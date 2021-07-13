@@ -43,4 +43,11 @@ $router->group( ['prefix'=>'api/v1' ,'as'=>'api.v1'], function() use($router){
     $router->put('/jobsectors/{id}', ['as'=>'jobsectors.update', 'uses'=>'JobSectorController@update']);
     $router->delete('/jobsectors/{id}',['as'=>'jobsectors.destroy','uses'=> 'JobSectorController@destroy']);
 
+    //skills crud operation
+    $router->get('/skills', ['as'=>'skills.getList','uses'=>'SkillController@getList']);
+    $router->get('/skills/{id}', ['as'=>'skills.read','uses'=>'SkillController@read']);
+    $router->post('/skills', ['as'=>'skills.store','uses'=>'SkillController@store']);
+    $router->put('/skills/{id}', ['as'=>'skills.update', 'uses'=>'SkillController@update']);
+    $router->delete('/skills/{id}',['as'=>'skills.destroy','uses'=> 'SkillController@destroy']);
+
 });

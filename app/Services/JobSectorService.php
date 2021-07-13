@@ -59,31 +59,37 @@ class JobSectorService
         } else {
             $jobSectors = $jobSectors->get();
         }
-        $action = [];
+        $data =[];
+
         foreach ($jobSectors as $jobSector) {
-            $action['read'] = route('api.v1.jobsectors.read', ['id' => $jobSector->id]);
-            $action['edit'] = route('api.v1.jobsectors.update', ['id' => $jobSector->id]);
-            $action['delete'] = route('api.v1.jobsectors.destroy', ['id' => $jobSector->id]);
-            $rank['action'] = $action;
+            $_links['read'] = route('api.v1.jobsectors.read', ['id' => $jobSector->id]);
+            $_links['edit'] = route('api.v1.jobsectors.update', ['id' => $jobSector->id]);
+            $_links['delete'] = route('api.v1.jobsectors.destroy', ['id' => $jobSector->id]);
+            $_link['_links'] = $_links;
             $data[] = $jobSector->toArray();
         }
 
+
         $response = [
             "data" => $data,
-            "response_status" => [
+            "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
                 "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "links" => [
+            "_links" => [
                 'paginate' => $paginate_link,
-                'parameters' => [
-                    'title_en',
-                    'title_bn'
+                "search" => [
+                    'parameters' => [
+                        'title_en',
+                        'title_bn'
+                    ],
+                    '_link' => route('api.v1.jobsectors.getList')
+
                 ],
-                'link' => route('api.v1.ranks.getList')
+
             ],
 
             "_page" => $page,
@@ -115,10 +121,10 @@ class JobSectorService
 
         $jobSector = $jobSector->first();
 
-        $action = [];
-        if (!empty($rank)) {
-            $action['edit'] = route('api.v1.jobsectors.update', ['id' => $id]);
-            $action['delete'] = route('api.v1.jobsectors.destroy', ['id' => $id]);
+        $links = [];
+        if (!empty($jobSector)) {
+            $links['update'] = route('api.v1.jobsectors.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.jobsectors.destroy', ['id' => $id]);
         }
         $response = [
             "data" => $jobSector ? $jobSector : [],
@@ -129,7 +135,7 @@ class JobSectorService
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "action" => $action,
+            "_links" => $links,
         ];
         return $response;
 

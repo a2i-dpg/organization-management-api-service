@@ -64,31 +64,32 @@ class RankTypeService
         } else {
             $rankTypes = $rankTypes->get();
         }
+        $data = [];
         foreach ($rankTypes as $rankType) {
-            $action['read'] = route('api.v1.ranktypes.read', ['id' => $rankType->id]);
-            $action['edit'] = route('api.v1.ranktypes.update', ['id' => $rankType->id]);
-            $action['delete'] = route('api.v1.ranktypes.destroy', ['id' => $rankType->id]);
-            $rankType['action'] = $action;
+            $_links['read'] = route('api.v1.ranktypes.read', ['id' => $rankType->id]);
+            $_links['edit'] = route('api.v1.ranktypes.update', ['id' => $rankType->id]);
+            $_links['delete'] = route('api.v1.ranktypes.destroy', ['id' => $rankType->id]);
+            $rankType['_links'] = $_links;
             $data[] = $rankType->toArray();
         }
 
         $response = [
             "data" => $data,
-            "response_status" => [
+            "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
                 "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "links" => [
+            "_links" => [
                 'paginate' => $paginate_link,
                 'search' => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
-                    'link' => route('api.v1.ranktypes.getList')
+                    '_link' => route('api.v1.ranktypes.getList')
                 ],
             ],
                 "_page" => $page,
@@ -98,6 +99,10 @@ class RankTypeService
         return $response;
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function getOneRanktype($id): array
     {
         $startTime = Carbon::now();
@@ -117,10 +122,10 @@ class RankTypeService
         $rankType->where('rank_types.row_status', '=', 1);
         $rankType = $rankType->first();
 
-        $action = [];
+        $links = [];
         if (!empty($rankType)) {
-            $action['edit'] = route('api.v1.ranktypes.update', ['id' => $id]);
-            $action['delete'] = route('api.v1.ranktypes.destroy', ['id' => $id]);
+            $links['update'] = route('api.v1.ranktypes.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.ranktypes.destroy', ['id' => $id]);
         }
         $response = [
             "data" => $rankType ? $rankType : [],
@@ -131,12 +136,16 @@ class RankTypeService
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "action" => $action,
+            "_links" => $links,
         ];
         return $response;
 
     }
 
+    /**
+     * @param $data
+     * @return RankType
+     */
     public function store($data): RankType
     {
         $rankType = new RankType();
@@ -146,6 +155,11 @@ class RankTypeService
         return $rankType;
     }
 
+    /**
+     * @param RankType $rankType
+     * @param array $data
+     * @return RankType
+     */
     public function update(RankType $rankType, array $data): RankType
 
     {
@@ -155,6 +169,10 @@ class RankTypeService
     }
 
 
+    /**
+     * @param RankType $rankType
+     * @return RankType
+     */
     public function destroy(RankType $rankType): RankType
     {
         $rankType->row_status = 99;
@@ -163,6 +181,10 @@ class RankTypeService
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function validator(Request $request)
     {
         $rules = [

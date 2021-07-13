@@ -122,7 +122,7 @@ class JobSectorController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
 
         $rankType = JobSector::findOrFail($id);
@@ -164,7 +164,7 @@ class JobSectorController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $rankType = JobSector::findOrFail($id);
 

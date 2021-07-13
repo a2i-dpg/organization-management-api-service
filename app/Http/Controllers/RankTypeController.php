@@ -134,7 +134,7 @@ class RankTypeController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
 
-    public function update(Request $request,$id)
+    public function update(Request $request,$id): JsonResponse
     {
 
         $rankType= RankType::findOrFail($id);
@@ -177,7 +177,7 @@ class RankTypeController extends Controller
      * @return JsonResponse
      */
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $rankType =RankType::findOrFail($id);
 

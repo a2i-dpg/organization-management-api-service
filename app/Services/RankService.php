@@ -10,12 +10,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 
-
 /**
  * Class RankService
  * @package App\Services
  */
-
 class RankService
 {
     /**
@@ -69,31 +67,35 @@ class RankService
         } else {
             $ranks = $ranks->get();
         }
-        $action = [];
         foreach ($ranks as $rank) {
-            $action['read'] = route('api.v1.ranks.read', ['id' => $rank->id]);
-            $action['edit'] = route('api.v1.ranks.update', ['id' => $rank->id]);
-            $action['delete'] = route('api.v1.ranks.destroy', ['id' => $rank->id]);
-            $rank['action'] = $action;
+            $_links['read'] = route('api.v1.ranks.read', ['id' => $rank->id]);
+            $_links['update'] = route('api.v1.ranks.update', ['id' => $rank->id]);
+            $_links['delete'] = route('api.v1.ranks.destroy', ['id' => $rank->id]);
+            $rank['_links'] = $_links;
             $data[] = $rank->toArray();
         }
 
         $response = [
             "data" => $data,
-            "response_status" => [
+            "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
                 "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "links" => [
+            "_links" => [
                 'paginate' => $paginate_link,
-                'parameters' => [
-                    'title_en',
-                    'title_bn'
+
+                "search" => [
+                    'parameters' => [
+                        'title_en',
+                        'title_bn'
+                    ],
+                    '_link' => route('api.v1.ranks.getList')
+
                 ],
-                'link' => route('api.v1.ranks.getList')
+
             ],
 
             "_page" => $page,
@@ -130,10 +132,10 @@ class RankService
 
         $rank = $rank->first();
 
-        $action = [];
+        $links = [];
         if (!empty($rank)) {
-            $action['edit'] = route('api.v1.ranks.update', ['id' => $id]);
-            $action['delete'] = route('api.v1.ranks.destroy', ['id' => $id]);
+            $links['update'] = route('api.v1.ranks.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.ranks.destroy', ['id' => $id]);
         }
         $response = [
             "data" => $rank ? $rank : [],
@@ -144,7 +146,7 @@ class RankService
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "action" => $action,
+            "_links" => $links,
         ];
         return $response;
 
