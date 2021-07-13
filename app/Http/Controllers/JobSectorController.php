@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Throwable;
 use App\Services\JobSectorService;
+
 /**
  * Class JobSectorController
  * @package App\Http\Controllers
@@ -47,6 +48,151 @@ class JobSectorController extends Controller
         }
 
         return Response::json($response);
+
+    }
+
+    /**
+     * Display the specified resource
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function read(Request $request, $id): JsonResponse
+    {
+        try {
+            $response = $this->jobSectorService->getOneJobSecotor($id);
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
+        return Response::json($response);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    function store(Request $request): JsonResponse
+    {
+        $validated = $this->jobSectorService->validator($request)->validate();
+        try {
+            //TODO: Only Validated data will stored.
+            $this->jobSectorService->store($validated);
+
+            //TODO: never response in try block if not necessary.
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => JsonResponse::HTTP_CREATED,
+                    "message" => "Job finished successfully.",
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ]
+            ];
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+
+            return Response::json($response, $response['_response_status']['code']);
+        }
+
+        return Response::json($response, JsonResponse::HTTP_CREATED);
+    }
+
+    /**
+     * update the specified resource in storage
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, $id)
+    {
+
+        $rankType = JobSector::findOrFail($id);
+
+        $validated = $this->jobSectorService->validator($request)->validate();
+
+        try {
+            $this->jobSectorService->update($rankType, $validated);
+
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => JsonResponse::HTTP_OK,
+                    "message" => "Job finished successfully.",
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ]
+            ];
+
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+
+            return Response::json($response, $response['_response_status']['code']);
+        }
+
+        return Response::json($response, JsonResponse::HTTP_CREATED);
+
+    }
+
+    /**
+     *  emove the specified resource from storage
+     * @param $id
+     * @return JsonResponse
+     */
+    public function destroy($id)
+    {
+        $rankType = JobSector::findOrFail($id);
+
+        try {
+            $this->jobSectorService->destroy($rankType);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => JsonResponse::HTTP_OK,
+                    "message" => "Job finished successfully.",
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ]
+            ];
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+
+            return Response::json($response, $response['_response_status']['code']);
+        }
+
+        return Response::json($response, JsonResponse::HTTP_OK);
 
     }
 

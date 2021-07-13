@@ -34,4 +34,13 @@ $router->group( ['prefix'=>'api/v1' ,'as'=>'api.v1'], function() use($router){
     $router->post('/ranks', ['as'=>'ranks.store','uses'=>'RankController@store']);
     $router->put('/ranks/{id}', ['as'=>'ranks.update', 'uses'=>'RankController@update']);
     $router->delete('/ranks/{id}',['as'=>'ranks.destroy','uses'=> 'RankController@destroy']);
+
+
+    //jobsectors crud operation
+    $router->get('/jobsectors', ['as'=>'jobsectors.getList','uses'=>'JobSectorController@getList']);
+    $router->get('/jobsectors/{id}', ['as'=>'jobsectors.read','uses'=>'JobSectorController@read']);
+    $router->post('/jobsectors', ['as'=>'jobsectors.store','uses'=>'JobSectorController@store']);
+    $router->put('/jobsectors/{id}', ['as'=>'jobsectors.update', 'uses'=>'JobSectorController@update']);
+    $router->delete('/jobsectors/{id}',['as'=>'jobsectors.destroy','uses'=> 'JobSectorController@destroy']);
+
 });

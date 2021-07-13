@@ -156,11 +156,11 @@ class RankService
      */
     public function store(array $data): Rank
     {
-        $locDistrict = new Rank();
-        $locDistrict->fill($data);
-        $locDistrict->save();
+        $rank = new Rank();
+        $$rank->fill($data);
+        $rank->save();
 
-        return $locDistrict;
+        return $rank;
     }
 
     /**
