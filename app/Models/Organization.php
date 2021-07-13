@@ -19,5 +19,5 @@ class Organization extends Model
         return $this->belongsTo(OrganizationType::class);
     }
 
-    protected  $guarded = [];
+    protected  $guarded = ['id'];
 }

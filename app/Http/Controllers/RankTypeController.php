@@ -38,6 +38,7 @@ class RankTypeController extends Controller
     }
 
     /**
+     * Display a listing  of  the resources
      * @param Request $request
      * @return JsonResponse
      */
@@ -62,6 +63,7 @@ class RankTypeController extends Controller
     }
 
     /**
+     * Display a specified resource
      * @param Request $request
      * @param $id
      * @return JsonResponse
@@ -85,6 +87,12 @@ class RankTypeController extends Controller
 
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankTypeService->validator($request)->validate();
@@ -118,6 +126,13 @@ class RankTypeController extends Controller
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
+    /**
+     * update a specified resource to storage
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
 
     public function update(Request $request,$id)
     {
@@ -156,6 +171,11 @@ class RankTypeController extends Controller
 
     }
 
+    /**
+     * Delete the specified resource from the storage
+     * @param $id
+     * @return JsonResponse
+     */
 
     public function destroy($id)
     {

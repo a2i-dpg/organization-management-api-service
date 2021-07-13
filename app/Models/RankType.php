@@ -17,7 +17,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class RankType extends Model
 {
-    protected $guarded = [];
+    /**
+     * @var string[]
+     */
+    protected  $guarded = ['id'];
 
     /**
      * @return BelongsTo

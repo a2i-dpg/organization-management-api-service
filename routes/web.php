@@ -4,7 +4,9 @@
 
 $router->get('/hello', 'ExampleController@hateoasResponse');
 
-$router->get('/', function () use ($router) {
+$router->get(/**
+ * @return string
+ */ '/', function () use ($router) {
     return $router->app->version();
 });
 

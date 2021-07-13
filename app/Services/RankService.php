@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Validator;
  */
 class RankService
 {
+    /**
+     *
+     * @param Request $request
+     * @return array
+     */
     public function getRankList(Request $request)
     {
         $startTime = Carbon::now();
@@ -49,7 +54,7 @@ class RankService
         }
 
         if ($paginate) {
-            $ranks = $ranks->paginate(1);
+            $ranks = $ranks->paginate(10);
             $paginate_data = (object)$ranks->toArray();
             $page = [
                 "size" => $paginate_data->per_page,
@@ -81,15 +86,24 @@ class RankService
             ],
             "links" => [
                 'paginate' => $paginate_link,
+                'parameters' => [
+                    'title_en',
+                    'title_bn'
+                ],
                 'link' => route('api.v1.ranks.getList')
             ],
 
-            "page" => $page,
+            "_page" => $page,
+            "_order" => $order
         ];
 
         return $response;
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function getOneRank($id)
     {
         $startTime = Carbon::now();
@@ -133,6 +147,10 @@ class RankService
 
     }
 
+    /**
+     * @param array $data
+     * @return Rank
+     */
     public function store(array $data): Rank
     {
         $locDistrict = new Rank();
@@ -141,6 +159,12 @@ class RankService
 
         return $locDistrict;
     }
+
+    /**
+     * @param Rank $rank
+     * @param array $data
+     * @return Rank
+     */
     public function update(Rank $rank, array $data): Rank
 
     {
@@ -148,6 +172,11 @@ class RankService
         $rank->save();
         return $rank;
     }
+
+    /**
+     * @param Rank $rank
+     * @return Rank
+     */
     public function destroy(Rank $rank): Rank
     {
         $rank->row_status = 99;
@@ -155,6 +184,10 @@ class RankService
         return $rank;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function validator(Request $request)
     {
         $rules = [

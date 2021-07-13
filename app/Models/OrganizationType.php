@@ -10,5 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OrganizationType extends Model
 {
-    //
+    /**
+     * @var string[]
+     */
+    protected  $guarded = ['id'];
 }

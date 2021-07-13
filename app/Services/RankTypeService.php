@@ -52,7 +52,7 @@ class RankTypeService
         }
 
         if ($paginate) {
-            $rankTypes = $rankTypes->paginate(1);
+            $rankTypes = $rankTypes->paginate(10);
             $paginate_data = (object)$rankTypes->toArray();
             $page = [
                 "size" => $paginate_data->per_page,
@@ -83,10 +83,16 @@ class RankTypeService
             ],
             "links" => [
                 'paginate' => $paginate_link,
-                'link' => route('api.v1.ranktypes.getList')
+                'search' => [
+                    'parameters' => [
+                        'title_en',
+                        'title_bn'
+                    ],
+                    'link' => route('api.v1.ranktypes.getList')
+                ],
             ],
-
-            "page" => $page,
+                "_page" => $page,
+                "_order" => $order
         ];
 
         return $response;
@@ -139,6 +145,7 @@ class RankTypeService
 
         return $rankType;
     }
+
     public function update(RankType $rankType, array $data): RankType
 
     {
@@ -154,7 +161,6 @@ class RankTypeService
         $rankType->save();
         return $rankType;
     }
-
 
 
     public function validator(Request $request)

@@ -13,12 +13,20 @@ use App\Helpers\Classes\CustomExceptionHandler;
 use App\Services\RankService;
 
 
+/**
+ * Class RankController
+ * @package App\Http\Controllers
+ */
 class RankController extends Controller
 {
 
     public RankService $rankService;
     private Carbon $startTime;
 
+    /**
+     * RankController constructor.
+     * @param RankService $rankService
+     */
     public function __construct(RankService $rankService)
     {
         $this->startTime = Carbon::now();
@@ -26,6 +34,11 @@ class RankController extends Controller
 
     }
 
+    /**
+     * Display a listing of the resource.
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function getList(Request $request): JsonResponse
     {
         try {
@@ -45,6 +58,12 @@ class RankController extends Controller
         return Response::json($response);
     }
 
+    /**
+     * Display the specified resource
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
     public function read(Request $request, $id): JsonResponse
     {
         try {
@@ -64,6 +83,12 @@ class RankController extends Controller
 
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankService->validator($request)->validate();
@@ -96,6 +121,14 @@ class RankController extends Controller
 
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
+
+    /**
+     * update the specified resource in storage
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function update(Request $request,$id)
     {
 
@@ -132,6 +165,12 @@ class RankController extends Controller
         return Response::json($response, JsonResponse::HTTP_CREATED);
 
     }
+
+    /**
+     *  emove the specified resource from storage
+     * @param $id
+     * @return JsonResponse
+     */
     public function destroy($id)
     {
         $rankType =Rank::findOrFail($id);
@@ -163,8 +202,6 @@ class RankController extends Controller
         return Response::json($response, JsonResponse::HTTP_OK);
 
     }
-
-
 
 
 }

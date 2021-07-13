@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Rank extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function organization(): BelongsTo
     {
