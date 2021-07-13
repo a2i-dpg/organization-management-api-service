@@ -9,10 +9,13 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
+
+
 /**
  * Class RankService
  * @package App\Services
  */
+
 class RankService
 {
     /**
@@ -20,7 +23,7 @@ class RankService
      * @param Request $request
      * @return array
      */
-    public function getRankList(Request $request)
+    public function getRankList(Request $request): array
     {
         $startTime = Carbon::now();
         $paginate_link = [];
@@ -44,13 +47,13 @@ class RankService
             ]
         )->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id')
             ->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id')
-            ->where('ranks.row_status', '=', 1)
+            ->where('ranks.row_status', '=', Rank::ROW_STATUS_ACTIVE)
             ->orderBy('ranks.id', $order);
 
         if (!empty($titleEn)) {
-            $ranks->where('loc_districts.title_en', 'like', '%' . $titleEn . '%');
+            $ranks->where('ranks.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $ranks->where('loc_districts.title_bn', 'like', '%' . $titleBn . '%');
+            $ranks->where('ranks.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         if ($paginate) {

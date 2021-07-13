@@ -41,14 +41,14 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         )->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id')
-            ->where('rank_types.row_status', '=', 1)
+            ->where('rank_types.row_status', '=', RankType::ROW_STATUS_ACTIVE)
             ->orderBy('rank_types.id', $order);
 
 
         if (!empty($titleEn)) {
-            $rankTypes->where('loc_districts.title_en', 'like', '%' . $titleEn . '%');
+            $rankTypes->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $rankTypes->where('loc_districts.title_bn', 'like', '%' . $titleBn . '%');
+            $rankTypes->where('rank_types.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         if ($paginate) {

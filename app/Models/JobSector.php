@@ -4,17 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
- * Class OrganizationType
+ * Class JobSector
  * @package App\Models
+ * @property string title_en
+ * @property string title_bn
  */
-class OrganizationType extends Model
+
+class JobSector extends Model
 {
     public const ROW_STATUS_ACTIVE = '1';
     public const ROW_STATUS_INACTIVE = '0';
     public const ROW_STATUS_DELETED = '99';
-    /**
-     * @var string[]
-     */
-    protected  $guarded = ['id'];
+
+    protected $guarded = ['id'];
 }
