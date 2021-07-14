@@ -172,16 +172,16 @@ class SkillController extends Controller
     }
 
     /**
-     *  emove the specified resource from storage
+     *  remove the specified resource from storage
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        $rankType = Skill::findOrFail($id);
+        $skill = Skill::findOrFail($id);
 
         try {
-            $this->skillService->destroy($rankType);
+            $this->skillService->destroy($skill);
             $response = [
                 '_response_status' => [
                     "success" => true,

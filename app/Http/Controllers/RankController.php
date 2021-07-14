@@ -129,15 +129,15 @@ class RankController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request,$id)
+    public function update(Request $request,$id): JsonResponse
     {
 
-        $rankType= Rank::findOrFail($id);
+        $rank= Rank::findOrFail($id);
 
         $validated = $this->rankService->validator($request)->validate();
 
         try {
-            $this->rankService->update($rankType, $validated);
+            $this->rankService->update($rank, $validated);
 
             $response = [
                 '_response_status' => [
@@ -171,12 +171,12 @@ class RankController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        $rankType =Rank::findOrFail($id);
+        $rank =Rank::findOrFail($id);
 
         try {
-            $this->rankService->destroy($rankType);
+            $this->rankService->destroy($rank);
             $response = [
                 '_response_status' => [
                     "success" => true,

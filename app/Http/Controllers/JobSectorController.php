@@ -17,9 +17,16 @@ use App\Services\JobSectorService;
  */
 class JobSectorController extends Controller
 {
+    /**
+     * @var JobSectorService
+     */
     public JobSectorService $jobSectorService;
     private Carbon $startTime;
 
+    /**
+     * JobSectorController constructor.
+     * @param JobSectorService $jobSectorService
+     */
     public function __construct(JobSectorService $jobSectorService)
     {
         $this->jobSectorService = $jobSectorService;
@@ -125,12 +132,12 @@ class JobSectorController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
 
-        $rankType = JobSector::findOrFail($id);
+        $jobSector = JobSector::findOrFail($id);
 
         $validated = $this->jobSectorService->validator($request)->validate();
 
         try {
-            $this->jobSectorService->update($rankType, $validated);
+            $this->jobSectorService->update($jobSector, $validated);
 
             $response = [
                 '_response_status' => [
@@ -160,16 +167,16 @@ class JobSectorController extends Controller
     }
 
     /**
-     *  emove the specified resource from storage
+     * remove the specified resource from storage
      * @param $id
      * @return JsonResponse
      */
     public function destroy($id): JsonResponse
     {
-        $rankType = JobSector::findOrFail($id);
+        $JobSector = JobSector::findOrFail($id);
 
         try {
-            $this->jobSectorService->destroy($rankType);
+            $this->jobSectorService->destroy($JobSector);
             $response = [
                 '_response_status' => [
                     "success" => true,
