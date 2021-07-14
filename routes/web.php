@@ -4,21 +4,30 @@
 
 $router->get('/hello', 'ExampleController@hateoasResponse');
 
-$router->get(/**
- * @return string
- */ '/', function () use ($router) {
+$router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
 
 $router->group( ['prefix'=>'api/v1' ,'as'=>'api.v1'], function() use($router){
-    //organizations crud operation
-    $router->get('/organizations', ['as'=>'organizations.viewAll','uses'=>'OrganizationController@viewAll']);
+
+
+
+    //organization crud operation
+    $router->get('/organizations', ['as'=>'organizations.getList','uses'=>'OrganizationController@getList']);
     $router->post('/organizations', ['as'=>'organizations.store','uses'=>'OrganizationController@store']);
-    $router->get('/organizations/{id}', ['as'=>'organizations.view','uses'=>'OrganizationController@view']);
+    $router->get('/organizations/{id}', ['as'=>'organizations.read','uses'=>'OrganizationController@read']);
     $router->put('/organizations/{id}', ['as'=>'organizations.update', 'uses'=>'OrganizationController@update']);
     $router->delete('/organizations/{id}',['as'=>'organizations.destroy','uses'=> 'OrganizationController@destroy']);
 
+
+    /**organizationType crud operation
+     * */
+    $router->get('/organizationtypes', ['as'=>'organizationtypes.getList','uses'=>'OrganizationTypeController@getList']);
+    $router->get('/organizationtypes/{id}', ['as'=>'organizationtypes.read','uses'=>'OrganizationTypeController@read']);
+    $router->post('/organizationtypes', ['as'=>'organizationtypes.store','uses'=>'OrganizationTypeController@store']);
+    $router->put('/organizationtypes/{id}', ['as'=>'organizationtypes.update', 'uses'=>'OrganizationTypeController@update']);
+    $router->delete('/organizationtypes/{id}',['as'=>'organizationtypes.destroy','uses'=> 'OrganizationTypeController@destroy']);
 
     //ranktypes crud operation
     $router->get('/ranktypes', ['as'=>'ranktypes.getList','uses'=>'RankTypeController@getList']);
