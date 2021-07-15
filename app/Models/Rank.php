@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,11 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Organization organization
  * @property-read RankType rankType
  */
-class Rank extends Model
+class Rank extends BaseModel
 {
-    public const ROW_STATUS_ACTIVE = '1';
-    public const ROW_STATUS_INACTIVE = '0';
-    public const ROW_STATUS_DELETED = '99';
+    use ScopeRowStatusTrait;
+
     protected $guarded = ['id'];
 
     public function organization(): BelongsTo
