@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder deleted()
- * @property-read RowStatus rowStatus
  * @property int row_status
  */
 trait ScopeRowStatusTrait
