@@ -41,7 +41,6 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         )->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id')
-            ->where('rank_types.row_status', '=', RankType::ROW_STATUS_ACTIVE)
             ->orderBy('rank_types.id', $order);
 
 
@@ -89,7 +88,7 @@ class RankTypeService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.ranktypes.getList')
+                    '_link' => route('api.v1.ranktypes.get-list')
                 ],
             ],
                 "_page" => $page,
@@ -128,7 +127,7 @@ class RankTypeService
             $links['delete'] = route('api.v1.ranktypes.destroy', ['id' => $id]);
         }
         $response = [
-            "data" => $rankType ? $rankType : [],
+            "data" => $rankType ? $rankType : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

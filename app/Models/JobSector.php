@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -12,11 +13,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string title_bn
  */
 
-class JobSector extends Model
+class JobSector extends BaseModel
 {
-    public const ROW_STATUS_ACTIVE = '1';
-    public const ROW_STATUS_INACTIVE = '0';
-    public const ROW_STATUS_DELETED = '99';
+    use ScopeRowStatusTrait;
 
     protected $guarded = ['id'];
 }

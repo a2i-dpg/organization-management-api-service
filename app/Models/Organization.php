@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Organization
  * @package App\Models
  */
-class Organization extends Model
+class Organization extends BaseModel
 {
 
-    public const ROW_STATUS_ACTIVE = '1';
-    public const ROW_STATUS_INACTIVE = '0';
-    public const ROW_STATUS_DELETED = '99';
+    use ScopeRowStatusTrait;
     /**
      * @return BelongsTo
      */

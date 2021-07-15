@@ -38,8 +38,7 @@ class JobSectorService
                 'job_sectors.title_bn',
                 'job_sectors.row_status',
             ]
-        )->where('job_sectors.row_status', '=', JobSector::ROW_STATUS_ACTIVE)
-            ->orderBy('job_sectors.id', $order);
+        )->orderBy('job_sectors.id', $order);
         if (!empty($titleEn)) {
             $jobSectors->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -59,7 +58,7 @@ class JobSectorService
         } else {
             $jobSectors = $jobSectors->get();
         }
-        $data =[];
+        $data = [];
 
         foreach ($jobSectors as $jobSector) {
             $_links['read'] = route('api.v1.jobsectors.read', ['id' => $jobSector->id]);
@@ -86,7 +85,7 @@ class JobSectorService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.jobsectors.getList')
+                    '_link' => route('api.v1.jobsectors.get-list')
 
                 ],
 
@@ -127,7 +126,7 @@ class JobSectorService
             $links['delete'] = route('api.v1.jobsectors.destroy', ['id' => $id]);
         }
         $response = [
-            "data" => $jobSector ? $jobSector : [],
+            "data" => $jobSector ? $jobSector : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

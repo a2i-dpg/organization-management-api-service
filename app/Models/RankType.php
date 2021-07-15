@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-
+use App\Traits\Scopes\ScopeRowStatusTrait;
 /**
  * Class RankType
  * @package App\Models\
@@ -15,11 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null description
  * @property-read Organization organization
  */
-class RankType extends Model
+class RankType extends BaseModel
 {
-    public const ROW_STATUS_ACTIVE = '1';
-    public const ROW_STATUS_INACTIVE = '0';
-    public const ROW_STATUS_DELETED = '99';
+    use ScopeRowStatusTrait;
     /**
      * @var string[]
      */

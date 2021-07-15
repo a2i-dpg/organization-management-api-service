@@ -38,8 +38,7 @@ class OccupationService
             'job_sectors.title_en as job_sectors_title',
         ]);
         $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id')
-            ->orderBy('occupations.id', $order)
-            ->where('occupations.row_status', '=', Occupation::ROW_STATUS_ACTIVE);
+            ->orderBy('occupations.id', $order);
         if (!empty($titleEn)) {
             $occupations->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -85,7 +84,7 @@ class OccupationService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.occupations.getList')
+                    '_link' => route('api.v1.occupations.get-list')
                 ]
             ],
             "_page" => $page,
@@ -110,8 +109,9 @@ class OccupationService
             'job_sectors.title_en as job_sectors_title',
         ]);
         $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id')
+            ->where('occupations.row_status', '=', Occupation::ROW_STATUS_ACTIVE)
             ->where('occupations.id', '=', $id);
-//            ->where('occupations.row_status', '=', Occupation::ROW_STATUS_ACTIVE);
+
 
         $occupation = $occupation->first();
 
@@ -121,7 +121,7 @@ class OccupationService
         }
 
         return [
-            "data" => $occupation ? $occupation : [],
+            "data" => $occupation ? $occupation : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

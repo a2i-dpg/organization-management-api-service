@@ -39,8 +39,7 @@ class OrganizationTypeService
             'organization_types.title_bn',
             'organization_types.is_government',
             'organization_types.row_status'
-        ])->where('organization_types.row_status', '=', OrganizationType::ROW_STATUS_ACTIVE)
-            ->orderBy('organization_types.id', $order);
+        ])->orderBy('organization_types.id', $order);
 
         if (!empty($titleEn)) {
             $organizationTypes->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
@@ -86,7 +85,7 @@ class OrganizationTypeService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.organizationtypes.getList')
+                    '_link' => route('api.v1.organizationtypes.get-list')
                 ]
             ],
             "_page" => $page,
@@ -120,7 +119,7 @@ class OrganizationTypeService
         }
 
         return [
-            "data" => $organizationType ? $organizationType : [],
+            "data" => $organizationType ? $organizationType : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

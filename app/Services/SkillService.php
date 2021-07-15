@@ -41,8 +41,7 @@ class SkillService
                 'skills.updated_at',
             ]
         )->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id')
-            ->where('skills.row_status', '=', Skill::ROW_STATUS_ACTIVE)
-            ->orderBy('job_sectors.id', $order);
+            ->orderBy('skills.id', $order);
 
         if (!empty($titleEn)) {
             $skills->where('skills.title_en', 'like', '%' . $titleEn . '%');
@@ -90,7 +89,7 @@ class SkillService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.skills.getList')
+                    '_link' => route('api.v1.skills.get-list')
 
                 ],
 
@@ -133,7 +132,7 @@ class SkillService
             $links['delete'] = route('api.v1.skills.destroy', ['id' => $id]);
         }
         $response = [
-            "data" => $skill ? $skill : [],
+            "data" => $skill ? $skill : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -214,6 +213,5 @@ class SkillService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 
 }

@@ -15,20 +15,13 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class OrganizationService
 {
-    /**
-     * @param Request $request
-     */
+
     public function OrganizationsList(Request $request)
     {
         $paginate_link = [];
         $page = [];
         $startTime = Carbon::now();
         $paginate = $request->query('page');
-
-//         pagiante size ;
-//        $paginate_size = $request->get('page_size');
-
-
         $organizations = Organization::select([
             'organizations.id',
             'organizations.title_en',

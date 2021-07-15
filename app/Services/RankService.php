@@ -2,14 +2,12 @@
 
 
 namespace App\Services;
-
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use App\Models\Rank;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-
-
 /**
  * Class RankService
  * @package App\Services
@@ -21,6 +19,7 @@ class RankService
      * @param Request $request
      * @return array
      */
+
     public function getRankList(Request $request): array
     {
         $startTime = Carbon::now();
@@ -45,9 +44,7 @@ class RankService
             ]
         )->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id')
             ->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id')
-            ->where('ranks.row_status', '=', Rank::ROW_STATUS_ACTIVE)
             ->orderBy('ranks.id', $order);
-
         if (!empty($titleEn)) {
             $ranks->where('ranks.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -92,7 +89,7 @@ class RankService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.ranks.getList')
+                    '_link' => route('api.v1.ranks.get-list')
 
                 ],
 
@@ -127,7 +124,7 @@ class RankService
             ]
         )->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id')
             ->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id')
-            ->where('ranks.row_status', '=', 1)
+            ->where('ranks.row_status', '=', Rank::ROW_STATUS_ACTIVE)
             ->where('ranks.id', '=', $id);
 
         $rank = $rank->first();
@@ -138,7 +135,7 @@ class RankService
             $links['delete'] = route('api.v1.ranks.destroy', ['id' => $id]);
         }
         $response = [
-            "data" => $rank ? $rank : [],
+            "data" => $rank ? $rank : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -159,7 +156,7 @@ class RankService
     public function store(array $data): Rank
     {
         $rank = new Rank();
-        $$rank->fill($data);
+        $rank->fill($data);
         $rank->save();
 
         return $rank;
