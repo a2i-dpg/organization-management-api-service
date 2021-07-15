@@ -2,6 +2,14 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Helpers\Classes\CustomRouter;
+
+$customRouter = function (string $as = '') use ($router) {
+    $custom = new CustomRouter($router);
+    return $custom->as($as);
+};
+
+
 $router->get('/hello', 'ExampleController@hateoasResponse');
 
 $router->get('/', function () use ($router) {
@@ -9,7 +17,7 @@ $router->get('/', function () use ($router) {
 });
 
 
-$router->group( ['prefix'=>'api/v1' ,'as'=>'api.v1'], function() use($router){
+$router->group( ['prefix'=>'api/v1' ,'as'=>'api.v1'], function() use($router,$customRouter){
 
 
 
@@ -38,12 +46,7 @@ $router->group( ['prefix'=>'api/v1' ,'as'=>'api.v1'], function() use($router){
 
 
     //ranks crud operation
-    $router->get('/ranks', ['as'=>'ranks.getList','uses'=>'RankController@getList']);
-    $router->get('/ranks/{id}', ['as'=>'ranks.read','uses'=>'RankController@read']);
-    $router->post('/ranks', ['as'=>'ranks.store','uses'=>'RankController@store']);
-    $router->put('/ranks/{id}', ['as'=>'ranks.update', 'uses'=>'RankController@update']);
-    $router->delete('/ranks/{id}',['as'=>'ranks.destroy','uses'=> 'RankController@destroy']);
-
+    $customRouter('ranks')->resourceRoute('ranks', 'RankController')->render();
 
     //jobsectors crud operation
     $router->get('/jobsectors', ['as'=>'jobsectors.getList','uses'=>'JobSectorController@getList']);
