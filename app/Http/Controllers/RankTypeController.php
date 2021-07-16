@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\RankType;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -98,10 +99,11 @@ class RankTypeController extends Controller
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
             //TODO: Only Validated data will stored.
-            $this->rankTypeService->store($validated);
+            $data = $this->rankTypeService->store($validated);
 
             //TODO: never response in try block if not necessary.
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -134,10 +136,10 @@ class RankTypeController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
 
-    public function update(Request $request,$id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
 
-        $rankType= RankType::findOrFail($id);
+        $rankType = RankType::findOrFail($id);
 
         $validated = $this->rankTypeService->validator($request)->validate();
 
@@ -179,7 +181,7 @@ class RankTypeController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $rankType =RankType::findOrFail($id);
+        $rankType = RankType::findOrFail($id);
 
         try {
             $this->rankTypeService->destroy($rankType);

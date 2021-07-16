@@ -97,10 +97,11 @@ class OccupationController extends Controller
         $validated = $this->occupationService->validator($request)->validate();
         try {
             //TODO: Only Validated data will stored.
-            $this->occupationService->store($validated);
+            $data = $this->occupationService->store($validated);
 
             //TODO: never response in try block if not necessary.
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,

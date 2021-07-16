@@ -94,10 +94,11 @@ class RankController extends Controller
         $validated = $this->rankService->validator($request)->validate();
         try {
             //TODO: Only Validated data will stored.
-            $this->rankService->store($validated);
+            $data = $this->rankService->store($validated);
 
             //TODO: never response in try block if not necessary.
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -129,10 +130,10 @@ class RankController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request,$id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
 
-        $rank= Rank::findOrFail($id);
+        $rank = Rank::findOrFail($id);
 
         $validated = $this->rankService->validator($request)->validate();
 
@@ -173,7 +174,7 @@ class RankController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $rank =Rank::findOrFail($id);
+        $rank = Rank::findOrFail($id);
 
         try {
             $this->rankService->destroy($rank);

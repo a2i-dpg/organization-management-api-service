@@ -85,7 +85,7 @@ class OrganizationTypeService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.organizationtypes.get-list')
+                    '_link' => route('api.v1.organizationtypes.getList')
                 ]
             ],
             "_page" => $page,
@@ -119,7 +119,7 @@ class OrganizationTypeService
         }
 
         return [
-            "data" => $organizationType ? $organizationType : null,
+            "data" => $organizationType ? $organizationType : [],
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
