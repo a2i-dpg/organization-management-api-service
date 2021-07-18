@@ -61,9 +61,9 @@ class JobSectorService
         $data = [];
 
         foreach ($jobSectors as $jobSector) {
-            $_links['read'] = route('api.v1.jobsectors.read', ['id' => $jobSector->id]);
-            $_links['edit'] = route('api.v1.jobsectors.update', ['id' => $jobSector->id]);
-            $_links['delete'] = route('api.v1.jobsectors.destroy', ['id' => $jobSector->id]);
+            $_links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
+            $_links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
+            $_links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $jobSector->id]);
             $_link['_links'] = $_links;
             $data[] = $jobSector->toArray();
         }
@@ -85,7 +85,7 @@ class JobSectorService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.jobsectors.get-list')
+                    '_link' => route('api.v1.job-sectors.get-list')
 
                 ],
 
@@ -122,8 +122,8 @@ class JobSectorService
 
         $links = [];
         if (!empty($jobSector)) {
-            $links['update'] = route('api.v1.jobsectors.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.jobsectors.destroy', ['id' => $id]);
+            $links['update'] = route('api.v1.job-sectors.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $id]);
         }
         $response = [
             "data" => $jobSector ? $jobSector : null,

@@ -99,10 +99,11 @@ class OrganizationTypeController extends Controller
 
         try {
             //TODO: Only Validated data will stored.
-            $this->organizationTypeService->store($validated);
+            $data = $this->organizationTypeService->store($validated);
 
             //TODO: never response in try block if not necessary.
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -127,6 +128,7 @@ class OrganizationTypeController extends Controller
 
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -142,9 +144,11 @@ class OrganizationTypeController extends Controller
         $validated = $this->organizationTypeService->validator($request)->validate();
 
         try {
-            $this->organizationTypeService->update($organizationType, $validated);
+            $data = $this->organizationTypeService->update($organizationType, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
+
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -169,6 +173,7 @@ class OrganizationTypeController extends Controller
 
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -180,7 +185,7 @@ class OrganizationTypeController extends Controller
         $organizationTYpe = OrganizationType::findOrFail($id);
 
         try {
-            $this->organizationTypeService->destroy($organizationTYpe );
+            $this->organizationTypeService->destroy($organizationTYpe);
             $response = [
                 '_response_status' => [
                     "success" => true,
