@@ -100,7 +100,7 @@ class OrganizationUnitTypeService
      * @param $id
      * @return array
      */
-    public function getOneOrganizationUnitType($id)
+    public function getOneOrganizationUnitType($id): array
     {
         $startTime = Carbon::now();
         $organizationUnitType = OrganizationUnitType::select([
