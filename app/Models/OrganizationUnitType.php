@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,10 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * */
 class OrganizationUnitType extends BaseModel
 {
-
-
+    use ScopeRowStatusTrait;
     protected $guarded = ['id'];
-
 
     /**
      * @return BelongsTo

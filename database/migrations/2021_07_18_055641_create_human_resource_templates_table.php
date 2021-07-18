@@ -24,6 +24,7 @@ class CreateHumanResourceTemplatesTable extends Migration
             $table->unsignedTinyInteger('is_designation')->default(1)->comment('1 => designation, 0 => wings or section');
             $table->string('skill_ids')->nullable();
             $table->unsignedInteger('organization_unit_type_id')->index('human_resource_templates_fk_organization_unit_type_id');
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('1 => occupied, 2 => vacancy, 0 => inactive, 99 => deleted');
             $table->timestamps();
         });
     }

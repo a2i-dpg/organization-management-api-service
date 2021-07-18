@@ -15,7 +15,7 @@ class AddForeignKeysToHumanResourceTemplates extends Migration
     {
         Schema::table('human_resource_templates', function (Blueprint $table) {
             $table->foreign('organization_id', 'human_resource_templates_fk_organization_id')->references('id')->on('organizations')->onUpdate('CASCADE')->onDelete('CASCADE');
-//            $table->foreign('organization_unit_type_id', 'human_resource_templates_fk_organization_unit_type_id')->references('id')->on('organization_unit_types')->onUpdate('CASCADE')->onDelete('CASCADE'); //TODO:uncomment after organization unit type done
+            $table->foreign('organization_unit_type_id', 'human_resource_templates_fk_organization_unit_type_id')->references('id')->on('organization_unit_types')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('parent_id', 'human_resource_templates_fk_parent_id')->references('id')->on('human_resource_templates')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('rank_id', 'human_resource_templates_fk_rank_id')->references('id')->on('ranks')->onUpdate('CASCADE')->onDelete('SET NULL');
         });

@@ -36,10 +36,10 @@ class HumanResourceTemplate extends BaseModel
         return $this->belongsTo(Organization::class);
     }
 
-//    public function organizationUnitType(): BelongsTo
-//    {
-//        return $this->belongsTo(OrganizationUnitType::class);
-//    }
+    public function organizationUnitType(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationUnitType::class);
+    }
 
     public function parent(): BelongsTo
     {

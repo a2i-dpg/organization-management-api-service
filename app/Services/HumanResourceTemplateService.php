@@ -123,7 +123,8 @@ class HumanResourceTemplateService
         $humanResourceTemplate->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
         $humanResourceTemplate->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
         $humanResourceTemplate->where('human_resource_templates.id', $id);
-        $humanResourceTemplate->first();
+
+        $humanResourceTemplate = $humanResourceTemplate->first();
 
         $links = [];
         if (!empty($humanResourceTemplate)) {
@@ -176,7 +177,7 @@ class HumanResourceTemplateService
      */
     public function destroy(HumanResourceTemplate  $humanResourceTemplate): HumanResourceTemplate
     {
-//        $humanResourceTemplate->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
+        $humanResourceTemplate->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
         $humanResourceTemplate->save();
         return $humanResourceTemplate;
     }
