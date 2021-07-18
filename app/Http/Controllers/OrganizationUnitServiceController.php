@@ -2,35 +2,39 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+
 use App\Helpers\Classes\CustomExceptionHandler;
-use App\Models\Service;
+use App\Models\OrganizationUnitService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Validation\ValidationException;
 use Throwable;
-use App\Services\ServiceService;
+use App\Services\OrganizationUnitServiceService;
 use Illuminate\Http\Request;
 
 /**
- * Class ServiceController
+ * Class OrganizationUnitServiceController
  * @package App\Http\Controllers
  */
-class ServiceController extends Controller
+class OrganizationUnitServiceController extends Controller
 {
     /**
-     * @var ServiceService
+     * @var OrganizationUnitServiceService
      */
-    public ServiceService $serviceService;
+    public OrganizationUnitServiceService $organizationUnitServiceService;
+    /**
+     * @var Carbon
+     */
     private Carbon $startTime;
 
     /**
-     * ServiceController constructor.
-     * @param ServiceService $serviceService
+     * OrganizationUnitServiceController constructor.
+     * @param OrganizationUnitServiceService $organizationUnitServiceService
      */
-    public function __construct(ServiceService $serviceService)
+    public function __construct(OrganizationUnitServiceService $organizationUnitServiceService)
     {
-        $this->serviceService = $serviceService;
+        $this->organizationUnitServiceService = $organizationUnitServiceService;
         $this->startTime = Carbon::now();
     }
 
@@ -42,7 +46,7 @@ class ServiceController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->serviceService->getServiceList($request);
+            $response = $this->organizationUnitServiceService->getOrganizationUnitServiceList($request);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -68,7 +72,7 @@ class ServiceController extends Controller
     public function read(Request $request, $id): JsonResponse
     {
         try {
-            $response = $this->serviceService->getOneService($id);
+            $response = $this->organizationUnitServiceService->getOneOrganizationUnitService($id);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -88,14 +92,16 @@ class ServiceController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     function store(Request $request): JsonResponse
     {
-        $validatedData = $this->serviceService->validator($request)->validate();
+        $validated = $this->organizationUnitServiceService->validator($request)->validate();
         try {
-            $data = $this->serviceService->store($validatedData);
+            //TODO: Only Validated data will stored.
+            $data = $this->organizationUnitServiceService->store($validated);
 
+            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -127,21 +133,22 @@ class ServiceController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id): JsonResponse
     {
 
-        $service = Service::findOrFail($id);
+        $organizationUnitService = OrganizationUnitService::findOrFail($id);
 
-        $validated = $this->serviceService->validator($request)->validate();
+        $validated = $this->organizationUnitServiceService->validator($request)->validate();
 
         try {
-            $data = $this->serviceService->update($service, $validated);
+            $data = $this->organizationUnitServiceService->update($organizationUnitService, $validated);
 
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
+
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
                     "message" => "Job finished successfully.",
@@ -174,10 +181,10 @@ class ServiceController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $service = Service::findOrFail($id);
+        $organizationUnitService = OrganizationUnitService::findOrFail($id);
 
         try {
-            $this->serviceService->destroy($service);
+            $this->organizationUnitServiceService->destroy($organizationUnitService);
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -201,5 +208,6 @@ class ServiceController extends Controller
         }
 
         return Response::json($response, JsonResponse::HTTP_OK);
+
     }
 }

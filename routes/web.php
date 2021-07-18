@@ -44,6 +44,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     //services crud api
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
 
+    //Org Unit Statistic crud api
+    $customRouter()->resourceRoute('organization-unit-services', 'OrganizationUnitServiceController')->render();
 
 
 });
