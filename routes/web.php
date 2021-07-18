@@ -20,27 +20,26 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
     //ranks crud operation
-    $customRouter('ranks')->resourceRoute('ranks', 'RankController')->render();
+    $customRouter()->resourceRoute('ranks', 'RankController')->render();
 
     //ranktypes crud operation
-    $customRouter('ranktypes')->resourceRoute('ranktypes', 'RankTypeController')->render();
+    $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
 
     //jobsectors crud operation
-    $customRouter('jobsectors')->resourceRoute('jobsectors', 'JobSectorController')->render();
+    $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();
 
     //skills crud operation
-    $customRouter('skills')->resourceRoute('skills', 'SkillController')->render();
+    $customRouter()->resourceRoute('skills', 'SkillController')->render();
 
     //occupation crud api
-    $customRouter('occupations')->resourceRoute('occupations', 'OccupationController')->render();
+    $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
 
 
     //organizationsTypes crud operation
-    $customRouter('organizationtypes')->resourceRoute('organizationtypes','OrganizationTypeController')->render();
+    $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
 
     //organization crud operation
-    $customRouter('organizations')->resourceRoute('organizations','OrganizationController')->render();
-
+    $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
 
 
 });

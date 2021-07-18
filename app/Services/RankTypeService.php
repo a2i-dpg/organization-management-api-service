@@ -65,9 +65,9 @@ class RankTypeService
         }
         $data = [];
         foreach ($rankTypes as $rankType) {
-            $_links['read'] = route('api.v1.ranktypes.read', ['id' => $rankType->id]);
-            $_links['edit'] = route('api.v1.ranktypes.update', ['id' => $rankType->id]);
-            $_links['delete'] = route('api.v1.ranktypes.destroy', ['id' => $rankType->id]);
+            $_links['read'] = route('api.v1.rank-types.read', ['id' => $rankType->id]);
+            $_links['edit'] = route('api.v1.rank-types.update', ['id' => $rankType->id]);
+            $_links['delete'] = route('api.v1.rank-types.destroy', ['id' => $rankType->id]);
             $rankType['_links'] = $_links;
             $data[] = $rankType->toArray();
         }
@@ -88,7 +88,7 @@ class RankTypeService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.ranktypes.get-list')
+                    '_link' => route('api.v1.rank-types.get-list')
                 ],
             ],
                 "_page" => $page,
@@ -123,8 +123,8 @@ class RankTypeService
 
         $links = [];
         if (!empty($rankType)) {
-            $links['update'] = route('api.v1.ranktypes.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.ranktypes.destroy', ['id' => $id]);
+            $links['update'] = route('api.v1.rank-types.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $id]);
         }
         $response = [
             "data" => $rankType ? $rankType : null,
