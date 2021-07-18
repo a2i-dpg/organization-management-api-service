@@ -29,7 +29,10 @@ class AddForeignKeysToHumanResourceTemplates extends Migration
     public function down()
     {
         Schema::table('human_resource_templates', function (Blueprint $table) {
-            //
+            $table->dropForeign('human_resource_templates_fk_organization_id');
+            $table->dropForeign('human_resource_templates_fk_organization_unit_type_id');
+            $table->dropForeign('human_resource_templates_fk_parent_id');
+            $table->dropForeign('human_resource_templates_fk_rank_id');
         });
     }
 }

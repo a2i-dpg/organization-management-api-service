@@ -65,9 +65,9 @@ class HumanResourceTemplateService
 
         $data = [];
         foreach ($humanResourceTemplates as $humanResourceTemplate) {
-            $_links['read'] = route('api.v1.ranks.read', ['id' => $humanResourceTemplate->id]);
-            $_links['update'] = route('api.v1.ranks.update', ['id' => $humanResourceTemplate->id]);
-            $_links['delete'] = route('api.v1.ranks.destroy', ['id' => $humanResourceTemplate->id]);
+            $_links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
+            $_links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
+            $_links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
             $humanResourceTemplate['_links'] = $_links;
             $data[] = $humanResourceTemplate->toArray();
         }
@@ -89,7 +89,7 @@ class HumanResourceTemplateService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.ranks.get-list')
+                    '_link' => route('api.v1.human-resource-templates.get-list')
 
                 ],
 
@@ -131,7 +131,7 @@ class HumanResourceTemplateService
             $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $id]);
         }
         return [
-            "data" => $humanResourceTemplate ? $humanResourceTemplate : null,
+            "data" => $humanResourceTemplate ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

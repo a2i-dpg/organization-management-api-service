@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array skill_ids
  * @property-read  Organization organization
  * @property-read  OrganizationUnitType organizationUnitType
- * @property-read  HumanResourceTemplate senior
+ * @property-read  HumanResourceTemplate parent
  * @property-read  HumanResource humanResource
  * @property-read  Rank rank
  */
@@ -56,9 +56,9 @@ class HumanResourceTemplate extends BaseModel
         return $this->hasMany(self::class, 'parent_id');
     }
 
-//    public function humanResource(): HasMany
-//    {
-//        return $this->hasMany(HumanResource::class);
-//    }
+    public function humanResource(): HasMany
+    {
+        return $this->hasMany(HumanResource::class);
+    }
 
 }
