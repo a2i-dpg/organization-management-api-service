@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * Class HumanResourceTemplate
- * @package Module\GovtStakeholder\App\Models
+ * @package App\Models
  * @property string title_en
  * @property string title_bn
  * @property int display_order
@@ -20,11 +23,8 @@ namespace App\Models;
  * @property-read  HumanResource humanResource
  * @property-read  Rank rank
  */
-
 class HumanResourceTemplate extends BaseModel
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -36,10 +36,10 @@ class HumanResourceTemplate extends BaseModel
         return $this->belongsTo(Organization::class);
     }
 
-    public function organizationUnitType(): BelongsTo
-    {
-        return $this->belongsTo(OrganizationUnitType::class);
-    }
+//    public function organizationUnitType(): BelongsTo
+//    {
+//        return $this->belongsTo(OrganizationUnitType::class);
+//    }
 
     public function parent(): BelongsTo
     {
@@ -56,9 +56,9 @@ class HumanResourceTemplate extends BaseModel
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    public function humanResource(): HasMany
-    {
-        return $this->hasMany(HumanResource::class);
-    }
+//    public function humanResource(): HasMany
+//    {
+//        return $this->hasMany(HumanResource::class);
+//    }
 
 }
