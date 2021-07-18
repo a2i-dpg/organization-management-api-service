@@ -144,9 +144,11 @@ class OrganizationTypeController extends Controller
         $validated = $this->organizationTypeService->validator($request)->validate();
 
         try {
-            $this->organizationTypeService->update($organizationType, $validated);
+            $data = $this->organizationTypeService->update($organizationType, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
+
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,

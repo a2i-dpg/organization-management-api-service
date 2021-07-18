@@ -61,9 +61,9 @@ class OrganizationTypeService
         }
         $data = [];
         foreach ($organizationTypes as $organizationType) {
-            $_links['read'] = route('api.v1.organizationtypes.read', ['id' => $organizationType->id]);
-            $_links['update'] = route('api.v1.organizationtypes.update', ['id' => $organizationType->id]);
-            $_links['delete'] = route('api.v1.organizationtypes.destroy', ['id' => $organizationType->id]);
+            $_links['read'] = route('api.v1.organization-types.read', ['id' => $organizationType->id]);
+            $_links['update'] = route('api.v1.organization-types.update', ['id' => $organizationType->id]);
+            $_links['delete'] = route('api.v1.organization-types.destroy', ['id' => $organizationType->id]);
             $organizationType['_links'] = $_links;
             $data[] = $organizationType->toArray();
 
@@ -85,7 +85,7 @@ class OrganizationTypeService
                         'title_en',
                         'title_bn'
                     ],
-                    '_link' => route('api.v1.organizationtypes.getList')
+                    '_link' => route('api.v1.organization-types.get-list')
                 ]
             ],
             "_page" => $page,
@@ -113,8 +113,8 @@ class OrganizationTypeService
 
         if (!empty($organizationType)) {
             $links = [
-                'update' => route('api.v1.organizationtypes.update', ['id' => $organizationType->id]),
-                'delete' => route('api.v1.organizationtypes.destroy', ['id' => $organizationType->id])
+                'update' => route('api.v1.organization-types.update', ['id' => $organizationType->id]),
+                'delete' => route('api.v1.organization-types.destroy', ['id' => $organizationType->id])
             ];
         }
 

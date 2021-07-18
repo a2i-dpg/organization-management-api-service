@@ -138,9 +138,10 @@ class RankController extends Controller
         $validated = $this->rankService->validator($request)->validate();
 
         try {
-            $this->rankService->update($rank, $validated);
+            $data = $this->rankService->update($rank, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,

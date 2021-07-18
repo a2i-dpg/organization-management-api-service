@@ -56,7 +56,7 @@ class SkillController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-            return Response::json($response,$response['_response_status']['code']);
+            return Response::json($response, $response['_response_status']['code']);
         }
 
         return Response::json($response);
@@ -103,7 +103,7 @@ class SkillController extends Controller
 
             //TODO: never response in try block if not necessary.
             $response = [
-                'data'=> $data ? $data :null,
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -143,10 +143,12 @@ class SkillController extends Controller
         $validated = $this->skillService->validator($request)->validate();
 
         try {
-            $this->skillService->update($skill, $validated);
+            $data = $this->skillService->update($skill, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
+
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
                     "message" => "Job finished successfully.",

@@ -142,9 +142,10 @@ class OccupationController extends Controller
         $validated = $this->occupationService->validator($request)->validate();
 
         try {
-            $this->occupationService->update($occupation, $validated);
+            $data = $this->occupationService->update($occupation, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,

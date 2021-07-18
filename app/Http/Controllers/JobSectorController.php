@@ -93,10 +93,8 @@ class JobSectorController extends Controller
     {
         $validated = $this->jobSectorService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->jobSectorService->store($validated);
 
-            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -138,9 +136,10 @@ class JobSectorController extends Controller
         $validated = $this->jobSectorService->validator($request)->validate();
 
         try {
-            $this->jobSectorService->update($jobSector, $validated);
+            $data = $this->jobSectorService->update($jobSector, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,

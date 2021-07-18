@@ -100,7 +100,7 @@ class OrganizationController extends Controller
 
             //TODO: never response in try block if not necessary.
             $response = [
-                'data'=>$data?$data:null,
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -123,8 +123,8 @@ class OrganizationController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
 
-      return Response::json($response, JsonResponse::HTTP_CREATED);
-  }
+        return Response::json($response, JsonResponse::HTTP_CREATED);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -142,9 +142,10 @@ class OrganizationController extends Controller
         $validated = $this->organizationService->validator($request)->validate();
 
         try {
-            $this->organizationService->update($organization, $validated);
+            $data = $this->organizationService->update($organization, $validated);
 
             $response = [
+                'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,

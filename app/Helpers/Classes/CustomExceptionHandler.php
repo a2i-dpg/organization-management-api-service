@@ -57,7 +57,7 @@ class CustomExceptionHandler
         return $this->exception->getMessage();
     }
 
-    public function getCode(): int
+    public function getCode(): string
     {
         return $this->exception->getCode();
     }
