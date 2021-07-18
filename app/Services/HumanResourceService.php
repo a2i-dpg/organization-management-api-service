@@ -5,10 +5,9 @@ namespace App\Services;
 
 
 use App\Models\HumanResource;
+use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -176,6 +175,22 @@ class HumanResourceService
         return $humanResource;
     }
 
+    /**
+     * @param HumanResource $humanResource
+     * @return HumanResource
+     */
+    public function destroy(HumanResource $humanResource): HumanResource
+    {
+        $humanResource->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
+        $humanResource->save();
+        return $humanResource;
+    }
+
+
+    /**
+     * @param Request $request
+     * @return Validator
+     */
     public function validator(Request $request): Validator
     {
 

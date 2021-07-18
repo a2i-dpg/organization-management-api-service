@@ -181,10 +181,6 @@ class HumanResourceTemplateService
         return $humanResourceTemplate;
     }
 
-    public function createHumanResourceTemplate(array $data): HumanResourceTemplate
-    {
-        return HumanResourceTemplate::create($data);
-    }
 
     public function validator(Request $request): Validator
     {

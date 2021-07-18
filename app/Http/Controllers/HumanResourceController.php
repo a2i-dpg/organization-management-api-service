@@ -53,69 +53,148 @@ class HumanResourceController extends Controller
         return Response::json($response);
     }
 
+
     /**
-     * Show the form for creating a new resource.
+     * Display the specified resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function create()
+    public function read($id): JsonResponse
     {
-        //
+        try {
+            $response = $this->humanResourceService->getOneHumanResource($id);
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
+        return Response::json($response);
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        //
+        $validatedData = $this->humanResourceService->validator($request)->validate();
+        try {
+            $data = $this->humanResourceService->store($validatedData);
+
+            $response = [
+                'data' => $data ?: null,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => JsonResponse::HTTP_CREATED,
+                    "message" => "Job finished successfully.",
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ]
+            ];
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+
+            return Response::json($response, $response['_response_status']['code']);
+        }
+
+        return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\HumanResource  $humanResource
-     * @return \Illuminate\Http\Response
-     */
-    public function show(HumanResource $humanResource)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\HumanResource  $humanResource
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(HumanResource $humanResource)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\HumanResource  $humanResource
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, HumanResource $humanResource)
+    public function update(Request $request, $id): JsonResponse
     {
-        //
+        $humanResource = HumanResource::findOrFail($id);
+
+        $validated = $this->humanResourceService->validator($request)->validate();
+
+        try {
+            $data = $this->humanResourceService->update($humanResource, $validated);
+
+            $response = [
+                'data' => $data ?: null,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => JsonResponse::HTTP_OK,
+                    "message" => "Job finished successfully.",
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ]
+            ];
+
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+
+            return Response::json($response, $response['_response_status']['code']);
+        }
+
+        return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\HumanResource  $humanResource
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy(HumanResource $humanResource)
+    public function destroy($id): JsonResponse
     {
-        //
+        $humanResource = HumanResource::findOrFail($id);
+
+        try {
+            $this->humanResourceService->destroy($humanResource);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => JsonResponse::HTTP_OK,
+                    "message" => "Job finished successfully.",
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ]
+            ];
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+
+            return Response::json($response, $response['_response_status']['code']);
+        }
+
+        return Response::json($response, JsonResponse::HTTP_OK);
     }
 }

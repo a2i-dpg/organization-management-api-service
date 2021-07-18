@@ -72,12 +72,10 @@ class HumanResourceTemplateController extends Controller
     {
         $validatedData = $this->humanResourceTemplateService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->humanResourceTemplateService->store($validatedData);
 
-            //TODO: never response in try block if not necessary.
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -156,10 +154,10 @@ class HumanResourceTemplateController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $rank = HumanResourceTemplate::findOrFail($id);
+        $humanResourceTemplate = HumanResourceTemplate::findOrFail($id);
 
         try {
-            $this->humanResourceTemplateService->destroy($rank);
+            $this->humanResourceTemplateService->destroy($humanResourceTemplate);
             $response = [
                 '_response_status' => [
                     "success" => true,
