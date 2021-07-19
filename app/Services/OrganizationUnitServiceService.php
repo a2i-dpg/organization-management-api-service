@@ -34,15 +34,14 @@ class OrganizationUnitServiceService
             [
                 'organization_unit_services.id as id',
                 'organizations.title_en as organization_title_en',
-                'organization_units.id as organization_unit_id',
-                'organization_units.organization_unit_type_id',
-                'organization_unit_services.service_id',
+                'organization_units.title_en as organization_unit_title_en',
+                'services.title_en as service_title_en',
 
             ]
         )
             ->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id')
             ->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id')
-            ->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+            ->join('services', 'organization_unit_services.service_id', '=', 'services.id');
         //->orderBy('organization_unit_types.id', $order);
 
         if (!empty($titleEn)) {
@@ -116,24 +115,23 @@ class OrganizationUnitServiceService
         $startTime = Carbon::now();
         $organizationUnitService = OrganizationUnitService::select(
             [
-                'organizationUnitServices.id as id',
-                'organizationUnitServices.title_en',
-                'organizationUnitServices.title_bn',
+                'organization_unit_services.id as id',
                 'organizations.title_en as organization_title_en',
-                'organizationUnitServices.row_status',
-                'organizationUnitServices.created_at',
-                'organizationUnitServices.updated_at',
+                'organization_units.title_en as organization_unit_title_en',
+                'services.title_en as service_title_en',
             ]
-        );
-        $organizationUnitService->LeftJoin('organizations', 'organizationUnitServices.organization_id', '=', 'organizations.id')
-            ->where('organizationUnitServices.row_status', '=', OrganizationUnitService::ROW_STATUS_ACTIVE)
-            ->where('organizationUnitServices.id', '=', $id);
+        )
+            ->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id')
+            ->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id')
+            ->join('services', 'organization_unit_services.service_id', '=', 'services.id')
+            ->where('organization_unit_services.row_status', '=', OrganizationUnitService::ROW_STATUS_ACTIVE)
+            ->where('organization_unit_services.id', '=', $id);
         $organizationUnitService = $organizationUnitService->first();
 
         $links = [];
         if (!empty($organizationUnitService)) {
-            $links['update'] = route('api.v1.organizationUnitServices.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.organizationUnitServices.destroy', ['id' => $id]);
+            $links['update'] = route('api.v1.organization-unit-services.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.organization-unit-services.destroy', ['id' => $id]);
         }
         $response = [
             "data" => $organizationUnitService ? $organizationUnitService : null,
@@ -171,23 +169,9 @@ class OrganizationUnitServiceService
      * @param array $data
      * @return OrganizationUnitService
      */
-    public function update(OrganizationUnitService $organizationUnitService, array $data): OrganizationUnitService
+    public function update(OrganizationUnitService $organizationUnitService): OrganizationUnitService
     {
-        $services = [];
-        for ($i = 0; $i < count($data['service_id']); $i++) {
-            $services[] = [
-                'organization_id' => $data['organization_id'],
-                'organization_unit_id' => $data['organization_unit_id'],
-                'service_id' => $data['service_id'][$i]
-            ];
-        }
-
-        //return OrganizationUnitService::findOrFail($organizationUnitService->id)->save($services);
-
-        $organizationUnitService->fill($services);
-        $organizationUnitService->save();
-
-        return $organizationUnitService;
+        return $this->destroy($organizationUnitService);
     }
 
     /**

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
 use App\Helpers\Classes\CustomExceptionHandler;
 use App\Models\OrganizationUnitService;
 use Carbon\Carbon;
@@ -130,17 +128,12 @@ class OrganizationUnitServiceController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update($id): JsonResponse
     {
-
         $organizationUnitService = OrganizationUnitService::findOrFail($id);
-
-        $validated = $this->organizationUnitServiceService->validator($request)->validate();
-
         try {
-            $data = $this->organizationUnitServiceService->update($organizationUnitService, $validated);
+            $data = $this->organizationUnitServiceService->update($organizationUnitService);
 
             $response = [
                 'data' => $data ? $data : null,

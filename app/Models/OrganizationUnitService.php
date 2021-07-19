@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\Scopes\ScopeRowStatusTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -12,10 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int organization_unit_id
  * @property int service_id
  **/
-
 class OrganizationUnitService extends BaseModel
 {
     use ScopeRowStatusTrait;
+
     /**
      * @var string[]
      */
@@ -24,6 +23,16 @@ class OrganizationUnitService extends BaseModel
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    /*public function organizationUnit(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationUnit::class);
+    }*/
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
     }
 
 
