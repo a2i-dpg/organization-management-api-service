@@ -17,7 +17,6 @@ use Illuminate\Validation\Rule;
  */
 class JobSectorService
 {
-
     /**
      * @param Request $request
      * @return array
