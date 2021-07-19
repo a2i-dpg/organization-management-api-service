@@ -98,10 +98,7 @@ class OrganizationUnitServiceController extends Controller
     {
         $validated = $this->organizationUnitServiceService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->organizationUnitServiceService->store($validated);
-
-            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [

@@ -43,7 +43,7 @@ class OrganizationUnitServiceService
             ->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id')
             ->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id')
             ->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
-            //->orderBy('organization_unit_types.id', $order);
+        //->orderBy('organization_unit_types.id', $order);
 
         if (!empty($titleEn)) {
             $organizationUnitServices->where('organization_unit_services.title_en', 'like', '%' . $titleEn . '%');
@@ -155,21 +155,15 @@ class OrganizationUnitServiceService
      */
     public function store(array $data): bool
     {
-        /*$organizationUnitService = new OrganizationUnitService();
-        $organizationUnitService->fill($data);
-        $organizationUnitService->save();
-
-        return $organizationUnitService;*/
-
-        dd($data);
-        $data = array_map(function ($item) use ($data) {
-            $item = array_merge($item, ['organization_id' => $data['organization_id'], 'organization_unit_id' => $data['organization_unit_id']]);
-            return $item;
-        }, $data['service_id']);
-
-        dd($data);
-
-        return UpazilaJobStatistic::insert($data);
+        $services = [];
+        for ($i = 0; $i < count($data['service_id']); $i++) {
+            $services[] = [
+                'organization_id' => $data['organization_id'],
+                'organization_unit_id' => $data['organization_unit_id'],
+                'service_id' => $data['service_id'][$i]
+            ];
+        }
+        return OrganizationUnitService::insert($services);
     }
 
     /**
@@ -179,7 +173,18 @@ class OrganizationUnitServiceService
      */
     public function update(OrganizationUnitService $organizationUnitService, array $data): OrganizationUnitService
     {
-        $organizationUnitService->fill($data);
+        $services = [];
+        for ($i = 0; $i < count($data['service_id']); $i++) {
+            $services[] = [
+                'organization_id' => $data['organization_id'],
+                'organization_unit_id' => $data['organization_unit_id'],
+                'service_id' => $data['service_id'][$i]
+            ];
+        }
+
+        //return OrganizationUnitService::findOrFail($organizationUnitService->id)->save($services);
+
+        $organizationUnitService->fill($services);
         $organizationUnitService->save();
 
         return $organizationUnitService;
@@ -214,9 +219,9 @@ class OrganizationUnitServiceService
                 'int',
                 'exists:organization_units,id',
             ],
-            'service_ids' => [
+            'service_id' => [
                 'required',
-                //'exists:services,id',
+                'exists:services,id',
             ],
         ];
         return Validator::make($request->all(), $rules);
