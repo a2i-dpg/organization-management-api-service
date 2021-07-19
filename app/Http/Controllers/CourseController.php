@@ -90,11 +90,11 @@ class CourseController extends Controller
     function store(Request $request): JsonResponse
     {
         $validated = $this->courseService->validator($request)->validate();
+
+        //dd($validated);
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->courseService->store($validated);
 
-            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [

@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Helpers\Classes\FileHandler;
 use App\Models\Course;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -163,6 +164,16 @@ class CourseService
      */
     public function store(array $data): Course
     {
+        $filename = null;
+        if (!empty($data['cover_image'])) {
+            $filename = FileHandler::storePhoto($data['cover_image'], 'course');
+        }
+        if ($filename) {
+            $data['cover_image'] = 'course/' . $filename;
+        } else {
+            $data['cover_image'] = Course::DEFAULT_COVER_IMAGE;
+        }
+
         $course = new Course();
         $course->fill($data);
         $course->save();
