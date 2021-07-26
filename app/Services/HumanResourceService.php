@@ -34,7 +34,7 @@ class HumanResourceService
             'human_resources.created_at',
             'human_resources.updated_at',
             'human_resources.title_en as parent',
-            'organization_units.title_en as organization_unit_name',
+//            'organization_units.title_en as organization_unit_name',
             'organizations.title_en as organization_name',
             'human_resource_templates.title_en as human_resource_template_name',
             'ranks.id as rank_title',
@@ -42,7 +42,7 @@ class HumanResourceService
 
         $humanResources->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
         $humanResources->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+//        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResources->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
         $humanResources->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
         $humanResources->orderBy('human_resource_templates.id', $order);
@@ -117,7 +117,7 @@ class HumanResourceService
             'human_resources.created_at',
             'human_resources.updated_at',
             'human_resources.title_en as parent',
-            'organization_units.title_en as organization_unit_name',
+//            'organization_units.title_en as organization_unit_name',
             'organizations.title_en as organization_name',
             'human_resource_templates.title_en as human_resource_template_name',
             'ranks.id as rank_title',
@@ -125,7 +125,7 @@ class HumanResourceService
 
         $humanResources->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
         $humanResources->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+//        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResources->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
         $humanResources->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
         $humanResources->where('human_resources.id', $id);
@@ -172,6 +172,7 @@ class HumanResourceService
     {
         $humanResource->fill($data);
         $humanResource->save();
+
         return $humanResource;
     }
 
@@ -183,6 +184,7 @@ class HumanResourceService
     {
         $humanResource->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
         $humanResource->save();
+
         return $humanResource;
     }
 
@@ -210,11 +212,11 @@ class HumanResourceService
                 'int',
                 'exists:organizations,id'
             ],
-            'organization_unit_id' => [
-                'required',
-                'int',
-                'exists:organization_units,id'
-            ],
+//            'organization_unit_id' => [
+//                'required',
+//                'int',
+//                'exists:organization_units,id'
+//            ],
             'parent_id' => [
                 'nullable',
                 'int',
