@@ -5,7 +5,6 @@ namespace App\Services;
 
 use App\Models\OrganizationType;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -141,8 +140,8 @@ class OrganizationTypeService
         $organizationType = new OrganizationType();
         $organizationType->fill($data);
         $organizationType->save();
-        return $organizationType;
 
+        return $organizationType;
     }
 
     /**
@@ -154,8 +153,8 @@ class OrganizationTypeService
     {
         $organizationType->fill($data);
         $organizationType->save();
-        return $organizationType;
 
+        return $organizationType;
     }
 
     /**
