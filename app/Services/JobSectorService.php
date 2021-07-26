@@ -162,6 +162,7 @@ class JobSectorService
     {
         $JobSector->fill($data);
         $JobSector->save();
+
         return $JobSector;
     }
 
@@ -171,8 +172,9 @@ class JobSectorService
      */
     public function destroy(JobSector $JobSector): JobSector
     {
-        $JobSector->row_status = 99;
+        $JobSector->row_status = JobSector::ROW_STATUS_DELETED;
         $JobSector->save();
+
         return $JobSector;
     }
 
