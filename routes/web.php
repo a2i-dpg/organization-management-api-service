@@ -18,7 +18,6 @@ $router->get('/', function () use ($router) {
 
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
-
     $customRouter()->resourceRoute('ranks', 'RankController')->render();
     $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
     $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();
