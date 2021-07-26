@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\Organization;
 use App\Models\OrganizationType;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -118,7 +119,7 @@ class OrganizationTypeService
         }
 
         return [
-            "data" => $organizationType ? $organizationType : [],
+            "data" => $organizationType ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -163,10 +164,10 @@ class OrganizationTypeService
      */
     public function destroy(OrganizationType $organizationType): OrganizationType
     {
-        $organizationType->row_status = 99;
+        $organizationType->row_status = Organization::ROW_STATUS_DELETED;
         $organizationType->save();
-        return $organizationType;
 
+        return $organizationType;
     }
 
     /**
