@@ -35,6 +35,7 @@ class CreateOrganizationsTable extends Migration
             $table->unsignedTinyInteger('row_status')->default(1);
             $table->timestamps();
         });
+
     }
 
     /**

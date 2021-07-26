@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Organization;
+use App\Models\OrganizationUnitType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call('UsersTableSeeder');
+         $this->call([
+             OrganizationSeeder::class,
+             OrganizationUnitTypeSeeder::class,
+         ]);
     }
 }

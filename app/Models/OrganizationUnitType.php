@@ -6,28 +6,24 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Occupation
+ * Class OrganizationUnitType
  * @package App\Models
  * @property string title_en
  * @property string title_bn
- * @property int job_sector_id
+ * @property-read int organization_id
  * @property int row_status
- * @property-read jobSector jobSector
- */
-class Occupation extends BaseModel
+ *
+ * */
+class OrganizationUnitType extends BaseModel
 {
     use ScopeRowStatusTrait;
-
-    /**
-     * @var string[]
-     */
     protected $guarded = ['id'];
 
     /**
      * @return BelongsTo
      */
-    public function jobSector(): BelongsTo
+    public function organization(): BelongsTo
     {
-        return $this->belongsTo(JobSector::class);
+        return $this->belongsTo(Organization::class);
     }
 }
