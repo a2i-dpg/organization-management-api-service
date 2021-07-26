@@ -24,7 +24,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
     $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
     $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
-    $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
+
+
+    //organization unit types crud operation
     $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-unit-services', 'OrganizationUnitServiceController')->render();
