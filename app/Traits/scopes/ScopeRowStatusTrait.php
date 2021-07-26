@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Scopes;
+namespace App\Traits\scopes;
 
 
 use App\Models\BaseModel;

@@ -36,11 +36,17 @@ class OrganizationService
             'organizations.id',
             'organizations.title_en',
             'organizations.title_bn',
+            'organizations.domain',
+            'organizations.fax_no',
             'organizations.mobile',
             'organizations.email',
-            'organizations.row_status',
             'organizations.contact_person_name',
-            'organization_types.title_en as organization_types_title',
+            'organizations.contact_person_mobile',
+            'organizations.contact_person_email',
+            'organizations.contact_person_designation',
+            'organizations.description',
+            'organizations.row_status',
+            'organization_types.title_en as organization_types_title'
 
         ]);
         $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id')
@@ -126,7 +132,6 @@ class OrganizationService
             'organizations.description',
             'organizations.row_status',
             'organization_types.title_en as organization_types_title'
-
         ])->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id')
             ->where('organizations.id', '=', $id)
             ->where('organizations.row_status', '=', Organization::ROW_STATUS_ACTIVE);
@@ -174,6 +179,7 @@ class OrganizationService
     {
         $organization->fill($data);
         $organization->save();
+
         return $organization;
     }
 
@@ -183,8 +189,9 @@ class OrganizationService
      */
     public function destroy(Organization $organization): Organization
     {
-        $organization->row_status = 99;
+        $organization->row_status = Organization::ROW_STATUS_DELETED;
         $organization->save();
+
         return $organization;
 
     }
@@ -198,14 +205,17 @@ class OrganizationService
     {
         $rules = [
             'title_en' => [
-                'max:191',
                 'required',
-                'string'
+                'string',
+                'max:191',
             ],
             'title_bn' => [
                 'required',
                 'string',
                 'max:191',
+            ],
+            'organization_type_id' => [
+                'required',
             ],
             'domain' => [
                 'required',
@@ -214,26 +224,14 @@ class OrganizationService
                 'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
                 'unique:organizations,domain,' . $id
             ],
-
             'description' => [
                 'nullable',
-                'max:255',
-            ],
-            'organization_type_id' => [
-                'required',
+                'max:5000',
             ],
             'fax_no' => [
                 'nullable',
                 'max: 50',
                 'regex: /^\+?[0-9]{6,}$/',
-            ],
-            'contact_person_designation' => [
-                'required',
-                'max: 191',
-            ],
-            'contact_person_email' => [
-                'required',
-                'regex: /\S+@\S+\.\S+/'
             ],
             'contact_person_mobile' => [
                 'required',
@@ -242,6 +240,14 @@ class OrganizationService
             'contact_person_name' => [
                 'required',
                 'max: 191',
+            ],
+            'contact_person_designation' => [
+                'required',
+                'max: 191',
+            ],
+            'contact_person_email' => [
+                'required',
+                'regex: /\S+@\S+\.\S+/'
             ],
             'mobile' => [
                 'required',
@@ -252,7 +258,7 @@ class OrganizationService
                 'regex : /^[^\s@]+@[^\s@]+$/',
             ],
             'logo' => [
-                'required_if:' . $id . ',null',
+//                'required_if:' . $id . ',null', TODO: it's required, have to add when filesystem api will be ready
                 'image',
                 'mimes:jpeg,jpg,png,gif',
                 'max:500',

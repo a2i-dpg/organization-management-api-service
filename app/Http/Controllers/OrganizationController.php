@@ -139,13 +139,13 @@ class OrganizationController extends Controller
         //TO DO : api test with valid data
         $organization = Organization::findOrFail($id);
 
-        $validated = $this->organizationService->validator($request)->validate();
+        $validated = $this->organizationService->validator($request, $id)->validate();
 
         try {
             $data = $this->organizationService->update($organization, $validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -207,6 +207,5 @@ class OrganizationController extends Controller
 
         return Response::json($response, JsonResponse::HTTP_OK);
     }
-
 
 }

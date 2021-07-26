@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Organization extends BaseModel
 {
     use ScopeRowStatusTrait;
+    protected  $guarded = ['id'];
+
     /**
      * @return BelongsTo
      */
@@ -35,5 +37,4 @@ class Organization extends BaseModel
         return $this->belongsTo(OrganizationType::class);
     }
 
-    protected  $guarded = ['id'];
 }

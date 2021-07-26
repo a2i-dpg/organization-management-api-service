@@ -15,6 +15,7 @@ class CreateOrganizationsTable extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('organization_type_id')->nullable()->index('organizations_fk_organization_type_id');
             $table->string('title_en', 191)->nullable();
             $table->string('title_bn', 191)->nullable();
             $table->unsignedInteger('loc_division_id')->nullable();
@@ -31,7 +32,6 @@ class CreateOrganizationsTable extends Migration
             $table->string('description')->nullable();
             $table->string('logo', 191)->nullable();
             $table->string('domain', 191)->nullable();
-            $table->unsignedInteger('organization_type_id')->nullable()->index('organizations_fk_organization_type_id');
             $table->unsignedTinyInteger('row_status')->default(1);
             $table->timestamps();
         });

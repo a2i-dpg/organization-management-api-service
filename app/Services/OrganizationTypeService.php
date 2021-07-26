@@ -3,9 +3,9 @@
 
 namespace App\Services;
 
+use App\Models\Organization;
 use App\Models\OrganizationType;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -119,7 +119,7 @@ class OrganizationTypeService
         }
 
         return [
-            "data" => $organizationType ? $organizationType : [],
+            "data" => $organizationType ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -141,8 +141,8 @@ class OrganizationTypeService
         $organizationType = new OrganizationType();
         $organizationType->fill($data);
         $organizationType->save();
-        return $organizationType;
 
+        return $organizationType;
     }
 
     /**
@@ -154,8 +154,8 @@ class OrganizationTypeService
     {
         $organizationType->fill($data);
         $organizationType->save();
-        return $organizationType;
 
+        return $organizationType;
     }
 
     /**
@@ -164,10 +164,10 @@ class OrganizationTypeService
      */
     public function destroy(OrganizationType $organizationType): OrganizationType
     {
-        $organizationType->row_status = 99;
+        $organizationType->row_status = Organization::ROW_STATUS_DELETED;
         $organizationType->save();
-        return $organizationType;
 
+        return $organizationType;
     }
 
     /**
