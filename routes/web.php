@@ -40,6 +40,12 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     //organization crud operation
     $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
+    $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
 
+    //organization unit types crud operation
+    $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
+
+    $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
+    $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
 
 });
