@@ -144,6 +144,7 @@ class OrganizationUnitTypeService
         $organizationUnitType = new OrganizationUnitType();
         $organizationUnitType->fill($data);
         $organizationUnitType->save();
+
         return $organizationUnitType;
 
     }
@@ -157,6 +158,7 @@ class OrganizationUnitTypeService
     {
         $organizationUnitType->fill($data);
         $organizationUnitType->save();
+
         return $organizationUnitType;
     }
 
@@ -199,7 +201,6 @@ class OrganizationUnitTypeService
                     return !empty($id);
                 }),
                 'int',
-                'exists:row_status,code',
             ]
         ];
 

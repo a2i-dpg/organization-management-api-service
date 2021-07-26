@@ -35,7 +35,6 @@ class OrganizationUnitTypeController extends Controller
     {
         $this->organizationUnitTypeService = $organizationUnitTypeService;
         $this->startTime = Carbon::now();
-
     }
 
     /**
@@ -131,10 +130,9 @@ class OrganizationUnitTypeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-
         $jobSector = OrganizationUnitType::findOrFail($id);
 
-        $validated = $this->organizationUnitTypeService->validator($request)->validate();
+        $validated = $this->organizationUnitTypeService->validator($request, $id)->validate();
 
         try {
             $data = $this->organizationUnitTypeService->update($jobSector, $validated);
