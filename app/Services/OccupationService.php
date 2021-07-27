@@ -97,7 +97,7 @@ class OccupationService
      * @param $id
      * @return array
      */
-    public function getOneOccupation($id)
+    public function getOneOccupation($id): array
     {
         $startTime = Carbon::now();
         $links = [];

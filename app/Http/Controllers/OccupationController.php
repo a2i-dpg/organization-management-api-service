@@ -145,7 +145,7 @@ class OccupationController extends Controller
             $data = $this->occupationService->update($occupation, $validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
