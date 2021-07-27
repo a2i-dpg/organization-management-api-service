@@ -63,13 +63,12 @@ class SkillController extends Controller
 
     }
 
+
     /**
-     * Display the specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
             $response = $this->skillService->getOneSkill($id);

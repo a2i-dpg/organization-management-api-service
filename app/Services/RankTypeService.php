@@ -102,7 +102,7 @@ class RankTypeService
      * @param $id
      * @return array
      */
-    public function getOneRanktype($id): array
+    public function getOneRankType($id): array
     {
         $startTime = Carbon::now();
         $rankType = RankType::select(

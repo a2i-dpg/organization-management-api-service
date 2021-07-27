@@ -107,7 +107,7 @@ class SkillService
      * @param $id
      * @return array
      */
-    public function getOneSkill($id)
+    public function getOneSkill($id): array
     {
         $startTime = Carbon::now();
         $skill = Skill::select(
@@ -187,7 +187,7 @@ class SkillService
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
      */
-    public function validator(Request $request)
+    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [

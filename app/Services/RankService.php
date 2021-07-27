@@ -2,7 +2,6 @@
 
 
 namespace App\Services;
-use App\Traits\Scopes\ScopeRowStatusTrait;
 use App\Models\Rank;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -106,7 +105,7 @@ class RankService
      * @param $id
      * @return array
      */
-    public function getOneRank($id)
+    public function getOneRank($id): array
     {
         $startTime = Carbon::now();
         $rank = Rank::select(
@@ -190,7 +189,7 @@ class RankService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request)
+    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [

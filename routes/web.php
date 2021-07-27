@@ -21,7 +21,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('skills', 'SkillController')->render();
     $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
     $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
-    $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
+    $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
     $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
     $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
     $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();

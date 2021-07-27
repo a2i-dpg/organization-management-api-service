@@ -7,10 +7,12 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
+/**
+ * Class OrganizationUnitService
+ * @package App\Services
+ */
 class OrganizationUnitService
 {
     public function getAllOrganizationUnit(Request $request): array
@@ -139,6 +141,7 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_name'
         ]);
         $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
+        $organizationUnit->where('organization_units.id','=', $id);
         $organizationUnit->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
         $organizationUnit = $organizationUnit->first();
 

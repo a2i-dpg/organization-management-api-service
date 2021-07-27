@@ -64,15 +64,13 @@ class RankTypeController extends Controller
     }
 
     /**
-     * Display a specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
-            $response = $this->rankTypeService->getOneRanktype($id);
+            $response = $this->rankTypeService->getOneRankType($id);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -94,6 +92,7 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
+
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankTypeService->validator($request)->validate();

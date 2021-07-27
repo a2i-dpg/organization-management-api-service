@@ -60,27 +60,26 @@ class OrganizationUnitController extends Controller
         return Response::json($response);
     }
 
+
     /**
-     * Display a specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
-//        try {
+        try {
             $response = $this->organizationUnitService->getOneOrganizationUnit($id);
-//        } catch (Throwable $e) {
-//            $handler = new CustomExceptionHandler($e);
-//            $response = [
-//                '_response_status' => array_merge([
-//                    "success" => false,
-//                    "started" => $this->startTime,
-//                    "finished" => Carbon::now(),
-//                ], $handler->convertExceptionToArray())
-//            ];
-//            return Response::json($response, $response['_response_status']['code']);
-//        }
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime,
+                    "finished" => Carbon::now(),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
         return Response::json($response);
 
     }
