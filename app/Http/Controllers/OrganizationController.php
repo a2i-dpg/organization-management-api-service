@@ -22,6 +22,9 @@ class OrganizationController extends Controller
      * @var OrganizationService
      */
     protected OrganizationService $organizationService;
+    /**
+     * @var Carbon
+     */
     private Carbon $startTime;
 
     /**

@@ -134,6 +134,7 @@ class OrganizationTypeController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {

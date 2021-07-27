@@ -48,7 +48,7 @@ class OrganizationService
 
         ]);
         $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id')
-            ->orderBy('organization_types.id', $order);
+            ->orderBy('organizations.id', $order);
 
 
         if (!empty($titleEn)) {
@@ -229,6 +229,18 @@ class OrganizationService
             'fax_no' => [
                 'nullable',
                 'max: 50',
+            ],
+            'loc_division_id' => [
+                'nullable',
+                'int',
+            ],
+            'loc_district_id' => [
+                'nullable',
+                'int',
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'int',
             ],
             'contact_person_mobile' => [
                 'required',
