@@ -58,13 +58,12 @@ class RankController extends Controller
         return Response::json($response);
     }
 
+
     /**
-     * Display the specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
             $response = $this->rankService->getOneRank($id);
