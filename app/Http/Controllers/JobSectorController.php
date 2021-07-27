@@ -21,6 +21,9 @@ class JobSectorController extends Controller
      * @var JobSectorService
      */
     public JobSectorService $jobSectorService;
+    /**
+     * @var Carbon
+     */
     private Carbon $startTime;
 
     /**

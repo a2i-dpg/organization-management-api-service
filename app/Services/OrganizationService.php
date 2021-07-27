@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
  */
 class OrganizationService
 {
-
     /**
      * @param Request $request
      * @return array
