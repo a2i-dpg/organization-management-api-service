@@ -138,6 +138,7 @@ class OrganizationUnitService
 //                     'loc_upazilas.title_en as upazila_name',
             'organization_unit_types.title_en as organization_unit_name'
         ]);
+        $organizationUnit->where('organization_units.id', '=', $id);
         $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnit->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
         $organizationUnit = $organizationUnit->first();
