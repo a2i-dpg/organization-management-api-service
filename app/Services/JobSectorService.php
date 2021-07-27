@@ -102,7 +102,7 @@ class JobSectorService
      * @param $id
      * @return array
      */
-    public function getOneJobSecotor($id): array
+    public function getOneJobSector($id): array
     {
         $startTime = Carbon::now();
 
@@ -145,11 +145,11 @@ class JobSectorService
      */
     public function store(array $data): JobSector
     {
-        $jobsector = new JobSector();
-        $jobsector->fill($data);
-        $jobsector->save();
+        $jobSector = new JobSector();
+        $jobSector->fill($data);
+        $jobSector->save();
 
-        return $jobsector;
+        return $jobSector;
     }
 
     /**

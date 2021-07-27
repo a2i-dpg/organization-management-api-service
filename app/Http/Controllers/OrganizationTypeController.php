@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\OrganizationType;
 use App\Services\OrganizationTypeService;
+use Illuminate\Validation\ValidationException;
 use App\Helpers\Classes\CustomExceptionHandler;
 use Illuminate\Support\Facades\Response;
 use Throwable;
@@ -63,11 +64,10 @@ class OrganizationTypeController extends Controller
 
     /**
      * Display a specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
             $response = $this->organizationTypeService->getOneOrganizationType($id);
@@ -89,7 +89,7 @@ class OrganizationTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -101,7 +101,7 @@ class OrganizationTypeController extends Controller
             $data = $this->organizationTypeService->store($validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -127,14 +127,13 @@ class OrganizationTypeController extends Controller
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
+     *  * Update the specified resource in storage.
+     * @param Request $request
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -146,7 +145,7 @@ class OrganizationTypeController extends Controller
             $data = $this->organizationTypeService->update($organizationType, $validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
 
                 '_response_status' => [
                     "success" => true,
@@ -181,10 +180,10 @@ class OrganizationTypeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $organizationTYpe = OrganizationType::findOrFail($id);
+        $organizationType = OrganizationType::findOrFail($id);
 
         try {
-            $this->organizationTypeService->destroy($organizationTYpe);
+            $this->organizationTypeService->destroy($organizationType);
             $response = [
                 '_response_status' => [
                     "success" => true,

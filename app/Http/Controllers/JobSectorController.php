@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Classes\CustomExceptionHandler;
 use App\Models\JobSector;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -67,10 +68,10 @@ class JobSectorController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
-            $response = $this->jobSectorService->getOneJobSecotor($id);
+            $response = $this->jobSectorService->getOneJobSector($id);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -90,7 +91,7 @@ class JobSectorController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {

@@ -171,7 +171,7 @@ class OccupationService
     public function destroy(Occupation $occupation): Occupation
     {
 
-        $occupation->row_status = 99;
+        $occupation->row_status =Occupation::ROW_STATUS_DELETED;
         $occupation->save();
         return $occupation;
 
