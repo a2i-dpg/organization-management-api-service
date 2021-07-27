@@ -10,6 +10,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  * @property string title_en
  * @property string title_bn
  * @property bool is_government
+ * @property int row_status
  */
 class OrganizationType extends BaseModel
 {

@@ -22,6 +22,9 @@ class OrganizationController extends Controller
      * @var OrganizationService
      */
     protected OrganizationService $organizationService;
+    /**
+     * @var Carbon
+     */
     private Carbon $startTime;
 
     /**
@@ -35,6 +38,7 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
      * @param Request $request
      * @return JsonResponse
      */
@@ -60,11 +64,11 @@ class OrganizationController extends Controller
 
     /**
      * Display a specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+
+    public function read($id): JsonResponse
     {
         try {
             $response = $this->organizationService->getOneOrganization($id);
@@ -85,8 +89,7 @@ class OrganizationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -128,8 +131,7 @@ class OrganizationController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException

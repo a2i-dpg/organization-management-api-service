@@ -8,6 +8,7 @@ use App\Models\Occupation;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use App\Services\OccupationService;
 
@@ -63,11 +64,10 @@ class OccupationController extends Controller
 
     /**
      * Display the specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
             $response = $this->occupationService->getOneOccupation($id);
@@ -90,7 +90,7 @@ class OccupationController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
@@ -132,7 +132,7 @@ class OccupationController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -145,7 +145,7 @@ class OccupationController extends Controller
             $data = $this->occupationService->update($occupation, $validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -173,7 +173,7 @@ class OccupationController extends Controller
     }
 
     /**
-     *  emove the specified resource from storage
+     * Remove the specified resource from storage
      * @param $id
      * @return JsonResponse
      */

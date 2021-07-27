@@ -9,6 +9,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  * @package App\Models
  * @property string title_en
  * @property string title_bn
+ * @property int row_status
  */
 
 class JobSector extends BaseModel

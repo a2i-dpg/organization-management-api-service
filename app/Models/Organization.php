@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string mobile
  * @property string email
  * @property string fax_no
+ * @property int loc_district_id
+ * @property int loc_division_id
+ * @property int loc_upazila_id
  * @property string contact_person_name
  * @property string contact_person_mobile
  * @property string contact_person_email
@@ -27,6 +30,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Organization extends BaseModel
 {
     use ScopeRowStatusTrait;
+
+    /**
+     * @var string[]
+     */
     protected  $guarded = ['id'];
 
     /**

@@ -1,13 +1,11 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Class CreateJobSectorsTable
- */
-class CreateJobSectorsTable extends Migration
+class CreateOrganizationUnitTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,12 +14,14 @@ class CreateJobSectorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_sectors', function (Blueprint $table) {
+        Schema::create('organization_unit_types', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('organization_id');
             $table->string('title_en', 191)->nullable();
             $table->string('title_bn', 191)->nullable();
             $table->unsignedTinyInteger('row_status')->default(1);
             $table->timestamps();
+            $table->foreign('organization_id')->references('id')->on('organizations');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateJobSectorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_sectors');
+        Schema::dropIfExists('organization_unit_types');
     }
 }

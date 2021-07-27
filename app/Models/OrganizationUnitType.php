@@ -12,11 +12,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string title_bn
  * @property-read int organization_id
  * @property int row_status
- *
+ * @property-read Organization $organization
  * */
 class OrganizationUnitType extends BaseModel
 {
     use ScopeRowStatusTrait;
+
+    /**
+     * @var string[]
+     */
     protected $guarded = ['id'];
 
     /**

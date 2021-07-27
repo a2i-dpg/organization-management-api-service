@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Helpers\Classes\CustomExceptionHandler;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use App\Models\OrganizationUnitType;
 use App\Services\OrganizationUnitTypeService;
@@ -38,6 +39,7 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -62,11 +64,11 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
-     * @param Request $request
+     * Display a specified resource
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read($id): JsonResponse
     {
         try {
             $response = $this->organizationUnitTypeService->getOneOrganizationUnitType($id);
@@ -82,14 +84,15 @@ class OrganizationUnitTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
+     * *Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
+
     function store(Request $request): JsonResponse
     {
         $validated = $this->organizationUnitTypeService->validator($request)->validate();
@@ -123,10 +126,11 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -199,8 +203,6 @@ class OrganizationUnitTypeController extends Controller
         }
 
         return Response::json($response, JsonResponse::HTTP_OK);
-
     }
-
 
 }
