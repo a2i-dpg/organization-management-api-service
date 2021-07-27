@@ -231,7 +231,6 @@ class OrganizationService
             'fax_no' => [
                 'nullable',
                 'max: 50',
-                'regex: /^\+?[0-9]{6,}$/',
             ],
             'contact_person_mobile' => [
                 'required',

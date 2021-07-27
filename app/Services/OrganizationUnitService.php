@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class OrganizationUnitService
 {
@@ -43,20 +44,20 @@ class OrganizationUnitService
 //                     'loc_divisions.title_en as division_name',
 //                     'loc_districts.title_en as district_name',
 //                     'loc_upazilas.title_en as upazila_name',
-//                     'organization_unit_types.title_en as organization_unit_name'
+                     'organization_unit_types.title_en as organization_unit_name'
                 ]);
 
                 $organizationUnits->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
 //                 $organizationUnits->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
 //                 $organizationUnits->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
 //                 $organizationUnits->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
-//                 $organizationUnits->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+                 $organizationUnits->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
 
 
          if (!empty($titleEn)) {
-                    $organizationTypes->where('organization_unit.title_en', 'like', '%' . $titleEn . '%');
+                    $organizationUnits->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
                 } elseif (!empty($titleBn)) {
-                    $organizationTypes->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+                    $organizationUnits->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
                 }
 
 
@@ -110,6 +111,58 @@ class OrganizationUnitService
 
     }
 
+    public function getOneOrganizationUnit($id): array
+    {
+
+        $startTime = Carbon::now();
+        $links = [];
+        $organizationUnit = OrganizationUnit::select([
+            'organization_units.id',
+            'organization_units.title_en',
+            'organization_units.title_bn',
+            'organization_units.address',
+            'organization_units.mobile',
+            'organization_units.email',
+            'organization_units.fax_no',
+            'organization_units.contact_person_name',
+            'organization_units.contact_person_mobile',
+            'organization_units.contact_person_email',
+            'organization_units.contact_person_designation',
+            'organization_units.employee_size',
+            'organization_units.row_status',
+            'organization_units.created_at',
+            'organization_units.updated_at',
+            'organizations.title_en as organization_name',
+//                     'loc_divisions.title_en as division_name',
+//                     'loc_districts.title_en as district_name',
+//                     'loc_upazilas.title_en as upazila_name',
+            'organization_unit_types.title_en as organization_unit_name'
+        ]);
+        $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
+        $organizationUnit->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnit = $organizationUnit->first();
+
+        if (!empty($organizationUnit)) {
+            $links = [
+                'update' => route('api.v1.organization-units.update', ['id' => $id]),
+                'delete' => route('api.v1.organization-units.destroy', ['id' => $id])
+            ];
+        }
+
+        return [
+            "data" => $organizationUnit ? $organizationUnit : null,
+            "_response_status" => [
+                "success" => true,
+                "code" => JsonResponse::HTTP_OK,
+                "message" => "Job finished successfully.",
+                "started" => $startTime,
+                "finished" => Carbon::now(),
+            ],
+            "_links" => $links
+        ];
+    }
+
+
     public function update(OrganizationUnit $organizationUnit, array $data): OrganizationUnit
         {
             $organizationUnit->fill($data);
@@ -140,9 +193,9 @@ class OrganizationUnitService
         }
 
         /**
-         * @param Organization $organization
+         * @param OrganizationUnit $organizationUnit
          * @param array $data
-         * @return Organization
+         * @return OrganizationUnit
          */
 
 
@@ -151,26 +204,21 @@ class OrganizationUnitService
              {
                  $rules = [
                      'title_en' => [
-                         'required',
-                         'string',
-                         'max: 191'
+                         'required'
                      ],
-
                      'title_bn' => [
-                         'required',
-                         'string',
-                         'max: 191'
+                         'required'
                      ],
                      'organization_id' => [
                          'required',
                          'int',
                          'exists:organizations,id',
                      ],
-//                      'organization_unit_type_id' => [
-//                          'required',
-//                          'int',
-//                          'exists:organization_unit_types,id',
-//                      ],
+                      'organization_unit_type_id' => [
+                          'required',
+                          'int',
+                          'exists:organization_unit_types,id',
+                      ],
 //                      'loc_division_id' => [
 //                          'required',
 //                          'int',

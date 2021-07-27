@@ -35,5 +35,4 @@ class OrganizationUnitService extends BaseModel
         return $this->belongsTo(Service::class);
     }
 
-
 }

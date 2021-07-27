@@ -19,14 +19,14 @@ use Throwable;
 class OrganizationUnitController extends Controller
 {
     /**
-     * @var OrganizationService
+     * @var OrganizationUnitService
      */
     protected OrganizationUnitService $organizationUnitService;
     private Carbon $startTime;
 
     /**
      * OrganizationController constructor.
-     * @param OrganizationService $organizationService
+     * @param OrganizationUnitService $organizationUnitService
      */
     public function __construct(OrganizationUnitService $organizationUnitService)
     {
@@ -68,19 +68,19 @@ class OrganizationUnitController extends Controller
      */
     public function read(Request $request, $id): JsonResponse
     {
-        try {
-            $response = $this->organizationUnitService->getOneOrganization($id);
-        } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
-        }
+//        try {
+            $response = $this->organizationUnitService->getOneOrganizationUnit($id);
+//        } catch (Throwable $e) {
+//            $handler = new CustomExceptionHandler($e);
+//            $response = [
+//                '_response_status' => array_merge([
+//                    "success" => false,
+//                    "started" => $this->startTime,
+//                    "finished" => Carbon::now(),
+//                ], $handler->convertExceptionToArray())
+//            ];
+//            return Response::json($response, $response['_response_status']['code']);
+//        }
         return Response::json($response);
 
     }
@@ -94,6 +94,7 @@ class OrganizationUnitController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+//        dd($request->all());
         ///TO DO : api test with valid data
         $validated = $this->organizationUnitService->validator($request)->validate();
         try {
