@@ -38,6 +38,7 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
      * @param Request $request
      * @return JsonResponse
      */

@@ -64,7 +64,6 @@ class JobSectorController extends Controller
 
     /**
      * Display the specified resource
-     * @param Request $request
      * @param $id
      * @return JsonResponse
      */

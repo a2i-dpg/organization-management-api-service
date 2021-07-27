@@ -168,7 +168,7 @@ class OrganizationUnitTypeService
      */
     public function destroy(OrganizationUnitType $organizationUnitType): OrganizationUnitType
     {
-        $organizationUnitType->row_Status = 99;
+        $organizationUnitType->row_Status =OrganizationUnitType::ROW_STATUS_DELETED;
         $organizationUnitType->save();
         return $organizationUnitType;
     }

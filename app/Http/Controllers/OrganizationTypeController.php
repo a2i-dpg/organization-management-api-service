@@ -39,6 +39,7 @@ class OrganizationTypeController extends Controller
     }
 
     /**
+     *Display a listing of the resource.
      * @param Request $request
      * @return JsonResponse
      */
@@ -87,8 +88,7 @@ class OrganizationTypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
+     * Store a newly created resource in storage
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -129,7 +129,7 @@ class OrganizationTypeController extends Controller
 
 
     /**
-     *  * Update the specified resource in storage.
+     * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
      * @return JsonResponse
