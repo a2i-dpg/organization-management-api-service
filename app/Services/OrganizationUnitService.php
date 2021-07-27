@@ -55,7 +55,7 @@ class OrganizationUnitService
 
 
          if (!empty($titleEn)) {
-                    $organizationUnits->where('organization_unit.title_en', 'like', '%' . $titleEn . '%');
+                    $organizationUnits->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
                 } elseif (!empty($titleBn)) {
                     $organizationUnits->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
                 }
@@ -138,12 +138,14 @@ class OrganizationUnitService
 //                     'loc_upazilas.title_en as upazila_name',
             'organization_unit_types.title_en as organization_unit_name'
         ]);
-//        $organizationUnit = $organizationUnit->first();
+        $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
+        $organizationUnit->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnit = $organizationUnit->first();
 
         if (!empty($organizationUnit)) {
             $links = [
                 'update' => route('api.v1.organization-units.update', ['id' => $id]),
-                'delete' => route('api.v1.organizations-units.destroy', ['id' => $id])
+                'delete' => route('api.v1.organization-units.destroy', ['id' => $id])
             ];
         }
 
