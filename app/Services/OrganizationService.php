@@ -222,7 +222,7 @@ class OrganizationService
                 'string',
                 'max:191',
                 'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'unique:organizations,domain,' . $id
+                'unique:organizations,domain,'.$id
             ],
             'description' => [
                 'nullable',
