@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\OrganizationUnitType;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Class OrganizationUnitTypeService
@@ -20,9 +21,8 @@ class OrganizationUnitTypeService
      * @param Request $request
      * @return array
      */
-    public function getAllOrganizationUnitType(Request $request): array
+    public function getAllOrganizationUnitType(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
         $paginate_link = [];
         $page = [];
         $titleEn = $request->query('title_en');
@@ -30,6 +30,7 @@ class OrganizationUnitTypeService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
+        /** @var OrganizationUnitType|Builder $organizationUnitTypes */
         $organizationUnitTypes = OrganizationUnitType::select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
@@ -38,8 +39,8 @@ class OrganizationUnitTypeService
             'organization_unit_types.updated_at',
             'organization_unit_types.row_status',
             'organizations.title_en as organization_name',
-        ])->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id')
-            ->orderBy('organization_unit_types.id', $order);
+        ]);
+        $organizationUnitTypes->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id')->orderBy('organization_unit_types.id', $order);
 
         if (!empty($titleEn)) {
             $organizationUnitTypes->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
@@ -68,14 +69,13 @@ class OrganizationUnitTypeService
             $_link['_links'] = $_links;
             $data[] = $organizationUnitType->toArray();
         }
-        $response = [
+        return [
             "data" => $data,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
                 'paginate' => $paginate_link,
@@ -93,16 +93,15 @@ class OrganizationUnitTypeService
             "_order" => $order
         ];
 
-        return $response;
     }
 
     /**
      * @param $id
      * @return array
      */
-    public function getOneOrganizationUnitType($id): array
+    public function getOneOrganizationUnitType(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var OrganizationUnitType|Builder $organizationUnitType */
         $organizationUnitType = OrganizationUnitType::select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
@@ -111,9 +110,10 @@ class OrganizationUnitTypeService
             'organization_unit_types.updated_at',
             'organization_unit_types.row_status',
             'organizations.title_en as organization_name',
-        ])->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id')
-            ->where('organization_unit_types.row_status', '=', OrganizationUnitType::ROW_STATUS_ACTIVE)
-            ->where('organization_unit_types.id', '=', $id);
+        ]);
+
+        $organizationUnitType->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');$organizationUnitType->where('organization_unit_types.row_status', '=', OrganizationUnitType::ROW_STATUS_ACTIVE);
+        $organizationUnitType->where('organization_unit_types.id', '=', $id);
         $organizationUnitType = $organizationUnitType->first();
 
         $links = [];
@@ -126,7 +126,6 @@ class OrganizationUnitTypeService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
