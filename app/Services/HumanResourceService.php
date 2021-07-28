@@ -16,7 +16,6 @@ class HumanResourceService
 {
     public function getHumanResourceList(Request $request): array
     {
-        $startTime = Carbon::now();
         $paginate_link = [];
         $page = [];
         $titleEn = $request->query('title_en');
@@ -106,7 +105,6 @@ class HumanResourceService
 
     public function getOneHumanResource($id): array
     {
-        $startTime = Carbon::now();
         $humanResources = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
