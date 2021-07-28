@@ -64,6 +64,7 @@ class RankTypeService
         } else {
             $rankTypes = $rankTypes->get();
         }
+
         $data = [];
         foreach ($rankTypes as $rankType) {
             $links['read'] = route('api.v1.rank-types.read', ['id' => $rankType->id]);
