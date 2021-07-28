@@ -42,6 +42,7 @@ class JobSectorService
             ]
         );
         $jobSectors->orderBy('job_sectors.id', $order);
+
         if (!empty($titleEn)) {
             $jobSectors->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -61,13 +62,14 @@ class JobSectorService
         } else {
             $jobSectors = $jobSectors->get();
         }
+
         $data = [];
 
         foreach ($jobSectors as $jobSector) {
             $links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
             $links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
             $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $jobSector->id]);
-            $_link['links'] = $links;
+            $jobSector['_links'] = $links;
             $data[] = $jobSector->toArray();
         }
 
@@ -100,7 +102,7 @@ class JobSectorService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOneJobSector(int $id,Carbon $startTime): array
+    public function getOneJobSector(int $id, Carbon $startTime): array
     {
         /** @var JobSector|Builder $jobSector */
         $jobSector = JobSector::select(
@@ -111,9 +113,8 @@ class JobSectorService
                 'job_sectors.row_status',
             ]
         );
-            $jobSector->where('job_sectors.row_status', '=', JobSector::ROW_STATUS_ACTIVE);
-            $jobSector->where('job_sectors.id', '=', $id);
-
+        $jobSector->where('job_sectors.row_status', '=', JobSector::ROW_STATUS_ACTIVE);
+        $jobSector->where('job_sectors.id', '=', $id);
         $jobSector = $jobSector->first();
 
         $links = [];
@@ -126,8 +127,8 @@ class JobSectorService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "links" => $links,
         ];
@@ -171,11 +172,11 @@ class JobSectorService
 
     /**
      * @param Request $request
-     * @param null $id
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
 
-    public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
