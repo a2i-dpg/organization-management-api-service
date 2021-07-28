@@ -125,6 +125,7 @@ class RankTypeService
             $links['update'] = route('api.v1.rank-types.update', ['id' => $id]);
             $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $id]);
         }
+
         return [
             "data" => $rankType ? $rankType : null,
             "_response_status" => [
@@ -146,7 +147,6 @@ class RankTypeService
         $rankType = new RankType();
         $rankType->fill($data);
         $rankType->save();
-
         return $rankType;
     }
 
@@ -170,7 +170,6 @@ class RankTypeService
     {
         $rankType->row_status = RankType::ROW_STATUS_DELETED;
         $rankType->save();
-
         return $rankType;
     }
 

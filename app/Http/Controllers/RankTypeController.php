@@ -56,10 +56,8 @@ class RankTypeController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
     }
 
@@ -117,10 +115,8 @@ class RankTypeController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
@@ -131,7 +127,7 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
         $validated = $this->rankTypeService->validator($request)->validate();
@@ -159,10 +155,8 @@ class RankTypeController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
 
     }
@@ -172,7 +166,7 @@ class RankTypeController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
 
@@ -196,11 +190,8 @@ class RankTypeController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
-
     }
 }

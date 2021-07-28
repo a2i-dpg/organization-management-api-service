@@ -42,7 +42,7 @@ class ServiceController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->serviceService->getServiceList($request);
+            $response = $this->serviceService->getServiceList($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -65,10 +65,10 @@ class ServiceController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         try {
-            $response = $this->serviceService->getOneService($id);
+            $response = $this->serviceService->getOneService($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -101,7 +101,7 @@ class ServiceController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "Job finished successfully.",
+                    "message" => "Service added successfully",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
@@ -129,7 +129,7 @@ class ServiceController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
 
         $service = Service::findOrFail($id);
@@ -144,7 +144,7 @@ class ServiceController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "Service updated successfully",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
@@ -172,7 +172,7 @@ class ServiceController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $service = Service::findOrFail($id);
 
@@ -182,7 +182,7 @@ class ServiceController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "Service deleted successfully",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
