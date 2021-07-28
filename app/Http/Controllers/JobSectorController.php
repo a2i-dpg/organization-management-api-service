@@ -22,6 +22,7 @@ class JobSectorController extends Controller
      * @var JobSectorService
      */
     public JobSectorService $jobSectorService;
+
     /**
      * @var Carbon
      */
@@ -45,7 +46,7 @@ class JobSectorController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->jobSectorService->getJobsectorList($request);
+            $response = $this->jobSectorService->getJobSectorList($request,$this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -57,20 +58,18 @@ class JobSectorController extends Controller
             ];
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
-
     }
 
     /**
      * Display the specified resource
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function read($id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->jobSectorService->getOneJobSector($id);
+            $response = $this->jobSectorService->getOneJobSector($id,$this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -83,27 +82,24 @@ class JobSectorController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $validated = $this->jobSectorService->validator($request)->validate();
         try {
             $data = $this->jobSectorService->store($validated);
-
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "Job finished successfully.",
+                    "message" => "JobSector added successfully.",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
@@ -117,41 +113,34 @@ class JobSectorController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * update the specified resource in storage
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-
         $jobSector = JobSector::findOrFail($id);
-
-        $validated = $this->jobSectorService->validator($request)->validate();
+        $validated = $this->jobSectorService->validator($request,$id)->validate();
 
         try {
             $data = $this->jobSectorService->update($jobSector, $validated);
-
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "JobSector updated successfully.",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -161,20 +150,17 @@ class JobSectorController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
-
     }
 
     /**
      * remove the specified resource from storage
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $JobSector = JobSector::findOrFail($id);
 
@@ -184,10 +170,10 @@ class JobSectorController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "JobSector deleted successfully.",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
-                ]
+                    ]
             ];
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
@@ -198,13 +184,8 @@ class JobSectorController extends Controller
                     "finished" => Carbon::now(),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
-
     }
-
-
 }

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\JobSector;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -19,17 +20,19 @@ class JobSectorService
 {
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getJobsectorList(Request $request): array
+    public function getJobSectorList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var JobSector|Builder $jobSectors */
         $jobSectors = JobSector::select(
             [
                 'job_sectors.id',
@@ -37,7 +40,8 @@ class JobSectorService
                 'job_sectors.title_bn',
                 'job_sectors.row_status',
             ]
-        )->orderBy('job_sectors.id', $order);
+        );
+        $jobSectors->orderBy('job_sectors.id', $order);
         if (!empty($titleEn)) {
             $jobSectors->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -46,67 +50,59 @@ class JobSectorService
 
         if ($paginate) {
             $jobSectors = $jobSectors->paginate(10);
-            $paginate_data = (object)$jobSectors->toArray();
+            $paginateData = (object)$jobSectors->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $jobSectors = $jobSectors->get();
         }
         $data = [];
 
         foreach ($jobSectors as $jobSector) {
-            $_links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
-            $_links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
-            $_links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $jobSector->id]);
-            $_link['_links'] = $_links;
+            $links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
+            $links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
+            $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $jobSector->id]);
+            $_link['links'] = $links;
             $data[] = $jobSector->toArray();
         }
 
-
-        $response = [
+        return [
             "data" => $data,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
-            "_links" => [
-                'paginate' => $paginate_link,
+            "links" => [
+                'paginate' => $paginateLink,
                 "search" => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.job-sectors.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
 
-        return $response;
-
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneJobSector($id): array
+    public function getOneJobSector(int $id,Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-
-
+        /** @var JobSector|Builder $jobSector */
         $jobSector = JobSector::select(
             [
                 'job_sectors.id',
@@ -114,8 +110,9 @@ class JobSectorService
                 'job_sectors.title_bn',
                 'job_sectors.row_status',
             ]
-        )->where('job_sectors.row_status', '=', JobSector::ROW_STATUS_ACTIVE)
-            ->where('job_sectors.id', '=', $id);
+        );
+            $jobSector->where('job_sectors.row_status', '=', JobSector::ROW_STATUS_ACTIVE);
+            $jobSector->where('job_sectors.id', '=', $id);
 
         $jobSector = $jobSector->first();
 
@@ -124,19 +121,16 @@ class JobSectorService
             $links['update'] = route('api.v1.job-sectors.update', ['id' => $id]);
             $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $id]);
         }
-        $response = [
-            "data" => $jobSector ? $jobSector : null,
+        return [
+            "data" => $jobSector ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
-            "_links" => $links,
+            "links" => $links,
         ];
-        return $response;
-
     }
 
     /**
@@ -158,11 +152,9 @@ class JobSectorService
      * @return JobSector
      */
     public function update(JobSector $JobSector, array $data): JobSector
-
     {
         $JobSector->fill($data);
         $JobSector->save();
-
         return $JobSector;
     }
 
@@ -174,18 +166,16 @@ class JobSectorService
     {
         $JobSector->row_status = JobSector::ROW_STATUS_DELETED;
         $JobSector->save();
-
         return $JobSector;
     }
-
 
     /**
      * @param Request $request
      * @param null $id
-     * @return mixed
+     * @return \Illuminate\Contracts\Validation\Validator
      */
 
-    public function validator(Request $request, $id = null)
+    public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * Class OrganizationUnitType
  * @package App\Models
@@ -29,5 +29,13 @@ class OrganizationUnitType extends BaseModel
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function humanResourceTemplate(): HasMany
+    {
+        return $this->hasMany(HumanResourceTemplate::class);
     }
 }
