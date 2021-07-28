@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\RankType;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -17,19 +18,19 @@ class RankTypeService
 {
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return mixed
      */
-    public function getRankTypeList(Request $request): array
+    public function getRankTypeList(Request $request, Carbon $startTime): array
     {
-
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
-        $startTime = Carbon::now();
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var RankType|Builder $rankTypes */
         $rankTypes = RankType::select(
             [
                 'rank_types.id',
@@ -40,9 +41,9 @@ class RankTypeService
                 'rank_types.created_at',
                 'rank_types.updated_at',
             ]
-        )->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id')
-            ->orderBy('rank_types.id', $order);
-
+        );
+        $rankTypes->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
+        $rankTypes->orderBy('rank_types.id', $order);
 
         if (!empty($titleEn)) {
             $rankTypes->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
@@ -52,37 +53,36 @@ class RankTypeService
 
         if ($paginate) {
             $rankTypes = $rankTypes->paginate(10);
-            $paginate_data = (object)$rankTypes->toArray();
+            $paginateData = (object)$rankTypes->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $rankTypes = $rankTypes->get();
         }
         $data = [];
         foreach ($rankTypes as $rankType) {
-            $_links['read'] = route('api.v1.rank-types.read', ['id' => $rankType->id]);
-            $_links['edit'] = route('api.v1.rank-types.update', ['id' => $rankType->id]);
-            $_links['delete'] = route('api.v1.rank-types.destroy', ['id' => $rankType->id]);
-            $rankType['_links'] = $_links;
+            $links['read'] = route('api.v1.rank-types.read', ['id' => $rankType->id]);
+            $links['edit'] = route('api.v1.rank-types.update', ['id' => $rankType->id]);
+            $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $rankType->id]);
+            $rankType['_links'] = $links;
             $data[] = $rankType->toArray();
         }
 
-        $response = [
+        return [
             "data" => $data,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
@@ -91,20 +91,19 @@ class RankTypeService
                     '_link' => route('api.v1.rank-types.get-list')
                 ],
             ],
-                "_page" => $page,
-                "_order" => $order
+            "_page" => $page,
+            "_order" => $order
         ];
-
-        return $response;
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneRankType($id): array
+    public function getOneRankType(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var RankType|Builder $rankType */
         $rankType = RankType::select(
             [
                 'rank_types.id',
@@ -126,7 +125,7 @@ class RankTypeService
             $links['update'] = route('api.v1.rank-types.update', ['id' => $id]);
             $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $id]);
         }
-        $response = [
+        return [
             "data" => $rankType ? $rankType : null,
             "_response_status" => [
                 "success" => true,
@@ -137,7 +136,6 @@ class RankTypeService
             ],
             "_links" => $links,
         ];
-        return $response;
 
     }
 
@@ -160,13 +158,11 @@ class RankTypeService
      * @return RankType
      */
     public function update(RankType $rankType, array $data): RankType
-
     {
         $rankType->fill($data);
         $rankType->save();
         return $rankType;
     }
-
 
     /**
      * @param RankType $rankType
@@ -178,7 +174,6 @@ class RankTypeService
         $rankType->save();
         return $rankType;
     }
-
 
     /**
      * @param Request $request

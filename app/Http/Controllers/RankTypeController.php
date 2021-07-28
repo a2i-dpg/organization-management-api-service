@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\RankTypeService;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use App\Helpers\Classes\CustomExceptionHandler;
 
@@ -17,11 +18,11 @@ use App\Helpers\Classes\CustomExceptionHandler;
  */
 class RankTypeController extends Controller
 {
-
     /**
      * @var RankTypeService
      */
     public RankTypeService $rankTypeService;
+
     /**
      * @var Carbon
      */
@@ -35,7 +36,6 @@ class RankTypeController extends Controller
     {
         $this->startTime = Carbon::now();
         $this->rankTypeService = $rankTypeService;
-
     }
 
     /**
@@ -46,7 +46,7 @@ class RankTypeController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->rankTypeService->getRankTypeList($request);
+            $response = $this->rankTypeService->getRankTypeList($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -67,10 +67,10 @@ class RankTypeController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function read($id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->rankTypeService->getOneRankType($id);
+            $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -90,17 +90,15 @@ class RankTypeController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
 
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->rankTypeService->store($validated);
 
-            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -132,7 +130,7 @@ class RankTypeController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
 
     public function update(Request $request, $id): JsonResponse
