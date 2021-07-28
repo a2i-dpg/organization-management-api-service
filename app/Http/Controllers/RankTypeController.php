@@ -92,7 +92,6 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankTypeService->validator($request)->validate();
@@ -104,7 +103,7 @@ class RankTypeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "Job finished successfully.",
+                    "message" => "Rank Type added successfully",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
@@ -132,12 +131,9 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-
     public function update(Request $request, $id): JsonResponse
     {
-
         $rankType = RankType::findOrFail($id);
-
         $validated = $this->rankTypeService->validator($request)->validate();
 
         try {
@@ -148,7 +144,7 @@ class RankTypeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "Rank Type updated successfully",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]
@@ -176,7 +172,6 @@ class RankTypeController extends Controller
      * @param $id
      * @return JsonResponse
      */
-
     public function destroy($id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
@@ -187,7 +182,7 @@ class RankTypeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "Rank Type deleted successfully",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\RankType;
@@ -37,6 +36,7 @@ class RankTypeService
                 'rank_types.title_en',
                 'rank_types.title_bn',
                 'organizations.title_en as organization_title_en',
+                'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_at',
                 'rank_types.updated_at',
@@ -103,13 +103,14 @@ class RankTypeService
      */
     public function getOneRankType(int $id, Carbon $startTime): array
     {
-        /** @var RankType|Builder $rankType */
+        /** @var RankType|Builder $rankTypes */
         $rankType = RankType::select(
             [
                 'rank_types.id',
                 'rank_types.title_en',
                 'rank_types.title_bn',
                 'organizations.title_en as organization_title_en',
+                'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_at',
                 'rank_types.updated_at',
@@ -117,7 +118,6 @@ class RankTypeService
         );
         $rankType->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
         $rankType->where('rank_types.id', '=', $id);
-        $rankType->where('rank_types.row_status', '=', 1);
         $rankType = $rankType->first();
 
         $links = [];
@@ -130,13 +130,11 @@ class RankTypeService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
             "_links" => $links,
         ];
-
     }
 
     /**
@@ -170,8 +168,9 @@ class RankTypeService
      */
     public function destroy(RankType $rankType): RankType
     {
-        $rankType->row_status = 99;
+        $rankType->row_status = RankType::ROW_STATUS_DELETED;
         $rankType->save();
+
         return $rankType;
     }
 
@@ -205,6 +204,5 @@ class RankTypeService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 
 }
