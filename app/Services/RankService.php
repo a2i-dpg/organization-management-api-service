@@ -7,6 +7,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Builder;
+
 /**
  * Class RankService
  * @package App\Services
@@ -14,20 +16,20 @@ use Illuminate\Support\Facades\Validator;
 class RankService
 {
     /**
-     *
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-
-    public function getRankList(Request $request): array
+    public function getRankList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
         $paginate_link = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Rank|Builder $ranks */
         $ranks = Rank::select(
             [
                 'ranks.id',
@@ -102,12 +104,13 @@ class RankService
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneRank($id): array
+    public function getOneRank(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var Rank|Builder $rank */
         $rank = Rank::select(
             [
                 'ranks.id',

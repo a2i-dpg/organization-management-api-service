@@ -74,7 +74,7 @@ class RankTypeService
         }
 
         return [
-            "data" => $data,
+            "data" => $data ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -103,7 +103,7 @@ class RankTypeService
      */
     public function getOneRankType(int $id, Carbon $startTime): array
     {
-        /** @var RankType|Builder $rankTypes */
+        /** @var RankType|Builder $rankType */
         $rankType = RankType::select(
             [
                 'rank_types.id',
@@ -127,7 +127,7 @@ class RankTypeService
         }
 
         return [
-            "data" => $rankType ? $rankType : null,
+            "data" => $rankType ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -142,7 +142,7 @@ class RankTypeService
      * @param $data
      * @return RankType
      */
-    public function store($data): RankType
+    public function store(array $data): RankType
     {
         $rankType = new RankType();
         $rankType->fill($data);
@@ -177,7 +177,7 @@ class RankTypeService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request)
+    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [

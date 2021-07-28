@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Builder;
 
 /**
  * Class ServiceService
@@ -28,6 +29,8 @@ class ServiceService
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Service|Builder $services */
         $services = Service::select(
             [
                 'services.id as id',
@@ -71,7 +74,7 @@ class ServiceService
             $data[] = $service->toArray();
         }
         return [
-            "data" => $data,
+            "data" => $data? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -92,7 +95,6 @@ class ServiceService
             "_page" => $page,
             "_order" => $order
         ];
-
     }
 
     /**
@@ -102,6 +104,7 @@ class ServiceService
      */
     public function getOneService(int $id, Carbon $startTime): array
     {
+        /** @var Service|Builder $service */
         $service = Service::select(
             [
                 'services.id as id',
@@ -124,7 +127,7 @@ class ServiceService
         }
 
         return [
-            "data" => $service ? $service : null,
+            "data" => $service ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
