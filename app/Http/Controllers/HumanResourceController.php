@@ -90,7 +90,6 @@ class HumanResourceController extends Controller
         $validatedData = $this->humanResourceService->validator($request)->validate();
         try {
             $data = $this->humanResourceService->store($validatedData);
-
             $response = [
                 'data' => $data ?: null,
                 '_response_status' => [
@@ -106,8 +105,8 @@ class HumanResourceController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
 
@@ -129,7 +128,6 @@ class HumanResourceController extends Controller
         $humanResource = HumanResource::findOrFail($id);
 
         $validated = $this->humanResourceService->validator($request)->validate();
-
         try {
             $data = $this->humanResourceService->update($humanResource, $validated);
 
@@ -149,8 +147,8 @@ class HumanResourceController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
 
@@ -185,8 +183,8 @@ class HumanResourceController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
 
