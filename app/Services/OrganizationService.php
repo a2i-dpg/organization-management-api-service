@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use Carbon\Carbon;
@@ -51,11 +50,9 @@ class OrganizationService
             'organizations.loc_upazila_id',
             'organizations.row_status',
             'organization_types.title_en as organization_types_title'
-
         ]);
         $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
         $organizations->orderBy('organizations.id', $order);
-
 
         if (!empty($titleEn)) {
             $organizations->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
@@ -139,9 +136,7 @@ class OrganizationService
         ]);
         $organization->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
         $organization->where('organizations.id', '=', $id);
-        $organization->where('organizations.row_status', '=', Organization::ROW_STATUS_ACTIVE);
         $organization = $organization->first();
-
 
         $links = [];
         if (!empty($organization)) {

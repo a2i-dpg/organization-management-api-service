@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\Occupation;
@@ -42,12 +41,12 @@ class OccupationService
         $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
         $occupations->orderBy('occupations.id', $order);
 
-
         if (!empty($titleEn)) {
             $occupations->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
             $occupations->where('occupations.title_en', 'like', '%' . $titleBn . '%');
         }
+
         if ($paginate) {
             $occupations = $occupations->paginate(10);
             $paginateData = (object)$occupations->toArray();
@@ -70,8 +69,9 @@ class OccupationService
             $occupation['_links'] = $links;
             $data[] = $occupation->toArray();
         }
+
         return [
-            "data" => $data? : null,
+            "data" => $data ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

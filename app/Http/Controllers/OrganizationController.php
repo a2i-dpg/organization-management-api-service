@@ -93,7 +93,6 @@ class OrganizationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $this->organizationService->validator($request)->validate();
-
         try {
             $data = $this->organizationService->store($validated);
             $response = [
@@ -131,7 +130,6 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findOrFail($id);
         $validated = $this->organizationService->validator($request, $id)->validate();
-
         try {
             $data = $this->organizationService->update($organization, $validated);
             $response = [
@@ -166,7 +164,6 @@ class OrganizationController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $organizationTYpe = Organization::findOrFail($id);
-
         try {
             $this->organizationService->destroy($organizationTYpe);
             $response = [
