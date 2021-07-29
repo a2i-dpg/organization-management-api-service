@@ -46,7 +46,7 @@ class JobSectorController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->jobSectorService->getJobSectorList($request,$this->startTime);
+            $response = $this->jobSectorService->getJobSectorList($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -100,7 +100,7 @@ class JobSectorController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "JobSector added successfully.",
+                    "message" => "Job Sector added successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]
@@ -138,7 +138,7 @@ class JobSectorController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "JobSector updated successfully.",
+                    "message" => "Job Sector updated successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]
@@ -172,7 +172,7 @@ class JobSectorController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "JobSector deleted successfully.",
+                    "message" => "Job Sector deleted successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                     ]
