@@ -63,7 +63,6 @@ class OccupationService
         }
 
         $data = [];
-
         foreach ($occupations as $occupation) {
             $links['read'] = route('api.v1.occupations.read', ['id' => $occupation->id]);
             $links['update'] = route('api.v1.occupations.update', ['id' => $occupation->id]);
@@ -72,7 +71,7 @@ class OccupationService
             $data[] = $occupation->toArray();
         }
         return [
-            "data" => $data,
+            "data" => $data? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -112,7 +111,6 @@ class OccupationService
             'job_sectors.title_en as job_sectors_title',
         ]);
         $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
-        $occupation->where('occupations.row_status', '=', Occupation::ROW_STATUS_ACTIVE);
         $occupation->where('occupations.id', '=', $id);
         $occupation = $occupation->first();
 
@@ -122,7 +120,7 @@ class OccupationService
         }
 
         return [
-            "data" => $occupation ?: null,
+            "data" => $occupation ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

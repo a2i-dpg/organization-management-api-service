@@ -46,7 +46,7 @@ class OccupationController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->occupationService->getOccupationList($request,$this->startTime);
+            $response = $this->occupationService->getOccupationList($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -69,7 +69,7 @@ class OccupationController extends Controller
     public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->occupationService->getOneOccupation($id,$this->startTime);
+            $response = $this->occupationService->getOneOccupation($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -126,11 +126,10 @@ class OccupationController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function update(Request $request,int $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-
         $occupation = Occupation::findOrFail($id);
-        $validated = $this->occupationService->validator($request,$id)->validate();
+        $validated = $this->occupationService->validator($request, $id)->validate();
 
         try {
             $data = $this->occupationService->update($occupation, $validated);

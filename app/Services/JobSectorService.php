@@ -111,7 +111,6 @@ class JobSectorService
                 'job_sectors.row_status',
             ]
         );
-        $jobSector->where('job_sectors.row_status', '=', JobSector::ROW_STATUS_ACTIVE);
         $jobSector->where('job_sectors.id', '=', $id);
         $jobSector = $jobSector->first();
 
