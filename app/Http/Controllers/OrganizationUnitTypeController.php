@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,7 +45,7 @@ class OrganizationUnitTypeController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($request,  $this->startTime);
+            $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -56,10 +55,8 @@ class OrganizationUnitTypeController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
     }
 
@@ -92,7 +89,6 @@ class OrganizationUnitTypeController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-
     function store(Request $request): JsonResponse
     {
         $validated = $this->organizationUnitTypeService->validator($request)->validate();
@@ -118,10 +114,8 @@ class OrganizationUnitTypeController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
@@ -134,14 +128,11 @@ class OrganizationUnitTypeController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
 
         $validated = $this->organizationUnitTypeService->validator($request, $id)->validate();
-
         try {
             $data = $this->organizationUnitTypeService->update($organizationUnitType, $validated);
-
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -152,7 +143,6 @@ class OrganizationUnitTypeController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -162,12 +152,9 @@ class OrganizationUnitTypeController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
-
     }
 
     /**
@@ -199,11 +186,8 @@ class OrganizationUnitTypeController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
     }
-
 }
