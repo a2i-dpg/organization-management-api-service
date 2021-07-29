@@ -46,7 +46,7 @@ class OrganizationTypeController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->organizationTypeService->getAllOrganizationType($request,$this->startTime);
+            $response = $this->organizationTypeService->getAllOrganizationType($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -69,7 +69,7 @@ class OrganizationTypeController extends Controller
     public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->organizationTypeService->getOneOrganizationType($id,$this->startTime);
+            $response = $this->organizationTypeService->getOneOrganizationType($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -93,21 +93,18 @@ class OrganizationTypeController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $this->organizationTypeService->validator($request)->validate();
-
         try {
             $data = $this->organizationTypeService->store($validated);
-
             $response = [
                 'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "OrganizationType added successfully.",
+                    "message" => "Organization Type added successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -122,7 +119,6 @@ class OrganizationTypeController extends Controller
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
-
     /**
      * Update the specified resource in storage.
      * @param Request $request
@@ -133,23 +129,19 @@ class OrganizationTypeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationType = OrganizationType::findOrFail($id);
-        $validated = $this->organizationTypeService->validator($request,$id)->validate();
-
+        $validated = $this->organizationTypeService->validator($request, $id)->validate();
         try {
             $data = $this->organizationTypeService->update($organizationType, $validated);
-
             $response = [
                 'data' => $data ?: null,
-
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "OrganizationType updated successfully.",
+                    "message" => "Organization Type updated successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -173,14 +165,13 @@ class OrganizationTypeController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $organizationType = OrganizationType::findOrFail($id);
-
         try {
             $this->organizationTypeService->destroy($organizationType);
             $response = [
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "OrganizationType deleted successfully.",
+                    "message" => "Organization Type deleted successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]

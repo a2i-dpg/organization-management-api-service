@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\Organization;
@@ -47,6 +46,7 @@ class OrganizationTypeService
         } elseif (!empty($titleBn)) {
             $organizationTypes->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
         }
+
         if ($paginate) {
             $organizationTypes = $organizationTypes->paginate(10);
             $paginateData = (object)$organizationTypes->toArray();
@@ -60,6 +60,7 @@ class OrganizationTypeService
         } else {
             $organizationTypes = $organizationTypes->get();
         }
+
         $data = [];
         foreach ($organizationTypes as $organizationType) {
             $links['read'] = route('api.v1.organization-types.read', ['id' => $organizationType->id]);
@@ -109,7 +110,6 @@ class OrganizationTypeService
             'organization_types.is_government',
             'organization_types.row_status'
         ]);
-        $organizationType->where('organization_types.row_status', '=', OrganizationType::ROW_STATUS_ACTIVE);
         $organizationType->where('organization_types.id', '=', $id);
         $organizationType = $organizationType->first();
 
