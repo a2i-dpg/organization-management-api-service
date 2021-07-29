@@ -139,13 +139,11 @@ class HumanResourceTemplateService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-
     }
 
     /**
