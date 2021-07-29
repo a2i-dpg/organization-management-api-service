@@ -171,7 +171,6 @@ class JobSectorService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
@@ -192,5 +191,4 @@ class JobSectorService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }
