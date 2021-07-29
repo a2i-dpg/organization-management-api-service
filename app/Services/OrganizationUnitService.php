@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Class OrganizationUnitService
@@ -15,17 +16,17 @@ use Illuminate\Support\Facades\Validator;
  */
 class OrganizationUnitService
 {
-    public function getAllOrganizationUnit(Request $request): array
+    public function getAllOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $paginate_link = [];
         $page = [];
-        $startTime = Carbon::now();
 
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
+        /** @var OrganizationUnit|Builder $organizationUnits */
          $organizationUnits = OrganizationUnit::select([
                     'organization_units.id',
                     'organization_units.title_en',
@@ -93,9 +94,8 @@ class OrganizationUnitService
                      "_response_status" => [
                          "success" => true,
                          "code" => JsonResponse::HTTP_OK,
-                         "message" => "Job finished successfully.",
-                         "started" => $startTime,
-                         "finished" => Carbon::now(),
+                         "started" => $startTime->format('H i s'),
+                         "finished" => Carbon::now()->format('H i s'),
                      ],
                      "_links" => [
                          'paginate' => $paginate_link,
@@ -113,10 +113,14 @@ class OrganizationUnitService
 
     }
 
-    public function getOneOrganizationUnit($id): array
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getOneOrganizationUnit($id, Carbon $startTime): array
     {
 
-        $startTime = Carbon::now();
+        /** @var OrganizationUnit|Builder $organizationUnit */
         $links = [];
         $organizationUnit = OrganizationUnit::select([
             'organization_units.id',
@@ -157,7 +161,6 @@ class OrganizationUnitService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
                 "started" => $startTime,
                 "finished" => Carbon::now(),
             ],
@@ -173,10 +176,13 @@ class OrganizationUnitService
             return $organizationUnit;
         }
 
-
+    /**
+     * @param OrganizationUnit $organizationUnit
+     * @return OrganizationUnit
+     */
     public function destroy(OrganizationUnit $organizationUnit): OrganizationUnit
         {
-            $organizationUnit->row_status = 99;
+            $organizationUnit->row_status = OrganizationUnit::ROW_STATUS_DELETED;
             $organizationUnit->save();
             return $organizationUnit;
 
@@ -195,14 +201,11 @@ class OrganizationUnitService
             return $organizationUnit;
         }
 
-        /**
-         * @param OrganizationUnit $organizationUnit
-         * @param array $data
-         * @return OrganizationUnit
-         */
-
-
-
+    /**
+     * @param Request $request
+     * @param null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
         public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
              {
                  $rules = [
@@ -285,7 +288,6 @@ class OrganizationUnitService
 //                      ],
                  ];
 
-//                  return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
 
                  return Validator::make($request->all(), $rules);
 
