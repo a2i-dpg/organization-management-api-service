@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -77,7 +76,7 @@ class HumanResourceTemplateService
         }
 
         return [
-            "data" => $data,
+            "data" => $data? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -86,18 +85,14 @@ class HumanResourceTemplateService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-
                 "search" => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.human-resource-templates.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
@@ -138,14 +133,15 @@ class HumanResourceTemplateService
             $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $id]);
             $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $id]);
         }
+
         return [
             "data" => $humanResourceTemplate ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
                 "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
@@ -162,7 +158,6 @@ class HumanResourceTemplateService
         $humanResourceTemplate = new HumanResourceTemplate();
         $humanResourceTemplate->fill($data);
         $humanResourceTemplate->save();
-
         return $humanResourceTemplate;
     }
 
@@ -188,7 +183,6 @@ class HumanResourceTemplateService
         $humanResourceTemplate->save();
         return $humanResourceTemplate;
     }
-
 
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
@@ -242,10 +236,7 @@ class HumanResourceTemplateService
                 'distinct'
             ]
         ];
-
         return Validator::make($request->all(), $rules);
-
     }
-
 }
 
