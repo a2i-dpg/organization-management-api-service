@@ -17,4 +17,5 @@ class JobSector extends BaseModel
     use ScopeRowStatusTrait;
 
     protected $guarded = ['id'];
+
 }

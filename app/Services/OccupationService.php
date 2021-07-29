@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Occupation;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -18,18 +19,19 @@ class OccupationService
 {
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOccupationList(Request $request): array
+    public function getOccupationList(Request $request, Carbon $startTime): array
     {
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
-        $startTime = Carbon::now();
-
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Occupation|Builder $occupations */
         $occupations = Occupation::select([
             'occupations.id',
             'occupations.title_en',
@@ -37,8 +39,10 @@ class OccupationService
             'occupations.row_status',
             'job_sectors.title_en as job_sectors_title',
         ]);
-        $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id')
-            ->orderBy('occupations.id', $order);
+        $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
+        $occupations->orderBy('occupations.id', $order);
+
+
         if (!empty($titleEn)) {
             $occupations->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -46,14 +50,14 @@ class OccupationService
         }
         if ($paginate) {
             $occupations = $occupations->paginate(10);
-            $paginate_data = (object)$occupations->toArray();
+            $paginateData = (object)$occupations->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link = $paginate_data->links;
+            $paginateLink = $paginateData->links;
         } else {
             $occupations = $occupations->get();
         }
@@ -61,24 +65,22 @@ class OccupationService
         $data = [];
 
         foreach ($occupations as $occupation) {
-            $_links['read'] = route('api.v1.occupations.read', ['id' => $occupation->id]);
-            $_links['update'] = route('api.v1.occupations.update', ['id' => $occupation->id]);
-            $_links['delete'] = route('api.v1.occupations.destroy', ['id' => $occupation->id]);
-            $district['_links'] = $_links;
+            $links['read'] = route('api.v1.occupations.read', ['id' => $occupation->id]);
+            $links['update'] = route('api.v1.occupations.update', ['id' => $occupation->id]);
+            $links['delete'] = route('api.v1.occupations.destroy', ['id' => $occupation->id]);
+            $occupation['_links'] = $links;
             $data[] = $occupation->toArray();
-
         }
         return [
             "data" => $data,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
-            "_links" => [
-                'paginate' => $paginate_link,
+            "links" => [
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
@@ -90,17 +92,18 @@ class OccupationService
             "_page" => $page,
             "_order" => $order
         ];
-
     }
 
     /**
      * @param $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneOccupation($id): array
+    public function getOneOccupation($id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
         $links = [];
+
+        /** @var Occupation|Builder $occupation */
         $occupation = Occupation::select([
             'occupations.id',
             'occupations.title_en',
@@ -108,11 +111,9 @@ class OccupationService
             'occupations.row_status',
             'job_sectors.title_en as job_sectors_title',
         ]);
-        $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id')
-            ->where('occupations.row_status', '=', Occupation::ROW_STATUS_ACTIVE)
-            ->where('occupations.id', '=', $id);
-
-
+        $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
+        $occupation->where('occupations.row_status', '=', Occupation::ROW_STATUS_ACTIVE);
+        $occupation->where('occupations.id', '=', $id);
         $occupation = $occupation->first();
 
         if (!empty($occupation)) {
@@ -121,19 +122,16 @@ class OccupationService
         }
 
         return [
-            "data" => $occupation ? $occupation : null,
+            "data" => $occupation ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
-            "_links" => $links
+            "links" => $links
         ];
-
     }
-
 
     /**
      * @param array $data
@@ -145,8 +143,6 @@ class OccupationService
         $occupation->fill($data);
         $occupation->save();
         return $occupation;
-
-
     }
 
     /**
@@ -156,12 +152,9 @@ class OccupationService
      */
     public function update(Occupation $occupation, array $data): Occupation
     {
-
         $occupation->fill($data);
         $occupation->save();
         return $occupation;
-
-
     }
 
     /**
@@ -170,19 +163,17 @@ class OccupationService
      */
     public function destroy(Occupation $occupation): Occupation
     {
-
-        $occupation->row_status =Occupation::ROW_STATUS_DELETED;
+        $occupation->row_status = Occupation::ROW_STATUS_DELETED;
         $occupation->save();
         return $occupation;
-
-
     }
+
     /**
      * @param Request $request
-     * @param null $id
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -195,21 +186,15 @@ class OccupationService
                 'string',
                 'max:191',
             ],
-
             'job_sector_id' => [
                 'required',
                 'exists:job_sectors,id'
             ],
             'row_status' => [
-                Rule::requiredIf(function () use ($id) {
-                    return !empty($id);
-                }),
-                'int',
-                'exists:row_status,code',
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],
         ];
-
         return Validator::make($request->all(), $rules);
     }
-
 }
