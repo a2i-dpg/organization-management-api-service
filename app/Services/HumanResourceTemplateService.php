@@ -5,23 +5,27 @@ namespace App\Services;
 
 use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Validator;
 
-
+/**
+ * Class HumanResourceTemplateService
+ * @package App\Services
+ */
 class HumanResourceTemplateService
 {
-    public function getHumanResourceTemplateList(Request $request): array
+    public function getHumanResourceTemplateList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
+        /** @var HumanResourceTemplate|Builder $humanResourceTemplates */
         $humanResourceTemplates = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
@@ -51,24 +55,24 @@ class HumanResourceTemplateService
 
         if ($paginate) {
             $humanResourceTemplates = $humanResourceTemplates->paginate(10);
-            $paginate_data = (object)$humanResourceTemplates->toArray();
+            $paginateData = (object)$humanResourceTemplates->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $humanResourceTemplates = $humanResourceTemplates->get();
         }
 
         $data = [];
         foreach ($humanResourceTemplates as $humanResourceTemplate) {
-            $_links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
-            $_links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
-            $_links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
-            $humanResourceTemplate['_links'] = $_links;
+            $links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
+            $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
+            $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
+            $humanResourceTemplate['_links'] = $links;
             $data[] = $humanResourceTemplate->toArray();
         }
 
@@ -77,12 +81,11 @@ class HumanResourceTemplateService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
 
                 "search" => [
                     'parameters' => [
@@ -100,9 +103,14 @@ class HumanResourceTemplateService
         ];
     }
 
-    public function getOneHumanResourceTemplate($id): array
+    /**
+     * @param int $id
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getOneHumanResourceTemplate(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var HumanResourceTemplate|Builder $humanResourceTemplate */
         $humanResourceTemplate = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
@@ -123,7 +131,6 @@ class HumanResourceTemplateService
         $humanResourceTemplate->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
         $humanResourceTemplate->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
         $humanResourceTemplate->where('human_resource_templates.id', $id);
-
         $humanResourceTemplate = $humanResourceTemplate->first();
 
         $links = [];
@@ -183,7 +190,7 @@ class HumanResourceTemplateService
     }
 
 
-    public function validator(Request $request): Validator
+    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -236,7 +243,7 @@ class HumanResourceTemplateService
             ]
         ];
 
-        return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        return Validator::make($request->all(), $rules);
 
     }
 

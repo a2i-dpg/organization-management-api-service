@@ -19,11 +19,12 @@ class OrganizationUnitTypeService
 {
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
     public function getAllOrganizationUnitType(Request $request, Carbon $startTime): array
     {
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
@@ -50,23 +51,23 @@ class OrganizationUnitTypeService
 
         if ($paginate) {
             $organizationUnitTypes = $organizationUnitTypes->paginate(10);
-            $paginate_data = (object)$organizationUnitTypes->toArray();
+            $paginateData = (object)$organizationUnitTypes->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $organizationUnitTypes = $organizationUnitTypes->get();
         }
         $data = [];
         foreach ($organizationUnitTypes as $organizationUnitType) {
-            $_links['read'] = route('api.v1.organization-unit-types.read', ['id' => $organizationUnitType->id]);
-            $_links['edit'] = route('api.v1.organization-unit-types.update', ['id' => $organizationUnitType->id]);
-            $_links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $organizationUnitType->id]);
-            $_link['_links'] = $_links;
+            $links['read'] = route('api.v1.organization-unit-types.read', ['id' => $organizationUnitType->id]);
+            $links['edit'] = route('api.v1.organization-unit-types.update', ['id' => $organizationUnitType->id]);
+            $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $organizationUnitType->id]);
+            $_link['_links'] = $links;
             $data[] = $organizationUnitType->toArray();
         }
         return [
@@ -78,7 +79,7 @@ class OrganizationUnitTypeService
                 "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 "search" => [
                     'parameters' => [
                         'title_en',
@@ -96,7 +97,8 @@ class OrganizationUnitTypeService
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
     public function getOneOrganizationUnitType(int $id, Carbon $startTime): array
@@ -121,7 +123,7 @@ class OrganizationUnitTypeService
             $links['update'] = route('api.v1.organization-unit-types.update', ['id' => $id]);
             $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $id]);
         }
-        $response = [
+        return [
             "data" => $organizationUnitType ? $organizationUnitType : null,
             "_response_status" => [
                 "success" => true,
@@ -131,7 +133,6 @@ class OrganizationUnitTypeService
             ],
             "_links" => $links,
         ];
-        return $response;
     }
 
     /**
@@ -167,7 +168,7 @@ class OrganizationUnitTypeService
      */
     public function destroy(OrganizationUnitType $organizationUnitType): OrganizationUnitType
     {
-        $organizationUnitType->row_Status =OrganizationUnitType::ROW_STATUS_DELETED;
+        $organizationUnitType->row_status = OrganizationUnitType::ROW_STATUS_DELETED;
         $organizationUnitType->save();
         return $organizationUnitType;
     }
