@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
@@ -22,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string contact_person_mobile
  * @property string contact_person_designation
  * @property int employee_size
+ * @property int row_status
  * @property-read Organization organization
  * @property-read OrganizationUnitType organizationUnitType
 

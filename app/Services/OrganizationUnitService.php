@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use Carbon\Carbon;
@@ -20,7 +19,6 @@ class OrganizationUnitService
     {
         $paginateLink = [];
         $page = [];
-
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
@@ -44,25 +42,22 @@ class OrganizationUnitService
                     'organization_units.created_at',
                     'organization_units.updated_at',
                     'organizations.title_en as organization_name',
-//                     'loc_divisions.title_en as division_name',
-//                     'loc_districts.title_en as district_name',
-//                     'loc_upazilas.title_en as upazila_name',
+                     /*'loc_divisions.title_en as division_name',
+                     'loc_districts.title_en as district_name',
+                     'loc_upazilas.title_en as upazila_name',*/
                      'organization_unit_types.title_en as organization_unit_name'
                 ]);
-
                 $organizationUnits->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-//                 $organizationUnits->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-//                 $organizationUnits->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-//                 $organizationUnits->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
+                 /*$organizationUnits->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
+                 $organizationUnits->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
+                 $organizationUnits->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');*/
                  $organizationUnits->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
-
 
          if (!empty($titleEn)) {
                     $organizationUnits->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
                 } elseif (!empty($titleBn)) {
                     $organizationUnits->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
                 }
-
 
          if ($paginate) {
                      $organizationUnits = $organizationUnits->paginate(10);
@@ -87,9 +82,8 @@ class OrganizationUnitService
              $data[] = $organizationUnit->toArray();
          }
 
-
           return [
-                 "data" => $data,
+                 "data" => $data ? : null,
                  "_response_status" => [
                      "success" => true,
                      "code" => JsonResponse::HTTP_OK,
@@ -109,7 +103,6 @@ class OrganizationUnitService
                  "_page" => $page,
                  "_order" => $order
                  ];
-
     }
 
     /**
@@ -117,11 +110,10 @@ class OrganizationUnitService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOneOrganizationUnit($id, Carbon $startTime): array
+    public function getOneOrganizationUnit(int $id, Carbon $startTime): array
     {
-
-        /** @var OrganizationUnit|Builder $organizationUnit */
         $links = [];
+        /** @var OrganizationUnit|Builder $organizationUnit */
         $organizationUnit = OrganizationUnit::select([
             'organization_units.id',
             'organization_units.title_en',
@@ -139,9 +131,9 @@ class OrganizationUnitService
             'organization_units.created_at',
             'organization_units.updated_at',
             'organizations.title_en as organization_name',
-//                     'loc_divisions.title_en as division_name',
-//                     'loc_districts.title_en as district_name',
-//                     'loc_upazilas.title_en as upazila_name',
+             /*'loc_divisions.title_en as division_name',
+             'loc_districts.title_en as district_name',
+             'loc_upazilas.title_en as upazila_name',*/
             'organization_unit_types.title_en as organization_unit_name'
         ]);
         $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
@@ -161,13 +153,12 @@ class OrganizationUnitService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links
         ];
     }
-
 
     public function update(OrganizationUnit $organizationUnit, array $data): OrganizationUnit
         {
@@ -186,7 +177,6 @@ class OrganizationUnitService
             $organizationUnit->save();
             return $organizationUnit;
         }
-
 
      /**
          * @param array $data
@@ -224,71 +214,69 @@ class OrganizationUnitService
                           'int',
                           'exists:organization_unit_types,id',
                       ],
-//                      'loc_division_id' => [
-//                          'required',
-//                          'int',
-//                          'exists:loc_divisions,id',
-//                      ],
-//                      'loc_district_id' => [
-//                          'required',
-//                          'int',
-//                          'exists:loc_districts,id',
-//                      ],
-//                      'loc_upazila_id' => [
-//                          'required',
-//                          'int',
-//                          'exists:loc_upazilas,id',
-//                      ],
-//                      'address' => [
-//                          'nullable',
-//                          'string',
-//                          'max:191',
-//                      ],
-//                      'mobile' => [
-//                          'nullable',
-//                          'string',
-//                          'max:20',
-//                      ],
-//                      'email' => [
-//                          'nullable',
-//                          'string',
-//                          'max:191',
-//                      ],
-//                      'fax_no' => [
-//                          'nullable',
-//                          'string',
-//                          'max:50',
-//                      ],
-//                      'contact_person_name' => [
-//                          'nullable',
-//                          'string',
-//                          'max:191',
-//                      ],
-//                      'contact_person_mobile' => [
-//                          'nullable',
-//                          'string',
-//                          'max:20',
-//                      ],
-//                      'contact_person_designation' => [
-//                          'nullable',
-//                          'string',
-//                          'max:191',
-//                      ],
-//                      'employee_size' => [
-//                          'required',
-//                          'int',
-//                      ],
-//                      'row_status' => [
-//                          Rule::requiredIf(function () use ($id) {
-//                              return !empty($id);
-//                          }),
-//                          'int',
-//                          'exists:row_status,code',
-//                      ],
+
+                     /*'loc_division_id' => [
+                          'required',
+                          'int',
+                          'exists:loc_divisions,id',
+                      ],
+                      'loc_district_id' => [
+                          'required',
+                          'int',
+                          'exists:loc_districts,id',
+                      ],
+                      'loc_upazila_id' => [
+                          'required',
+                          'int',
+                          'exists:loc_upazilas,id',
+                      ],
+                      'address' => [
+                          'nullable',
+                          'string',
+                          'max:191',
+                      ],
+                      'mobile' => [
+                          'nullable',
+                          'string',
+                          'max:20',
+                      ],
+                      'email' => [
+                          'nullable',
+                          'string',
+                          'max:191',
+                      ],
+                      'fax_no' => [
+                          'nullable',
+                          'string',
+                          'max:50',
+                      ],
+                      'contact_person_name' => [
+                          'nullable',
+                          'string',
+                          'max:191',
+                      ],
+                      'contact_person_mobile' => [
+                          'nullable',
+                          'string',
+                          'max:20',
+                      ],
+                      'contact_person_designation' => [
+                          'nullable',
+                          'string',
+                          'max:191',
+                      ],
+                      'employee_size' => [
+                          'required',
+                          'int',
+                      ],
+                      'row_status' => [
+                          Rule::requiredIf(function () use ($id) {
+                              return !empty($id);
+                          }),
+                          'int',
+                          'exists:row_status,code',
+                      ],*/
                  ];
-
-
                  return Validator::make($request->all(), $rules);
-
              }
 }

@@ -52,19 +52,16 @@ class OrganizationUnitController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
     }
-
 
     /**
      * @param $id
      * @return JsonResponse
      */
-    public function read($id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->organizationUnitService->getOneOrganizationUnit($id, $this->startTime);
@@ -80,7 +77,6 @@ class OrganizationUnitController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
@@ -93,7 +89,6 @@ class OrganizationUnitController extends Controller
         $validated = $this->organizationUnitService->validator($request)->validate();
         try {
             $data = $this->organizationUnitService->store($validated);
-
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -104,7 +99,6 @@ class OrganizationUnitController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -114,10 +108,8 @@ class OrganizationUnitController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
@@ -130,12 +122,9 @@ class OrganizationUnitController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
-
         $validated = $this->organizationUnitService->validator($request)->validate();
-
         try {
             $data = $this->organizationUnitService->update($organizationUnit, $validated);
-
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -146,7 +135,6 @@ class OrganizationUnitController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -156,10 +144,8 @@ class OrganizationUnitController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
@@ -170,14 +156,13 @@ class OrganizationUnitController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
-
         try {
             $this->organizationUnitService->destroy($organizationUnit);
             $response = [
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Organization Unit successfully",
+                    "message" => "Organization Unit delete successfully",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]
@@ -191,12 +176,8 @@ class OrganizationUnitController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
     }
-
-
 }
