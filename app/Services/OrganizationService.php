@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Validation\Rule;
 
 /**
  * Class OrganizationService
@@ -17,19 +19,19 @@ class OrganizationService
 {
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getAllOrganization(Request $request): array
+    public function getAllOrganization(Request $request, Carbon $startTime): array
     {
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
-        $startTime = Carbon::now();
-
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
+        /** @var Organization|Builder $organizations */
         $organizations = Organization::select([
             'organizations.id',
             'organizations.title_en',
@@ -43,12 +45,16 @@ class OrganizationService
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
             'organizations.description',
+            'organizations.logo',
+            'organizations.loc_division_id',
+            'organizations.loc_district_id',
+            'organizations.loc_upazila_id',
             'organizations.row_status',
             'organization_types.title_en as organization_types_title'
 
         ]);
-        $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id')
-            ->orderBy('organizations.id', $order);
+        $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
+        $organizations->orderBy('organizations.id', $order);
 
 
         if (!empty($titleEn)) {
@@ -59,26 +65,25 @@ class OrganizationService
 
         if ($paginate) {
             $organizations = $organizations->paginate(10);
-            $paginate_data = (object)$organizations->toArray();
+            $paginateData = (object)$organizations->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link = $paginate_data->links;
+            $paginateLink = $paginateData->links;
         } else {
             $organizations = $organizations->get();
         }
 
         $data = [];
         foreach ($organizations as $organization) {
-            $_links['read'] = route('api.v1.organizations.read', ['id' => $organization->id]);
-            $_links['update'] = route('api.v1.organizations.update', ['id' => $organization->id]);
-            $_links['delete'] = route('api.v1.organizations.destroy', ['id' => $organization->id]);
-            $organization['_links'] = $_links;
+            $links['read'] = route('api.v1.organizations.read', ['id' => $organization->id]);
+            $links['update'] = route('api.v1.organizations.update', ['id' => $organization->id]);
+            $links['delete'] = route('api.v1.organizations.destroy', ['id' => $organization->id]);
+            $organization['_links'] = $links;
             $data[] = $organization->toArray();
-
         }
 
         return [
@@ -86,12 +91,11 @@ class OrganizationService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
@@ -103,18 +107,16 @@ class OrganizationService
             "_page" => $page,
             "_order" => $order
         ];
-
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneOrganization($id): array
+    public function getOneOrganization(int $id, Carbon $startTime): array
     {
-
-        $startTime = Carbon::now();
-        $links = [];
+        /** @var Organization|Builder $organization */
         $organization = Organization::select([
             'organizations.id',
             'organizations.title_en',
@@ -128,13 +130,20 @@ class OrganizationService
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
             'organizations.description',
+            'organizations.logo',
+            'organizations.loc_division_id',
+            'organizations.loc_district_id',
+            'organizations.loc_upazila_id',
             'organizations.row_status',
             'organization_types.title_en as organization_types_title'
-        ])->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id')
-            ->where('organizations.id', '=', $id)
-            ->where('organizations.row_status', '=', Organization::ROW_STATUS_ACTIVE);
+        ]);
+        $organization->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
+        $organization->where('organizations.id', '=', $id);
+        $organization->where('organizations.row_status', '=', Organization::ROW_STATUS_ACTIVE);
         $organization = $organization->first();
 
+
+        $links = [];
         if (!empty($organization)) {
             $links = [
                 'update' => route('api.v1.organizations.update', ['id' => $id]),
@@ -143,18 +152,16 @@ class OrganizationService
         }
 
         return [
-            "data" => $organization ? $organization : null,
+            "data" => $organization ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links
         ];
     }
-
 
     /**
      * @param array $data
@@ -177,7 +184,6 @@ class OrganizationService
     {
         $organization->fill($data);
         $organization->save();
-
         return $organization;
     }
 
@@ -189,17 +195,15 @@ class OrganizationService
     {
         $organization->row_status = Organization::ROW_STATUS_DELETED;
         $organization->save();
-
         return $organization;
-
     }
 
     /**
      * @param Request $request
-     * @param null $id
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -220,7 +224,7 @@ class OrganizationService
                 'string',
                 'max:191',
                 'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'unique:organizations,domain,'.$id
+                'unique:organizations,domain,' . $id
             ],
             'description' => [
                 'nullable',
@@ -267,19 +271,19 @@ class OrganizationService
                 'regex : /^[^\s@]+@[^\s@]+$/',
             ],
             'logo' => [
-//                'required_if:' . $id . ',null', TODO: it's required, have to add when filesystem api will be ready
-                'image',
-                'mimes:jpeg,jpg,png,gif',
-                'max:500',
+                'required_if:' . $id . ',null',
+                'string',
+                'max:191'
             ],
             'address' => [
                 'required',
                 'max: 191'
-            ]
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
+            ],
         ];
-        $messages = [
-            'logo.max' => 'Please upload maximum 500kb size of image',
-        ];
-        return Validator::make($request->all(), $rules, $messages);
+        return Validator::make($request->all(), $rules);
     }
 }

@@ -64,7 +64,6 @@ class JobSectorService
         }
 
         $data = [];
-
         foreach ($jobSectors as $jobSector) {
             $links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
             $links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
@@ -94,7 +93,6 @@ class JobSectorService
             "_page" => $page,
             "_order" => $order
         ];
-
     }
 
     /**
@@ -143,7 +141,6 @@ class JobSectorService
         $jobSector = new JobSector();
         $jobSector->fill($data);
         $jobSector->save();
-
         return $jobSector;
     }
 
@@ -175,7 +172,6 @@ class JobSectorService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
@@ -196,5 +192,4 @@ class JobSectorService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }

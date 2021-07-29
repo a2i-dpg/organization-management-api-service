@@ -23,7 +23,6 @@ class CreateOrganizationTypesTable extends Migration
             $table->unsignedTinyInteger('is_government')->default(1)->comment('0 => non govt, 1 => govt');
             $table->unsignedTinyInteger('row_status')->default(1);
             $table->timestamps();
-
         });
     }
 
