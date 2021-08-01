@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Rank;
@@ -8,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use App\Helpers\Classes\CustomExceptionHandler;
 use App\Services\RankService;
@@ -19,7 +19,6 @@ use App\Services\RankService;
  */
 class RankController extends Controller
 {
-
     public RankService $rankService;
     private Carbon $startTime;
 
@@ -31,7 +30,6 @@ class RankController extends Controller
     {
         $this->startTime = Carbon::now();
         $this->rankService = $rankService;
-
     }
 
     /**
@@ -42,14 +40,14 @@ class RankController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->rankService->getRankList($request);
+            $response = $this->rankService->getRankList($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
             return Response::json($response, $response['_response_status']['code']);
@@ -58,52 +56,48 @@ class RankController extends Controller
         return Response::json($response);
     }
 
-
     /**
      * @param $id
      * @return JsonResponse
      */
-    public function read($id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->rankService->getOneRank($id);
+            $response = $this->rankService->getOneRank($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->rankService->store($validated);
 
-            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Rank added successfully",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
         } catch (Throwable $e) {
@@ -111,8 +105,8 @@ class RankController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
 
@@ -127,15 +121,13 @@ class RankController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-
         $rank = Rank::findOrFail($id);
 
         $validated = $this->rankService->validator($request)->validate();
-
         try {
             $data = $this->rankService->update($rank, $validated);
 
@@ -144,9 +136,9 @@ class RankController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Rank updated successfully",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
 
@@ -155,8 +147,8 @@ class RankController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
 
@@ -172,7 +164,7 @@ class RankController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $rank = Rank::findOrFail($id);
 
@@ -182,9 +174,9 @@ class RankController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Rank deleted successfully",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
         } catch (Throwable $e) {
@@ -192,19 +184,14 @@ class RankController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
-
     }
-
-
 }
 
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services;
-
 
 use App\Models\HumanResource;
 use App\Models\HumanResourceTemplate;
@@ -11,18 +9,20 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use PhpParser\Builder;
 
 class HumanResourceService
 {
-    public function getHumanResourceList(Request $request): array
+    public function getHumanResourceList(Request $request, Carbon $startTime): array
     {
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
+        /** @var HumanResource|Builder $humanResources */
         $humanResources = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
@@ -54,24 +54,24 @@ class HumanResourceService
 
         if ($paginate) {
             $humanResources = $humanResources->paginate(10);
-            $paginate_data = (object)$humanResources->toArray();
+            $paginateData = (object)$humanResources->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $humanResources = $humanResources->get();
         }
 
         $data = [];
         foreach ($humanResources as $humanResource) {
-            $_links['read'] = route('api.v1.human-resources.read', ['id' => $humanResource->id]);
-            $_links['update'] = route('api.v1.human-resources.update', ['id' => $humanResource->id]);
-            $_links['delete'] = route('api.v1.human-resources.destroy', ['id' => $humanResource->id]);
-            $humanResource['_links'] = $_links;
+            $links['read'] = route('api.v1.human-resources.read', ['id' => $humanResource->id]);
+            $links['update'] = route('api.v1.human-resources.update', ['id' => $humanResource->id]);
+            $links['delete'] = route('api.v1.human-resources.destroy', ['id' => $humanResource->id]);
+            $humanResource['_links'] = $links;
             $data[] = $humanResource->toArray();
         }
 
@@ -80,12 +80,11 @@ class HumanResourceService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
 
                 "search" => [
                     'parameters' => [
@@ -93,19 +92,17 @@ class HumanResourceService
                         'title_bn'
                     ],
                     '_link' => route('api.v1.human-resources.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
     }
 
-    public function getOneHumanResource($id): array
+    public function getOneHumanResource(int $id, Carbon $startTime): array
     {
-        $humanResources = HumanResource::select([
+        /** @var HumanResource|Builder $humanResource */
+        $humanResource = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
             'human_resources.title_bn',
@@ -121,31 +118,30 @@ class HumanResourceService
             'ranks.id as rank_title',
         ]);
 
-        $humanResources->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
-        $humanResources->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-//        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
-        $humanResources->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
-        $humanResources->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
-        $humanResources->where('human_resources.id', $id);
-        $humanResources = $humanResources->first();
+        $humanResource->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
+        $humanResource->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
+//        $humanResource->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+        $humanResource->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
+        $humanResource->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $humanResource->where('human_resources.id', $id);
+        $humanResource = $humanResource->first();
 
         $links = [];
-        if (!empty($humanResources)) {
+        if (!empty($humanResource)) {
             $links['update'] = route('api.v1.human-resources.update', ['id' => $id]);
             $links['delete'] = route('api.v1.human-resources.destroy', ['id' => $id]);
         }
+
         return [
-            "data" => $humanResources ?: null,
+            "data" => $humanResource ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-
     }
 
     /**
@@ -157,7 +153,6 @@ class HumanResourceService
         $humanResource = new HumanResource();
         $humanResource->fill($data);
         $humanResource->save();
-
         return $humanResource;
     }
 
@@ -170,7 +165,6 @@ class HumanResourceService
     {
         $humanResource->fill($data);
         $humanResource->save();
-
         return $humanResource;
     }
 
@@ -182,10 +176,8 @@ class HumanResourceService
     {
         $humanResource->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
         $humanResource->save();
-
         return $humanResource;
     }
-
 
     /**
      * @param Request $request
@@ -193,7 +185,6 @@ class HumanResourceService
      */
     public function validator(Request $request): Validator
     {
-
         $rules = [
             'title_en' => [
                 'required',
@@ -254,9 +245,6 @@ class HumanResourceService
                 Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE, HumanResource::ROW_STATUS_DELETED]),
             ]
         ];
-
         return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
-
     }
-
 }

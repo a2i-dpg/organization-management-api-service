@@ -22,6 +22,7 @@ class OrganizationController extends Controller
      * @var OrganizationService
      */
     protected OrganizationService $organizationService;
+
     /**
      * @var Carbon
      */
@@ -45,46 +46,42 @@ class OrganizationController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->organizationService->getAllOrganization($request);
+            $response = $this->organizationService->getAllOrganization($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
     }
 
     /**
      * Display a specified resource
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-
-    public function read($id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->organizationService->getOneOrganization($id);
+            $response = $this->organizationService->getOneOrganization($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
@@ -95,37 +92,30 @@ class OrganizationController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        ///TO DO : api test with valid data
         $validated = $this->organizationService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->organizationService->store($validated);
-
-            //TODO: never response in try block if not necessary.
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Organization added successfully.",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
@@ -138,60 +128,51 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        //TO DO : api test with valid data
         $organization = Organization::findOrFail($id);
-
         $validated = $this->organizationService->validator($request, $id)->validate();
-
         try {
             $data = $this->organizationService->update($organization, $validated);
-
             $response = [
                 'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Organization updated successfully.",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $organizationTYpe = Organization::findOrFail($id);
-
         try {
             $this->organizationService->destroy($organizationTYpe);
             $response = [
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Organization deleted successfully.",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
         } catch (Throwable $e) {
@@ -199,15 +180,12 @@ class OrganizationController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
     }
-
 }

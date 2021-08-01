@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\Skill;
@@ -8,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use PhpParser\Builder;
 
 /**
  * Class SkillService
@@ -19,29 +18,33 @@ class SkillService
 
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getSkillList(Request $request): array
+    public function getSkillList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Skill|Builder $skills */
         $skills = Skill::select(
             [
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title_bn',
                 'organizations.title_en as organization_title_en',
+                'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
             ]
-        )->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id')
-            ->orderBy('skills.id', $order);
+        );
+        $skills->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
+        $skills->orderBy('skills.id', $order);
 
         if (!empty($titleEn)) {
             $skills->where('skills.title_en', 'like', '%' . $titleEn . '%');
@@ -49,81 +52,74 @@ class SkillService
             $skills->where('skills.title_bn', 'like', '%' . $titleBn . '%');
         }
 
-
         if ($paginate) {
             $skills = $skills->paginate(10);
-            $paginate_data = (object)$skills->toArray();
+            $paginateData = (object)$skills->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $skills = $skills->get();
         }
 
         $data = [];
-
         foreach ($skills as $skill) {
-            $_links['read'] = route('api.v1.skills.read', ['id' => $skill->id]);
-            $_links['update'] = route('api.v1.skills.update', ['id' => $skill->id]);
-            $_links['delete'] = route('api.v1.skills.destroy', ['id' => $skill->id]);
-            $skill['_links'] = $_links;
+            $links['read'] = route('api.v1.skills.read', ['id' => $skill->id]);
+            $links['update'] = route('api.v1.skills.update', ['id' => $skill->id]);
+            $links['delete'] = route('api.v1.skills.destroy', ['id' => $skill->id]);
+            $skill['_links'] = $links;
             $data[] = $skill->toArray();
         }
-        $response = [
-            "data" => $data,
+
+        return [
+            "data" => $data ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.skills.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
-
-        return $response;
-
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneSkill($id): array
+    public function getOneSkill(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var Skill|Builder $skill */
         $skill = Skill::select(
             [
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title_bn',
                 'organizations.title_en as organization_title_en',
+                'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
             ]
         );
-        $skill->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id')
-            ->where('skills.row_status', '=', Skill::ROW_STATUS_ACTIVE)
-            ->where('skills.id', '=', $id);
+        $skill->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
+        $skill->where('skills.id', '=', $id);
         $skill = $skill->first();
 
         $links = [];
@@ -131,18 +127,16 @@ class SkillService
             $links['update'] = route('api.v1.skills.update', ['id' => $id]);
             $links['delete'] = route('api.v1.skills.destroy', ['id' => $id]);
         }
-        $response = [
-            "data" => $skill ? $skill : null,
+        return [
+            "data" => $skill ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-        return $response;
     }
 
     /**
@@ -154,7 +148,6 @@ class SkillService
         $skill = new Skill();
         $skill->fill($data);
         $skill->save();
-
         return $skill;
     }
 
@@ -167,7 +160,6 @@ class SkillService
     {
         $skill->fill($data);
         $skill->save();
-
         return $skill;
     }
 
@@ -179,13 +171,13 @@ class SkillService
     {
         $skill->row_status = 99;
         $skill->save();
-
         return $skill;
     }
 
     /**
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
+     * @return \Illuminate\Contracts\Validation\Validator
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
