@@ -64,13 +64,13 @@ class RankTypeController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function read($id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->rankTypeService->getOneRankType($id);
+            $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -97,10 +97,8 @@ class RankTypeController extends Controller
     {
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->rankTypeService->store($validated);
 
-            //TODO: never response in try block if not necessary.
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -135,18 +133,18 @@ class RankTypeController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
 
         $rankType = RankType::findOrFail($id);
 
-        $validated = $this->rankTypeService->validator($request)->validate();
+        $validated = $this->rankTypeService->validator($request, $id)->validate();
 
         try {
             $data = $this->rankTypeService->update($rankType, $validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -179,7 +177,7 @@ class RankTypeController extends Controller
      * @return JsonResponse
      */
 
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
 
@@ -189,7 +187,7 @@ class RankTypeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
+                    "message" => "Rank types deleted successfully!.",
                     "started" => $this->startTime,
                     "finished" => Carbon::now(),
                 ]

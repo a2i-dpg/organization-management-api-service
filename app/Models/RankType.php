@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\Scopes\ScopeRowStatusTrait;
 /**
@@ -11,7 +10,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  * @property int|null organization_id
  * @property string title_en
  * @property string title_bn
- * @property int|null description
+ * @property string|null description
  * @property-read Organization organization
  */
 class RankType extends BaseModel

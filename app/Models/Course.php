@@ -38,7 +38,6 @@ class Course extends BaseModel
 
     protected $table = 'courses';
     protected $guarded = ['id'];
-    const DEFAULT_COVER_IMAGE = 'course/course.jpeg';
 
     public function institute(): BelongsTo
     {
@@ -50,7 +49,7 @@ class Course extends BaseModel
         return $this->hasMany(CourseSession::class,'course_id','id');
     }
 
-    public function publishCourses(): HasMany
+    public function c(): HasMany
     {
         return $this->hasMany(PublishCourse::class);
     }

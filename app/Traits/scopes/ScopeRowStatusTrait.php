@@ -4,7 +4,6 @@ namespace App\Traits\scopes;
 
 
 use App\Models\BaseModel;
-//use App\Models\RowStatus;
 use Illuminate\Database\Eloquent\Builder;
 
 /**

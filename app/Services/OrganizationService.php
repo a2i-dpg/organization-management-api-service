@@ -267,10 +267,8 @@ class OrganizationService
                 'regex : /^[^\s@]+@[^\s@]+$/',
             ],
             'logo' => [
-//                'required_if:' . $id . ',null', TODO: it's required, have to add when filesystem api will be ready
-                'image',
-                'mimes:jpeg,jpg,png,gif',
-                'max:500',
+                'required',
+                'string',
             ],
             'address' => [
                 'required',
