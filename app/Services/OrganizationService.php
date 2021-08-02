@@ -49,7 +49,8 @@ class OrganizationService
             'organizations.loc_district_id',
             'organizations.loc_upazila_id',
             'organizations.row_status',
-            'organization_types.title_en as organization_types_title'
+            'organization_types.id as organization_type_id',
+            'organization_types.title_en as organization_types_title',
         ]);
         $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
         $organizations->orderBy('organizations.id', $order);
@@ -132,6 +133,7 @@ class OrganizationService
             'organizations.loc_district_id',
             'organizations.loc_upazila_id',
             'organizations.row_status',
+            'organization_types.id as organization_type_id',
             'organization_types.title_en as organization_types_title'
         ]);
         $organization->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');

@@ -43,5 +43,4 @@ class Organization extends BaseModel
     {
         return $this->belongsTo(OrganizationType::class);
     }
-
 }
