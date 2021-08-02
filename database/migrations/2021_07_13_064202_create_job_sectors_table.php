@@ -17,7 +17,6 @@ class CreateJobSectorsTable extends Migration
             $table->increments('id');
             $table->string('title_en', 191)->nullable();
             $table->string('title_bn', 800)->nullable();
-            $table->unsignedInteger('created_by')->nullable();
             $table->unsignedTinyInteger('row_status')->default(1);
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

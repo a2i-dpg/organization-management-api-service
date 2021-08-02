@@ -23,6 +23,7 @@ class CreateOrganizationUnitTypesTable extends Migration
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
