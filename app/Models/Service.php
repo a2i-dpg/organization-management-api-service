@@ -13,7 +13,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  * @property string title_en
  * @property string title_bn
  * @property-read Organization organization
- * @method static \Illuminate\Database\Eloquent\Builder|Organization acl()
+ * @method static Builder|Organization acl()
  * @method static Builder|Organization active()
  * @method static Builder|Organization newModelQuery()
  * @method static Builder|Organization newQuery()
