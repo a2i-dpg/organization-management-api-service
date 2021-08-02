@@ -100,8 +100,6 @@ class OrganizationTypeService
      */
     public function getOneOrganizationType(int $id, carbon $startTime): array
     {
-        $links = [];
-
         /** @var OrganizationType|Builder $organizationType */
         $organizationType = OrganizationType::select([
             'organization_types.id as id',
@@ -113,6 +111,7 @@ class OrganizationTypeService
         $organizationType->where('organization_types.id', '=', $id);
         $organizationType = $organizationType->first();
 
+        $links = [];
         if (!empty($organizationType)) {
             $links = [
                 'update' => route('api.v1.organization-types.update', ['id' => $organizationType->id]),
