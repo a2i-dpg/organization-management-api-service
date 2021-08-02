@@ -4,10 +4,10 @@ namespace App\Services;
 
 use App\Models\Skill;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Builder;
 
 /**
  * Class SkillService
@@ -15,7 +15,6 @@ use PhpParser\Builder;
  */
 class SkillService
 {
-
     /**
      * @param Request $request
      * @param Carbon $startTime
@@ -36,6 +35,7 @@ class SkillService
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title_bn',
+                'organizations.id as organization_id',
                 'organizations.title_en as organization_title_en',
                 'skills.description',
                 'skills.row_status',
@@ -111,6 +111,7 @@ class SkillService
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title_bn',
+                'organizations.id as organization_id',
                 'organizations.title_en as organization_title_en',
                 'skills.description',
                 'skills.row_status',
@@ -169,7 +170,7 @@ class SkillService
      */
     public function destroy(Skill $skill): Skill
     {
-        $skill->row_status = 99;
+        $skill->row_status = Skill::ROW_STATUS_DELETED;
         $skill->save();
         return $skill;
     }
@@ -205,5 +206,4 @@ class SkillService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }

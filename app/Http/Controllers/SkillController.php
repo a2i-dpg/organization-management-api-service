@@ -24,6 +24,7 @@ class SkillController extends Controller
      * @var SkillService
      */
     public SkillService $skillService;
+
     /**
      * @var Carbon
      */
@@ -64,7 +65,7 @@ class SkillController extends Controller
 
 
     /**
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
@@ -97,7 +98,7 @@ class SkillController extends Controller
         try {
             $data = $this->skillService->store($validated);
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -111,8 +112,8 @@ class SkillController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
             return Response::json($response, $response['_response_status']['code']);
@@ -123,7 +124,7 @@ class SkillController extends Controller
     /**
      * update the specified resource in storage
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -135,9 +136,8 @@ class SkillController extends Controller
         try {
             $data = $this->skillService->update($skill, $validated);
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
-
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
                     "message" => "Skill updated successfully",
@@ -145,7 +145,6 @@ class SkillController extends Controller
                     "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
-
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -158,12 +157,11 @@ class SkillController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response, JsonResponse::HTTP_CREATED);
-
     }
 
     /**
-     *  remove the specified resource from storage
-     * @param $id
+     * Remove the specified resource from storage
+     * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
@@ -186,15 +184,12 @@ class SkillController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
-
     }
 }
