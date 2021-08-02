@@ -25,7 +25,6 @@ class CreateOccupationsTable extends Migration
             $table->timestamps();
             $table->foreign('job_sector_id', 'occupations_fk_job_sector_id')->references('id')->on('job_sectors')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
-
     }
 
     /**

@@ -158,14 +158,13 @@ class JobSectorController extends Controller
     }
 
     /**
-     * remove the specified resource from storage
+     * Remove the specified resource from storage
      * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {
         $JobSector = JobSector::findOrFail($id);
-
         try {
             $this->jobSectorService->destroy($JobSector);
             $response = [

@@ -36,7 +36,8 @@ class OccupationService
             'occupations.title_en',
             'occupations.title_bn',
             'occupations.row_status',
-            'job_sectors.title_en as job_sectors_title',
+            'job_sectors.id as job_sector_id',
+            'job_sectors.title_en as job_sector_title',
         ]);
         $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
         $occupations->orderBy('occupations.id', $order);
@@ -108,7 +109,8 @@ class OccupationService
             'occupations.title_en',
             'occupations.title_bn',
             'occupations.row_status',
-            'job_sectors.title_en as job_sectors_title',
+            'job_sectors.id as job_sector_id',
+            'job_sectors.title_en as job_sector_title',
         ]);
         $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
         $occupation->where('occupations.id', '=', $id);
