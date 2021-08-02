@@ -2,12 +2,14 @@
 
 
 namespace App\Services;
+
 use App\Models\Rank;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 /**
@@ -81,7 +83,7 @@ class RankService
         }
 
         return [
-            "data" => $data ? : null,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -187,9 +189,10 @@ class RankService
 
     /**
      * @param Request $request
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request ,int $id=null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -220,6 +223,10 @@ class RankService
                 'nullable',
                 'int',
                 'exists:organizations,id',
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

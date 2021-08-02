@@ -22,13 +22,22 @@ class Rank extends BaseModel
 {
     use ScopeRowStatusTrait;
 
+    /**
+     * @var string[]
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo
+     */
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function rankType(): BelongsTo
     {
         return $this->belongsTo(RankType::class);

@@ -128,7 +128,7 @@ class RankTypeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
-        $validated = $this->rankTypeService->validator($request)->validate();
+        $validated = $this->rankTypeService->validator($request, $id)->validate();
 
         try {
             $data = $this->rankTypeService->update($rankType, $validated);

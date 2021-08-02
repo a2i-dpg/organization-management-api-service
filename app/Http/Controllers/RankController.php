@@ -127,7 +127,7 @@ class RankController extends Controller
     {
         $rank = Rank::findOrFail($id);
 
-        $validated = $this->rankService->validator($request)->validate();
+        $validated = $this->rankService->validator($request,$id)->validate();
         try {
             $data = $this->rankService->update($rank, $validated);
 

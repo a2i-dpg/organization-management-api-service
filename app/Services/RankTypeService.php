@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * Class RankTypeService
@@ -180,9 +181,10 @@ class RankTypeService
 
     /**
      * @param Request $request
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -204,6 +206,10 @@ class RankTypeService
                 'nullable',
                 'string',
                 'max:255',
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);
