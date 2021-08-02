@@ -25,10 +25,10 @@ class OrganizationUnitService extends BaseModel
         return $this->belongsTo(Organization::class);
     }
 
-    /*public function organizationUnit(): BelongsTo
+    public function organizationUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationUnit::class);
-    }*/
+    }
 
     public function service(): BelongsTo
     {
