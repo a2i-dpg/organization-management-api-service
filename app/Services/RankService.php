@@ -3,11 +3,12 @@
 
 namespace App\Services;
 use App\Models\Rank;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Builder;
+
 
 /**
  * Class RankService
@@ -37,7 +38,9 @@ class RankService
                 'ranks.title_bn',
                 'ranks.grade',
                 'ranks.order',
+                'organizations.id as organization_id',
                 'organizations.title_en as organization_title_en',
+                'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
                 'ranks.row_status',
                 'ranks.created_at',
@@ -87,7 +90,6 @@ class RankService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-
                 "search" => [
                     'parameters' => [
                         'title_en',
@@ -116,7 +118,9 @@ class RankService
                 'ranks.title_bn',
                 'ranks.grade',
                 'ranks.order',
+                'organizations.id as organization_id',
                 'organizations.title_en as organization_title_en',
+                'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
                 'ranks.row_status',
                 'ranks.created_at',
@@ -155,7 +159,6 @@ class RankService
         $rank = new Rank();
         $rank->fill($data);
         $rank->save();
-
         return $rank;
     }
 
@@ -165,7 +168,6 @@ class RankService
      * @return Rank
      */
     public function update(Rank $rank, array $data): Rank
-
     {
         $rank->fill($data);
         $rank->save();
@@ -222,6 +224,4 @@ class RankService
         ];
         return Validator::make($request->all(), $rules);
     }
-
-
 }

@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null organization_id
  * @property string title_en
  * @property string title_bn
+ * @property string|null grade
+ * @property int|null order
  * @property int rank_type_id
+ * @property int row_status
  * @property-read Organization organization
  * @property-read RankType rankType
  */

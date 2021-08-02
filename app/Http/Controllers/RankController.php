@@ -57,7 +57,7 @@ class RankController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
@@ -117,9 +117,9 @@ class RankController extends Controller
     }
 
     /**
-     * update the specified resource in storage
+     * Update the specified resource in storage
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -160,8 +160,8 @@ class RankController extends Controller
     }
 
     /**
-     *  emove the specified resource from storage
-     * @param $id
+     * Remove the specified resource from storage
+     * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
