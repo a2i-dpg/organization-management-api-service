@@ -162,7 +162,7 @@ class OrganizationUnitTypeController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
 

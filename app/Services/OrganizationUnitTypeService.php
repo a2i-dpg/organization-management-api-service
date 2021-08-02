@@ -197,15 +197,10 @@ class OrganizationUnitTypeService
                 'exists:organizations,id',
             ],
             'row_status' => [
-                Rule::requiredIf(function () use ($id) {
-                    return !empty($id);
-                }),
-                'int',
-            ]
+                'required_if:' . $id . ',!=,null',
+                Rule::in([OrganizationUnitType::ROW_STATUS_ACTIVE, OrganizationUnitType::ROW_STATUS_INACTIVE]),
+            ],
         ];
-
         return Validator::make($request->all(), $rules);
-
     }
-
 }
