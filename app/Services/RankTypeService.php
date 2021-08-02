@@ -144,7 +144,7 @@ class RankTypeService
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return RankType
      */
     public function store(array $data): RankType
@@ -198,7 +198,7 @@ class RankTypeService
             'organization_id' => [
                 'nullable',
                 'int',
-                'exists:organizations,id', //always check for foreign key
+                'exists:organizations,id',
             ],
             'description' => [
                 'nullable',
@@ -208,5 +208,4 @@ class RankTypeService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }

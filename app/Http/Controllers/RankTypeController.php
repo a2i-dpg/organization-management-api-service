@@ -62,7 +62,7 @@ class RankTypeController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
@@ -81,7 +81,6 @@ class RankTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
@@ -95,7 +94,6 @@ class RankTypeController extends Controller
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
             $data = $this->rankTypeService->store($validated);
-
             $response = [
                 'data' => $data ? $data : null,
                 '_response_status' => [
@@ -123,7 +121,7 @@ class RankTypeController extends Controller
     /**
      * update a specified resource to storage
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -158,18 +156,16 @@ class RankTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response, JsonResponse::HTTP_CREATED);
-
     }
 
     /**
      * Delete the specified resource from the storage
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
-
         try {
             $this->rankTypeService->destroy($rankType);
             $response = [
