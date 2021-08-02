@@ -113,6 +113,7 @@ class RankTypeService
                 'rank_types.title_en',
                 'rank_types.title_bn',
                 'rank_types.description',
+                'organizations.id as organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.description',
                 'rank_types.row_status',
