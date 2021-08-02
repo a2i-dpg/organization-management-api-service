@@ -17,15 +17,18 @@ class CreateHumanResourceTemplatesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('organization_id')->index('human_resource_templates_fk_organization_id');
             $table->string('title_en', 191)->nullable();
-            $table->string('title_bn', 191)->nullable();
+            $table->string('title_bn', 500)->nullable();
             $table->unsignedInteger('parent_id')->nullable()->index('human_resource_templates_fk_parent_id')->comment('self parent id');
             $table->unsignedInteger('rank_id')->nullable()->index('human_resource_templates_fk_rank_id');
             $table->unsignedSmallInteger('display_order')->default(0);
             $table->unsignedTinyInteger('is_designation')->default(1)->comment('1 => designation, 0 => wings or section');
             $table->string('skill_ids')->nullable();
             $table->unsignedInteger('organization_unit_type_id')->index('human_resource_templates_fk_organization_unit_type_id');
-            $table->unsignedTinyInteger('row_status')->default(1)->comment('1 => occupied, 2 => vacancy, 0 => inactive, 99 => deleted');
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('1 => occupied, 2 => vacancy, 0 => inactive');
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
