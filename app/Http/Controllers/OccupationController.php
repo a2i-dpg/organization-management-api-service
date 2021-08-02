@@ -171,7 +171,7 @@ class OccupationController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Occupation updated successfully.",
+                    "message" => "Occupation delete successfully.",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
                 ]
