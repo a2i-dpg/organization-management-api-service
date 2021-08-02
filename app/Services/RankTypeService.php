@@ -37,6 +37,7 @@ class RankTypeService
                 'rank_types.title_bn',
                 'rank_types.description',
                 'organizations.title_en as organization_title_en',
+                'organizations.id as organization_id',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_at',
