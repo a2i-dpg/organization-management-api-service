@@ -64,7 +64,7 @@ class OrganizationUnitServiceController extends Controller
     /**
      * Display the specified resource
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function read(Request $request, int $id): JsonResponse
@@ -121,7 +121,7 @@ class OrganizationUnitServiceController extends Controller
     }
 
     /**
-     * update the specified resource in storage
+     * Update the specified resource in storage
      * @param int $id
      * @return JsonResponse
      */
@@ -131,7 +131,7 @@ class OrganizationUnitServiceController extends Controller
         try {
             $data = $this->organizationUnitServiceService->update($organizationUnitService);
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -157,7 +157,7 @@ class OrganizationUnitServiceController extends Controller
 
     /**
      *  remove the specified resource from storage
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse

@@ -4,10 +4,10 @@ namespace App\Services;
 
 use App\Models\OrganizationUnitService;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Builder;
 
 /**
  * Class OrganizationUnitServiceService
@@ -103,7 +103,7 @@ class OrganizationUnitServiceService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOneOrganizationUnitService(int $id, Carbon $startTime)
+    public function getOneOrganizationUnitService(int $id, Carbon $startTime): array
     {
         /** @var OrganizationUnitService|Builder $organizationUnitService */
         $organizationUnitService = OrganizationUnitService::select(
@@ -183,7 +183,7 @@ class OrganizationUnitServiceService
      * return use Illuminate\Support\Facades\Validator;
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request)
+    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'organization_id' => [

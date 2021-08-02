@@ -60,5 +60,4 @@ class HumanResourceTemplate extends BaseModel
     {
         return $this->hasMany(HumanResource::class);
     }
-
 }

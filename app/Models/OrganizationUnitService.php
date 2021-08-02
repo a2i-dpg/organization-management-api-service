@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int organization_id
  * @property int organization_unit_id
  * @property int service_id
+ * @property-read OrganizationUnit $organizationUnit
+ * @property-read Organization $organization
+ * @property-read Service $service
  **/
 class OrganizationUnitService extends BaseModel
 {
@@ -25,14 +28,13 @@ class OrganizationUnitService extends BaseModel
         return $this->belongsTo(Organization::class);
     }
 
-    /*public function organizationUnit(): BelongsTo
+    public function organizationUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationUnit::class);
-    }*/
+    }
 
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
-
 }
