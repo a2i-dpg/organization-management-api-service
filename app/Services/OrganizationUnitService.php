@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
