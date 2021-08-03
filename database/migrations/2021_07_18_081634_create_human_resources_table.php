@@ -17,7 +17,7 @@ class CreateHumanResourcesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('human_resource_template_id')->nullable()->index('human_resources_fk_human_resource_template_id');
             $table->unsignedInteger('organization_id')->index('human_resources_fk_organization_id');
-//            $table->unsignedInteger('organization_unit_id')->index('human_resources_fk_organization_unit_id');
+            $table->unsignedInteger('organization_unit_id')->index('human_resources_fk_organization_unit_id');
             $table->string('title_en', 191)->nullable();
             $table->string('title_bn', 191)->nullable();
             $table->unsignedInteger('parent_id')->nullable()->index('human_resources_fk_parent_id')->comment('self parent id');

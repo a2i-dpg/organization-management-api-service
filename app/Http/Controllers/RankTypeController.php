@@ -91,8 +91,9 @@ class RankTypeController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $validated = $this->rankTypeService->validator($request)->validate();
+
         try {
+            $validated = $this->rankTypeService->validator($request)->validate();
             $data = $this->rankTypeService->store($validated);
             $response = [
                 'data' => $data ? $data : null,
@@ -105,6 +106,8 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
+            print_r($e->getMessage());
+            die();
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([

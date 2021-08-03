@@ -163,6 +163,7 @@ class OrganizationTypeService
     {
         $organizationType->row_status = Organization::ROW_STATUS_DELETED;
         $organizationType->save();
+        $organizationType->delete();
         return $organizationType;
     }
 
