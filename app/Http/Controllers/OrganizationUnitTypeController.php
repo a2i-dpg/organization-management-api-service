@@ -61,8 +61,8 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
-     * Display a specified resource
-     * @param $id
+     * * Display a specified resource
+     * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
@@ -120,9 +120,9 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     *  * Update the specified resource in storage.
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      * @throws ValidationException
      */
