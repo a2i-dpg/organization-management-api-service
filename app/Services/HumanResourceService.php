@@ -201,11 +201,11 @@ class HumanResourceService
                 'int',
                 'exists:organizations,id'
             ],
-//            'organization_unit_id' => [
-//                'required',
-//                'int',
-//                'exists:organization_units,id'
-//            ],
+            'organization_unit_id' => [
+                'required',
+                'int',
+                'exists:organization_units,id'
+            ],
             'parent_id' => [
                 'nullable',
                 'int',
