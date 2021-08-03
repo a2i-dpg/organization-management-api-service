@@ -22,6 +22,9 @@ class OrganizationUnitController extends Controller
      * @var OrganizationUnitService
      */
     protected OrganizationUnitService $organizationUnitService;
+    /**
+     * @var Carbon
+     */
     private Carbon $startTime;
 
     /**
@@ -58,7 +61,8 @@ class OrganizationUnitController extends Controller
     }
 
     /**
-     * @param $id
+     * * Display a listing  of  the resources
+     * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
@@ -80,6 +84,7 @@ class OrganizationUnitController extends Controller
     }
 
     /**
+     * * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -114,6 +119,7 @@ class OrganizationUnitController extends Controller
     }
 
     /**
+     * * update a specified resource to storage
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -150,6 +156,7 @@ class OrganizationUnitController extends Controller
     }
 
     /**
+     *  * Delete the specified resource from the storage
      * @param int $id
      * @return JsonResponse
      */
