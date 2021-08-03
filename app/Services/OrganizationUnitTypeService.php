@@ -68,7 +68,7 @@ class OrganizationUnitTypeService
             $links['read'] = route('api.v1.organization-unit-types.read', ['id' => $organizationUnitType->id]);
             $links['edit'] = route('api.v1.organization-unit-types.update', ['id' => $organizationUnitType->id]);
             $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $organizationUnitType->id]);
-            $_link['_links'] = $links;
+            $organizationUnitType['_links'] = $links;
             $data[] = $organizationUnitType->toArray();
         }
         return [
@@ -88,13 +88,10 @@ class OrganizationUnitTypeService
                     ],
                     '_link' => route('api.v1.organization-unit-types.get-list')
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
-
     }
 
     /**
@@ -146,9 +143,7 @@ class OrganizationUnitTypeService
         $organizationUnitType = new OrganizationUnitType();
         $organizationUnitType->fill($data);
         $organizationUnitType->save();
-
         return $organizationUnitType;
-
     }
 
     /**
@@ -160,7 +155,6 @@ class OrganizationUnitTypeService
     {
         $organizationUnitType->fill($data);
         $organizationUnitType->save();
-
         return $organizationUnitType;
     }
 
@@ -177,10 +171,10 @@ class OrganizationUnitTypeService
 
     /**
      * @param Request $request
-     * @param null $id
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -205,9 +199,6 @@ class OrganizationUnitTypeService
                 'int',
             ]
         ];
-
         return Validator::make($request->all(), $rules);
-
     }
-
 }

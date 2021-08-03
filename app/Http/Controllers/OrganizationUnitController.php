@@ -128,7 +128,7 @@ class OrganizationUnitController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
-        $validated = $this->organizationUnitService->validator($request)->validate();
+        $validated = $this->organizationUnitService->validator($request,$id)->validate();
         try {
             $data = $this->organizationUnitService->update($organizationUnit, $validated);
             $response = [
@@ -156,7 +156,7 @@ class OrganizationUnitController extends Controller
     }
 
     /**
-     *  * Delete the specified resource from the storage
+     * Delete the specified resource from the storage
      * @param int $id
      * @return JsonResponse
      */

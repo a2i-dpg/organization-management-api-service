@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
@@ -143,7 +144,7 @@ class OrganizationUnitService
              'loc_districts.title_en as district_name',
              'loc_upazilas.title_en as upazila_name',*/
             'organization_unit_types.title_en as organization_unit_name',
-            'organization_unit_types.id as organization_unit_types_id',
+            'organization_unit_types.id as organization_unit_type_id',
         ]);
         $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnit->where('organization_units.id','=', $id);
@@ -201,10 +202,10 @@ class OrganizationUnitService
 
     /**
      * @param Request $request
-     * @param null $id
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-        public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
+        public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
              {
                  $rules = [
                      'title_en' => [
@@ -238,7 +239,7 @@ class OrganizationUnitService
                           'required',
                           'int',
                           'exists:loc_upazilas,id',
-                      ],
+                      ],*/
                       'address' => [
                           'nullable',
                           'string',
@@ -278,13 +279,10 @@ class OrganizationUnitService
                           'required',
                           'int',
                       ],
-                      'row_status' => [
-                          Rule::requiredIf(function () use ($id) {
-                              return !empty($id);
-                          }),
-                          'int',
-                          'exists:row_status,code',
-                      ],*/
+                     'row_status' => [
+                         'required_if:' . $id . ',!=,null',
+                         Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
+                     ],
                  ];
                  return Validator::make($request->all(), $rules);
              }
