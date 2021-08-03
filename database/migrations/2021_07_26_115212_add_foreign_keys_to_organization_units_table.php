@@ -14,8 +14,15 @@ class AddForeignKeysToOrganizationUnitsTable extends Migration
     public function up()
     {
         Schema::table('organization_units', function (Blueprint $table) {
-            $table->foreign('organization_id', 'organization_units_fk_organization_id')->references('id')->on('organizations')->onUpdate('CASCADE')->onDelete('RESTRICT');
-            $table->foreign('organization_unit_type_id', 'organization_units_fk_organization_unit_type_id')->references('id')->on('organization_unit_types')->onUpdate('CASCADE')->onDelete('RESTRICT');
+            $table->foreign('organization_id', 'organization_units_fk_organization_id')
+                ->references('id')->on('organizations')
+                ->onUpdate('CASCADE')
+                ->onDelete('RESTRICT');
+
+            $table->foreign('organization_unit_type_id', 'organization_units_fk_organization_unit_type_id')
+                ->references('id')->on('organization_unit_types')
+                ->onUpdate('CASCADE')
+                ->onDelete('RESTRICT');
         });
     }
 

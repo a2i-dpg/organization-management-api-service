@@ -177,12 +177,14 @@ class JobSectorService
             'title_en' => [
                 'required',
                 'string',
-                'max:191',
+                'max:300',
+                'min:2'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191',
+                'max:500',
+                'min:2'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
