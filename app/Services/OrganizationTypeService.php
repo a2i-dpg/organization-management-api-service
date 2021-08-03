@@ -33,11 +33,13 @@ class OrganizationTypeService
 
         /** @var OrganizationType|Builder $organizationTypes */
         $organizationTypes = OrganizationType::select([
-            'organization_types.id as id',
+            'organization_types.id',
             'organization_types.title_en',
             'organization_types.title_bn',
             'organization_types.is_government',
-            'organization_types.row_status'
+            'organization_types.row_status',
+            'organization_types.created_by',
+            'organization_types.updated_by',
         ]);
         $organizationTypes->orderBy('organization_types.id', $order);
 
@@ -102,11 +104,13 @@ class OrganizationTypeService
     {
         /** @var OrganizationType|Builder $organizationType */
         $organizationType = OrganizationType::select([
-            'organization_types.id as id',
+            'organization_types.id',
             'organization_types.title_en',
             'organization_types.title_bn',
             'organization_types.is_government',
-            'organization_types.row_status'
+            'organization_types.row_status',
+            'organization_types.created_by',
+            'organization_types.updated_by',
         ]);
         $organizationType->where('organization_types.id', '=', $id);
         $organizationType = $organizationType->first();
@@ -114,8 +118,8 @@ class OrganizationTypeService
         $links = [];
         if (!empty($organizationType)) {
             $links = [
-                'update' => route('api.v1.organization-types.update', ['id' => $organizationType->id]),
-                'delete' => route('api.v1.organization-types.destroy', ['id' => $organizationType->id])
+                'update' => route('api.v1.organization-types.update', ['id' => $id]),
+                'delete' => route('api.v1.organization-types.destroy', ['id' => $id])
             ];
         }
 
@@ -172,7 +176,7 @@ class OrganizationTypeService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request,int  $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -183,7 +187,7 @@ class OrganizationTypeService
             'title_bn' => [
                 'required',
                 'string',
-                'max:191',
+                'max:400',
             ],
             'is_government' => [
                 'required',
