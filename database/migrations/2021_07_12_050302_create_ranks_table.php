@@ -17,12 +17,15 @@ class CreateRanksTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('organization_id')->nullable()->index('ranks_fk_organization_id');
             $table->string('title_en', 191)->nullable();
-            $table->string('title_bn', 191)->nullable();
+            $table->string('title_bn', 500)->nullable();
             $table->unsignedInteger('rank_type_id')->index('ranks_fk_rank_type_id');
             $table->string('grade', 100)->nullable();
             $table->unsignedSmallInteger('order')->nullable()->default(0);
             $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

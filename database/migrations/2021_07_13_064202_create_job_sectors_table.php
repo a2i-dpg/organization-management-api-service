@@ -4,9 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Class CreateJobSectorsTable
- */
 class CreateJobSectorsTable extends Migration
 {
     /**
@@ -19,9 +16,12 @@ class CreateJobSectorsTable extends Migration
         Schema::create('job_sectors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title_en', 191)->nullable();
-            $table->string('title_bn', 191)->nullable();
+            $table->string('title_bn', 800)->nullable();
             $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

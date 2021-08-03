@@ -20,7 +20,7 @@ class CreateOrganizationsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('organization_type_id')->nullable()->index('organizations_fk_organization_type_id');
             $table->string('title_en', 191)->nullable();
-            $table->string('title_bn', 191)->nullable();
+            $table->string('title_bn', 1000)->nullable();
             $table->unsignedInteger('loc_division_id')->nullable();
             $table->unsignedInteger('loc_district_id')->nullable();
             $table->unsignedInteger('loc_upazila_id')->nullable();
@@ -32,11 +32,14 @@ class CreateOrganizationsTable extends Migration
             $table->string('contact_person_mobile', 20)->nullable();
             $table->string('contact_person_email', 191)->nullable();
             $table->string('contact_person_designation', 191)->nullable();
-            $table->string('description')->nullable();
-            $table->string('logo', 191)->nullable();
+            $table->text('description')->nullable();
+            $table->text('logo', 191)->nullable();
             $table->string('domain', 191)->nullable();
             $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
     }

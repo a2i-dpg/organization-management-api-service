@@ -34,7 +34,10 @@ class CreateOrganizationUnitsTable extends Migration
             $table->string('contact_person_designation', 191)->nullable();
             $table->unsignedInteger('employee_size')->default(0);
             $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
