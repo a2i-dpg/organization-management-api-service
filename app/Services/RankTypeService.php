@@ -176,6 +176,7 @@ class RankTypeService
     {
         $rankType->row_status = RankType::ROW_STATUS_DELETED;
         $rankType->save();
+        $rankType->delete();
         return $rankType;
     }
 
