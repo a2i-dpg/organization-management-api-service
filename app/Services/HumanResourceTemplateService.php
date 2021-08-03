@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * Class HumanResourceTemplateService
@@ -15,6 +16,11 @@ use Illuminate\Support\Facades\Validator;
  */
 class HumanResourceTemplateService
 {
+    /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getHumanResourceTemplateList(Request $request, Carbon $startTime): array
     {
         $paginateLink = [];
@@ -32,12 +38,18 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.skill_ids as skills',
+            'human_resource_templates.title_en as parent',
+            'human_resource_templates.organization_id',
+            'organizations.title_en as organization_title',
+            'human_resource_templates.organization_unit_type_id',
+            'organization_unit_types.title_en as organization_unit_type_title',
+            'human_resource_templates.rank_id',
+            'ranks.title_en as rank_title_en',
+            'human_resource_templates.row_Status',
+            'human_resource_templates.created_by',
+            'human_resource_templates.updated_by',
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
-            'human_resource_templates.title_en as parent',
-            'organizations.title_en as organization_title',
-            'organization_unit_types.title_en as organization_unit_type_title',
-            'ranks.id as rank_title',
         ]);
 
         $humanResourceTemplates->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
@@ -76,7 +88,7 @@ class HumanResourceTemplateService
         }
 
         return [
-            "data" => $data? : null,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -113,12 +125,18 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.skill_ids as skills',
+            'human_resource_templates.title_en as parent',
+            'human_resource_templates.organization_id',
+            'organizations.title_en as organization_title',
+            'human_resource_templates.organization_unit_type_id',
+            'organization_unit_types.title_en as organization_unit_type_title',
+            'human_resource_templates.rank_id',
+            'ranks.title_en as rank_title_en',
+            'human_resource_templates.row_Status',
+            'human_resource_templates.created_by',
+            'human_resource_templates.updated_by',
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
-            'human_resource_templates.title_en as parent',
-            'organizations.title_en as organization_title',
-            'organization_unit_types.title_en as organization_unit_type_title',
-            'ranks.id as rank_title',
         ]);
 
         $humanResourceTemplate->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
@@ -175,14 +193,19 @@ class HumanResourceTemplateService
      * @param HumanResourceTemplate $humanResourceTemplate
      * @return HumanResourceTemplate
      */
-    public function destroy(HumanResourceTemplate  $humanResourceTemplate): HumanResourceTemplate
+    public function destroy(HumanResourceTemplate $humanResourceTemplate): HumanResourceTemplate
     {
         $humanResourceTemplate->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
         $humanResourceTemplate->save();
         return $humanResourceTemplate;
     }
 
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -232,7 +255,12 @@ class HumanResourceTemplateService
                 'nullable',
                 'int',
                 'distinct'
-            ]
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'int',
+                Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
+            ],
         ];
         return Validator::make($request->all(), $rules);
     }

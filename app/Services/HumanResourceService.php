@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use PhpParser\Builder;
+use Illuminate\Database\Query\Builder;
 
 class HumanResourceService
 {
@@ -33,7 +33,7 @@ class HumanResourceService
             'human_resources.created_at',
             'human_resources.updated_at',
             'human_resources.title_en as parent',
-//            'organization_units.title_en as organization_unit_name',
+            'organization_units.title_en as organization_unit_name',
             'organizations.title_en as organization_name',
             'human_resource_templates.title_en as human_resource_template_name',
             'ranks.id as rank_title',
@@ -41,7 +41,7 @@ class HumanResourceService
 
         $humanResources->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
         $humanResources->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-//        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResources->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
         $humanResources->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
         $humanResources->orderBy('human_resource_templates.id', $order);
@@ -108,19 +108,27 @@ class HumanResourceService
             'human_resources.title_bn',
             'human_resources.display_order',
             'human_resources.is_designation',
-            'human_resources.skill_ids as skills',
+            'human_resources.skill_ids',
+            'human_resources.parent_id',
+            'human_resources.title_en as parent',
+            'organization_units.title_en as organization_unit_name',
+            'human_resources.organization_id',
+            'human_resources.organization_unit_id',
+            'organizations.title_en as organization_name',
+            'human_resources.human_resource_template_id',
+            'human_resource_templates.title_en as human_resource_template_name',
+            'human_resources.rank_id',
+            'human_resources.row_status',
+            'ranks.title_en as rank_title_en',
+            'human_resources.created_by',
+            'human_resources.updated_by',
             'human_resources.created_at',
             'human_resources.updated_at',
-            'human_resources.title_en as parent',
-//            'organization_units.title_en as organization_unit_name',
-            'organizations.title_en as organization_name',
-            'human_resource_templates.title_en as human_resource_template_name',
-            'ranks.id as rank_title',
         ]);
 
         $humanResource->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
         $humanResource->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-//        $humanResource->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+        $humanResource->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResource->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
         $humanResource->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
         $humanResource->where('human_resources.id', $id);
@@ -181,9 +189,10 @@ class HumanResourceService
 
     /**
      * @param Request $request
+     * @param int|null $id
      * @return Validator
      */
-    public function validator(Request $request): Validator
+    public function validator(Request $request,int $id = null): Validator
     {
         $rules = [
             'title_en' => [
@@ -239,9 +248,8 @@ class HumanResourceService
                 'int',
                 'distinct'
             ],
-            'status' => [
-                'nullable',
-                'int',
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
                 Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE, HumanResource::ROW_STATUS_DELETED]),
             ]
         ];

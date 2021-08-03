@@ -8,6 +8,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * Class SkillService
@@ -35,12 +36,14 @@ class SkillService
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title_bn',
-                'organizations.id as organization_id',
+                'skills.organization_id',
                 'organizations.title_en as organization_title_en',
                 'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
+                'skills.created_by',
+                'skills.updated_by',
             ]
         );
         $skills->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
@@ -111,12 +114,14 @@ class SkillService
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title_bn',
-                'organizations.id as organization_id',
+                'skills.organization_id',
                 'organizations.title_en as organization_title_en',
                 'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
+                'skills.created_by',
+                'skills.updated_by',
             ]
         );
         $skill->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
@@ -178,9 +183,10 @@ class SkillService
     /**
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -202,6 +208,10 @@ class SkillService
                 'nullable',
                 'string',
                 'max:255',
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Skill::ROW_STATUS_ACTIVE, Skill::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

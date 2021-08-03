@@ -7,7 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Builder;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Validation\Rule;
 
 /**
  * Class ServiceService
@@ -36,8 +37,11 @@ class ServiceService
                 'services.id as id',
                 'services.title_en',
                 'services.title_bn',
+                'services.organization_id',
                 'organizations.title_en as organization_title_en',
                 'services.row_status',
+                'services.created_by',
+                'services.updated_by',
                 'services.created_at',
                 'services.updated_at',
             ]
@@ -110,8 +114,11 @@ class ServiceService
                 'services.id as id',
                 'services.title_en',
                 'services.title_bn',
+                'services.organization_id',
                 'organizations.title_en as organization_title_en',
                 'services.row_status',
+                'services.created_by',
+                'services.updated_by',
                 'services.created_at',
                 'services.updated_at',
             ]
@@ -168,7 +175,7 @@ class ServiceService
      */
     public function destroy(Service $service): Service
     {
-        $service->row_status = 99;
+        $service->row_status = Service::ROW_STATUS_ACTIVE;
         $service->save();
         return $service;
     }
@@ -177,7 +184,7 @@ class ServiceService
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -195,8 +202,11 @@ class ServiceService
                 'int',
                 'exists:organizations,id',
             ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
+            ],
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }

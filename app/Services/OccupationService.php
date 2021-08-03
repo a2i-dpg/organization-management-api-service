@@ -35,9 +35,13 @@ class OccupationService
             'occupations.id',
             'occupations.title_en',
             'occupations.title_bn',
-            'occupations.row_status',
-            'job_sectors.id as job_sector_id',
+            'occupations.job_sector_id',
             'job_sectors.title_en as job_sector_title',
+            'occupations.row_status',
+            'occupations.created_by',
+            'occupations.updated_by',
+            'occupations.created_at',
+            'occupations.updated_at',
         ]);
         $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
         $occupations->orderBy('occupations.id', $order);
@@ -72,7 +76,7 @@ class OccupationService
         }
 
         return [
-            "data" => $data ? : null,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -108,21 +112,25 @@ class OccupationService
             'occupations.id',
             'occupations.title_en',
             'occupations.title_bn',
-            'occupations.row_status',
-            'job_sectors.id as job_sector_id',
+            'occupations.job_sector_id',
             'job_sectors.title_en as job_sector_title',
+            'occupations.row_status',
+            'occupations.created_by',
+            'occupations.updated_by',
+            'occupations.created_at',
+            'occupations.updated_at',
         ]);
         $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
         $occupation->where('occupations.id', '=', $id);
         $occupation = $occupation->first();
 
         if (!empty($occupation)) {
-            $links['update'] = route('api.v1.occupations.update', ['id' => $occupation->id]);
-            $links['delete'] = route('api.v1.occupations.destroy', ['id' => $occupation->id]);
+            $links['update'] = route('api.v1.occupations.update', ['id' => $id]);
+            $links['delete'] = route('api.v1.occupations.destroy', ['id' => $id]);
         }
 
         return [
-            "data" => $occupation ? : null,
+            "data" => $occupation ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,

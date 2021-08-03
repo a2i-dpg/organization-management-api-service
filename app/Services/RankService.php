@@ -40,11 +40,13 @@ class RankService
                 'ranks.title_bn',
                 'ranks.grade',
                 'ranks.order',
-                'organizations.id as organization_id',
+                'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
                 'ranks.row_status',
+                'ranks.created_by',
+                'ranks.updated_by',
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
@@ -120,11 +122,13 @@ class RankService
                 'ranks.title_bn',
                 'ranks.grade',
                 'ranks.order',
-                'organizations.id as organization_id',
+                'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
                 'ranks.row_status',
+                'ranks.created_by',
+                'ranks.updated_by',
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
@@ -182,7 +186,7 @@ class RankService
      */
     public function destroy(Rank $rank): Rank
     {
-        $rank->row_status = 99;
+        $rank->row_status = Rank::ROW_STATUS_ACTIVE;
         $rank->save();
         return $rank;
     }

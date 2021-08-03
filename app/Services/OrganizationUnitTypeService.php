@@ -36,11 +36,13 @@ class OrganizationUnitTypeService
             'organization_unit_types.id',
             'organization_unit_types.title_en',
             'organization_unit_types.title_bn',
+            'organization_unit_types.organization_id',
+            'organizations.title_en as organization_name',
+            'organization_unit_types.row_status',
+            'organization_unit_types.created_by',
+            'organization_unit_types.updated_by',
             'organization_unit_types.created_at',
             'organization_unit_types.updated_at',
-            'organization_unit_types.row_status',
-            'organizations.title_en as organization_name',
-            'organizations.id as organization_id',
         ]);
         $organizationUnitTypes->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id')->orderBy('organization_unit_types.id', $order);
 
@@ -106,11 +108,13 @@ class OrganizationUnitTypeService
             'organization_unit_types.id',
             'organization_unit_types.title_en',
             'organization_unit_types.title_bn',
+            'organization_unit_types.organization_id',
+            'organizations.title_en as organization_name',
+            'organization_unit_types.row_status',
+            'organization_unit_types.created_by',
+            'organization_unit_types.updated_by',
             'organization_unit_types.created_at',
             'organization_unit_types.updated_at',
-            'organization_unit_types.row_status',
-            'organizations.title_en as organization_name',
-            'organizations.id as organization_id',
         ]);
 
         $organizationUnitType->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');$organizationUnitType->where('organization_unit_types.row_status', '=', OrganizationUnitType::ROW_STATUS_ACTIVE);

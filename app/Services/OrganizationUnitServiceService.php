@@ -8,6 +8,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 /**
  * Class OrganizationUnitServiceService
@@ -33,11 +34,16 @@ class OrganizationUnitServiceService
         /** @var OrganizationUnitService|Builder $organizationUnitServices */
         $organizationUnitServices = OrganizationUnitService::select(
             [
-                'organization_unit_services.id as id',
+                'organization_unit_services.id',
+                'organization_unit_services.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organization_unit_services.organization_unit_id',
                 'organization_units.title_en as organization_unit_title_en',
+                'organization_unit_services.service_id',
                 'services.title_en as service_title_en',
                 'organization_unit_services.row_status',
+                'organization_unit_services.created_by',
+                'organization_unit_services.updated_by',
                 'organization_unit_services.created_at',
                 'organization_unit_services.updated_at',
             ]
@@ -108,11 +114,16 @@ class OrganizationUnitServiceService
         /** @var OrganizationUnitService|Builder $organizationUnitService */
         $organizationUnitService = OrganizationUnitService::select(
             [
-                'organization_unit_services.id as id',
+                'organization_unit_services.id',
+                'organization_unit_services.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organization_unit_services.organization_unit_id',
                 'organization_units.title_en as organization_unit_title_en',
+                'organization_unit_services.service_id',
                 'services.title_en as service_title_en',
                 'organization_unit_services.row_status',
+                'organization_unit_services.created_by',
+                'organization_unit_services.updated_by',
                 'organization_unit_services.created_at',
                 'organization_unit_services.updated_at',
             ]
@@ -181,9 +192,10 @@ class OrganizationUnitServiceService
     /**
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'organization_id' => [
@@ -199,6 +211,10 @@ class OrganizationUnitServiceService
             'service_id' => [
                 'required',
                 'exists:services,id',
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([OrganizationUnitService::ROW_STATUS_ACTIVE, OrganizationUnitService::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

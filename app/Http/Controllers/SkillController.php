@@ -122,7 +122,7 @@ class SkillController extends Controller
     }
 
     /**
-     * update the specified resource in storage
+     * Update the specified resource in storage
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -131,7 +131,7 @@ class SkillController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $skill = Skill::findOrFail($id);
-        $validated = $this->skillService->validator($request)->validate();
+        $validated = $this->skillService->validator($request,$id)->validate();
 
         try {
             $data = $this->skillService->update($skill, $validated);

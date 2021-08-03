@@ -41,7 +41,6 @@ class CreateOrganizationsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
     }
 
     /**

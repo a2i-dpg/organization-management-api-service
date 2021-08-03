@@ -36,11 +36,12 @@ class RankTypeService
                 'rank_types.id',
                 'rank_types.title_en',
                 'rank_types.title_bn',
-                'rank_types.description',
-                'organizations.title_en as organization_title_en',
                 'rank_types.organization_id',
+                'organizations.title_en as organization_title_en',
                 'rank_types.description',
                 'rank_types.row_status',
+                'rank_types.created_by',
+                'rank_types.updated_by',
                 'rank_types.created_at',
                 'rank_types.updated_at',
             ]
@@ -118,6 +119,8 @@ class RankTypeService
                 'organizations.title_en as organization_title_en',
                 'rank_types.description',
                 'rank_types.row_status',
+                'rank_types.created_by',
+                'rank_types.updated_by',
                 'rank_types.created_at',
                 'rank_types.updated_at',
             ]
@@ -210,6 +213,7 @@ class RankTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'int',
                 Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
         ];

@@ -40,6 +40,8 @@ class OrganizationTypeService
             'organization_types.row_status',
             'organization_types.created_by',
             'organization_types.updated_by',
+            'organization_types.created_at',
+            'organization_types.updated_at'
         ]);
         $organizationTypes->orderBy('organization_types.id', $order);
 
@@ -111,6 +113,8 @@ class OrganizationTypeService
             'organization_types.row_status',
             'organization_types.created_by',
             'organization_types.updated_by',
+            'organization_types.created_at',
+            'organization_types.updated_at'
         ]);
         $organizationType->where('organization_types.id', '=', $id);
         $organizationType = $organizationType->first();

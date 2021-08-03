@@ -84,7 +84,7 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
-     * *Store a newly created resource in storage.
+     * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -96,7 +96,7 @@ class OrganizationUnitTypeController extends Controller
             $data = $this->organizationUnitTypeService->store($validated);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -120,7 +120,7 @@ class OrganizationUnitTypeController extends Controller
     }
 
     /**
-     *  * Update the specified resource in storage.
+     * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -159,7 +159,7 @@ class OrganizationUnitTypeController extends Controller
 
     /**
      * remove the specified resource from storage
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse

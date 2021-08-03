@@ -57,7 +57,7 @@ class HumanResourceController extends Controller
 
     /**
      * Display the specified resource.
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
@@ -119,7 +119,7 @@ class HumanResourceController extends Controller
     /**
      * Update the specified resource in storage.
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      * @throws ValidationException
      */
@@ -127,7 +127,7 @@ class HumanResourceController extends Controller
     {
         $humanResource = HumanResource::findOrFail($id);
 
-        $validated = $this->humanResourceService->validator($request)->validate();
+        $validated = $this->humanResourceService->validator($request,$id)->validate();
         try {
             $data = $this->humanResourceService->update($humanResource, $validated);
 

@@ -39,6 +39,10 @@ class JobSectorService
                 'job_sectors.title_en',
                 'job_sectors.title_bn',
                 'job_sectors.row_status',
+                'job_sectors.created_by',
+                'job_sectors.updated_by',
+                'job_sectors.created_at',
+                'job_sectors.updated_at'
             ]
         );
         $jobSectors->orderBy('job_sectors.id', $order);
@@ -109,6 +113,10 @@ class JobSectorService
                 'job_sectors.title_en',
                 'job_sectors.title_bn',
                 'job_sectors.row_status',
+                'job_sectors.created_by',
+                'job_sectors.updated_by',
+                'job_sectors.created_at',
+                'job_sectors.updated_at'
             ]
         );
         $jobSector->where('job_sectors.id', '=', $id);

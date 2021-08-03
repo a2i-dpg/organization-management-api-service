@@ -45,28 +45,27 @@ class HumanResourceTemplateController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        try {
+//        try {
             $response = $this->humanResourceTemplateService->getHumanResourceTemplateList($request, $this->startTime);
-        } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
-        }
+//        } catch (Throwable $e) {
+//            $handler = new CustomExceptionHandler($e);
+//            $response = [
+//                '_response_status' => array_merge([
+//                    "success" => false,
+//                    "started" => $this->startTime->format('H i s'),
+//                    "finished" => Carbon::now()->format('H i s'),
+//                ], $handler->convertExceptionToArray())
+//            ];
+//            return Response::json($response, $response['_response_status']['code']);
+//        }
         return Response::json($response);
     }
 
     /**
-     * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function read(Request $request, int $id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->humanResourceTemplateService->getOneHumanResourceTemplate($id, $this->startTime);
@@ -122,7 +121,7 @@ class HumanResourceTemplateController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $humanResourceTemplate = HumanResourceTemplate::findOrFail($id);
-        $validated = $this->humanResourceTemplateService->validator($request)->validate();
+        $validated = $this->humanResourceTemplateService->validator($request,$id)->validate();
         try {
             $data = $this->humanResourceTemplateService->update($humanResourceTemplate, $validated);
             $response = [
@@ -151,7 +150,7 @@ class HumanResourceTemplateController extends Controller
 
     /**
      *  remove the specified resource from storage
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse

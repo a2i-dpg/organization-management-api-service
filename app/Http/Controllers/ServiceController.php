@@ -134,7 +134,7 @@ class ServiceController extends Controller
 
         $service = Service::findOrFail($id);
 
-        $validated = $this->serviceService->validator($request)->validate();
+        $validated = $this->serviceService->validator($request,$id)->validate();
 
         try {
             $data = $this->serviceService->update($service, $validated);
