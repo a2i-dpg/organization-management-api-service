@@ -186,8 +186,9 @@ class RankService
      */
     public function destroy(Rank $rank): Rank
     {
-        $rank->row_status = Rank::ROW_STATUS_ACTIVE;
+        $rank->row_status = Rank::ROW_STATUS_DELETED;
         $rank->save();
+        $rank->delete();
         return $rank;
     }
 

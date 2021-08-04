@@ -173,6 +173,7 @@ class OccupationService
     {
         $occupation->row_status = Occupation::ROW_STATUS_DELETED;
         $occupation->save();
+        $occupation->delete();
         return $occupation;
     }
 

@@ -45,19 +45,19 @@ class HumanResourceTemplateController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        try {
+        try {
             $response = $this->humanResourceTemplateService->getHumanResourceTemplateList($request, $this->startTime);
-//        } catch (Throwable $e) {
-//            $handler = new CustomExceptionHandler($e);
-//            $response = [
-//                '_response_status' => array_merge([
-//                    "success" => false,
-//                    "started" => $this->startTime->format('H i s'),
-//                    "finished" => Carbon::now()->format('H i s'),
-//                ], $handler->convertExceptionToArray())
-//            ];
-//            return Response::json($response, $response['_response_status']['code']);
-//        }
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
         return Response::json($response);
     }
 
@@ -149,7 +149,7 @@ class HumanResourceTemplateController extends Controller
     }
 
     /**
-     *  remove the specified resource from storage
+     * Remove the specified resource from storage
      * @param int $id
      * @return JsonResponse
      */

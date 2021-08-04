@@ -175,8 +175,9 @@ class ServiceService
      */
     public function destroy(Service $service): Service
     {
-        $service->row_status = Service::ROW_STATUS_ACTIVE;
+        $service->row_status = Service::ROW_STATUS_DELETED;
         $service->save();
+        $service->delete();
         return $service;
     }
 

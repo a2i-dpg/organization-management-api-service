@@ -171,6 +171,7 @@ class JobSectorService
     {
         $JobSector->row_status = JobSector::ROW_STATUS_DELETED;
         $JobSector->save();
+        $JobSector->delete();
         return $JobSector;
     }
 

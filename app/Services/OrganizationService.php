@@ -200,6 +200,7 @@ class OrganizationService
     {
         $organization->row_status = Organization::ROW_STATUS_DELETED;
         $organization->save();
+        $organization->delete();
         return $organization;
     }
 

@@ -197,6 +197,7 @@ class HumanResourceTemplateService
     {
         $humanResourceTemplate->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
         $humanResourceTemplate->save();
+        $humanResourceTemplate->delete();
         return $humanResourceTemplate;
     }
 

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int organization_unit_type_id
  * @property int rank_id
  * @property array skill_ids
+ * @property int row_status
  * @property-read  Organization organization
  * @property-read  OrganizationUnitType organizationUnitType
  * @property-read  HumanResourceTemplate parent

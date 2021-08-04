@@ -196,6 +196,7 @@ class OrganizationUnitService
     {
         $organizationUnit->row_status = OrganizationUnit::ROW_STATUS_DELETED;
         $organizationUnit->save();
+        $organizationUnit->delete();
         return $organizationUnit;
     }
 

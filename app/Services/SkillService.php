@@ -79,7 +79,7 @@ class SkillService
         }
 
         return [
-            "data" => $data ? : null,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -177,6 +177,7 @@ class SkillService
     {
         $skill->row_status = Skill::ROW_STATUS_DELETED;
         $skill->save();
+        $skill->delete();
         return $skill;
     }
 
@@ -186,7 +187,7 @@ class SkillService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
