@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-
 use App\Models\JobSector;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;

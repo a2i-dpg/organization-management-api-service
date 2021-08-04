@@ -199,12 +199,14 @@ class HumanResourceService
             'title_en' => [
                 'required',
                 'string',
-                'max: 191'
+                'max: 191',
+                'min:2'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191'
+                'max: 600',
+                'min:2'
             ],
             'organization_id' => [
                 'required',
@@ -240,11 +242,11 @@ class HumanResourceService
                 'required',
                 'int',
             ],
-            'skill_id' => [
+            'skill_ids' => [
                 'nullable',
                 'array'
             ],
-            'skill_id.*' => [
+            'skill_ids.*' => [
                 'nullable',
                 'int',
                 'distinct'

@@ -18,7 +18,7 @@ class CreateOccupationsTable extends Migration
     {
         Schema::create('occupations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title_en');
+            $table->string('title_en',200);
             $table->string('title_bn', 800);
             $table->unsignedInteger('job_sector_id')->index('occupations_fk_job_sector_id');
             $table->unsignedTinyInteger('row_status')->default(1);
@@ -27,7 +27,10 @@ class CreateOccupationsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('job_sector_id', 'occupations_fk_job_sector_id')
-                ->references('id')->on('job_sectors')->onUpdate('CASCADE')->onDelete('CASCADE');
+                ->references('id')
+                ->on('job_sectors')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 

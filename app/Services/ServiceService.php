@@ -192,11 +192,13 @@ class ServiceService
                 'required',
                 'string',
                 'max:191',
+                'min:2',
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191',
+                'max: 1000',
+                'min:2',
             ],
             'organization_id' => [
                 'required',

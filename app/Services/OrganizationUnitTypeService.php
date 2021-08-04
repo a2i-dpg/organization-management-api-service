@@ -185,12 +185,14 @@ class OrganizationUnitTypeService
             'title_en' => [
                 'required',
                 'string',
-                'max: 191'
+                'max: 191',
+                'min:2'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191'
+                'max: 600',
+                'min:2',
             ],
             'organization_id' => [
                 'required',

@@ -215,15 +215,18 @@ class OrganizationService
             'title_en' => [
                 'required',
                 'string',
-                'max:191',
+                'max:300',
+                'min:2',
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max:191',
+                'max:1000',
+                'min:2'
             ],
             'organization_type_id' => [
                 'required',
+                'int'
             ],
             'domain' => [
                 'required',
@@ -258,7 +261,7 @@ class OrganizationService
             ],
             'contact_person_name' => [
                 'required',
-                'max: 191',
+                'max: 200',
             ],
             'contact_person_designation' => [
                 'required',
@@ -283,7 +286,7 @@ class OrganizationService
             ],
             'address' => [
                 'required',
-                'max: 191'
+                'max: 600'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

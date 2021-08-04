@@ -185,6 +185,7 @@ class OrganizationTypeService
         $rules = [
             'title_en' => [
                 'max:191',
+                'min:2',
                 'required',
                 'string'
             ],
@@ -192,6 +193,7 @@ class OrganizationTypeService
                 'required',
                 'string',
                 'max:400',
+                'min:2',
             ],
             'is_government' => [
                 'required',

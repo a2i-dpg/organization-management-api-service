@@ -85,6 +85,7 @@ class HumanResourceTemplateController extends Controller
 
     function store(Request $request): JsonResponse
     {
+
         $validatedData = $this->humanResourceTemplateService->validator($request)->validate();
         try {
             $data = $this->humanResourceTemplateService->store($validatedData);

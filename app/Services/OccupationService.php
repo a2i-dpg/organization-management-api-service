@@ -186,17 +186,20 @@ class OccupationService
     {
         $rules = [
             'title_en' => [
-                'max:191',
                 'required',
-                'string'
+                'string',
+                'max:200',
+                'min:2',
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max:191',
+                'max:800',
+                'min:2'
             ],
             'job_sector_id' => [
                 'required',
+                'int',
                 'exists:job_sectors,id'
             ],
             'row_status' => [

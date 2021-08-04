@@ -194,11 +194,13 @@ class SkillService
                 'required',
                 'string',
                 'max:191',
+                'min:2',
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191',
+                'max: 600',
+                'min:2'
             ],
             'organization_id' => [
                 'nullable',
@@ -208,7 +210,7 @@ class SkillService
             'description' => [
                 'nullable',
                 'string',
-                'max:255',
+                'max:5000',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

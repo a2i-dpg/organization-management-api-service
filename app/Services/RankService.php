@@ -197,18 +197,20 @@ class RankService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request ,int $id=null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
                 'required',
                 'string',
                 'max:191',
+                'min:2'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191',
+                'max:500',
+                'min:2'
             ],
             'rank_type_id' => [
                 'required',

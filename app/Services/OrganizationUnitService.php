@@ -221,10 +221,16 @@ class OrganizationUnitService
     {
         $rules = [
             'title_en' => [
-                'required'
+                'required',
+                'string',
+                'max:191',
+                'min:2'
             ],
             'title_bn' => [
-                'required'
+                'required',
+                'string',
+                'max:600',
+                'min:2'
             ],
             'organization_id' => [
                 'required',
