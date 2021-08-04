@@ -34,7 +34,7 @@ class ApiInfoController extends Controller
                 'HumanResourceTemplate',
             ],
             'description'=>[
-                'It is a organization management api service that manages services related to a organization'
+                'It is a organization management api service that manages services related to organization'
             ]
         ];
         return Response::json($response,JsonResponse::HTTP_OK);

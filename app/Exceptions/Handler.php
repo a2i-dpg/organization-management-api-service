@@ -4,11 +4,22 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
+
+/**
+ * Class Handler
+ * @package App\Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -25,12 +36,8 @@ class Handler extends ExceptionHandler
 
     /**
      * Report or log an exception.
-     *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     *
+     * @param Throwable $exception
      * @throws \Exception
      */
     public function report(Throwable $exception)
@@ -39,16 +46,46 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     *
-     * @throws \Throwable
+     * @param Request $request
+     * @param Throwable $e
+     * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
+     * @throws Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        return parent::render($request, $exception);
+        if ($e instanceof HttpResponseException) {
+            $errors = [
+                "code" => JsonResponse::HTTP_BAD_REQUEST,
+                "message" => "Invalid Request Format",
+            ];
+            return \response()->json($errors);
+
+        } elseif ($e instanceof ModelNotFoundException || $e instanceof NotFoundHttpException) {
+            $errors = [
+                "code" => JsonResponse::HTTP_NOT_FOUND,
+                "message" => "404 not found",
+            ];
+            return \response()->json($errors);
+        } elseif ($e instanceof AuthorizationException) {
+            $errors = [
+                "code" => JsonResponse::HTTP_FORBIDDEN,
+                "message" => "Don't have permission to access",
+            ];
+            return \response()->json($errors);
+        } elseif ($e instanceof ValidationException) {
+            $errors = [
+                "code" => JsonResponse::HTTP_FORBIDDEN,
+                "message" => "Validation Fail",
+                'errors' => $e->errors()
+            ];
+            return \response()->json($errors);
+        } elseif ($e instanceof BindingResolutionException) {
+            $errors = [
+                "code" => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => "Unable to resolve dependency",
+            ];
+            return \response()->json($errors);
+        }
+        return parent::render($request, $e);
     }
 }
