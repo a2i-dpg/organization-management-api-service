@@ -30,33 +30,62 @@ class HumanResource extends BaseModel
 {
     use ScopeRowStatusTrait;
 
+    /**
+     * @var string[]
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @var string[]
+     */
+    protected $casts = [
+        'skill_ids' => 'array',
+    ];
+
+
+    /**
+     * @return BelongsTo
+     */
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function organizationUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationUnit::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function humanResourceTemplate(): BelongsTo
     {
         return $this->belongsTo(HumanResourceTemplate::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(HumanResource::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function rank(): BelongsTo
     {
         return $this->belongsTo(Rank::class);

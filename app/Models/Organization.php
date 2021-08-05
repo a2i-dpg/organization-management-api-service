@@ -13,12 +13,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string address
  * @property string mobile
  * @property string email
- * @property string fax_no
+ * @property string|null fax_no
+ * @property int|null loc_district_id
+ * @property int|null loc_division_id
+ * @property int|null loc_upazila_id
  * @property string contact_person_name
  * @property string contact_person_mobile
  * @property string contact_person_email
  * @property string contact_person_designation
- * @property string description
+ * @property string|null description
  * @property string logo
  * @property string domain
  * @property int organization_type_id
@@ -27,6 +30,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Organization extends BaseModel
 {
     use ScopeRowStatusTrait;
+
+    /**
+     * @var string[]
+     */
+    protected  $guarded = ['id'];
+
     /**
      * @return BelongsTo
      */
@@ -34,6 +43,4 @@ class Organization extends BaseModel
     {
         return $this->belongsTo(OrganizationType::class);
     }
-
-    protected  $guarded = ['id'];
 }

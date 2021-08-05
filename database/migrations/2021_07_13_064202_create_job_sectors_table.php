@@ -15,8 +15,8 @@ class CreateJobSectorsTable extends Migration
     {
         Schema::create('job_sectors', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title_en', 191)->nullable();
-            $table->string('title_bn', 800)->nullable();
+            $table->string('title_en', 300)->nullable();
+            $table->string('title_bn', 500)->nullable();
             $table->unsignedTinyInteger('row_status')->default(1);
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

@@ -2,26 +2,35 @@
 
 namespace App\Services;
 
-
 use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
-
+/**
+ * Class HumanResourceTemplateService
+ * @package App\Services
+ */
 class HumanResourceTemplateService
 {
-    public function getHumanResourceTemplateList(Request $request): array
+    /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getHumanResourceTemplateList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
+        /** @var HumanResourceTemplate|Builder $humanResourceTemplates */
         $humanResourceTemplates = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
@@ -29,12 +38,18 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.skill_ids as skills',
+            'human_resource_templates.title_en as parent',
+            'human_resource_templates.organization_id',
+            'organizations.title_en as organization_title',
+            'human_resource_templates.organization_unit_type_id',
+            'organization_unit_types.title_en as organization_unit_type_title',
+            'human_resource_templates.rank_id',
+            'ranks.title_en as rank_title_en',
+            'human_resource_templates.row_Status',
+            'human_resource_templates.created_by',
+            'human_resource_templates.updated_by',
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
-            'human_resource_templates.title_en as parent',
-            'organizations.title_en as organization_title',
-            'organization_unit_types.title_en as organization_unit_type_title',
-            'ranks.id as rank_title',
         ]);
 
         $humanResourceTemplates->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
@@ -51,58 +66,58 @@ class HumanResourceTemplateService
 
         if ($paginate) {
             $humanResourceTemplates = $humanResourceTemplates->paginate(10);
-            $paginate_data = (object)$humanResourceTemplates->toArray();
+            $paginateData = (object)$humanResourceTemplates->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $humanResourceTemplates = $humanResourceTemplates->get();
         }
 
         $data = [];
         foreach ($humanResourceTemplates as $humanResourceTemplate) {
-            $_links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
-            $_links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
-            $_links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
-            $humanResourceTemplate['_links'] = $_links;
+            $links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
+            $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
+            $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
+            $humanResourceTemplate['_links'] = $links;
             $data[] = $humanResourceTemplate->toArray();
         }
 
         return [
-            "data" => $data,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
-
+                'paginate' => $paginateLink,
                 "search" => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.human-resource-templates.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
     }
 
-    public function getOneHumanResourceTemplate($id): array
+    /**
+     * @param int $id
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getOneHumanResourceTemplate(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var HumanResourceTemplate|Builder $humanResourceTemplate */
         $humanResourceTemplate = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
@@ -110,12 +125,18 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.skill_ids as skills',
+            'human_resource_templates.title_en as parent',
+            'human_resource_templates.organization_id',
+            'organizations.title_en as organization_title',
+            'human_resource_templates.organization_unit_type_id',
+            'organization_unit_types.title_en as organization_unit_type_title',
+            'human_resource_templates.rank_id',
+            'ranks.title_en as rank_title_en',
+            'human_resource_templates.row_Status',
+            'human_resource_templates.created_by',
+            'human_resource_templates.updated_by',
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
-            'human_resource_templates.title_en as parent',
-            'organizations.title_en as organization_title',
-            'organization_unit_types.title_en as organization_unit_type_title',
-            'ranks.id as rank_title',
         ]);
 
         $humanResourceTemplate->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
@@ -123,7 +144,6 @@ class HumanResourceTemplateService
         $humanResourceTemplate->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
         $humanResourceTemplate->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
         $humanResourceTemplate->where('human_resource_templates.id', $id);
-
         $humanResourceTemplate = $humanResourceTemplate->first();
 
         $links = [];
@@ -131,18 +151,17 @@ class HumanResourceTemplateService
             $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $id]);
             $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $id]);
         }
+
         return [
             "data" => $humanResourceTemplate ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-
     }
 
     /**
@@ -155,7 +174,6 @@ class HumanResourceTemplateService
         $humanResourceTemplate = new HumanResourceTemplate();
         $humanResourceTemplate->fill($data);
         $humanResourceTemplate->save();
-
         return $humanResourceTemplate;
     }
 
@@ -175,26 +193,33 @@ class HumanResourceTemplateService
      * @param HumanResourceTemplate $humanResourceTemplate
      * @return HumanResourceTemplate
      */
-    public function destroy(HumanResourceTemplate  $humanResourceTemplate): HumanResourceTemplate
+    public function destroy(HumanResourceTemplate $humanResourceTemplate): HumanResourceTemplate
     {
         $humanResourceTemplate->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
         $humanResourceTemplate->save();
+        $humanResourceTemplate->delete();
         return $humanResourceTemplate;
     }
 
-
-    public function validator(Request $request): Validator
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
                 'required',
                 'string',
-                'max: 191'
+                'max: 191',
+                'min: 2'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191'
+                'max: 500',
+                'min: 2'
             ],
             'organization_id' => [
                 'required',
@@ -225,20 +250,22 @@ class HumanResourceTemplateService
                 'required',
                 'int',
             ],
-            'skill_id' => [
+            'skill_ids' => [
                 'nullable',
                 'array'
             ],
-            'skill_id.*' => [
+            'skill_ids.*' => [
                 'nullable',
                 'int',
                 'distinct'
-            ]
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'int',
+                Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
+            ],
         ];
-
-        return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
-
+        return Validator::make($request->all(), $rules);
     }
-
 }
 

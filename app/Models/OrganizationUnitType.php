@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * Class OrganizationUnitType
  * @package App\Models
@@ -12,11 +12,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string title_bn
  * @property-read int organization_id
  * @property int row_status
- *
+ * @property-read Organization $organization
  * */
 class OrganizationUnitType extends BaseModel
 {
     use ScopeRowStatusTrait;
+
+    /**
+     * @var string[]
+     */
     protected $guarded = ['id'];
 
     /**
@@ -25,5 +29,13 @@ class OrganizationUnitType extends BaseModel
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function humanResourceTemplate(): HasMany
+    {
+        return $this->hasMany(HumanResourceTemplate::class);
     }
 }

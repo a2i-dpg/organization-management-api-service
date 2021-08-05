@@ -1,14 +1,15 @@
 <?php
 
-
 namespace App\Services;
 
+use App\Models\Organization;
 use App\Models\OrganizationType;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Validation\Rule;
 
 /**
  * Class OrganizationTypeService
@@ -18,55 +19,59 @@ class OrganizationTypeService
 {
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getAllOrganizationType(Request $request): array
+    public function getAllOrganizationType(Request $request, Carbon $startTime): array
     {
-
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
-        $startTime = Carbon::now();
-
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-
+        /** @var OrganizationType|Builder $organizationTypes */
         $organizationTypes = OrganizationType::select([
-            'organization_types.id as id',
+            'organization_types.id',
             'organization_types.title_en',
             'organization_types.title_bn',
             'organization_types.is_government',
-            'organization_types.row_status'
-        ])->orderBy('organization_types.id', $order);
+            'organization_types.row_status',
+            'organization_types.created_by',
+            'organization_types.updated_by',
+            'organization_types.created_at',
+            'organization_types.updated_at'
+        ]);
+        $organizationTypes->orderBy('organization_types.id', $order);
 
         if (!empty($titleEn)) {
             $organizationTypes->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
             $organizationTypes->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
         }
+
         if ($paginate) {
             $organizationTypes = $organizationTypes->paginate(10);
-            $paginate_data = (object)$organizationTypes->toArray();
+            $paginateData = (object)$organizationTypes->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link = $paginate_data->links;
+            $paginateLink = $paginateData->links;
         } else {
             $organizationTypes = $organizationTypes->get();
         }
+
         $data = [];
         foreach ($organizationTypes as $organizationType) {
-            $_links['read'] = route('api.v1.organization-types.read', ['id' => $organizationType->id]);
-            $_links['update'] = route('api.v1.organization-types.update', ['id' => $organizationType->id]);
-            $_links['delete'] = route('api.v1.organization-types.destroy', ['id' => $organizationType->id]);
-            $organizationType['_links'] = $_links;
+            $links['read'] = route('api.v1.organization-types.read', ['id' => $organizationType->id]);
+            $links['update'] = route('api.v1.organization-types.update', ['id' => $organizationType->id]);
+            $links['delete'] = route('api.v1.organization-types.destroy', ['id' => $organizationType->id]);
+            $organizationType['_links'] = $links;
             $data[] = $organizationType->toArray();
-
         }
 
         return [
@@ -74,12 +79,11 @@ class OrganizationTypeService
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
@@ -94,42 +98,45 @@ class OrganizationTypeService
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneOrganizationType($id): array
+    public function getOneOrganizationType(int $id, carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $links = [];
+        /** @var OrganizationType|Builder $organizationType */
         $organizationType = OrganizationType::select([
-            'organization_types.id as id',
+            'organization_types.id',
             'organization_types.title_en',
             'organization_types.title_bn',
             'organization_types.is_government',
-            'organization_types.row_status'
-        ])->where('organization_types.row_status', '=', OrganizationType::ROW_STATUS_ACTIVE)
-            ->where('organization_types.id', '=', $id);
+            'organization_types.row_status',
+            'organization_types.created_by',
+            'organization_types.updated_by',
+            'organization_types.created_at',
+            'organization_types.updated_at'
+        ]);
+        $organizationType->where('organization_types.id', '=', $id);
         $organizationType = $organizationType->first();
 
+        $links = [];
         if (!empty($organizationType)) {
             $links = [
-                'update' => route('api.v1.organization-types.update', ['id' => $organizationType->id]),
-                'delete' => route('api.v1.organization-types.destroy', ['id' => $organizationType->id])
+                'update' => route('api.v1.organization-types.update', ['id' => $id]),
+                'delete' => route('api.v1.organization-types.destroy', ['id' => $id])
             ];
         }
 
         return [
-            "data" => $organizationType ? $organizationType : [],
+            "data" => $organizationType ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links
         ];
-
     }
 
     /**
@@ -142,7 +149,6 @@ class OrganizationTypeService
         $organizationType->fill($data);
         $organizationType->save();
         return $organizationType;
-
     }
 
     /**
@@ -155,7 +161,6 @@ class OrganizationTypeService
         $organizationType->fill($data);
         $organizationType->save();
         return $organizationType;
-
     }
 
     /**
@@ -164,29 +169,31 @@ class OrganizationTypeService
      */
     public function destroy(OrganizationType $organizationType): OrganizationType
     {
-        $organizationType->row_status = 99;
+        $organizationType->row_status = Organization::ROW_STATUS_DELETED;
         $organizationType->save();
+        $organizationType->delete();
         return $organizationType;
-
     }
 
     /**
      * @param Request $request
-     * @param null $id
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request, $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
                 'max:191',
+                'min:2',
                 'required',
                 'string'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max:191',
+                'max:400',
+                'min:2',
             ],
             'is_government' => [
                 'required',
@@ -194,9 +201,9 @@ class OrganizationTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }

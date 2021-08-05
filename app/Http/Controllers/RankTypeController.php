@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\RankTypeService;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 use App\Helpers\Classes\CustomExceptionHandler;
 
@@ -17,11 +18,11 @@ use App\Helpers\Classes\CustomExceptionHandler;
  */
 class RankTypeController extends Controller
 {
-
     /**
      * @var RankTypeService
      */
     public RankTypeService $rankTypeService;
+
     /**
      * @var Carbon
      */
@@ -35,7 +36,6 @@ class RankTypeController extends Controller
     {
         $this->startTime = Carbon::now();
         $this->rankTypeService = $rankTypeService;
-
     }
 
     /**
@@ -46,70 +46,62 @@ class RankTypeController extends Controller
     public function getList(Request $request): JsonResponse
     {
         try {
-            $response = $this->rankTypeService->getRankTypeList($request);
+            $response = $this->rankTypeService->getRankTypeList($request, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
     }
 
     /**
-     * Display a specified resource
-     * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id): JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
-            $response = $this->rankTypeService->getOneRanktype($id);
+            $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
-            //TODO: Only Validated data will stored.
             $data = $this->rankTypeService->store($validated);
-
-            //TODO: never response in try block if not necessary.
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Rank Type added successfully",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
         } catch (Throwable $e) {
@@ -117,31 +109,26 @@ class RankTypeController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
 
     /**
-     * update a specified resource to storage
+     * Update a specified resource to storage
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
-
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
-
         $rankType = RankType::findOrFail($id);
-
-        $validated = $this->rankTypeService->validator($request)->validate();
+        $validated = $this->rankTypeService->validator($request, $id)->validate();
 
         try {
             $data = $this->rankTypeService->update($rankType, $validated);
@@ -151,9 +138,9 @@ class RankTypeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Rank Type updated successfully",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
 
@@ -162,37 +149,32 @@ class RankTypeController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_CREATED);
-
     }
 
     /**
      * Delete the specified resource from the storage
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
-
         try {
             $this->rankTypeService->destroy($rankType);
             $response = [
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
-                    "message" => "Job finished successfully.",
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "message" => "Rank Type deleted successfully",
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ]
             ];
         } catch (Throwable $e) {
@@ -200,15 +182,12 @@ class RankTypeController extends Controller
             $response = [
                 '_response_status' => array_merge([
                     "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
                 ], $handler->convertExceptionToArray())
             ];
-
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
-
     }
 }

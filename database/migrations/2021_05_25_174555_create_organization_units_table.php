@@ -16,9 +16,9 @@ class CreateOrganizationUnitsTable extends Migration
         Schema::create('organization_units', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title_en', 191)->nullable();
-            $table->string('title_bn', 191)->nullable();
-            $table->unsignedInteger('organization_id')->index('organization_units_fk_organization_id');
-            $table->unsignedInteger('organization_unit_type_id')->index('organization_units_fk_organization_unit_type_id');
+            $table->string('title_bn', 600)->nullable();
+            $table->unsignedInteger('organization_id');
+            $table->unsignedInteger('organization_unit_type_id');
             $table->unsignedInteger('loc_division_id')->nullable();
             $table->unsignedInteger('loc_district_id')->nullable();
             $table->unsignedInteger('loc_upazila_id')->nullable();

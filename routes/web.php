@@ -9,12 +9,11 @@ $customRouter = function (string $as = '') use ($router) {
     return $custom->as($as);
 };
 
+//$router->get('/', function () use ($router) {
+//    return $router->app->version();
+//});
 
-$router->get('/hello', 'ExampleController@hateoasResponse');
-
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
     $customRouter()->resourceRoute('ranks', 'RankController')->render();
@@ -24,17 +23,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
     $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
     $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
-
-    //organization-Unit crud operation
-    $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
-
-
-
-
-    //organization unit types crud operation
     $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
-    $customRouter()->resourceRoute('services', 'ServiceController')->render();
-    $customRouter()->resourceRoute('organization-unit-services', 'OrganizationUnitServiceController')->render();
     $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
     $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
+    $customRouter()->resourceRoute('services', 'ServiceController')->render();
+    $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    $customRouter()->resourceRoute('organization-unit-services', 'OrganizationUnitServiceController')->render();
 });

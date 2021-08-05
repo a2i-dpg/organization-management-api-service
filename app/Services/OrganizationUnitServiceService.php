@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\OrganizationUnitService;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -19,30 +19,38 @@ class OrganizationUnitServiceService
 
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationUnitServiceList(Request $request): array
+    public function getOrganizationUnitServiceList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var OrganizationUnitService|Builder $organizationUnitServices */
         $organizationUnitServices = OrganizationUnitService::select(
             [
-                'organization_unit_services.id as id',
+                'organization_unit_services.id',
+                'organization_unit_services.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organization_unit_services.organization_unit_id',
                 'organization_units.title_en as organization_unit_title_en',
+                'organization_unit_services.service_id',
                 'services.title_en as service_title_en',
-
+                'organization_unit_services.row_status',
+                'organization_unit_services.created_by',
+                'organization_unit_services.updated_by',
+                'organization_unit_services.created_at',
+                'organization_unit_services.updated_at',
             ]
-        )
-            ->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id')
-            ->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id')
-            ->join('services', 'organization_unit_services.service_id', '=', 'services.id');
-        //->orderBy('organization_unit_types.id', $order);
+        );
+        $organizationUnitServices->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id');
+        $organizationUnitServices->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id');
+        $organizationUnitServices->join('services', 'organization_unit_services.service_id', '=', 'services.id');
 
         if (!empty($titleEn)) {
             $organizationUnitServices->where('organization_unit_services.title_en', 'like', '%' . $titleEn . '%');
@@ -50,82 +58,80 @@ class OrganizationUnitServiceService
             $organizationUnitServices->where('organization_unit_services.title_bn', 'like', '%' . $titleBn . '%');
         }
 
-
         if ($paginate) {
             $organizationUnitServices = $organizationUnitServices->paginate(10);
-            $paginate_data = (object)$organizationUnitServices->toArray();
+            $paginateData = (object)$organizationUnitServices->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $organizationUnitServices = $organizationUnitServices->get();
         }
 
         $data = [];
-
-
         foreach ($organizationUnitServices as $organizationUnitService) {
-            $_links['read'] = route('api.v1.organization-unit-services.read', ['id' => $organizationUnitService->id]);
-            $_links['update'] = route('api.v1.organization-unit-services.update', ['id' => $organizationUnitService->id]);
-            $_links['delete'] = route('api.v1.organization-unit-services.destroy', ['id' => $organizationUnitService->id]);
-            $organizationUnitService['_links'] = $_links;
+            $links['read'] = route('api.v1.organization-unit-services.read', ['id' => $organizationUnitService->id]);
+            $links['update'] = route('api.v1.organization-unit-services.update', ['id' => $organizationUnitService->id]);
+            $links['delete'] = route('api.v1.organization-unit-services.destroy', ['id' => $organizationUnitService->id]);
+            $organizationUnitService['_links'] = $links;
             $data[] = $organizationUnitService->toArray();
         }
 
-        $response = [
+        return [
             "data" => $data,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.organization-unit-services.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
-
-        return $response;
-
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneOrganizationUnitService($id)
+    public function getOneOrganizationUnitService(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var OrganizationUnitService|Builder $organizationUnitService */
         $organizationUnitService = OrganizationUnitService::select(
             [
-                'organization_unit_services.id as id',
+                'organization_unit_services.id',
+                'organization_unit_services.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organization_unit_services.organization_unit_id',
                 'organization_units.title_en as organization_unit_title_en',
+                'organization_unit_services.service_id',
                 'services.title_en as service_title_en',
+                'organization_unit_services.row_status',
+                'organization_unit_services.created_by',
+                'organization_unit_services.updated_by',
+                'organization_unit_services.created_at',
+                'organization_unit_services.updated_at',
             ]
-        )
-            ->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id')
-            ->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id')
-            ->join('services', 'organization_unit_services.service_id', '=', 'services.id')
-            ->where('organization_unit_services.row_status', '=', OrganizationUnitService::ROW_STATUS_ACTIVE)
-            ->where('organization_unit_services.id', '=', $id);
+        );
+        $organizationUnitService->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id');
+        $organizationUnitService->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id');
+        $organizationUnitService->join('services', 'organization_unit_services.service_id', '=', 'services.id');
+        $organizationUnitService->where('organization_unit_services.id', '=', $id);
         $organizationUnitService = $organizationUnitService->first();
 
         $links = [];
@@ -133,23 +139,22 @@ class OrganizationUnitServiceService
             $links['update'] = route('api.v1.organization-unit-services.update', ['id' => $id]);
             $links['delete'] = route('api.v1.organization-unit-services.destroy', ['id' => $id]);
         }
-        $response = [
+
+        return [
             "data" => $organizationUnitService ? $organizationUnitService : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-        return $response;
     }
 
     /**
      * @param array $data
-     * @return OrganizationUnitService
+     * @return bool
      */
     public function store(array $data): bool
     {
@@ -166,7 +171,6 @@ class OrganizationUnitServiceService
 
     /**
      * @param OrganizationUnitService $organizationUnitService
-     * @param array $data
      * @return OrganizationUnitService
      */
     public function update(OrganizationUnitService $organizationUnitService): OrganizationUnitService
@@ -180,17 +184,19 @@ class OrganizationUnitServiceService
      */
     public function destroy(OrganizationUnitService $organizationUnitService): OrganizationUnitService
     {
-        $organizationUnitService->row_status = 99;
+        $organizationUnitService->row_status = $organizationUnitService::ROW_STATUS_DELETED;
         $organizationUnitService->save();
-
+        $organizationUnitService->delete();
         return $organizationUnitService;
     }
 
     /**
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request)
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'organization_id' => [
@@ -207,8 +213,11 @@ class OrganizationUnitServiceService
                 'required',
                 'exists:services,id',
             ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([OrganizationUnitService::ROW_STATUS_ACTIVE, OrganizationUnitService::ROW_STATUS_INACTIVE]),
+            ],
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }

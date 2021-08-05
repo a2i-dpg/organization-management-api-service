@@ -2,12 +2,16 @@
 
 
 namespace App\Services;
-use App\Traits\Scopes\ScopeRowStatusTrait;
+
 use App\Models\Rank;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
+
 /**
  * Class RankService
  * @package App\Services
@@ -15,20 +19,20 @@ use Illuminate\Support\Facades\Validator;
 class RankService
 {
     /**
-     *
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-
-    public function getRankList(Request $request): array
+    public function getRankList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Rank|Builder $ranks */
         $ranks = Rank::select(
             [
                 'ranks.id',
@@ -36,15 +40,21 @@ class RankService
                 'ranks.title_bn',
                 'ranks.grade',
                 'ranks.order',
+                'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
+                'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
                 'ranks.row_status',
+                'ranks.created_by',
+                'ranks.updated_by',
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
-        )->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id')
-            ->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id')
-            ->orderBy('ranks.id', $order);
+        );
+        $ranks->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
+        $ranks->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
+        $ranks->orderBy('ranks.id', $order);
+
         if (!empty($titleEn)) {
             $ranks->where('ranks.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -53,62 +63,58 @@ class RankService
 
         if ($paginate) {
             $ranks = $ranks->paginate(10);
-            $paginate_data = (object)$ranks->toArray();
+            $paginateData = (object)$ranks->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $ranks = $ranks->get();
         }
+
+        $data = [];
         foreach ($ranks as $rank) {
-            $_links['read'] = route('api.v1.ranks.read', ['id' => $rank->id]);
-            $_links['update'] = route('api.v1.ranks.update', ['id' => $rank->id]);
-            $_links['delete'] = route('api.v1.ranks.destroy', ['id' => $rank->id]);
-            $rank['_links'] = $_links;
+            $links['read'] = route('api.v1.ranks.read', ['id' => $rank->id]);
+            $links['update'] = route('api.v1.ranks.update', ['id' => $rank->id]);
+            $links['delete'] = route('api.v1.ranks.destroy', ['id' => $rank->id]);
+            $rank['_links'] = $links;
             $data[] = $rank->toArray();
         }
 
-        $response = [
-            "data" => $data,
+        return [
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
-
+                'paginate' => $paginateLink,
                 "search" => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.ranks.get-list')
-
                 ],
-
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
-
-        return $response;
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneRank($id)
+    public function getOneRank(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var Rank|Builder $rank */
         $rank = Rank::select(
             [
                 'ranks.id',
@@ -116,17 +122,20 @@ class RankService
                 'ranks.title_bn',
                 'ranks.grade',
                 'ranks.order',
+                'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
+                'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
                 'ranks.row_status',
+                'ranks.created_by',
+                'ranks.updated_by',
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
-        )->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id')
-            ->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id')
-            ->where('ranks.row_status', '=', Rank::ROW_STATUS_ACTIVE)
-            ->where('ranks.id', '=', $id);
-
+        );
+        $rank->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
+        $rank->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
+        $rank->where('ranks.id', '=', $id);
         $rank = $rank->first();
 
         $links = [];
@@ -134,19 +143,17 @@ class RankService
             $links['update'] = route('api.v1.ranks.update', ['id' => $id]);
             $links['delete'] = route('api.v1.ranks.destroy', ['id' => $id]);
         }
-        $response = [
+
+        return [
             "data" => $rank ? $rank : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-        return $response;
-
     }
 
     /**
@@ -158,7 +165,6 @@ class RankService
         $rank = new Rank();
         $rank->fill($data);
         $rank->save();
-
         return $rank;
     }
 
@@ -168,7 +174,6 @@ class RankService
      * @return Rank
      */
     public function update(Rank $rank, array $data): Rank
-
     {
         $rank->fill($data);
         $rank->save();
@@ -181,27 +186,31 @@ class RankService
      */
     public function destroy(Rank $rank): Rank
     {
-        $rank->row_status = 99;
+        $rank->row_status = Rank::ROW_STATUS_DELETED;
         $rank->save();
+        $rank->delete();
         return $rank;
     }
 
     /**
      * @param Request $request
+     * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request)
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
                 'required',
                 'string',
                 'max:191',
+                'min:2'
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191',
+                'max:500',
+                'min:2'
             ],
             'rank_type_id' => [
                 'required',
@@ -222,9 +231,11 @@ class RankService
                 'int',
                 'exists:organizations,id',
             ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
+            ],
         ];
         return Validator::make($request->all(), $rules);
     }
-
-
 }

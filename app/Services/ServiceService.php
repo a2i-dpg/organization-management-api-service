@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\Service;
@@ -8,6 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Validation\Rule;
 
 /**
  * Class ServiceService
@@ -18,24 +19,29 @@ class ServiceService
 
     /**
      * @param Request $request
+     * @param Carbon $startTime
      * @return array
      */
-    public function getServiceList(Request $request): array
+    public function getServiceList(Request $request, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
-        $paginate_link = [];
+        $paginateLink = [];
         $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Service|Builder $services */
         $services = Service::select(
             [
                 'services.id as id',
                 'services.title_en',
                 'services.title_bn',
+                'services.organization_id',
                 'organizations.title_en as organization_title_en',
                 'services.row_status',
+                'services.created_by',
+                'services.updated_by',
                 'services.created_at',
                 'services.updated_at',
             ]
@@ -48,17 +54,16 @@ class ServiceService
             $services->where('services.title_bn', 'like', '%' . $titleBn . '%');
         }
 
-
         if ($paginate) {
             $services = $services->paginate(10);
-            $paginate_data = (object)$services->toArray();
+            $paginateData = (object)$services->toArray();
             $page = [
-                "size" => $paginate_data->per_page,
-                "total_element" => $paginate_data->total,
-                "total_page" => $paginate_data->last_page,
-                "current_page" => $paginate_data->current_page
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
             ];
-            $paginate_link[] = $paginate_data->links;
+            $paginateLink[] = $paginateData->links;
         } else {
             $services = $services->get();
         }
@@ -66,63 +71,60 @@ class ServiceService
         $data = [];
 
         foreach ($services as $service) {
-            $_links['read'] = route('api.v1.services.read', ['id' => $service->id]);
-            $_links['update'] = route('api.v1.services.update', ['id' => $service->id]);
-            $_links['delete'] = route('api.v1.services.destroy', ['id' => $service->id]);
-            $service['_links'] = $_links;
+            $links['read'] = route('api.v1.services.read', ['id' => $service->id]);
+            $links['update'] = route('api.v1.services.update', ['id' => $service->id]);
+            $links['delete'] = route('api.v1.services.destroy', ['id' => $service->id]);
+            $service['_links'] = $links;
             $data[] = $service->toArray();
         }
-        $response = [
-            "data" => $data,
+        return [
+            "data" => $data? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => [
-                'paginate' => $paginate_link,
+                'paginate' => $paginateLink,
                 'search' => [
                     'parameters' => [
                         'title_en',
                         'title_bn'
                     ],
                     '_link' => route('api.v1.services.get-list')
-
                 ],
-
             ],
 
             "_page" => $page,
             "_order" => $order
         ];
-
-        return $response;
-
     }
 
     /**
-     * @param $id
+     * @param int $id
+     * @param Carbon $startTime
      * @return array
      */
-    public function getOneService($id)
+    public function getOneService(int $id, Carbon $startTime): array
     {
-        $startTime = Carbon::now();
+        /** @var Service|Builder $service */
         $service = Service::select(
             [
                 'services.id as id',
                 'services.title_en',
                 'services.title_bn',
+                'services.organization_id',
                 'organizations.title_en as organization_title_en',
                 'services.row_status',
+                'services.created_by',
+                'services.updated_by',
                 'services.created_at',
                 'services.updated_at',
             ]
         );
-        $service->join('organizations', 'services.organization_id', '=', 'organizations.id')
-            ->where('services.row_status', '=', Service::ROW_STATUS_ACTIVE)
-            ->where('services.id', '=', $id);
+        $service->join('organizations', 'services.organization_id', '=', 'organizations.id');
+        $service->where('services.id', '=', $id);
         $service = $service->first();
 
         $links = [];
@@ -130,18 +132,17 @@ class ServiceService
             $links['update'] = route('api.v1.services.update', ['id' => $id]);
             $links['delete'] = route('api.v1.services.destroy', ['id' => $id]);
         }
-        $response = [
-            "data" => $service ? $service : null,
+
+        return [
+            "data" => $service ? : null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "message" => "Job finished successfully.",
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
             "_links" => $links,
         ];
-        return $response;
     }
 
     /**
@@ -153,7 +154,6 @@ class ServiceService
         $service = new Service();
         $service->fill($data);
         $service->save();
-
         return $service;
     }
 
@@ -166,7 +166,6 @@ class ServiceService
     {
         $service->fill($data);
         $service->save();
-
         return $service;
     }
 
@@ -176,9 +175,9 @@ class ServiceService
      */
     public function destroy(Service $service): Service
     {
-        $service->row_status = 99;
+        $service->row_status = Service::ROW_STATUS_DELETED;
         $service->save();
-
+        $service->delete();
         return $service;
     }
 
@@ -186,27 +185,31 @@ class ServiceService
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
                 'required',
                 'string',
                 'max:191',
+                'min:2',
             ],
             'title_bn' => [
                 'required',
                 'string',
-                'max: 191',
+                'max: 1000',
+                'min:2',
             ],
             'organization_id' => [
                 'required',
                 'int',
                 'exists:organizations,id',
             ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
+            ],
         ];
-
         return Validator::make($request->all(), $rules);
     }
-
 }
