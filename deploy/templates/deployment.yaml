@@ -48,6 +48,7 @@ spec:
                   - >
                     mv /app/.env.example /app/.env;
                     php artisan key:generate;
+                    php artisan migrate;
                     sed -i "s/APP_ENV=.*$/APP_ENV=$APP_ENV/g" /app/.env;
                     sed -i "s/APP_DEBUG=.*$/APP_DEBUG=$APP_DEBUG/g" /app/.env;
                     sed -i "s/APP_URL=.*$/APP_URL=$APP_URL/g" /app/.env;
