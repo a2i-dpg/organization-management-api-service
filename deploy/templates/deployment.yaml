@@ -48,7 +48,6 @@ spec:
                   - >
                     mv /app/.env.example /app/.env;
                     php artisan key:generate;
-                    php artisan migrate;
                     sed -i "s/APP_ENV=.*$/APP_ENV=$APP_ENV/g" /app/.env;
                     sed -i "s/APP_DEBUG=.*$/APP_DEBUG=$APP_DEBUG/g" /app/.env;
                     sed -i "s/APP_URL=.*$/APP_URL=$APP_URL/g" /app/.env;
@@ -57,6 +56,8 @@ spec:
                     sed -i "s/DB_DATABASE=.*$/DB_DATABASE=$DB_DATABASE/g" /app/.env;
                     sed -i "s/DB_USERNAME=.*$/DB_USERNAME=$DB_USERNAME/g" /app/.env;
                     sed -i "s/DB_PASSWORD=.*$/DB_PASSWORD=$DB_PASSWORD/g" /app/.env;
-                    chown -R www-data:www-data /app
+                    chown -R www-data:www-data /app;
+                    php artisan migrate;
+
       imagePullSecrets:
         - name: regcred
