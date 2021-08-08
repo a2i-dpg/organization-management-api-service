@@ -201,7 +201,7 @@ class OrganizationUnitTypeController extends Controller
     public function getHierarchy(int $id): string
     {
         try {
-            $response = $this->organizationUnitTypeService->getHierrarchy($id);
+            $response = $this->organizationUnitTypeService->getHierarchy($id,$this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -214,7 +214,6 @@ class OrganizationUnitTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
 
     }
 }

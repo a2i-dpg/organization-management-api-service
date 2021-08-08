@@ -195,7 +195,7 @@ class OrganizationUnitController extends Controller
     public function getHierarchy(int $id): string
     {
         try {
-            $response = $this->organizationUnitService->getHierrarchy($id);
+            $response = $this->organizationUnitService->getHierarchy($id,$this->startTime);
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [

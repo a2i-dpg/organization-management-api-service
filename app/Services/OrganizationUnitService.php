@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\HumanResource;
+use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -171,7 +173,7 @@ class OrganizationUnitService
         }
 
         return [
-            "data" => $organizationUnit ? $organizationUnit : null,
+            "data" => $organizationUnit ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -182,6 +184,11 @@ class OrganizationUnitService
         ];
     }
 
+    /**
+     * @param OrganizationUnit $organizationUnit
+     * @param array $data
+     * @return OrganizationUnit
+     */
     public function update(OrganizationUnit $organizationUnit, array $data): OrganizationUnit
     {
         $organizationUnit->fill($data);
@@ -307,19 +314,36 @@ class OrganizationUnitService
     }
 
 
-    public function getHierrarchy(int $id): array
+    /**
+     * @param int $id
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getHierarchy(int $id, Carbon $startTime): array
     {
-        /** @var  HumanResource|Builder $hierarchy */
-        $hierarchy = HumanResource::select([
+        /** @var  HumanResourceTemplate|Builder $hierarchyBuilder */
+        $hierarchyBuilder = HumanResource::select([
             'human_resources.title_en',
             't2.title_en as parent'
         ]);
-        $hierarchy->leftjoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
-        $hierarchy->where('human_resources.organization_unit_id', '=', $id);
+        $hierarchyBuilder->leftjoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $hierarchyBuilder->where('human_resources.organization_unit_id', '=', $id);
 
-        $hierarchy = $hierarchy->get();
+        /** @var Collection|HumanResourceTemplate $hierarchies */
+        $hierarchies = $hierarchyBuilder->get();
+
         $data = [];
-        $data[]=(object) $hierarchy->toArray();
-        return $data;
+        foreach ($hierarchies as $hierarchy) {
+            $data[] = $hierarchy;
+        }
+        return [
+            "data" => $data,
+            "_response_status" => [
+                "success" => true,
+                "code" => JsonResponse::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ]
+        ];
     }
 }
