@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 /**
@@ -14,7 +14,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
 
 class JobSector extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
 
     protected $guarded = ['id'];
 }

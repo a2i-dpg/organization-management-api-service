@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * Class Skill
  * @package App\Models
@@ -16,7 +17,8 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  */
 class Skill extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
+
     /**
      * @var string[]
      */

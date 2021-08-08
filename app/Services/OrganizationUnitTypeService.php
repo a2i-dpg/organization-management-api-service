@@ -164,14 +164,11 @@ class OrganizationUnitTypeService
 
     /**
      * @param OrganizationUnitType $organizationUnitType
-     * @return OrganizationUnitType
+     * @return bool
      */
-    public function destroy(OrganizationUnitType $organizationUnitType): OrganizationUnitType
+    public function destroy(OrganizationUnitType $organizationUnitType): bool
     {
-        $organizationUnitType->row_status = OrganizationUnitType::ROW_STATUS_DELETED;
-        $organizationUnitType->save();
-        $organizationUnitType->delete();
-        return $organizationUnitType;
+        return $organizationUnitType->delete();
     }
 
     /**

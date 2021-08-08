@@ -173,14 +173,11 @@ class RankTypeService
 
     /**
      * @param RankType $rankType
-     * @return RankType
+     * @return bool
      */
-    public function destroy(RankType $rankType): RankType
+    public function destroy(RankType $rankType): bool
     {
-        $rankType->row_status = RankType::ROW_STATUS_DELETED;
-        $rankType->save();
-        $rankType->delete();
-        return $rankType;
+        return $rankType->delete();
     }
 
     /**

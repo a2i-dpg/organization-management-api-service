@@ -190,14 +190,11 @@ class OrganizationUnitService
 
     /**
      * @param OrganizationUnit $organizationUnit
-     * @return OrganizationUnit
+     * @return bool
      */
-    public function destroy(OrganizationUnit $organizationUnit): OrganizationUnit
+    public function destroy(OrganizationUnit $organizationUnit): bool
     {
-        $organizationUnit->row_status = OrganizationUnit::ROW_STATUS_DELETED;
-        $organizationUnit->save();
-        $organizationUnit->delete();
-        return $organizationUnit;
+        return $organizationUnit->delete();
     }
 
     /**

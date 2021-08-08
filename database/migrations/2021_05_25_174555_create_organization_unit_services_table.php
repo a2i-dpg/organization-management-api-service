@@ -15,10 +15,10 @@ class CreateOrganizationUnitServicesTable extends Migration
     {
         Schema::create('organization_unit_services', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('organization_id')->index('organization_unit_services_fk_organization_id');
-            $table->unsignedInteger('organization_unit_id')->index('organization_unit_services_fk_organization_unit_id');
-            $table->unsignedInteger('service_id')->index('organization_unit_services_fk_service_id');
-            $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedInteger('organization_id');
+            $table->unsignedInteger('organization_unit_id');
+            $table->unsignedInteger('service_id');
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();

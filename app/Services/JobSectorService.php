@@ -164,14 +164,11 @@ class JobSectorService
 
     /**
      * @param JobSector $JobSector
-     * @return JobSector
+     * @return bool
      */
-    public function destroy(JobSector $JobSector): JobSector
+    public function destroy(JobSector $JobSector): bool
     {
-        $JobSector->row_status = JobSector::ROW_STATUS_DELETED;
-        $JobSector->save();
-        $JobSector->delete();
-        return $JobSector;
+        return $JobSector->delete();
     }
 
     /**

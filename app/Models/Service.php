@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Service
@@ -21,7 +21,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  */
 class Service extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
 
     protected $guarded = ['id'];
 

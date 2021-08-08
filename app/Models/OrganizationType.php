@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class OrganizationType
  * @package App\Models
  * @property string title_en
  * @property string title_bn
- * @property bool is_government
+ * @property int is_government
  * @property int row_status
  */
 class OrganizationType extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
     /**
      * @var string[]
      */

@@ -178,14 +178,11 @@ class HumanResourceService
 
     /**
      * @param HumanResource $humanResource
-     * @return HumanResource
+     * @return bool
      */
-    public function destroy(HumanResource $humanResource): HumanResource
+    public function destroy(HumanResource $humanResource): bool
     {
-        $humanResource->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
-        $humanResource->save();
-        $humanResource->delete();
-        return $humanResource;
+        return $humanResource->delete();
     }
 
     /**
@@ -253,7 +250,7 @@ class HumanResourceService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE, HumanResource::ROW_STATUS_DELETED]),
+                Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
             ]
         ];
         return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);

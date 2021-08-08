@@ -14,8 +14,17 @@ class AddForeignKeyToRanksTable extends Migration
     public function up()
     {
         Schema::table('ranks', function (Blueprint $table) {
-            $table->foreign('organization_id', 'ranks_fk_organization_id')->references('id')->on('organizations')->onUpdate('CASCADE')->onDelete('CASCADE');
-            $table->foreign('rank_type_id', 'ranks_fk_rank_type_id')->references('id')->on('rank_types')->onUpdate('CASCADE')->onDelete('RESTRICT');
+            $table->foreign('organization_id', 'ranks_fk_organization_id')
+                ->references('id')
+                ->on('organizations')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
+
+            $table->foreign('rank_type_id', 'ranks_fk_rank_type_id')
+                ->references('id')
+                ->on('rank_types')
+                ->onUpdate('CASCADE')
+                ->onDelete('RESTRICT');
         });
     }
 

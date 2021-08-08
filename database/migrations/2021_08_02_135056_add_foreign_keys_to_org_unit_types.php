@@ -15,7 +15,10 @@ class AddForeignKeysToOrgUnitTypes extends Migration
     {
         Schema::table('organization_unit_types', function (Blueprint $table) {
             $table->foreign('organization_id', 'org_organization_id_unit_type_fk')
-                ->references('id')->on('organizations');
+                ->references('id')
+                ->on('organizations')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 

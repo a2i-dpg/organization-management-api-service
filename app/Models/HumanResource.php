@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class HumanResource
@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int rank_id
  * @property int is_designation
  * @property int status
+ * @property int row_status
  * @property array skill_ids
  * @property-read HumanResourceTemplate humanResourceTemplate
  * @property-read Organization organization
@@ -28,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HumanResource extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
 
     /**
      * @var string[]

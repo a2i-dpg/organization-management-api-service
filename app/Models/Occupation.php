@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Occupation
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Occupation extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
 
     /**
      * @var string[]

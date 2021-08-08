@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * Class RankType
  * @package App\Models\
@@ -15,7 +16,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
  */
 class RankType extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
     /**
      * @var string[]
      */
