@@ -165,14 +165,11 @@ class OrganizationTypeService
 
     /**
      * @param OrganizationType $organizationType
-     * @return OrganizationType
+     * @return bool
      */
-    public function destroy(OrganizationType $organizationType): OrganizationType
+    public function destroy(OrganizationType $organizationType): bool
     {
-        $organizationType->row_status = Organization::ROW_STATUS_DELETED;
-        $organizationType->save();
-        $organizationType->delete();
-        return $organizationType;
+        return $organizationType->delete();
     }
 
     /**

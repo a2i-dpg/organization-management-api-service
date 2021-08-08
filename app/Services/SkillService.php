@@ -171,14 +171,11 @@ class SkillService
 
     /**
      * @param Skill $skill
-     * @return Skill
+     * @return bool
      */
-    public function destroy(Skill $skill): Skill
+    public function destroy(Skill $skill): bool
     {
-        $skill->row_status = Skill::ROW_STATUS_DELETED;
-        $skill->save();
-        $skill->delete();
-        return $skill;
+        return $skill->delete();
     }
 
     /**

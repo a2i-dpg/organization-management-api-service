@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int id
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  **/
 class OrganizationUnitService extends BaseModel
 {
-    use ScopeRowStatusTrait;
+    use SoftDeletes;
 
     /**
      * @var string[]

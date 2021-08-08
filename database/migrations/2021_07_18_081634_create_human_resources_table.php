@@ -15,19 +15,21 @@ class CreateHumanResourcesTable extends Migration
     {
         Schema::create('human_resources', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('human_resource_template_id')->nullable()->index('human_resources_fk_human_resource_template_id');
-            $table->unsignedInteger('organization_id')->index('human_resources_fk_organization_id');
-            $table->unsignedInteger('organization_unit_id')->index('human_resources_fk_organization_unit_id');
-            $table->string('title_en', 191)->nullable();
+            $table->unsignedInteger('human_resource_template_id')->nullable();
+            $table->unsignedInteger('organization_id');
+            $table->unsignedInteger('organization_unit_id');
+            $table->string('title_en', 191);
             $table->string('title_bn', 600)->nullable();
-            $table->unsignedInteger('parent_id')->nullable()->index('human_resources_fk_parent_id')->comment('self parent id');
-            $table->unsignedInteger('rank_id')->nullable()->index('human_resources_fk_rank_id');
-            $table->unsignedSmallInteger('display_order')->default(0);
+            $table->unsignedInteger('parent_id')->nullable()->comment('self parent id');
+            $table->unsignedInteger('rank_id')->nullable();
+            $table->unsignedInteger('display_order')->default(0);
             $table->unsignedTinyInteger('is_designation')->default(1)->comment('1 => designation, 0 => wings or section');
             $table->string('skill_ids')->nullable();
-            $table->unsignedTinyInteger('row_status')->default(1)->comment('1 => occupied, 2 => vacancy, 0 => inactive');
+            $table->unsignedTinyInteger('status')->default(1)->comment('1 => occupied, 2 => vacancy, 0 => inactive');
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

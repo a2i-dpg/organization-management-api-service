@@ -182,14 +182,11 @@ class RankService
 
     /**
      * @param Rank $rank
-     * @return Rank
+     * @return bool
      */
-    public function destroy(Rank $rank): Rank
+    public function destroy(Rank $rank): bool
     {
-        $rank->row_status = Rank::ROW_STATUS_DELETED;
-        $rank->save();
-        $rank->delete();
-        return $rank;
+        return $rank->delete();
     }
 
     /**

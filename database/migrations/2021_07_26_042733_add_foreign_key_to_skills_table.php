@@ -14,7 +14,11 @@ class AddForeignKeyToSkillsTable extends Migration
     public function up()
     {
         Schema::table('skills', function (Blueprint $table) {
-            $table->foreign('organization_id', 'skills_fk_organization_id')->references('id')->on('organizations')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('organization_id', 'skills_fk_organization_id')
+                ->references('id')
+                ->on('organizations')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class HumanResourceTemplate
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int organization_unit_type_id
  * @property int rank_id
  * @property array skill_ids
+ * @property int status
  * @property int row_status
  * @property-read  Organization organization
  * @property-read  OrganizationUnitType organizationUnitType
@@ -26,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class HumanResourceTemplate extends BaseModel
 {
+    use SoftDeletes;
+
     /**
      * @var string[]
      */

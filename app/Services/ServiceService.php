@@ -171,14 +171,11 @@ class ServiceService
 
     /**
      * @param Service $service
-     * @return Service
+     * @return bool
      */
-    public function destroy(Service $service): Service
+    public function destroy(Service $service): bool
     {
-        $service->row_status = Service::ROW_STATUS_DELETED;
-        $service->save();
-        $service->delete();
-        return $service;
+        return $service->delete();
     }
 
     /**

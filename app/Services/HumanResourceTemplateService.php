@@ -191,14 +191,11 @@ class HumanResourceTemplateService
 
     /**
      * @param HumanResourceTemplate $humanResourceTemplate
-     * @return HumanResourceTemplate
+     * @return bool
      */
-    public function destroy(HumanResourceTemplate $humanResourceTemplate): HumanResourceTemplate
+    public function destroy(HumanResourceTemplate $humanResourceTemplate): bool
     {
-        $humanResourceTemplate->row_status = HumanResourceTemplate::ROW_STATUS_DELETED;
-        $humanResourceTemplate->save();
-        $humanResourceTemplate->delete();
-        return $humanResourceTemplate;
+        return $humanResourceTemplate->delete();
     }
 
     /**

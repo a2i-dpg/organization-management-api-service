@@ -167,14 +167,11 @@ class OccupationService
 
     /**
      * @param Occupation $occupation
-     * @return Occupation
+     * @return bool
      */
-    public function destroy(Occupation $occupation): Occupation
+    public function destroy(Occupation $occupation): bool
     {
-        $occupation->row_status = Occupation::ROW_STATUS_DELETED;
-        $occupation->save();
-        $occupation->delete();
-        return $occupation;
+        return $occupation->delete();
     }
 
     /**
