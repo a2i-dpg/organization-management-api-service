@@ -22,9 +22,9 @@ class CreateOrganizationUnitsTable extends Migration
             $table->unsignedInteger('organization_id');
             $table->unsignedInteger('organization_unit_type_id');
 
-            $table->unsignedInteger('loc_division_id')->nullable()->index('org_unit_loc_division_id_inx');
-            $table->unsignedInteger('loc_district_id')->nullable()->index('org_unit_loc_district_id_inx');
-            $table->unsignedInteger('loc_upazila_id')->nullable()->index('org_unit_loc_upazila_id_inx');
+            $table->unsignedMediumInteger('loc_division_id')->nullable()->index('org_unit_loc_division_id_inx');
+            $table->unsignedMediumInteger('loc_district_id')->nullable()->index('org_unit_loc_district_id_inx');
+            $table->unsignedMediumInteger('loc_upazila_id')->nullable()->index('org_unit_loc_upazila_id_inx');
 
             $table->string('address', 191)->nullable();
             $table->string('mobile', 20)->nullable();
