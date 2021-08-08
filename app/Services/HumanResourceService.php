@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Models\HumanResource;
-use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Query\Builder;
 
 class HumanResourceService
 {
@@ -22,8 +22,8 @@ class HumanResourceService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var HumanResource|Builder $humanResources */
-        $humanResources = HumanResource::select([
+        /** @var Builder $humanResourceBuilder */
+        $humanResourceBuilder = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
             'human_resources.title_bn',
@@ -39,21 +39,23 @@ class HumanResourceService
             'ranks.id as rank_title',
         ]);
 
-        $humanResources->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
-        $humanResources->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-        $humanResources->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
-        $humanResources->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
-        $humanResources->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
-        $humanResources->orderBy('human_resource_templates.id', $order);
+        $humanResourceBuilder->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
+        $humanResourceBuilder->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
+        $humanResourceBuilder->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+        $humanResourceBuilder->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
+        $humanResourceBuilder->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $humanResourceBuilder->orderBy('human_resource_templates.id', $order);
 
         if (!empty($titleEn)) {
-            $humanResources->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
+            $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $humanResources->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $humanResources */
+
         if ($paginate) {
-            $humanResources = $humanResources->paginate(10);
+            $humanResources = $humanResourceBuilder->paginate(10);
             $paginateData = (object)$humanResources->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -63,11 +65,12 @@ class HumanResourceService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $humanResources = $humanResources->get();
+            $humanResources = $humanResourceBuilder->get();
         }
 
         $data = [];
         foreach ($humanResources as $humanResource) {
+            /** @var HumanResource $humanResource */
             $links['read'] = route('api.v1.human-resources.read', ['id' => $humanResource->id]);
             $links['update'] = route('api.v1.human-resources.update', ['id' => $humanResource->id]);
             $links['delete'] = route('api.v1.human-resources.destroy', ['id' => $humanResource->id]);
@@ -99,10 +102,15 @@ class HumanResourceService
         ];
     }
 
+    /**
+     * @param int $id
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getOneHumanResource(int $id, Carbon $startTime): array
     {
-        /** @var HumanResource|Builder $humanResource */
-        $humanResource = HumanResource::select([
+        /** @var Builder $humanResourceBuilder */
+        $humanResourceBuilder = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
             'human_resources.title_bn',
@@ -126,16 +134,19 @@ class HumanResourceService
             'human_resources.updated_at',
         ]);
 
-        $humanResource->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
-        $humanResource->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
-        $humanResource->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
-        $humanResource->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
-        $humanResource->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
-        $humanResource->where('human_resources.id', $id);
-        $humanResource = $humanResource->first();
+        $humanResourceBuilder->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
+        $humanResourceBuilder->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
+        $humanResourceBuilder->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
+        $humanResourceBuilder->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
+        $humanResourceBuilder->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $humanResourceBuilder->where('human_resources.id', $id);
+
+
+        /** @var HumanResource $humanResource */
+        $humanResource = $humanResourceBuilder->first();
 
         $links = [];
-        if (!empty($humanResource)) {
+        if ($humanResource) {
             $links['update'] = route('api.v1.human-resources.update', ['id' => $id]);
             $links['delete'] = route('api.v1.human-resources.destroy', ['id' => $id]);
         }
@@ -190,7 +201,7 @@ class HumanResourceService
      * @param int|null $id
      * @return Validator
      */
-    public function validator(Request $request,int $id = null): Validator
+    public function validator(Request $request, int $id = null): Validator
     {
         $rules = [
             'title_en' => [

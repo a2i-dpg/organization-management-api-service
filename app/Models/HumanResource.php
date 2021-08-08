@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class HumanResource
  * @package App\Models
+ * @property int id
  * @property string title_en
  * @property string title_bn
  * @property int display_order
