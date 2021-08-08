@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Helpers\Classes\CustomExceptionHandler;
@@ -189,5 +191,29 @@ class OrganizationUnitTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response, JsonResponse::HTTP_OK);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getHierarchy(int $id): string
+    {
+        try {
+            $response = $this->organizationUnitTypeService->getHierrarchy($id);
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
+        return Response::json($response);
+
+
     }
 }

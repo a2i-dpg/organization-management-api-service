@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -117,7 +118,7 @@ class OrganizationUnitTypeService
             'organization_unit_types.updated_at',
         ]);
 
-        $organizationUnitType->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');$organizationUnitType->where('organization_unit_types.row_status', '=', OrganizationUnitType::ROW_STATUS_ACTIVE);
+        $organizationUnitType->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
         $organizationUnitType->where('organization_unit_types.id', '=', $id);
         $organizationUnitType = $organizationUnitType->first();
 
@@ -127,7 +128,7 @@ class OrganizationUnitTypeService
             $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $id]);
         }
         return [
-            "data" => $organizationUnitType ? $organizationUnitType : null,
+            "data" => $organizationUnitType ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -206,4 +207,21 @@ class OrganizationUnitTypeService
         ];
         return Validator::make($request->all(), $rules);
     }
+
+    public function getHierrarchy(int $id): array
+    {
+        /** @var  HumanResourceTemplate|Builder $hierarchy */
+        $hierarchy = HumanResourceTemplate::select([
+            'human_resource_templates.title_en',
+            't2.title_en as parent'
+        ]);
+        $hierarchy->leftjoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
+        $hierarchy->where('human_resource_templates.organization_unit_type_id', '=', $id);
+
+        $hierarchy = $hierarchy->get();
+        $data = [];
+        $data[]= $hierarchy->toArray();
+        return $data;
+    }
+
 }
