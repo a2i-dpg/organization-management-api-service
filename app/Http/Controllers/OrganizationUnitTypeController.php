@@ -195,6 +195,7 @@ class OrganizationUnitTypeController extends Controller
 
 
     /**
+     * @param int $id
      * @return string
      */
     public function getHierarchy(int $id): string

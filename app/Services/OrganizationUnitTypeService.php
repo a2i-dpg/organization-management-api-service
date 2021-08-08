@@ -220,7 +220,7 @@ class OrganizationUnitTypeService
 
         $hierarchy = $hierarchy->get();
         $data = [];
-        $data[]= $hierarchy->toArray();
+        $data[]=(object) $hierarchy->toArray();
         return $data;
     }
 

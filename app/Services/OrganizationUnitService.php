@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\HumanResource;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
@@ -303,5 +304,22 @@ class OrganizationUnitService
             ],
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+
+    public function getHierrarchy(int $id): array
+    {
+        /** @var  HumanResource|Builder $hierarchy */
+        $hierarchy = HumanResource::select([
+            'human_resources.title_en',
+            't2.title_en as parent'
+        ]);
+        $hierarchy->leftjoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $hierarchy->where('human_resources.organization_unit_id', '=', $id);
+
+        $hierarchy = $hierarchy->get();
+        $data = [];
+        $data[]=(object) $hierarchy->toArray();
+        return $data;
     }
 }

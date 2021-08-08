@@ -44,19 +44,19 @@ class OrganizationUnitController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        try {
+        try {
             $response = $this->organizationUnitService->getAllOrganizationUnit($request, $this->startTime);
-//        } catch (Throwable $e) {
-//            $handler = new CustomExceptionHandler($e);
-//            $response = [
-//                '_response_status' => array_merge([
-//                    "success" => false,
-//                    "started" => $this->startTime->format('H i s'),
-//                    "finished" => Carbon::now()->format('H i s'),
-//                ], $handler->convertExceptionToArray())
-//            ];
-//            return Response::json($response, $response['_response_status']['code']);
-//        }
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
         return Response::json($response);
     }
 
@@ -128,7 +128,7 @@ class OrganizationUnitController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
-        $validated = $this->organizationUnitService->validator($request,$id)->validate();
+        $validated = $this->organizationUnitService->validator($request, $id)->validate();
         try {
             $data = $this->organizationUnitService->update($organizationUnit, $validated);
             $response = [
@@ -186,5 +186,29 @@ class OrganizationUnitController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function getHierarchy(int $id): string
+    {
+        try {
+            $response = $this->organizationUnitService->getHierrarchy($id);
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
+        return Response::json($response);
+
+
     }
 }

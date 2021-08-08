@@ -193,8 +193,4 @@ class HumanResourceController extends Controller
 
         return Response::json($response, JsonResponse::HTTP_OK);
     }
-    public function getHierrarchy(){
-       return \App\Models\HumanResourceTemplate::with('parent')->get();
-    }
-
 }
