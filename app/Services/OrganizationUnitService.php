@@ -53,7 +53,6 @@ class OrganizationUnitService
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
-
 //            'loc_divisions.title_en as division_name',
 //            'loc_districts.title_en as district_name',
 //            'loc_upazilas.title_en as upazila_name',
@@ -61,9 +60,9 @@ class OrganizationUnitService
 
         ]);
         $organizationUnits->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        /*$organizationUnits->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-        $organizationUnits->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-        $organizationUnits->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');*/
+//        $organizationUnits->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
+//        $organizationUnits->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
+//        $organizationUnits->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
         $organizationUnits->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
 
         if (!empty($titleEn)) {
@@ -149,17 +148,17 @@ class OrganizationUnitService
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
-
 //            'loc_divisions.title_en as division_name',
 //            'loc_districts.title_en as district_name',
 //            'loc_upazilas.title_en as upazila_name',
+
         ]);
         $organizationUnit->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnit->where('organization_units.id', '=', $id);
         $organizationUnit->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
-//        $organizationUnits->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-//        $organizationUnits->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-//        $organizationUnits->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
+//        $organizationUnit->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
+//        $organizationUnit->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
+//        $organizationUnit->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
         $organizationUnit = $organizationUnit->first();
 
         if (!empty($organizationUnit)) {
@@ -280,7 +279,13 @@ class OrganizationUnitService
                 'string',
                 'max:191',
             ],
+
             'contact_person_mobile' => [
+                'nullable',
+                'string',
+                'max:20',
+            ],
+            'contact_person_email' => [
                 'nullable',
                 'string',
                 'max:20',
