@@ -39,7 +39,7 @@ class RankService
                 'ranks.title_en',
                 'ranks.title_bn',
                 'ranks.grade',
-                'ranks.order',
+                'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.id as rank_type_id',
@@ -219,7 +219,7 @@ class RankService
                 'string',
                 'max:100',
             ],
-            'order' => [
+            'display_order' => [
                 'nullable',
                 'int',
             ],
