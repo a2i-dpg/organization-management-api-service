@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class OrganizationType
  * @package App\Models
@@ -14,9 +14,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class OrganizationType extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
+
     /**
      * @var string[]
      */
-    protected  $guarded = ['id'];
+    protected $guarded = ['id'];
 }

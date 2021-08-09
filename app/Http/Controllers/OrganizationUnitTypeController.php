@@ -136,7 +136,7 @@ class OrganizationUnitTypeController extends Controller
         try {
             $data = $this->organizationUnitTypeService->update($organizationUnitType, $validated);
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -195,13 +195,13 @@ class OrganizationUnitTypeController extends Controller
 
 
     /**
-     * @param int $id
-     * @return string
+     * @param OrganizationUnitType $organizationUnitType
+     * @return JsonResponse
      */
-    public function getHierarchy(int $id): string
+    public function getHierarchy(OrganizationUnitType $organizationUnitType): JsonResponse
     {
         try {
-            $response = $this->organizationUnitTypeService->getHierarchy($id,$this->startTime);
+            $response =optional($organizationUnitType->getHierarchy())->toArray();
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -214,6 +214,5 @@ class OrganizationUnitTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
     }
 }

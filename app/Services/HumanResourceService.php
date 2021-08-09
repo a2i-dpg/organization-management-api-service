@@ -32,7 +32,7 @@ class HumanResourceService
             'human_resources.skill_ids as skills',
             'human_resources.created_at',
             'human_resources.updated_at',
-            'human_resources.title_en as parent',
+            't2.title_en as parent',
             'organization_units.title_en as organization_unit_name',
             'organizations.title_en as organization_name',
             'human_resource_templates.title_en as human_resource_template_name',

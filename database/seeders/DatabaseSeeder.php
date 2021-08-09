@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Organization;
+use App\Models\OrganizationType;
 use App\Models\OrganizationUnitType;
 use Illuminate\Database\Seeder;
 
@@ -15,9 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call([
-             OrganizationSeeder::class,
-             OrganizationUnitTypeSeeder::class,
-         ]);
+        $this->call([
+            OrganizationTypeSeeder::class,
+        ]);
     }
 }

@@ -309,38 +309,31 @@ class OrganizationUnitService
         ];
         return Validator::make($request->all(), $rules);
     }
-
-
-    /**
-     * @param int $id
-     * @param Carbon $startTime
-     * @return array
-     */
-    public function getHierarchy(int $id, Carbon $startTime): array
-    {
-        /** @var  HumanResourceTemplate|Builder $hierarchyBuilder */
-        $hierarchyBuilder = HumanResource::select([
-            'human_resources.title_en',
-            't2.title_en as parent'
-        ]);
-        $hierarchyBuilder->leftjoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
-        $hierarchyBuilder->where('human_resources.organization_unit_id', '=', $id);
-
-        /** @var Collection|HumanResourceTemplate $hierarchies */
-        $hierarchies = $hierarchyBuilder->get();
-
-        $data = [];
-        foreach ($hierarchies as $hierarchy) {
-            $data[] = $hierarchy;
-        }
-        return [
-            "data" => $data,
-            "_response_status" => [
-                "success" => true,
-                "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime->format('H i s'),
-                "finished" => Carbon::now()->format('H i s'),
-            ]
-        ];
-    }
+//    public function getHierarchy(int $id, Carbon $startTime): array
+//    {
+//        /** @var  HumanResourceTemplate|Builder $hierarchyBuilder */
+//        $hierarchyBuilder = HumanResourceTemplate::select([
+//            'human_resource_templates.title_en',
+//            'table2.title_en as parent'
+//        ]);
+//        $hierarchyBuilder->leftjoin('human_resource_templates as table2', 'human_resource_templates.parent_id', '=', 'table2.id');
+//        $hierarchyBuilder->where('human_resource_templates.organization_unit_type_id', '=', $id);
+//
+//        /** @var Collection|HumanResourceTemplate $hierarchies */
+//        $hierarchies = $hierarchyBuilder->get();
+//
+//        $data = [];
+//        foreach ($hierarchies as $hierarchy) {
+//            $data[] =$hierarchy;
+//        }
+//        return [
+//            "data" => $data,
+//            "_response_status" => [
+//                "success" => true,
+//                "code" => JsonResponse::HTTP_OK,
+//                "started" => $startTime->format('H i s'),
+//                "finished" => Carbon::now()->format('H i s'),
+//            ]
+//        ];
+//    }
 }

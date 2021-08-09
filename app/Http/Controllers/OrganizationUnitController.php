@@ -189,13 +189,13 @@ class OrganizationUnitController extends Controller
     }
 
     /**
-     * @param int $id
-     * @return string
+     * @param OrganizationUnit $organizationUnit
+     * @return JsonResponse
      */
-    public function getHierarchy(int $id): string
+    public function getHierarchy(OrganizationUnit $organizationUnit): JsonResponse
     {
         try {
-            $response = $this->organizationUnitService->getHierarchy($id,$this->startTime);
+            $response = optional($organizationUnit->getHierarchy())->toArray();
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
@@ -208,7 +208,5 @@ class OrganizationUnitController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response);
-
-
     }
 }
