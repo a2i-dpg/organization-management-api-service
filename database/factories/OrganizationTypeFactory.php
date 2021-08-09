@@ -11,11 +11,11 @@ class OrganizationTypeFactory extends Factory
 
     public function definition(): array
     {
+        $title = $this->faker->randomElement(["Government org","private org"]);
     	return [
-            'title_en'=>$this->faker->randomElement(["Government org","private org"]),
-    	    'title_bn'=>$this->faker->randomElement(["Government org","private org"]),
+            'title_en'=>$title,
+    	    'title_bn'=>$title,
             'is_government'=>$this->faker->randomElement([0,1]),
-
     	];
     }
 }

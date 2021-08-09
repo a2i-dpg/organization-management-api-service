@@ -189,7 +189,7 @@ class OrganizationUnitController extends Controller
     }
 
     /**
-     * @param OrganizationUnit $organizationUnit
+     * @param int $id
      * @return JsonResponse
      */
     public function getHierarchy(int $id): JsonResponse

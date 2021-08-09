@@ -195,13 +195,14 @@ class OrganizationUnitTypeController extends Controller
 
 
     /**
-     * @param OrganizationUnitType $organizationUnitType
+     * @param int $id
      * @return JsonResponse
      */
-    public function getHierarchy(OrganizationUnitType $organizationUnitType): JsonResponse
+    public function getHierarchy(int $id): JsonResponse
     {
+        $organizationUnitType = OrganizationUnitType::find($id);
         try {
-            $response =optional($organizationUnitType->getHierarchy())->toArray();
+            $response = optional($organizationUnitType->getHierarchy())->toArray();
         } catch (Throwable $e) {
             $handler = new CustomExceptionHandler($e);
             $response = [
