@@ -29,6 +29,7 @@ class OrganizationUnitTypeService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
+        $organizationId = $request->query('organization_id');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
         /** @var OrganizationUnitType|Builder $organizationUnitTypes */
@@ -47,9 +48,13 @@ class OrganizationUnitTypeService
         $organizationUnitTypes->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id')->orderBy('organization_unit_types.id', $order);
 
         if (!empty($titleEn)) {
-            $organizationUnitTypes->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
+            $organizationUnitTypes->where('organization_unit_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationUnitTypes->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationUnitTypes->where('organization_unit_types.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        if (!empty($organizationId)) {
+            $organizationUnitTypes->where('organization_unit_types.organization_id',$organizationId);
         }
 
         if ($paginate) {
