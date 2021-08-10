@@ -315,5 +315,4 @@ class OrganizationUnitService
         ];
         return Validator::make($request->all(), $rules);
     }
-
 }
