@@ -19,7 +19,7 @@ class HumanResourceTemplateFactory extends Factory
 
         $organization = Organization::all()->random();
         $organizationUnitType = OrganizationUnitType::all()->random();
-        $parent = HumanResourceTemplate::all() ? HumanResourceTemplate::all()->random():HumanResourceTemplate::factory()->create();
+        $parent = HumanResourceTemplate::all()->random();
 
         $skill = Skill::all()->toArray();
         $rank = Rank::all()->random();
