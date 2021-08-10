@@ -29,6 +29,7 @@ class OrganizationUnitFactory extends Factory
     	return [
             'title_en' => $title,
             'title_bn' => $title,
+            'employee_size'=>$this->faker->randomDigit(),
 
             'organization_unit_type_id' => $organizationUnitType->id,
             'organization_id' => $organization->id,
