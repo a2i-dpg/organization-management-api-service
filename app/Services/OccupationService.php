@@ -4,7 +4,8 @@ namespace App\Services;
 
 use App\Models\Occupation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +31,8 @@ class OccupationService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var Occupation|Builder $occupations */
-        $occupations = Occupation::select([
+        /** @var Builder $occupationBuilder */
+        $occupationBuilder = Occupation::select([
             'occupations.id',
             'occupations.title_en',
             'occupations.title_bn',
@@ -43,17 +44,19 @@ class OccupationService
             'occupations.created_at',
             'occupations.updated_at',
         ]);
-        $occupations->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
-        $occupations->orderBy('occupations.id', $order);
+        $occupationBuilder->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
+        $occupationBuilder->orderBy('occupations.id', $order);
 
         if (!empty($titleEn)) {
-            $occupations->where('occupations.title_en', 'like', '%' . $titleEn . '%');
+            $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $occupations->where('occupations.title_en', 'like', '%' . $titleBn . '%');
+            $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $occupations */
+
         if ($paginate) {
-            $occupations = $occupations->paginate(10);
+            $occupations = $occupationBuilder->paginate(10);
             $paginateData = (object)$occupations->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -63,11 +66,13 @@ class OccupationService
             ];
             $paginateLink = $paginateData->links;
         } else {
-            $occupations = $occupations->get();
+            $occupations = $occupationBuilder->get();
         }
 
         $data = [];
+
         foreach ($occupations as $occupation) {
+            /** @var  Occupation $occupation */
             $links['read'] = route('api.v1.occupations.read', ['id' => $occupation->id]);
             $links['update'] = route('api.v1.occupations.update', ['id' => $occupation->id]);
             $links['delete'] = route('api.v1.occupations.destroy', ['id' => $occupation->id]);
@@ -107,8 +112,8 @@ class OccupationService
     {
         $links = [];
 
-        /** @var Occupation|Builder $occupation */
-        $occupation = Occupation::select([
+        /** @var Builder $occupationBuilder */
+        $occupationBuilder = Occupation::select([
             'occupations.id',
             'occupations.title_en',
             'occupations.title_bn',
@@ -120,9 +125,11 @@ class OccupationService
             'occupations.created_at',
             'occupations.updated_at',
         ]);
-        $occupation->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
-        $occupation->where('occupations.id', '=', $id);
-        $occupation = $occupation->first();
+        $occupationBuilder->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
+        $occupationBuilder->where('occupations.id', '=', $id);
+
+        /** @var  Occupation $occupation */
+        $occupation = $occupationBuilder->first();
 
         if (!empty($occupation)) {
             $links['update'] = route('api.v1.occupations.update', ['id' => $id]);

@@ -7,7 +7,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 
 /**
@@ -30,8 +31,8 @@ class OrganizationService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var Organization|Builder $organizations */
-        $organizations = Organization::select([
+        /** @var Builder organizationBuilder */
+        $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
             'organizations.title_bn',
@@ -56,17 +57,19 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
-        $organizations->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
-        $organizations->orderBy('organizations.id', $order);
+        $organizationBuilder->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
+        $organizationBuilder->orderBy('organizations.id', $order);
 
         if (!empty($titleEn)) {
-            $organizations->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
+            $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizations->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $organizations */
+
         if ($paginate) {
-            $organizations = $organizations->paginate(10);
+            $organizations = $organizationBuilder->paginate(10);
             $paginateData = (object)$organizations->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -76,11 +79,12 @@ class OrganizationService
             ];
             $paginateLink = $paginateData->links;
         } else {
-            $organizations = $organizations->get();
+            $organizations = $organizationBuilder->get();
         }
 
         $data = [];
         foreach ($organizations as $organization) {
+            /** @var Organization $organization */
             $links['read'] = route('api.v1.organizations.read', ['id' => $organization->id]);
             $links['update'] = route('api.v1.organizations.update', ['id' => $organization->id]);
             $links['delete'] = route('api.v1.organizations.destroy', ['id' => $organization->id]);
@@ -118,8 +122,8 @@ class OrganizationService
      */
     public function getOneOrganization(int $id, Carbon $startTime): array
     {
-        /** @var Organization|Builder $organization */
-        $organization = Organization::select([
+        /** @var Builder $organizationBuilder */
+        $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
             'organizations.title_bn',
@@ -144,9 +148,12 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
-        $organization->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
-        $organization->where('organizations.id', '=', $id);
-        $organization = $organization->first();
+        $organizationBuilder->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
+        $organizationBuilder->where('organizations.id', '=', $id);
+
+
+        /** @var Organization $organization */
+        $organization = $organizationBuilder->first();
 
         $links = [];
         if (!empty($organization)) {

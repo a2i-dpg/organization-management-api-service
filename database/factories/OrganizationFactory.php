@@ -12,10 +12,11 @@ class OrganizationFactory extends Factory
 
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Sonali Bank","Pubali Bank","Akij Group","City Bank"]);
+        $title = $this->faker->randomElement(["Sonali Bank", "Pubali Bank", "Akij Group", "City Bank"]);
         return [
             'title_en' => $title,
             'title_bn' => $title,
+            'loc_division_id' => 1,
             'domain' => 'https://www.' . $this->faker->domainName,
         ];
     }

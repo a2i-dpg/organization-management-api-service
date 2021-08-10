@@ -6,7 +6,8 @@ use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -30,8 +31,8 @@ class HumanResourceTemplateService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var HumanResourceTemplate|Builder $humanResourceTemplates */
-        $humanResourceTemplates = HumanResourceTemplate::select([
+        /** @var Builder $humanResourceTemplateBuilder */
+        $humanResourceTemplateBuilder = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
             'human_resource_templates.title_bn',
@@ -45,27 +46,30 @@ class HumanResourceTemplateService
             'organization_unit_types.title_en as organization_unit_type_title',
             'human_resource_templates.rank_id',
             'ranks.title_en as rank_title_en',
-            'human_resource_templates.row_Status',
+            'human_resource_templates.status',
+            'human_resource_templates.row_status',
             'human_resource_templates.created_by',
             'human_resource_templates.updated_by',
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
         ]);
 
-        $humanResourceTemplates->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
-        $humanResourceTemplates->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
-        $humanResourceTemplates->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
-        $humanResourceTemplates->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
-        $humanResourceTemplates->orderBy('human_resource_templates.id', $order);
+        $humanResourceTemplateBuilder->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
+        $humanResourceTemplateBuilder->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $humanResourceTemplateBuilder->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
+        $humanResourceTemplateBuilder->orderBy('human_resource_templates.id', $order);
 
         if (!empty($titleEn)) {
-            $humanResourceTemplates->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
+            $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $humanResourceTemplates->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceTemplateBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $humanResourceTemplates */
+
         if ($paginate) {
-            $humanResourceTemplates = $humanResourceTemplates->paginate(10);
+            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate(10);
             $paginateData = (object)$humanResourceTemplates->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -75,11 +79,12 @@ class HumanResourceTemplateService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $humanResourceTemplates = $humanResourceTemplates->get();
+            $humanResourceTemplates = $humanResourceTemplateBuilder->get();
         }
 
         $data = [];
         foreach ($humanResourceTemplates as $humanResourceTemplate) {
+            /** @var HumanResourceTemplate $humanResourceTemplate */
             $links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
             $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
             $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
@@ -117,8 +122,8 @@ class HumanResourceTemplateService
      */
     public function getOneHumanResourceTemplate(int $id, Carbon $startTime): array
     {
-        /** @var HumanResourceTemplate|Builder $humanResourceTemplate */
-        $humanResourceTemplate = HumanResourceTemplate::select([
+        /** @var Builder $humanResourceTemplateBuilder */
+        $humanResourceTemplateBuilder = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
             'human_resource_templates.title_bn',
@@ -132,19 +137,22 @@ class HumanResourceTemplateService
             'organization_unit_types.title_en as organization_unit_type_title',
             'human_resource_templates.rank_id',
             'ranks.title_en as rank_title_en',
-            'human_resource_templates.row_Status',
+            'human_resource_templates.status',
+            'human_resource_templates.row_status',
             'human_resource_templates.created_by',
             'human_resource_templates.updated_by',
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
         ]);
 
-        $humanResourceTemplate->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
-        $humanResourceTemplate->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
-        $humanResourceTemplate->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
-        $humanResourceTemplate->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
-        $humanResourceTemplate->where('human_resource_templates.id', $id);
-        $humanResourceTemplate = $humanResourceTemplate->first();
+        $humanResourceTemplateBuilder->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
+        $humanResourceTemplateBuilder->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $humanResourceTemplateBuilder->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
+        $humanResourceTemplateBuilder->where('human_resource_templates.id', $id);
+
+        /** @var HumanResourceTemplate $humanResourceTemplate */
+        $humanResourceTemplate = $humanResourceTemplateBuilder->first();
 
         $links = [];
         if (!empty($humanResourceTemplate)) {
@@ -255,6 +263,9 @@ class HumanResourceTemplateService
                 'nullable',
                 'int',
                 'distinct'
+            ],
+            'status' => [
+                'int',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

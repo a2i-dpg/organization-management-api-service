@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\OrganizationUnitType;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class OrganizationUnitTypeService
@@ -33,8 +32,8 @@ class OrganizationUnitTypeService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var OrganizationUnitType|Builder $organizationUnitTypes */
-        $organizationUnitTypes = OrganizationUnitType::select([
+        /** @var Builder $organizationUnitTypeBuilder */
+        $organizationUnitTypeBuilder = OrganizationUnitType::select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
             'organization_unit_types.title_bn',
@@ -46,16 +45,17 @@ class OrganizationUnitTypeService
             'organization_unit_types.created_at',
             'organization_unit_types.updated_at',
         ]);
-        $organizationUnitTypes->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id')->orderBy('organization_unit_types.id', $order);
+        $organizationUnitTypeBuilder->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
+        $organizationUnitTypeBuilder->orderBy('organization_unit_types.id', $order);
 
         if (!empty($titleEn)) {
-            $organizationUnitTypes->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
+            $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationUnitTypes->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }
-
+        /** @var Collection $organizationUnitTypes */
         if ($paginate) {
-            $organizationUnitTypes = $organizationUnitTypes->paginate(10);
+            $organizationUnitTypes = $organizationUnitTypeBuilder->paginate(10);
             $paginateData = (object)$organizationUnitTypes->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -65,10 +65,11 @@ class OrganizationUnitTypeService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $organizationUnitTypes = $organizationUnitTypes->get();
+            $organizationUnitTypes = $organizationUnitTypeBuilder->get();
         }
         $data = [];
         foreach ($organizationUnitTypes as $organizationUnitType) {
+            /**@var OrganizationUnitType $organizationUnitType * */
             $links['read'] = route('api.v1.organization-unit-types.read', ['id' => $organizationUnitType->id]);
             $links['edit'] = route('api.v1.organization-unit-types.update', ['id' => $organizationUnitType->id]);
             $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $organizationUnitType->id]);
@@ -105,8 +106,8 @@ class OrganizationUnitTypeService
      */
     public function getOneOrganizationUnitType(int $id, Carbon $startTime): array
     {
-        /** @var OrganizationUnitType|Builder $organizationUnitType */
-        $organizationUnitType = OrganizationUnitType::select([
+        /** @var Builder $organizationUnitTypeBuilder */
+        $organizationUnitTypeBuilder = OrganizationUnitType::select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
             'organization_unit_types.title_bn',
@@ -119,9 +120,11 @@ class OrganizationUnitTypeService
             'organization_unit_types.updated_at',
         ]);
 
-        $organizationUnitType->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
-        $organizationUnitType->where('organization_unit_types.id', '=', $id);
-        $organizationUnitType = $organizationUnitType->first();
+        $organizationUnitTypeBuilder->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
+        $organizationUnitTypeBuilder->where('organization_unit_types.id', '=', $id);
+
+        /**@var OrganizationUnitType $organizationUnitType * */
+        $organizationUnitType = $organizationUnitTypeBuilder->first();
 
         $links = [];
         if (!empty($organizationUnitType)) {
@@ -204,33 +207,5 @@ class OrganizationUnitTypeService
             ],
         ];
         return Validator::make($request->all(), $rules);
-    }
-
-    public function getHierarchy(int $id, Carbon $startTime): array
-    {
-        /** @var  HumanResourceTemplate|Builder $hierarchyBuilder */
-        $hierarchyBuilder = HumanResourceTemplate::select([
-            'human_resource_templates.title_en',
-            'table2.title_en as parent'
-        ]);
-        $hierarchyBuilder->leftjoin('human_resource_templates as table2', 'human_resource_templates.parent_id', '=', 'table2.id');
-        $hierarchyBuilder->where('human_resource_templates.organization_unit_type_id', '=', $id);
-
-        /** @var Collection|HumanResourceTemplate $hierarchies */
-        $hierarchies = $hierarchyBuilder->get();
-
-        $data = [];
-        foreach ($hierarchies as $hierarchy) {
-            $data[] =$hierarchy;
-        }
-        return [
-            "data" => $data,
-            "_response_status" => [
-                "success" => true,
-                "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime->format('H i s'),
-                "finished" => Carbon::now()->format('H i s'),
-            ]
-        ];
     }
 }
