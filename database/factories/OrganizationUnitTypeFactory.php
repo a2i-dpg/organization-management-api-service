@@ -2,32 +2,33 @@
 
 namespace Database\Factories;
 
-use App\Models\OrganizationType;
+use App\Model;
+use App\Models\Organization;
 use App\Models\OrganizationUnitType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Class OrganizationTypeFactory
+ * Class OrganizationUnitTypeFactory
  * @package Database\Factories
  */
-class OrganizationTypeFactory extends Factory
+class OrganizationUnitTypeFactory extends Factory
 {
     /**
      * @var string
      */
-    protected $model = OrganizationType::class;
+    protected $model = OrganizationUnitType::class;
 
     /**
      * @return array
      */
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Government org", "private org"]);
-
+        $organization = Organization::all()->random();
+        $title = $this->faker->randomElement(["Mobile Banking", "Payment Method"]);
         return [
+            'organization_id' => $organization->id,
             'title_en' => $title,
             'title_bn' => $title,
-            'is_government' => $this->faker->randomElement([0, 1]),
         ];
     }
 }

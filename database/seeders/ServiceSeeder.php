@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Service;
 use Illuminate\Database\Seeder;
-use App\Models\OrganizationType;
-class OrganizationTypeSeeder extends Seeder
+
+class ServiceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +14,6 @@ class OrganizationTypeSeeder extends Seeder
      */
     public function run()
     {
-        OrganizationType::factory()->count(5)->create();
-
+        Service::factory()->count(3)->create();
     }
 }

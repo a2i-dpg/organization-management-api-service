@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\JobSector;
 use Illuminate\Database\Seeder;
 
-class OrganizationTableSeeder extends Seeder
+class JobSectorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +14,6 @@ class OrganizationTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        JobSector::factory()->count(3)->create();
     }
 }

@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             OrganizationTypeSeeder::class,
+            OrganizationSeeder::class,
+            OrganizationUnitType::class,
+            OrganizationUnitSeeder::class,
+            ServiceSeeder::class,
         ]);
     }
 }
