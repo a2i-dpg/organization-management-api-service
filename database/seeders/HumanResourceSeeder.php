@@ -18,6 +18,7 @@ class HumanResourceSeeder extends Seeder
      */
     public function run()
     {
-        HumanResource::factory()->count(10)->create();
+        HumanResource::factory()->create();
+        HumanResource::factory()->count(9)->create();
     }
 }

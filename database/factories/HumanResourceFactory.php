@@ -21,7 +21,7 @@ class HumanResourceFactory extends Factory
         $organization = Organization::all()->random();
         $organizationUnitType = OrganizationUnitType::all()->random();
         $humanResourceTemplate = HumanResourceTemplate::all()->random();
-        $parent =HumanResource::all()->random();
+        $parent = HumanResource::inRandomOrder()->first();
         $skill = Skill::all()->toArray();
         $rank = Rank::all()->random();
 
@@ -30,7 +30,7 @@ class HumanResourceFactory extends Factory
             'organization_unit_type_id'=>$organizationUnitType->id,
             'human_resource_template_id'=>$humanResourceTemplate->id,
             'rank_id'=>$rank->id,
-            'parent_id'=>$parent->id,
+            'parent_id'=>$parent?$parent->id:"",
             'skill_ids'=>array_rand($skill,2),
             'display_order'=>$this->faker->randomDigit(),
             'is_designation'=>1,

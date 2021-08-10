@@ -19,16 +19,15 @@ class HumanResourceTemplateFactory extends Factory
 
         $organization = Organization::all()->random();
         $organizationUnitType = OrganizationUnitType::all()->random();
-        $parent = HumanResourceTemplate::all()->random();
-
+        $parent = HumanResourceTemplate::inRandomOrder()->first();
         $skill = Skill::all()->toArray();
         $rank = Rank::all()->random();
 
         return [
             'organization_id' => $organization->id,
-            'organization_unit_type_id'=>$organizationUnitType->id,
+            'organization_unit_id'=>$organizationUnitType->id,
             'rank_id'=>$rank->id,
-            'parent_id'=>$parent->id,
+            'parent_id'=>$parent?$parent->id:null,
             'skill_ids'=>array_rand($skill,2),
             'display_order'=>$this->faker->randomDigit(),
             'is_designation'=>1,
