@@ -25,7 +25,7 @@ class HumanResourceTemplateFactory extends Factory
 
         return [
             'organization_id' => $organization->id,
-            'organization_unit_id'=>$organizationUnitType->id,
+            'organization_unit_type_id'=>$organizationUnitType->id,
             'rank_id'=>$rank->id,
             'parent_id'=>$parent?$parent->id:null,
             'skill_ids'=>array_rand($skill,2),
