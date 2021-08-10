@@ -19,9 +19,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             OrganizationTypeSeeder::class,
             OrganizationSeeder::class,
-            OrganizationUnitType::class,
+            OrganizationUnitTypeSeeder::class,
             OrganizationUnitSeeder::class,
             ServiceSeeder::class,
+            OrganizationUnitServiceSeeder::class,
+            RankTypeSeeder::class,
+            RankSeeder::class,
+            JobSectorSeeder::class,
+            SkillSeeder::class,
+            OccupationSeeder::class,
+            HumanResourceTemplateSeeder::class,
+            HumanResourceSeeder::class
         ]);
     }
 }
