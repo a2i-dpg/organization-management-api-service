@@ -1,0 +1,2160 @@
+{
+    "openapi": "3.0.0",
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "",
+            "variables": {}
+        },
+        {
+            "url": "https://bus.softbd.xyz/devportal/apis",
+            "description": "",
+            "variables": {}
+        }
+    ],
+    "info": {
+        "version": "1.0",
+        "title": "NISE_3_CORE_API",
+        "description": "It a core api service that manages Location Services,UserRoleManagement Services and Auth Services globally",
+        "termsOfService": "",
+        "contact": {},
+        "license": {
+            "name": ""
+        }
+    },
+    "paths": {
+        "/api/v1": {
+            "get": {
+                "summary": "api info",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "NISE3 Core API Info"
+                ]
+            }
+        },
+        "/api/v1/divisions": {
+            "get": {
+                "summary": "get list",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            },
+            "post": {
+                "summary": "store",
+                "operationId": "store",
+                "parameters": [
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Test Division"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "টেস্টিং ডিস্ট্রিক্ট"
+                        }
+                    },
+                    {
+                        "name": "bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "1",
+                            "maxLength": 4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            }
+        },
+        "/api/v1/divisions/{divisionId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "divisionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "5"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "divisionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Test Division_update"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "টেস্টিং ডিস্ট্রিক্ট _আপডেট"
+                        }
+                    },
+                    {
+                        "name": "bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "1",
+                            "maxLength": 4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "divisionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            }
+        },
+        "/api/v1/districts": {
+            "get": {
+                "summary": "get list",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_division_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            },
+            "post": {
+                "summary": "store",
+                "operationId": "store2",
+                "parameters": [
+                    {
+                        "name": "loc_division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "division_bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": 10,
+                            "maxLength": 4
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Test District"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "টেস্টিং জেলা"
+                        }
+                    },
+                    {
+                        "name": "bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "100",
+                            "maxLength": 4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            }
+        },
+        "/api/v1/districts/{districtId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "districtId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get One district",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "operationId": "update3",
+                "parameters": [
+                    {
+                        "name": "districtId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "loc_division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "division_bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": 10,
+                            "maxLength": 4
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Test District _ Update"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "টেস্টিং জেলা_আপডেট"
+                        }
+                    },
+                    {
+                        "name": "bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "100",
+                            "maxLength": 4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            },
+            "delete": {
+                "summary": "destroy",
+                "operationId": "destroy1",
+                "parameters": [
+                    {
+                        "name": "districtId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            }
+        },
+        "/api/v1/upazilas": {
+            "get": {
+                "summary": "get-list",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_division_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_district_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            },
+            "post": {
+                "summary": "store",
+                "parameters": [
+                    {
+                        "name": "loc_division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "loc_district_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "division_bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "10",
+                            "maxLength": 4
+                        }
+                    },
+                    {
+                        "name": "district_bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "100",
+                            "maxLength": 4
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "New Upazila"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "নিউ উপজিলা"
+                        }
+                    },
+                    {
+                        "name": "bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000",
+                            "maxLength": 4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            }
+        },
+        "/api/v1/upazilas/{upazilaId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "upazilaId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "parameters": [
+                    {
+                        "name": "upazilaId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "loc_division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "loc_district_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "division_bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "10",
+                            "maxLength": 4
+                        }
+                    },
+                    {
+                        "name": "district_bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "100",
+                            "maxLength": 4
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "New Upazila _Update"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "নিউ উপজিলা_আপডেট"
+                        }
+                    },
+                    {
+                        "name": "bbs_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "1000",
+                            "maxLength": 4
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            },
+            "delete": {
+                "summary": "destroy",
+                "parameters": [
+                    {
+                        "name": "upazilaId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            }
+        },
+        "/api/v1/permissions": {
+            "get": {
+                "summary": "get list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            },
+            "post": {
+                "summary": "store",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Can Add"
+                        }
+                    },
+                    {
+                        "name": "uri",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "can-add"
+                        }
+                    },
+                    {
+                        "name": "method",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            }
+        },
+        "/api/v1/permissions/{permissionId}": {
+            "get": {
+                "summary": "get one",
+                "operationId": "read1",
+                "parameters": [
+                    {
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "parameters": [
+                    {
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Can Add Updated"
+                        }
+                    },
+                    {
+                        "name": "uri",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "can-add-updated"
+                        }
+                    },
+                    {
+                        "name": "method",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            },
+            "delete": {
+                "summary": "destroy",
+                "operationId": "destroy6",
+                "parameters": [
+                    {
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            }
+        },
+        "/api/v1/permissions/{instituteId}/assign-permissions-to-institute": {
+            "post": {
+                "summary": "assign-permissions-to-organization",
+                "parameters": [
+                    {
+                        "name": "instituteId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[0]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "2"
+                        }
+                    },
+                    {
+                        "name": "permissions[1]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "4"
+                        }
+                    },
+                    {
+                        "name": "permissions[2]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "example": "5"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            }
+        },
+        "/api/v1/permissions/{organizationId}/assign-permissions-to-organization": {
+            "post": {
+                "summary": "assign-permissions-to-institute",
+                "operationId": "assign-permissions-to-institute",
+                "parameters": [
+                    {
+                        "name": "organizationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "permissions[0]",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[1]",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "2"
+                        }
+                    },
+                    {
+                        "name": "permissions[2]",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "3"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionService"
+                ]
+            }
+        },
+        "/api/v1/roles": {
+            "get": {
+                "summary": "get list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "RoleServices"
+                ]
+            },
+            "post": {
+                "summary": "store",
+                "parameters": [
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Editor"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "সম্পাদক"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "editor"
+                        }
+                    },
+                    {
+                        "name": "permission_group_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "organization_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "institute_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "RoleServices"
+                ]
+            }
+        },
+        "/api/v1/roles/{roleId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "RoleServices"
+                ]
+            },
+            "put": {
+                "summary": "store",
+                "parameters": [
+                    {
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Editor_Updated"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "সম্পাদক _ আপডেট"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen bookআপডেট."
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "editor-updated"
+                        }
+                    },
+                    {
+                        "name": "permission_group_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "organization_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "institute_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "RoleServices"
+                ]
+            },
+            "delete": {
+                "summary": "destroy",
+                "parameters": [
+                    {
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "RoleServices"
+                ]
+            }
+        },
+        "/api/v1/roles/{roleId}/assign-permissions": {
+            "post": {
+                "summary": "assign-permission",
+                "parameters": [
+                    {
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[0]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[1]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "2"
+                        }
+                    },
+                    {
+                        "name": "permissions[2]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "3"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "RoleServices"
+                ]
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "summary": "get list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            },
+            "post": {
+                "summary": "store",
+                "parameters": [
+                    {
+                        "name": "name_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Miladul Islam"
+                        }
+                    },
+                    {
+                        "name": "name_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "মিলাদুল ইসলাম"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "miladul@email.com"
+                        }
+                    },
+                    {
+                        "name": "loc_division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "loc_district_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "loc_upazila_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "12345678"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            }
+        },
+        "/api/v1/users/{userId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            },
+            "put": {
+                "summary": "store",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "name_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Miladul Islam_Updated"
+                        }
+                    },
+                    {
+                        "name": "name_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "মিলাদুল ইসলাম"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "miladul@email.com"
+                        }
+                    },
+                    {
+                        "name": "loc_division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "loc_district_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "loc_upazila_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "12345678"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            }
+        },
+        "/api/v1/users/{userId}/assign-role": {
+            "post": {
+                "summary": "assign-role",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "role_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            }
+        },
+        "/api/v1/users/{userId}/assign-permissions": {
+            "post": {
+                "summary": "assign-permissions",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "permissions[0]",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[1]",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "2"
+                        }
+                    },
+                    {
+                        "name": "permissions[2]",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "4"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "UserService"
+                ]
+            }
+        },
+        "/api/v1/permission-groups": {
+            "get": {
+                "summary": "get list",
+                "operationId": "get-list0",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionGroupService"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "parameters": [
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Permission Group1"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "পারমিশন গ্রুপঃ১"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "permission-group1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionGroupService"
+                ]
+            }
+        },
+        "/api/v1/permission-groups/{permissionGroupId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "permissionGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionGroupService"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "parameters": [
+                    {
+                        "name": "permissionGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Permission Group1_updated"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "পারমিশন গ্রুপঃ১"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "permission-group1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionGroupService"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "parameters": [
+                    {
+                        "name": "permissionGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionGroupService"
+                ]
+            }
+        },
+        "/api/v1/permission-groups/{permissionGroupId}/assign-permissions": {
+            "post": {
+                "summary": "assign-permission",
+                "parameters": [
+                    {
+                        "name": "permissionGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "permissions[0]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[1]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "3"
+                        }
+                    },
+                    {
+                        "name": "permissions[2]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "5"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionGroupService"
+                ]
+            }
+        },
+        "/api/v1/permission-sub-groups": {
+            "get": {
+                "summary": "get list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionSubGroupService"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "parameters": [
+                    {
+                        "name": "permission_group_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Permission Sub Group1"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "পারমিশন সাব গ্রুপ ১"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "permission-sub-group-key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionSubGroupService"
+                ]
+            }
+        },
+        "/api/v1/permission-sub-groups/{permissionSubGroupId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+                        "name": "permissionSubGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionSubGroupService"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "operationId": "update4",
+                "parameters": [
+                    {
+                        "name": "permissionSubGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "permission_group_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "title_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Permission Sub Group1_Update"
+                        }
+                    },
+                    {
+                        "name": "title_bn",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "পারমিশন সাব গ্রুপ ১"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "permission-sub-group-key-updated"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionSubGroupService"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "parameters": [
+                    {
+                        "name": "permissionSubGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionSubGroupService"
+                ]
+            }
+        },
+        "/api/v1/permission-sub-groups/{permissionSubGroupId}/assign-permissions": {
+            "post": {
+                "summary": "assign-permission",
+                "parameters": [
+                    {
+                        "name": "permissionSubGroupId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "permissions[0]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "permissions[1]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "3"
+                        }
+                    },
+                    {
+                        "name": "permissions[2]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": "5"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    }
+                },
+                "tags": [
+                    "PermissionSubGroupService"
+                ]
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "title_bn": {
+                "name": "title_bn",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "title_en": {
+                "name": "title_en",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "bbs_code": {
+                "name": "bbs_code",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 4
+                }
+            },
+            "loc_division_id": {
+                "name": "loc_division_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "loc_district_id": {
+                "name": "loc_district_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "division_bbs_code": {
+                "name": "division_bbs_code",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 4
+                }
+            },
+            "page": {
+                "name": "page",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "district_bbs_code": {
+                "name": "district_bbs_code",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 4
+                }
+            },
+            "row_status": {
+                "name": "row_status",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "name": {
+                "name": "name",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "example": "Demo Name"
+                }
+            },
+            "key": {
+                "name": "key",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "example": "demo_key"
+                }
+            },
+            "name_en": {
+                "name": "name_en",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "example": "Demo Name En"
+                }
+            },
+            "name_bn": {
+                "name": "name_bn",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "example": "ডেমো নাম"
+                }
+            },
+            "email": {
+                "name": "email",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user1@gmail.com"
+                }
+            },
+            "organization_id": {
+                "name": "organization_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "institute_id": {
+                "name": "institute_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "loc_upazila_id": {
+                "name": "loc_upazila_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "password": {
+                "name": "password",
+                "in": "query",
+                "required": true,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "format": "password"
+                }
+            },
+            "permission_group_id": {
+                "name": "permission_group_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "order": {
+                "in": "query",
+                "name": "order",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string",
+                    "enum": [
+                        "asc",
+                        "desc"
+                    ]
+                }
+            }
+        }
+    },
+    "tags": []
+}
