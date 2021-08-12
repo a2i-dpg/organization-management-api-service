@@ -4,7 +4,8 @@ namespace App\Services;
 
 use App\Models\Skill;
 use Carbon\Carbon;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +31,8 @@ class SkillService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var Skill|Builder $skills */
-        $skills = Skill::select(
+        /** @var Builder $skillBuilder */
+        $skillBuilder = Skill::select(
             [
                 'skills.id as id',
                 'skills.title_en',
@@ -46,17 +47,19 @@ class SkillService
                 'skills.updated_by',
             ]
         );
-        $skills->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
-        $skills->orderBy('skills.id', $order);
+        $skillBuilder->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
+        $skillBuilder->orderBy('skills.id', $order);
 
         if (!empty($titleEn)) {
-            $skills->where('skills.title_en', 'like', '%' . $titleEn . '%');
+            $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $skills->where('skills.title_bn', 'like', '%' . $titleBn . '%');
+            $skillBuilder->where('skills.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $skills */
+
         if ($paginate) {
-            $skills = $skills->paginate(10);
+            $skills = $skillBuilder->paginate(10);
             $paginateData = (object)$skills->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -66,11 +69,12 @@ class SkillService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $skills = $skills->get();
+            $skills = $skillBuilder->get();
         }
 
         $data = [];
         foreach ($skills as $skill) {
+            /** @var Skill $skill */
             $links['read'] = route('api.v1.skills.read', ['id' => $skill->id]);
             $links['update'] = route('api.v1.skills.update', ['id' => $skill->id]);
             $links['delete'] = route('api.v1.skills.destroy', ['id' => $skill->id]);
@@ -108,8 +112,8 @@ class SkillService
      */
     public function getOneSkill(int $id, Carbon $startTime): array
     {
-        /** @var Skill|Builder $skill */
-        $skill = Skill::select(
+        /** @var Builder $skillBuilder */
+        $skillBuilder = Skill::select(
             [
                 'skills.id as id',
                 'skills.title_en',
@@ -124,9 +128,11 @@ class SkillService
                 'skills.updated_by',
             ]
         );
-        $skill->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
-        $skill->where('skills.id', '=', $id);
-        $skill = $skill->first();
+        $skillBuilder->LeftJoin('organizations', 'skills.organization_id', '=', 'organizations.id');
+        $skillBuilder->where('skills.id', '=', $id);
+
+        /** @var Skill $skill */
+        $skill = $skillBuilder->first();
 
         $links = [];
         if (!empty($skill)) {

@@ -52,7 +52,6 @@ class RankController extends Controller
             ];
             return Response::json($response, $response['_response_status']['code']);
         }
-
         return Response::json($response);
     }
 

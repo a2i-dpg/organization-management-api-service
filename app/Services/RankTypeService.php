@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Models\RankType;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -30,8 +31,8 @@ class RankTypeService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var RankType|Builder $rankTypes */
-        $rankTypes = RankType::select(
+        /** @var Builder $rankTypeBuilder */
+        $rankTypeBuilder = RankType::select(
             [
                 'rank_types.id',
                 'rank_types.title_en',
@@ -46,17 +47,19 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         );
-        $rankTypes->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
-        $rankTypes->orderBy('rank_types.id', $order);
+        $rankTypeBuilder->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
+        $rankTypeBuilder->orderBy('rank_types.id', $order);
 
         if (!empty($titleEn)) {
-            $rankTypes->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
+            $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $rankTypes->where('rank_types.title_bn', 'like', '%' . $titleBn . '%');
+            $rankTypeBuilder->where('rank_types.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $rankTypes */
+
         if ($paginate) {
-            $rankTypes = $rankTypes->paginate(10);
+            $rankTypes = $rankTypeBuilder->paginate(10);
             $paginateData = (object)$rankTypes->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -66,11 +69,12 @@ class RankTypeService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $rankTypes = $rankTypes->get();
+            $rankTypes = $rankTypeBuilder->get();
         }
 
         $data = [];
         foreach ($rankTypes as $rankType) {
+            /** @var RankType $rankType */
             $links['read'] = route('api.v1.rank-types.read', ['id' => $rankType->id]);
             $links['edit'] = route('api.v1.rank-types.update', ['id' => $rankType->id]);
             $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $rankType->id]);
@@ -108,8 +112,8 @@ class RankTypeService
      */
     public function getOneRankType(int $id, Carbon $startTime): array
     {
-        /** @var RankType|Builder $rankType */
-        $rankType = RankType::select(
+        /** @var Builder $rankTypeBuilder */
+        $rankTypeBuilder = RankType::select(
             [
                 'rank_types.id',
                 'rank_types.title_en',
@@ -125,9 +129,11 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         );
-        $rankType->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
-        $rankType->where('rank_types.id', '=', $id);
-        $rankType = $rankType->first();
+        $rankTypeBuilder->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
+        $rankTypeBuilder->where('rank_types.id', '=', $id);
+
+        /** @var RankType $rankType */
+        $rankType = $rankTypeBuilder->first();
 
         $links = [];
         if (!empty($rankType)) {

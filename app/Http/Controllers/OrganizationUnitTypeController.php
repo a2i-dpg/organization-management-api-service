@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Helpers\Classes\CustomExceptionHandler;
@@ -134,7 +136,7 @@ class OrganizationUnitTypeController extends Controller
         try {
             $data = $this->organizationUnitTypeService->update($organizationUnitType, $validated);
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_OK,
@@ -189,5 +191,29 @@ class OrganizationUnitTypeController extends Controller
             return Response::json($response, $response['_response_status']['code']);
         }
         return Response::json($response, JsonResponse::HTTP_OK);
+    }
+
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getHierarchy(int $id): JsonResponse
+    {
+        $organizationUnitType = OrganizationUnitType::find($id);
+        try {
+            $response = optional($organizationUnitType->getHierarchy())->toArray();
+        } catch (Throwable $e) {
+            $handler = new CustomExceptionHandler($e);
+            $response = [
+                '_response_status' => array_merge([
+                    "success" => false,
+                    "started" => $this->startTime->format('H i s'),
+                    "finished" => Carbon::now()->format('H i s'),
+                ], $handler->convertExceptionToArray())
+            ];
+            return Response::json($response, $response['_response_status']['code']);
+        }
+        return Response::json($response);
     }
 }

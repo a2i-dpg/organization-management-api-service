@@ -7,7 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 
 /**
@@ -31,8 +32,8 @@ class ServiceService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var Service|Builder $services */
-        $services = Service::select(
+        /** @var Builder $serviceBuilder */
+        $serviceBuilder = Service::select(
             [
                 'services.id as id',
                 'services.title_en',
@@ -46,16 +47,17 @@ class ServiceService
                 'services.updated_at',
             ]
         );
-        $services->join('organizations', 'services.organization_id', '=', 'organizations.id');
+        $serviceBuilder->join('organizations', 'services.organization_id', '=', 'organizations.id');
 
         if (!empty($titleEn)) {
-            $services->where('services.title_en', 'like', '%' . $titleEn . '%');
+            $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $services->where('services.title_bn', 'like', '%' . $titleBn . '%');
+            $serviceBuilder->where('services.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $services */
         if ($paginate) {
-            $services = $services->paginate(10);
+            $services = $serviceBuilder->paginate(10);
             $paginateData = (object)$services->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -65,12 +67,13 @@ class ServiceService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $services = $services->get();
+            $services = $serviceBuilder->get();
         }
 
         $data = [];
 
         foreach ($services as $service) {
+            /** @var Service $service */
             $links['read'] = route('api.v1.services.read', ['id' => $service->id]);
             $links['update'] = route('api.v1.services.update', ['id' => $service->id]);
             $links['delete'] = route('api.v1.services.destroy', ['id' => $service->id]);
@@ -78,7 +81,7 @@ class ServiceService
             $data[] = $service->toArray();
         }
         return [
-            "data" => $data? : null,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -108,8 +111,8 @@ class ServiceService
      */
     public function getOneService(int $id, Carbon $startTime): array
     {
-        /** @var Service|Builder $service */
-        $service = Service::select(
+        /** @var Builder $serviceBuilder */
+        $serviceBuilder = Service::select(
             [
                 'services.id as id',
                 'services.title_en',
@@ -123,9 +126,11 @@ class ServiceService
                 'services.updated_at',
             ]
         );
-        $service->join('organizations', 'services.organization_id', '=', 'organizations.id');
-        $service->where('services.id', '=', $id);
-        $service = $service->first();
+        $serviceBuilder->join('organizations', 'services.organization_id', '=', 'organizations.id');
+        $serviceBuilder->where('services.id', '=', $id);
+
+        /** @var  Service $service */
+        $service = $serviceBuilder->first();
 
         $links = [];
         if (!empty($service)) {
@@ -134,7 +139,7 @@ class ServiceService
         }
 
         return [
-            "data" => $service ? : null,
+            "data" => $service ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -182,7 +187,7 @@ class ServiceService
      * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
      */
-    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [

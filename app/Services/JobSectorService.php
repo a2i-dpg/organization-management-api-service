@@ -5,7 +5,8 @@ namespace App\Services;
 
 use App\Models\JobSector;
 use Carbon\Carbon;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -31,8 +32,8 @@ class JobSectorService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var JobSector|Builder $jobSectors */
-        $jobSectors = JobSector::select(
+        /** @var Builder $jobSectorBuilder */
+        $jobSectorBuilder = JobSector::select(
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
@@ -44,16 +45,18 @@ class JobSectorService
                 'job_sectors.updated_at'
             ]
         );
-        $jobSectors->orderBy('job_sectors.id', $order);
+        $jobSectorBuilder->orderBy('job_sectors.id', $order);
 
         if (!empty($titleEn)) {
-            $jobSectors->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
+            $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $jobSectors->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $jobSectors */
+
         if ($paginate) {
-            $jobSectors = $jobSectors->paginate(10);
+            $jobSectors = $jobSectorBuilder->paginate(10);
             $paginateData = (object)$jobSectors->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -63,11 +66,12 @@ class JobSectorService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $jobSectors = $jobSectors->get();
+            $jobSectors = $jobSectorBuilder->get();
         }
 
         $data = [];
         foreach ($jobSectors as $jobSector) {
+            /** @var JobSector $jobSector */
             $links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
             $links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
             $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $jobSector->id]);
@@ -105,8 +109,8 @@ class JobSectorService
      */
     public function getOneJobSector(int $id, Carbon $startTime): array
     {
-        /** @var JobSector|Builder $jobSector */
-        $jobSector = JobSector::select(
+        /** @var Builder $jobSectorBuilder */
+        $jobSectorBuilder = JobSector::select(
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
@@ -118,8 +122,10 @@ class JobSectorService
                 'job_sectors.updated_at'
             ]
         );
-        $jobSector->where('job_sectors.id', '=', $id);
-        $jobSector = $jobSector->first();
+        $jobSectorBuilder->where('job_sectors.id', '=', $id);
+
+        /** @var JobSector $jobSector */
+        $jobSector = $jobSectorBuilder->first();
 
         $links = [];
         if (!empty($jobSector)) {

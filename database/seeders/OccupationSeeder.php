@@ -2,9 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Occupation;
 use Illuminate\Database\Seeder;
 
-class OrganizationTableSeeder extends Seeder
+/**
+ * Class OccupationSeeder
+ * @package Database\Seeders
+ */
+class OccupationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +18,6 @@ class OrganizationTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Occupation::factory()->count(10)->create();
     }
 }

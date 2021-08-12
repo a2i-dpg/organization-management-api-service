@@ -31,8 +31,8 @@ class OrganizationUnitServiceService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var OrganizationUnitService|Builder $organizationUnitServices */
-        $organizationUnitServices = OrganizationUnitService::select(
+        /** @var Builder $organizationUnitServiceBuilder */
+        $organizationUnitServiceBuilder = OrganizationUnitService::select(
             [
                 'organization_unit_services.id',
                 'organization_unit_services.organization_id',
@@ -48,18 +48,18 @@ class OrganizationUnitServiceService
                 'organization_unit_services.updated_at',
             ]
         );
-        $organizationUnitServices->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id');
-        $organizationUnitServices->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id');
-        $organizationUnitServices->join('services', 'organization_unit_services.service_id', '=', 'services.id');
+        $organizationUnitServiceBuilder->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id');
+        $organizationUnitServiceBuilder->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id');
+        $organizationUnitServiceBuilder->join('services', 'organization_unit_services.service_id', '=', 'services.id');
 
         if (!empty($titleEn)) {
-            $organizationUnitServices->where('organization_unit_services.title_en', 'like', '%' . $titleEn . '%');
+            $organizationUnitServiceBuilder->where('organization_unit_services.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationUnitServices->where('organization_unit_services.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationUnitServiceBuilder->where('organization_unit_services.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         if ($paginate) {
-            $organizationUnitServices = $organizationUnitServices->paginate(10);
+            $organizationUnitServices = $organizationUnitServiceBuilder->paginate(10);
             $paginateData = (object)$organizationUnitServices->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -69,11 +69,12 @@ class OrganizationUnitServiceService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $organizationUnitServices = $organizationUnitServices->get();
+            $organizationUnitServices = $organizationUnitServiceBuilder->get();
         }
 
         $data = [];
         foreach ($organizationUnitServices as $organizationUnitService) {
+            /** @var OrganizationUnitService $organizationUnitService */
             $links['read'] = route('api.v1.organization-unit-services.read', ['id' => $organizationUnitService->id]);
             $links['update'] = route('api.v1.organization-unit-services.update', ['id' => $organizationUnitService->id]);
             $links['delete'] = route('api.v1.organization-unit-services.destroy', ['id' => $organizationUnitService->id]);
@@ -111,8 +112,8 @@ class OrganizationUnitServiceService
      */
     public function getOneOrganizationUnitService(int $id, Carbon $startTime): array
     {
-        /** @var OrganizationUnitService|Builder $organizationUnitService */
-        $organizationUnitService = OrganizationUnitService::select(
+        /** @var Builder $organizationUnitServiceBuilder */
+        $organizationUnitServiceBuilder = OrganizationUnitService::select(
             [
                 'organization_unit_services.id',
                 'organization_unit_services.organization_id',
@@ -128,11 +129,13 @@ class OrganizationUnitServiceService
                 'organization_unit_services.updated_at',
             ]
         );
-        $organizationUnitService->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id');
-        $organizationUnitService->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id');
-        $organizationUnitService->join('services', 'organization_unit_services.service_id', '=', 'services.id');
-        $organizationUnitService->where('organization_unit_services.id', '=', $id);
-        $organizationUnitService = $organizationUnitService->first();
+        $organizationUnitServiceBuilder->join('organizations', 'organization_unit_services.organization_id', '=', 'organizations.id');
+        $organizationUnitServiceBuilder->join('organization_units', 'organization_unit_services.organization_unit_id', '=', 'organization_units.id');
+        $organizationUnitServiceBuilder->join('services', 'organization_unit_services.service_id', '=', 'services.id');
+        $organizationUnitServiceBuilder->where('organization_unit_services.id', '=', $id);
+
+        /** @var OrganizationUnitService $organizationUnitService */
+        $organizationUnitService = $organizationUnitServiceBuilder->first();
 
         $links = [];
         if (!empty($organizationUnitService)) {

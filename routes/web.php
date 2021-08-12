@@ -9,10 +9,6 @@ $customRouter = function (string $as = '') use ($router) {
     return $custom->as($as);
 };
 
-//$router->get('/', function () use ($router) {
-//    return $router->app->version();
-//});
-
 $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
@@ -24,9 +20,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
     $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
     $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
+    $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types-hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
     $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
     $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units-hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
     $customRouter()->resourceRoute('organization-unit-services', 'OrganizationUnitServiceController')->render();
 });

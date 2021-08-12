@@ -4,7 +4,8 @@
 namespace App\Services;
 
 use App\Models\Rank;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -32,14 +33,14 @@ class RankService
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
-        /** @var Rank|Builder $ranks */
-        $ranks = Rank::select(
+        /** @var Builder $rankBuilder */
+        $rankBuilder = Rank::select(
             [
                 'ranks.id',
                 'ranks.title_en',
                 'ranks.title_bn',
                 'ranks.grade',
-                'ranks.order',
+                'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.id as rank_type_id',
@@ -51,18 +52,21 @@ class RankService
                 'ranks.updated_at',
             ]
         );
-        $ranks->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
-        $ranks->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
-        $ranks->orderBy('ranks.id', $order);
+        $rankBuilder->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
+        $rankBuilder->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
+        $rankBuilder->orderBy('ranks.id', $order);
+
 
         if (!empty($titleEn)) {
-            $ranks->where('ranks.title_en', 'like', '%' . $titleEn . '%');
+            $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $ranks->where('ranks.title_bn', 'like', '%' . $titleBn . '%');
+            $rankBuilder->where('ranks.title_bn', 'like', '%' . $titleBn . '%');
         }
 
+        /** @var Collection $ranks */
+
         if ($paginate) {
-            $ranks = $ranks->paginate(10);
+            $ranks = $rankBuilder->paginate(10);
             $paginateData = (object)$ranks->toArray();
             $page = [
                 "size" => $paginateData->per_page,
@@ -72,11 +76,12 @@ class RankService
             ];
             $paginateLink[] = $paginateData->links;
         } else {
-            $ranks = $ranks->get();
+            $ranks = $rankBuilder->get();
         }
 
         $data = [];
         foreach ($ranks as $rank) {
+            /** @var Rank $rank */
             $links['read'] = route('api.v1.ranks.read', ['id' => $rank->id]);
             $links['update'] = route('api.v1.ranks.update', ['id' => $rank->id]);
             $links['delete'] = route('api.v1.ranks.destroy', ['id' => $rank->id]);
@@ -114,14 +119,14 @@ class RankService
      */
     public function getOneRank(int $id, Carbon $startTime): array
     {
-        /** @var Rank|Builder $rank */
-        $rank = Rank::select(
+        /** @var Builder $rankBuilder */
+        $rankBuilder = Rank::select(
             [
                 'ranks.id',
                 'ranks.title_en',
                 'ranks.title_bn',
                 'ranks.grade',
-                'ranks.order',
+                'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.id as rank_type_id',
@@ -133,10 +138,12 @@ class RankService
                 'ranks.updated_at',
             ]
         );
-        $rank->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
-        $rank->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
-        $rank->where('ranks.id', '=', $id);
-        $rank = $rank->first();
+        $rankBuilder->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
+        $rankBuilder->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
+        $rankBuilder->where('ranks.id', '=', $id);
+
+        /** @var Rank $rank */
+        $rank = $rankBuilder->first();
 
         $links = [];
         if (!empty($rank)) {
@@ -145,7 +152,7 @@ class RankService
         }
 
         return [
-            "data" => $rank ? $rank : null,
+            "data" => $rank ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -219,7 +226,7 @@ class RankService
                 'string',
                 'max:100',
             ],
-            'order' => [
+            'display_order' => [
                 'nullable',
                 'int',
             ],
