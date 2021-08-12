@@ -30,6 +30,7 @@ class ServiceService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
+        $organizationId= $request->query('organization_id');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
         /** @var Builder $serviceBuilder */
@@ -49,6 +50,10 @@ class ServiceService
         );
         $serviceBuilder->join('organizations', 'services.organization_id', '=', 'organizations.id');
 
+
+        if(!empty($organizationId)){
+            $serviceBuilder->where('services.organization_id','=',$organizationId);
+        }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
