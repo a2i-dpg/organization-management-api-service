@@ -174,9 +174,9 @@ class OrganizationUnitServiceService
 
     /**
      * @param OrganizationUnitService $organizationUnitService
-     * @return OrganizationUnitService
+     * @return bool
      */
-    public function update(OrganizationUnitService $organizationUnitService): OrganizationUnitService
+    public function update(OrganizationUnitService $organizationUnitService): bool
     {
         return $this->destroy($organizationUnitService);
     }

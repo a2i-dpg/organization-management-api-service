@@ -170,12 +170,7 @@
                 "description": "API endpoint to get a specified rank type.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "name": "rankTypeId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "$ref": "#/components/parameters/rankTypeId"
                     }
                 ],
                 "responses": {
@@ -223,6 +218,9 @@
                 "summary": "update",
                 "description": "API endpoint to get a specified rank type.A successful request response will show 200 HTTP status code",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/rankTypeId"
+                    },
                     {
                         "$ref": "#/components/parameters/organization_id_optional"
                     },
@@ -279,16 +277,11 @@
             },
             "delete": {
                 "summary": "delete",
-                "description": " API endpoint to get the list of rank types\n\nA successful request response will show 200 HTTP status code",
+                "description": " API endpoint to get the list of rank types.A successful request response will show 200 HTTP status code",
                 "operationId": "delete",
                 "parameters": [
                     {
-                        "name": "rankTypeId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "$ref": "#/components/parameters/rankTypeId"
                     }
                 ],
                 "responses": {
@@ -519,12 +512,7 @@
                 "operationId": "get_one1",
                 "parameters": [
                     {
-                        "name": "rankId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "$ref": "#/components/parameters/rankId"
                     }
                 ],
                 "responses": {
@@ -572,6 +560,9 @@
                 "summary": "update",
                 "description": "API endpoint to get a rank. A successful request response will show 200 HTTP status code",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/rankId"
+                    },
                     {
                         "$ref": "#/components/parameters/organization_id"
                     },
@@ -2516,6 +2507,682 @@
                 ]
             }
         },
+        "/organization-unit-types/{organizationUnitTypeId}/get-hierarchy": {
+            "get": {
+                "summary": "get-hierarchy",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationUnitTypeId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get-hierarchy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationUnitType"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "organization_id": 2,
+                                    "organization_unit_type_id": 1,
+                                    "title_en": "Sales executive",
+                                    "title_bn": "Sales executive",
+                                    "parent_id": null,
+                                    "rank_id": 3,
+                                    "display_order": 1,
+                                    "is_designation": 1,
+                                    "skill_ids": [
+                                        2,
+                                        3
+                                    ],
+                                    "status": 1,
+                                    "row_status": 1,
+                                    "created_by": null,
+                                    "updated_by": null,
+                                    "created_at": "2021-08-10T12:19:27.000000Z",
+                                    "updated_at": "2021-08-10T12:19:27.000000Z",
+                                    "deleted_at": null,
+                                    "name": "Sales executive",
+                                    "parent": null,
+                                    "organization_title": "Akij Group",
+                                    "organization_unit_type_title": "Payment Method",
+                                    "children": [
+                                        {
+                                            "id": 2,
+                                            "organization_id": 3,
+                                            "organization_unit_type_id": 3,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 3,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                2,
+                                                3
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Sonali Bank",
+                                            "organization_unit_type_title": "Mobile Banking",
+                                            "organization": {
+                                                "id": 3,
+                                                "organization_type_id": 2,
+                                                "title_en": "Sonali Bank",
+                                                "title_bn": "Sonali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "34563 Rempel Junctions Suite 197\nNorth Keyonmouth, KY 84799-4766",
+                                                "mobile": "01758393749",
+                                                "email": "garfield66@kuphal.net",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Alessandra Wehner",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "ford99@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Saepe magni recusandae aperiam iusto expedita illo consequuntur ut.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.jakubowski.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 3,
+                                                "organization_id": 5,
+                                                "title_en": "Mobile Banking",
+                                                "title_bn": "Mobile Banking",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 3,
+                                            "organization_id": 2,
+                                            "organization_unit_type_id": 3,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 3,
+                                            "display_order": 2,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                1,
+                                                2
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Akij Group",
+                                            "organization_unit_type_title": "Mobile Banking",
+                                            "organization": {
+                                                "id": 2,
+                                                "organization_type_id": 2,
+                                                "title_en": "Akij Group",
+                                                "title_bn": "Akij Group",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "991 Maude Neck\nNew Marcella, IA 88496-3387",
+                                                "mobile": "01758393749",
+                                                "email": "nedra42@berge.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Anya Denesik",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "joanie.beier@example.com",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et distinctio adipisci et sunt.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.goldner.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 3,
+                                                "organization_id": 5,
+                                                "title_en": "Mobile Banking",
+                                                "title_bn": "Mobile Banking",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 4,
+                                            "organization_id": 5,
+                                            "organization_unit_type_id": 3,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 3,
+                                            "display_order": 6,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                1,
+                                                3
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Sonali Bank",
+                                            "organization_unit_type_title": "Mobile Banking",
+                                            "organization": {
+                                                "id": 5,
+                                                "organization_type_id": 4,
+                                                "title_en": "Sonali Bank",
+                                                "title_bn": "Sonali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "537 Guillermo Park Suite 150\nNew Lornahaven, NM 10777",
+                                                "mobile": "01758393749",
+                                                "email": "freddie.heidenreich@johnson.info",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Timmothy Ritchie",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "leonardo03@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Distinctio dolorem magnam ea.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.reinger.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 3,
+                                                "organization_id": 5,
+                                                "title_en": "Mobile Banking",
+                                                "title_bn": "Mobile Banking",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 5,
+                                            "organization_id": 4,
+                                            "organization_unit_type_id": 1,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 3,
+                                            "display_order": 8,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                2,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization_unit_type_title": "Payment Method",
+                                            "organization": {
+                                                "id": 4,
+                                                "organization_type_id": 3,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8948 Philip Village\nVandervortfurt, NM 64694-1883",
+                                                "mobile": "01758393749",
+                                                "email": "berenice.lynch@block.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Giovani Ebert",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "hortense86@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Rerum voluptatibus quas ut beatae vero est deserunt.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gottlieb.org",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 1,
+                                                "organization_id": 2,
+                                                "title_en": "Payment Method",
+                                                "title_bn": "Payment Method",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 6,
+                                            "organization_id": 1,
+                                            "organization_unit_type_id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 9,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                3,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization_unit_type_title": "Payment Method",
+                                            "organization": {
+                                                "id": 1,
+                                                "organization_type_id": 4,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                                "mobile": "01758393749",
+                                                "email": "ernser.johann@heidenreich.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Sigmund Ward",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "zpredovic@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gusikowski.net",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 1,
+                                                "organization_id": 2,
+                                                "title_en": "Payment Method",
+                                                "title_bn": "Payment Method",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 7,
+                                            "organization_id": 3,
+                                            "organization_unit_type_id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 2,
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                1,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Sonali Bank",
+                                            "organization_unit_type_title": "Payment Method",
+                                            "organization": {
+                                                "id": 3,
+                                                "organization_type_id": 2,
+                                                "title_en": "Sonali Bank",
+                                                "title_bn": "Sonali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "34563 Rempel Junctions Suite 197\nNorth Keyonmouth, KY 84799-4766",
+                                                "mobile": "01758393749",
+                                                "email": "garfield66@kuphal.net",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Alessandra Wehner",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "ford99@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Saepe magni recusandae aperiam iusto expedita illo consequuntur ut.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.jakubowski.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 1,
+                                                "organization_id": 2,
+                                                "title_en": "Payment Method",
+                                                "title_bn": "Payment Method",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 8,
+                                            "organization_id": 5,
+                                            "organization_unit_type_id": 2,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 2,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                2,
+                                                3
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Sonali Bank",
+                                            "organization_unit_type_title": "Payment Method",
+                                            "organization": {
+                                                "id": 5,
+                                                "organization_type_id": 4,
+                                                "title_en": "Sonali Bank",
+                                                "title_bn": "Sonali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "537 Guillermo Park Suite 150\nNew Lornahaven, NM 10777",
+                                                "mobile": "01758393749",
+                                                "email": "freddie.heidenreich@johnson.info",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Timmothy Ritchie",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "leonardo03@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Distinctio dolorem magnam ea.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.reinger.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 2,
+                                                "organization_id": 5,
+                                                "title_en": "Payment Method",
+                                                "title_bn": "Payment Method",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 9,
+                                            "organization_id": 3,
+                                            "organization_unit_type_id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 9,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                1,
+                                                2
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Sonali Bank",
+                                            "organization_unit_type_title": "Payment Method",
+                                            "organization": {
+                                                "id": 3,
+                                                "organization_type_id": 2,
+                                                "title_en": "Sonali Bank",
+                                                "title_bn": "Sonali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "34563 Rempel Junctions Suite 197\nNorth Keyonmouth, KY 84799-4766",
+                                                "mobile": "01758393749",
+                                                "email": "garfield66@kuphal.net",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Alessandra Wehner",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "ford99@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Saepe magni recusandae aperiam iusto expedita illo consequuntur ut.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.jakubowski.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 1,
+                                                "organization_id": 2,
+                                                "title_en": "Payment Method",
+                                                "title_bn": "Payment Method",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 10,
+                                            "organization_id": 1,
+                                            "organization_unit_type_id": 1,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 2,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                3,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:27.000000Z",
+                                            "updated_at": "2021-08-10T12:19:27.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization_unit_type_title": "Payment Method",
+                                            "organization": {
+                                                "id": 1,
+                                                "organization_type_id": 4,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                                "mobile": "01758393749",
+                                                "email": "ernser.johann@heidenreich.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Sigmund Ward",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "zpredovic@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gusikowski.net",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "organization_unit_type": {
+                                                "id": 1,
+                                                "organization_id": 2,
+                                                "title_en": "Payment Method",
+                                                "title_bn": "Payment Method",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        }
+                                    ],
+                                    "organization": {
+                                        "id": 2,
+                                        "organization_type_id": 2,
+                                        "title_en": "Akij Group",
+                                        "title_bn": "Akij Group",
+                                        "loc_division_id": 1,
+                                        "loc_district_id": 1,
+                                        "loc_upazila_id": 1,
+                                        "address": "991 Maude Neck\nNew Marcella, IA 88496-3387",
+                                        "mobile": "01758393749",
+                                        "email": "nedra42@berge.com",
+                                        "fax_no": "+123456",
+                                        "contact_person_name": "Anya Denesik",
+                                        "contact_person_mobile": "01758393749",
+                                        "contact_person_email": "joanie.beier@example.com",
+                                        "contact_person_designation": "HR",
+                                        "description": "Et distinctio adipisci et sunt.",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.goldner.com",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-10T12:19:24.000000Z",
+                                        "updated_at": "2021-08-10T12:19:24.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "organization_unit_type": {
+                                        "id": 1,
+                                        "organization_id": 2,
+                                        "title_en": "Payment Method",
+                                        "title_bn": "Payment Method",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-10T12:19:24.000000Z",
+                                        "updated_at": "2021-08-10T12:19:24.000000Z",
+                                        "deleted_at": null
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-unit-types"
+                ]
+            }
+        },
         "/organization-units": {
             "get": {
                 "summary": "get list",
@@ -2936,6 +3603,562 @@
                 ]
             }
         },
+        "/organization-units/{organizationUnitId}/get-hierarchy": {
+            "get": {
+                "summary": "get-hierarchy",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationUnitTypeId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get-hierarchy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationUnit"
+                                },
+                                "examples": {
+                                    "id": 1,
+                                    "human_resource_template_id": 1,
+                                    "organization_id": 1,
+                                    "organization_unit_id": 1,
+                                    "title_en": "Marketing",
+                                    "title_bn": "Marketing",
+                                    "parent_id": null,
+                                    "rank_id": 2,
+                                    "display_order": 7,
+                                    "is_designation": 1,
+                                    "skill_ids": [
+                                        3,
+                                        4
+                                    ],
+                                    "status": 1,
+                                    "row_status": 1,
+                                    "created_by": null,
+                                    "updated_by": null,
+                                    "created_at": "2021-08-10T12:19:27.000000Z",
+                                    "updated_at": "2021-08-10T12:19:27.000000Z",
+                                    "deleted_at": null,
+                                    "name": "Marketing",
+                                    "parent": null,
+                                    "organization_title": "Pubali Bank",
+                                    "children": [
+                                        {
+                                            "id": 2,
+                                            "human_resource_template_id": 1,
+                                            "organization_id": 1,
+                                            "organization_unit_id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                1,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization": {
+                                                "id": 1,
+                                                "organization_type_id": 4,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                                "mobile": "01758393749",
+                                                "email": "ernser.johann@heidenreich.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Sigmund Ward",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "zpredovic@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gusikowski.net",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 3,
+                                            "human_resource_template_id": 1,
+                                            "organization_id": 1,
+                                            "organization_unit_id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 2,
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                0,
+                                                3
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization": {
+                                                "id": 1,
+                                                "organization_type_id": 4,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                                "mobile": "01758393749",
+                                                "email": "ernser.johann@heidenreich.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Sigmund Ward",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "zpredovic@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gusikowski.net",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 4,
+                                            "human_resource_template_id": 8,
+                                            "organization_id": 2,
+                                            "organization_unit_id": 5,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 3,
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                2,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Akij Group",
+                                            "organization": {
+                                                "id": 2,
+                                                "organization_type_id": 2,
+                                                "title_en": "Akij Group",
+                                                "title_bn": "Akij Group",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "991 Maude Neck\nNew Marcella, IA 88496-3387",
+                                                "mobile": "01758393749",
+                                                "email": "nedra42@berge.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Anya Denesik",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "joanie.beier@example.com",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et distinctio adipisci et sunt.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.goldner.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 5,
+                                            "human_resource_template_id": 4,
+                                            "organization_id": 3,
+                                            "organization_unit_id": 4,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 2,
+                                            "display_order": 8,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                2,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Sonali Bank",
+                                            "organization": {
+                                                "id": 3,
+                                                "organization_type_id": 2,
+                                                "title_en": "Sonali Bank",
+                                                "title_bn": "Sonali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "34563 Rempel Junctions Suite 197\nNorth Keyonmouth, KY 84799-4766",
+                                                "mobile": "01758393749",
+                                                "email": "garfield66@kuphal.net",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Alessandra Wehner",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "ford99@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Saepe magni recusandae aperiam iusto expedita illo consequuntur ut.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.jakubowski.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 6,
+                                            "human_resource_template_id": 5,
+                                            "organization_id": 4,
+                                            "organization_unit_id": 1,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 2,
+                                            "display_order": 0,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                1,
+                                                3
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization": {
+                                                "id": 4,
+                                                "organization_type_id": 3,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8948 Philip Village\nVandervortfurt, NM 64694-1883",
+                                                "mobile": "01758393749",
+                                                "email": "berenice.lynch@block.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Giovani Ebert",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "hortense86@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Rerum voluptatibus quas ut beatae vero est deserunt.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gottlieb.org",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 7,
+                                            "human_resource_template_id": 9,
+                                            "organization_id": 1,
+                                            "organization_unit_id": 4,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 0,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                0,
+                                                1
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization": {
+                                                "id": 1,
+                                                "organization_type_id": 4,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                                "mobile": "01758393749",
+                                                "email": "ernser.johann@heidenreich.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Sigmund Ward",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "zpredovic@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gusikowski.net",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 8,
+                                            "human_resource_template_id": 2,
+                                            "organization_id": 4,
+                                            "organization_unit_id": 3,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "parent_id": 1,
+                                            "rank_id": 2,
+                                            "display_order": 2,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                3,
+                                                4
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Sales executive",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization": {
+                                                "id": 4,
+                                                "organization_type_id": 3,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8948 Philip Village\nVandervortfurt, NM 64694-1883",
+                                                "mobile": "01758393749",
+                                                "email": "berenice.lynch@block.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Giovani Ebert",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "hortense86@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Rerum voluptatibus quas ut beatae vero est deserunt.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gottlieb.org",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 9,
+                                            "human_resource_template_id": 6,
+                                            "organization_id": 2,
+                                            "organization_unit_id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 1,
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                0,
+                                                2
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Akij Group",
+                                            "organization": {
+                                                "id": 2,
+                                                "organization_type_id": 2,
+                                                "title_en": "Akij Group",
+                                                "title_bn": "Akij Group",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "991 Maude Neck\nNew Marcella, IA 88496-3387",
+                                                "mobile": "01758393749",
+                                                "email": "nedra42@berge.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Anya Denesik",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "joanie.beier@example.com",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et distinctio adipisci et sunt.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.goldner.com",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        },
+                                        {
+                                            "id": 10,
+                                            "human_resource_template_id": 2,
+                                            "organization_id": 1,
+                                            "organization_unit_id": 4,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "parent_id": 1,
+                                            "rank_id": 2,
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "skill_ids": [
+                                                0,
+                                                1
+                                            ],
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-10T12:19:28.000000Z",
+                                            "updated_at": "2021-08-10T12:19:28.000000Z",
+                                            "deleted_at": null,
+                                            "name": "Marketing",
+                                            "parent": 1,
+                                            "organization_title": "Pubali Bank",
+                                            "organization": {
+                                                "id": 1,
+                                                "organization_type_id": 4,
+                                                "title_en": "Pubali Bank",
+                                                "title_bn": "Pubali Bank",
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 1,
+                                                "loc_upazila_id": 1,
+                                                "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                                "mobile": "01758393749",
+                                                "email": "ernser.johann@heidenreich.com",
+                                                "fax_no": "+123456",
+                                                "contact_person_name": "Sigmund Ward",
+                                                "contact_person_mobile": "01758393749",
+                                                "contact_person_email": "zpredovic@example.net",
+                                                "contact_person_designation": "HR",
+                                                "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                                "logo": "logo.jpg",
+                                                "domain": "https://www.gusikowski.net",
+                                                "row_status": 1,
+                                                "created_by": null,
+                                                "updated_by": null,
+                                                "created_at": "2021-08-10T12:19:24.000000Z",
+                                                "updated_at": "2021-08-10T12:19:24.000000Z",
+                                                "deleted_at": null
+                                            },
+                                            "children": []
+                                        }
+                                    ],
+                                    "organization": {
+                                        "id": 1,
+                                        "organization_type_id": 4,
+                                        "title_en": "Pubali Bank",
+                                        "title_bn": "Pubali Bank",
+                                        "loc_division_id": 1,
+                                        "loc_district_id": 1,
+                                        "loc_upazila_id": 1,
+                                        "address": "8729 Berta Unions\nLake Kalifort, CT 48893-4962",
+                                        "mobile": "01758393749",
+                                        "email": "ernser.johann@heidenreich.com",
+                                        "fax_no": "+123456",
+                                        "contact_person_name": "Sigmund Ward",
+                                        "contact_person_mobile": "01758393749",
+                                        "contact_person_email": "zpredovic@example.net",
+                                        "contact_person_designation": "HR",
+                                        "description": "Et ab blanditiis recusandae aut ex cum dolorem.",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.gusikowski.net",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-10T12:19:24.000000Z",
+                                        "updated_at": "2021-08-10T12:19:24.000000Z",
+                                        "deleted_at": null
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-units"
+                ]
+            }
+        },
         "/services": {
             "get": {
                 "summary": "get list",
@@ -3222,6 +4445,887 @@
                 },
                 "tags": [
                     "services"
+                ]
+            }
+        },
+        "/organization-unit-services": {
+            "get": {
+                "summary": "get list",
+                "description": "API endpoint to get the list of organization unit services.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationUnitService"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 5,
+                                            "organization_title_en": "AKIJ GROUP_update",
+                                            "organization_unit_title_en": "GCL_update",
+                                            "service_title_en": "Service1_update",
+                                            "row_status": 1,
+                                            "created_at": null,
+                                            "updated_at": "2021-08-01T05:47:25.000000Z",
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                                "update": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                                "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                            }
+                                        },
+                                        {
+                                            "id": 6,
+                                            "organization_title_en": "AKIJ GROUP_update",
+                                            "organization_unit_title_en": "GCL_update",
+                                            "service_title_en": "Service1_update",
+                                            "row_status": 1,
+                                            "created_at": null,
+                                            "updated_at": null,
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/organization-unit-services/6",
+                                                "update": "http://localhost:8000/api/v1/organization-unit-services/6",
+                                                "delete": "http://localhost:8000/api/v1/organization-unit-services/6"
+                                            }
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "06 00 34",
+                                        "finished": "06 00 34"
+                                    },
+                                    "_links": {
+                                        "paginate": [],
+                                        "search": {
+                                            "parameters": [
+                                                "title_en",
+                                                "title_bn"
+                                            ],
+                                            "_link": "http://localhost:8000/api/v1/organization-unit-services"
+                                        }
+                                    },
+                                    "_page": [],
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-unit-services"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "description": "API endpoint to create a organization unit types.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organization_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/service_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "create",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": true,
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "Organization Unit Service added successfully",
+                                        "started": "06 00 24",
+                                        "finished": "06 00 25"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-unit-services"
+                ]
+            }
+        },
+        "/organization-unit-services/{organizationUnitServiceId}": {
+            "get": {
+                "summary": "get one",
+                "description": "API endpoint to get the specified organization unit type.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationUnitServiceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationUnitService"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 5,
+                                        "organization_title_en": "AKIJ GROUP_update",
+                                        "organization_unit_title_en": "GCL_update",
+                                        "service_title_en": "Service1_update",
+                                        "row_status": 1,
+                                        "created_at": null,
+                                        "updated_at": "2021-08-01T05:47:25.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "06 00 50",
+                                        "finished": "06 00 50"
+                                    },
+                                    "_links": {
+                                        "update": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                        "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-unit-services"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "description": "API endpoint to update an existing organization unit types \n\nA successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationUnitServiceId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/service_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "update",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationUnitService"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 5,
+                                        "organization_id": 1,
+                                        "organization_unit_id": 1,
+                                        "service_id": 1,
+                                        "row_status": 99,
+                                        "created_at": null,
+                                        "updated_at": "2021-08-02T06:01:44.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization Unit Service updated successfully.",
+                                        "started": "06 01 43",
+                                        "finished": "06 01 44"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-unit-services"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "description": " API endpoint to delete an organization unit type.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationUnitServiceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization Unit Service deleted successfully.",
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-unit-services"
+                ]
+            }
+        },
+        "/human-resource-templates": {
+            "get": {
+                "summary": "get list",
+                "description": "API endpoint to get the list of Human Resource templates.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResourceTemplate"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 5,
+                                            "organization_title_en": "AKIJ GROUP_update",
+                                            "organization_unit_title_en": "GCL_update",
+                                            "service_title_en": "Service1_update",
+                                            "row_status": 1,
+                                            "created_at": null,
+                                            "updated_at": "2021-08-01T05:47:25.000000Z",
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                                "update": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                                "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                            }
+                                        },
+                                        {
+                                            "id": 6,
+                                            "organization_title_en": "AKIJ GROUP_update",
+                                            "organization_unit_title_en": "GCL_update",
+                                            "service_title_en": "Service1_update",
+                                            "row_status": 1,
+                                            "created_at": null,
+                                            "updated_at": null,
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/organization-unit-services/6",
+                                                "update": "http://localhost:8000/api/v1/organization-unit-services/6",
+                                                "delete": "http://localhost:8000/api/v1/organization-unit-services/6"
+                                            }
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "06 00 34",
+                                        "finished": "06 00 34"
+                                    },
+                                    "_links": {
+                                        "paginate": [],
+                                        "search": {
+                                            "parameters": [
+                                                "title_en",
+                                                "title_bn"
+                                            ],
+                                            "_link": "http://localhost:8000/api/v1/organization-unit-services"
+                                        }
+                                    },
+                                    "_page": [],
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resource-templates"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "description": " API endpoint to create a Human Resource template.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organization_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/parent_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/rank_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/display_order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/is_designation"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skill_ids"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_type_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/status"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "create",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResourceTemplate"
+                                },
+                                "example": {
+                                    "data": true,
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "Human resource template added successfully",
+                                        "started": "06 00 24",
+                                        "finished": "06 00 25"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resource-templates"
+                ]
+            }
+        },
+        "/human-resource-templates/{humanResourceTemplatesId}": {
+            "get": {
+                "summary": "get one",
+                "description": "API endpoint to get a HumanResourceTemlate .A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/humanResourceTemplatesId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResourceTemplate"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 5,
+                                        "organization_title_en": "AKIJ GROUP_update",
+                                        "organization_unit_title_en": "GCL_update",
+                                        "service_title_en": "Service1_update",
+                                        "row_status": 1,
+                                        "created_at": null,
+                                        "updated_at": "2021-08-01T05:47:25.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "06 00 50",
+                                        "finished": "06 00 50"
+                                    },
+                                    "_links": {
+                                        "update": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                        "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resource-templates"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "description": "API endpoint to update an existing organization unit types \n\nA successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/humanResourceTemplatesId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "update",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResourceTemplate"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 5,
+                                        "organization_id": 1,
+                                        "organization_unit_id": 1,
+                                        "service_id": 1,
+                                        "row_status": 99,
+                                        "created_at": null,
+                                        "updated_at": "2021-08-02T06:01:44.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "HumanResourceTemplate updated successfully.",
+                                        "started": "06 01 43",
+                                        "finished": "06 01 44"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resource-templates"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "description": " API endpoint to delete an organization unit type.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/humanResourceTemplatesId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResourceTemplate"
+                                },
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Human Resource Template deleted successfully.",
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resource-templates"
+                ]
+            }
+        },
+        "/human-resources": {
+            "get": {
+                "summary": "get list",
+                "description": " API endpoint to get the list of Human ResourcesA successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResource"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "HRM Templete1_updated",
+                                            "title_bn": "এইচআরএম টেম্পলটেম এক_আপডেটেড",
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "skills": null,
+                                            "created_at": "2021-08-03T04:01:22.000000Z",
+                                            "updated_at": "2021-08-03T04:14:19.000000Z",
+                                            "parent": "HRM Templete1_updated",
+                                            "organization_title": "AKIJ GROUP",
+                                            "organization_unit_type_title": "akij group food",
+                                            "rank_title": null,
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/human-resource-templates/1",
+                                                "update": "http://localhost:8000/api/v1/human-resource-templates/1",
+                                                "delete": "http://localhost:8000/api/v1/human-resource-templates/1"
+                                            }
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "HRM Templete1",
+                                            "title_bn": "এইচআরএম টেম্পলটেম এক",
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "skills": null,
+                                            "created_at": "2021-08-03T04:09:22.000000Z",
+                                            "updated_at": "2021-08-03T04:09:22.000000Z",
+                                            "parent": "HRM Templete1",
+                                            "organization_title": "AKIJ GROUP",
+                                            "organization_unit_type_title": "akij group food",
+                                            "rank_title": null,
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/human-resource-templates/2",
+                                                "update": "http://localhost:8000/api/v1/human-resource-templates/2",
+                                                "delete": "http://localhost:8000/api/v1/human-resource-templates/2"
+                                            }
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "HRM Templete1",
+                                            "title_bn": "এইচআরএম টেম্পলটেম এক",
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "skills": null,
+                                            "created_at": "2021-08-03T04:14:40.000000Z",
+                                            "updated_at": "2021-08-03T04:14:40.000000Z",
+                                            "parent": "HRM Templete1",
+                                            "organization_title": "AKIJ GROUP",
+                                            "organization_unit_type_title": "akij group food",
+                                            "rank_title": null,
+                                            "_links": {
+                                                "read": "http://localhost:8000/api/v1/human-resource-templates/3",
+                                                "update": "http://localhost:8000/api/v1/human-resource-templates/3",
+                                                "delete": "http://localhost:8000/api/v1/human-resource-templates/3"
+                                            }
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "05 43 29",
+                                        "finished": "05 43 29"
+                                    },
+                                    "_links": {
+                                        "paginate": [],
+                                        "search": {
+                                            "parameters": [
+                                                "title_en",
+                                                "title_bn"
+                                            ],
+                                            "_link": "http://localhost:8000/api/v1/human-resource-templates"
+                                        }
+                                    },
+                                    "_page": [],
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resources"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "description": "API endpoint to create a Human ResourceA successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/human_resource_template_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/parent_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/rank_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/display_order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/is_designation"
+                    },
+                    {
+                        "$ref": "#/components/parameters/status"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "create",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResource"
+                                },
+                                "example": {
+                                    "data": true,
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "Human Resource added successfully",
+                                        "started": "06 00 24",
+                                        "finished": "06 00 25"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resources"
+                ]
+            }
+        },
+        "/human-resources/{humanResourceId}": {
+            "get": {
+                "summary": "get one",
+                "description": "API endpoint to get a humanResource .A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/humanResourceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResource"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 5,
+                                        "organization_title_en": "AKIJ GROUP_update",
+                                        "organization_unit_title_en": "GCL_update",
+                                        "service_title_en": "Service1_update",
+                                        "row_status": 1,
+                                        "created_at": null,
+                                        "updated_at": "2021-08-01T05:47:25.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "06 00 50",
+                                        "finished": "06 00 50"
+                                    },
+                                    "_links": {
+                                        "update": "http://localhost:8000/api/v1/organization-unit-services/5",
+                                        "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resources"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "description": "API endpoint to update an existing organization unit types.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/humanResourceId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/human_resource_template_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/parent_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/rank_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/display_order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/is_designation"
+                    },
+                    {
+                        "$ref": "#/components/parameters/status"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "update",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 5,
+                                        "organization_id": 1,
+                                        "organization_unit_id": 1,
+                                        "service_id": 1,
+                                        "row_status": 99,
+                                        "created_at": null,
+                                        "updated_at": "2021-08-02T06:01:44.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Human Resource updated successfully.",
+                                        "started": "06 01 43",
+                                        "finished": "06 01 44"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resources"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "description": " API endpoint to delete an organization unit type.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/humanResourceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/humanResource"
+                                },
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Human Resource Template deleted successfully.",
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "human-resources"
                 ]
             }
         }
@@ -3928,9 +6032,337 @@
                     "title_bn",
                     "organization_id"
                 ]
+            },
+            "organizationUnitService": {
+                "type": "object",
+                "description": "Provide services of organization unit",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "description": "Organization id"
+                    },
+                    "organization_unit_id": {
+                        "type": "integer",
+                        "description": "Organization unit id"
+                    },
+                    "service_id": {
+                        "type": "integer",
+                        "description": "Service id"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    },
+                    "create_by": {
+                        "type": "integer",
+                        "description": "Creator"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "description": "Modifier"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "organization_id",
+                    "organization_unit_id",
+                    "service_id"
+                ]
+            },
+            "humanResourceTemplate": {
+                "type": "object",
+                "description": "Provide Human Resource Template",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 255
+                    },
+                    "title_bn": {
+                        "type": "string",
+                        "description": " title in Bengali",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "description": "Organization id"
+                    },
+                    "organization_unit_type_id": {
+                        "type": "integer",
+                        "description": "Organization unit type id"
+                    },
+                    "display_order": {
+                        "type": "integer",
+                        "description": "Display order.default =>0"
+                    },
+                    "is_designation": {
+                        "type": "integer",
+                        "description": "1 => designation, 0 => wings or section"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "description": "Self parent id"
+                    },
+                    "rank_id": {
+                        "type": "integer",
+                        "description": "Rank id"
+                    },
+                    "skill_ids": {
+                        "type": "string",
+                        "description": "skill ids"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "1 => occupied, 2 => vacancy ,0 => inactive",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ]
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    },
+                    "create_by": {
+                        "type": "integer",
+                        "description": "Creator"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "description": "Modifier"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "title_en",
+                    "title_bn",
+                    "organization_id",
+                    "organization_unit_type_id",
+                    "display_order"
+                ]
+            },
+            "humanResource": {
+                "type": "object",
+                "description": "Provide Human Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 255
+                    },
+                    "title_bn": {
+                        "type": "string",
+                        "description": " title in Bengali",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "human_resource_template_id": {
+                        "type": "integer",
+                        "description": "Human Resource template id"
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "description": "Organization id"
+                    },
+                    "organization_unit_id": {
+                        "type": "integer",
+                        "description": "Organization unit id"
+                    },
+                    "display_order": {
+                        "type": "integer",
+                        "description": "Display order.default =>0"
+                    },
+                    "is_designation": {
+                        "type": "integer",
+                        "description": "1 => designation, 0 => wings or section"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "description": "Self parent id"
+                    },
+                    "rank_id": {
+                        "type": "integer",
+                        "description": "Rank id"
+                    },
+                    "skill_ids": {
+                        "type": "string",
+                        "description": "skill ids"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "1 => occupied, 2 => vacancy ,0 => inactive",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ]
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    },
+                    "create_by": {
+                        "type": "integer",
+                        "description": "Creator"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "description": "Modifier"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "title_bn",
+                    "title_en",
+                    "organization_id",
+                    "organization_unit_id",
+                    "display_order",
+                    "is_designation"
+                ]
             }
         },
         "parameters": {
+            "human_resource_template_id": {
+                "name": "human_resource_template_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "humanResourceId": {
+                "name": "humanResourceId",
+                "in": "path",
+                "required": "true",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "rank_id": {
+                "name": "rank_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "status": {
+                "name": "status",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "humanResourceTemplatesId": {
+                "name": "humanResourceTemplatesId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "organization_unit_type_id": {
+                "name": "organization_unit_type_id",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "skill_ids": {
+                "name": "skill_ids",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "is_designation": {
+                "name": "is_designation",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "parent_id": {
+                "name": "parent_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "service_id": {
+                "name": "service_id",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "array"
+                }
+            },
+            "organization_unit_id": {
+                "name": "organization_unit_id",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "skillId": {
                 "name": "skillId",
                 "in": "path",
@@ -4263,6 +6695,14 @@
                 "required": true,
                 "schema": {
                     "type": "integer"
+                }
+            },
+            "organizationUnitServiceId": {
+                "name": "organizationUnitServiceId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer'"
                 }
             },
             "employee_size": {

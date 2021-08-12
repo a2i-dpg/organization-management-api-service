@@ -269,6 +269,9 @@ class HumanResourceService
                 'int',
                 'distinct'
             ],
+            'status' => [
+                'int',
+            ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
