@@ -265,11 +265,13 @@ class OrganizationService
             ],
             'contact_person_name' => [
                 'required',
-                'max: 200',
+                'max: 500',
+                'min:2'
             ],
             'contact_person_designation' => [
                 'required',
-                'max: 191',
+                'max: 300',
+                "min:2"
             ],
             'contact_person_email' => [
                 'required',
@@ -290,7 +292,8 @@ class OrganizationService
             ],
             'address' => [
                 'required',
-                'max: 600'
+                'max: 600',
+                'min:2'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

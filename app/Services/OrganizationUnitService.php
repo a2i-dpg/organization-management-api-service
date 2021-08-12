@@ -299,6 +299,11 @@ class OrganizationUnitService
                 'string',
                 'max:20',
             ],
+            'contact_person_email' => [
+                'nullable',
+                'string',
+                'regex: /\S+@\S+\.\S+/'
+            ],
             'contact_person_designation' => [
                 'nullable',
                 'string',

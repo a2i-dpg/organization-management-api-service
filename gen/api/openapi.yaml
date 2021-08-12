@@ -1,0 +1,4501 @@
+openapi: 3.0.3
+info:
+  contact: {}
+  license: {}
+  title: organization management api service
+  version: "1.0"
+servers:
+- url: http://localhost:8000/{basePath}
+  variables:
+    basePath:
+      default: api/v1
+paths:
+  /rank-types:
+    get:
+      description: API endpoint to get the list of rank types.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: CEO
+                  title_bn: সি ই ও
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T11:46:45.000000Z
+                  updated_at: 2021-07-26T11:53:31.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/rank-types/1
+                    edit: http://localhost:8000/api/v1/rank-types/1
+                    delete: http://localhost:8000/api/v1/rank-types/1
+                - id: 2
+                  title_en: CEO
+                  title_bn: সি ই ও
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T11:54:53.000000Z
+                  updated_at: 2021-07-26T11:54:53.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/rank-types/2
+                    edit: http://localhost:8000/api/v1/rank-types/2
+                    delete: http://localhost:8000/api/v1/rank-types/2
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 08 10 22
+                  finished: 08 10 22
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/rank-types
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/rankType'
+          description: get_list
+      summary: get_list
+      tags:
+      - rank-types
+      x-accepts: application/json
+    post:
+      description: API endpoint to get the list of rank types.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "201":
+          content:
+            application/json:
+              example:
+                data:
+                - title_en: CEO
+                  title_bn: সি ই ও
+                  organization_id: "1"
+                  description: chief executive officer. Main and last step taker of
+                    organization.
+                  row_status: "1"
+                  updated_at: 2021-08-11T08:41:09.000000Z
+                  created_at: 2021-08-11T08:41:09.000000Z
+                  id: 5
+                _response_status:
+                  success: true
+                  code: 201
+                  message: Rank Type added successfully
+                  started: 08 41 09
+                  finished: 08 41 09
+              schema:
+                $ref: '#/components/schemas/rankType'
+          description: create
+      summary: create
+      tags:
+      - rank-types
+      x-accepts: application/json
+  /rank-types/{rankTypeId}:
+    delete:
+      description: |2-
+         API endpoint to get the list of rank types
+
+        A successful request response will show 200 HTTP status code
+      operationId: delete
+      parameters:
+      - explode: false
+        in: path
+        name: rankTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: CEO
+                  title_bn: সি ই ও
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T11:46:45.000000Z
+                  updated_at: 2021-07-26T11:53:31.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/rank-types/1
+                    edit: http://localhost:8000/api/v1/rank-types/1
+                    delete: http://localhost:8000/api/v1/rank-types/1
+                - id: 2
+                  title_en: CEO
+                  title_bn: সি ই ও
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T11:54:53.000000Z
+                  updated_at: 2021-07-26T11:54:53.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/rank-types/2
+                    edit: http://localhost:8000/api/v1/rank-types/2
+                    delete: http://localhost:8000/api/v1/rank-types/2
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-26T11:55:20.604334Z
+                  finished: 2021-07-26T11:55:20.638670Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/rank-types
+                _page: []
+                _order: ASC
+          description: get_list
+      summary: delete
+      tags:
+      - rank-types
+      x-accepts: application/json
+    get:
+      description: API endpoint to get a specified rank type.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: rankTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Chief of General Staff
+                  title_bn: Chief of General Staff
+                  description: Ipsa similique quia tempora vitae quis deserunt voluptas
+                    atque expedita.
+                  organization_id: 4
+                  organization_title_en: Pubali Bank
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: 2021-08-10T12:19:25.000000Z
+                  updated_at: 2021-08-10T12:19:25.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 16 16 57
+                  finished: 16 16 57
+                _links:
+                  update: http://localhost:8000/api/v1/rank-types/1
+                  delete: http://localhost:8000/api/v1/rank-types/1
+              schema:
+                $ref: '#/components/schemas/rankType'
+          description: get_one
+      summary: get_one
+      tags:
+      - rank-types
+      x-accepts: application/json
+    put:
+      description: API endpoint to get a specified rank type.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Army Lieutenant
+                  title_bn: লেফট্যানেন্ট
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T11:46:45.000000Z
+                  updated_at: 2021-07-26T11:46:45.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Rank Type updated successfully
+                  started: 11 44 41
+                  finished: 11 44 42
+                _links:
+                  update: http://localhost:8000/api/v1/rank-types/1
+                  delete: http://localhost:8000/api/v1/rank-types/1
+              schema:
+                $ref: '#/components/schemas/rankType'
+          description: get_one
+      summary: update
+      tags:
+      - rank-types
+      x-accepts: application/json
+  /ranks:
+    get:
+      description: API endpoint to get the list of ranks .A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: captain
+                  title_bn: ক্যাপ্টেন
+                  grade: "1"
+                  order: 0
+                  organization_title_en: BDBL
+                  rank_type_title_en: CEO
+                  row_status: 1
+                  created_at: 2021-07-26T12:01:03.000000Z
+                  updated_at: 2021-07-26T12:01:03.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/ranks/1
+                    update: http://localhost:8000/api/v1/ranks/1
+                    delete: http://localhost:8000/api/v1/ranks/1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 16 16 57
+                  finished: 16 16 57
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/ranks
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/rank'
+          description: get_list
+      summary: get_list
+      tags:
+      - rank
+      x-accepts: application/json
+    post:
+      description: API endpoint to get the list of ranks.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: rank_type_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: grade
+        required: false
+        schema:
+          maximum: 100
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: display_order
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: captain
+                  title_bn: ক্যাপ্টেন
+                  grade: "1"
+                  order: 0
+                  organization_title_en: BDBL
+                  rank_type_title_en: CEO
+                  row_status: 1
+                  created_at: 2021-07-26T12:01:03.000000Z
+                  updated_at: 2021-07-26T12:01:03.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/ranks/1
+                    update: http://localhost:8000/api/v1/ranks/1
+                    delete: http://localhost:8000/api/v1/ranks/1
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-26T12:01:34.931110Z
+                  finished: 2021-07-26T12:01:34.975083Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/ranks
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/rank'
+          description: create
+      summary: create
+      tags:
+      - rank
+      x-accepts: application/json
+  /ranks/{rankId}:
+    delete:
+      description: ' API endpoint to get a rank.A successful request response will
+        show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: rankId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: captain
+                  title_bn: ক্যাপ্টেন
+                  grade: "1"
+                  order: 0
+                  organization_title_en: BDBL
+                  rank_type_title_en: CEO
+                  row_status: 1
+                  created_at: 2021-07-26T12:01:03.000000Z
+                  updated_at: 2021-07-26T12:01:03.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-26T12:01:45.440830Z
+                  finished: 2021-07-26T12:01:45.473154Z
+                _links:
+                  update: http://localhost:8000/api/v1/ranks/1
+                  delete: http://localhost:8000/api/v1/ranks/1
+              schema:
+                $ref: '#/components/schemas/rank'
+          description: delete
+      summary: delete
+      tags:
+      - rank
+      x-accepts: application/json
+    get:
+      description: API endpoint to get a rank.A successful request response will show
+        200 HTTP status code
+      operationId: get_one1
+      parameters:
+      - explode: false
+        in: path
+        name: rankId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: captain
+                  title_bn: ক্যাপ্টেন
+                  grade: "1"
+                  order: 0
+                  organization_title_en: BDBL
+                  rank_type_title_en: CEO
+                  row_status: 1
+                  created_at: 2021-07-26T12:01:03.000000Z
+                  updated_at: 2021-07-26T12:01:03.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-26T12:01:45.440830Z
+                  finished: 2021-07-26T12:01:45.473154Z
+                _links:
+                  update: http://localhost:8000/api/v1/ranks/1
+                  delete: http://localhost:8000/api/v1/ranks/1
+              schema:
+                $ref: '#/components/schemas/rank'
+          description: get_one
+      summary: get_one
+      tags:
+      - rank
+      x-accepts: application/json
+    put:
+      description: API endpoint to get a rank. A successful request response will
+        show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: rank_type_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: grade
+        required: false
+        schema:
+          maximum: 100
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: display_order
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: captain
+                  title_bn: ক্যাপ্টেন
+                  grade: "1"
+                  order: 0
+                  organization_title_en: BDBL
+                  rank_type_title_en: CEO
+                  row_status: 1
+                  created_at: 2021-07-26T12:01:03.000000Z
+                  updated_at: 2021-07-26T12:01:03.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-26T12:01:45.440830Z
+                  finished: 2021-07-26T12:01:45.473154Z
+                _links:
+                  update: http://localhost:8000/api/v1/ranks/1
+                  delete: http://localhost:8000/api/v1/ranks/1
+              schema:
+                $ref: '#/components/schemas/rankType'
+          description: update
+      summary: update
+      tags:
+      - rank
+      x-accepts: application/json
+  /organization-types:
+    get:
+      description: ' API endpoint to get the list organization types.A successful
+        request response will show 200 HTTP status code'
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Goverment org
+                  title_bn: সরকারি
+                  is_government: 1
+                  row_status: 1
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organization-types/1
+                    update: http://127.0.0.1:8000/api/v1/organization-types/1
+                    delete: http://127.0.0.1:8000/api/v1/organization-types/1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 17 00 54
+                  finished: 17 00 54
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/organization-types
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/organizationType'
+          description: get_list
+      summary: get_list
+      tags:
+      - organization-types
+      x-accepts: application/json
+    post:
+      description: API endpoint to create an organization type.A successful request
+        response will show 201 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: is_government
+        required: true
+        schema:
+          type: boolean
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "201":
+          content:
+            application/json:
+              example:
+                data:
+                  title_en: Private bank 2
+                  title_bn: বেসরকারি ব্যাংক
+                  is_government: 1
+                  row_status: 1
+                  updated_at: 2021-07-26T09:53:48.000000Z
+                  created_at: 2021-07-26T09:53:48.000000Z
+                  id: 1
+                _response_status:
+                  success: true
+                  code: 201
+                  message: Organization type added successfully.
+                  started: 2021-07-26T09:53:48.012764Z
+                  finished: 2021-07-26T09:53:48.061748Z
+              schema:
+                $ref: '#/components/schemas/organizationType'
+          description: create
+      summary: create
+      tags:
+      - organization-types
+      x-accepts: application/json
+  /organization-types/{organizationTypeId}:
+    delete:
+      description: API endpoint to delete an organization type.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Organization type deleted successfully.
+                  started: 2021-07-26T10:02:28.720901Z
+                  finished: 2021-07-26T10:02:28.771021Z
+              schema: {}
+          description: delete
+      summary: delete
+      tags:
+      - organization-types
+      x-accepts: application/json
+    get:
+      description: ' API endpoint to get an organization type by organization id.A
+        successful request response will show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: organizationTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Goverment org
+                  title_bn: সরকারি
+                  is_government: 1
+                  row_status: 1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T10:01:28.555561Z
+                  finished: 2021-07-26T10:01:28.585407Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organization-types/1
+                  delete: http://127.0.0.1:8000/api/v1/organization-types/1
+          description: get_one
+      summary: get_one
+      tags:
+      - organization-types
+      x-accepts: application/json
+    put:
+      description: API endpoint to update an organization type.A successful request
+        response will show 201 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: is_government
+        required: true
+        schema:
+          type: boolean
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200": {}
+        "201":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Goverment org
+                  title_bn: সরকারি
+                  is_government: 1
+                  row_status: 1
+                  created_at: 2021-07-26T09:53:48.000000Z
+                  updated_at: 2021-07-26T09:58:41.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: organization Type updated successfully.
+                  started: 2021-07-26T09:58:49.376044Z
+                  finished: 2021-07-26T09:58:49.419228Z
+          description: update
+      summary: update
+      tags:
+      - organization-types
+      x-accepts: application/json
+  /organization:
+    get:
+      description: API endpoint to get the list of organizations.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: abc
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: abc@gmail.com
+                  contact_person_designation: coordinator2
+                  description: Akij is one of the largest company in bangladesh
+                  row_status: 1
+                  organization_types_title: Public Bank
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organizations/1
+                    update: http://127.0.0.1:8000/api/v1/organizations/1
+                    delete: http://127.0.0.1:8000/api/v1/organizations/1
+                - id: 8
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup1.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: sayed ahmed
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: hr.akij@gmail.com
+                  contact_person_designation: HR
+                  description: null
+                  row_status: 99
+                  organization_types_title: Public Bank
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organizations/8
+                    update: http://127.0.0.1:8000/api/v1/organizations/8
+                    delete: http://127.0.0.1:8000/api/v1/organizations/8
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T09:06:28.206729Z
+                  finished: 2021-07-27T09:06:28.239348Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/organizations
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/organization'
+          description: get list
+      summary: get list
+      tags:
+      - organization
+      x-accepts: application/json
+    post:
+      description: API endpoint to create a organization.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_type_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: loc_division_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_district_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_upazila_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: address
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: fax_no
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_name
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_designation
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: logo
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: domain
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: abc
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: abc@gmail.com
+                  contact_person_designation: coordinator2
+                  description: Akij is one of the largest company in bangladesh
+                  row_status: 1
+                  organization_types_title: Public Bank
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organizations/1
+                    update: http://127.0.0.1:8000/api/v1/organizations/1
+                    delete: http://127.0.0.1:8000/api/v1/organizations/1
+                - id: 8
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup1.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: sayed ahmed
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: hr.akij@gmail.com
+                  contact_person_designation: HR
+                  description: null
+                  row_status: 1
+                  organization_types_title: Public Bank
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organizations/8
+                    update: http://127.0.0.1:8000/api/v1/organizations/8
+                    delete: http://127.0.0.1:8000/api/v1/organizations/8
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-27T09:06:28.206729Z
+                  finished: 2021-07-27T09:06:28.239348Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/organizations
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/organization'
+          description: create
+      summary: create
+      tags:
+      - organization
+      x-accepts: application/json
+  /organizations/{organizationId}:
+    delete:
+      description: |2-
+         API endpoint to delete a specified organization
+
+        A successful request response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: abc
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: abc@gmail.com
+                  contact_person_designation: coordinator2
+                  description: Akij is one of the largest company in bangladesh
+                  row_status: 1
+                  organization_types_title: Public Bank
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Organization deleted successfully.
+                  started: 2021-07-27T09:08:55.138201Z
+                  finished: 2021-07-27T09:08:55.176534Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organizations/1
+                  delete: http://127.0.0.1:8000/api/v1/organizations/1
+              schema:
+                $ref: '#/components/schemas/organization'
+          description: delete
+      summary: delete
+      tags:
+      - organization
+      x-accepts: application/json
+    get:
+      description: API endpoint to get a specified organization.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: abc
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: abc@gmail.com
+                  contact_person_designation: coordinator2
+                  description: Akij is one of the largest company in bangladesh
+                  row_status: 1
+                  organization_types_title: Public Bank
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job finished successfully.
+                  started: 2021-07-27T09:08:55.138201Z
+                  finished: 2021-07-27T09:08:55.176534Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organizations/1
+                  delete: http://127.0.0.1:8000/api/v1/organizations/1
+          description: get one
+      summary: get one
+      tags:
+      - organization
+      x-accepts: application/json
+    put:
+      description: |-
+        ###### API endpoint to get a specified organization
+
+        A successful request response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: organization_type_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: loc_division_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_district_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_upazila_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: address
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: fax_no
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_name
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_designation
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: logo
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: domain
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: AKIJ GROUP
+                  title_bn: AKIJ GROUP
+                  domain: http://www.akijgroup.com
+                  fax_no: ""
+                  mobile: "01758393749"
+                  email: akij.group@gmail.com
+                  contact_person_name: abc
+                  contact_person_mobile: "01758393749"
+                  contact_person_email: abc@gmail.com
+                  contact_person_designation: coordinator2
+                  description: Akij is one of the largest company in bangladesh
+                  row_status: 1
+                  organization_types_title: Public Bank
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Organization updated successfully
+                  started: 2021-07-27T09:08:55.138201Z
+                  finished: 2021-07-27T09:08:55.176534Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organizations/1
+                  delete: http://127.0.0.1:8000/api/v1/organizations/1
+              schema:
+                $ref: '#/components/schemas/organization'
+          description: update
+      summary: update
+      tags:
+      - organization
+      x-accepts: application/json
+  /job-sectors:
+    get:
+      description: API endpoint to get the list of job sectors.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Charity and voluntary work
+                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  row_status: 1
+                - id: 2
+                  title_en: software industry
+                  title_bn: 'সফটওয়্যার ইন্দুস্ত্র্য '
+                  row_status: 1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T12:11:32.746156Z
+                  finished: 2021-07-26T12:11:32.792900Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/job-sectors
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/jobSector'
+          description: get_list
+      summary: get_list
+      tags:
+      - JobSectors
+      x-accepts: application/json
+    post:
+      description: API endpoint to create of job sectors.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Charity and voluntary work
+                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  row_status: 1
+                - id: 2
+                  title_en: software industry
+                  title_bn: 'সফটওয়্যার ইন্দুস্ত্র্য '
+                  row_status: 1
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job Sector added successfully.
+                  started: 2021-07-26T12:11:32.746156Z
+                  finished: 2021-07-26T12:11:32.792900Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/job-sectors
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/jobSector'
+          description: create
+      summary: create
+      tags:
+      - JobSectors
+      x-accepts: application/json
+  /job-sectors/{jobSectorId}:
+    delete:
+      description: ' API endpoint to get a specified job sector.A successful request
+        response will show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: jobSectorId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Charity and voluntary work
+                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  row_status: 1
+                _response_status:
+                  success: true
+                  code: 200
+                  message: JobSector deleted successfully.
+                  started: 2021-07-26T12:11:43.477363Z
+                  finished: 2021-07-26T12:11:43.504253Z
+                _links:
+                  update: http://localhost:8000/api/v1/job-sectors/1
+                  delete: http://localhost:8000/api/v1/job-sectors/1
+              schema:
+                $ref: '#/components/schemas/jobSector'
+          description: delete
+      summary: delete
+      tags:
+      - JobSectors
+      x-accepts: application/json
+    get:
+      description: API endpoint to get a specified job sector.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: jobSectorId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Charity and voluntary work
+                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  row_status: 1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T12:11:43.477363Z
+                  finished: 2021-07-26T12:11:43.504253Z
+                _links:
+                  update: http://localhost:8000/api/v1/job-sectors/1
+                  delete: http://localhost:8000/api/v1/job-sectors/1
+              schema:
+                $ref: '#/components/schemas/jobSector'
+          description: get_one
+      summary: get_one
+      tags:
+      - JobSectors
+      x-accepts: application/json
+    put:
+      description: API endpoint to get a specified job sector.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: jobSectorId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Charity and voluntary work
+                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  row_status: 1
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Job Sector updated successfully.
+                  started: 2021-07-26T12:11:43.477363Z
+                  finished: 2021-07-26T12:11:43.504253Z
+                _links:
+                  update: http://localhost:8000/api/v1/job-sectors/1
+                  delete: http://localhost:8000/api/v1/job-sectors/1
+              schema:
+                $ref: '#/components/schemas/jobSector'
+          description: update
+      summary: update
+      tags:
+      - JobSectors
+      x-accepts: application/json
+  /occupations:
+    get:
+      description: API endpoint to get the list of occupations.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: swe
+                  title_bn: swe
+                  row_status: 1
+                  job_sectors_title: Charity and voluntary work2
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T12:26:43.765538Z
+                  finished: 2021-07-26T12:26:43.799644Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/occupations
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/occupation'
+          description: get_list
+      summary: get_list
+      tags:
+      - Occupation
+      x-accepts: application/json
+    post:
+      description: API endpoint to get the list of occupations.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: job_sector_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: swe
+                  title_bn: swe
+                  row_status: 1
+                  job_sectors_title: Charity and voluntary work2
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Occupation added successfully.
+                  started: 2021-07-26T12:26:43.765538Z
+                  finished: 2021-07-26T12:26:43.799644Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/occupations
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/occupation'
+          description: create
+      summary: create
+      tags:
+      - Occupation
+      x-accepts: application/json
+  /occupations/{occupationId}:
+    delete:
+      description: ' API endpoint to delete an occupations.A successful request response
+        will show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: occupationId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: swe
+                  title_bn: swe
+                  row_status: 1
+                  job_sectors_title: Charity and voluntary work2
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Occupation deleted successfully.
+                  started: 2021-07-26T12:27:10.730020Z
+                  finished: 2021-07-26T12:27:10.774465Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/occupations/1
+                  delete: http://127.0.0.1:8000/api/v1/occupations/1
+              schema:
+                $ref: '#/components/schemas/occupation'
+          description: delete
+      summary: delete
+      tags:
+      - Occupation
+      x-accepts: application/json
+    get:
+      description: API endpoint to get an occupations.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: occupationId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: swe
+                  title_bn: swe
+                  row_status: 1
+                  job_sectors_title: Charity and voluntary work2
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T12:27:10.730020Z
+                  finished: 2021-07-26T12:27:10.774465Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/occupations/1
+                  delete: http://127.0.0.1:8000/api/v1/occupations/1
+              schema:
+                $ref: '#/components/schemas/occupation'
+          description: get_one
+      summary: get_one
+      tags:
+      - Occupation
+      x-accepts: application/json
+    put:
+      description: API endpoint to update an occupations.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: occupationId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: job_sector_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: swe
+                  title_bn: swe
+                  row_status: 1
+                  job_sectors_title: Charity and voluntary work2
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Occupation updated  successfully.
+                  started: 2021-07-26T12:27:10.730020Z
+                  finished: 2021-07-26T12:27:10.774465Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/occupations/1
+                  delete: http://127.0.0.1:8000/api/v1/occupations/1
+              schema:
+                $ref: '#/components/schemas/occupation'
+          description: update
+      summary: update
+      tags:
+      - Occupation
+      x-accepts: application/json
+  /skills:
+    get:
+      description: API endpoint to get the list of Skills.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:08:11.000000Z
+                  updated_at: 2021-07-26T12:08:11.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/skills/1
+                    update: http://localhost:8000/api/v1/skills/1
+                    delete: http://localhost:8000/api/v1/skills/1
+                - id: 2
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-27T12:27:37.000000Z
+                  updated_at: 2021-07-27T12:27:37.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/skills/2
+                    update: http://localhost:8000/api/v1/skills/2
+                    delete: http://localhost:8000/api/v1/skills/2
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T12:36:28.530531Z
+                  finished: 2021-07-27T12:36:28.605161Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/skills
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/skill'
+          description: get_list
+      summary: get_list
+      tags:
+      - skills
+      x-accepts: application/json
+    post:
+      description: API endpoint to create a Skill.A successful request response will
+        show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:08:11.000000Z
+                  updated_at: 2021-07-26T12:08:11.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/skills/1
+                    update: http://localhost:8000/api/v1/skills/1
+                    delete: http://localhost:8000/api/v1/skills/1
+                - id: 2
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-27T12:27:37.000000Z
+                  updated_at: 2021-07-27T12:27:37.000000Z
+                  _links:
+                    read: http://localhost:8000/api/v1/skills/2
+                    update: http://localhost:8000/api/v1/skills/2
+                    delete: http://localhost:8000/api/v1/skills/2
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Skill added successfully.
+                  started: 2021-07-27T12:36:28.530531Z
+                  finished: 2021-07-27T12:36:28.605161Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://localhost:8000/api/v1/skills
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/skill'
+          description: create
+      summary: create
+      tags:
+      - skills
+      x-accepts: application/json
+  /skills/{skillId}:
+    delete:
+      description: API endpoint to delete a specified Skill.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: skillId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:08:11.000000Z
+                  updated_at: 2021-07-26T12:08:11.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Skill deleted successfully.
+                  started: 2021-07-27T12:36:39.845979Z
+                  finished: 2021-07-27T12:36:39.907373Z
+                _links:
+                  update: http://localhost:8000/api/v1/skills/1
+                  delete: http://localhost:8000/api/v1/skills/1
+              schema:
+                $ref: '#/components/schemas/skill'
+          description: delete
+      summary: delete
+      tags:
+      - skills
+      x-accepts: application/json
+    get:
+      description: API endpoint to get a specified Skill.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: skillId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:08:11.000000Z
+                  updated_at: 2021-07-26T12:08:11.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T12:36:39.845979Z
+                  finished: 2021-07-27T12:36:39.907373Z
+                _links:
+                  update: http://localhost:8000/api/v1/skills/1
+                  delete: http://localhost:8000/api/v1/skills/1
+              schema:
+                $ref: '#/components/schemas/skill'
+          description: get_one
+      summary: get_one
+      tags:
+      - skills
+      x-accepts: application/json
+    put:
+      description: API endpoint to get a specified Skill. A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: description
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Corporate management
+                  title_bn: কর্পোরেট ব্যবস্থাপনা
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:08:11.000000Z
+                  updated_at: 2021-07-26T12:08:11.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: skill updated successfully.
+                  started: 2021-07-27T12:36:39.845979Z
+                  finished: 2021-07-27T12:36:39.907373Z
+                _links:
+                  update: http://localhost:8000/api/v1/skills/1
+                  delete: http://localhost:8000/api/v1/skills/1
+              schema:
+                $ref: '#/components/schemas/skill'
+          description: update
+      summary: update
+      tags:
+      - skills
+      x-accepts: application/json
+  /organization-unit-types:
+    get:
+      description: API endpoint to get the list of organization unit types.A successful
+        request response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Mobile Banking
+                  title_bn: মোবাইল ব্যাংকিং
+                  created_at: null
+                  updated_at: null
+                  row_status: 1
+                  organization_name: City Group
+                - id: 2
+                  title_en: Payment Method
+                  title_bn: রকেট মোবাইল ব্যাংকিং
+                  created_at: null
+                  updated_at: null
+                  row_status: 1
+                  organization_name: BRTC
+                - id: 3
+                  title_en: akij group food
+                  title_bn: akij group food
+                  created_at: 2021-07-26T10:49:24.000000Z
+                  updated_at: 2021-07-26T10:49:24.000000Z
+                  row_status: 1
+                  organization_name: BDBL
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T10:49:47.929460Z
+                  finished: 2021-07-26T10:49:47.971113Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/organization-unit-types
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/organizationUnitType'
+          description: get list
+      summary: get list
+      tags:
+      - organization-unit-types
+      x-accepts: application/json
+    post:
+      description: API endpoint to create a organization unit types.A successful request
+        response will show 201 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: successful
+        "201":
+          content:
+            application/json:
+              example:
+                data:
+                  title_en: akij group food
+                  title_bn: akij group food
+                  organization_id: "1"
+                  updated_at: 2021-07-26T10:49:24.000000Z
+                  created_at: 2021-07-26T10:49:24.000000Z
+                  id: 3
+                _response_status:
+                  success: true
+                  code: 201
+                  message: organizationUnitType added successfully.
+                  started: 2021-07-26T10:49:24.486782Z
+                  finished: 2021-07-26T10:49:24.548578Z
+              schema:
+                $ref: '#/components/schemas/organizationUnitType'
+          description: create
+      summary: create
+      tags:
+      - organization-unit-types
+      x-accepts: application/json
+  /organization-unit-types/{organizationUnitTypeId}:
+    delete:
+      description: API endpoint to delete an organization unit type.A successful request
+        response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationUnitTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                _response_status:
+                  success: true
+                  code: 200
+                  message: organizationUnitType deleted successfully.
+                  started: 2021-07-26T10:51:12.047999Z
+                  finished: 2021-07-26T10:51:12.077788Z
+              schema:
+                $ref: '#/components/schemas/organizationType'
+          description: delete
+      summary: delete
+      tags:
+      - organization-unit-types
+      x-accepts: application/json
+    get:
+      description: ' API endpoint to get a organization unit type. A successful request
+        response will show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: organizationUnitTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 3
+                  title_en: akij group food
+                  title_bn: akij group food
+                  created_at: 2021-07-26T10:49:24.000000Z
+                  updated_at: 2021-07-26T10:49:24.000000Z
+                  row_status: 1
+                  organization_name: BDBL
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-26T10:50:06.424905Z
+                  finished: 2021-07-26T10:50:06.450560Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organization-unit-types/3
+                  delete: http://127.0.0.1:8000/api/v1/organization-unit-types/3
+              schema:
+                $ref: '#/components/schemas/organizationUnitType'
+          description: get one
+      summary: get one
+      tags:
+      - organization-unit-types
+      x-accepts: application/json
+    put:
+      description: ' API endpoint to update an existing organization unit types.A
+        successful request response will show 201 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: organizationUnitTypeId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "201":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 3
+                  organization_id: "1"
+                  title_en: akij group food
+                  title_bn: আকিজ গ্রপ ফুদ
+                  row_status: "1"
+                  created_at: 2021-07-26T10:49:24.000000Z
+                  updated_at: 2021-07-26T10:59:55.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: OrganizationUnitType updated successfully.
+                  started: 2021-07-26T10:59:55.072110Z
+                  finished: 2021-07-26T10:59:55.122564Z
+              schema:
+                $ref: '#/components/parameters/organizationUnitTypeId'
+          description: update
+      summary: update
+      tags:
+      - organization-unit-types
+      x-accepts: application/json
+  /organization-units:
+    get:
+      description: API endpoint to get the list of organization Units. A successful
+        request response will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: asdf
+                  title_bn: বাংলা
+                  address: null
+                  mobile: null
+                  email: null
+                  fax_no: null
+                  contact_person_name: null
+                  contact_person_mobile: null
+                  contact_person_email: null
+                  contact_person_designation: null
+                  employee_size: 0
+                  row_status: 1
+                  created_at: 2021-07-27T07:15:15.000000Z
+                  updated_at: 2021-07-27T07:15:15.000000Z
+                  organization_name: BDBL
+                  organization_unit_name: Mobile Banking
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organization-units/1
+                    update: http://127.0.0.1:8000/api/v1/organization-units/1
+                    delete: http://127.0.0.1:8000/api/v1/organization-units/1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T07:15:19.226063Z
+                  finished: 2021-07-27T07:15:19.267457Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/organization-units
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/organizationUnit'
+          description: get list
+      summary: get list
+      tags:
+      - organization-units
+      x-accepts: application/json
+    post:
+      description: ' API endpoint to create organization Unit.A successful request
+        response will show 200 HTTP status code'
+      parameters:
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: organization_type_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_division_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_district_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_upazila_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: address
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: fax_no
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_name
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_designation
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: employee_size
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: asdf
+                  title_bn: বাংলা
+                  address: null
+                  mobile: null
+                  email: null
+                  fax_no: null
+                  contact_person_name: null
+                  contact_person_mobile: null
+                  contact_person_email: null
+                  contact_person_designation: null
+                  employee_size: 0
+                  row_status: 1
+                  created_at: 2021-07-27T07:15:15.000000Z
+                  updated_at: 2021-07-27T07:15:15.000000Z
+                  organization_name: BDBL
+                  organization_unit_name: Mobile Banking
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/organization-units/1
+                    update: http://127.0.0.1:8000/api/v1/organization-units/1
+                    delete: http://127.0.0.1:8000/api/v1/organization-units/1
+                _response_status:
+                  success: true
+                  code: 200
+                  message: organizationUnit created successfully.
+                  started: 2021-07-27T07:15:19.226063Z
+                  finished: 2021-07-27T07:15:19.267457Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/organization-units
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/organizationUnit'
+          description: create
+      summary: create
+      tags:
+      - organization-units
+      x-accepts: application/json
+  /organization-units/{organizationUnitId}:
+    delete:
+      description: API endpoint to delete a specified Organization  Unit.A successful
+        request response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationUnitId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: asdf
+                  title_bn: বাংলা
+                  address: null
+                  mobile: null
+                  email: null
+                  fax_no: null
+                  contact_person_name: null
+                  contact_person_mobile: null
+                  contact_person_email: null
+                  contact_person_designation: null
+                  employee_size: 0
+                  row_status: 1
+                  created_at: 2021-07-27T07:15:15.000000Z
+                  updated_at: 2021-07-27T07:15:15.000000Z
+                  organization_name: BDBL
+                  organization_unit_name: Mobile Banking
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Organization Unit deleted successfully.
+                  started: 2021-07-27T07:15:50.969239Z
+                  finished: 2021-07-27T07:15:51.008907Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organization-units/1
+                  delete: http://127.0.0.1:8000/api/v1/organization-units/1
+              schema:
+                $ref: '#/components/parameters/organizationUnitId'
+          description: delete
+      summary: delete
+      tags:
+      - organization-units
+      x-accepts: application/json
+    get:
+      description: ' API endpoint to get a specified Organization  Unit.A successful
+        request response will show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: organizationUnitId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: asdf
+                  title_bn: বাংলা
+                  address: null
+                  mobile: null
+                  email: null
+                  fax_no: null
+                  contact_person_name: null
+                  contact_person_mobile: null
+                  contact_person_email: null
+                  contact_person_designation: null
+                  employee_size: 0
+                  row_status: 1
+                  created_at: 2021-07-27T07:15:15.000000Z
+                  updated_at: 2021-07-27T07:15:15.000000Z
+                  organization_name: BDBL
+                  organization_unit_name: Mobile Banking
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T07:15:50.969239Z
+                  finished: 2021-07-27T07:15:51.008907Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organization-units/1
+                  delete: http://127.0.0.1:8000/api/v1/organization-units/1
+              schema:
+                $ref: '#/components/schemas/organizationUnit'
+          description: get one
+      summary: get one
+      tags:
+      - organization-units
+      x-accepts: application/json
+    put:
+      description: API endpoint to update a specified Organization  Unit. A successful
+        request response will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: organizationUnitId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: organization_type_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_division_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_district_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: loc_upazila_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: address
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: fax_no
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_name
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_mobile
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_email
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: contact_person_designation
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: employee_size
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: asdf
+                  title_bn: বাংলা
+                  address: null
+                  mobile: null
+                  email: null
+                  fax_no: null
+                  contact_person_name: null
+                  contact_person_mobile: null
+                  contact_person_email: null
+                  contact_person_designation: null
+                  employee_size: 0
+                  row_status: 1
+                  created_at: 2021-07-27T07:15:15.000000Z
+                  updated_at: 2021-07-27T07:15:15.000000Z
+                  organization_name: BDBL
+                  organization_unit_name: Mobile Banking
+                _response_status:
+                  success: true
+                  code: 200
+                  message: OrganizationUnit updated successfully.
+                  started: 2021-07-27T07:15:50.969239Z
+                  finished: 2021-07-27T07:15:51.008907Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/organization-units/1
+                  delete: http://127.0.0.1:8000/api/v1/organization-units/1
+              schema:
+                $ref: '#/components/schemas/organizationUnit'
+          description: get one
+      summary: get one
+      tags:
+      - organization-units
+      x-accepts: application/json
+  /services:
+    get:
+      description: API endpoint to get the list of services.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Service1_update
+                  title_bn: Service1_bn_update
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:02:05.000000Z
+                  updated_at: 2021-07-26T12:02:33.000000Z
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/services/1
+                    update: http://127.0.0.1:8000/api/v1/services/1
+                    delete: http://127.0.0.1:8000/api/v1/services/1
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T04:57:59.799854Z
+                  finished: 2021-07-27T04:58:02.250532Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/services
+                _page: []
+                _order: ASC
+              schema:
+                $ref: '#/components/schemas/service'
+          description: get list
+      summary: get list
+      tags:
+      - services
+      x-accepts: application/json
+    post:
+      description: API endpoint to create a service.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 1
+                  title_en: Service1_update
+                  title_bn: Service1_bn_update
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:02:05.000000Z
+                  updated_at: 2021-07-26T12:02:33.000000Z
+                  _links:
+                    read: http://127.0.0.1:8000/api/v1/services/1
+                    update: http://127.0.0.1:8000/api/v1/services/1
+                    delete: http://127.0.0.1:8000/api/v1/services/1
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Service added successfully.
+                  started: 2021-07-27T04:57:59.799854Z
+                  finished: 2021-07-27T04:58:02.250532Z
+                _links:
+                  paginate: []
+                  search:
+                    parameters:
+                    - title_en
+                    - title_bn
+                    _link: http://127.0.0.1:8000/api/v1/services
+                _page: []
+                _order: ASC
+          description: create
+      summary: create
+      tags:
+      - services
+      x-accepts: application/json
+  /services/{serviceId}:
+    delete:
+      description: API endpoint to get a specified service.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Service1_update
+                  title_bn: Service1_bn_update
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:02:05.000000Z
+                  updated_at: 2021-07-26T12:02:33.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: service deleted successfully
+                  started: 2021-07-27T04:58:41.782168Z
+                  finished: 2021-07-27T04:58:41.823333Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/services/1
+                  delete: http://127.0.0.1:8000/api/v1/services/1
+              schema:
+                $ref: '#/components/schemas/service'
+          description: delete
+      summary: delete
+      tags:
+      - services
+      x-accepts: application/json
+    get:
+      description: API endpoint to get a specified service.A successful request response
+        will show 200 HTTP status code
+      parameters:
+      - explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Service1_update
+                  title_bn: Service1_bn_update
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:02:05.000000Z
+                  updated_at: 2021-07-26T12:02:33.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  started: 2021-07-27T04:58:41.782168Z
+                  finished: 2021-07-27T04:58:41.823333Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/services/1
+                  delete: http://127.0.0.1:8000/api/v1/services/1
+              schema:
+                $ref: '#/components/schemas/service'
+          description: get one
+      summary: get one
+      tags:
+      - services
+      x-accepts: application/json
+    put:
+      description: '###### API endpoint to update the specified service.A successful
+        request response will show 200 HTTP status code'
+      parameters:
+      - explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: organization_id
+        required: true
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: title_en
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: title_bn
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: row_status
+        required: false
+        schema:
+          enum:
+          - 1
+          - 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 1
+                  title_en: Service1_update
+                  title_bn: Service1_bn_update
+                  organization_title_en: BDBL
+                  row_status: 1
+                  created_at: 2021-07-26T12:02:05.000000Z
+                  updated_at: 2021-07-26T12:02:33.000000Z
+                _response_status:
+                  success: true
+                  code: 200
+                  message: service updated successfully.
+                  started: 2021-07-27T04:58:41.782168Z
+                  finished: 2021-07-27T04:58:41.823333Z
+                _links:
+                  update: http://127.0.0.1:8000/api/v1/services/1
+                  delete: http://127.0.0.1:8000/api/v1/services/1
+              schema:
+                $ref: '#/components/schemas/service'
+          description: update
+      summary: update
+      tags:
+      - services
+      x-accepts: application/json
+components:
+  parameters:
+    skillId:
+      explode: false
+      in: path
+      name: skillId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    serviceId:
+      explode: false
+      in: path
+      name: serviceId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    occupationId:
+      explode: false
+      in: path
+      name: occupationId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    job_sector_id:
+      explode: true
+      in: query
+      name: job_sector_id
+      required: true
+      schema:
+        type: integer
+      style: form
+    rankId:
+      explode: false
+      in: path
+      name: rankId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    page:
+      explode: true
+      in: query
+      name: page
+      required: false
+      schema:
+        type: integer
+      style: form
+    order:
+      explode: true
+      in: query
+      name: order
+      required: false
+      schema:
+        enum:
+        - asc
+        - desc
+        type: string
+      style: form
+    title_en:
+      explode: true
+      in: query
+      name: title_en
+      required: true
+      schema:
+        type: string
+      style: form
+    title_bn:
+      explode: true
+      in: query
+      name: title_bn
+      required: true
+      schema:
+        type: string
+      style: form
+    row_status:
+      explode: true
+      in: query
+      name: row_status
+      required: false
+      schema:
+        enum:
+        - 1
+        - 0
+        type: integer
+      style: form
+    title_bn_optional:
+      explode: true
+      in: query
+      name: title_bn
+      required: false
+      schema:
+        type: string
+      style: form
+    title_en_optional:
+      explode: true
+      in: query
+      name: title_en
+      required: false
+      schema:
+        type: string
+      style: form
+    rank_type_id:
+      explode: true
+      in: query
+      name: rank_type_id
+      required: true
+      schema:
+        type: integer
+      style: form
+    grade:
+      explode: true
+      in: query
+      name: grade
+      required: false
+      schema:
+        maximum: 100
+        type: string
+      style: form
+    display_order:
+      explode: true
+      in: query
+      name: display_order
+      required: false
+      schema:
+        type: integer
+      style: form
+    rankTypeId:
+      explode: false
+      in: path
+      name: rankTypeId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    organization_id:
+      explode: true
+      in: query
+      name: organization_id
+      required: true
+      schema:
+        type: integer
+      style: form
+    organization_id_optional:
+      explode: true
+      in: query
+      name: organization_id
+      required: false
+      schema:
+        type: integer
+      style: form
+    is_government:
+      explode: true
+      in: query
+      name: is_government
+      required: true
+      schema:
+        type: boolean
+      style: form
+    organizationTypeId:
+      explode: false
+      in: path
+      name: organizationTypeId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    description:
+      explode: true
+      in: query
+      name: description
+      required: false
+      schema:
+        type: string
+      style: form
+    jobSectorId:
+      explode: false
+      in: path
+      name: jobSectorId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    organization_type_id:
+      explode: true
+      in: query
+      name: organization_type_id
+      required: true
+      schema:
+        type: integer
+      style: form
+    loc_division_id:
+      explode: true
+      in: query
+      name: loc_division_id
+      required: false
+      schema:
+        type: integer
+      style: form
+    loc_district_id:
+      explode: true
+      in: query
+      name: loc_district_id
+      required: false
+      schema:
+        type: integer
+      style: form
+    loc_upazila_id:
+      explode: true
+      in: query
+      name: loc_upazila_id
+      required: false
+      schema:
+        type: integer
+      style: form
+    address:
+      explode: true
+      in: query
+      name: address
+      required: false
+      schema:
+        type: string
+      style: form
+    mobile:
+      explode: true
+      in: query
+      name: mobile
+      required: true
+      schema:
+        type: string
+      style: form
+    domain:
+      explode: true
+      in: query
+      name: domain
+      required: true
+      schema:
+        type: string
+      style: form
+    fax_no:
+      explode: true
+      in: query
+      name: fax_no
+      required: false
+      schema:
+        type: string
+      style: form
+    contact_person_mobile:
+      explode: true
+      in: query
+      name: contact_person_mobile
+      required: true
+      schema:
+        type: string
+      style: form
+    contact_person_name:
+      explode: true
+      in: query
+      name: contact_person_name
+      required: true
+      schema:
+        type: string
+      style: form
+    contact_person_designation:
+      explode: true
+      in: query
+      name: contact_person_designation
+      required: true
+      schema:
+        type: string
+      style: form
+    contact_person_email:
+      explode: true
+      in: query
+      name: contact_person_email
+      required: true
+      schema:
+        type: string
+      style: form
+    email:
+      explode: true
+      in: query
+      name: email
+      required: true
+      schema:
+        type: string
+      style: form
+    logo:
+      explode: true
+      in: query
+      name: logo
+      required: true
+      schema:
+        type: string
+      style: form
+    logo_optional:
+      explode: true
+      in: query
+      name: logo
+      required: false
+      schema:
+        type: string
+      style: form
+    organizationId:
+      explode: false
+      in: path
+      name: organizationId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    organizationUnitTypeId:
+      explode: false
+      in: path
+      name: organizationUnitTypeId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    organizationUnitId:
+      explode: false
+      in: path
+      name: organizationUnitId
+      required: true
+      schema:
+        type: integer
+      style: simple
+    employee_size:
+      explode: true
+      in: query
+      name: employee_size
+      required: true
+      schema:
+        type: integer
+      style: form
+  schemas:
+    organizationType:
+      description: Organization types
+      example:
+        create_by: 1
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_by: 5
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        is_government: true
+        row_status: 6
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: title in Bengali
+          maxLength: 500
+          minLength: 2
+          type: string
+        is_government:
+          description: Organization status . 0 => non govt, 1 => govt
+          type: boolean
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - is_government
+      - title_bn
+      - title_en
+      type: object
+    organization:
+      description: provide organizations
+      example:
+        address: address
+        contact_person_mobile: contact_person_mobile
+        loc_district_id: 5
+        loc_upazila_id: 5
+        mobile: mobile
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        create_by: 7
+        organization_type_id: 6
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        loc_division_id: 1
+        domain: domain
+        updated_by: 9
+        title_bn: title_bn
+        logo: logo
+        title_en: title_en
+        id: 0
+        contact_person_name: contact_person_name
+        contact_person_designation: contact_person_designation
+        row_status: 2
+        email: email
+        fax_no: fax_no
+        contact_person_email: contact_person_email
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: ' title in Bengali'
+          maxLength: 500
+          minLength: 2
+          type: string
+        organization_type_id:
+          description: Organization type id
+          type: integer
+        loc_division_id:
+          description: location id of division
+          type: integer
+        loc_district_id:
+          description: location id of district
+          type: integer
+        loc_upazila_id:
+          description: location id of upazila
+          type: integer
+        address:
+          description: organization address
+          maximum: 600
+          minimum: 2
+          type: string
+        mobile:
+          description: Mobile number of organization
+          type: string
+        email:
+          description: email address
+          type: string
+        fax_no:
+          description: ' fax number'
+          maximum: 50
+          type: string
+        contact_person_name:
+          description: Contact person name
+          maximum: 300
+          minimum: 2
+          type: string
+        contact_person_mobile:
+          description: Contact person mobile number
+          type: string
+        contact_person_email:
+          description: Contact person email address
+          type: string
+        contact_person_designation:
+          description: Contact person's designation
+          type: string
+        logo:
+          description: Logo of the organization
+          type: string
+        description:
+          description: Details about the organization
+          type: string
+        domain:
+          description: Unique Website domain of the organization
+          type: string
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - address
+      - contact_person_designation
+      - contact_person_email
+      - contact_person_mobile
+      - contact_person_name
+      - domain
+      - email
+      - logo
+      - mobile
+      - organization_type_id
+      - title_bn
+      - title_en
+      type: object
+    rankType:
+      description: Provide rank type
+      example:
+        create_by: 1
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_by: 5
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 6
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: Rank type title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: Rank type title in Bengali
+          maxLength: 500
+          minLength: 2
+          type: string
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - title_bn
+      - title_en
+      type: object
+    rank:
+      description: provide rank
+      example:
+        create_by: 2
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        grade: grade
+        organization_id: 1
+        display_order: 6
+        updated_by: 7
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 5
+        rank_type_id: 5
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: title in Bengali
+          maxLength: 500
+          minLength: 2
+          type: string
+        grade:
+          description: grade
+          maximum: 100
+          type: string
+        display_order:
+          description: display order
+          type: integer
+        organization_id:
+          description: 'Organization id '
+          type: integer
+        rank_type_id:
+          description: 'RankType id '
+          type: integer
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - organization_id
+      - rank_type_id
+      - title_bn
+      - title_en
+      type: object
+    jobSector:
+      description: Job Sectors
+      example:
+        create_by: 1
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        updated_by: 5
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 6
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: title in Bengali
+          maxLength: 500
+          minLength: 2
+          type: string
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - title_bn
+      - title_en
+      type: object
+    occupation:
+      description: occupation
+      example:
+        create_by: 5
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        job_sector_id: 6
+        updated_by: 5
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 1
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: Rank type title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: Rank type title in Bengali
+          maxLength: 500
+          minLength: 2
+          type: string
+        job_sector_id:
+          description: Job sector id
+          type: integer
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - job_sector_id
+      - title_bn
+      - title_en
+      type: object
+    skill:
+      description: provide skills
+      example:
+        create_by: 5
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        organization_id: 6
+        updated_by: 5
+        title_bn: title_bn
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 1
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: ' title in Bengali'
+          maxLength: 500
+          minLength: 2
+          type: string
+        description:
+          description: Details of a skill
+          maximum: 5000
+          minimum: 2
+          type: string
+        organization_id:
+          description: Organization id
+          type: integer
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - title_bn
+      - title_en
+      type: object
+    organizationUnitType:
+      description: provide skills
+      example:
+        create_by: 5
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        organization_id: 6
+        updated_by: 5
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 1
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: ' title in Bengali'
+          maxLength: 500
+          minLength: 2
+          type: string
+        organization_id:
+          description: Organization id
+          type: integer
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - organization_id
+      - title_bn
+      - title_en
+      type: object
+    organizationUnit:
+      description: Organization Unit type
+      example:
+        address: address
+        contact_person_mobile: contact_person_mobile
+        loc_district_id: 5
+        loc_upazila_id: 2
+        mobile: mobile
+        created_at: 2000-01-23T04:56:07.000+00:00
+        employee_size: 7
+        create_by: 3
+        organization_unit_type_id: 1
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        loc_division_id: 5
+        organization_id: 6
+        updated_by: 2
+        title_bn: title_bn
+        title_en: title_en
+        id: 0
+        contact_person_name: contact_person_name
+        contact_person_designation: contact_person_designation
+        row_status: 9
+        email: email
+        fax_no: fax_no
+        contact_person_email: contact_person_email
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: ' title in Bengali'
+          maxLength: 500
+          minLength: 2
+          type: string
+        organization_id:
+          description: Organization id
+          type: integer
+        organization_unit_type_id:
+          description: OrganizationUnitType id
+          type: integer
+        loc_division_id:
+          description: location id of division
+          type: integer
+        loc_district_id:
+          description: location id of district
+          type: integer
+        loc_upazila_id:
+          description: location id of upazila
+          type: integer
+        address:
+          description: organization address
+          maximum: 600
+          minimum: 2
+          type: string
+        mobile:
+          description: Mobile number of organization
+          type: string
+        email:
+          description: email address
+          type: string
+        fax_no:
+          description: ' fax number'
+          maximum: 50
+          type: string
+        contact_person_name:
+          description: Contact person name
+          maximum: 300
+          minimum: 2
+          type: string
+        contact_person_mobile:
+          description: Contact person mobile number
+          type: string
+        contact_person_email:
+          description: Contact person email address
+          type: string
+        contact_person_designation:
+          description: Contact person's designation
+          type: string
+        employee_size:
+          description: Number of employees
+          type: integer
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - employee_size
+      - loc_district_id
+      - loc_division_id
+      - loc_upazila_id
+      - organization_id
+      - organization_unit_type_id
+      - title_bn
+      - title_en
+      type: object
+    service:
+      description: provide services
+      example:
+        create_by: 5
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        organization_id: 6
+        updated_by: 5
+        title_bn: title_bn
+        created_at: 2000-01-23T04:56:07.000+00:00
+        title_en: title_en
+        id: 0
+        row_status: 1
+      properties:
+        id:
+          description: Primary Key
+          readOnly: true
+          type: integer
+        title_en:
+          description: title in English
+          maxLength: 255
+          minLength: 2
+          type: string
+        title_bn:
+          description: ' title in Bengali'
+          maxLength: 1000
+          minLength: 2
+          type: string
+        organization_id:
+          description: Organization id
+          type: integer
+        row_status:
+          description: Activation status .1 => active ,0=>inactive
+          enum:
+          - 0
+          - 1
+          type: integer
+        create_by:
+          description: Creator
+          type: integer
+        updated_by:
+          description: Modifier
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - organization_id
+      - title_bn
+      - title_en
+      type: object
+

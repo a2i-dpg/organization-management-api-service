@@ -67,7 +67,6 @@ class OrganizationTypeService
         } else {
             $organizationTypes = $organizationTypeBuilder->get();
         }
-
         $data = [];
         foreach ($organizationTypes as $organizationType) {
             /** @var OrganizationType $organizationType */
@@ -125,7 +124,6 @@ class OrganizationTypeService
 
         /** @var OrganizationType $organizationType */
         $organizationType= $organizationTypeBuilder->first();
-
         $links = [];
         if (!empty($organizationType)) {
             $links = [
