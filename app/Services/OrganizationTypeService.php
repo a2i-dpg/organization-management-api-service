@@ -67,15 +67,9 @@ class OrganizationTypeService
         } else {
             $organizationTypes = $organizationTypeBuilder->get();
         }
-        $data = [];
-        foreach ($organizationTypes as $organizationType) {
-            /** @var OrganizationType $organizationType */
-            $links['read'] = route('api.v1.organization-types.read', ['id' => $organizationType->id]);
-            $links['update'] = route('api.v1.organization-types.update', ['id' => $organizationType->id]);
-            $links['delete'] = route('api.v1.organization-types.destroy', ['id' => $organizationType->id]);
-            $organizationType['_links'] = $links;
-            $data[] = $organizationType->toArray();
-        }
+
+        $data= $organizationTypes->toArray();
+
 
         return [
             "data" => $data,
@@ -87,13 +81,6 @@ class OrganizationTypeService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.organization-types.get-list')
-                ]
             ],
             "_page" => $page,
             "_order" => $order
@@ -123,15 +110,7 @@ class OrganizationTypeService
 
 
         /** @var OrganizationType $organizationType */
-        $organizationType= $organizationTypeBuilder->first();
-        $links = [];
-        if (!empty($organizationType)) {
-            $links = [
-                'update' => route('api.v1.organization-types.update', ['id' => $id]),
-                'delete' => route('api.v1.organization-types.destroy', ['id' => $id])
-            ];
-        }
-
+        $organizationType = $organizationTypeBuilder->first();
         return [
             "data" => $organizationType ?: [],
             "_response_status" => [
@@ -139,8 +118,7 @@ class OrganizationTypeService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => $links
+            ]
         ];
     }
 

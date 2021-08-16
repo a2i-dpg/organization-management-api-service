@@ -3608,7 +3608,7 @@
                 "summary": "get-hierarchy",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/organizationUnitTypeId"
+                        "$ref": "#/components/parameters/organizationUnitId"
                     }
                 ],
                 "responses": {
@@ -4580,7 +4580,7 @@
         "/organization-unit-services/{organizationUnitServiceId}": {
             "get": {
                 "summary": "get one",
-                "description": "API endpoint to get the specified organization unit type.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to get the specified organization unit Service.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationUnitServiceId"
@@ -6350,7 +6350,6 @@
                 "name": "service_id",
                 "in": "query",
                 "required": false,
-                "style": "form",
                 "schema": {
                     "type": "array"
                 }
@@ -6702,7 +6701,7 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer'"
+                    "type": "integer"
                 }
             },
             "employee_size": {
