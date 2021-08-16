@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationUnitServicesTable extends Migration
+class CreateHumanResourceTemplateSkillTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateOrganizationUnitServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_unit_services', function (Blueprint $table) {
-            $table->unsignedInteger('organization_unit_id');
-            $table->unsignedInteger('service_id');
-            $table->foreign('service_id')
+        Schema::create('human_resource_template_skill', function (Blueprint $table) {
+            $table->unsignedInteger('human_resource_template_id');
+            $table->unsignedInteger('skill_id');
+            $table->foreign('skill_id')
                 ->references('id')
-                ->on('services')
+                ->on('skills')
                 ->onDelete('cascade');
         });
     }
@@ -30,6 +30,6 @@ class CreateOrganizationUnitServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_unit_services');
+        Schema::dropIfExists('human_resource_skill');
     }
 }

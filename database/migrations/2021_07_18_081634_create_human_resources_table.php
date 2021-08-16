@@ -24,12 +24,10 @@ class CreateHumanResourcesTable extends Migration
             $table->unsignedInteger('rank_id')->nullable();
             $table->unsignedInteger('display_order')->default(0);
             $table->unsignedTinyInteger('is_designation')->default(1)->comment('1 => designation, 0 => wings or section');
-            $table->string('skill_ids')->nullable();
             $table->unsignedTinyInteger('status')->default(1)->comment('1 => occupied, 2 => vacancy, 0 => inactive');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

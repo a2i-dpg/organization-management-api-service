@@ -42,6 +42,14 @@ class OrganizationUnitType extends BaseModel
         return $this->hasMany(HumanResourceTemplate::class);
     }
 
+    /**
+     * @return HasMany
+     */
+    public function organizationUnit(): HasMany
+    {
+        return $this->hasMany(OrganizationUnit::class);
+    }
+
 
     public function getHierarchy()
     {

@@ -17,12 +17,11 @@ class CreateServicesTable extends Migration
             $table->increments('id');
             $table->string('title_en', 191);
             $table->string('title_bn', 1000)->nullable();
-            $table->unsignedInteger('organization_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
