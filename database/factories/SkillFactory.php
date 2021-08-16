@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Organization;
 use App\Models\Skill;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -13,13 +12,11 @@ class SkillFactory extends Factory
 
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Computer skill", "Leadership skills","Management skills"]);
-        $organization = Organization::all()->random();
-
+        $title = $this->faker->unique->jobTitle;
         return [
-            'organization_id' => $organization->id,
-            'title_en' => $title,
-            'title_bn'=>$title,
+            'title_en' => ucfirst($title),
+            'title_bn' => ucfirst($title),
+            'description' => $this->faker->paragraph(50)
         ];
 
     }

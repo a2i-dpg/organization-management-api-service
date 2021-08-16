@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -18,4 +19,9 @@ class JobSector extends BaseModel
     use SoftDeletes, HasFactory;
 
     protected $guarded = ['id'];
+
+    public function occupation():HasMany
+    {
+        return $this->hasMany(Occupation::class);
+    }
 }

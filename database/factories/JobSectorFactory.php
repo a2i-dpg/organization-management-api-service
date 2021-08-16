@@ -12,10 +12,10 @@ class JobSectorFactory extends Factory
 
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Software Industry", "Garments Sector","Banking"]);
-    	return [
-            'title_en' => $title,
-            'title_bn' => $title,
-    	];
+        $title = $this->faker->unique()->jobTitle;
+        return [
+            'title_en' => ucfirst($title),
+            'title_bn' => ucfirst($title),
+        ];
     }
 }

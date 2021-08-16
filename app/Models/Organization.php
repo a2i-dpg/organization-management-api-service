@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -43,5 +44,15 @@ class Organization extends BaseModel
     public function organizationType(): BelongsTo
     {
         return $this->belongsTo(OrganizationType::class);
+    }
+
+    public function organizationUnitType():HasMany
+    {
+        return $this->hasMany(OrganizationUnitType::class);
+    }
+
+    public function rangType():HasMany
+    {
+        return $this->hasMany(RankType::class);
     }
 }
