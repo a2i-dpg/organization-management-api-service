@@ -82,15 +82,8 @@ class OrganizationService
             $organizations = $organizationBuilder->get();
         }
 
-        $data = [];
-        foreach ($organizations as $organization) {
-            /** @var Organization $organization */
-            $links['read'] = route('api.v1.organizations.read', ['id' => $organization->id]);
-            $links['update'] = route('api.v1.organizations.update', ['id' => $organization->id]);
-            $links['delete'] = route('api.v1.organizations.destroy', ['id' => $organization->id]);
-            $organization['_links'] = $links;
-            $data[] = $organization->toArray();
-        }
+
+        $data = $organizations->toArray();
 
         return [
             "data" => $data,
@@ -102,13 +95,6 @@ class OrganizationService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.organizations.get-list')
-                ]
             ],
             "_page" => $page,
             "_order" => $order
@@ -155,14 +141,6 @@ class OrganizationService
         /** @var Organization $organization */
         $organization = $organizationBuilder->first();
 
-        $links = [];
-        if (!empty($organization)) {
-            $links = [
-                'update' => route('api.v1.organizations.update', ['id' => $id]),
-                'delete' => route('api.v1.organizations.destroy', ['id' => $id])
-            ];
-        }
-
         return [
             "data" => $organization ?: null,
             "_response_status" => [
@@ -171,7 +149,6 @@ class OrganizationService
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
-            "_links" => $links
         ];
     }
 

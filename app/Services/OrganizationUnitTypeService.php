@@ -67,15 +67,8 @@ class OrganizationUnitTypeService
         } else {
             $organizationUnitTypes = $organizationUnitTypeBuilder->get();
         }
-        $data = [];
-        foreach ($organizationUnitTypes as $organizationUnitType) {
-            /**@var OrganizationUnitType $organizationUnitType * */
-            $links['read'] = route('api.v1.organization-unit-types.read', ['id' => $organizationUnitType->id]);
-            $links['edit'] = route('api.v1.organization-unit-types.update', ['id' => $organizationUnitType->id]);
-            $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $organizationUnitType->id]);
-            $organizationUnitType['_links'] = $links;
-            $data[] = $organizationUnitType->toArray();
-        }
+
+            $data = $organizationUnitTypes->toArray();
         return [
             "data" => $data,
             "_response_status" => [
@@ -86,13 +79,6 @@ class OrganizationUnitTypeService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                "search" => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.organization-unit-types.get-list')
-                ],
             ],
             "_page" => $page,
             "_order" => $order
@@ -126,20 +112,14 @@ class OrganizationUnitTypeService
         /**@var OrganizationUnitType $organizationUnitType * */
         $organizationUnitType = $organizationUnitTypeBuilder->first();
 
-        $links = [];
-        if (!empty($organizationUnitType)) {
-            $links['update'] = route('api.v1.organization-unit-types.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.organization-unit-types.destroy', ['id' => $id]);
-        }
         return [
             "data" => $organizationUnitType ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime,
-                "finished" => Carbon::now(),
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
             ],
-            "_links" => $links,
         ];
     }
 
