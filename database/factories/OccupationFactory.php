@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\JobSector;
 use App\Models\Occupation;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,14 +22,10 @@ class OccupationFactory extends Factory
      */
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Software Engineer", "Banker","Teacher","Doctor","Civil Engineer"]);
-
-        $jobSector = JobSector::all()->random();
-
+        $title = $this->faker->unique->jobTitle;
         return [
-            'job_sector_id' => $jobSector->id,
-            'title_en' => $title,
-            'title_bn' => $title,
+            'title_en' => ucfirst($title),
+            'title_bn' => ucfirst($title),
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Organization;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,12 +22,10 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Web Development", "Graphic design","video editing"]);
-        $organization = Organization::all()->random();
-    	return [
-            'title_en' => $title,
-            'title_bn' => $title,
-            'organization_id' => $organization->id
-    	];
+        $title = $this->faker->unique()->jobTitle;
+        return [
+            'title_en' => ucfirst($title),
+            'title_bn' => ucfirst($title),
+        ];
     }
 }
