@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\OrganizationType;
-use App\Models\OrganizationUnitType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
