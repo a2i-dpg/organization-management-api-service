@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
-
+use App\Models\Service;
 
 /**
  * Class OrganizationUnitService
@@ -91,15 +91,7 @@ class OrganizationUnitService
             $organizationUnits = $organizationUnitBuilder->get();
         }
 
-        $data = [];
-        foreach ($organizationUnits as $organizationUnit) {
-            /** @var OrganizationUnit $organizationUnit */
-            $links['read'] = route('api.v1.organization-units.read', ['id' => $organizationUnit->id]);
-            $links['update'] = route('api.v1.organization-units.update', ['id' => $organizationUnit->id]);
-            $links['delete'] = route('api.v1.organization-units.destroy', ['id' => $organizationUnit->id]);
-            $organizationUnit['_links'] = $links;
-            $data[] = $organizationUnit->toArray();
-        }
+        $data = $organizationUnits->toArray();
 
         return [
             "data" => $data ?: null,
@@ -111,13 +103,6 @@ class OrganizationUnitService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.organization-units.get-list')
-                ]
             ],
             "_page" => $page,
             "_order" => $order
@@ -169,15 +154,6 @@ class OrganizationUnitService
 
         /** @var OrganizationUnit $organizationUnit */
         $organizationUnit = $organizationUnitBuilder->first();
-
-        $links = [];
-        if (!empty($organizationUnit)) {
-            $links = [
-                'update' => route('api.v1.organization-units.update', ['id' => $id]),
-                'delete' => route('api.v1.organization-units.destroy', ['id' => $id])
-            ];
-        }
-
         return [
             "data" => $organizationUnit ?: null,
             "_response_status" => [
@@ -185,8 +161,7 @@ class OrganizationUnitService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => $links
+            ]
         ];
     }
 
@@ -224,35 +199,55 @@ class OrganizationUnitService
     }
 
     /**
+     * @param OrganizationUnit $organizationUnit
+     * @param array $serviceIds
+     * @return OrganizationUnit
+     */
+    public function assignService(OrganizationUnit $organizationUnit, array $serviceIds): OrganizationUnit
+    {
+        $validServices = Service::whereIn('id', $serviceIds)->orderBy('id', 'ASC')->pluck('id')->toArray();
+        $organizationUnit->services()->syncWithoutDetaching($validServices);
+        return $organizationUnit;
+    }
+
+
+    /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $rules = [
-            'title_en' => [
-                'required',
-                'string',
-                'max:191',
-                'min:2'
-            ],
-            'title_bn' => [
-                'required',
-                'string',
-                'max:600',
-                'min:2'
-            ],
-            'organization_id' => [
-                'required',
-                'int',
-                'exists:organizations,id',
-            ],
-            'organization_unit_type_id' => [
-                'required',
-                'int',
-                'exists:organization_unit_types,id',
-            ],
+
+        if (isset($request->serviceIds)) {
+            $rules = [
+                'serviceIds' => 'required|array|min:1',
+                'serviceIds.*' => 'required|integer|distinct|min:1'
+            ];
+        } else {
+            $rules = [
+                'title_en' => [
+                    'required',
+                    'string',
+                    'max:191',
+                    'min:2'
+                ],
+                'title_bn' => [
+                    'required',
+                    'string',
+                    'max:600',
+                    'min:2'
+                ],
+                'organization_id' => [
+                    'required',
+                    'int',
+                    'exists:organizations,id',
+                ],
+                'organization_unit_type_id' => [
+                    'required',
+                    'int',
+                    'exists:organization_unit_types,id',
+                ],
 
 //            'loc_division_id' => [
 //                 'required',
@@ -269,55 +264,70 @@ class OrganizationUnitService
 //                 'int',
 //                 'exists:loc_upazilas,id',
 //             ],
-            'address' => [
-                'nullable',
-                'string',
-                'max:191',
-            ],
-            'mobile' => [
-                'nullable',
-                'string',
-                'max:20',
-            ],
-            'email' => [
-                'nullable',
-                'string',
-                'max:191',
-            ],
-            'fax_no' => [
-                'nullable',
-                'string',
-                'max:50',
-            ],
-            'contact_person_name' => [
-                'nullable',
-                'string',
-                'max:191',
-            ],
-            'contact_person_mobile' => [
-                'nullable',
-                'string',
-                'max:20',
-            ],
-            'contact_person_email' => [
-                'nullable',
-                'string',
-                'regex: /\S+@\S+\.\S+/'
-            ],
-            'contact_person_designation' => [
-                'nullable',
-                'string',
-                'max:191',
-            ],
-            'employee_size' => [
-                'required',
-                'int',
-            ],
-            'row_status' => [
-                'required_if:' . $id . ',!=,null',
-                Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
-            ],
-        ];
+                'address' => [
+                    'nullable',
+                    'string',
+                    'max:191',
+                ],
+                'mobile' => [
+                    'nullable',
+                    'string',
+                    'max:20',
+                ],
+                'email' => [
+                    'nullable',
+                    'string',
+                    'max:191',
+                ],
+                'fax_no' => [
+                    'nullable',
+                    'string',
+                    'max:50',
+                ],
+                'contact_person_name' => [
+                    'nullable',
+                    'string',
+                    'max:191',
+                ],
+                'contact_person_mobile' => [
+                    'nullable',
+                    'string',
+                    'max:20',
+                ],
+                'contact_person_email' => [
+                    'nullable',
+                    'string',
+                    'regex: /\S+@\S+\.\S+/'
+                ],
+                'contact_person_designation' => [
+                    'nullable',
+                    'string',
+                    'max:191',
+                ],
+                'employee_size' => [
+                    'required',
+                    'int',
+                ],
+                'row_status' => [
+                    'required_if:' . $id . ',!=,null',
+                    Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
+                ]
+            ];
+
+        }
+
+
         return Validator::make($request->all(), $rules);
+    }
+    public function serviceValidator(Request $request):\Illuminate\Contracts\Validation\Validator
+    {
+        $data=[
+            'serviceIds'=>explode(',',$request['serviceIds'])
+        ];
+        $rules = [
+            'serviceIds' => 'required|array|min:1',
+            'serviceIds.*' => 'required|integer|distinct|min:1'
+        ];
+        return Validator::make($data, $rules);
     }
 }

@@ -69,15 +69,7 @@ class JobSectorService
             $jobSectors = $jobSectorBuilder->get();
         }
 
-        $data = [];
-        foreach ($jobSectors as $jobSector) {
-            /** @var JobSector $jobSector */
-            $links['read'] = route('api.v1.job-sectors.read', ['id' => $jobSector->id]);
-            $links['edit'] = route('api.v1.job-sectors.update', ['id' => $jobSector->id]);
-            $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $jobSector->id]);
-            $jobSector['_links'] = $links;
-            $data[] = $jobSector->toArray();
-        }
+        $data = $jobSectors->toArray();
 
         return [
             "data" => $data,
@@ -89,13 +81,6 @@ class JobSectorService
             ],
             "links" => [
                 'paginate' => $paginateLink,
-                "search" => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.job-sectors.get-list')
-                ],
             ],
             "_page" => $page,
             "_order" => $order
@@ -126,12 +111,6 @@ class JobSectorService
 
         /** @var JobSector $jobSector */
         $jobSector = $jobSectorBuilder->first();
-
-        $links = [];
-        if (!empty($jobSector)) {
-            $links['update'] = route('api.v1.job-sectors.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.job-sectors.destroy', ['id' => $id]);
-        }
         return [
             "data" => $jobSector ?: null,
             "_response_status" => [
@@ -139,8 +118,7 @@ class JobSectorService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "links" => $links,
+            ]
         ];
     }
 

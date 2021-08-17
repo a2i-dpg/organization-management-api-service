@@ -79,15 +79,7 @@ class RankService
             $ranks = $rankBuilder->get();
         }
 
-        $data = [];
-        foreach ($ranks as $rank) {
-            /** @var Rank $rank */
-            $links['read'] = route('api.v1.ranks.read', ['id' => $rank->id]);
-            $links['update'] = route('api.v1.ranks.update', ['id' => $rank->id]);
-            $links['delete'] = route('api.v1.ranks.destroy', ['id' => $rank->id]);
-            $rank['_links'] = $links;
-            $data[] = $rank->toArray();
-        }
+        $data = $ranks->toArray();
 
         return [
             "data" => $data ?: null,
@@ -99,13 +91,6 @@ class RankService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                "search" => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.ranks.get-list')
-                ],
             ],
             "_page" => $page,
             "_order" => $order
@@ -145,12 +130,6 @@ class RankService
         /** @var Rank $rank */
         $rank = $rankBuilder->first();
 
-        $links = [];
-        if (!empty($rank)) {
-            $links['update'] = route('api.v1.ranks.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.ranks.destroy', ['id' => $id]);
-        }
-
         return [
             "data" => $rank ?: null,
             "_response_status" => [
@@ -158,8 +137,7 @@ class RankService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => $links,
+            ]
         ];
     }
 

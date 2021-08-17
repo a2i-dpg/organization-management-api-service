@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Classes\CustomExceptionHandler;
 use App\Models\HumanResourceTemplate;
 use App\Services\HumanResourceTemplateService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -41,49 +41,38 @@ class HumanResourceTemplateController extends Controller
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @return Exception|JsonResponse|Throwable
      */
-    public function getList(Request $request): JsonResponse
+    public function getList(Request $request):JsonResponse
     {
         try {
             $response = $this->humanResourceTemplateService->getHumanResourceTemplateList($request, $this->startTime);
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
         return Response::json($response);
     }
 
     /**
      * @param int $id
-     * @return JsonResponse
+     * @return Exception|JsonResponse|Throwable
      */
-    public function read(int $id): JsonResponse
+    public function read(int $id):JsonResponse
     {
         try {
             $response = $this->humanResourceTemplateService->getOneHumanResourceTemplate($id, $this->startTime);
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
         return Response::json($response);
     }
 
-    function store(Request $request): JsonResponse
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
+     */
+    function store(Request $request):JsonResponse
     {
 
         $validatedData = $this->humanResourceTemplateService->validator($request)->validate();
@@ -100,15 +89,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
@@ -116,10 +97,10 @@ class HumanResourceTemplateController extends Controller
     /**
      * @param Request $request
      * @param int $id
-     * @return JsonResponse
+     * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $id):JsonResponse
     {
         $humanResourceTemplate = HumanResourceTemplate::findOrFail($id);
         $validated = $this->humanResourceTemplateService->validator($request,$id)->validate();
@@ -136,15 +117,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
         return Response::json($response, JsonResponse::HTTP_CREATED);
     }
@@ -152,9 +125,9 @@ class HumanResourceTemplateController extends Controller
     /**
      * Remove the specified resource from storage
      * @param int $id
-     * @return JsonResponse
+     * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id):JsonResponse
     {
         $humanResourceTemplate = HumanResourceTemplate::findOrFail($id);
         try {
@@ -169,15 +142,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
         return Response::json($response, JsonResponse::HTTP_OK);
     }

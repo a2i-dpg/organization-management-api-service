@@ -29,9 +29,8 @@ class HumanResourceService
             'human_resources.title_bn',
             'human_resources.display_order',
             'human_resources.is_designation',
-            'human_resources.skill_ids',
             'human_resources.parent_id',
-            'human_resources.title_en as parent',
+            't2.title_en as parent',
             'organization_units.title_en as organization_unit_name',
             'human_resources.organization_id',
             'human_resources.organization_unit_id',
@@ -77,15 +76,7 @@ class HumanResourceService
             $humanResources = $humanResourceBuilder->get();
         }
 
-        $data = [];
-        foreach ($humanResources as $humanResource) {
-            /** @var HumanResource $humanResource */
-            $links['read'] = route('api.v1.human-resources.read', ['id' => $humanResource->id]);
-            $links['update'] = route('api.v1.human-resources.update', ['id' => $humanResource->id]);
-            $links['delete'] = route('api.v1.human-resources.destroy', ['id' => $humanResource->id]);
-            $humanResource['_links'] = $links;
-            $data[] = $humanResource->toArray();
-        }
+        $data = $humanResources->toArray();
 
         return [
             "data" => $data,
@@ -97,14 +88,6 @@ class HumanResourceService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-
-                "search" => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.human-resources.get-list')
-                ],
             ],
             "_page" => $page,
             "_order" => $order
@@ -125,9 +108,8 @@ class HumanResourceService
             'human_resources.title_bn',
             'human_resources.display_order',
             'human_resources.is_designation',
-            'human_resources.skill_ids',
             'human_resources.parent_id',
-            'human_resources.title_en as parent',
+            't2.title_en as parent',
             'organization_units.title_en as organization_unit_name',
             'human_resources.organization_id',
             'human_resources.organization_unit_id',

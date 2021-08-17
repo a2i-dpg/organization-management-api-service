@@ -69,6 +69,7 @@ class OrganizationUnitTypeService
         }
 
             $data = $organizationUnitTypes->toArray();
+
         return [
             "data" => $data,
             "_response_status" => [

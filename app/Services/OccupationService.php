@@ -69,16 +69,7 @@ class OccupationService
             $occupations = $occupationBuilder->get();
         }
 
-        $data = [];
-
-        foreach ($occupations as $occupation) {
-            /** @var  Occupation $occupation */
-            $links['read'] = route('api.v1.occupations.read', ['id' => $occupation->id]);
-            $links['update'] = route('api.v1.occupations.update', ['id' => $occupation->id]);
-            $links['delete'] = route('api.v1.occupations.destroy', ['id' => $occupation->id]);
-            $occupation['_links'] = $links;
-            $data[] = $occupation->toArray();
-        }
+        $data = $occupations->toArray();
 
         return [
             "data" => $data ?: null,
@@ -89,14 +80,7 @@ class OccupationService
                 "finished" => Carbon::now()->format('H i s'),
             ],
             "links" => [
-                'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.occupations.get-list')
-                ]
+                'paginate' => $paginateLink
             ],
             "_page" => $page,
             "_order" => $order
@@ -110,8 +94,6 @@ class OccupationService
      */
     public function getOneOccupation($id, Carbon $startTime): array
     {
-        $links = [];
-
         /** @var Builder $occupationBuilder */
         $occupationBuilder = Occupation::select([
             'occupations.id',
@@ -131,11 +113,6 @@ class OccupationService
         /** @var  Occupation $occupation */
         $occupation = $occupationBuilder->first();
 
-        if (!empty($occupation)) {
-            $links['update'] = route('api.v1.occupations.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.occupations.destroy', ['id' => $id]);
-        }
-
         return [
             "data" => $occupation ?: null,
             "_response_status" => [
@@ -143,8 +120,7 @@ class OccupationService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "links" => $links
+            ]
         ];
     }
 

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Service
  * @package App\Models
- * @property int organization_id
  * @property string title_en
  * @property string title_bn
  * @property-read Organization organization
@@ -26,8 +25,4 @@ class Service extends BaseModel
 
     protected $guarded = ['id'];
 
-    public function organization(): BelongsTo
-    {
-        return $this->belongsTo(Organization::class);
-    }
 }

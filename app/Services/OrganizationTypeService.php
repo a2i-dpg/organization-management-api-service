@@ -70,7 +70,6 @@ class OrganizationTypeService
 
         $data= $organizationTypes->toArray();
 
-
         return [
             "data" => $data,
             "_response_status" => [

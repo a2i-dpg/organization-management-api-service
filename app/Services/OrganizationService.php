@@ -82,8 +82,9 @@ class OrganizationService
             $organizations = $organizationBuilder->get();
         }
 
-
+        /** @var array $data */
         $data = $organizations->toArray();
+
 
         return [
             "data" => $data,
@@ -265,11 +266,10 @@ class OrganizationService
             'logo' => [
                 'required_if:' . $id . ',null',
                 'string',
-                'max:191'
             ],
             'address' => [
                 'required',
-                'max: 600',
+                'max: 1000',
                 'min:2'
             ],
             'row_status' => [

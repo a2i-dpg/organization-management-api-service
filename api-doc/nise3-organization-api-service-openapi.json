@@ -22,6 +22,627 @@
         }
     ],
     "paths": {
+        "/organization-types": {
+            "get": {
+                "summary": "get_list",
+                "description": " API endpoint to get the list organization types.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get_list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationType"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "Goverment org",
+                                            "title_bn": "সরকারি",
+                                            "is_government": 1,
+                                            "row_status": 1
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
+                                    },
+                                    "_links": {
+                                        "paginate": []
+                                    },
+                                    "_page": [],
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-types"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "description": "API endpoint to create an organization type.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/is_government"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "create",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationType"
+                                },
+                                "example": {
+                                    "data": {
+                                        "title_en": "Private bank 2",
+                                        "title_bn": "বেসরকারি ব্যাংক",
+                                        "is_government": 1,
+                                        "row_status": 1,
+                                        "updated_at": "2021-07-26T09:53:48.000000Z",
+                                        "created_at": "2021-07-26T09:53:48.000000Z",
+                                        "id": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "Organization type added successfully.",
+                                        "started": "2021-07-26T09:53:48.012764Z",
+                                        "finished": "2021-07-26T09:53:48.061748Z"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-types"
+                ]
+            }
+        },
+        "/organization-types/{organizationTypeId}": {
+            "get": {
+                "summary": "get_one",
+                "description": " API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationTypeId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get_one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationType"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "Goverment org",
+                                        "title_bn": "সরকারি",
+                                        "is_government": 1,
+                                        "row_status": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-types"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "description": "API endpoint to update an organization type.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationTypeId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/is_government"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "update",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organizationType"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "Goverment org",
+                                        "title_bn": "সরকারি",
+                                        "is_government": 1,
+                                        "row_status": 1,
+                                        "created_at": "2021-07-26T09:53:48.000000Z",
+                                        "updated_at": "2021-07-26T09:58:41.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "organization Type updated successfully.",
+                                        "started": "2021-07-26T09:58:49.376044Z",
+                                        "finished": "2021-07-26T09:58:49.419228Z"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-types"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "description": "API endpoint to delete an organization type.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationTypeId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                },
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization type deleted successfully.",
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization-types"
+                ]
+            }
+        },
+        "/organizations": {
+            "get": {
+                "summary": "get list",
+                "description": "API endpoint to get the list of organizations.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organization"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "AKIJ GROUP",
+                                            "title_bn": "AKIJ GROUP",
+                                            "domain": "http://www.akijgroup.com",
+                                            "fax_no": "",
+                                            "mobile": "01758393749",
+                                            "email": "akij.group@gmail.com",
+                                            "contact_person_name": "abc",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "abc@gmail.com",
+                                            "contact_person_designation": "coordinator2",
+                                            "description": "Akij is one of the largest company in bangladesh",
+                                            "row_status": 1,
+                                            "organization_types_title": "Public Bank"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "AKIJ GROUP",
+                                            "title_bn": "AKIJ GROUP",
+                                            "domain": "http://www.akijgroup1.com",
+                                            "fax_no": "",
+                                            "mobile": "01758393749",
+                                            "email": "akij.group@gmail.com",
+                                            "contact_person_name": "sayed ahmed",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "hr.akij@gmail.com",
+                                            "contact_person_designation": "HR",
+                                            "description": null,
+                                            "row_status": 99,
+                                            "organization_types_title": "Public Bank"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
+                                    },
+                                    "_page": [],
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization"
+                ]
+            },
+            "post": {
+                "summary": "create",
+                "description": "API endpoint to create a organization.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organization_type_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_division_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_district_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_upazila_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/address"
+                    },
+                    {
+                        "$ref": "#/components/parameters/mobile"
+                    },
+                    {
+                        "$ref": "#/components/parameters/email"
+                    },
+                    {
+                        "$ref": "#/components/parameters/fax_no"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_name"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_mobile"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_email"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_designation"
+                    },
+                    {
+                        "$ref": "#/components/parameters/description"
+                    },
+                    {
+                        "$ref": "#/components/parameters/logo"
+                    },
+                    {
+                        "$ref": "#/components/parameters/domain"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "create",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organization"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "AKIJ GROUP",
+                                            "title_bn": "AKIJ GROUP",
+                                            "domain": "http://www.akijgroup.com",
+                                            "fax_no": "",
+                                            "mobile": "01758393749",
+                                            "email": "akij.group@gmail.com",
+                                            "contact_person_name": "abc",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "abc@gmail.com",
+                                            "contact_person_designation": "coordinator2",
+                                            "description": "Akij is one of the largest company in bangladesh",
+                                            "row_status": 1,
+                                            "organization_types_title": "Public Bank"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "AKIJ GROUP",
+                                            "title_bn": "AKIJ GROUP",
+                                            "domain": "http://www.akijgroup1.com",
+                                            "fax_no": "",
+                                            "mobile": "01758393749",
+                                            "email": "akij.group@gmail.com",
+                                            "contact_person_name": "sayed ahmed",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "hr.akij@gmail.com",
+                                            "contact_person_designation": "HR",
+                                            "description": null,
+                                            "row_status": 1,
+                                            "organization_types_title": "Public Bank"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization created successfully.",
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
+                                    },
+                                    "_links": {
+                                        "paginate": []
+                                    },
+                                    "_page": [],
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization"
+                ]
+            }
+        },
+        "/organizations/{organizationId}": {
+            "get": {
+                "summary": "get one",
+                "description": "API endpoint to get the specified organization.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organization"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "AKIJ GROUP",
+                                        "title_bn": "AKIJ GROUP",
+                                        "domain": "http://www.akijgroup.com",
+                                        "fax_no": "",
+                                        "mobile": "01758393749",
+                                        "email": "akij.group@gmail.com",
+                                        "contact_person_name": "abc",
+                                        "contact_person_mobile": "01758393749",
+                                        "contact_person_email": "abc@gmail.com",
+                                        "contact_person_designation": "coordinator2",
+                                        "description": "Akij is one of the largest company in bangladesh",
+                                        "row_status": 1,
+                                        "organization_types_title": "Public Bank"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization"
+                ]
+            },
+            "put": {
+                "summary": "update",
+                "description": "API endpoint to get a specified organization.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_type_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_division_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_district_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_upazila_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/address"
+                    },
+                    {
+                        "$ref": "#/components/parameters/mobile"
+                    },
+                    {
+                        "$ref": "#/components/parameters/email"
+                    },
+                    {
+                        "$ref": "#/components/parameters/fax_no"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_name"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_mobile"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_email"
+                    },
+                    {
+                        "$ref": "#/components/parameters/contact_person_designation"
+                    },
+                    {
+                        "$ref": "#/components/parameters/description"
+                    },
+                    {
+                        "$ref": "#/components/parameters/logo_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/domain"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "update",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organization"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "AKIJ GROUP",
+                                        "title_bn": "AKIJ GROUP",
+                                        "domain": "http://www.akijgroup.com",
+                                        "fax_no": "",
+                                        "mobile": "01758393749",
+                                        "email": "akij.group@gmail.com",
+                                        "contact_person_name": "abc",
+                                        "contact_person_mobile": "01758393749",
+                                        "contact_person_email": "abc@gmail.com",
+                                        "contact_person_designation": "coordinator2",
+                                        "description": "Akij is one of the largest company in bangladesh",
+                                        "row_status": 1,
+                                        "organization_types_title": "Public Bank"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization updated successfully",
+                                        "started": "2021-07-27T09:08:55.138201Z",
+                                        "finished": "2021-07-27T09:08:55.176534Z"
+                                    },
+                                    "_links": {
+                                        "update": "http://127.0.0.1:8000/api/v1/organizations/1",
+                                        "delete": "http://127.0.0.1:8000/api/v1/organizations/1"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization"
+                ]
+            },
+            "delete": {
+                "summary": "delete",
+                "description": " API endpoint to delete a specified organization. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organization"
+                                },
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization deleted successfully.",
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization"
+                ]
+            }
+        },
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -86,14 +707,7 @@
                                         "finished": "08 10 22"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/rank-types"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -345,12 +959,7 @@
                                             "rank_type_title_en": "CEO",
                                             "row_status": 1,
                                             "created_at": "2021-07-26T12:01:03.000000Z",
-                                            "updated_at": "2021-07-26T12:01:03.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/ranks/1",
-                                                "update": "http://localhost:8000/api/v1/ranks/1",
-                                                "delete": "http://localhost:8000/api/v1/ranks/1"
-                                            }
+                                            "updated_at": "2021-07-26T12:01:03.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -360,14 +969,7 @@
                                         "finished": "16 16 57"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/ranks"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -382,7 +984,7 @@
             },
             "post": {
                 "summary": "create",
-                "description": "API endpoint to get the list of ranks.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to create a Rank.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organization_id"
@@ -426,30 +1028,18 @@
                                             "rank_type_title_en": "CEO",
                                             "row_status": 1,
                                             "created_at": "2021-07-26T12:01:03.000000Z",
-                                            "updated_at": "2021-07-26T12:01:03.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/ranks/1",
-                                                "update": "http://localhost:8000/api/v1/ranks/1",
-                                                "delete": "http://localhost:8000/api/v1/ranks/1"
-                                            }
+                                            "updated_at": "2021-07-26T12:01:03.000000Z"
                                         }
                                     ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job finished successfully.",
-                                        "started": "2021-07-26T12:01:34.931110Z",
-                                        "finished": "2021-07-26T12:01:34.975083Z"
+                                        "message": "Rank added successfully",
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/ranks"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -466,7 +1056,7 @@
         "/ranks/{rankId}": {
             "get": {
                 "summary": "get_one",
-                "description": "API endpoint to get a rank.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to get the specified rank.A successful request response will show 200 HTTP status code",
                 "operationId": "get_one1",
                 "parameters": [
                     {
@@ -497,13 +1087,8 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job finished successfully.",
-                                        "started": "2021-07-26T12:01:45.440830Z",
-                                        "finished": "2021-07-26T12:01:45.473154Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/ranks/1",
-                                        "delete": "http://localhost:8000/api/v1/ranks/1"
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
                                     }
                                 }
                             }
@@ -516,7 +1101,7 @@
             },
             "put": {
                 "summary": "update",
-                "description": "API endpoint to get a rank. A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to update the specified rank. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/rankId"
@@ -549,7 +1134,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/rankType"
+                                    "$ref": "#/components/schemas/rank"
                                 },
                                 "example": {
                                     "data": {
@@ -567,13 +1152,9 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job finished successfully.",
-                                        "started": "2021-07-26T12:01:45.440830Z",
-                                        "finished": "2021-07-26T12:01:45.473154Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/ranks/1",
-                                        "delete": "http://localhost:8000/api/v1/ranks/1"
+                                        "message": "Rank updated successfully.",
+                                        "started": "06 02 03",
+                                        "finished": "06 02 03"
                                     }
                                 }
                             }
@@ -615,680 +1196,6 @@
                 },
                 "tags": [
                     "rank"
-                ]
-            }
-        },
-        "/organization-types": {
-            "get": {
-                "summary": "get_list",
-                "description": " API endpoint to get the list organization types.A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/order"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_en_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_bn_optional"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get_list",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/organizationType"
-                                },
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title_en": "Goverment org",
-                                            "title_bn": "সরকারি",
-                                            "is_government": 1,
-                                            "row_status": 1,
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/organization-types/1",
-                                                "update": "http://127.0.0.1:8000/api/v1/organization-types/1",
-                                                "delete": "http://127.0.0.1:8000/api/v1/organization-types/1"
-                                            }
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/organization-types"
-                                        }
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization-types"
-                ]
-            },
-            "post": {
-                "summary": "create",
-                "description": "API endpoint to create an organization type.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/title_en"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_bn"
-                    },
-                    {
-                        "$ref": "#/components/parameters/is_government"
-                    },
-                    {
-                        "$ref": "#/components/parameters/row_status"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "create",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/organizationType"
-                                },
-                                "example": {
-                                    "data": {
-                                        "title_en": "Private bank 2",
-                                        "title_bn": "বেসরকারি ব্যাংক",
-                                        "is_government": 1,
-                                        "row_status": 1,
-                                        "updated_at": "2021-07-26T09:53:48.000000Z",
-                                        "created_at": "2021-07-26T09:53:48.000000Z",
-                                        "id": 1
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 201,
-                                        "message": "Organization type added successfully.",
-                                        "started": "2021-07-26T09:53:48.012764Z",
-                                        "finished": "2021-07-26T09:53:48.061748Z"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization-types"
-                ]
-            }
-        },
-        "/organization-types/{organizationTypeId}": {
-            "get": {
-                "summary": "get_one",
-                "description": " API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationTypeId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get_one",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "title_en": "Goverment org",
-                                        "title_bn": "সরকারি",
-                                        "is_government": 1,
-                                        "row_status": 1
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "started": "2021-07-26T10:01:28.555561Z",
-                                        "finished": "2021-07-26T10:01:28.585407Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/organization-types/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/organization-types/1"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization-types"
-                ]
-            },
-            "put": {
-                "summary": "update",
-                "description": "API endpoint to update an organization type.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationTypeId"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_en"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_bn"
-                    },
-                    {
-                        "$ref": "#/components/parameters/is_government"
-                    },
-                    {
-                        "$ref": "#/components/parameters/row_status"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "headers": {}
-                    },
-                    "201": {
-                        "description": "update",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "title_en": "Goverment org",
-                                        "title_bn": "সরকারি",
-                                        "is_government": 1,
-                                        "row_status": 1,
-                                        "created_at": "2021-07-26T09:53:48.000000Z",
-                                        "updated_at": "2021-07-26T09:58:41.000000Z"
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "organization Type updated successfully.",
-                                        "started": "2021-07-26T09:58:49.376044Z",
-                                        "finished": "2021-07-26T09:58:49.419228Z"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization-types"
-                ]
-            },
-            "delete": {
-                "summary": "delete",
-                "description": "API endpoint to delete an organization type.A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationTypeId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "delete",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                },
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Organization type deleted successfully.",
-                                        "started": "2021-07-26T10:02:28.720901Z",
-                                        "finished": "2021-07-26T10:02:28.771021Z"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization-types"
-                ]
-            }
-        },
-        "/organizations": {
-            "get": {
-                "summary": "get list",
-                "description": "API endpoint to get the list of organizations.A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/order"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_en_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_bn_optional"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get list",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/organization"
-                                },
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup.com",
-                                            "fax_no": "",
-                                            "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "abc",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "abc@gmail.com",
-                                            "contact_person_designation": "coordinator2",
-                                            "description": "Akij is one of the largest company in bangladesh",
-                                            "row_status": 1,
-                                            "organization_types_title": "Public Bank",
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/organizations/1",
-                                                "update": "http://127.0.0.1:8000/api/v1/organizations/1",
-                                                "delete": "http://127.0.0.1:8000/api/v1/organizations/1"
-                                            }
-                                        },
-                                        {
-                                            "id": 8,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup1.com",
-                                            "fax_no": "",
-                                            "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "sayed ahmed",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "hr.akij@gmail.com",
-                                            "contact_person_designation": "HR",
-                                            "description": null,
-                                            "row_status": 99,
-                                            "organization_types_title": "Public Bank",
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/organizations/8",
-                                                "update": "http://127.0.0.1:8000/api/v1/organizations/8",
-                                                "delete": "http://127.0.0.1:8000/api/v1/organizations/8"
-                                            }
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "started": "2021-07-27T09:06:28.206729Z",
-                                        "finished": "2021-07-27T09:06:28.239348Z"
-                                    },
-                                    "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/organizations"
-                                        }
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization"
-                ]
-            },
-            "post": {
-                "summary": "create",
-                "description": "API endpoint to create a organization.A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organization_type_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_en"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_bn"
-                    },
-                    {
-                        "$ref": "#/components/parameters/loc_division_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/loc_district_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/loc_upazila_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/address"
-                    },
-                    {
-                        "$ref": "#/components/parameters/mobile"
-                    },
-                    {
-                        "$ref": "#/components/parameters/email"
-                    },
-                    {
-                        "$ref": "#/components/parameters/fax_no"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_name"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_mobile"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_email"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_designation"
-                    },
-                    {
-                        "$ref": "#/components/parameters/description"
-                    },
-                    {
-                        "$ref": "#/components/parameters/logo"
-                    },
-                    {
-                        "$ref": "#/components/parameters/domain"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "create",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/organization"
-                                },
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup.com",
-                                            "fax_no": "",
-                                            "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "abc",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "abc@gmail.com",
-                                            "contact_person_designation": "coordinator2",
-                                            "description": "Akij is one of the largest company in bangladesh",
-                                            "row_status": 1,
-                                            "organization_types_title": "Public Bank",
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/organizations/1",
-                                                "update": "http://127.0.0.1:8000/api/v1/organizations/1",
-                                                "delete": "http://127.0.0.1:8000/api/v1/organizations/1"
-                                            }
-                                        },
-                                        {
-                                            "id": 8,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup1.com",
-                                            "fax_no": "",
-                                            "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "sayed ahmed",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "hr.akij@gmail.com",
-                                            "contact_person_designation": "HR",
-                                            "description": null,
-                                            "row_status": 1,
-                                            "organization_types_title": "Public Bank",
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/organizations/8",
-                                                "update": "http://127.0.0.1:8000/api/v1/organizations/8",
-                                                "delete": "http://127.0.0.1:8000/api/v1/organizations/8"
-                                            }
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Job finished successfully.",
-                                        "started": "2021-07-27T09:06:28.206729Z",
-                                        "finished": "2021-07-27T09:06:28.239348Z"
-                                    },
-                                    "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/organizations"
-                                        }
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization"
-                ]
-            }
-        },
-        "/organizations/{organizationId}": {
-            "get": {
-                "summary": "get one",
-                "description": "API endpoint to get a specified organization.A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get one",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "title_en": "AKIJ GROUP",
-                                        "title_bn": "AKIJ GROUP",
-                                        "domain": "http://www.akijgroup.com",
-                                        "fax_no": "",
-                                        "mobile": "01758393749",
-                                        "email": "akij.group@gmail.com",
-                                        "contact_person_name": "abc",
-                                        "contact_person_mobile": "01758393749",
-                                        "contact_person_email": "abc@gmail.com",
-                                        "contact_person_designation": "coordinator2",
-                                        "description": "Akij is one of the largest company in bangladesh",
-                                        "row_status": 1,
-                                        "organization_types_title": "Public Bank"
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Job finished successfully.",
-                                        "started": "2021-07-27T09:08:55.138201Z",
-                                        "finished": "2021-07-27T09:08:55.176534Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/organizations/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/organizations/1"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization"
-                ]
-            },
-            "put": {
-                "summary": "update",
-                "description": "###### API endpoint to get a specified organization\n\nA successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationId"
-                    },
-                    {
-                        "$ref": "#/components/parameters/organization_type_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_en"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_bn"
-                    },
-                    {
-                        "$ref": "#/components/parameters/loc_division_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/loc_district_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/loc_upazila_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/address"
-                    },
-                    {
-                        "$ref": "#/components/parameters/mobile"
-                    },
-                    {
-                        "$ref": "#/components/parameters/email"
-                    },
-                    {
-                        "$ref": "#/components/parameters/fax_no"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_name"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_mobile"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_email"
-                    },
-                    {
-                        "$ref": "#/components/parameters/contact_person_designation"
-                    },
-                    {
-                        "$ref": "#/components/parameters/description"
-                    },
-                    {
-                        "$ref": "#/components/parameters/logo_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/domain"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/organization"
-                                },
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "title_en": "AKIJ GROUP",
-                                        "title_bn": "AKIJ GROUP",
-                                        "domain": "http://www.akijgroup.com",
-                                        "fax_no": "",
-                                        "mobile": "01758393749",
-                                        "email": "akij.group@gmail.com",
-                                        "contact_person_name": "abc",
-                                        "contact_person_mobile": "01758393749",
-                                        "contact_person_email": "abc@gmail.com",
-                                        "contact_person_designation": "coordinator2",
-                                        "description": "Akij is one of the largest company in bangladesh",
-                                        "row_status": 1,
-                                        "organization_types_title": "Public Bank"
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Organization updated successfully",
-                                        "started": "2021-07-27T09:08:55.138201Z",
-                                        "finished": "2021-07-27T09:08:55.176534Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/organizations/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/organizations/1"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization"
-                ]
-            },
-            "delete": {
-                "summary": "delete",
-                "description": " API endpoint to delete a specified organization\n\nA successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "delete",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/organization"
-                                },
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Organization deleted successfully.",
-                                        "started": "06 02 03",
-                                        "finished": "06 02 03"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "organization"
                 ]
             }
         },
@@ -1401,18 +1308,11 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "Job Sector added successfully.",
-                                        "started": "2021-07-26T12:11:32.746156Z",
-                                        "finished": "2021-07-26T12:11:32.792900Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/job-sectors"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -1453,8 +1353,8 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-26T12:11:43.477363Z",
-                                        "finished": "2021-07-26T12:11:43.504253Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
                                         "update": "http://localhost:8000/api/v1/job-sectors/1",
@@ -1505,12 +1405,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "Job Sector updated successfully.",
-                                        "started": "2021-07-26T12:11:43.477363Z",
-                                        "finished": "2021-07-26T12:11:43.504253Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/job-sectors/1",
-                                        "delete": "http://localhost:8000/api/v1/job-sectors/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -1594,18 +1490,11 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-26T12:26:43.765538Z",
-                                        "finished": "2021-07-26T12:26:43.799644Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/occupations"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -1710,12 +1599,8 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-26T12:27:10.730020Z",
-                                        "finished": "2021-07-26T12:27:10.774465Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/occupations/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/occupations/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -1789,8 +1674,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "Occupation deleted successfully.",
-                                        "started": "2021-07-26T12:27:10.730020Z",
-                                        "finished": "2021-07-26T12:27:10.774465Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -1834,7 +1719,7 @@
                                             "id": 1,
                                             "title_en": "Corporate management",
                                             "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                            "organization_title_en": "BDBL",
+                                            "description": null,
                                             "row_status": 1,
                                             "created_at": "2021-07-26T12:08:11.000000Z",
                                             "updated_at": "2021-07-26T12:08:11.000000Z",
@@ -1848,7 +1733,7 @@
                                             "id": 2,
                                             "title_en": "Corporate management",
                                             "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                            "organization_title_en": "BDBL",
+                                            "description": null,
                                             "row_status": 1,
                                             "created_at": "2021-07-27T12:27:37.000000Z",
                                             "updated_at": "2021-07-27T12:27:37.000000Z",
@@ -1891,9 +1776,6 @@
                 "description": "API endpoint to create a Skill.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/organization_id"
-                    },
-                    {
                         "$ref": "#/components/parameters/title_en"
                     },
                     {
@@ -1920,29 +1802,19 @@
                                             "id": 1,
                                             "title_en": "Corporate management",
                                             "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                            "organization_title_en": "BDBL",
+                                            "description": null,
                                             "row_status": 1,
                                             "created_at": "2021-07-26T12:08:11.000000Z",
-                                            "updated_at": "2021-07-26T12:08:11.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/skills/1",
-                                                "update": "http://localhost:8000/api/v1/skills/1",
-                                                "delete": "http://localhost:8000/api/v1/skills/1"
-                                            }
+                                            "updated_at": "2021-07-26T12:08:11.000000Z"
                                         },
                                         {
                                             "id": 2,
                                             "title_en": "Corporate management",
                                             "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                            "organization_title_en": "BDBL",
+                                            "description": null,
                                             "row_status": 1,
                                             "created_at": "2021-07-27T12:27:37.000000Z",
-                                            "updated_at": "2021-07-27T12:27:37.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/skills/2",
-                                                "update": "http://localhost:8000/api/v1/skills/2",
-                                                "delete": "http://localhost:8000/api/v1/skills/2"
-                                            }
+                                            "updated_at": "2021-07-27T12:27:37.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -1996,7 +1868,7 @@
                                         "id": 1,
                                         "title_en": "Corporate management",
                                         "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                        "organization_title_en": "BDBL",
+                                        "description": null,
                                         "row_status": 1,
                                         "created_at": "2021-07-26T12:08:11.000000Z",
                                         "updated_at": "2021-07-26T12:08:11.000000Z"
@@ -2053,7 +1925,7 @@
                                         "id": 1,
                                         "title_en": "Corporate management",
                                         "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                        "organization_title_en": "BDBL",
+                                        "description": null,
                                         "row_status": 1,
                                         "created_at": "2021-07-26T12:08:11.000000Z",
                                         "updated_at": "2021-07-26T12:08:11.000000Z"
@@ -2062,12 +1934,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "skill updated successfully.",
-                                        "started": "2021-07-27T12:36:39.845979Z",
-                                        "finished": "2021-07-27T12:36:39.907373Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/skills/1",
-                                        "delete": "http://localhost:8000/api/v1/skills/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -2171,18 +2039,11 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-26T10:49:47.929460Z",
-                                        "finished": "2021-07-26T10:49:47.971113Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/organization-unit-types"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -2237,8 +2098,8 @@
                                         "success": true,
                                         "code": 201,
                                         "message": "organizationUnitType added successfully.",
-                                        "started": "2021-07-26T10:49:24.486782Z",
-                                        "finished": "2021-07-26T10:49:24.548578Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -2280,12 +2141,8 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-26T10:50:06.424905Z",
-                                        "finished": "2021-07-26T10:50:06.450560Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/organization-unit-types/3",
-                                        "delete": "http://127.0.0.1:8000/api/v1/organization-unit-types/3"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -2338,8 +2195,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "OrganizationUnitType updated successfully.",
-                                        "started": "2021-07-26T10:59:55.072110Z",
-                                        "finished": "2021-07-26T10:59:55.122564Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -3106,29 +2963,17 @@
                                             "created_at": "2021-07-27T07:15:15.000000Z",
                                             "updated_at": "2021-07-27T07:15:15.000000Z",
                                             "organization_name": "BDBL",
-                                            "organization_unit_name": "Mobile Banking",
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/organization-units/1",
-                                                "update": "http://127.0.0.1:8000/api/v1/organization-units/1",
-                                                "delete": "http://127.0.0.1:8000/api/v1/organization-units/1"
-                                            }
+                                            "organization_unit_name": "Mobile Banking"
                                         }
                                     ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-27T07:15:19.226063Z",
-                                        "finished": "2021-07-27T07:15:19.267457Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/organization-units"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -3236,18 +3081,11 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "organizationUnit created successfully.",
-                                        "started": "2021-07-27T07:15:19.226063Z",
-                                        "finished": "2021-07-27T07:15:19.267457Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/organization-units"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -3301,12 +3139,8 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-27T07:15:50.969239Z",
-                                        "finished": "2021-07-27T07:15:51.008907Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/organization-units/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/organization-units/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -3408,12 +3242,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "OrganizationUnit updated successfully.",
-                                        "started": "2021-07-27T07:15:50.969239Z",
-                                        "finished": "2021-07-27T07:15:51.008907Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/organization-units/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/organization-units/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -3498,7 +3328,6 @@
                                     "$ref": "#/components/schemas/organizationUnit"
                                 },
                                 "examples": {
-
                                 }
                             }
                         }
@@ -3509,6 +3338,69 @@
                 ]
             }
         },
+       "/organization-units/{organizationUnitId}/assign-service-to-organization-unit": {
+           "post": {
+               "summary": "Assign services to organizationUnit",
+               "description": "API endpoint to assign services to the specified organization unit.A successful request response will show 200 HTTP status code.",
+               "parameters": [
+                   {
+                       "$ref": "#/components/parameters/organizationUnitId"
+                   },
+                   {
+                       "$ref": "#/components/parameters/serviceIds"
+                   }
+               ],
+               "responses": {
+                   "200": {
+                       "description": "Assign services to organizationUnit",
+                       "content": {
+                           "application/json": {
+                               "schema": {
+                                   "$ref": "#/components/schemas/organizationUnit"
+                               },
+                               "example": {
+                                   "data": {
+                                       "id": 1,
+                                       "title_en": "Bangking",
+                                       "title_bn": "Bangking",
+                                       "employee_size": 2,
+                                       "organization_id": 1,
+                                       "organization_unit_type_id": 1,
+                                       "loc_division_id": 1,
+                                       "loc_district_id": 1,
+                                       "loc_upazila_id": 1,
+                                       "address": "9269 Hilpert Ridges Apt. 752.Rosalynmouth, WA 60955",
+                                       "mobile": "01758393749",
+                                       "email": "hill.alvina@pfannerstill.com",
+                                       "fax_no": "+123456",
+                                       "contact_person_name": "Prof. Yessenia Schamberger",
+                                       "contact_person_mobile": "01758393749",
+                                       "contact_person_email": "blowe@example.org",
+                                       "contact_person_designation": "HR",
+                                       "row_status": 1,
+                                       "created_by": null,
+                                       "updated_by": null,
+                                       "created_at": "2021-08-16T09:07:40.000000Z",
+                                       "updated_at": "2021-08-16T09:07:40.000000Z",
+                                       "deleted_at": null
+                                   },
+                                   "_response_status": {
+                                       "success": true,
+                                       "code": 200,
+                                       "message": "Services added to OrganizationUnit successfully",
+                                       "started": "11 53 40",
+                                       "finished": "11 53 40"
+                                   }
+                               }
+                           }
+                       }
+                   }
+               },
+               "tags": [
+                   "organization-units"
+               ]
+           }
+       },
         "/services": {
             "get": {
                 "summary": "get list",
@@ -3554,14 +3446,7 @@
                                         "finished": "06 22 02"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/services"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -3605,30 +3490,18 @@
                                             "organization_title_en": "BDBL",
                                             "row_status": 1,
                                             "created_at": "2021-07-26T12:02:05.000000Z",
-                                            "updated_at": "2021-07-26T12:02:33.000000Z",
-                                            "_links": {
-                                                "read": "http://127.0.0.1:8000/api/v1/services/1",
-                                                "update": "http://127.0.0.1:8000/api/v1/services/1",
-                                                "delete": "http://127.0.0.1:8000/api/v1/services/1"
-                                            }
+                                            "updated_at": "2021-07-26T12:02:33.000000Z"
                                         }
                                     ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
                                         "message": "Service added successfully.",
-                                        "started": "2021-07-27T04:57:59.799854Z",
-                                        "finished": "2021-07-27T04:58:02.250532Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://127.0.0.1:8000/api/v1/services"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -3672,12 +3545,8 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-27T04:58:41.782168Z",
-                                        "finished": "2021-07-27T04:58:41.823333Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/services/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/services/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -3690,7 +3559,7 @@
             },
             "put": {
                 "summary": "update",
-                "description": "###### API endpoint to update the specified service.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to update the specified service.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/serviceId"
@@ -3730,12 +3599,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "service updated successfully.",
-                                        "started": "2021-07-27T04:58:41.782168Z",
-                                        "finished": "2021-07-27T04:58:41.823333Z"
-                                    },
-                                    "_links": {
-                                        "update": "http://127.0.0.1:8000/api/v1/services/1",
-                                        "delete": "http://127.0.0.1:8000/api/v1/services/1"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -3767,8 +3632,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "service deleted successfully",
-                                        "started": "2021-07-27T04:58:41.782168Z",
-                                        "finished": "2021-07-27T04:58:41.823333Z"
+                                        "started": "17 00 54",
+                                        "finished": "17 00 54"
                                     }
                                 }
                             }
@@ -3810,8 +3675,9 @@
                                     "data": [
                                         {
                                             "id": 5,
-                                            "organization_title_en": "AKIJ GROUP_update",
+                                            "organization_unit_id": 1,
                                             "organization_unit_title_en": "GCL_update",
+                                            "service_id": 2,
                                             "service_title_en": "Service1_update",
                                             "row_status": 1,
                                             "created_at": null,
@@ -3824,8 +3690,9 @@
                                         },
                                         {
                                             "id": 6,
-                                            "organization_title_en": "AKIJ GROUP_update",
+                                            "organization_unit_id": 1,
                                             "organization_unit_title_en": "GCL_update",
+                                            "service_id": 3,
                                             "service_title_en": "Service1_update",
                                             "row_status": 1,
                                             "created_at": null,
@@ -3844,14 +3711,7 @@
                                         "finished": "06 00 34"
                                     },
                                     "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/organization-unit-services"
-                                        }
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -3868,9 +3728,6 @@
                 "summary": "create",
                 "description": "API endpoint to create a organization unit types.A successful request response will show 201 HTTP status code",
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organization_id"
-                    },
                     {
                         "$ref": "#/components/parameters/organization_unit_id"
                     },
@@ -3941,10 +3798,6 @@
                                         "code": 200,
                                         "started": "06 00 50",
                                         "finished": "06 00 50"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/organization-unit-services/5",
-                                        "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
                                     }
                                 }
                             }
@@ -3961,9 +3814,6 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationUnitServiceId"
-                    },
-                    {
-                        "$ref": "#/components/parameters/organization_id"
                     },
                     {
                         "$ref": "#/components/parameters/organization_unit_id"
@@ -4686,8 +4536,12 @@
                         "maxLength": 500
                     },
                     "is_government": {
-                        "type": "boolean",
-                        "description": "Organization status . 0 => non govt, 1 => govt"
+                        "type": "integer",
+                        "description": "Organization status . 0 => non govt, 1 => govt",
+                        "enum": [
+                            0,
+                            1
+                        ]
                     },
                     "row_status": {
                         "type": "integer",
@@ -5101,10 +4955,6 @@
                         "maximum": 5000,
                         "minimum": 2
                     },
-                    "organization_id": {
-                        "type": "integer",
-                        "description": "Organization id"
-                    },
                     "row_status": {
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
@@ -5330,10 +5180,6 @@
                         "minLength": 2,
                         "maxLength": 1000
                     },
-                    "organization_id": {
-                        "type": "integer",
-                        "description": "Organization id"
-                    },
                     "row_status": {
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
@@ -5373,10 +5219,6 @@
                         "type": "integer",
                         "description": "Primary Key",
                         "readOnly": true
-                    },
-                    "organization_id": {
-                        "type": "integer",
-                        "description": "Organization id"
                     },
                     "organization_unit_id": {
                         "type": "integer",
@@ -5461,10 +5303,6 @@
                     "rank_id": {
                         "type": "integer",
                         "description": "Rank id"
-                    },
-                    "skill_ids": {
-                        "type": "string",
-                        "description": "skill ids"
                     },
                     "status": {
                         "type": "integer",
@@ -5611,7 +5449,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             },
             "humanResourceId": {
@@ -5619,7 +5458,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 }
             },
             "rank_id": {
@@ -5627,7 +5467,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 5
                 }
             },
             "status": {
@@ -5635,7 +5476,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "humanResourceTemplatesId": {
@@ -5643,7 +5485,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "organization_unit_type_id": {
@@ -5651,7 +5494,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             },
             "skill_ids": {
@@ -5659,7 +5503,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "[1,2]"
                 }
             },
             "is_designation": {
@@ -5675,7 +5520,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "service_id": {
@@ -5683,7 +5529,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "array"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "organization_unit_id": {
@@ -5691,7 +5538,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             },
             "skillId": {
@@ -5699,7 +5547,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 5
                 }
             },
             "serviceId": {
@@ -5707,7 +5556,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "occupationId": {
@@ -5715,7 +5565,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             },
             "job_sector_id": {
@@ -5731,7 +5582,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "page": {
@@ -5740,7 +5592,8 @@
                 "required": false,
                 "style": "form",
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "order": {
@@ -5808,7 +5661,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "grade": {
@@ -5817,7 +5671,8 @@
                 "required": false,
                 "schema": {
                     "type": "string",
-                    "maximum": 100
+                    "maximum": 100,
+                    "example": "0"
                 }
             },
             "display_order": {
@@ -5825,7 +5680,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "rankTypeId": {
@@ -5833,7 +5689,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             },
             "organization_id": {
@@ -5841,7 +5698,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 }
             },
             "organization_id_optional": {
@@ -5849,15 +5707,21 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 5
                 }
             },
             "is_government": {
                 "name": "is_government",
                 "in": "query",
                 "required": true,
+                "style": "form",
                 "schema": {
-                    "type": "boolean"
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
                 }
             },
             "organizationTypeId": {
@@ -5865,7 +5729,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 }
             },
             "description": {
@@ -5873,7 +5738,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"
                 }
             },
             "jobSectorId": {
@@ -5881,7 +5747,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "organization_type_id": {
@@ -5889,7 +5756,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 4
                 }
             },
             "loc_division_id": {
@@ -5897,7 +5765,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "loc_district_id": {
@@ -5905,7 +5774,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "loc_upazila_id": {
@@ -5913,7 +5783,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "address": {
@@ -5937,7 +5808,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://www.companyname.com"
                 }
             },
             "fax_no": {
@@ -5945,7 +5817,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "+123456"
                 }
             },
             "contact_person_mobile": {
@@ -5953,7 +5826,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "01789 277788"
                 }
             },
             "contact_person_name": {
@@ -5961,7 +5835,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Mr. X"
                 }
             },
             "contact_person_designation": {
@@ -5969,7 +5844,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "HR"
                 }
             },
             "contact_person_email": {
@@ -5977,7 +5853,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "mr.x@gmail.com"
                 }
             },
             "email": {
@@ -5985,7 +5862,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "company_name@gmail.com"
                 }
             },
             "logo": {
@@ -5993,7 +5871,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "logo.jpg"
                 }
             },
             "logo_optional": {
@@ -6001,7 +5880,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "logo.jpg"
                 }
             },
             "organizationId": {
@@ -6009,15 +5889,37 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 }
+            },
+            "serviceIds": {
+                "name": "serviceIds",
+                "in": "query",
+                "required": true,
+                "explode": false,
+                "content": {
+                    "multipart/form-data":{
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "uniqueItems": true
+                            },
+                            "minimum": 1
+                        }
+                    }
+                }
+
+
             },
             "organizationUnitTypeId": {
                 "name": "organizationUnitTypeId",
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "organizationUnitId": {
@@ -6025,7 +5927,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 }
             },
             "organizationUnitServiceId": {
@@ -6033,7 +5936,8 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 3
                 }
             },
             "employee_size": {
@@ -6041,7 +5945,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 }
             }
         }

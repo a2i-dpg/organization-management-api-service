@@ -51,7 +51,7 @@ class Organization extends BaseModel
         return $this->hasMany(OrganizationUnitType::class);
     }
 
-    public function rangType():HasMany
+    public function rankType():HasMany
     {
         return $this->hasMany(RankType::class);
     }
