@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use ErrorException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -86,6 +87,14 @@ class Handler extends ExceptionHandler
             ];
             return \response()->json($errors);
         }
+        elseif ($e instanceof ErrorException){
+            $errors = [
+                "code" => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => "Unable to resolve dependency",
+            ];
+            return \response()->json($errors);
+        }
+
         return parent::render($request, $e);
     }
 }

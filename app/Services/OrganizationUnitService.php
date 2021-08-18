@@ -51,22 +51,18 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_type_title_en',
             'organization_units.organization_id',
             'organizations.title_en as organization_name',
+            'loc_divisions.id',
+            'loc_districts.id',
+            'loc_upazilas.id',
+
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
 
-//            'loc_divisions.title_en as division_name',
-//            'loc_districts.title_en as district_name',
-//            'loc_upazilas.title_en as upazila_name',
-
-
         ]);
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        /*$organizationUnitBuilder->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-        $organizationUnitBuilder->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-        $organizationUnitBuilder->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');*/
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
 
         if (!empty($titleEn)) {
@@ -134,22 +130,19 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_type_title_en',
             'organization_units.organization_id',
             'organizations.title_en as organization_name',
+            'loc_divisions.id',
+            'loc_districts.id',
+            'loc_upazilas.id',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
 
-//            'loc_divisions.title_en as division_name',
-//            'loc_districts.title_en as district_name',
-//            'loc_upazilas.title_en as upazila_name',
         ]);
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnitBuilder->where('organization_units.id', '=', $id);
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
-//        $organizationUnitBuilders->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-//        $organizationUnitBuilders->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-//        $organizationUnitBuilders->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
 
 
         /** @var OrganizationUnit $organizationUnit */
@@ -218,111 +211,105 @@ class OrganizationUnitService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $rules = [
+            'title_en' => [
+                'required',
+                'string',
+                'max:191',
+                'min:2'
+            ],
+            'title_bn' => [
+                'required',
+                'string',
+                'max:600',
+                'min:2'
+            ],
+            'organization_id' => [
+                'required',
+                'int',
+                'exists:organizations,id',
+            ],
+            'organization_unit_type_id' => [
+                'required',
+                'int',
+                'exists:organization_unit_types,id',
+            ],
 
-        if (isset($request->serviceIds)) {
-            $rules = [
-                'serviceIds' => 'required|array|min:1',
-                'serviceIds.*' => 'required|integer|distinct|min:1'
-            ];
-        } else {
-            $rules = [
-                'title_en' => [
-                    'required',
-                    'string',
-                    'max:191',
-                    'min:2'
-                ],
-                'title_bn' => [
-                    'required',
-                    'string',
-                    'max:600',
-                    'min:2'
-                ],
-                'organization_id' => [
-                    'required',
-                    'int',
-                    'exists:organizations,id',
-                ],
-                'organization_unit_type_id' => [
-                    'required',
-                    'int',
-                    'exists:organization_unit_types,id',
-                ],
-
-//            'loc_division_id' => [
-//                 'required',
-//                 'int',
-//                 'exists:loc_divisions,id',
-//             ],
-//             'loc_district_id' => [
-//                 'required',
-//                 'int',
-//                 'exists:loc_districts,id',
-//             ],
-//             'loc_upazila_id' => [
-//                 'required',
-//                 'int',
-//                 'exists:loc_upazilas,id',
-//             ],
-                'address' => [
-                    'nullable',
-                    'string',
-                    'max:191',
-                ],
-                'mobile' => [
-                    'nullable',
-                    'string',
-                    'max:20',
-                ],
-                'email' => [
-                    'nullable',
-                    'string',
-                    'max:191',
-                ],
-                'fax_no' => [
-                    'nullable',
-                    'string',
-                    'max:50',
-                ],
-                'contact_person_name' => [
-                    'nullable',
-                    'string',
-                    'max:191',
-                ],
-                'contact_person_mobile' => [
-                    'nullable',
-                    'string',
-                    'max:20',
-                ],
-                'contact_person_email' => [
-                    'nullable',
-                    'string',
-                    'regex: /\S+@\S+\.\S+/'
-                ],
-                'contact_person_designation' => [
-                    'nullable',
-                    'string',
-                    'max:191',
-                ],
-                'employee_size' => [
-                    'required',
-                    'int',
-                ],
-                'row_status' => [
-                    'required_if:' . $id . ',!=,null',
-                    Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
-                ]
-            ];
-
-        }
+            'loc_division_id' => [
+                'nullable',
+                'int',
+            ],
+            'loc_district_id' => [
+                'nullable',
+                'int',
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'int',
+            ],
+            'address' => [
+                'nullable',
+                'string',
+                'max:191',
+            ],
+            'mobile' => [
+                'nullable',
+                'string',
+                'max:20',
+            ],
+            'email' => [
+                'nullable',
+                'string',
+                'max:191',
+            ],
+            'fax_no' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+            'contact_person_name' => [
+                'nullable',
+                'string',
+                'max:191',
+            ],
+            'contact_person_mobile' => [
+                'nullable',
+                'string',
+                'max:20',
+            ],
+            'contact_person_email' => [
+                'nullable',
+                'string',
+                'regex: /\S+@\S+\.\S+/'
+            ],
+            'contact_person_designation' => [
+                'nullable',
+                'string',
+                'max:191',
+            ],
+            'employee_size' => [
+                'required',
+                'int',
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
+            ]
+        ];
 
 
         return Validator::make($request->all(), $rules);
     }
-    public function serviceValidator(Request $request):\Illuminate\Contracts\Validation\Validator
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
-        $data=[
-            'serviceIds'=>explode(',',$request['serviceIds'])
+        $data = [
+            'serviceIds' => explode(',', $request['serviceIds'])
         ];
         $rules = [
             'serviceIds' => 'required|array|min:1',

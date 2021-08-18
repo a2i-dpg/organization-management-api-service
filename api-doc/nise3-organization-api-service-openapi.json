@@ -172,7 +172,7 @@
             },
             "put": {
                 "summary": "update",
-                "description": "API endpoint to update an organization type.A successful request response will show 201 HTTP status code",
+                "description": "API endpoint to update the specified  organization type.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationTypeId"
@@ -226,7 +226,7 @@
             },
             "delete": {
                 "summary": "delete",
-                "description": "API endpoint to delete an organization type.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to delete the specified organization type.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationTypeId"
@@ -287,7 +287,7 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "AKIJ GROUP",
+                                            "title_en": "AKIJ GROUP_update",
                                             "title_bn": "AKIJ GROUP",
                                             "domain": "http://www.akijgroup.com",
                                             "fax_no": "",
@@ -297,32 +297,153 @@
                                             "contact_person_mobile": "01758393749",
                                             "contact_person_email": "abc@gmail.com",
                                             "contact_person_designation": "coordinator2",
-                                            "description": "Akij is one of the largest company in bangladesh",
+                                            "description": "Aut deserunt enim ab culpa quidem aliquam vel.",
+                                            "logo": "logo_update.jpg",
+                                            "loc_division_id": 2,
+                                            "loc_district_id": 2,
+                                            "loc_upazila_id": 2,
+                                            "organization_type_id": 1,
+                                            "organization_types_title": "abc",
                                             "row_status": 1,
-                                            "organization_types_title": "Public Bank"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-16T09:07:38.000000Z",
+                                            "updated_at": "2021-08-17T04:54:21.000000Z"
                                         },
                                         {
-                                            "id": 8,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup1.com",
-                                            "fax_no": "",
+                                            "id": 2,
+                                            "title_en": "O'Kon, Ward and Lueilwitz",
+                                            "title_bn": "O'Kon, Ward and Lueilwitz",
+                                            "domain": "https://www.rutherford.com",
+                                            "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "sayed ahmed",
+                                            "email": "wanda90@jones.com",
+                                            "contact_person_name": "Miss Vena Langworth Jr.",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "hr.akij@gmail.com",
-                                            "contact_person_designation": "HR",
-                                            "description": null,
-                                            "row_status": 99,
-                                            "organization_types_title": "Public Bank"
+                                            "contact_person_email": "bruen.iliana@example.com",
+                                            "contact_person_designation": "Percussion Instrument Repairer",
+                                            "description": "Nihil quisquam ea suscipit consequuntur.",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "organization_type_id": 1,
+                                            "organization_types_title": "abc",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-16T09:07:38.000000Z",
+                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "McKenzie-Murray",
+                                            "title_bn": "McKenzie-Murray",
+                                            "domain": "https://www.mann.com",
+                                            "fax_no": "+123456",
+                                            "mobile": "01758393749",
+                                            "email": "hcarter@auer.biz",
+                                            "contact_person_name": "Noe Hansen DDS",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "broderick.eichmann@example.org",
+                                            "contact_person_designation": "Production Planner",
+                                            "description": "Voluptas enim sit nihil ex.",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "organization_type_id": 1,
+                                            "organization_types_title": "abc",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-16T09:07:38.000000Z",
+                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Kemmer-Torphy",
+                                            "title_bn": "Kemmer-Torphy",
+                                            "domain": "https://www.denesik.biz",
+                                            "fax_no": "+123456",
+                                            "mobile": "01758393749",
+                                            "email": "elise.dicki@gutmann.com",
+                                            "contact_person_name": "Craig Reichel Sr.",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "kessler.keaton@example.org",
+                                            "contact_person_designation": "Petroleum Pump System Operator",
+                                            "description": "Repudiandae officiis praesentium ut debitis excepturi optio.",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "organization_type_id": 2,
+                                            "organization_types_title": "Private org",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-16T09:07:38.000000Z",
+                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Dickinson, Franecki and Harvey",
+                                            "title_bn": "Dickinson, Franecki and Harvey",
+                                            "domain": "https://www.jerde.com",
+                                            "fax_no": "+123456",
+                                            "mobile": "01758393749",
+                                            "email": "jcartwright@hand.com",
+                                            "contact_person_name": "Mrs. Carlie Lockman",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "witting.willa@example.net",
+                                            "contact_person_designation": "Life Scientists",
+                                            "description": "Iusto dolores aut cumque.",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "organization_type_id": 2,
+                                            "organization_types_title": "Private org",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-16T09:07:38.000000Z",
+                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Greenfelder, Conn and Gislason",
+                                            "title_bn": "Greenfelder, Conn and Gislason",
+                                            "domain": "https://www.ziemann.com",
+                                            "fax_no": "+123456",
+                                            "mobile": "01758393749",
+                                            "email": "ophelia72@pfeffer.info",
+                                            "contact_person_name": "Daphne Botsford",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "weimann.abagail@example.com",
+                                            "contact_person_designation": "Manufactured Building Installer",
+                                            "description": "Voluptatem labore sequi et dolorum porro.",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "organization_type_id": 2,
+                                            "organization_types_title": "Private org",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-16T09:07:38.000000Z",
+                                            "updated_at": "2021-08-16T09:07:38.000000Z"
                                         }
                                     ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
+                                        "started": "03 59 21",
+                                        "finished": "03 59 21"
+                                    },
+                                    "_links": {
+                                        "paginate": []
                                     },
                                     "_page": [],
                                     "_order": "ASC"
@@ -507,7 +628,7 @@
             },
             "put": {
                 "summary": "update",
-                "description": "API endpoint to get a specified organization.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to get the specified organization.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationId"
@@ -611,7 +732,7 @@
             },
             "delete": {
                 "summary": "delete",
-                "description": " API endpoint to delete a specified organization. A successful request response will show 200 HTTP status code",
+                "description": " API endpoint to delete the specified organization. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationId"
@@ -5910,8 +6031,6 @@
                         }
                     }
                 }
-
-
             },
             "organizationUnitTypeId": {
                 "name": "organizationUnitTypeId",
