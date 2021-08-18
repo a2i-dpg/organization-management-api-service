@@ -51,9 +51,9 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_type_title_en',
             'organization_units.organization_id',
             'organizations.title_en as organization_name',
-            'loc_divisions.id',
-            'loc_districts.id',
-            'loc_upazilas.id',
+            'organization_units.loc_division_id',
+            'organization_units.loc_district_id',
+            'organization_units.loc_upazila_id',
 
             'organization_units.row_status',
             'organization_units.created_by',
@@ -130,9 +130,9 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_type_title_en',
             'organization_units.organization_id',
             'organizations.title_en as organization_name',
-            'loc_divisions.id',
-            'loc_districts.id',
-            'loc_upazilas.id',
+            'organization_units.loc_division_id',
+            'organization_units.loc_district_id',
+            'organization_units.loc_upazila_id',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
@@ -308,6 +308,7 @@ class OrganizationUnitService
      */
     public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+
         $data = [
             'serviceIds' => explode(',', $request['serviceIds'])
         ];
@@ -315,6 +316,6 @@ class OrganizationUnitService
             'serviceIds' => 'required|array|min:1',
             'serviceIds.*' => 'required|integer|distinct|min:1'
         ];
-        return Validator::make($data, $rules);
+        return Validator::make($request['serviceIds'][0], $rules);
     }
 }

@@ -63,6 +63,7 @@ class OrganizationUnit extends BaseModel
         $root['name'] = $root->title_en;
         $root['parent'] = $root->parent_id;
         $root['organization_title'] = $root->organization->title_en;
+        $root['organization_unit_title'] = $root->organizationUnit->title_en;
 
         $children = $root->children;
 

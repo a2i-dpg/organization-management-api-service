@@ -156,7 +156,7 @@ class OrganizationUnitTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function getHierarchy(int $id):JsonResponsel
+    public function getHierarchy(int $id)
     {
         $organizationUnitType = OrganizationUnitType::find($id);
         try {

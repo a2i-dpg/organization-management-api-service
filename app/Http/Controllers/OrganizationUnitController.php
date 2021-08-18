@@ -157,7 +157,9 @@ class OrganizationUnitController extends Controller
     public function assignServiceToOrganizationUnit(Request $request, int $id)
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
+
         $validated = $this->organizationUnitService->serviceValidator($request)->validated();
+
         try {
             $organizationUnit = $this->organizationUnitService->assignService($organizationUnit, $validated['serviceIds']);
             $response = [

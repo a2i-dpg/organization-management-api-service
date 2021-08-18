@@ -54,6 +54,7 @@ class OrganizationUnitType extends BaseModel
     public function getHierarchy()
     {
         $topRoot = $this->humanResourceTemplate->where('parent_id', null)->first();
+
         if (!$topRoot) {
             return null;
         }
@@ -64,7 +65,6 @@ class OrganizationUnitType extends BaseModel
 
     public function makeHierarchy($root)
     {
-        $root['name'] = $root->title_en;
         $root['parent'] = $root->parent_id;
         $root['organization_title'] = $root->organization->title_en;
         $root['organization_unit_type_title'] = $root->organizationUnitType->title_en;
