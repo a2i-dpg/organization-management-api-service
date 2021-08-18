@@ -71,19 +71,10 @@ class RankTypeService
         } else {
             $rankTypes = $rankTypeBuilder->get();
         }
-
-        $data = [];
-        foreach ($rankTypes as $rankType) {
-            /** @var RankType $rankType */
-            $links['read'] = route('api.v1.rank-types.read', ['id' => $rankType->id]);
-            $links['edit'] = route('api.v1.rank-types.update', ['id' => $rankType->id]);
-            $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $rankType->id]);
-            $rankType['_links'] = $links;
-            $data[] = $rankType->toArray();
-        }
+        $data = $rankTypes->toArray();
 
         return [
-            "data" => $data ? : null,
+            "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
@@ -92,13 +83,6 @@ class RankTypeService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.rank-types.get-list')
-                ],
             ],
             "_page" => $page,
             "_order" => $order
@@ -135,21 +119,14 @@ class RankTypeService
         /** @var RankType $rankType */
         $rankType = $rankTypeBuilder->first();
 
-        $links = [];
-        if (!empty($rankType)) {
-            $links['update'] = route('api.v1.rank-types.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.rank-types.destroy', ['id' => $id]);
-        }
-
         return [
-            "data" => $rankType ? : null,
+            "data" => $rankType ?: null,
             "_response_status" => [
                 "success" => true,
                 "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime,
-                "finished" => Carbon::now(),
-            ],
-            "_links" => $links,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ]
         ];
     }
 
@@ -191,7 +168,7 @@ class RankTypeService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request,int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [

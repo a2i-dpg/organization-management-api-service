@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\OrganizationUnit;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
-
+use App\Models\Service;
 
 /**
  * Class OrganizationUnitService
@@ -51,22 +51,18 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_type_title_en',
             'organization_units.organization_id',
             'organizations.title_en as organization_name',
+            'loc_divisions.id',
+            'loc_districts.id',
+            'loc_upazilas.id',
+
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
 
-//            'loc_divisions.title_en as division_name',
-//            'loc_districts.title_en as district_name',
-//            'loc_upazilas.title_en as upazila_name',
-
-
         ]);
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        /*$organizationUnitBuilder->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-        $organizationUnitBuilder->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-        $organizationUnitBuilder->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');*/
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
 
         if (!empty($titleEn)) {
@@ -91,15 +87,7 @@ class OrganizationUnitService
             $organizationUnits = $organizationUnitBuilder->get();
         }
 
-        $data = [];
-        foreach ($organizationUnits as $organizationUnit) {
-            /** @var OrganizationUnit $organizationUnit */
-            $links['read'] = route('api.v1.organization-units.read', ['id' => $organizationUnit->id]);
-            $links['update'] = route('api.v1.organization-units.update', ['id' => $organizationUnit->id]);
-            $links['delete'] = route('api.v1.organization-units.destroy', ['id' => $organizationUnit->id]);
-            $organizationUnit['_links'] = $links;
-            $data[] = $organizationUnit->toArray();
-        }
+        $data = $organizationUnits->toArray();
 
         return [
             "data" => $data ?: null,
@@ -111,13 +99,6 @@ class OrganizationUnitService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.organization-units.get-list')
-                ]
             ],
             "_page" => $page,
             "_order" => $order
@@ -149,35 +130,23 @@ class OrganizationUnitService
             'organization_unit_types.title_en as organization_unit_type_title_en',
             'organization_units.organization_id',
             'organizations.title_en as organization_name',
+            'loc_divisions.id',
+            'loc_districts.id',
+            'loc_upazilas.id',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
 
-//            'loc_divisions.title_en as division_name',
-//            'loc_districts.title_en as district_name',
-//            'loc_upazilas.title_en as upazila_name',
         ]);
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnitBuilder->where('organization_units.id', '=', $id);
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
-//        $organizationUnitBuilders->leftJoin('loc_divisions', 'organization_units.loc_division_id', '=', 'loc_divisions.id');
-//        $organizationUnitBuilders->leftJoin('loc_districts', 'organization_units.loc_district_id', '=', 'loc_districts.id');
-//        $organizationUnitBuilders->leftJoin('loc_upazilas', 'organization_units.loc_upazila_id', '=', 'loc_upazilas.id');
 
 
         /** @var OrganizationUnit $organizationUnit */
         $organizationUnit = $organizationUnitBuilder->first();
-
-        $links = [];
-        if (!empty($organizationUnit)) {
-            $links = [
-                'update' => route('api.v1.organization-units.update', ['id' => $id]),
-                'delete' => route('api.v1.organization-units.destroy', ['id' => $id])
-            ];
-        }
-
         return [
             "data" => $organizationUnit ?: null,
             "_response_status" => [
@@ -185,8 +154,7 @@ class OrganizationUnitService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => $links
+            ]
         ];
     }
 
@@ -224,6 +192,19 @@ class OrganizationUnitService
     }
 
     /**
+     * @param OrganizationUnit $organizationUnit
+     * @param array $serviceIds
+     * @return OrganizationUnit
+     */
+    public function assignService(OrganizationUnit $organizationUnit, array $serviceIds): OrganizationUnit
+    {
+        $validServices = Service::whereIn('id', $serviceIds)->orderBy('id', 'ASC')->pluck('id')->toArray();
+        $organizationUnit->services()->syncWithoutDetaching($validServices);
+        return $organizationUnit;
+    }
+
+
+    /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
@@ -254,21 +235,18 @@ class OrganizationUnitService
                 'exists:organization_unit_types,id',
             ],
 
-//            'loc_division_id' => [
-//                 'required',
-//                 'int',
-//                 'exists:loc_divisions,id',
-//             ],
-//             'loc_district_id' => [
-//                 'required',
-//                 'int',
-//                 'exists:loc_districts,id',
-//             ],
-//             'loc_upazila_id' => [
-//                 'required',
-//                 'int',
-//                 'exists:loc_upazilas,id',
-//             ],
+            'loc_division_id' => [
+                'nullable',
+                'int',
+            ],
+            'loc_district_id' => [
+                'nullable',
+                'int',
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'int',
+            ],
             'address' => [
                 'nullable',
                 'string',
@@ -299,6 +277,11 @@ class OrganizationUnitService
                 'string',
                 'max:20',
             ],
+            'contact_person_email' => [
+                'nullable',
+                'string',
+                'regex: /\S+@\S+\.\S+/'
+            ],
             'contact_person_designation' => [
                 'nullable',
                 'string',
@@ -311,8 +294,27 @@ class OrganizationUnitService
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
-            ],
+            ]
         ];
+
+
         return Validator::make($request->all(), $rules);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = [
+            'serviceIds' => explode(',', $request['serviceIds'])
+        ];
+        $rules = [
+            'serviceIds' => 'required|array|min:1',
+            'serviceIds.*' => 'required|integer|distinct|min:1'
+        ];
+        return Validator::make($data, $rules);
     }
 }

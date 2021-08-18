@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 /**
  * Class OrganizationUnit
@@ -93,8 +93,20 @@ class OrganizationUnit extends BaseModel
         return $this->belongsTo(OrganizationUnitType::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function humanResources(): HasMany
     {
         return $this->hasMany(HumanResource::class);
     }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class, 'organization_unit_services');
+    }
+
 }

@@ -38,8 +38,8 @@ class HumanResourceTemplateService
             'human_resource_templates.title_bn',
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
-            'human_resource_templates.skill_ids as skills',
-            'human_resource_templates.title_en as parent',
+            'human_resource_templates.parent_id',
+            't2.title_en as parent',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title',
             'human_resource_templates.organization_unit_type_id',
@@ -82,15 +82,7 @@ class HumanResourceTemplateService
             $humanResourceTemplates = $humanResourceTemplateBuilder->get();
         }
 
-        $data = [];
-        foreach ($humanResourceTemplates as $humanResourceTemplate) {
-            /** @var HumanResourceTemplate $humanResourceTemplate */
-            $links['read'] = route('api.v1.human-resource-templates.read', ['id' => $humanResourceTemplate->id]);
-            $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $humanResourceTemplate->id]);
-            $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $humanResourceTemplate->id]);
-            $humanResourceTemplate['_links'] = $links;
-            $data[] = $humanResourceTemplate->toArray();
-        }
+        $data = $humanResourceTemplates->toArray();
 
         return [
             "data" => $data ?: null,
@@ -102,13 +94,6 @@ class HumanResourceTemplateService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                "search" => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.human-resource-templates.get-list')
-                ],
             ],
             "_page" => $page,
             "_order" => $order
@@ -129,8 +114,8 @@ class HumanResourceTemplateService
             'human_resource_templates.title_bn',
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
-            'human_resource_templates.skill_ids as skills',
-            'human_resource_templates.title_en as parent',
+            'human_resource_templates.parent_id',
+            't2.title_en as parent',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title',
             'human_resource_templates.organization_unit_type_id',
@@ -154,12 +139,6 @@ class HumanResourceTemplateService
         /** @var HumanResourceTemplate $humanResourceTemplate */
         $humanResourceTemplate = $humanResourceTemplateBuilder->first();
 
-        $links = [];
-        if (!empty($humanResourceTemplate)) {
-            $links['update'] = route('api.v1.human-resource-templates.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.human-resource-templates.destroy', ['id' => $id]);
-        }
-
         return [
             "data" => $humanResourceTemplate ?: null,
             "_response_status" => [
@@ -167,8 +146,7 @@ class HumanResourceTemplateService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => $links,
+            ]
         ];
     }
 
@@ -254,15 +232,6 @@ class HumanResourceTemplateService
             'is_designation' => [
                 'required',
                 'int',
-            ],
-            'skill_ids' => [
-                'nullable',
-                'array'
-            ],
-            'skill_ids.*' => [
-                'nullable',
-                'int',
-                'distinct'
             ],
             'status' => [
                 'int',

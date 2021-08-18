@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int organization_id
  * @property int organization_unit_type_id
  * @property int rank_id
- * @property array skill_ids
  * @property int status
  * @property int row_status
  * @property-read  Organization organization

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Classes\CustomExceptionHandler;
 use App\Models\Service;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -37,48 +37,29 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return JsonResponse
+     * @return Exception|JsonResponse|Throwable
      */
-    public function getList(Request $request): JsonResponse
+    public function getList(Request $request):JsonResponse
     {
         try {
             $response = $this->serviceService->getServiceList($request, $this->startTime);
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
-
         return Response::json($response);
-
     }
 
     /**
      * Display the specified resource
-     * @param Request $request
-     * @param $id
-     * @return JsonResponse
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
      */
-    public function read(Request $request, int $id): JsonResponse
+    public function read(int $id):JsonResponse
     {
         try {
             $response = $this->serviceService->getOneService($id, $this->startTime);
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
-                ], $handler->convertExceptionToArray())
-            ];
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
         return Response::json($response);
 
@@ -87,17 +68,17 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return JsonResponse
+     * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    function store(Request $request): JsonResponse
+    function store(Request $request):JsonResponse
     {
         $validatedData = $this->serviceService->validator($request)->validate();
         try {
             $data = $this->serviceService->store($validatedData);
 
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => JsonResponse::HTTP_CREATED,
@@ -107,16 +88,7 @@ class ServiceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
-                ], $handler->convertExceptionToArray())
-            ];
-
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
 
         return Response::json($response, JsonResponse::HTTP_CREATED);
@@ -125,11 +97,11 @@ class ServiceController extends Controller
     /**
      * update the specified resource in storage
      * @param Request $request
-     * @param $id
-     * @return JsonResponse
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $id)
     {
 
         $service = Service::findOrFail($id);
@@ -151,16 +123,7 @@ class ServiceController extends Controller
             ];
 
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
-                ], $handler->convertExceptionToArray())
-            ];
-
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
 
         return Response::json($response, JsonResponse::HTTP_CREATED);
@@ -169,10 +132,10 @@ class ServiceController extends Controller
 
     /**
      *  remove the specified resource from storage
-     * @param $id
-     * @return JsonResponse
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id):JsonResponse
     {
         $service = Service::findOrFail($id);
 
@@ -188,18 +151,8 @@ class ServiceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            $handler = new CustomExceptionHandler($e);
-            $response = [
-                '_response_status' => array_merge([
-                    "success" => false,
-                    "started" => $this->startTime,
-                    "finished" => Carbon::now(),
-                ], $handler->convertExceptionToArray())
-            ];
-
-            return Response::json($response, $response['_response_status']['code']);
+            return $e;
         }
-
         return Response::json($response, JsonResponse::HTTP_OK);
     }
 }

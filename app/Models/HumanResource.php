@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int is_designation
  * @property int status
  * @property int row_status
- * @property array skill_ids
  * @property-read HumanResourceTemplate humanResourceTemplate
  * @property-read Organization organization
  * @property-read OrganizationUnit organizationUnit

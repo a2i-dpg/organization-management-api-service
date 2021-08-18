@@ -30,6 +30,7 @@ class ServiceService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $paginate = $request->query('page');
+        $organizationId = $request->query('organization_id');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
         /** @var Builder $serviceBuilder */
@@ -38,8 +39,6 @@ class ServiceService
                 'services.id as id',
                 'services.title_en',
                 'services.title_bn',
-                'services.organization_id',
-                'organizations.title_en as organization_title_en',
                 'services.row_status',
                 'services.created_by',
                 'services.updated_by',
@@ -47,8 +46,10 @@ class ServiceService
                 'services.updated_at',
             ]
         );
-        $serviceBuilder->join('organizations', 'services.organization_id', '=', 'organizations.id');
 
+        if (!empty($organizationId)) {
+            $serviceBuilder->where('services.organization_id', '=', $organizationId);
+        }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -70,16 +71,8 @@ class ServiceService
             $services = $serviceBuilder->get();
         }
 
-        $data = [];
+        $data = $services->toArray();
 
-        foreach ($services as $service) {
-            /** @var Service $service */
-            $links['read'] = route('api.v1.services.read', ['id' => $service->id]);
-            $links['update'] = route('api.v1.services.update', ['id' => $service->id]);
-            $links['delete'] = route('api.v1.services.destroy', ['id' => $service->id]);
-            $service['_links'] = $links;
-            $data[] = $service->toArray();
-        }
         return [
             "data" => $data ?: null,
             "_response_status" => [
@@ -90,15 +83,7 @@ class ServiceService
             ],
             "_links" => [
                 'paginate' => $paginateLink,
-                'search' => [
-                    'parameters' => [
-                        'title_en',
-                        'title_bn'
-                    ],
-                    '_link' => route('api.v1.services.get-list')
-                ],
             ],
-
             "_page" => $page,
             "_order" => $order
         ];
@@ -117,8 +102,6 @@ class ServiceService
                 'services.id as id',
                 'services.title_en',
                 'services.title_bn',
-                'services.organization_id',
-                'organizations.title_en as organization_title_en',
                 'services.row_status',
                 'services.created_by',
                 'services.updated_by',
@@ -126,17 +109,10 @@ class ServiceService
                 'services.updated_at',
             ]
         );
-        $serviceBuilder->join('organizations', 'services.organization_id', '=', 'organizations.id');
         $serviceBuilder->where('services.id', '=', $id);
 
         /** @var  Service $service */
         $service = $serviceBuilder->first();
-
-        $links = [];
-        if (!empty($service)) {
-            $links['update'] = route('api.v1.services.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.services.destroy', ['id' => $id]);
-        }
 
         return [
             "data" => $service ?: null,
@@ -145,8 +121,7 @@ class ServiceService
                 "code" => JsonResponse::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => $links,
+            ]
         ];
     }
 
@@ -201,11 +176,6 @@ class ServiceService
                 'string',
                 'max: 1000',
                 'min:2',
-            ],
-            'organization_id' => [
-                'required',
-                'int',
-                'exists:organizations,id',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
