@@ -31,6 +31,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -49,26 +52,41 @@
                                     "$ref": "#/components/schemas/organizationType"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 2,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Goverment org",
-                                            "title_bn": "সরকারি",
+                                            "title_en": "Government org",
+                                            "title_bn": "Government org",
                                             "is_government": 1,
-                                            "row_status": 1
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:39.000000Z",
+                                            "updated_at": "2021-08-19T09:11:39.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Private org",
+                                            "title_bn": "Private org",
+                                            "is_government": 2,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:39.000000Z",
+                                            "updated_at": "2021-08-19T09:11:39.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "11 50 13",
+                                        "finished": "11 50 13"
+                                    }
                                 }
                             }
                         }
@@ -266,6 +284,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -284,95 +305,104 @@
                                     "$ref": "#/components/schemas/organization"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 6,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "AKIJ GROUP_update",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup.com",
-                                            "fax_no": "",
+                                            "title_en": "Senger-Roberts",
+                                            "title_bn": "Senger-Roberts",
+                                            "domain": "https://www.mertz.com",
+                                            "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "abc",
+                                            "email": "kstreich@rohan.com",
+                                            "contact_person_name": "Prof. William Willms DVM",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "abc@gmail.com",
-                                            "contact_person_designation": "coordinator2",
-                                            "description": "Aut deserunt enim ab culpa quidem aliquam vel.",
-                                            "logo": "logo_update.jpg",
-                                            "loc_division_id": 2,
-                                            "loc_district_id": 2,
-                                            "loc_upazila_id": 2,
+                                            "contact_person_email": "willy48@example.com",
+                                            "contact_person_designation": "Municipal Fire Fighter",
+                                            "description": "Error omnis et nulla accusamus illo.",
+                                            "address": "892 Zackery Streets\nWalterberg, TN 25534-3582",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
                                             "organization_type_id": 1,
-                                            "organization_types_title": "abc",
+                                            "organization_types_title": "Government org",
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-08-16T09:07:38.000000Z",
-                                            "updated_at": "2021-08-17T04:54:21.000000Z"
+                                            "created_at": "2021-08-19T09:11:39.000000Z",
+                                            "updated_at": "2021-08-19T09:11:39.000000Z"
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "O'Kon, Ward and Lueilwitz",
-                                            "title_bn": "O'Kon, Ward and Lueilwitz",
-                                            "domain": "https://www.rutherford.com",
+                                            "title_en": "Hyatt and Sons",
+                                            "title_bn": "Hyatt and Sons",
+                                            "domain": "https://www.moore.com",
                                             "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "wanda90@jones.com",
-                                            "contact_person_name": "Miss Vena Langworth Jr.",
+                                            "email": "kub.retta@considine.com",
+                                            "contact_person_name": "Kianna Crooks",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "bruen.iliana@example.com",
-                                            "contact_person_designation": "Percussion Instrument Repairer",
-                                            "description": "Nihil quisquam ea suscipit consequuntur.",
+                                            "contact_person_email": "kyra.conroy@example.com",
+                                            "contact_person_designation": "Aircraft Cargo Handling Supervisor",
+                                            "description": "Non nemo doloribus facilis.",
+                                            "address": "1605 Ashleigh Mountain Apt. 904\nEast Murphyborough, ID 53054-9257",
                                             "logo": "logo.jpg",
                                             "loc_division_id": 1,
                                             "loc_district_id": 1,
                                             "loc_upazila_id": 1,
                                             "organization_type_id": 1,
-                                            "organization_types_title": "abc",
+                                            "organization_types_title": "Government org",
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-08-16T09:07:38.000000Z",
-                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                            "created_at": "2021-08-19T09:11:39.000000Z",
+                                            "updated_at": "2021-08-19T09:11:39.000000Z"
                                         },
                                         {
                                             "id": 3,
-                                            "title_en": "McKenzie-Murray",
-                                            "title_bn": "McKenzie-Murray",
-                                            "domain": "https://www.mann.com",
+                                            "title_en": "Kutch, Wiza and Legros",
+                                            "title_bn": "Kutch, Wiza and Legros",
+                                            "domain": "https://www.fahey.info",
                                             "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "hcarter@auer.biz",
-                                            "contact_person_name": "Noe Hansen DDS",
+                                            "email": "fhaley@bailey.com",
+                                            "contact_person_name": "Mrs. Joy Rogahn",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "broderick.eichmann@example.org",
-                                            "contact_person_designation": "Production Planner",
-                                            "description": "Voluptas enim sit nihil ex.",
+                                            "contact_person_email": "preilly@example.com",
+                                            "contact_person_designation": "Carpet Installer",
+                                            "description": "Pariatur enim et soluta velit.",
+                                            "address": "596 Maurice Manor Apt. 114\nWest Osvaldobury, NH 13708",
                                             "logo": "logo.jpg",
                                             "loc_division_id": 1,
                                             "loc_district_id": 1,
                                             "loc_upazila_id": 1,
                                             "organization_type_id": 1,
-                                            "organization_types_title": "abc",
+                                            "organization_types_title": "Government org",
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-08-16T09:07:38.000000Z",
-                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                            "created_at": "2021-08-19T09:11:39.000000Z",
+                                            "updated_at": "2021-08-19T09:11:39.000000Z"
                                         },
                                         {
                                             "id": 4,
-                                            "title_en": "Kemmer-Torphy",
-                                            "title_bn": "Kemmer-Torphy",
-                                            "domain": "https://www.denesik.biz",
+                                            "title_en": "Renner-Carter",
+                                            "title_bn": "Renner-Carter",
+                                            "domain": "https://www.roob.com",
                                             "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "elise.dicki@gutmann.com",
-                                            "contact_person_name": "Craig Reichel Sr.",
+                                            "email": "ithiel@pollich.com",
+                                            "contact_person_name": "Melvina Stokes",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "kessler.keaton@example.org",
-                                            "contact_person_designation": "Petroleum Pump System Operator",
-                                            "description": "Repudiandae officiis praesentium ut debitis excepturi optio.",
+                                            "contact_person_email": "oberbrunner.susan@example.org",
+                                            "contact_person_designation": "Hazardous Materials Removal Worker",
+                                            "description": "Ut quod aut mollitia recusandae veritatis sunt molestiae.",
+                                            "address": "4776 Kian Loop\nPort Tomasa, MN 53763",
                                             "logo": "logo.jpg",
                                             "loc_division_id": 1,
                                             "loc_district_id": 1,
@@ -382,22 +412,23 @@
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-08-16T09:07:38.000000Z",
-                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                            "created_at": "2021-08-19T09:11:39.000000Z",
+                                            "updated_at": "2021-08-19T09:11:39.000000Z"
                                         },
                                         {
                                             "id": 5,
-                                            "title_en": "Dickinson, Franecki and Harvey",
-                                            "title_bn": "Dickinson, Franecki and Harvey",
-                                            "domain": "https://www.jerde.com",
+                                            "title_en": "Becker, Kreiger and Batz",
+                                            "title_bn": "Becker, Kreiger and Batz",
+                                            "domain": "https://www.macejkovic.net",
                                             "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "jcartwright@hand.com",
-                                            "contact_person_name": "Mrs. Carlie Lockman",
+                                            "email": "rokon@weimann.com",
+                                            "contact_person_name": "Willow Ondricka",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "witting.willa@example.net",
-                                            "contact_person_designation": "Life Scientists",
-                                            "description": "Iusto dolores aut cumque.",
+                                            "contact_person_email": "skuhn@example.net",
+                                            "contact_person_designation": "Marketing Manager",
+                                            "description": "Provident iure modi impedit laboriosam aliquid et doloribus.",
+                                            "address": "529 Miller Locks\nElisemouth, ID 76558",
                                             "logo": "logo.jpg",
                                             "loc_division_id": 1,
                                             "loc_district_id": 1,
@@ -407,22 +438,23 @@
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-08-16T09:07:38.000000Z",
-                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                            "created_at": "2021-08-19T09:11:40.000000Z",
+                                            "updated_at": "2021-08-19T09:11:40.000000Z"
                                         },
                                         {
                                             "id": 6,
-                                            "title_en": "Greenfelder, Conn and Gislason",
-                                            "title_bn": "Greenfelder, Conn and Gislason",
-                                            "domain": "https://www.ziemann.com",
+                                            "title_en": "Bins Group",
+                                            "title_bn": "Bins Group",
+                                            "domain": "https://www.stehr.com",
                                             "fax_no": "+123456",
                                             "mobile": "01758393749",
-                                            "email": "ophelia72@pfeffer.info",
-                                            "contact_person_name": "Daphne Botsford",
+                                            "email": "amari.gleichner@langworth.com",
+                                            "contact_person_name": "Josie Torphy",
                                             "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "weimann.abagail@example.com",
-                                            "contact_person_designation": "Manufactured Building Installer",
-                                            "description": "Voluptatem labore sequi et dolorum porro.",
+                                            "contact_person_email": "lboyer@example.net",
+                                            "contact_person_designation": "Private Household Cook",
+                                            "description": "Ipsum accusantium ducimus qui officia est aliquam.",
+                                            "address": "47239 Carroll Lakes Apt. 009\nMarceloburgh, WI 98784-9494",
                                             "logo": "logo.jpg",
                                             "loc_division_id": 1,
                                             "loc_district_id": 1,
@@ -432,21 +464,16 @@
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-08-16T09:07:38.000000Z",
-                                            "updated_at": "2021-08-16T09:07:38.000000Z"
+                                            "created_at": "2021-08-19T09:11:40.000000Z",
+                                            "updated_at": "2021-08-19T09:11:40.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "03 59 21",
-                                        "finished": "03 59 21"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "11 59 52",
+                                        "finished": "11 59 52"
+                                    }
                                 }
                             }
                         }
@@ -773,6 +800,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -791,47 +821,149 @@
                                     "$ref": "#/components/schemas/rankType"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 2,
+                                    "page_size": 10,
+                                    "total": 18,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "CEO",
-                                            "title_bn": "সি ই ও",
-                                            "organization_title_en": "BDBL",
+                                            "title_en": "Chief of Army Staff",
+                                            "title_bn": "Chief of Army Staff",
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "description": "Quia voluptatem voluptates quo aut itaque quas assumenda dolor minima.",
                                             "row_status": 1,
-                                            "created_at": "2021-07-26T11:46:45.000000Z",
-                                            "updated_at": "2021-07-26T11:53:31.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/rank-types/1",
-                                                "edit": "http://localhost:8000/api/v1/rank-types/1",
-                                                "delete": "http://localhost:8000/api/v1/rank-types/1"
-                                            }
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "CEO",
-                                            "title_bn": "সি ই ও",
-                                            "organization_title_en": "BDBL",
+                                            "title_en": "Chief of General Staff",
+                                            "title_bn": "Chief of General Staff",
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "description": "Mollitia iste animi et pariatur sed est sunt corporis rerum.",
                                             "row_status": 1,
-                                            "created_at": "2021-07-26T11:54:53.000000Z",
-                                            "updated_at": "2021-07-26T11:54:53.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/rank-types/2",
-                                                "edit": "http://localhost:8000/api/v1/rank-types/2",
-                                                "delete": "http://localhost:8000/api/v1/rank-types/2"
-                                            }
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Chief of brigade",
+                                            "title_bn": "Chief of brigade",
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "description": "Et tempore dolores qui occaecati adipisci et nam sit et.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Chief of Army Staff",
+                                            "title_bn": "Chief of Army Staff",
+                                            "organization_id": 2,
+                                            "organization_title_en": "Hyatt and Sons",
+                                            "description": "Incidunt temporibus totam dolorem autem eligendi amet unde est ea.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Chief of General Staff",
+                                            "title_bn": "Chief of General Staff",
+                                            "organization_id": 2,
+                                            "organization_title_en": "Hyatt and Sons",
+                                            "description": "In dolorem tempore quia omnis vel consequatur et aut eum.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Chief of brigade",
+                                            "title_bn": "Chief of brigade",
+                                            "organization_id": 2,
+                                            "organization_title_en": "Hyatt and Sons",
+                                            "description": "Et inventore porro minima fuga eos tenetur possimus qui voluptas.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Chief of Army Staff",
+                                            "title_bn": "Chief of Army Staff",
+                                            "organization_id": 3,
+                                            "organization_title_en": "Kutch, Wiza and Legros",
+                                            "description": "Optio molestias autem ea in repudiandae eaque voluptas sit saepe.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Chief of General Staff",
+                                            "title_bn": "Chief of General Staff",
+                                            "organization_id": 3,
+                                            "organization_title_en": "Kutch, Wiza and Legros",
+                                            "description": "Voluptatem ipsam et ea quo aspernatur aut aut et aperiam.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Chief of brigade",
+                                            "title_bn": "Chief of brigade",
+                                            "organization_id": 3,
+                                            "organization_title_en": "Kutch, Wiza and Legros",
+                                            "description": "Laudantium recusandae dolorem et voluptate odio possimus qui perspiciatis voluptatem.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Chief of Army Staff",
+                                            "title_bn": "Chief of Army Staff",
+                                            "organization_id": 4,
+                                            "organization_title_en": "Renner-Carter",
+                                            "description": "Sed sunt doloribus voluptas praesentium nihil rerum aut at assumenda.",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "08 10 22",
-                                        "finished": "08 10 22"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 01 29",
+                                        "finished": "12 01 29"
+                                    }
                                 }
                             }
                         }
@@ -1051,6 +1183,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1069,31 +1204,179 @@
                                     "$ref": "#/components/schemas/rank"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 6,
+                                    "page_size": 10,
+                                    "total": 54,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "captain",
-                                            "title_bn": "ক্যাপ্টেন",
+                                            "title_en": "জেনারেল",
+                                            "title_bn": "জেনারেল",
                                             "grade": "1",
-                                            "order": 0,
-                                            "organization_title_en": "BDBL",
-                                            "rank_type_title_en": "CEO",
+                                            "display_order": 1,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 1,
+                                            "rank_type_title_en": "Chief of Army Staff",
                                             "row_status": 1,
-                                            "created_at": "2021-07-26T12:01:03.000000Z",
-                                            "updated_at": "2021-07-26T12:01:03.000000Z"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "title_bn": "লেফটেন্যান্ট জেনারেল",
+                                            "grade": "2",
+                                            "display_order": 2,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 1,
+                                            "rank_type_title_en": "Chief of Army Staff",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "title_bn": "ব্রিগেডিয়ার জেনারেল",
+                                            "grade": "3",
+                                            "display_order": 3,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 1,
+                                            "rank_type_title_en": "Chief of Army Staff",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "জেনারেল",
+                                            "title_bn": "জেনারেল",
+                                            "grade": "1",
+                                            "display_order": 1,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 2,
+                                            "rank_type_title_en": "Chief of General Staff",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "title_bn": "লেফটেন্যান্ট জেনারেল",
+                                            "grade": "2",
+                                            "display_order": 2,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 2,
+                                            "rank_type_title_en": "Chief of General Staff",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "title_bn": "ব্রিগেডিয়ার জেনারেল",
+                                            "grade": "3",
+                                            "display_order": 3,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 2,
+                                            "rank_type_title_en": "Chief of General Staff",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "জেনারেল",
+                                            "title_bn": "জেনারেল",
+                                            "grade": "1",
+                                            "display_order": 1,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 3,
+                                            "rank_type_title_en": "Chief of brigade",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "title_bn": "লেফটেন্যান্ট জেনারেল",
+                                            "grade": "2",
+                                            "display_order": 2,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 3,
+                                            "rank_type_title_en": "Chief of brigade",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "title_bn": "ব্রিগেডিয়ার জেনারেল",
+                                            "grade": "3",
+                                            "display_order": 3,
+                                            "organization_id": 1,
+                                            "organization_title_en": "Senger-Roberts",
+                                            "rank_type_id": 3,
+                                            "rank_type_title_en": "Chief of brigade",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "জেনারেল",
+                                            "title_bn": "জেনারেল",
+                                            "grade": "1",
+                                            "display_order": 1,
+                                            "organization_id": 2,
+                                            "organization_title_en": "Hyatt and Sons",
+                                            "rank_type_id": 4,
+                                            "rank_type_title_en": "Chief of Army Staff",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "16 16 57",
-                                        "finished": "16 16 57"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 02 21",
+                                        "finished": "12 02 21"
+                                    }
                                 }
                             }
                         }
@@ -1396,6 +1679,9 @@
                         "$ref": "#/components/parameters/title_en"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_bn"
                     },
                     {
@@ -1411,32 +1697,49 @@
                                     "$ref": "#/components/schemas/jobSector"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 3,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Charity and voluntary work",
-                                            "title_bn": "দাতব্য এবং স্বেচ্ছাসেবী কাজ",
-                                            "row_status": 1
+                                            "title_en": "Appliance Repairer",
+                                            "title_bn": "Appliance Repairer",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "software industry",
-                                            "title_bn": "সফটওয়্যার ইন্দুস্ত্র্য ",
-                                            "row_status": 1
+                                            "title_en": "Able Seamen",
+                                            "title_bn": "Able Seamen",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Electronic Equipment Assembler",
+                                            "title_bn": "Electronic Equipment Assembler",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job Sector added successfully.",
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 02 55",
+                                        "finished": "12 02 55"
+                                    }
                                 }
                             }
                         }
@@ -1581,6 +1884,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1599,26 +1905,127 @@
                                     "$ref": "#/components/schemas/occupation"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 9,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "swe",
-                                            "title_bn": "swe",
+                                            "title_en": "Creative Writer",
+                                            "title_bn": "Creative Writer",
+                                            "job_sector_id": 1,
+                                            "job_sector_title": "Appliance Repairer",
                                             "row_status": 1,
-                                            "job_sectors_title": "Charity and voluntary work2"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Hoist and Winch Operator",
+                                            "title_bn": "Hoist and Winch Operator",
+                                            "job_sector_id": 1,
+                                            "job_sector_title": "Appliance Repairer",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Home Health Aide",
+                                            "title_bn": "Home Health Aide",
+                                            "job_sector_id": 1,
+                                            "job_sector_title": "Appliance Repairer",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Airframe Mechanic",
+                                            "title_bn": "Airframe Mechanic",
+                                            "job_sector_id": 2,
+                                            "job_sector_title": "Able Seamen",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Operating Engineer",
+                                            "title_bn": "Operating Engineer",
+                                            "job_sector_id": 2,
+                                            "job_sector_title": "Able Seamen",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "University",
+                                            "title_bn": "University",
+                                            "job_sector_id": 2,
+                                            "job_sector_title": "Able Seamen",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Manager of Air Crew",
+                                            "title_bn": "Manager of Air Crew",
+                                            "job_sector_id": 3,
+                                            "job_sector_title": "Electronic Equipment Assembler",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Cultural Studies Teacher",
+                                            "title_bn": "Cultural Studies Teacher",
+                                            "job_sector_id": 3,
+                                            "job_sector_title": "Electronic Equipment Assembler",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Precision Instrument Repairer",
+                                            "title_bn": "Precision Instrument Repairer",
+                                            "job_sector_id": 3,
+                                            "job_sector_title": "Electronic Equipment Assembler",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 04 55",
+                                        "finished": "12 04 55"
+                                    }
                                 }
                             }
                         }
@@ -1817,6 +2224,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1835,54 +2245,129 @@
                                     "$ref": "#/components/schemas/skill"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 10,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Corporate management",
-                                            "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                            "description": null,
+                                            "title_en": "Heavy Equipment Mechanic",
+                                            "title_bn": "Heavy Equipment Mechanic",
+                                            "description": "Sed omnis nemo sint consequatur qui quia maiores. Est non labore et. Dolorum sapiente dolorum earum cupiditate. Qui velit nam sequi hic est quisquam. Mollitia enim dicta iure consequatur. Nam aut non est maxime aspernatur. Quidem cumque eius numquam eos repellendus. Eum reprehenderit ullam et ut voluptatem natus quia. Voluptas voluptatibus cupiditate distinctio minima enim. Eaque nihil qui qui delectus. Modi sed aut soluta qui. Numquam veniam fuga a veniam ea eligendi. Hic odit illo nihil ab. Sapiente et sit ut at nulla qui nostrum. Eaque ea qui aut iusto quaerat quae non est. Eum et ex et aut a aut. Debitis repellat ex omnis aut quisquam magnam sequi maxime. Repudiandae laborum eum harum enim optio vero. Sunt et voluptatem aut architecto natus a fuga. Et odit magni dicta accusamus molestiae culpa eaque. Esse doloremque quasi ipsam ea dolorem aut. Esse non adipisci quod omnis nisi magni. Et ea corrupti minus consequatur quo molestiae. Sunt quisquam et voluptatibus omnis voluptas at eum. Iure asperiores doloribus id. Laudantium optio error aut ut ratione et nulla. Consequatur officiis odio et eos. Illo porro in nulla et consequatur id. Molestiae reprehenderit dicta nihil omnis. Qui debitis incidunt quis eum dolorum. Qui illo quas vero aut eum. Aperiam et eum voluptas autem recusandae quis. Delectus enim voluptatibus qui hic et. Quidem dolores possimus omnis eveniet voluptatibus. Quam possimus suscipit occaecati commodi architecto. Harum tempora minima id voluptatem expedita aliquam. Repudiandae ut minima dolorum alias fugiat officiis repudiandae. Ratione corrupti tempore et doloribus aut doloribus quasi quidem. Praesentium soluta et debitis eaque voluptatem architecto corporis. Aut laudantium harum sed. Dolores optio impedit a animi veniam illum. Qui expedita praesentium ut nam dolores distinctio. Ipsum rerum aliquid aliquam eligendi vel a. Debitis magnam rem adipisci non qui. Iure reprehenderit a id deserunt eligendi qui incidunt velit. Sint aut et ea sapiente optio impedit autem. Quasi enim ea recusandae omnis mollitia consequuntur ipsam. Doloremque incidunt facere quisquam est aut voluptatem. Aut labore autem id omnis.",
                                             "row_status": 1,
-                                            "created_at": "2021-07-26T12:08:11.000000Z",
-                                            "updated_at": "2021-07-26T12:08:11.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/skills/1",
-                                                "update": "http://localhost:8000/api/v1/skills/1",
-                                                "delete": "http://localhost:8000/api/v1/skills/1"
-                                            }
+                                            "created_at": "2021-08-19T08:55:03.000000Z",
+                                            "updated_at": "2021-08-19T08:55:03.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "Corporate management",
-                                            "title_bn": "কর্পোরেট ব্যবস্থাপনা",
-                                            "description": null,
+                                            "title_en": "Logging Supervisor",
+                                            "title_bn": "Logging Supervisor",
+                                            "description": "Quasi unde necessitatibus ut sequi est adipisci. Accusamus in sit deserunt voluptate. Sunt aspernatur architecto delectus. Incidunt sit voluptatem qui cum autem eum ut. Voluptatem eos et consequatur optio sit. Eveniet excepturi accusantium ipsum. Est nihil delectus at et. Saepe totam ipsa laboriosam tenetur. Et voluptate aut fugit error voluptate. Est dolorem sapiente dolore asperiores amet. Nemo dolor rerum eveniet voluptatem cumque et. Quidem qui corrupti vero repellat sunt. Non vel consequatur rerum deleniti voluptas. Impedit architecto libero et suscipit. Eveniet est dolorem qui. Ea eum nobis enim sed. Nulla cupiditate vero cupiditate non reprehenderit error. Quo quae quod velit enim ratione deserunt. Qui et numquam qui et quo maxime veniam sit. Rerum expedita occaecati sed in saepe et et. Et consequatur repudiandae quia. Mollitia nulla consequatur omnis. Doloremque optio ipsum cumque unde nisi. Quod molestiae quos quia nulla officiis. Dolore impedit sit architecto laboriosam. Sint nisi dolore ut enim. Sit non quae qui nesciunt temporibus a. Inventore odio non harum reiciendis. Vero eligendi sequi deserunt consequatur non velit. Voluptatem quia veritatis voluptatem ipsum odio dolorem. Fuga voluptates consectetur magni rerum. Accusantium assumenda atque magnam temporibus a placeat laudantium. Reprehenderit ut consequuntur magnam praesentium. Distinctio nobis aliquid optio. Iure est tempore officia quas recusandae hic quisquam. Soluta aut aut delectus maxime tenetur porro. Qui dolor maiores veritatis odio tenetur et. Voluptatem omnis velit eos similique perferendis ut. Temporibus dolore aut ex hic quisquam. Sequi quo optio quasi qui facere eius. Sint sint voluptas qui culpa tempora qui eveniet. Vero laborum labore et quod nulla ut. Quis iste qui a dolor dolorum nulla possimus. Illum necessitatibus maiores ad voluptatem possimus. Blanditiis eaque ut ut maxime eius autem occaecati. Quibusdam nihil sint non dolores vel quia. Eos facilis doloremque eligendi deleniti id. Esse qui velit praesentium quaerat qui a accusamus. Perspiciatis excepturi harum deleniti in doloremque est dolorum ipsa. In molestiae corrupti quo quos corporis aut. Aut necessitatibus temporibus non natus blanditiis iste. Maiores aut quod praesentium deserunt error deserunt in. Earum iusto autem asperiores tenetur unde. Libero ipsa corporis commodi atque incidunt. Ratione qui ea ab doloremque porro aut cupiditate sit. Et fugiat ad nihil officia.",
                                             "row_status": 1,
-                                            "created_at": "2021-07-27T12:27:37.000000Z",
-                                            "updated_at": "2021-07-27T12:27:37.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/skills/2",
-                                                "update": "http://localhost:8000/api/v1/skills/2",
-                                                "delete": "http://localhost:8000/api/v1/skills/2"
-                                            }
+                                            "created_at": "2021-08-19T08:55:03.000000Z",
+                                            "updated_at": "2021-08-19T08:55:03.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Geological Sample Test Technician",
+                                            "title_bn": "Geological Sample Test Technician",
+                                            "description": "Ea quam fuga delectus. Eum beatae qui autem facere eum in. Non aliquid voluptas consectetur voluptas libero. Beatae quo reiciendis ab dolore iste voluptatibus qui dignissimos. Dolor impedit atque corporis autem ipsa hic quasi. Laboriosam et hic dicta quibusdam. Sint qui quis et reiciendis et eum dicta. Non aliquam mollitia sed assumenda. Praesentium nemo nam explicabo est. Unde quis et et quis. Ut velit velit eos dolores. Minus perspiciatis ipsum sit voluptates soluta nulla voluptate impedit. Necessitatibus libero velit eos. Facilis et dolorem vel quaerat et consequuntur. Explicabo cumque voluptatem neque dicta consequatur. Iste mollitia ut blanditiis non quos cupiditate eum nostrum. Reprehenderit distinctio et at omnis officia. Culpa ut repudiandae ut aliquam libero. Omnis aut suscipit sed temporibus illo vel corrupti aut. Dolor quisquam ut et sunt accusamus. Fuga et qui ipsa eos. Ut delectus consequatur quae voluptatibus. Facere suscipit delectus aut quia nihil veniam debitis. Voluptatem suscipit qui autem eum. Omnis ut non deserunt et. Sequi minima repudiandae doloremque. Ut veritatis eveniet eum et facilis quam ex. Sit expedita aliquid voluptatem velit ad neque eos. Est quibusdam alias temporibus sed qui. Commodi quidem aspernatur autem doloribus asperiores sit ad nemo. Numquam qui blanditiis inventore corporis sequi. Consequuntur suscipit dolor nobis. Velit consequatur rerum dolores ab ipsum deleniti ea dolor. Accusantium rem accusamus est explicabo recusandae. Atque non et voluptatem nobis aut. Distinctio aut et natus velit doloremque ducimus fugiat quis. Nihil id ipsam cumque minima magni dolorem id. Enim corrupti dolore quod rerum.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T08:55:03.000000Z",
+                                            "updated_at": "2021-08-19T08:55:03.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Commercial and Industrial Designer",
+                                            "title_bn": "Commercial and Industrial Designer",
+                                            "description": "Eveniet officiis in ut minima et porro laborum. Harum eos quisquam sint magnam cum. A quod id officia reiciendis. Voluptas tenetur aut porro ut consectetur architecto quam et. Nesciunt impedit consequuntur sapiente ab accusamus voluptas. Enim aut numquam rerum omnis quasi. Quis modi est quas quibusdam. Qui cumque eos totam id cupiditate vero neque. Dolorem ducimus aut eaque id sapiente consequuntur. Quos nesciunt enim quas molestias. Et sed aut quis doloremque hic. Voluptatem similique esse rerum temporibus in. Fuga fugit odio nostrum deserunt quasi. Voluptatum quaerat ipsum voluptatibus et quia odio. Dolor reiciendis sint iste quia dolores. Sint quia et aliquam officia hic. Cum placeat vitae accusamus aspernatur fuga. Quis ea velit ea nemo ullam quia aut. Voluptatem quos numquam doloribus voluptatem. Et distinctio harum molestiae. Nobis qui est eum ipsa quis dolores. Quia ullam rerum fugit et eius. Officiis voluptas ut dolore voluptas. Rerum sit voluptatem eos assumenda ut modi. Quas aut reprehenderit est. Eum consectetur quidem deleniti. Ut repellat ab modi eos autem et. Quia ab esse possimus omnis et adipisci. Autem qui consequatur voluptatibus enim quam. Repellat ipsa quas facere doloremque optio. Placeat voluptas placeat distinctio amet quia quam consequatur. Natus architecto quaerat architecto. Fuga minima explicabo recusandae perferendis qui eos repudiandae. Eum vel cumque consequatur repellat nam fuga. Ut necessitatibus iure aut. Unde recusandae exercitationem omnis aliquid qui beatae vitae vitae. Ut laudantium in rem eum nesciunt deleniti. Est sed laudantium veniam veritatis et. Hic eius dolores aliquam ea qui dicta nemo. Eius beatae sunt ea ut quidem non qui. Ut enim amet sed ea quia corrupti. Officia optio eveniet et id. Sed tenetur accusamus accusamus et quia aspernatur. Dolorum delectus omnis quibusdam. In quibusdam non voluptas quasi non cumque. Blanditiis ullam commodi omnis iste. Minus repellat dicta autem tempore. Ad sed cumque enim iusto. Minima et ab eos sit excepturi fugit alias. Dolorem facere quas inventore porro omnis. Ut molestias molestiae iste vero nostrum accusamus officia. Praesentium sequi nulla asperiores officia voluptas. Unde harum molestiae aperiam atque non aperiam. Sit earum facere sint impedit magnam minima voluptates. Ut natus illum laboriosam est vero voluptas beatae. Aut voluptas qui nisi eos sit eos. Ut dicta voluptatem et rerum. Quae amet quo illo perferendis quisquam assumenda ea sed.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T08:55:03.000000Z",
+                                            "updated_at": "2021-08-19T08:55:03.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Mail Clerk",
+                                            "title_bn": "Mail Clerk",
+                                            "description": "Odit ut iure officiis nam iusto nemo nesciunt. Et soluta enim blanditiis sequi. Impedit mollitia ut nostrum nihil consequatur mollitia. Aut magni qui est vel blanditiis. Qui facere vero commodi itaque id. Itaque consequatur qui sed tenetur. Voluptas fugiat iure facere neque consequatur minus architecto. Optio quibusdam optio consequatur nobis ea autem recusandae. Recusandae distinctio ratione explicabo est blanditiis. Ut odio iure qui libero. Quidem praesentium et omnis at ut a doloribus. Perspiciatis amet praesentium est eligendi blanditiis. Nemo praesentium ut non ut. Et nobis velit quam accusamus. Dolor iusto quisquam eius laboriosam quisquam optio in. Et ducimus officiis aliquid dolorem alias voluptatem. Praesentium quam quia eos nam iste esse. Hic aliquid maxime eos iusto. Eum et beatae alias vel. Et eos quo ipsum culpa doloremque. Sequi quia fugiat natus id qui assumenda eos. Eos eaque totam saepe voluptates tenetur. Consequatur ratione sit qui ut rerum id esse omnis. Ut inventore quo ad quia totam. Fuga aut dolorem porro omnis ut. Est repellat voluptate et laudantium voluptas. Quia odio et eos cum facilis. Et totam molestias qui quasi. Aut recusandae sunt adipisci nam expedita ut a. Qui quidem et nam iste ea illum fugit. Rerum maxime voluptas modi iste. Doloribus debitis omnis aut eos aliquam aperiam. Sequi sint quae earum mollitia dolor quis. Sint rerum eligendi et iusto eaque unde explicabo. Consequatur expedita aut quos illum odit quisquam qui. Quis assumenda voluptatem voluptatum consequatur sed. Non sunt ipsam officiis fuga quisquam eos quisquam. Necessitatibus ratione a et asperiores quia odit similique voluptatem. Voluptatem totam optio alias expedita sunt. Quae quia maiores fugit. Ratione non numquam suscipit expedita. Eum vel fugiat et qui repellat sit quaerat aut. Architecto voluptate quod eveniet tempore. Ut corporis consequuntur reiciendis aspernatur necessitatibus dolore sint debitis. Molestiae voluptates debitis quia eaque maxime. Molestiae omnis illum et ut ut. Est error veniam neque labore.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T08:55:03.000000Z",
+                                            "updated_at": "2021-08-19T08:55:03.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Biological Technician",
+                                            "title_bn": "Biological Technician",
+                                            "description": "Quia aut voluptates dolore et et quos ut. Architecto adipisci distinctio doloribus incidunt. Omnis iure tenetur consequatur. Fugiat corporis ut doloribus temporibus non doloremque veritatis voluptate. Sapiente error vitae nostrum sint voluptas. Totam autem ipsa et libero. Nesciunt sunt doloremque aut ipsam temporibus. Culpa et et praesentium ea dignissimos earum dolores. Et praesentium ea dolorum corrupti sunt voluptatem aperiam. Veritatis enim officia sit atque. Saepe ratione minus doloribus debitis. Et aut dolorem ut temporibus. Quia provident et velit illo consectetur. Accusantium sapiente quia fugit reiciendis sed autem dolore. Quis ea aperiam aliquid. Rem quia voluptatem suscipit ut rerum neque praesentium. Molestiae modi id expedita odit qui itaque vel. Assumenda eligendi eum facilis. Pariatur distinctio quaerat exercitationem facilis non. Et minus reprehenderit voluptas non numquam. Dolor nemo ut eaque sint voluptas dolorum tempore tempore. Molestiae praesentium consequatur natus et autem voluptatem vel. Dolores dolores mollitia qui dolorem sint sed et. Nihil qui perspiciatis ut. Quis aut reiciendis laborum mollitia voluptatum unde. Et nisi vero aliquam molestiae rerum sunt impedit nihil. Consequatur unde nam iure laudantium voluptatem illum. Recusandae dolore pariatur et cupiditate mollitia minus. Et quae assumenda quis non quibusdam soluta. Ullam dicta distinctio totam ut qui. Eos ea qui quibusdam. Ut ut qui dicta vero fuga. Necessitatibus quo animi fugiat sit. Ad voluptates omnis quaerat veritatis. Laudantium ratione et et quo. Temporibus voluptatum vitae distinctio voluptates. Quia provident delectus ut saepe sunt temporibus ea. Dolorum ipsa sit autem qui consequatur sed cupiditate. Sint consequatur quam dolorem nulla. Voluptas rerum suscipit rerum accusamus tenetur illo qui. Officiis sapiente iure alias dolore. Incidunt aut possimus sint voluptates. Suscipit autem nisi et error nobis dicta voluptate. Odit et voluptatum quia. Voluptas nemo qui deserunt ea. Sapiente quo nesciunt inventore accusantium aut qui ut. Dolorem est enim velit assumenda et dolorem. Facilis fuga architecto sunt eius dolores facere ad. Quaerat aut nostrum tempora tempore rerum nesciunt.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Radio Mechanic",
+                                            "title_bn": "Radio Mechanic",
+                                            "description": "Officiis eligendi debitis magnam voluptatem ut atque. Ut corrupti incidunt fugiat in minus quam. Ipsum sed neque vero omnis sit voluptate consequatur. Sed placeat rerum saepe aut. Officiis culpa et ratione numquam. Ducimus dolores est quis facere omnis iure. Cum molestiae quis qui assumenda dolores omnis ut. Velit ducimus et suscipit rerum exercitationem qui sunt fuga. Dolore nisi similique eos in laboriosam. Eos sed et non nisi qui tempora cupiditate laudantium. Molestiae dolore et quod qui possimus vitae consequuntur. Ipsum dignissimos quidem illum itaque velit unde. Quibusdam placeat ipsum aut. At fugiat voluptatem placeat id cum nam quis porro. Aliquid pariatur cupiditate praesentium ea nesciunt. Cumque provident nulla ea illum quia voluptatum. Culpa error error iusto sint illo. Fuga ab qui nam. Quod veritatis architecto et enim labore. Nihil molestias tempore ab. Et similique consequuntur dignissimos. Aut nostrum quia consequatur quis. Facilis quia dolores aliquid dolorem incidunt aut. Pariatur sunt perspiciatis consequatur dolores sequi voluptatem. Repellat minima incidunt saepe nesciunt suscipit voluptatum. Doloribus aut perspiciatis dolorem non tenetur aut. Quo cum hic qui. Sapiente adipisci velit vero quia eum odit. Non voluptates maiores quibusdam. Tempore tempore at eaque est nisi sed sunt. Perspiciatis molestiae aut voluptatum dolorem. Debitis illo ea modi dolores et. Id rerum in occaecati ut facilis dolorum. Excepturi est cum dolores ipsam ut rerum ab. Eum error eum rem quos. A eius vitae ut aspernatur. Impedit quos maiores id assumenda nostrum nemo mollitia. Doloremque autem optio itaque voluptates ipsam veniam rem. Nostrum quia vero ut nostrum animi dolor. Dolorum vel vero expedita officiis ea magni consequatur. Cupiditate incidunt incidunt nesciunt facere rerum. Eveniet explicabo aut debitis ut nam accusantium. Non qui iure illum dolor. Ratione ut tempore voluptas facilis soluta minus laboriosam. Eum minima nihil harum similique. Ratione placeat omnis eos iusto. Eligendi reiciendis voluptatum sint ut quaerat qui consequatur. Soluta doloribus iure esse minima repellendus. Eos hic ratione fugit ut veritatis doloribus. Rem consequuntur reprehenderit fugiat debitis praesentium. Dolorum est qui sed. At sunt velit provident. Ut eaque est sit esse. Sequi consequatur sint tempore.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Claims Taker",
+                                            "title_bn": "Claims Taker",
+                                            "description": "Sed culpa ut accusamus quo iste. Repellat error ut earum suscipit. Necessitatibus quam et laborum vel officia non qui. Ipsa est recusandae earum. Earum laboriosam iste dolores recusandae. Veritatis aut corrupti in similique. Ex aut rem dignissimos veniam perferendis voluptas eum. Commodi natus voluptas beatae sunt. Error aperiam magni adipisci. Nihil illo esse quia. Unde voluptas ea iure a. Possimus sit autem laborum eos at qui molestiae. Dolorem ipsam animi magni. Sunt debitis et consectetur illum. Sapiente sunt ex porro soluta. Dolor sit expedita et exercitationem quas et. Suscipit aspernatur deleniti ad illum sit doloremque vel recusandae. Rerum veritatis est et dolorem at sed. Dicta dolorum enim quia facilis nobis. Amet sint aliquid sit non provident. Est doloremque sit numquam quibusdam nihil. Voluptatem numquam pariatur eligendi natus corrupti ullam eum voluptates. Sequi in nostrum sit adipisci. Soluta et consequatur vero ex reiciendis molestiae est. Fugiat eum sit sint sunt. Delectus consequuntur aperiam tempora sunt ea. Rem voluptatibus quae est et nesciunt rerum. Quo rerum facilis est et cupiditate sit. Eum aut illo velit quo qui. Consequatur veritatis consequatur placeat aperiam autem ipsum hic. Nemo id dignissimos minima maiores voluptate nesciunt quod. Ex et est similique veniam. Et odit aspernatur possimus rerum veniam. Atque repudiandae ea soluta consequatur esse. Vitae animi cupiditate voluptas totam labore vel commodi at. Vel aut et quas cumque. Et quam voluptas enim. Voluptatem saepe possimus aut nobis aperiam. Eos omnis harum soluta veritatis quia itaque dolores. Repellendus illo quod necessitatibus cumque eum quasi. Aut sint rem non sit. Et accusantium sit non ex quo ipsa. Facere libero omnis ex nobis laboriosam. Ut est et earum amet aut ratione. Reprehenderit dolore vitae aperiam veniam harum maxime modi. Nihil consectetur dolores voluptatem. Ducimus perferendis voluptatibus non nihil. Eaque non qui id nostrum exercitationem modi consequatur debitis. Et illo voluptatibus est architecto culpa. Provident qui ut sed voluptas. Sit doloribus vel et. Incidunt aliquid harum iste aut autem quod ipsam. Cum quos ut hic sunt.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Teacher",
+                                            "title_bn": "Teacher",
+                                            "description": "Aut quo labore modi. Asperiores consequatur voluptatem doloribus. Culpa minima cupiditate non in molestias enim. Sit minus ipsum fuga in magnam modi quia. Ut sequi in est nulla voluptate. Exercitationem quidem hic consequatur quo corrupti sed. Placeat qui qui libero ab. Voluptates et quia eligendi qui natus. Quae ullam fuga voluptatibus atque. Recusandae earum corrupti sed praesentium provident autem. Voluptatum aut aut aut sit sapiente id natus. Occaecati aut voluptas quam voluptatem tempora accusamus. Ducimus sunt quia eos est alias. Aliquam rem sequi beatae inventore. Eum in nihil molestiae minus. Cumque et eum eum sapiente quisquam harum velit. Vero libero occaecati quia odio voluptatum similique esse autem. Rerum voluptatum consequuntur aut facilis quis est eos. Odio a distinctio eos quis id aliquid optio. Qui quo molestiae velit adipisci iste et non molestias. Facilis saepe doloremque pariatur maiores accusamus molestias quasi. Nihil autem ratione consequatur. Distinctio sit assumenda cumque. Tenetur consequatur deleniti quia ut deleniti labore et. Omnis repudiandae voluptatum voluptas quasi natus tempore quos. Expedita rerum et delectus reiciendis natus illo. Officiis magni labore est nostrum. Quos molestias omnis pariatur ea quia. Voluptate est et sit eos tenetur. Praesentium aliquam qui minima voluptatem ea nobis. A eum sit sed. Laborum consequuntur hic error esse. Rerum perferendis ipsa est. Consequuntur non esse sed minus pariatur. Error id sed aut hic commodi impedit. Officiis sunt laborum tenetur placeat. Eos ea ad ut aut quam error consectetur veritatis. Dolores dignissimos quidem ducimus nam. Reiciendis fuga voluptatem aspernatur dolores earum dignissimos natus. Alias occaecati autem quae maiores harum. Officiis explicabo ad iusto animi velit.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Bellhop",
+                                            "title_bn": "Bellhop",
+                                            "description": "Facere dolore omnis corrupti distinctio et nobis rerum. Eius veniam inventore sint exercitationem aut exercitationem et. Aut ullam occaecati mollitia saepe sint molestias quisquam. Facere ipsam omnis sit aut. Expedita quasi magnam velit. Explicabo reiciendis ex eaque aperiam sapiente aspernatur ipsam. Quaerat aperiam velit sed hic aliquam. Et iste id dolore nisi quia. Necessitatibus quas asperiores minus et quidem omnis itaque. Sint voluptate odit et ad officia veniam. Quo corrupti hic consequatur consequatur libero non. Expedita totam architecto necessitatibus quia reprehenderit sed praesentium. Beatae minus tempore commodi totam. Molestiae delectus quo voluptates sed necessitatibus expedita. Quisquam placeat qui autem molestiae sequi. Distinctio omnis quasi deleniti et. Numquam laudantium ducimus a cupiditate voluptatem aliquid rerum. Quos ut officiis eum sed. Voluptatem hic illo porro nemo sit accusamus ratione. Error aut deserunt laborum ut. Aut voluptates et vero pariatur cupiditate minus quidem autem. Asperiores dolor et quia amet nulla quidem. Saepe quas et eveniet eveniet ut voluptas quasi. Fugiat et illum earum dignissimos voluptatem laborum aut aliquid. Id eos labore aperiam est voluptatem magni. Eaque qui deserunt dolores autem aut voluptates voluptas. In ipsam error ut illum qui dolores. Laboriosam nostrum rerum et labore quod. Ut libero delectus corporis quasi explicabo officiis et. Ut quia exercitationem id temporibus voluptas dolores. Rem sit mollitia maiores et voluptatum iusto. Saepe hic eligendi fugiat totam voluptatibus repellendus. Perferendis et optio repudiandae illo tempora asperiores dolor asperiores. Quos et accusantium non dolorem molestiae laborum.",
+                                            "row_status": 1,
+                                            "created_at": "2021-08-19T09:11:46.000000Z",
+                                            "updated_at": "2021-08-19T09:11:46.000000Z",
+                                            "created_by": null,
+                                            "updated_by": null
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "2021-07-27T12:36:28.530531Z",
-                                        "finished": "2021-07-27T12:36:28.605161Z"
-                                    },
-                                    "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/skills"
-                                        }
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 06 45",
+                                        "finished": "12 06 45"
+                                    }
                                 }
                             }
                         }
@@ -2110,6 +2595,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -2128,46 +2616,139 @@
                                     "$ref": "#/components/schemas/organizationUnitType"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 2,
+                                    "page_size": 10,
+                                    "total": 12,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Mobile Banking",
-                                            "title_bn": "মোবাইল ব্যাংকিং",
-                                            "created_at": null,
-                                            "updated_at": null,
+                                            "title_en": "Payment",
+                                            "title_bn": "Payment",
+                                            "organization_id": 1,
+                                            "organization_name": "Senger-Roberts",
                                             "row_status": 1,
-                                            "organization_name": "City Group"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "Payment Method",
-                                            "title_bn": "রকেট মোবাইল ব্যাংকিং",
-                                            "created_at": null,
-                                            "updated_at": null,
+                                            "title_en": "Mobile Bangking",
+                                            "title_bn": "Mobile Bangking",
+                                            "organization_id": 1,
+                                            "organization_name": "Senger-Roberts",
                                             "row_status": 1,
-                                            "organization_name": "BRTC"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
                                         },
                                         {
                                             "id": 3,
-                                            "title_en": "akij group food",
-                                            "title_bn": "akij group food",
-                                            "created_at": "2021-07-26T10:49:24.000000Z",
-                                            "updated_at": "2021-07-26T10:49:24.000000Z",
+                                            "title_en": "Payment",
+                                            "title_bn": "Payment",
+                                            "organization_id": 2,
+                                            "organization_name": "Hyatt and Sons",
                                             "row_status": 1,
-                                            "organization_name": "BDBL"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Mobile Bangking",
+                                            "title_bn": "Mobile Bangking",
+                                            "organization_id": 2,
+                                            "organization_name": "Hyatt and Sons",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Payment",
+                                            "title_bn": "Payment",
+                                            "organization_id": 3,
+                                            "organization_name": "Kutch, Wiza and Legros",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Mobile Bangking",
+                                            "title_bn": "Mobile Bangking",
+                                            "organization_id": 3,
+                                            "organization_name": "Kutch, Wiza and Legros",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Payment",
+                                            "title_bn": "Payment",
+                                            "organization_id": 4,
+                                            "organization_name": "Renner-Carter",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Mobile Bangking",
+                                            "title_bn": "Mobile Bangking",
+                                            "organization_id": 4,
+                                            "organization_name": "Renner-Carter",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Payment",
+                                            "title_bn": "Payment",
+                                            "organization_id": 5,
+                                            "organization_name": "Becker, Kreiger and Batz",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Mobile Bangking",
+                                            "title_bn": "Mobile Bangking",
+                                            "organization_id": 5,
+                                            "organization_name": "Becker, Kreiger and Batz",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:43.000000Z",
+                                            "updated_at": "2021-08-19T09:11:43.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 08 36",
+                                        "finished": "12 08 36"
+                                    }
                                 }
                             }
                         }
@@ -2496,7 +3077,6 @@
                                         "deleted_at": null
                                     }
                                 }
-
                             }
                         }
                     }
@@ -2513,6 +3093,9 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -2533,38 +3116,279 @@
                                     "$ref": "#/components/schemas/organizationUnit"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 3,
+                                    "page_size": 10,
+                                    "total": 24,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "asdf",
-                                            "title_bn": "বাংলা",
-                                            "address": null,
-                                            "mobile": null,
-                                            "email": null,
-                                            "fax_no": null,
-                                            "contact_person_name": null,
-                                            "contact_person_mobile": null,
-                                            "contact_person_email": null,
-                                            "contact_person_designation": null,
-                                            "employee_size": 0,
+                                            "title_en": "Bangking",
+                                            "title_bn": "Bangking",
+                                            "address": "9853 Kub Shores Suite 832\nNorth Jacklynbury, TN 73698",
+                                            "mobile": "01758393749",
+                                            "email": "davis.nathanial@tromp.com",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Bret Kshlerin",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "umills@example.net",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 1,
+                                            "organization_unit_type_id": 1,
+                                            "organization_unit_type_title_en": "Payment",
+                                            "organization_id": 1,
+                                            "organization_name": "Senger-Roberts",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
                                             "row_status": 1,
-                                            "created_at": "2021-07-27T07:15:15.000000Z",
-                                            "updated_at": "2021-07-27T07:15:15.000000Z",
-                                            "organization_name": "BDBL",
-                                            "organization_unit_name": "Mobile Banking"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Salary",
+                                            "title_bn": "Salary",
+                                            "address": "739 Jacobs Summit Apt. 196\nPort Kennith, CO 13692",
+                                            "mobile": "01758393749",
+                                            "email": "nader.helga@bartell.com",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Darrin Wiza",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "little.nya@example.org",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 8,
+                                            "organization_unit_type_id": 1,
+                                            "organization_unit_type_title_en": "Payment",
+                                            "organization_id": 1,
+                                            "organization_name": "Senger-Roberts",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Bangking",
+                                            "title_bn": "Bangking",
+                                            "address": "780 Monroe Street Apt. 445\nZoiefurt, MD 40949-7780",
+                                            "mobile": "01758393749",
+                                            "email": "glennie08@walsh.com",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Ms. Imogene Watsica",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "winnifred.turner@example.com",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 3,
+                                            "organization_unit_type_id": 2,
+                                            "organization_unit_type_title_en": "Mobile Bangking",
+                                            "organization_id": 1,
+                                            "organization_name": "Senger-Roberts",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Salary",
+                                            "title_bn": "Salary",
+                                            "address": "7714 Magdalena Common Suite 235\nSouth Elissashire, WV 55097-7614",
+                                            "mobile": "01758393749",
+                                            "email": "bwelch@marks.com",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Rubie Bode",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "noel82@example.net",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 1,
+                                            "organization_unit_type_id": 2,
+                                            "organization_unit_type_title_en": "Mobile Bangking",
+                                            "organization_id": 1,
+                                            "organization_name": "Senger-Roberts",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:41.000000Z",
+                                            "updated_at": "2021-08-19T09:11:41.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Bangking",
+                                            "title_bn": "Bangking",
+                                            "address": "985 Marques Lodge\nNew Yadira, IN 29822",
+                                            "mobile": "01758393749",
+                                            "email": "koconner@macejkovic.org",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Mr. Mathias Streich",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "otis58@example.com",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 0,
+                                            "organization_unit_type_id": 3,
+                                            "organization_unit_type_title_en": "Payment",
+                                            "organization_id": 2,
+                                            "organization_name": "Hyatt and Sons",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Salary",
+                                            "title_bn": "Salary",
+                                            "address": "907 Mozelle Islands\nAliyahhaven, VT 47609-1811",
+                                            "mobile": "01758393749",
+                                            "email": "rose01@quigley.net",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Mason Hauck",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "vrohan@example.net",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 4,
+                                            "organization_unit_type_id": 3,
+                                            "organization_unit_type_title_en": "Payment",
+                                            "organization_id": 2,
+                                            "organization_name": "Hyatt and Sons",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Bangking",
+                                            "title_bn": "Bangking",
+                                            "address": "7635 Trantow Via\nRosinaville, UT 15191-0389",
+                                            "mobile": "01758393749",
+                                            "email": "june.turcotte@eichmann.org",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Dr. Alphonso Lakin III",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "gmann@example.net",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 6,
+                                            "organization_unit_type_id": 4,
+                                            "organization_unit_type_title_en": "Mobile Bangking",
+                                            "organization_id": 2,
+                                            "organization_name": "Hyatt and Sons",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Salary",
+                                            "title_bn": "Salary",
+                                            "address": "91669 Hammes Plains Apt. 283\nHodkiewiczport, AR 21028",
+                                            "mobile": "01758393749",
+                                            "email": "lgrady@bernier.com",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Arielle Monahan DDS",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "dietrich.zoie@example.net",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 4,
+                                            "organization_unit_type_id": 4,
+                                            "organization_unit_type_title_en": "Mobile Bangking",
+                                            "organization_id": 2,
+                                            "organization_name": "Hyatt and Sons",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Bangking",
+                                            "title_bn": "Bangking",
+                                            "address": "270 Julianne Camp Apt. 165\nPhyllischester, SD 35033-1198",
+                                            "mobile": "01758393749",
+                                            "email": "ima.raynor@sipes.com",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Robert D'Amore",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "constantin.waters@example.net",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 7,
+                                            "organization_unit_type_id": 5,
+                                            "organization_unit_type_title_en": "Payment",
+                                            "organization_id": 3,
+                                            "organization_name": "Kutch, Wiza and Legros",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Salary",
+                                            "title_bn": "Salary",
+                                            "address": "10562 Pollich Extensions Apt. 004\nNew Lazaro, NE 70523",
+                                            "mobile": "01758393749",
+                                            "email": "marcelino.huel@oconnell.net",
+                                            "fax_no": "+123456",
+                                            "contact_person_name": "Royal Hansen",
+                                            "contact_person_mobile": "01758393749",
+                                            "contact_person_email": "hgreenfelder@example.org",
+                                            "contact_person_designation": "HR",
+                                            "employee_size": 2,
+                                            "organization_unit_type_id": 5,
+                                            "organization_unit_type_title_en": "Payment",
+                                            "organization_id": 3,
+                                            "organization_name": "Kutch, Wiza and Legros",
+                                            "loc_division_id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_upazila_id": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:42.000000Z",
+                                            "updated_at": "2021-08-19T09:11:42.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 09 30",
+                                        "finished": "12 09 30"
+                                    }
                                 }
                             }
                         }
@@ -3086,15 +3910,14 @@
                 ],
                 "requestBody": {
                     "content": {
-                      "serviceIds": {
-                          "schema": {
-                              "type": "array",
-                              "items": {
-                                  "type": "integer"
-                              }
-                          }
-                      }
-
+                        "serviceIds": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
                     }
                 },
                 "responses": {
@@ -3157,6 +3980,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -3175,28 +4001,79 @@
                                     "$ref": "#/components/schemas/service"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 6,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Service1_update",
-                                            "title_bn": "Service1_bn_update",
-                                            "organization_title_en": "BDBL",
+                                            "title_en": "Executive Secretary",
+                                            "title_bn": "Executive Secretary",
                                             "row_status": 1,
-                                            "created_at": "2021-07-26T12:02:05.000000Z",
-                                            "updated_at": "2021-07-26T12:02:33.000000Z"
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T08:55:01.000000Z",
+                                            "updated_at": "2021-08-19T08:55:01.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Private Sector Executive",
+                                            "title_bn": "Private Sector Executive",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T08:55:01.000000Z",
+                                            "updated_at": "2021-08-19T08:55:01.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Heat Treating Equipment Operator",
+                                            "title_bn": "Heat Treating Equipment Operator",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T08:55:01.000000Z",
+                                            "updated_at": "2021-08-19T08:55:01.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Outdoor Power Equipment Mechanic",
+                                            "title_bn": "Outdoor Power Equipment Mechanic",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:45.000000Z",
+                                            "updated_at": "2021-08-19T09:11:45.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Food Preparation Worker",
+                                            "title_bn": "Food Preparation Worker",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:45.000000Z",
+                                            "updated_at": "2021-08-19T09:11:45.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Rigger",
+                                            "title_bn": "Rigger",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:45.000000Z",
+                                            "updated_at": "2021-08-19T09:11:45.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "06 22 01",
-                                        "finished": "06 22 02"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 13 24",
+                                        "finished": "12 13 24"
+                                    }
                                 }
                             }
                         }
@@ -3401,6 +4278,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -3419,54 +4299,229 @@
                                     "$ref": "#/components/schemas/humanResourceTemplate"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 5,
+                                    "page_size": 10,
+                                    "total": 48,
+                                    "order": "ASC",
                                     "data": [
                                         {
-                                            "id": 5,
-                                            "organization_title_en": "AKIJ GROUP_update",
-                                            "organization_unit_title_en": "GCL_update",
-                                            "service_title_en": "Service1_update",
+                                            "id": 1,
+                                            "title_en": "Marketing(Bangking)",
+                                            "title_bn": "Marketing(Bangking)",
+                                            "display_order": 7,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 1,
+                                            "organization_unit_type_title": "Payment",
+                                            "rank_id": 20,
+                                            "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "status": 1,
                                             "row_status": 1,
-                                            "created_at": null,
-                                            "updated_at": "2021-08-01T05:47:25.000000Z",
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/organization-unit-services/5",
-                                                "update": "http://localhost:8000/api/v1/organization-unit-services/5",
-                                                "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
-                                            }
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Marketing Child(Bangking)",
+                                            "title_bn": "Marketing Child(Bangking)",
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "parent_id": 1,
+                                            "parent": "Marketing(Bangking)",
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 1,
+                                            "organization_unit_type_title": "Payment",
+                                            "rank_id": 16,
+                                            "rank_title_en": "জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Marketing(Salary)",
+                                            "title_bn": "Marketing(Salary)",
+                                            "display_order": 8,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 1,
+                                            "organization_unit_type_title": "Payment",
+                                            "rank_id": 32,
+                                            "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Marketing Child(Salary)",
+                                            "title_bn": "Marketing Child(Salary)",
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "parent_id": 3,
+                                            "parent": "Marketing(Salary)",
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 1,
+                                            "organization_unit_type_title": "Payment",
+                                            "rank_id": 5,
+                                            "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Marketing(Bangking)",
+                                            "title_bn": "Marketing(Bangking)",
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 2,
+                                            "organization_unit_type_title": "Mobile Bangking",
+                                            "rank_id": 18,
+                                            "rank_title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
                                         },
                                         {
                                             "id": 6,
-                                            "organization_title_en": "AKIJ GROUP_update",
-                                            "organization_unit_title_en": "GCL_update",
-                                            "service_title_en": "Service1_update",
+                                            "title_en": "Marketing Child(Bangking)",
+                                            "title_bn": "Marketing Child(Bangking)",
+                                            "display_order": 8,
+                                            "is_designation": 1,
+                                            "parent_id": 5,
+                                            "parent": "Marketing(Bangking)",
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 2,
+                                            "organization_unit_type_title": "Mobile Bangking",
+                                            "rank_id": 49,
+                                            "rank_title_en": "জেনারেল",
+                                            "status": 1,
                                             "row_status": 1,
-                                            "created_at": null,
-                                            "updated_at": null,
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/organization-unit-services/6",
-                                                "update": "http://localhost:8000/api/v1/organization-unit-services/6",
-                                                "delete": "http://localhost:8000/api/v1/organization-unit-services/6"
-                                            }
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Marketing(Salary)",
+                                            "title_bn": "Marketing(Salary)",
+                                            "display_order": 6,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 2,
+                                            "organization_unit_type_title": "Mobile Bangking",
+                                            "rank_id": 48,
+                                            "rank_title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Marketing Child(Salary)",
+                                            "title_bn": "Marketing Child(Salary)",
+                                            "display_order": 7,
+                                            "is_designation": 1,
+                                            "parent_id": 7,
+                                            "parent": "Marketing(Salary)",
+                                            "organization_id": 1,
+                                            "organization_title": "Senger-Roberts",
+                                            "organization_unit_type_id": 2,
+                                            "organization_unit_type_title": "Mobile Bangking",
+                                            "rank_id": 37,
+                                            "rank_title_en": "জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Marketing(Bangking)",
+                                            "title_bn": "Marketing(Bangking)",
+                                            "display_order": 6,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_id": 2,
+                                            "organization_title": "Hyatt and Sons",
+                                            "organization_unit_type_id": 3,
+                                            "organization_unit_type_title": "Payment",
+                                            "rank_id": 52,
+                                            "rank_title_en": "জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Marketing Child(Bangking)",
+                                            "title_bn": "Marketing Child(Bangking)",
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "parent_id": 9,
+                                            "parent": "Marketing(Bangking)",
+                                            "organization_id": 2,
+                                            "organization_title": "Hyatt and Sons",
+                                            "organization_unit_type_id": 3,
+                                            "organization_unit_type_title": "Payment",
+                                            "rank_id": 42,
+                                            "rank_title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "06 00 34",
-                                        "finished": "06 00 34"
-                                    },
-                                    "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/organization-unit-services"
-                                        }
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 18 37",
+                                        "finished": "12 18 38"
+                                    }
                                 }
                             }
                         }
@@ -3680,6 +4735,9 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -3698,83 +4756,249 @@
                                     "$ref": "#/components/schemas/humanResource"
                                 },
                                 "example": {
+                                    "current_page": 1,
+                                    "total_page": 5,
+                                    "page_size": 10,
+                                    "total": 48,
+                                    "order": "ASC",
                                     "data": [
                                         {
-                                            "id": 1,
-                                            "title_en": "HRM Templete1_updated",
-                                            "title_bn": "এইচআরএম টেম্পলটেম এক_আপডেটেড",
-                                            "display_order": 1,
+                                            "id": 2,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 6,
                                             "is_designation": 1,
-                                            "skills": null,
-                                            "created_at": "2021-08-03T04:01:22.000000Z",
-                                            "updated_at": "2021-08-03T04:14:19.000000Z",
-                                            "parent": "HRM Templete1_updated",
-                                            "organization_title": "AKIJ GROUP",
-                                            "organization_unit_type_title": "akij group food",
-                                            "rank_title": null,
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/human-resource-templates/1",
-                                                "update": "http://localhost:8000/api/v1/human-resource-templates/1",
-                                                "delete": "http://localhost:8000/api/v1/human-resource-templates/1"
-                                            }
+                                            "parent_id": 1,
+                                            "parent": "Marketing",
+                                            "organization_unit_name": "Bangking",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 1,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 2,
+                                            "human_resource_template_name": "Marketing Child(Bangking)",
+                                            "rank_id": 17,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
                                         },
                                         {
-                                            "id": 2,
-                                            "title_en": "HRM Templete1",
-                                            "title_bn": "এইচআরএম টেম্পলটেম এক",
-                                            "display_order": 1,
+                                            "id": 1,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 5,
                                             "is_designation": 1,
-                                            "skills": null,
-                                            "created_at": "2021-08-03T04:09:22.000000Z",
-                                            "updated_at": "2021-08-03T04:09:22.000000Z",
-                                            "parent": "HRM Templete1",
-                                            "organization_title": "AKIJ GROUP",
-                                            "organization_unit_type_title": "akij group food",
-                                            "rank_title": null,
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/human-resource-templates/2",
-                                                "update": "http://localhost:8000/api/v1/human-resource-templates/2",
-                                                "delete": "http://localhost:8000/api/v1/human-resource-templates/2"
-                                            }
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_unit_name": "Bangking",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 1,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 2,
+                                            "human_resource_template_name": "Marketing Child(Bangking)",
+                                            "rank_id": 37,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
                                         },
                                         {
                                             "id": 3,
-                                            "title_en": "HRM Templete1",
-                                            "title_bn": "এইচআরএম টেম্পলটেম এক",
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 6,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_unit_name": "Salary",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 2,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 4,
+                                            "human_resource_template_name": "Marketing Child(Salary)",
+                                            "rank_id": 43,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "display_order": 9,
+                                            "is_designation": 1,
+                                            "parent_id": 3,
+                                            "parent": "Marketing",
+                                            "organization_unit_name": "Salary",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 2,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 4,
+                                            "human_resource_template_name": "Marketing Child(Salary)",
+                                            "rank_id": 43,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 8,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_unit_name": "Bangking",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 3,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 6,
+                                            "human_resource_template_name": "Marketing Child(Bangking)",
+                                            "rank_id": 11,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 6,
+                                            "is_designation": 1,
+                                            "parent_id": 5,
+                                            "parent": "Marketing",
+                                            "organization_unit_name": "Bangking",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 3,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 6,
+                                            "human_resource_template_name": "Marketing Child(Bangking)",
+                                            "rank_id": 45,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
+                                            "display_order": 0,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_unit_name": "Salary",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 4,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 8,
+                                            "human_resource_template_name": "Marketing Child(Salary)",
+                                            "rank_id": 38,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Sales executive",
+                                            "title_bn": "Sales executive",
                                             "display_order": 1,
                                             "is_designation": 1,
-                                            "skills": null,
-                                            "created_at": "2021-08-03T04:14:40.000000Z",
-                                            "updated_at": "2021-08-03T04:14:40.000000Z",
-                                            "parent": "HRM Templete1",
-                                            "organization_title": "AKIJ GROUP",
-                                            "organization_unit_type_title": "akij group food",
-                                            "rank_title": null,
-                                            "_links": {
-                                                "read": "http://localhost:8000/api/v1/human-resource-templates/3",
-                                                "update": "http://localhost:8000/api/v1/human-resource-templates/3",
-                                                "delete": "http://localhost:8000/api/v1/human-resource-templates/3"
-                                            }
+                                            "parent_id": 7,
+                                            "parent": "Sales executive",
+                                            "organization_unit_name": "Salary",
+                                            "organization_id": 1,
+                                            "organization_unit_id": 4,
+                                            "organization_name": "Senger-Roberts",
+                                            "human_resource_template_id": 8,
+                                            "human_resource_template_name": "Marketing Child(Salary)",
+                                            "rank_id": 40,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 5,
+                                            "is_designation": 1,
+                                            "parent_id": null,
+                                            "parent": null,
+                                            "organization_unit_name": "Bangking",
+                                            "organization_id": 2,
+                                            "organization_unit_id": 5,
+                                            "organization_name": "Hyatt and Sons",
+                                            "human_resource_template_id": 10,
+                                            "human_resource_template_name": "Marketing Child(Bangking)",
+                                            "rank_id": 13,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Marketing",
+                                            "title_bn": "Marketing",
+                                            "display_order": 1,
+                                            "is_designation": 1,
+                                            "parent_id": 9,
+                                            "parent": "Marketing",
+                                            "organization_unit_name": "Bangking",
+                                            "organization_id": 2,
+                                            "organization_unit_id": 5,
+                                            "organization_name": "Hyatt and Sons",
+                                            "human_resource_template_id": 10,
+                                            "human_resource_template_name": "Marketing Child(Bangking)",
+                                            "rank_id": 24,
+                                            "status": 1,
+                                            "row_status": 1,
+                                            "rank_title_en": "ব্রিগেডিয়ার জেনারেল",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-19T09:11:48.000000Z",
+                                            "updated_at": "2021-08-19T09:11:48.000000Z"
                                         }
                                     ],
-                                    "_response_status": {
+                                    "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "05 43 29",
-                                        "finished": "05 43 29"
-                                    },
-                                    "_links": {
-                                        "paginate": [],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/human-resource-templates"
-                                        }
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "started": "12 19 19",
+                                        "finished": "12 19 19"
+                                    }
                                 }
                             }
                         }
@@ -5392,7 +6616,7 @@
                 "name": "serviceIds",
                 "in": "query",
                 "content": {
-                    "application/x-www-form-urlencoded":{
+                    "application/x-www-form-urlencoded": {
                         "schema": {
                             "type": "array",
                             "items": {
@@ -5401,7 +6625,6 @@
                         }
                     }
                 }
-
             },
             "organizationUnitTypeId": {
                 "name": "organizationUnitTypeId",
@@ -5434,6 +6657,15 @@
                 "name": "employee_size",
                 "in": "query",
                 "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": 10
+                }
+            },
+            "limit": {
+                "name": "limit",
+                "in": "path",
+                "required": false,
                 "schema": {
                     "type": "integer",
                     "example": 10

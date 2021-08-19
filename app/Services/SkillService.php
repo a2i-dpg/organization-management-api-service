@@ -24,10 +24,10 @@ class SkillService
      */
     public function getSkillList(Request $request, Carbon $startTime): array
     {
-        $paginateLink = [];
-        $page = [];
+        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -57,35 +57,26 @@ class SkillService
         /** @var Collection $skills */
 
         if ($paginate) {
-            $skills = $skillBuilder->paginate(10);
+            $skills = $skillBuilder->paginate($limit);
             $paginateData = (object)$skills->toArray();
-            $page = [
-                "size" => $paginateData->per_page,
-                "total_element" => $paginateData->total,
-                "total_page" => $paginateData->last_page,
-                "current_page" => $paginateData->current_page
-            ];
-            $paginateLink[] = $paginateData->links;
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
         } else {
             $skills = $skillBuilder->get();
         }
 
-        $data = $skills->toArray();
-
-        return [
-            "data" => $data ?: null,
-            "_response_status" => [
-                "success" => true,
-                "code" => JsonResponse::HTTP_OK,
-                "started" => $startTime->format('H i s'),
-                "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => [
-                'paginate' => $paginateLink,
-            ],
-            "_page" => $page,
-            "_order" => $order
+        $response['order'] = $order;
+        $response['data'] = $skills->toArray()['data'] ?? $skills->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => JsonResponse::HTTP_OK,
+            "started" => $startTime->format('H i s'),
+            "finished" => Carbon::now()->format('H i s'),
         ];
+
+        return $response;
     }
 
     /**
