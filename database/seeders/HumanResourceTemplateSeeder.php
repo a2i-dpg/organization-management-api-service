@@ -43,6 +43,7 @@ class HumanResourceTemplateSeeder extends Seeder
                                         'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
                                         'title_en' => "Marketing(" . $organizationUnit->title_en . ")",
                                         "title_bn" => "Marketing(" . $organizationUnit->title_bn . ")",
+
                                     ]
                                 )
                         ],

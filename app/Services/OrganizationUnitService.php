@@ -309,13 +309,13 @@ class OrganizationUnitService
     public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
 
-        $data = [
-            'serviceIds' => explode(',', $request['serviceIds'])
-        ];
+//        $data = [
+//            'serviceIds' => explode(',', $request['serviceIds'])
+//        ];
         $rules = [
             'serviceIds' => 'required|array|min:1',
             'serviceIds.*' => 'required|integer|distinct|min:1'
         ];
-        return Validator::make($request['serviceIds'][0], $rules);
+        return Validator::make($request->all(), $rules);
     }
 }

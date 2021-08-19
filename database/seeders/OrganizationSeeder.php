@@ -37,22 +37,21 @@ class OrganizationSeeder extends Seeder
 
         foreach ($organizations as $organization) {
             OrganizationUnitType::factory()
-                ->has(
-                    OrganizationUnit::factory()
-                        ->count(2)
-                        ->state(new Sequence(
-                            [
-                                'organization_id' => $organization->id,
-                                'title_en' => "Bangking",
-                                'title_bn' => 'Bangking'
-                            ],
-                            [
-                                'organization_id' => $organization->id,
-                                'title_en' => "Salary",
-                                'title_bn' => 'Salary'
-                            ],
+                ->has(OrganizationUnit::factory()
+                    ->count(2)
+                    ->state(new Sequence(
+                        [
+                            'organization_id' => $organization->id,
+                            'title_en' => "Bangking",
+                            'title_bn' => 'Bangking'
+                        ],
+                        [
+                            'organization_id' => $organization->id,
+                            'title_en' => "Salary",
+                            'title_bn' => 'Salary'
+                        ],
 
-                        ))
+                    ))
                 )
                 ->count(2)
                 ->state(new Sequence(

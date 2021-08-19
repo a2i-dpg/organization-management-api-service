@@ -2375,7 +2375,7 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/organizationUnitType"
                                 },
-                                "examples": {
+                                "example": {
                                     "id": 1,
                                     "organization_id": 1,
                                     "organization_unit_type_id": 1,
@@ -2915,7 +2915,7 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/organizationUnit"
                                 },
-                                "examples": {
+                                "example": {
                                     "id": 1,
                                     "human_resource_template_id": 2,
                                     "organization_id": 1,
@@ -3082,11 +3082,21 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationUnitId"
-                    },
-                    {
-                        "$ref": "#/components/parameters/serviceIds"
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                      "serviceIds": {
+                          "schema": {
+                              "type": "array",
+                              "items": {
+                                  "type": "integer"
+                              }
+                          }
+                      }
+
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Assign services to organizationUnit",
@@ -5381,12 +5391,17 @@
             "serviceIds": {
                 "name": "serviceIds",
                 "in": "query",
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
+                "content": {
+                    "application/x-www-form-urlencoded":{
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
                     }
                 }
+
             },
             "organizationUnitTypeId": {
                 "name": "organizationUnitTypeId",
