@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
 class HumanResourceController extends Controller
@@ -78,7 +79,7 @@ class HumanResourceController extends Controller
                 'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
-                    "code" => JsonResponse::HTTP_CREATED,
+                    "code" => ResponseAlias::HTTP_CREATED,
                     "message" => "Human Resource added successfully",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
@@ -88,7 +89,7 @@ class HumanResourceController extends Controller
             return $e;
         }
 
-        return Response::json($response, JsonResponse::HTTP_CREATED);
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -110,7 +111,7 @@ class HumanResourceController extends Controller
                 'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
-                    "code" => JsonResponse::HTTP_OK,
+                    "code" => ResponseAlias::HTTP_OK,
                     "message" => "Human Resource updated successfully",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
@@ -121,7 +122,7 @@ class HumanResourceController extends Controller
             return $e;
         }
 
-        return Response::json($response, JsonResponse::HTTP_CREATED);
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -138,7 +139,7 @@ class HumanResourceController extends Controller
             $response = [
                 '_response_status' => [
                     "success" => true,
-                    "code" => JsonResponse::HTTP_OK,
+                    "code" => ResponseAlias::HTTP_OK,
                     "message" => "Human Resource deleted successfully",
                     "started" => $this->startTime->format('H i s'),
                     "finished" => Carbon::now()->format('H i s'),
@@ -148,6 +149,6 @@ class HumanResourceController extends Controller
             return $e;
         }
 
-        return Response::json($response, JsonResponse::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
