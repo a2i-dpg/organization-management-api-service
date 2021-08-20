@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\OrganizationType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OrganizationTypeService
@@ -25,10 +27,10 @@ class OrganizationTypeService
      */
     public function getAllOrganizationType(Request $request, Carbon $startTime): array
     {
-        $response = [];
+        $paginateLink = [];
+        $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -55,26 +57,35 @@ class OrganizationTypeService
         /** @var Collection $organizationTypes */
 
         if ($paginate) {
-            $organizationTypes = $organizationTypeBuilder->paginate($limit);
+            $organizationTypes = $organizationTypeBuilder->paginate(10);
             $paginateData = (object)$organizationTypes->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
+            $page = [
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
+            ];
+            $paginateLink = $paginateData->links;
         } else {
             $organizationTypes = $organizationTypeBuilder->get();
         }
 
-        $response['order'] = $order;
-        $response['data'] = $organizationTypes->toArray()['data'] ?? $organizationTypes->toArray();
-        $response['response_status'] = [
-            "success" => true,
-            "code" => JsonResponse::HTTP_OK,
-            "started" => $startTime->format('H i s'),
-            "finished" => Carbon::now()->format('H i s'),
-        ];
+        $data= $organizationTypes->toArray();
 
-        return $response;
+        return [
+            "data" => $data,
+            "_response_status" => [
+                "success" => true,
+                "code" => Response::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ],
+            "_links" => [
+                'paginate' => $paginateLink,
+            ],
+            "_page" => $page,
+            "_order" => $order
+        ];
     }
 
     /**
@@ -105,7 +116,7 @@ class OrganizationTypeService
             "data" => $organizationType ?: [],
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -171,7 +182,7 @@ class OrganizationTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

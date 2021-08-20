@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\Occupation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OccupationService
@@ -24,10 +26,10 @@ class OccupationService
      */
     public function getOccupationList(Request $request, Carbon $startTime): array
     {
-        $response = [];
+        $paginateLink = [];
+        $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -56,27 +58,35 @@ class OccupationService
         /** @var Collection $occupations */
 
         if ($paginate) {
-            $occupations = $occupationBuilder->paginate($limit);
+            $occupations = $occupationBuilder->paginate(10);
             $paginateData = (object)$occupations->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
+            $page = [
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
+            ];
+            $paginateLink = $paginateData->links;
         } else {
             $occupations = $occupationBuilder->get();
         }
 
-        $response['order'] = $order;
-        $response['data'] = $occupations->toArray()['data'] ?? $occupations->toArray();
-        $response['response_status'] = [
-            "success" => true,
-            "code" => JsonResponse::HTTP_OK,
-            "started" => $startTime->format('H i s'),
-            "finished" => Carbon::now()->format('H i s'),
+        $data = $occupations->toArray();
+
+        return [
+            "data" => $data ?: null,
+            "_response_status" => [
+                "success" => true,
+                "code" => Response::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ],
+            "links" => [
+                'paginate' => $paginateLink
+            ],
+            "_page" => $page,
+            "_order" => $order
         ];
-
-        return $response;
-
     }
 
     /**
@@ -109,7 +119,7 @@ class OccupationService
             "data" => $occupation ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -176,7 +186,7 @@ class OccupationService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

@@ -2,23 +2,24 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\HumanResource;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class HumanResourceService
 {
     public function getHumanResourceList(Request $request, Carbon $startTime): array
     {
-        $response = [];
+        $paginateLink = [];
+        $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -63,26 +64,35 @@ class HumanResourceService
         /** @var Collection $humanResources */
 
         if ($paginate) {
-            $humanResources = $humanResourceBuilder->paginate($limit);
+            $humanResources = $humanResourceBuilder->paginate(10);
             $paginateData = (object)$humanResources->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
+            $page = [
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
+            ];
+            $paginateLink[] = $paginateData->links;
         } else {
             $humanResources = $humanResourceBuilder->get();
         }
 
-        $response['order'] = $order;
-        $response['data'] = $humanResources->toArray()['data'] ?? $humanResources->toArray();
-        $response['response_status'] = [
-            "success" => true,
-            "code" => JsonResponse::HTTP_OK,
-            "started" => $startTime->format('H i s'),
-            "finished" => Carbon::now()->format('H i s'),
-        ];
+        $data = $humanResources->toArray();
 
-        return $response;
+        return [
+            "data" => $data,
+            "_response_status" => [
+                "success" => true,
+                "code" => Response::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ],
+            "_links" => [
+                'paginate' => $paginateLink,
+            ],
+            "_page" => $page,
+            "_order" => $order
+        ];
     }
 
     /**
@@ -138,7 +148,7 @@ class HumanResourceService
             "data" => $humanResource ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -247,7 +257,7 @@ class HumanResourceService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ]
         ];
         return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);

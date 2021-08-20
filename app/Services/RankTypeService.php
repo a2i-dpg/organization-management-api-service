@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\RankType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class RankTypeService
@@ -24,10 +26,10 @@ class RankTypeService
      */
     public function getRankTypeList(Request $request, Carbon $startTime): array
     {
-        $response = [];
+        $paginateLink = [];
+        $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -59,27 +61,34 @@ class RankTypeService
         /** @var Collection $rankTypes */
 
         if ($paginate) {
-            $rankTypes = $rankTypeBuilder->paginate($limit);
+            $rankTypes = $rankTypeBuilder->paginate(10);
             $paginateData = (object)$rankTypes->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
-
+            $page = [
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
+            ];
+            $paginateLink[] = $paginateData->links;
         } else {
             $rankTypes = $rankTypeBuilder->get();
         }
+        $data = $rankTypes->toArray();
 
-        $response['order'] = $order;
-        $response['data'] = $rankTypes->toArray()['data'] ?? $rankTypes->toArray();
-        $response['response_status'] = [
-            "success" => true,
-            "code" => JsonResponse::HTTP_OK,
-            "started" => $startTime->format('H i s'),
-            "finished" => Carbon::now()->format('H i s'),
+        return [
+            "data" => $data ?: null,
+            "_response_status" => [
+                "success" => true,
+                "code" => Response::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ],
+            "_links" => [
+                'paginate' => $paginateLink,
+            ],
+            "_page" => $page,
+            "_order" => $order
         ];
-
-        return $response;
     }
 
     /**
@@ -116,7 +125,7 @@ class RankTypeService
             "data" => $rankType ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -189,7 +198,7 @@ class RankTypeService
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'int',
-                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

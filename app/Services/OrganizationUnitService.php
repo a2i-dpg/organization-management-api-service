@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Models\BaseModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
@@ -12,6 +13,7 @@ use App\Models\OrganizationUnit;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Service;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OrganizationUnitService
@@ -26,10 +28,10 @@ class OrganizationUnitService
      */
     public function getAllOrganizationUnit(Request $request, Carbon $startTime): array
     {
-        $response = [];
+        $paginateLink = [];
+        $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -74,26 +76,35 @@ class OrganizationUnitService
         /** @var  Collection $organizationUnits */
 
         if ($paginate) {
-            $organizationUnits = $organizationUnitBuilder->paginate($limit);
+            $organizationUnits = $organizationUnitBuilder->paginate(10);
             $paginateData = (object)$organizationUnits->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
+            $page = [
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
+            ];
+            $paginateLink = $paginateData->links;
         } else {
             $organizationUnits = $organizationUnitBuilder->get();
         }
 
-        $response['order'] = $order;
-        $response['data'] = $organizationUnits->toArray()['data'] ?? $organizationUnits->toArray();
-        $response['response_status'] = [
-            "success" => true,
-            "code" => JsonResponse::HTTP_OK,
-            "started" => $startTime->format('H i s'),
-            "finished" => Carbon::now()->format('H i s'),
-        ];
+        $data = $organizationUnits->toArray();
 
-        return $response;
+        return [
+            "data" => $data ?: null,
+            "_response_status" => [
+                "success" => true,
+                "code" => Response::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ],
+            "_links" => [
+                'paginate' => $paginateLink,
+            ],
+            "_page" => $page,
+            "_order" => $order
+        ];
     }
 
     /**
@@ -142,7 +153,7 @@ class OrganizationUnitService
             "data" => $organizationUnit ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -284,7 +295,7 @@ class OrganizationUnitService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ]
         ];
 
@@ -300,13 +311,13 @@ class OrganizationUnitService
     public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
 
-//        $data = [
-//            'serviceIds' => explode(',', $request['serviceIds'])
-//        ];
+        $data = [
+            'serviceIds' => explode(',', $request['serviceIds'])
+        ];
         $rules = [
             'serviceIds' => 'required|array|min:1',
             'serviceIds.*' => 'required|integer|distinct|min:1'
         ];
-        return Validator::make($request->all(), $rules);
+        return Validator::make($request['serviceIds'][0], $rules);
     }
 }

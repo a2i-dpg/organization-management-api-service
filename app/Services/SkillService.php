@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\Skill;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SkillService
@@ -24,10 +26,10 @@ class SkillService
      */
     public function getSkillList(Request $request, Carbon $startTime): array
     {
-        $response = [];
+        $paginateLink = [];
+        $page = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -57,26 +59,35 @@ class SkillService
         /** @var Collection $skills */
 
         if ($paginate) {
-            $skills = $skillBuilder->paginate($limit);
+            $skills = $skillBuilder->paginate(10);
             $paginateData = (object)$skills->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
+            $page = [
+                "size" => $paginateData->per_page,
+                "total_element" => $paginateData->total,
+                "total_page" => $paginateData->last_page,
+                "current_page" => $paginateData->current_page
+            ];
+            $paginateLink[] = $paginateData->links;
         } else {
             $skills = $skillBuilder->get();
         }
 
-        $response['order'] = $order;
-        $response['data'] = $skills->toArray()['data'] ?? $skills->toArray();
-        $response['response_status'] = [
-            "success" => true,
-            "code" => JsonResponse::HTTP_OK,
-            "started" => $startTime->format('H i s'),
-            "finished" => Carbon::now()->format('H i s'),
-        ];
+        $data = $skills->toArray();
 
-        return $response;
+        return [
+            "data" => $data ?: null,
+            "_response_status" => [
+                "success" => true,
+                "code" => Response::HTTP_OK,
+                "started" => $startTime->format('H i s'),
+                "finished" => Carbon::now()->format('H i s'),
+            ],
+            "_links" => [
+                'paginate' => $paginateLink,
+            ],
+            "_page" => $page,
+            "_order" => $order
+        ];
     }
 
     /**
@@ -110,7 +121,7 @@ class SkillService
             "data" => $skill ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -178,7 +189,7 @@ class SkillService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([Skill::ROW_STATUS_ACTIVE, Skill::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);
