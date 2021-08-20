@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\JobSector;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class JobSectorService
@@ -75,7 +77,7 @@ class JobSectorService
             "data" => $data,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -115,7 +117,7 @@ class JobSectorService
             "data" => $jobSector ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -177,7 +179,7 @@ class JobSectorService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([JobSector::ROW_STATUS_ACTIVE, JobSector::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

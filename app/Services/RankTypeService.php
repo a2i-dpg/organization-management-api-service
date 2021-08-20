@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\RankType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class RankTypeService
@@ -77,7 +79,7 @@ class RankTypeService
             "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -123,7 +125,7 @@ class RankTypeService
             "data" => $rankType ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -196,7 +198,7 @@ class RankTypeService
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'int',
-                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

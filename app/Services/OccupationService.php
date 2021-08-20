@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\Occupation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OccupationService
@@ -75,7 +77,7 @@ class OccupationService
             "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -117,7 +119,7 @@ class OccupationService
             "data" => $occupation ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -184,7 +186,7 @@ class OccupationService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules);

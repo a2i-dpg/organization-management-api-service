@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Models\BaseModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
@@ -12,6 +13,7 @@ use App\Models\OrganizationUnit;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Service;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OrganizationUnitService
@@ -93,7 +95,7 @@ class OrganizationUnitService
             "data" => $data ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -151,7 +153,7 @@ class OrganizationUnitService
             "data" => $organizationUnit ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ]
@@ -293,7 +295,7 @@ class OrganizationUnitService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([OrganizationUnit::ROW_STATUS_ACTIVE, OrganizationUnit::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ]
         ];
 

@@ -4,14 +4,16 @@
 namespace App\Helpers\Classes;
 
 
+use Laravel\Lumen\Routing\Router;
+
 class CustomRouter
 {
-    private \Laravel\Lumen\Routing\Router $router;
+    private Router $router;
     private string $uri;
     private string $controller;
     private ?string $as = null;
 
-    public function __construct(\Laravel\Lumen\Routing\Router $router)
+    public function __construct(Router $router)
     {
         $this->router = $router;
     }

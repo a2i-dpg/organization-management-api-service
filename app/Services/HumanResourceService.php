@@ -2,14 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\HumanResource;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class HumanResourceService
 {
@@ -82,7 +83,7 @@ class HumanResourceService
             "data" => $data,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -147,7 +148,7 @@ class HumanResourceService
             "data" => $humanResource ?: null,
             "_response_status" => [
                 "success" => true,
-                "code" => JsonResponse::HTTP_OK,
+                "code" => Response::HTTP_OK,
                 "started" => $startTime->format('H i s'),
                 "finished" => Carbon::now()->format('H i s'),
             ],
@@ -256,7 +257,7 @@ class HumanResourceService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ]
         ];
         return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
