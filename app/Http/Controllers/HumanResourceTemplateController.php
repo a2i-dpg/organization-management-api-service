@@ -85,8 +85,7 @@ class HumanResourceTemplateController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
                     "message" => "Human Resource Template added successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -113,8 +112,7 @@ class HumanResourceTemplateController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Human Resource Template updated successfully.",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -138,8 +136,7 @@ class HumanResourceTemplateController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "HumanResource Template delete successfully.",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {

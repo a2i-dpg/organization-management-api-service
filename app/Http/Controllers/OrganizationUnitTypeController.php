@@ -86,8 +86,7 @@ class OrganizationUnitTypeController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
                     "message" => "Organization Unit Type added successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -116,8 +115,7 @@ class OrganizationUnitTypeController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Organization Unit Type updated successfully.",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -142,8 +140,7 @@ class OrganizationUnitTypeController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Organization Unit Type deleted successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -161,10 +158,19 @@ class OrganizationUnitTypeController extends Controller
     {
         $organizationUnitType = OrganizationUnitType::find($id);
         try {
-            $response = optional($organizationUnitType->getHierarchy())->toArray();
+            $data = optional($organizationUnitType->getHierarchy())->toArray();
+            $response = [
+                'data' => $data ?: null,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization Unit updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         } catch (Throwable $e) {
             return $e;
         }
-        return Response::json($response);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

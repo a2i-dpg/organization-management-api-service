@@ -85,8 +85,7 @@ class OrganizationUnitController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
                     "message" => "Organization Unit added successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -109,13 +108,12 @@ class OrganizationUnitController extends Controller
         try {
             $data = $this->organizationUnitService->update($organizationUnit, $validated);
             $response = [
-                'data' => $data ? $data : null,
+                'data' => $data ?: null,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Organization Unit updated successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -139,8 +137,7 @@ class OrganizationUnitController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Organization Unit delete successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -169,8 +166,7 @@ class OrganizationUnitController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Services added to OrganizationUnit successfully",
-                    "started" => $this->startTime->format('H i s'),
-                    "finished" => Carbon::now()->format('H i s'),
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
         } catch (Throwable $e) {
@@ -189,10 +185,19 @@ class OrganizationUnitController extends Controller
         $organizationUnit = OrganizationUnit::find($id);
 
         try {
-            $response = optional($organizationUnit->getHierarchy())->toArray();
+            $data = optional($organizationUnit->getHierarchy())->toArray();
+            $response = [
+                'data' => $data ?: null,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization Unit updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         } catch (Throwable $e) {
             return $e;
         }
-        return Response::json($response);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
