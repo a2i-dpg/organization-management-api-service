@@ -90,8 +90,8 @@ class OrganizationUnitService
         $response['response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
-            "started" => $startTime,
-            "finished" => Carbon::now()->format('s'),
+            "started" => $startTime->format('H i s'),
+            "finished" => Carbon::now()->format('H i s'),
         ];
 
         return $response;

@@ -6,7 +6,6 @@ use App\Models\BaseModel;
 use App\Models\RankType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -76,8 +75,8 @@ class RankTypeService
         $response['response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
-            "started" => $startTime,
-            "finished" => Carbon::now()->format('s'),
+            "started" => $startTime->format('H i s'),
+            "finished" => Carbon::now()->format('H i s'),
         ];
 
         return $response;
@@ -185,7 +184,6 @@ class RankTypeService
             'description' => [
                 'nullable',
                 'string',
-                'max:5000',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

@@ -149,7 +149,7 @@
             }
         },
         "/organization-types/{organizationTypeId}": {
-            "get": {
+             "get": {
                 "summary": "get_one",
                 "description": " API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code",
                 "parameters": [
@@ -4554,9 +4554,6 @@
                         "$ref": "#/components/parameters/is_designation"
                     },
                     {
-                        "$ref": "#/components/parameters/skill_ids"
-                    },
-                    {
                         "$ref": "#/components/parameters/organization_unit_type_id"
                     },
                     {
@@ -4645,10 +4642,40 @@
             },
             "put": {
                 "summary": "update",
-                "description": "API endpoint to update an existing organization unit types \n\nA successful request response will show 201 HTTP status code",
+                "description": "API endpoint to update an existing human resource template .A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/humanResourceTemplatesId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn"
+                    },
+                    {
+                        "$ref": "#/components/parameters/parent_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/rank_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/display_order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/is_designation"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_type_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/status"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
                     }
                 ],
                 "responses": {
@@ -5252,10 +5279,11 @@
                         "type": "string",
                         "description": "title in Bengali",
                         "minLength": 2,
-                        "maxLength": 500
+                        "maxLength": 400
                     },
                     "is_government": {
                         "type": "integer",
+                        "nullable": true,
                         "description": "Organization status . 0 => non govt, 1 => govt",
                         "enum": [
                             0,
@@ -5270,11 +5298,13 @@
                             1
                         ]
                     },
-                    "create_by": {
+                    "created_by": {
+                        "nullable": true,
                         "type": "integer",
                         "description": "Creator"
                     },
                     "updated_by": {
+                        "nullable": true,
                         "type": "integer",
                         "description": "Modifier"
                     },
@@ -5306,16 +5336,17 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 300
                     },
                     "title_bn": {
                         "type": "string",
                         "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 500
+                        "maxLength": 1000
                     },
                     "organization_type_id": {
                         "type": "integer",
+                        "required": true,
                         "description": "Organization type id"
                     },
                     "loc_division_id": {
@@ -5332,7 +5363,7 @@
                     },
                     "address": {
                         "type": "string",
-                        "maximum": 600,
+                        "maximum": 1000,
                         "minimum": 2,
                         "description": "organization address"
                     },
@@ -5389,10 +5420,12 @@
                     },
                     "create_by": {
                         "type": "integer",
+                        "nullable": true,
                         "description": "Creator"
                     },
                     "updated_by": {
                         "type": "integer",
+                        "nullable": true,
                         "description": "Modifier"
                     },
                     "created_at": {
@@ -5430,15 +5463,20 @@
                     },
                     "title_en": {
                         "type": "string",
-                        "description": "Rank type title in English",
+                        "description": " title in English",
                         "minLength": 2,
                         "maxLength": 255
                     },
                     "title_bn": {
                         "type": "string",
-                        "description": "Rank type title in Bengali",
+                        "description": "title in Bengali",
                         "minLength": 2,
                         "maxLength": 500
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "description of the ranktype"
+
                     },
                     "row_status": {
                         "type": "integer",
@@ -5450,10 +5488,12 @@
                     },
                     "create_by": {
                         "type": "integer",
+                        "nullable": true,
                         "description": "Creator"
                     },
                     "updated_by": {
                         "type": "integer",
+                        "nullable": true,
                         "description": "Modifier"
                     },
                     "created_at": {
@@ -5483,7 +5523,7 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 200
                     },
                     "title_bn": {
                         "type": "string",
@@ -5494,7 +5534,7 @@
                     "grade": {
                         "type": "string",
                         "description": "grade",
-                        "maximum": 100
+                        "maxLength": 100
                     },
                     "display_order": {
                         "type": "integer",
@@ -5553,7 +5593,7 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 300
                     },
                     "title_bn": {
                         "type": "string",
@@ -5563,6 +5603,7 @@
                     },
                     "row_status": {
                         "type": "integer",
+                        "default": 1,
                         "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
                             0,
@@ -5602,15 +5643,15 @@
                     },
                     "title_en": {
                         "type": "string",
-                        "description": "Rank type title in English",
+                        "description": " title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 300
                     },
                     "title_bn": {
                         "type": "string",
-                        "description": "Rank type title in Bengali",
+                        "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 500
+                        "maxLength": 800
                     },
                     "job_sector_id": {
                         "type": "integer",
@@ -5660,13 +5701,13 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength":191
                     },
                     "title_bn": {
                         "type": "string",
                         "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 500
+                        "maxLength": 600
                     },
                     "description": {
                         "type": "string",
@@ -5682,7 +5723,7 @@
                             1
                         ]
                     },
-                    "create_by": {
+                    "created_by": {
                         "type": "integer",
                         "description": "Creator"
                     },
@@ -5717,13 +5758,13 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 191
                     },
                     "title_bn": {
                         "type": "string",
                         "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 500
+                        "maxLength": 600
                     },
                     "organization_id": {
                         "type": "integer",
@@ -5773,13 +5814,13 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 191
                     },
                     "title_bn": {
                         "type": "string",
                         "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 500
+                        "maxLength": 600
                     },
                     "organization_id": {
                         "type": "integer",
@@ -5803,8 +5844,7 @@
                     },
                     "address": {
                         "type": "string",
-                        "maximum": 600,
-                        "minimum": 2,
+                        "maximum": 1000,
                         "description": "organization address"
                     },
                     "mobile": {
@@ -5823,7 +5863,7 @@
                     "contact_person_name": {
                         "type": "string",
                         "description": "Contact person name",
-                        "maximum": 300,
+                        "maximum": 191,
                         "minimum": 2
                     },
                     "contact_person_mobile": {
@@ -5888,7 +5928,7 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 191
                     },
                     "title_bn": {
                         "type": "string",
@@ -5943,34 +5983,10 @@
                     "service_id": {
                         "type": "integer",
                         "description": "Service id"
-                    },
-                    "row_status": {
-                        "type": "integer",
-                        "description": "Activation status .1 => active ,0=>inactive",
-                        "enum": [
-                            0,
-                            1
-                        ]
-                    },
-                    "create_by": {
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
                     }
+
                 },
                 "required": [
-                    "organization_id",
                     "organization_unit_id",
                     "service_id"
                 ]
@@ -5988,13 +6004,13 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 191
                     },
                     "title_bn": {
                         "type": "string",
                         "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 1000
+                        "maxLength": 500
                     },
                     "organization_id": {
                         "type": "integer",
@@ -6075,13 +6091,13 @@
                         "type": "string",
                         "description": "title in English",
                         "minLength": 2,
-                        "maxLength": 255
+                        "maxLength": 191
                     },
                     "title_bn": {
                         "type": "string",
                         "description": " title in Bengali",
                         "minLength": 2,
-                        "maxLength": 1000
+                        "maxLength": 600
                     },
                     "human_resource_template_id": {
                         "type": "integer",
@@ -6110,10 +6126,6 @@
                     "rank_id": {
                         "type": "integer",
                         "description": "Rank id"
-                    },
-                    "skill_ids": {
-                        "type": "string",
-                        "description": "skill ids"
                     },
                     "status": {
                         "type": "integer",
@@ -6166,7 +6178,7 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 }
             },
             "humanResourceId": {
@@ -6184,7 +6196,7 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "example": 5
+                    "example": 1
                 }
             },
             "status": {

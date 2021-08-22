@@ -27,7 +27,7 @@ class RankService
      */
     public function getRankList(Request $request, Carbon $startTime): array
     {
-        $response=[];
+        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
@@ -66,7 +66,8 @@ class RankService
 
         /** @var Collection $ranks */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $ranks = $rankBuilder->paginate($limit);
             $paginateData = (object)$ranks->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -77,13 +78,13 @@ class RankService
             $ranks = $rankBuilder->get();
         }
 
-        $response['order']=$order;
-        $response['data']=$ranks->toArray()['data'] ?? $ranks->toArray();
-        $response['response_status']= [
+        $response['order'] = $order;
+        $response['data'] = $ranks->toArray()['data'] ?? $ranks->toArray();
+        $response['response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
-            "started" => $startTime,
-            "finished" => Carbon::now()->format('s'),
+            "started" => $startTime->format('H i s'),
+            "finished" => Carbon::now()->format('H i s'),
         ];
 
         return $response;
@@ -201,7 +202,7 @@ class RankService
                 'int',
             ],
             'organization_id' => [
-                'nullable',
+                'required',
                 'int',
                 'exists:organizations,id',
             ],

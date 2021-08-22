@@ -86,8 +86,8 @@ class OrganizationService
         $response['response_status']= [
             "success" => true,
             "code" => Response::HTTP_OK,
-            "started" => $startTime,
-            "finished" => Carbon::now()->format('s'),
+            "started" => $startTime->format('H i s'),
+            "finished" => Carbon::now()->format('H i s'),
         ];
 
         return $response;
@@ -211,10 +211,11 @@ class OrganizationService
             ],
             'description' => [
                 'nullable',
-                'max:5000',
+                'string',
             ],
             'fax_no' => [
                 'nullable',
+                'string',
                 'max: 50',
             ],
             'loc_division_id' => [
@@ -245,7 +246,7 @@ class OrganizationService
             ],
             'contact_person_email' => [
                 'required',
-                'regex: /\S+@\S+\.\S+/'
+                'email'
             ],
             'mobile' => [
                 'required',
@@ -253,7 +254,7 @@ class OrganizationService
             ],
             'email' => [
                 'required',
-                'regex : /^[^\s@]+@[^\s@]+$/',
+                'email',
             ],
             'logo' => [
                 'required_if:' . $id . ',null',
