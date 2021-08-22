@@ -3409,7 +3409,7 @@
                         "$ref": "#/components/parameters/organization_id"
                     },
                     {
-                        "$ref": "#/components/parameters/organization_type_id"
+                        "$ref": "#/components/parameters/organization_unit_type_id"
                     },
                     {
                         "$ref": "#/components/parameters/loc_division_id"
@@ -6330,7 +6330,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "abc"
                 }
             },
             "title_bn": {
@@ -6338,7 +6339,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "abc"
                 }
             },
             "row_status": {
@@ -6473,7 +6475,7 @@
                 "required": true,
                 "schema": {
                     "type": "integer",
-                    "example": 4
+                    "example": 1
                 }
             },
             "loc_division_id": {
@@ -6516,7 +6518,8 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "0171122334455"
                 }
             },
             "domain": {
