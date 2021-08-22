@@ -12,16 +12,50 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/{basePath}",
-            "description": "",
-            "variables": {
-                "basePath": {
-                    "default": "api/v1"
-                }
-            }
+            "url": "http://localhost:8000/api/v1"
+        },
+        {
+            "url": " https://api.bus.softbd.xyz/org/api/v1"
         }
     ],
     "paths": {
+        "/": {
+            "get": {
+                "summary": "Organization Service Information",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "service_name": "NISE-3 Organization Management API Service",
+                                    "service_version": "V1",
+                                    "lumen_version": "Lumen (8.2.4) (Laravel Components ^8.0)",
+                                    "module_list": [
+                                        "OrganizationType",
+                                        "Organization",
+                                        "RankType",
+                                        "Rank",
+                                        "Service",
+                                        "Skill",
+                                        "JobSector",
+                                        "Occupation",
+                                        "OrganizationUnitType",
+                                        "OrganizationUnit",
+                                        "organizationUnitService",
+                                        "HumanResource",
+                                        "HumanResourceTemplate"
+                                    ],
+                                    "description": [
+                                        "It is a organization management api service that manages services related to organization"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/organization-types": {
             "get": {
                 "summary": "get_list",
