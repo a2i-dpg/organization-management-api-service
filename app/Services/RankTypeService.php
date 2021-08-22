@@ -59,7 +59,8 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $rankTypes = $rankTypeBuilder->paginate($limit);
             $paginateData = (object)$rankTypes->toArray();
             $response['current_page'] = $paginateData->current_page;

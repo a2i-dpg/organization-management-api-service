@@ -56,7 +56,8 @@ class JobSectorService
 
         /** @var Collection $jobSectors */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $jobSectors = $jobSectorBuilder->paginate($limit);
             $paginateData = (object)$jobSectors->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -67,9 +68,9 @@ class JobSectorService
             $jobSectors = $jobSectorBuilder->get();
         }
 
-        $response['order']=$order;
-        $response['data']=$jobSectors->toArray()['data'] ?? $jobSectors->toArray();
-        $response['response_status']= [
+        $response['order'] = $order;
+        $response['data'] = $jobSectors->toArray()['data'] ?? $jobSectors->toArray();
+        $response['response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "started" => $startTime->format('H i s'),

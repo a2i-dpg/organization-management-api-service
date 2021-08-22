@@ -74,7 +74,8 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($limit);
             $paginateData = (object)$organizationUnits->toArray();
             $response['current_page'] = $paginateData->current_page;

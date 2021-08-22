@@ -57,8 +57,9 @@ class SkillService
 
         /** @var Collection $skills */
 
-        if ($paginate) {
-            $skills = $skillBuilder->paginate(10);
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
+            $skills = $skillBuilder->paginate($limit);
             $paginateData = (object)$skills->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -68,7 +69,6 @@ class SkillService
             $skills = $skillBuilder->get();
         }
 
-        $data = $skills->toArray();
 
         $response['order'] = $order;
         $response['data'] = $skills->toArray()['data'] ?? $skills->toArray();

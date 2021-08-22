@@ -57,8 +57,10 @@ class ServiceService
         }
 
         /** @var Collection $services */
-        if ($paginate) {
-            $services = $serviceBuilder->paginate(10);
+
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
+            $services = $serviceBuilder->paginate($limit);
             $paginateData = (object)$services->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;

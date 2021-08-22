@@ -70,7 +70,8 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $organizations = $organizationBuilder->paginate($limit);
             $paginateData = (object)$organizations->toArray();
             $response['current_page'] = $paginateData->current_page;

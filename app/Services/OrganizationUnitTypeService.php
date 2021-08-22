@@ -54,8 +54,11 @@ class OrganizationUnitTypeService
         } elseif (!empty($titleBn)) {
             $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }
+
         /** @var Collection $organizationUnitTypes */
-        if ($paginate) {
+
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($limit);
             $paginateData = (object)$organizationUnitTypes->toArray();
             $response['current_page'] = $paginateData->current_page;

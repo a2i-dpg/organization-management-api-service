@@ -69,7 +69,8 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $programmes = $humanResourceTemplateBuilder->paginate($limit);
             $paginateData = (object)$programmes->toArray();
             $response['current_page'] = $paginateData->current_page;

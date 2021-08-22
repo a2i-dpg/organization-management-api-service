@@ -56,7 +56,8 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $occupations = $occupationBuilder->paginate($limit);
             $paginateData = (object)$occupations->toArray();
 

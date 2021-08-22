@@ -25,7 +25,7 @@ class OrganizationTypeService
      */
     public function getAllOrganizationType(Request $request, Carbon $startTime): array
     {
-        $response=[];
+        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
@@ -54,7 +54,8 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($limit);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;

@@ -63,7 +63,8 @@ class HumanResourceService
 
         /** @var Collection $humanResources */
 
-        if ($paginate) {
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
             $humanResources = $humanResourceBuilder->paginate($limit);
             $paginateData = (object)$humanResources->toArray();
             $response['current_page'] = $paginateData->current_page;
