@@ -71,8 +71,8 @@ class HumanResourceTemplateService
 
         if ($paginate || $limit) {
             $limit = $limit ?: 10;
-            $programmes = $humanResourceTemplateBuilder->paginate($limit);
-            $paginateData = (object)$programmes->toArray();
+            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($limit);
+            $paginateData = (object)$humanResourceTemplates->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;

@@ -32,16 +32,16 @@ class HumanResourceService
             'human_resources.is_designation',
             'human_resources.parent_id',
             't2.title_en as parent',
-            'organization_units.title_en as organization_unit_name',
             'human_resources.organization_id',
-            'human_resources.organization_unit_id',
             'organizations.title_en as organization_name',
+            'human_resources.organization_unit_id',
+            'organization_units.title_en as organization_unit_name',
             'human_resources.human_resource_template_id',
             'human_resource_templates.title_en as human_resource_template_name',
             'human_resources.rank_id',
+            'ranks.title_en as rank_title_en',
             'human_resources.status',
             'human_resources.row_status',
-            'ranks.title_en as rank_title_en',
             'human_resources.created_by',
             'human_resources.updated_by',
             'human_resources.created_at',
@@ -103,16 +103,16 @@ class HumanResourceService
             'human_resources.is_designation',
             'human_resources.parent_id',
             't2.title_en as parent',
-            'organization_units.title_en as organization_unit_name',
             'human_resources.organization_id',
-            'human_resources.organization_unit_id',
             'organizations.title_en as organization_name',
+            'human_resources.organization_unit_id',
+            'organization_units.title_en as organization_unit_name',
             'human_resources.human_resource_template_id',
             'human_resource_templates.title_en as human_resource_template_name',
             'human_resources.rank_id',
+            'ranks.title_en as rank_title_en',
             'human_resources.status',
             'human_resources.row_status',
-            'ranks.title_en as rank_title_en',
             'human_resources.created_by',
             'human_resources.updated_by',
             'human_resources.created_at',
@@ -129,11 +129,6 @@ class HumanResourceService
 
         /** @var HumanResource $humanResource */
         $humanResource = $humanResourceBuilder->first();
-
-        if ($humanResource) {
-            $links['update'] = route('api.v1.human-resources.update', ['id' => $id]);
-            $links['delete'] = route('api.v1.human-resources.destroy', ['id' => $id]);
-        }
 
         return [
             "data" => $humanResource ?: null,

@@ -46,6 +46,7 @@ class ServiceService
                 'services.updated_at',
             ]
         );
+        $serviceBuilder->orderBy('services.id', $order);
 
         if (!empty($organizationId)) {
             $serviceBuilder->where('services.organization_id', '=', $organizationId);

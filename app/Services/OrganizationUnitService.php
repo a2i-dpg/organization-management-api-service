@@ -65,6 +65,7 @@ class OrganizationUnitService
         ]);
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
@@ -301,10 +302,7 @@ class OrganizationUnitService
      */
     public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
-
-        $data = [
-            'serviceIds' => explode(',', $request['serviceIds'])
-        ];
+        $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
             'serviceIds' => 'required|array|min:1',
             'serviceIds.*' => 'required|integer|distinct|min:1'

@@ -104,6 +104,7 @@ class JobSectorService
 
         /** @var JobSector $jobSector */
         $jobSector = $jobSectorBuilder->first();
+
         return [
             "data" => $jobSector ?: null,
             "_response_status" => [

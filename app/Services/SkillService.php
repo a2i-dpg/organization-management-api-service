@@ -69,7 +69,6 @@ class SkillService
             $skills = $skillBuilder->get();
         }
 
-
         $response['order'] = $order;
         $response['data'] = $skills->toArray()['data'] ?? $skills->toArray();
         $response['response_status'] = [

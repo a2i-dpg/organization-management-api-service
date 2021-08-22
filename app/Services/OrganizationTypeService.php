@@ -102,6 +102,7 @@ class OrganizationTypeService
 
         /** @var OrganizationType $organizationType */
         $organizationType = $organizationTypeBuilder->first();
+
         return [
             "data" => $organizationType ?: [],
             "_response_status" => [
