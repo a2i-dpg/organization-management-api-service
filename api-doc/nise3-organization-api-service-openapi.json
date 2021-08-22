@@ -3511,7 +3511,7 @@
         "/organization-units/{organizationUnitId}": {
             "get": {
                 "summary": "get one",
-                "description": " API endpoint to get a specified Organization  Unit.A successful request response will show 200 HTTP status code",
+                "description": " API endpoint to get the specified Organization  Unit.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationUnitId"
@@ -3561,8 +3561,8 @@
                 ]
             },
             "put": {
-                "summary": "get one",
-                "description": "API endpoint to update a specified Organization  Unit. A successful request response will show 200 HTTP status code",
+                "summary": "update",
+                "description": "API endpoint to update the specified Organization  Unit. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationUnitId"
@@ -6211,7 +6211,7 @@
                 "required": true,
                 "schema": {
                     "type": "integer",
-                    "example": 3
+                    "example": 1
                 }
             },
             "skill_ids": {
@@ -6664,7 +6664,7 @@
             },
             "limit": {
                 "name": "limit",
-                "in": "path",
+                "in": "query",
                 "required": false,
                 "schema": {
                     "type": "integer",

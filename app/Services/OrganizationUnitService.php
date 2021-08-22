@@ -77,7 +77,6 @@ class OrganizationUnitService
         if ($paginate) {
             $organizationUnits = $organizationUnitBuilder->paginate($limit);
             $paginateData = (object)$organizationUnits->toArray();
-            $paginateData = (object)$programmes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
@@ -252,7 +251,7 @@ class OrganizationUnitService
             ],
             'email' => [
                 'nullable',
-                'string',
+                'email',
                 'max:191',
             ],
             'fax_no' => [
@@ -273,7 +272,7 @@ class OrganizationUnitService
             'contact_person_email' => [
                 'nullable',
                 'string',
-                'regex: /\S+@\S+\.\S+/'
+                'email'
             ],
             'contact_person_designation' => [
                 'nullable',
@@ -309,6 +308,6 @@ class OrganizationUnitService
             'serviceIds' => 'required|array|min:1',
             'serviceIds.*' => 'required|integer|distinct|min:1'
         ];
-        return Validator::make($request['serviceIds'][0], $rules);
+        return Validator::make($data, $rules);
     }
 }
