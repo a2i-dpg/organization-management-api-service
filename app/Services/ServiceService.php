@@ -27,12 +27,11 @@ class ServiceService
      */
     public function getServiceList(Request $request, Carbon $startTime): array
     {
-        $paginateLink = [];
-        $page = [];
+        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
-        $organizationId = $request->query('organization_id');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
         /** @var Builder $serviceBuilder */
@@ -62,33 +61,24 @@ class ServiceService
         if ($paginate) {
             $services = $serviceBuilder->paginate(10);
             $paginateData = (object)$services->toArray();
-            $page = [
-                "size" => $paginateData->per_page,
-                "total_element" => $paginateData->total,
-                "total_page" => $paginateData->last_page,
-                "current_page" => $paginateData->current_page
-            ];
-            $paginateLink[] = $paginateData->links;
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
         } else {
             $services = $serviceBuilder->get();
         }
 
-        $data = $services->toArray();
-
-        return [
-            "data" => $data ?: null,
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "started" => $startTime->format('H i s'),
-                "finished" => Carbon::now()->format('H i s'),
-            ],
-            "_links" => [
-                'paginate' => $paginateLink,
-            ],
-            "_page" => $page,
-            "_order" => $order
+        $response['order'] = $order;
+        $response['data'] = $services->toArray()['data'] ?? $services->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "started" => $startTime,
+            "finished" => Carbon::now()->format('s'),
         ];
+
+        return $response;
     }
 
     /**

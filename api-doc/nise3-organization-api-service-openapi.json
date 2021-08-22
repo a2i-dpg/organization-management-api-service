@@ -488,9 +488,6 @@
                 "description": "API endpoint to create a organization.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/organization_type_id"
-                    },
-                    {
                         "$ref": "#/components/parameters/title_en"
                     },
                     {
