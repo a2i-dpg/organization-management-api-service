@@ -530,6 +530,9 @@
                         "$ref": "#/components/parameters/title_en"
                     },
                     {
+                        "$ref": "#/components/parameters/organization_type_id"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_bn"
                     },
                     {
@@ -751,25 +754,35 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "title_en": "AKIJ GROUP",
-                                        "title_bn": "AKIJ GROUP",
-                                        "domain": "http://www.akijgroup.com",
-                                        "fax_no": "",
-                                        "mobile": "01758393749",
-                                        "email": "akij.group@gmail.com",
-                                        "contact_person_name": "abc",
-                                        "contact_person_mobile": "01758393749",
-                                        "contact_person_email": "abc@gmail.com",
-                                        "contact_person_designation": "coordinator2",
-                                        "description": "Akij is one of the largest company in bangladesh",
+                                        "id": 2,
+                                        "organization_type_id": "1",
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
+                                        "loc_upazila_id": "1",
+                                        "address": "Dhaka-1208",
+                                        "mobile": "01711223344",
+                                        "email": "company_name@gmail.com",
+                                        "fax_no": "+123456",
+                                        "contact_person_name": "Mr. X",
+                                        "contact_person_mobile": "01789277788",
+                                        "contact_person_email": "mr.x@gmail.com",
+                                        "contact_person_designation": "HR",
+                                        "description": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.companyname.com",
                                         "row_status": 1,
-                                        "organization_types_title": "Public Bank"
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:22.000000Z",
+                                        "updated_at": "2021-08-23T09:10:38.000000Z",
+                                        "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Organization updated successfully",
+                                        "message": "Organization updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -6713,7 +6726,7 @@
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "0171122334455"
+                    "example": "01711223344"
                 }
             },
             "domain": {
@@ -6722,7 +6735,7 @@
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "http://www.companyname.com"
+                    "example": "https://www.companyname.com"
                 }
             },
             "fax_no": {
@@ -6740,7 +6753,7 @@
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "01789 277788"
+                    "example": "01789277788"
                 }
             },
             "contact_person_name": {
