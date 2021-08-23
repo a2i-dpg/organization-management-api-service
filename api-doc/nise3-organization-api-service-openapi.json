@@ -587,44 +587,36 @@
                                     "$ref": "#/components/schemas/organization"
                                 },
                                 "example": {
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup.com",
-                                            "fax_no": "",
-                                            "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "abc",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "abc@gmail.com",
-                                            "contact_person_designation": "coordinator2",
-                                            "description": "Akij is one of the largest company in bangladesh",
-                                            "row_status": 1,
-                                            "organization_types_title": "Public Bank"
-                                        },
-                                        {
-                                            "id": 8,
-                                            "title_en": "AKIJ GROUP",
-                                            "title_bn": "AKIJ GROUP",
-                                            "domain": "http://www.akijgroup1.com",
-                                            "fax_no": "",
-                                            "mobile": "01758393749",
-                                            "email": "akij.group@gmail.com",
-                                            "contact_person_name": "sayed ahmed",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "hr.akij@gmail.com",
-                                            "contact_person_designation": "HR",
-                                            "description": null,
-                                            "row_status": 1,
-                                            "organization_types_title": "Public Bank"
-                                        }
-                                    ],
+                                    "data": {
+                                        "id": 2,
+                                        "organization_type_id": "1",
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
+                                        "loc_upazila_id": "1",
+                                        "address": "Dhaka-1208",
+                                        "mobile": "01711223344",
+                                        "email": "company_name@gmail.com",
+                                        "fax_no": "+123456",
+                                        "contact_person_name": "Mr. X",
+                                        "contact_person_mobile": "01789277788",
+                                        "contact_person_email": "mr.x@gmail.com",
+                                        "contact_person_designation": "HR",
+                                        "description": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.2companyname.com",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:22.000000Z",
+                                        "updated_at": "2021-08-23T09:10:38.000000Z",
+                                        "deleted_at": null
+                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Organization created successfully.",
+                                        "message": "Organization updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -656,20 +648,30 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "title_en": "AKIJ GROUP",
-                                        "title_bn": "AKIJ GROUP",
-                                        "domain": "http://www.akijgroup.com",
-                                        "fax_no": "",
-                                        "mobile": "01758393749",
-                                        "email": "akij.group@gmail.com",
-                                        "contact_person_name": "abc",
-                                        "contact_person_mobile": "01758393749",
-                                        "contact_person_email": "abc@gmail.com",
-                                        "contact_person_designation": "coordinator2",
-                                        "description": "Akij is one of the largest company in bangladesh",
+                                        "id": 2,
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "domain": "https://www.companyname.com",
+                                        "fax_no": "+123456",
+                                        "mobile": "01711223344",
+                                        "email": "company_name@gmail.com",
+                                        "contact_person_name": "Mr. X",
+                                        "contact_person_mobile": "01789277788",
+                                        "contact_person_email": "mr.x@gmail.com",
+                                        "contact_person_designation": "HR",
+                                        "description": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
+                                        "logo": "logo.jpg",
+                                        "loc_division_id": 1,
+                                        "loc_district_id": 1,
+                                        "loc_upazila_id": 1,
+                                        "organization_type_id": 1,
+                                        "organization_types_title": "Government org",
+                                        "address": "Dhaka-1208",
                                         "row_status": 1,
-                                        "organization_types_title": "Public Bank"
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:22.000000Z",
+                                        "updated_at": "2021-08-23T09:10:38.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1443,176 +1445,21 @@
                                     "$ref": "#/components/schemas/rank"
                                 },
                                 "example": {
-                                    "current_page": 1,
-                                    "total_page": 6,
-                                    "page_size": "10",
-                                    "total": 54,
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title_en": "জেনারেল",
-                                            "title_bn": "জেনারেল",
-                                            "grade": "1",
-                                            "display_order": 1,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 1,
-                                            "rank_type_title_en": "Chief of Army Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:24.000000Z",
-                                            "updated_at": "2021-08-22T12:10:24.000000Z"
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title_en": "লেফটেন্যান্ট জেনারেল",
-                                            "title_bn": "লেফটেন্যান্ট জেনারেল",
-                                            "grade": "2",
-                                            "display_order": 2,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 1,
-                                            "rank_type_title_en": "Chief of Army Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title_en": "ব্রিগেডিয়ার জেনারেল",
-                                            "title_bn": "ব্রিগেডিয়ার জেনারেল",
-                                            "grade": "3",
-                                            "display_order": 3,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 1,
-                                            "rank_type_title_en": "Chief of Army Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "title_en": "জেনারেল",
-                                            "title_bn": "জেনারেল",
-                                            "grade": "1",
-                                            "display_order": 1,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 2,
-                                            "rank_type_title_en": "Chief of General Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 5,
-                                            "title_en": "লেফটেন্যান্ট জেনারেল",
-                                            "title_bn": "লেফটেন্যান্ট জেনারেল",
-                                            "grade": "2",
-                                            "display_order": 2,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 2,
-                                            "rank_type_title_en": "Chief of General Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 6,
-                                            "title_en": "ব্রিগেডিয়ার জেনারেল",
-                                            "title_bn": "ব্রিগেডিয়ার জেনারেল",
-                                            "grade": "3",
-                                            "display_order": 3,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 2,
-                                            "rank_type_title_en": "Chief of General Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 7,
-                                            "title_en": "জেনারেল",
-                                            "title_bn": "জেনারেল",
-                                            "grade": "1",
-                                            "display_order": 1,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 3,
-                                            "rank_type_title_en": "Chief of brigade",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 8,
-                                            "title_en": "লেফটেন্যান্ট জেনারেল",
-                                            "title_bn": "লেফটেন্যান্ট জেনারেল",
-                                            "grade": "2",
-                                            "display_order": 2,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 3,
-                                            "rank_type_title_en": "Chief of brigade",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 9,
-                                            "title_en": "ব্রিগেডিয়ার জেনারেল",
-                                            "title_bn": "ব্রিগেডিয়ার জেনারেল",
-                                            "grade": "3",
-                                            "display_order": 3,
-                                            "organization_id": 1,
-                                            "organization_title_en": "Zulauf, Kohler and O'Keefe",
-                                            "rank_type_id": 3,
-                                            "rank_type_title_en": "Chief of brigade",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        },
-                                        {
-                                            "id": 10,
-                                            "title_en": "জেনারেল",
-                                            "title_bn": "জেনারেল",
-                                            "grade": "1",
-                                            "display_order": 1,
-                                            "organization_id": 2,
-                                            "organization_title_en": "Douglas Ltd",
-                                            "rank_type_id": 4,
-                                            "rank_type_title_en": "Chief of Army Staff",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-22T12:10:25.000000Z",
-                                            "updated_at": "2021-08-22T12:10:25.000000Z"
-                                        }
-                                    ],
-                                    "response_status": {
+                                    "data": {
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "rank_type_id": "1",
+                                        "grade": "0",
+                                        "display_order": "1",
+                                        "organization_id": "2",
+                                        "updated_at": "2021-08-23T09:19:09.000000Z",
+                                        "created_at": "2021-08-23T09:19:09.000000Z",
+                                        "id": 55
+                                    },
+                                    "_response_status": {
                                         "success": true,
-                                        "code": 200,
+                                        "code": 201,
+                                        "message": "Rank added successfully",
                                         "query_time": 0
                                     }
                                 }
@@ -1876,46 +1723,17 @@
                                     "$ref": "#/components/schemas/jobSector"
                                 },
                                 "example": {
-                                    "current_page": 1,
-                                    "total_page": 1,
-                                    "page_size": 10,
-                                    "total": 3,
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title_en": "Appliance Repairer",
-                                            "title_bn": "Appliance Repairer",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-19T09:11:46.000000Z",
-                                            "updated_at": "2021-08-19T09:11:46.000000Z"
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title_en": "Able Seamen",
-                                            "title_bn": "Able Seamen",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-19T09:11:46.000000Z",
-                                            "updated_at": "2021-08-19T09:11:46.000000Z"
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title_en": "Electronic Equipment Assembler",
-                                            "title_bn": "Electronic Equipment Assembler",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-19T09:11:46.000000Z",
-                                            "updated_at": "2021-08-19T09:11:46.000000Z"
-                                        }
-                                    ],
-                                    "response_status": {
+                                    "data": {
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "updated_at": "2021-08-23T09:24:16.000000Z",
+                                        "created_at": "2021-08-23T09:24:16.000000Z",
+                                        "id": 4
+                                    },
+                                    "_response_status": {
                                         "success": true,
-                                        "code": 200,
+                                        "code": 201,
+                                        "message": "Job Sector added successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -2285,11 +2103,16 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "title_en": "swe",
-                                        "title_bn": "swe",
+                                        "id": 3,
+                                        "title_en": "Electronics Engineering Technician",
+                                        "title_bn": "Electronics Engineering Technician",
+                                        "job_sector_id": 1,
+                                        "job_sector_title": "abc",
                                         "row_status": 1,
-                                        "job_sectors_title": "Charity and voluntary work2"
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:28.000000Z",
+                                        "updated_at": "2021-08-22T12:10:28.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2331,6 +2154,18 @@
                                     "$ref": "#/components/schemas/occupation"
                                 },
                                 "example": {
+                                    "data": {
+                                        "id": 3,
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "job_sector_id": "1",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:28.000000Z",
+                                        "updated_at": "2021-08-23T09:27:20.000000Z",
+                                        "deleted_at": null
+                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -4263,8 +4098,7 @@
                                     "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "12 13 24",
-                                        "finished": "12 13 24"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4313,14 +4147,8 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "Service added successfully.",
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
-                                    },
-                                    "_links": {
-                                        "paginate": []
-                                    },
-                                    "_page": [],
-                                    "_order": "ASC"
+                                        "query_time": 0
+                                    }
                                 }
                             }
                         }
@@ -4361,8 +4189,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4408,15 +4235,17 @@
                                         "title_bn": "Service1_bn_update",
                                         "organization_title_en": "BDBL",
                                         "row_status": 1,
-                                        "created_at": "2021-07-26T12:02:05.000000Z",
-                                        "updated_at": "2021-07-26T12:02:33.000000Z"
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "deleted_at": null,
+                                        "created_at": "2021-08-22T12:10:27.000000Z",
+                                        "updated_at": "2021-08-23T09:38:44.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
                                         "message": "service updated successfully.",
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4429,7 +4258,7 @@
             },
             "delete": {
                 "summary": "delete",
-                "description": "API endpoint to get a specified service.A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to delete the specified service.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/serviceId"
@@ -4448,8 +4277,7 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "service deleted successfully",
-                                        "started": "17 00 54",
-                                        "finished": "17 00 54"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4711,8 +4539,7 @@
                                     "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "12 18 37",
-                                        "finished": "12 18 38"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4759,10 +4586,6 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "successful",
-                        "headers": {}
-                    },
                     "201": {
                         "description": "create",
                         "content": {
@@ -4771,13 +4594,25 @@
                                     "$ref": "#/components/schemas/humanResourceTemplate"
                                 },
                                 "example": {
-                                    "data": true,
+                                    "data": {
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "organization_id": "2",
+                                        "organization_unit_type_id": "1",
+                                        "parent_id": "1",
+                                        "rank_id": "1",
+                                        "display_order": "1",
+                                        "is_designation": "1",
+                                        "status": "1",
+                                        "updated_at": "2021-08-23T09:40:09.000000Z",
+                                        "created_at": "2021-08-23T09:40:09.000000Z",
+                                        "id": 50
+                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 201,
-                                        "message": "Human resource template added successfully",
-                                        "started": "06 00 24",
-                                        "finished": "06 00 25"
+                                        "message": "Human Resource Template added successfully",
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4792,7 +4627,7 @@
         "/human-resource-templates/{humanResourceTemplatesId}": {
             "get": {
                 "summary": "get one",
-                "description": "API endpoint to get a HumanResourceTemlate .A successful request response will show 200 HTTP status code",
+                "description": "API endpoint to get a HumanResourceTemplate .A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/humanResourceTemplatesId"
@@ -4808,23 +4643,30 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 5,
-                                        "organization_title_en": "AKIJ GROUP_update",
-                                        "organization_unit_title_en": "GCL_update",
-                                        "service_title_en": "Service1_update",
+                                        "id": 1,
+                                        "title_en": "Marketing(Bangking)",
+                                        "title_bn": "Marketing(Bangking)",
+                                        "display_order": 6,
+                                        "is_designation": 1,
+                                        "parent_id": null,
+                                        "parent": null,
+                                        "organization_id": 1,
+                                        "organization_title": "Zulauf, Kohler and O'Keefe",
+                                        "organization_unit_type_id": 1,
+                                        "organization_unit_type_title": "abc",
+                                        "rank_id": 34,
+                                        "rank_title_en": "জেনারেল",
+                                        "status": 1,
                                         "row_status": 1,
-                                        "created_at": null,
-                                        "updated_at": "2021-08-01T05:47:25.000000Z"
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:30.000000Z",
+                                        "updated_at": "2021-08-22T12:10:30.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "06 00 50",
-                                        "finished": "06 00 50"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/organization-unit-services/5",
-                                        "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4883,20 +4725,28 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 5,
-                                        "organization_id": 1,
-                                        "organization_unit_id": 1,
-                                        "service_id": 1,
-                                        "row_status": 99,
-                                        "created_at": null,
-                                        "updated_at": "2021-08-02T06:01:44.000000Z"
+                                        "id": 1,
+                                        "organization_id": "2",
+                                        "organization_unit_type_id": "1",
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "parent_id": "1",
+                                        "rank_id": "1",
+                                        "display_order": "1",
+                                        "is_designation": "1",
+                                        "status": "1",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:30.000000Z",
+                                        "updated_at": "2021-08-23T09:48:17.000000Z",
+                                        "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "HumanResourceTemplate updated successfully.",
-                                        "started": "06 01 43",
-                                        "finished": "06 01 44"
+                                        "message": "Human Resource Template updated successfully.",
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -4909,7 +4759,7 @@
             },
             "delete": {
                 "summary": "delete",
-                "description": " API endpoint to delete an organization unit type.A successful request response will show 200 HTTP status code",
+                "description": " API endpoint to delete a Human Resource Template.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/humanResourceTemplatesId"
@@ -4928,8 +4778,7 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "Human Resource Template deleted successfully.",
-                                        "started": "06 02 03",
-                                        "finished": "06 02 03"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -5211,8 +5060,7 @@
                                     "response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "12 19 19",
-                                        "finished": "12 19 19"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -5262,9 +5110,6 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "successful"
-                    },
                     "201": {
                         "description": "create",
                         "content": {
@@ -5274,19 +5119,25 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 5,
-                                        "organization_title_en": "AKIJ GROUP_update",
-                                        "organization_unit_title_en": "GCL_update",
-                                        "service_title_en": "Service1_update",
-                                        "row_status": 1,
-                                        "created_at": null,
-                                        "updated_at": "2021-08-01T05:47:25.000000Z"
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "organization_id": "2",
+                                        "organization_unit_id": "3",
+                                        "parent_id": "1",
+                                        "human_resource_template_id": "1",
+                                        "rank_id": "1",
+                                        "display_order": "1",
+                                        "is_designation": "1",
+                                        "status": "1",
+                                        "updated_at": "2021-08-23T09:50:13.000000Z",
+                                        "created_at": "2021-08-23T09:50:13.000000Z",
+                                        "id": 49
                                     },
                                     "_response_status": {
                                         "success": true,
-                                        "code": 200,
-                                        "started": "06 00 50",
-                                        "finished": "06 00 50"
+                                        "code": 201,
+                                        "message": "Human Resource added successfully",
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -5317,23 +5168,32 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 5,
-                                        "organization_title_en": "AKIJ GROUP_update",
-                                        "organization_unit_title_en": "GCL_update",
-                                        "service_title_en": "Service1_update",
+                                        "id": 2,
+                                        "title_en": "Sales executive",
+                                        "title_bn": "Sales executive",
+                                        "display_order": 6,
+                                        "is_designation": 1,
+                                        "parent_id": 1,
+                                        "parent": "Sales executive",
+                                        "organization_id": 1,
+                                        "organization_name": "Zulauf, Kohler and O'Keefe",
+                                        "organization_unit_id": 1,
+                                        "organization_unit_name": "Bangking",
+                                        "human_resource_template_id": 2,
+                                        "human_resource_template_name": "Marketing Child(Bangking)",
+                                        "rank_id": 26,
+                                        "rank_title_en": "লেফটেন্যান্ট জেনারেল",
+                                        "status": 1,
                                         "row_status": 1,
-                                        "created_at": null,
-                                        "updated_at": "2021-08-01T05:47:25.000000Z"
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:30.000000Z",
+                                        "updated_at": "2021-08-22T12:10:30.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "06 00 50",
-                                        "finished": "06 00 50"
-                                    },
-                                    "_links": {
-                                        "update": "http://localhost:8000/api/v1/organization-unit-services/5",
-                                        "delete": "http://localhost:8000/api/v1/organization-unit-services/5"
+                                        "query_time": 0
                                     }
                                 }
                             }
@@ -5386,27 +5246,34 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "successful"
-                    },
                     "201": {
                         "description": "update",
                         "content": {
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 5,
-                                        "organization_id": 1,
-                                        "organization_unit_id": 1,
-                                        "service_id": 1,
-                                        "row_status": 99,
-                                        "created_at": null,
-                                        "updated_at": "2021-08-02T06:01:44.000000Z"
+                                        "id": 2,
+                                        "human_resource_template_id": "1",
+                                        "organization_id": "2",
+                                        "organization_unit_id": "3",
+                                        "title_en": "abc",
+                                        "title_bn": "abc",
+                                        "parent_id": "1",
+                                        "rank_id": "1",
+                                        "display_order": "1",
+                                        "is_designation": "1",
+                                        "status": "1",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-08-22T12:10:30.000000Z",
+                                        "updated_at": "2021-08-23T09:52:12.000000Z",
+                                        "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Human Resource updated successfully.",
+                                        "message": "Human Resource updated successfully",
                                         "query_time": 0
                                     }
                                 }
