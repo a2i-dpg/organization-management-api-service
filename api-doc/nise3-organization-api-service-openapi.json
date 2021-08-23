@@ -5407,7 +5407,6 @@
                     },
                     "organization_type_id": {
                         "type": "integer",
-                        "required": true,
                         "description": "Organization type id"
                     },
                     "loc_division_id": {
