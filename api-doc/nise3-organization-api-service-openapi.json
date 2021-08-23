@@ -6687,11 +6687,17 @@
             },
             "serviceIds": {
                 "name": "serviceIds",
+                "style": "form",
                 "in": "query",
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "uniqueItems": true
+                            }
+                        }
                     }
                 }
             },
