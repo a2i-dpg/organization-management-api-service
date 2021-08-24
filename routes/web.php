@@ -31,4 +31,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     //Assign services to organization unit
     $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
+
+    $router->get('organization-units-trashed-data', ['as' => 'organization-units.get-trashed-data', 'uses' => 'OrganizationUnitController@getTrashedData']);
+    $router->get('organization-units-restore-data/{id}', ['as' => 'organization-units.restore-data', 'uses' => 'OrganizationUnitController@restore']);
+    $router->get('organization-units-force-delete/{id}', ['as' => 'organization-units.restore-data', 'uses' => 'OrganizationUnitController@forceDelete']);
+
 });
