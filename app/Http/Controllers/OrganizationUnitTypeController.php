@@ -164,7 +164,7 @@ class OrganizationUnitTypeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Organization Unit updated successfully",
+                    "message" => "OrganizationUnitType  based hierarchy got successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
