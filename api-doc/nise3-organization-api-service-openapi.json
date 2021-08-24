@@ -6687,7 +6687,6 @@
             },
             "serviceIds": {
                 "name": "serviceIds",
-                "style": "form",
                 "in": "query",
                 "content": {
                     "multipart/form-data": {

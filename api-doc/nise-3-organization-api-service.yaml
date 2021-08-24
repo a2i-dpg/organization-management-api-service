@@ -39,10 +39,12 @@ paths:
                   - HumanResourceTemplate
                 description:
                   - It is a organization management api service that manages services related to organization
+      tags:
+        - APi info
   /organization-types:
     get:
       summary: get_list
-      description: ' API endpoint to get the list organization types.A successful request response will show 200 HTTP status code'
+      description: ' API endpoint to get the list of organization types.A successful request response will show 200 HTTP status code'
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
@@ -84,8 +86,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 11 50 13
-                  finished: 11 50 13
+                  query_time: 0
       tags:
         - organization-types
     post:
@@ -109,6 +110,8 @@ paths:
                   title_bn: বেসরকারি ব্যাংক
                   is_government: 1
                   row_status: 1
+                  created_by: null
+                  updated_by: null
                   updated_at: '2021-07-26T09:53:48.000000Z'
                   created_at: '2021-07-26T09:53:48.000000Z'
                   id: 1
@@ -116,8 +119,7 @@ paths:
                   success: true
                   code: 201
                   message: Organization type added successfully.
-                  started: '2021-07-26T09:53:48.012764Z'
-                  finished: '2021-07-26T09:53:48.061748Z'
+                  query_time: 0
       tags:
         - organization-types
   /organization-types/{organizationTypeId}:
@@ -140,11 +142,14 @@ paths:
                   title_bn: সরকারি
                   is_government: 1
                   row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:22.000000Z'
+                  updated_at: '2021-08-22T12:10:22.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - organization-types
     put:
@@ -172,12 +177,13 @@ paths:
                   row_status: 1
                   created_at: '2021-07-26T09:53:48.000000Z'
                   updated_at: '2021-07-26T09:58:41.000000Z'
+                  created_by: null
+                  updated_by: null
                 _response_status:
                   success: true
                   code: 200
                   message: organization Type updated successfully.
-                  started: '2021-07-26T09:58:49.376044Z'
-                  finished: '2021-07-26T09:58:49.419228Z'
+                  query_time: 0
       tags:
         - organization-types
     delete:
@@ -196,8 +202,7 @@ paths:
                   success: true
                   code: 200
                   message: Organization type deleted successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - organization-types
   /organizations:
@@ -383,8 +388,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 11 59 52
-                  finished: 11 59 52
+                  query_time: 0
       tags:
         - organization
     post:
@@ -392,6 +396,7 @@ paths:
       description: API endpoint to create a organization.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/title_en'
+        - $ref: '#/components/parameters/organization_type_id'
         - $ref: '#/components/parameters/title_bn'
         - $ref: '#/components/parameters/loc_division_id'
         - $ref: '#/components/parameters/loc_district_id'
@@ -416,44 +421,35 @@ paths:
                 $ref: '#/components/schemas/organization'
               example:
                 data:
-                  - id: 1
-                    title_en: AKIJ GROUP
-                    title_bn: AKIJ GROUP
-                    domain: http://www.akijgroup.com
-                    fax_no: ''
-                    mobile: '01758393749'
-                    email: akij.group@gmail.com
-                    contact_person_name: abc
-                    contact_person_mobile: '01758393749'
-                    contact_person_email: abc@gmail.com
-                    contact_person_designation: coordinator2
-                    description: Akij is one of the largest company in bangladesh
-                    row_status: 1
-                    organization_types_title: Public Bank
-                  - id: 8
-                    title_en: AKIJ GROUP
-                    title_bn: AKIJ GROUP
-                    domain: http://www.akijgroup1.com
-                    fax_no: ''
-                    mobile: '01758393749'
-                    email: akij.group@gmail.com
-                    contact_person_name: sayed ahmed
-                    contact_person_mobile: '01758393749'
-                    contact_person_email: hr.akij@gmail.com
-                    contact_person_designation: HR
-                    description: null
-                    row_status: 1
-                    organization_types_title: Public Bank
+                  id: 2
+                  organization_type_id: '1'
+                  title_en: abc
+                  title_bn: abc
+                  loc_division_id: '1'
+                  loc_district_id: '1'
+                  loc_upazila_id: '1'
+                  address: Dhaka-1208
+                  mobile: '01711223344'
+                  email: company_name@gmail.com
+                  fax_no: '+123456'
+                  contact_person_name: Mr. X
+                  contact_person_mobile: '01789277788'
+                  contact_person_email: mr.x@gmail.com
+                  contact_person_designation: HR
+                  description: Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+                  logo: logo.jpg
+                  domain: https://www.2companyname.com
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:22.000000Z'
+                  updated_at: '2021-08-23T09:10:38.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
-                  message: Organization created successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
-                _links:
-                  paginate: []
-                _page: []
-                _order: ASC
+                  message: Organization updated successfully.
+                  query_time: 0
       tags:
         - organization
   /organizations/{organizationId}:
@@ -471,25 +467,34 @@ paths:
                 $ref: '#/components/schemas/organization'
               example:
                 data:
-                  id: 1
-                  title_en: AKIJ GROUP
-                  title_bn: AKIJ GROUP
-                  domain: http://www.akijgroup.com
-                  fax_no: ''
-                  mobile: '01758393749'
-                  email: akij.group@gmail.com
-                  contact_person_name: abc
-                  contact_person_mobile: '01758393749'
-                  contact_person_email: abc@gmail.com
-                  contact_person_designation: coordinator2
-                  description: Akij is one of the largest company in bangladesh
+                  id: 2
+                  title_en: abc
+                  title_bn: abc
+                  domain: https://www.companyname.com
+                  fax_no: '+123456'
+                  mobile: '01711223344'
+                  email: company_name@gmail.com
+                  contact_person_name: Mr. X
+                  contact_person_mobile: '01789277788'
+                  contact_person_email: mr.x@gmail.com
+                  contact_person_designation: HR
+                  description: Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+                  logo: logo.jpg
+                  loc_division_id: 1
+                  loc_district_id: 1
+                  loc_upazila_id: 1
+                  organization_type_id: 1
+                  organization_types_title: Government org
+                  address: Dhaka-1208
                   row_status: 1
-                  organization_types_title: Public Bank
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:22.000000Z'
+                  updated_at: '2021-08-23T09:10:38.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - organization
     put:
@@ -523,29 +528,35 @@ paths:
                 $ref: '#/components/schemas/organization'
               example:
                 data:
-                  id: 1
-                  title_en: AKIJ GROUP
-                  title_bn: AKIJ GROUP
-                  domain: http://www.akijgroup.com
-                  fax_no: ''
-                  mobile: '01758393749'
-                  email: akij.group@gmail.com
-                  contact_person_name: abc
-                  contact_person_mobile: '01758393749'
-                  contact_person_email: abc@gmail.com
-                  contact_person_designation: coordinator2
-                  description: Akij is one of the largest company in bangladesh
+                  id: 2
+                  organization_type_id: '1'
+                  title_en: abc
+                  title_bn: abc
+                  loc_division_id: '1'
+                  loc_district_id: '1'
+                  loc_upazila_id: '1'
+                  address: Dhaka-1208
+                  mobile: '01711223344'
+                  email: company_name@gmail.com
+                  fax_no: '+123456'
+                  contact_person_name: Mr. X
+                  contact_person_mobile: '01789277788'
+                  contact_person_email: mr.x@gmail.com
+                  contact_person_designation: HR
+                  description: Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+                  logo: logo.jpg
+                  domain: https://www.companyname.com
                   row_status: 1
-                  organization_types_title: Public Bank
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:22.000000Z'
+                  updated_at: '2021-08-23T09:10:38.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
-                  message: Organization updated successfully
-                  started: '2021-07-27T09:08:55.138201Z'
-                  finished: '2021-07-27T09:08:55.176534Z'
-                _links:
-                  update: http://127.0.0.1:8000/api/v1/organizations/1
-                  delete: http://127.0.0.1:8000/api/v1/organizations/1
+                  message: Organization updated successfully.
+                  query_time: 0
       tags:
         - organization
     delete:
@@ -565,8 +576,7 @@ paths:
                   success: true
                   code: 200
                   message: Organization deleted successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - organization
   /rank-types:
@@ -706,8 +716,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 01 29
-                  finished: 12 01 29
+                  query_time: 0
       tags:
         - rank-types
     post:
@@ -740,8 +749,7 @@ paths:
                   success: true
                   code: 201
                   message: Rank Type added successfully
-                  started: 08 41 09
-                  finished: 08 41 09
+                  query_time: 0
       tags:
         - rank-types
   /rank-types/{rankTypeId}:
@@ -773,11 +781,7 @@ paths:
                 _response_status:
                   success: true
                   code: 200
-                  started: 16 16 57
-                  finished: 16 16 57
-                _links:
-                  update: http://localhost:8000/api/v1/rank-types/1
-                  delete: http://localhost:8000/api/v1/rank-types/1
+                  query_time: 0
       tags:
         - rank-types
     put:
@@ -810,8 +814,7 @@ paths:
                   success: true
                   code: 200
                   message: Rank Type updated successfully
-                  started: 11 44 41
-                  finished: 11 44 42
+                  query_time: 0
       tags:
         - rank-types
     delete:
@@ -830,8 +833,7 @@ paths:
                   success: true
                   code: 200
                   message: Rank Type deleted successfully
-                  started: 06 22 01
-                  finished: 06 22 02
+                  query_time: 0
       tags:
         - rank-types
   /ranks:
@@ -1001,8 +1003,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 02 21
-                  finished: 12 02 21
+                  query_time: 0
       tags:
         - rank
     post:
@@ -1025,26 +1026,20 @@ paths:
                 $ref: '#/components/schemas/rank'
               example:
                 data:
-                  - id: 1
-                    title_en: captain
-                    title_bn: ক্যাপ্টেন
-                    grade: '1'
-                    order: 0
-                    organization_title_en: BDBL
-                    rank_type_title_en: CEO
-                    row_status: 1
-                    created_at: '2021-07-26T12:01:03.000000Z'
-                    updated_at: '2021-07-26T12:01:03.000000Z'
+                  title_en: abc
+                  title_bn: abc
+                  rank_type_id: '1'
+                  grade: '0'
+                  display_order: '1'
+                  organization_id: '2'
+                  updated_at: '2021-08-23T09:19:09.000000Z'
+                  created_at: '2021-08-23T09:19:09.000000Z'
+                  id: 55
                 _response_status:
                   success: true
-                  code: 200
+                  code: 201
                   message: Rank added successfully
-                  started: 06 02 03
-                  finished: 06 02 03
-                _links:
-                  paginate: []
-                _page: []
-                _order: ASC
+                  query_time: 0
       tags:
         - rank
   /ranks/{rankId}:
@@ -1064,20 +1059,23 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: captain
-                  title_bn: ক্যাপ্টেন
+                  title_en: জেনারেল
+                  title_bn: জেনারেল
                   grade: '1'
-                  order: 0
-                  organization_title_en: BDBL
-                  rank_type_title_en: CEO
+                  display_order: 1
+                  organization_id: 1
+                  organization_title_en: Zulauf, Kohler and O'Keefe
+                  rank_type_id: 1
+                  rank_type_title_en: Chief of Army Staff
                   row_status: 1
-                  created_at: '2021-07-26T12:01:03.000000Z'
-                  updated_at: '2021-07-26T12:01:03.000000Z'
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:24.000000Z'
+                  updated_at: '2021-08-22T12:10:24.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - rank
     put:
@@ -1115,8 +1113,7 @@ paths:
                   success: true
                   code: 200
                   message: Rank updated successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - rank
     delete:
@@ -1136,8 +1133,7 @@ paths:
                   success: true
                   code: 200
                   message: Rank deleted successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - rank
   /job-sectors:
@@ -1157,29 +1153,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/jobSector'
               example:
+                current_page: 1
+                total_page: 1
+                page_size: 10
+                total: 3
+                order: ASC
                 data:
                   - id: 1
-                    title_en: Charity and voluntary work
-                    title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                    title_en: Insurance Underwriter
+                    title_bn: Insurance Underwriter
                     row_status: 1
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-22T12:10:28.000000Z'
+                    updated_at: '2021-08-22T12:10:28.000000Z'
                   - id: 2
-                    title_en: software industry
-                    title_bn: 'সফটওয়্যার ইন্দুস্ত্র্য '
+                    title_en: Structural Metal Fabricator
+                    title_bn: Structural Metal Fabricator
                     row_status: 1
-                _response_status:
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-22T12:10:29.000000Z'
+                    updated_at: '2021-08-22T12:10:29.000000Z'
+                  - id: 3
+                    title_en: Municipal Clerk
+                    title_bn: Municipal Clerk
+                    row_status: 1
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-22T12:10:29.000000Z'
+                    updated_at: '2021-08-22T12:10:29.000000Z'
+                response_status:
                   success: true
                   code: 200
-                  started: '2021-07-26T12:11:32.746156Z'
-                  finished: '2021-07-26T12:11:32.792900Z'
-                _links:
-                  paginate: []
-                  search:
-                    parameters:
-                      - title_en
-                      - title_bn
-                    _link: http://localhost:8000/api/v1/job-sectors
-                _page: []
-                _order: ASC
+                  query_time: 0
       tags:
         - JobSectors
     post:
@@ -1198,41 +1205,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/jobSector'
               example:
-                current_page: 1
-                total_page: 1
-                page_size: 10
-                total: 3
-                order: ASC
                 data:
-                  - id: 1
-                    title_en: Appliance Repairer
-                    title_bn: Appliance Repairer
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
-                  - id: 2
-                    title_en: Able Seamen
-                    title_bn: Able Seamen
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
-                  - id: 3
-                    title_en: Electronic Equipment Assembler
-                    title_bn: Electronic Equipment Assembler
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
-                response_status:
+                  title_en: abc
+                  title_bn: abc
+                  updated_at: '2021-08-23T09:24:16.000000Z'
+                  created_at: '2021-08-23T09:24:16.000000Z'
+                  id: 4
+                _response_status:
                   success: true
-                  code: 200
-                  started: 12 02 55
-                  finished: 12 02 55
+                  code: 201
+                  message: Job Sector added successfully.
+                  query_time: 0
       tags:
         - JobSectors
   /job-sectors/{jobSectorId}:
@@ -1251,17 +1234,19 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: Charity and voluntary work
-                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  title_en: abc
+                  title_bn: abc
                   row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:28.000000Z'
+                  updated_at: '2021-08-23T08:04:01.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
-                _links:
-                  update: http://localhost:8000/api/v1/job-sectors/1
-                  delete: http://localhost:8000/api/v1/job-sectors/1
+                  message: Job Sector updated successfully.
+                  query_time: 0
       tags:
         - JobSectors
     put:
@@ -1282,15 +1267,19 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: Charity and voluntary work
-                  title_bn: দাতব্য এবং স্বেচ্ছাসেবী কাজ
+                  title_en: abc
+                  title_bn: abc
                   row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:28.000000Z'
+                  updated_at: '2021-08-23T08:04:01.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
                   message: Job Sector updated successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - JobSectors
     delete:
@@ -1310,8 +1299,7 @@ paths:
                   success: true
                   code: 200
                   message: JobSector deleted successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - JobSectors
   /occupations:
@@ -1431,8 +1419,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 04 55
-                  finished: 12 04 55
+                  query_time: 0
       tags:
         - Occupation
     post:
@@ -1452,26 +1439,17 @@ paths:
                 $ref: '#/components/schemas/occupation'
               example:
                 data:
-                  - id: 1
-                    title_en: swe
-                    title_bn: swe
-                    row_status: 1
-                    job_sectors_title: Charity and voluntary work2
+                  title_en: abc
+                  title_bn: abc
+                  job_sector_id: '1'
+                  updated_at: '2021-08-23T07:34:46.000000Z'
+                  created_at: '2021-08-23T07:34:46.000000Z'
+                  id: 10
                 _response_status:
                   success: true
-                  code: 200
+                  code: 201
                   message: Occupation added successfully.
-                  started: '2021-07-26T12:26:43.765538Z'
-                  finished: '2021-07-26T12:26:43.799644Z'
-                _links:
-                  paginate: []
-                  search:
-                    parameters:
-                      - title_en
-                      - title_bn
-                    _link: http://localhost:8000/api/v1/occupations
-                _page: []
-                _order: ASC
+                  query_time: 0
       tags:
         - Occupation
   /occupations/{occupationId}:
@@ -1489,16 +1467,20 @@ paths:
                 $ref: '#/components/schemas/occupation'
               example:
                 data:
-                  id: 1
-                  title_en: swe
-                  title_bn: swe
+                  id: 3
+                  title_en: Electronics Engineering Technician
+                  title_bn: Electronics Engineering Technician
+                  job_sector_id: 1
+                  job_sector_title: abc
                   row_status: 1
-                  job_sectors_title: Charity and voluntary work2
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:28.000000Z'
+                  updated_at: '2021-08-22T12:10:28.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - Occupation
     put:
@@ -1517,12 +1499,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/occupation'
               example:
+                data:
+                  id: 3
+                  title_en: abc
+                  title_bn: abc
+                  job_sector_id: '1'
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:28.000000Z'
+                  updated_at: '2021-08-23T09:27:20.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
                   message: Occupation updated  successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - Occupation
     delete:
@@ -1542,8 +1534,7 @@ paths:
                   success: true
                   code: 200
                   message: Occupation deleted successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - Occupation
   /skills:
@@ -1663,8 +1654,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 06 45
-                  finished: 12 06 45
+                  query_time: 0
       tags:
         - skills
     post:
@@ -1694,8 +1684,7 @@ paths:
                   success: true
                   code: 201
                   message: Skill added successfully
-                  started: 11 25 13
-                  finished: 11 25 13
+                  query_time: 0
       tags:
         - skills
   /skills/{skillId}:
@@ -1723,8 +1712,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 06 45
-                  finished: 12 06 45
+                  query_time: 0
       tags:
         - skills
     put:
@@ -1757,8 +1745,7 @@ paths:
                   success: true
                   code: 200
                   message: skill updated successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - skills
     delete:
@@ -1778,8 +1765,7 @@ paths:
                   success: true
                   code: 200
                   message: Skill deleted successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - skills
   /organization-unit-types:
@@ -1909,8 +1895,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 08 36
-                  finished: 12 08 36
+                  query_time: 0
       tags:
         - organization-unit-types
     post:
@@ -1940,8 +1925,7 @@ paths:
                   success: true
                   code: 201
                   message: organizationUnitType added successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - organization-unit-types
   /organization-unit-types/{organizationUnitTypeId}:
@@ -1959,18 +1943,20 @@ paths:
                 $ref: '#/components/schemas/organizationUnitType'
               example:
                 data:
-                  id: 3
-                  title_en: akij group food
-                  title_bn: akij group food
-                  created_at: '2021-07-26T10:49:24.000000Z'
-                  updated_at: '2021-07-26T10:49:24.000000Z'
+                  id: 1
+                  title_en: abc
+                  title_bn: abc
+                  organization_id: 2
+                  organization_name: Douglas Ltd
                   row_status: 1
-                  organization_name: BDBL
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:24.000000Z'
+                  updated_at: '2021-08-23T07:57:19.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - organization-unit-types
     put:
@@ -1991,19 +1977,21 @@ paths:
                 $ref: '#/components/parameters/organizationUnitTypeId'
               example:
                 data:
-                  id: 3
-                  organization_id: '1'
-                  title_en: akij group food
-                  title_bn: আকিজ গ্রপ ফুদ
-                  row_status: '1'
-                  created_at: '2021-07-26T10:49:24.000000Z'
-                  updated_at: '2021-07-26T10:59:55.000000Z'
+                  id: 1
+                  organization_id: '2'
+                  title_en: abc
+                  title_bn: abc
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:24.000000Z'
+                  updated_at: '2021-08-23T07:57:19.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
-                  message: OrganizationUnitType updated successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  message: Organization Unit Type updated successfully.
+                  query_time: 0
       tags:
         - organization-unit-types
     delete:
@@ -2041,122 +2029,186 @@ paths:
               schema:
                 $ref: '#/components/schemas/organizationUnitType'
               example:
-                id: 1
-                organization_id: 1
-                organization_unit_type_id: 1
-                title_en: Marketing(Bangking)
-                title_bn: Marketing(Bangking)
-                parent_id: null
-                rank_id: 46
-                display_order: 1
-                is_designation: 1
-                status: 1
-                row_status: 1
-                created_by: null
-                updated_by: null
-                created_at: '2021-08-18T07:11:03.000000Z'
-                updated_at: '2021-08-18T07:11:03.000000Z'
-                deleted_at: null
-                parent: null
-                organization_title: Lowe, Quitzon and Fahey
-                organization_unit_type_title: Payment
-                children:
-                  - id: 2
-                    organization_id: 1
-                    organization_unit_type_id: 1
-                    title_en: Marketing Child(Bangking)
-                    title_bn: Marketing Child(Bangking)
-                    parent_id: 1
-                    rank_id: 6
-                    display_order: 3
-                    is_designation: 1
-                    status: 1
+                data:
+                  id: 1
+                  organization_id: 1
+                  organization_unit_type_id: 1
+                  title_en: Marketing(Bangking)
+                  title_bn: Marketing(Bangking)
+                  parent_id: null
+                  rank_id: 34
+                  display_order: 6
+                  is_designation: 1
+                  status: 1
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:30.000000Z'
+                  updated_at: '2021-08-22T12:10:30.000000Z'
+                  deleted_at: null
+                  parent: null
+                  organization_title: Zulauf, Kohler and O'Keefe
+                  organization_unit_type_title: abc
+                  children:
+                    - id: 2
+                      organization_id: 1
+                      organization_unit_type_id: 1
+                      title_en: Marketing Child(Bangking)
+                      title_bn: Marketing Child(Bangking)
+                      parent_id: 1
+                      rank_id: 8
+                      display_order: 4
+                      is_designation: 1
+                      status: 1
+                      row_status: 1
+                      created_by: null
+                      updated_by: null
+                      created_at: '2021-08-22T12:10:30.000000Z'
+                      updated_at: '2021-08-22T12:10:30.000000Z'
+                      deleted_at: null
+                      parent: 1
+                      organization_title: Zulauf, Kohler and O'Keefe
+                      organization_unit_type_title: abc
+                      organization:
+                        id: 1
+                        organization_type_id: 1
+                        title_en: Zulauf, Kohler and O'Keefe
+                        title_bn: Zulauf, Kohler and O'Keefe
+                        loc_division_id: 1
+                        loc_district_id: 1
+                        loc_upazila_id: 1
+                        address: |-
+                          97523 Nikolaus Lakes Apt. 771
+                          Marvinborough, OR 98746
+                        mobile: '01758393749'
+                        email: hill.kirk@jacobs.com
+                        fax_no: '+123456'
+                        contact_person_name: Ms. Madilyn Satterfield DDS
+                        contact_person_mobile: '01758393749'
+                        contact_person_email: swaniawski.elnora@example.net
+                        contact_person_designation: Utility Meter Reader
+                        description: Et eum ut iure possimus veritatis beatae nam.
+                        logo: logo.jpg
+                        domain: https://www.boehm.com
+                        row_status: 1
+                        created_by: null
+                        updated_by: null
+                        created_at: '2021-08-22T12:10:22.000000Z'
+                        updated_at: '2021-08-22T12:10:22.000000Z'
+                        deleted_at: null
+                      organization_unit_type:
+                        id: 1
+                        organization_id: 2
+                        title_en: abc
+                        title_bn: abc
+                        row_status: 1
+                        created_by: null
+                        updated_by: null
+                        created_at: '2021-08-22T12:10:24.000000Z'
+                        updated_at: '2021-08-23T07:57:19.000000Z'
+                        deleted_at: null
+                      children: []
+                    - id: 49
+                      organization_id: 2
+                      organization_unit_type_id: 1
+                      title_en: abc
+                      title_bn: abc
+                      parent_id: 1
+                      rank_id: 1
+                      display_order: 1
+                      is_designation: 1
+                      status: 1
+                      row_status: 1
+                      created_by: null
+                      updated_by: null
+                      created_at: '2021-08-23T07:33:47.000000Z'
+                      updated_at: '2021-08-23T07:33:47.000000Z'
+                      deleted_at: null
+                      parent: 1
+                      organization_title: Douglas Ltd
+                      organization_unit_type_title: abc
+                      organization:
+                        id: 2
+                        organization_type_id: 1
+                        title_en: Douglas Ltd
+                        title_bn: Douglas Ltd
+                        loc_division_id: 1
+                        loc_district_id: 1
+                        loc_upazila_id: 1
+                        address: |-
+                          814 Dock Harbor Suite 504
+                          Adolphland, WV 32081-5456
+                        mobile: '01758393749'
+                        email: bria33@friesen.com
+                        fax_no: '+123456'
+                        contact_person_name: Hillard Fay V
+                        contact_person_mobile: '01758393749'
+                        contact_person_email: flakin@example.net
+                        contact_person_designation: Pantograph Engraver
+                        description: Maxime ipsum rerum autem neque excepturi unde.
+                        logo: logo.jpg
+                        domain: https://www.runolfsdottir.com
+                        row_status: 1
+                        created_by: null
+                        updated_by: null
+                        created_at: '2021-08-22T12:10:22.000000Z'
+                        updated_at: '2021-08-22T12:10:22.000000Z'
+                        deleted_at: null
+                      organization_unit_type:
+                        id: 1
+                        organization_id: 2
+                        title_en: abc
+                        title_bn: abc
+                        row_status: 1
+                        created_by: null
+                        updated_by: null
+                        created_at: '2021-08-22T12:10:24.000000Z'
+                        updated_at: '2021-08-23T07:57:19.000000Z'
+                        deleted_at: null
+                      children: []
+                  organization:
+                    id: 1
+                    organization_type_id: 1
+                    title_en: Zulauf, Kohler and O'Keefe
+                    title_bn: Zulauf, Kohler and O'Keefe
+                    loc_division_id: 1
+                    loc_district_id: 1
+                    loc_upazila_id: 1
+                    address: |-
+                      97523 Nikolaus Lakes Apt. 771
+                      Marvinborough, OR 98746
+                    mobile: '01758393749'
+                    email: hill.kirk@jacobs.com
+                    fax_no: '+123456'
+                    contact_person_name: Ms. Madilyn Satterfield DDS
+                    contact_person_mobile: '01758393749'
+                    contact_person_email: swaniawski.elnora@example.net
+                    contact_person_designation: Utility Meter Reader
+                    description: Et eum ut iure possimus veritatis beatae nam.
+                    logo: logo.jpg
+                    domain: https://www.boehm.com
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-18T07:11:04.000000Z'
-                    updated_at: '2021-08-18T07:11:04.000000Z'
+                    created_at: '2021-08-22T12:10:22.000000Z'
+                    updated_at: '2021-08-22T12:10:22.000000Z'
                     deleted_at: null
-                    parent: 1
-                    organization_title: Lowe, Quitzon and Fahey
-                    organization_unit_type_title: Payment
-                    organization:
-                      id: 1
-                      organization_type_id: 1
-                      title_en: Lowe, Quitzon and Fahey
-                      title_bn: Lowe, Quitzon and Fahey
-                      loc_division_id: 1
-                      loc_district_id: 1
-                      loc_upazila_id: 1
-                      address: |-
-                        5292 Kody Streets
-                        South Margieborough, GA 61292-7798
-                      mobile: '01758393749'
-                      email: marge.davis@douglas.com
-                      fax_no: '+123456'
-                      contact_person_name: Johnathon Koepp
-                      contact_person_mobile: '01758393749'
-                      contact_person_email: kunze.patience@example.net
-                      contact_person_designation: Pest Control Worker
-                      description: Qui facilis quidem accusamus error quia ducimus ex.
-                      logo: logo.jpg
-                      domain: https://www.kilback.com
-                      row_status: 1
-                      created_by: null
-                      updated_by: null
-                      created_at: '2021-08-18T07:10:55.000000Z'
-                      updated_at: '2021-08-18T07:10:55.000000Z'
-                      deleted_at: null
-                    organization_unit_type:
-                      id: 1
-                      organization_id: 1
-                      title_en: Payment
-                      title_bn: Payment
-                      row_status: 1
-                      created_by: null
-                      updated_by: null
-                      created_at: '2021-08-18T07:10:57.000000Z'
-                      updated_at: '2021-08-18T07:10:57.000000Z'
-                      deleted_at: null
-                    children: []
-                organization:
-                  id: 1
-                  organization_type_id: 1
-                  title_en: Lowe, Quitzon and Fahey
-                  title_bn: Lowe, Quitzon and Fahey
-                  loc_division_id: 1
-                  loc_district_id: 1
-                  loc_upazila_id: 1
-                  address: |-
-                    5292 Kody Streets
-                    South Margieborough, GA 61292-7798
-                  mobile: '01758393749'
-                  email: marge.davis@douglas.com
-                  fax_no: '+123456'
-                  contact_person_name: Johnathon Koepp
-                  contact_person_mobile: '01758393749'
-                  contact_person_email: kunze.patience@example.net
-                  contact_person_designation: Pest Control Worker
-                  description: Qui facilis quidem accusamus error quia ducimus ex.
-                  logo: logo.jpg
-                  domain: https://www.kilback.com
-                  row_status: 1
-                  created_by: null
-                  updated_by: null
-                  created_at: '2021-08-18T07:10:55.000000Z'
-                  updated_at: '2021-08-18T07:10:55.000000Z'
-                  deleted_at: null
-                organization_unit_type:
-                  id: 1
-                  organization_id: 1
-                  title_en: Payment
-                  title_bn: Payment
-                  row_status: 1
-                  created_by: null
-                  updated_by: null
-                  created_at: '2021-08-18T07:10:57.000000Z'
-                  updated_at: '2021-08-18T07:10:57.000000Z'
-                  deleted_at: null
+                  organization_unit_type:
+                    id: 1
+                    organization_id: 2
+                    title_en: abc
+                    title_bn: abc
+                    row_status: 1
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-22T12:10:24.000000Z'
+                    updated_at: '2021-08-23T07:57:19.000000Z'
+                    deleted_at: null
+                _response_status:
+                  success: true
+                  code: 200
+                  message: OrganizationUnitType  based hierarchy got successfully
+                  query_time: 0
       tags:
         - organization-unit-types
   /organization-units:
@@ -2656,156 +2708,162 @@ paths:
               schema:
                 $ref: '#/components/schemas/organizationUnit'
               example:
-                id: 1
-                human_resource_template_id: 2
-                organization_id: 1
-                organization_unit_id: 1
-                title_en: Marketing
-                title_bn: Marketing
-                parent_id: null
-                rank_id: 11
-                display_order: 0
-                is_designation: 1
-                status: 1
-                row_status: 1
-                created_by: null
-                updated_by: null
-                created_at: '2021-08-18T07:11:04.000000Z'
-                updated_at: '2021-08-18T07:11:04.000000Z'
-                deleted_at: null
-                name: Marketing
-                parent: null
-                organization_title: Lowe, Quitzon and Fahey
-                organization_unit_title: Bangking
-                children:
-                  - id: 2
-                    human_resource_template_id: 2
-                    organization_id: 1
-                    organization_unit_id: 1
-                    title_en: Marketing
-                    title_bn: Marketing
-                    parent_id: 1
-                    rank_id: 15
-                    display_order: 0
-                    is_designation: 1
-                    status: 1
+                data:
+                  id: 3
+                  human_resource_template_id: 4
+                  organization_id: 1
+                  organization_unit_id: 2
+                  title_en: Marketing
+                  title_bn: Marketing
+                  parent_id: null
+                  rank_id: 11
+                  display_order: 0
+                  is_designation: 1
+                  status: 1
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:31.000000Z'
+                  updated_at: '2021-08-22T12:10:31.000000Z'
+                  deleted_at: null
+                  name: Marketing
+                  parent: null
+                  organization_title: Zulauf, Kohler and O'Keefe
+                  organization_unit_title: Salary
+                  children:
+                    - id: 4
+                      human_resource_template_id: 4
+                      organization_id: 1
+                      organization_unit_id: 2
+                      title_en: Sales executive
+                      title_bn: Sales executive
+                      parent_id: 3
+                      rank_id: 49
+                      display_order: 1
+                      is_designation: 1
+                      status: 1
+                      row_status: 1
+                      created_by: null
+                      updated_by: null
+                      created_at: '2021-08-22T12:10:31.000000Z'
+                      updated_at: '2021-08-22T12:10:31.000000Z'
+                      deleted_at: null
+                      name: Sales executive
+                      parent: 3
+                      organization_title: Zulauf, Kohler and O'Keefe
+                      organization_unit_title: Salary
+                      organization:
+                        id: 1
+                        organization_type_id: 1
+                        title_en: Zulauf, Kohler and O'Keefe
+                        title_bn: Zulauf, Kohler and O'Keefe
+                        loc_division_id: 1
+                        loc_district_id: 1
+                        loc_upazila_id: 1
+                        address: |-
+                          97523 Nikolaus Lakes Apt. 771
+                          Marvinborough, OR 98746
+                        mobile: '01758393749'
+                        email: hill.kirk@jacobs.com
+                        fax_no: '+123456'
+                        contact_person_name: Ms. Madilyn Satterfield DDS
+                        contact_person_mobile: '01758393749'
+                        contact_person_email: swaniawski.elnora@example.net
+                        contact_person_designation: Utility Meter Reader
+                        description: Et eum ut iure possimus veritatis beatae nam.
+                        logo: logo.jpg
+                        domain: https://www.boehm.com
+                        row_status: 1
+                        created_by: null
+                        updated_by: null
+                        created_at: '2021-08-22T12:10:22.000000Z'
+                        updated_at: '2021-08-22T12:10:22.000000Z'
+                        deleted_at: null
+                      organization_unit:
+                        id: 2
+                        title_en: Salary
+                        title_bn: Salary
+                        employee_size: 5
+                        organization_id: 1
+                        organization_unit_type_id: 1
+                        loc_division_id: 1
+                        loc_district_id: 1
+                        loc_upazila_id: 1
+                        address: |-
+                          182 Dortha Extensions Apt. 254
+                          North Marquesburgh, DE 24419-2606
+                        mobile: '01758393749'
+                        email: abigail26@spencer.com
+                        fax_no: '+123456'
+                        contact_person_name: Miss Edythe Kub III
+                        contact_person_mobile: '01758393749'
+                        contact_person_email: arianna.zieme@example.net
+                        contact_person_designation: HR
+                        row_status: 1
+                        created_by: null
+                        updated_by: null
+                        created_at: '2021-08-22T12:10:24.000000Z'
+                        updated_at: '2021-08-22T12:10:24.000000Z'
+                        deleted_at: null
+                      children: []
+                  organization:
+                    id: 1
+                    organization_type_id: 1
+                    title_en: Zulauf, Kohler and O'Keefe
+                    title_bn: Zulauf, Kohler and O'Keefe
+                    loc_division_id: 1
+                    loc_district_id: 1
+                    loc_upazila_id: 1
+                    address: |-
+                      97523 Nikolaus Lakes Apt. 771
+                      Marvinborough, OR 98746
+                    mobile: '01758393749'
+                    email: hill.kirk@jacobs.com
+                    fax_no: '+123456'
+                    contact_person_name: Ms. Madilyn Satterfield DDS
+                    contact_person_mobile: '01758393749'
+                    contact_person_email: swaniawski.elnora@example.net
+                    contact_person_designation: Utility Meter Reader
+                    description: Et eum ut iure possimus veritatis beatae nam.
+                    logo: logo.jpg
+                    domain: https://www.boehm.com
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-18T07:11:04.000000Z'
-                    updated_at: '2021-08-18T07:11:04.000000Z'
+                    created_at: '2021-08-22T12:10:22.000000Z'
+                    updated_at: '2021-08-22T12:10:22.000000Z'
                     deleted_at: null
-                    name: Marketing
-                    parent: 1
-                    organization_title: Lowe, Quitzon and Fahey
-                    organization_unit_title: Bangking
-                    organization:
-                      id: 1
-                      organization_type_id: 1
-                      title_en: Lowe, Quitzon and Fahey
-                      title_bn: Lowe, Quitzon and Fahey
-                      loc_division_id: 1
-                      loc_district_id: 1
-                      loc_upazila_id: 1
-                      address: |-
-                        5292 Kody Streets
-                        South Margieborough, GA 61292-7798
-                      mobile: '01758393749'
-                      email: marge.davis@douglas.com
-                      fax_no: '+123456'
-                      contact_person_name: Johnathon Koepp
-                      contact_person_mobile: '01758393749'
-                      contact_person_email: kunze.patience@example.net
-                      contact_person_designation: Pest Control Worker
-                      description: Qui facilis quidem accusamus error quia ducimus ex.
-                      logo: logo.jpg
-                      domain: https://www.kilback.com
-                      row_status: 1
-                      created_by: null
-                      updated_by: null
-                      created_at: '2021-08-18T07:10:55.000000Z'
-                      updated_at: '2021-08-18T07:10:55.000000Z'
-                      deleted_at: null
-                    organization_unit:
-                      id: 1
-                      title_en: Bangking
-                      title_bn: Bangking
-                      employee_size: 5
-                      organization_id: 1
-                      organization_unit_type_id: 1
-                      loc_division_id: 1
-                      loc_district_id: 1
-                      loc_upazila_id: 1
-                      address: |-
-                        86480 Considine Camp
-                        South Pablo, WI 97356
-                      mobile: '01758393749'
-                      email: bennie.block@waters.org
-                      fax_no: '+123456'
-                      contact_person_name: Sim Gottlieb
-                      contact_person_mobile: '01758393749'
-                      contact_person_email: susan.ryan@example.net
-                      contact_person_designation: HR
-                      row_status: 1
-                      created_by: null
-                      updated_by: null
-                      created_at: '2021-08-18T07:10:57.000000Z'
-                      updated_at: '2021-08-18T07:10:57.000000Z'
-                      deleted_at: null
-                    children: []
-                organization:
-                  id: 1
-                  organization_type_id: 1
-                  title_en: Lowe, Quitzon and Fahey
-                  title_bn: Lowe, Quitzon and Fahey
-                  loc_division_id: 1
-                  loc_district_id: 1
-                  loc_upazila_id: 1
-                  address: |-
-                    5292 Kody Streets
-                    South Margieborough, GA 61292-7798
-                  mobile: '01758393749'
-                  email: marge.davis@douglas.com
-                  fax_no: '+123456'
-                  contact_person_name: Johnathon Koepp
-                  contact_person_mobile: '01758393749'
-                  contact_person_email: kunze.patience@example.net
-                  contact_person_designation: Pest Control Worker
-                  description: Qui facilis quidem accusamus error quia ducimus ex.
-                  logo: logo.jpg
-                  domain: https://www.kilback.com
-                  row_status: 1
-                  created_by: null
-                  updated_by: null
-                  created_at: '2021-08-18T07:10:55.000000Z'
-                  updated_at: '2021-08-18T07:10:55.000000Z'
-                  deleted_at: null
-                organization_unit:
-                  id: 1
-                  title_en: Bangking
-                  title_bn: Bangking
-                  employee_size: 5
-                  organization_id: 1
-                  organization_unit_type_id: 1
-                  loc_division_id: 1
-                  loc_district_id: 1
-                  loc_upazila_id: 1
-                  address: |-
-                    86480 Considine Camp
-                    South Pablo, WI 97356
-                  mobile: '01758393749'
-                  email: bennie.block@waters.org
-                  fax_no: '+123456'
-                  contact_person_name: Sim Gottlieb
-                  contact_person_mobile: '01758393749'
-                  contact_person_email: susan.ryan@example.net
-                  contact_person_designation: HR
-                  row_status: 1
-                  created_by: null
-                  updated_by: null
-                  created_at: '2021-08-18T07:10:57.000000Z'
-                  updated_at: '2021-08-18T07:10:57.000000Z'
-                  deleted_at: null
+                  organization_unit:
+                    id: 2
+                    title_en: Salary
+                    title_bn: Salary
+                    employee_size: 5
+                    organization_id: 1
+                    organization_unit_type_id: 1
+                    loc_division_id: 1
+                    loc_district_id: 1
+                    loc_upazila_id: 1
+                    address: |-
+                      182 Dortha Extensions Apt. 254
+                      North Marquesburgh, DE 24419-2606
+                    mobile: '01758393749'
+                    email: abigail26@spencer.com
+                    fax_no: '+123456'
+                    contact_person_name: Miss Edythe Kub III
+                    contact_person_mobile: '01758393749'
+                    contact_person_email: arianna.zieme@example.net
+                    contact_person_designation: HR
+                    row_status: 1
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-22T12:10:24.000000Z'
+                    updated_at: '2021-08-22T12:10:24.000000Z'
+                    deleted_at: null
+                _response_status:
+                  success: true
+                  code: 200
+                  message: Organization Unit based hierarchy got successfully
+                  query_time: 0
       tags:
         - organization-units
   /organization-units/{organizationUnitId}/assign-service-to-organization-unit:
@@ -2930,8 +2988,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 13 24
-                  finished: 12 13 24
+                  query_time: 0
       tags:
         - services
     post:
@@ -2960,12 +3017,7 @@ paths:
                   success: true
                   code: 200
                   message: Service added successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
-                _links:
-                  paginate: []
-                _page: []
-                _order: ASC
+                  query_time: 0
       tags:
         - services
   /services/{serviceId}:
@@ -2993,8 +3045,7 @@ paths:
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - services
     put:
@@ -3020,19 +3071,21 @@ paths:
                   title_bn: Service1_bn_update
                   organization_title_en: BDBL
                   row_status: 1
-                  created_at: '2021-07-26T12:02:05.000000Z'
-                  updated_at: '2021-07-26T12:02:33.000000Z'
+                  created_by: null
+                  updated_by: null
+                  deleted_at: null
+                  created_at: '2021-08-22T12:10:27.000000Z'
+                  updated_at: '2021-08-23T09:38:44.000000Z'
                 _response_status:
                   success: true
                   code: 200
                   message: service updated successfully.
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - services
     delete:
       summary: delete
-      description: API endpoint to get a specified service.A successful request response will show 200 HTTP status code
+      description: API endpoint to delete the specified service.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/serviceId'
       responses:
@@ -3047,8 +3100,7 @@ paths:
                   success: true
                   code: 200
                   message: service deleted successfully
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - services
   /human-resource-templates:
@@ -3268,8 +3320,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 18 37
-                  finished: 12 18 38
+                  query_time: 0
       tags:
         - human-resource-templates
     post:
@@ -3287,9 +3338,6 @@ paths:
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/row_status'
       responses:
-        '200':
-          description: successful
-          headers: {}
         '201':
           description: create
           content:
@@ -3297,19 +3345,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/humanResourceTemplate'
               example:
-                data: true
+                data:
+                  title_en: abc
+                  title_bn: abc
+                  organization_id: '2'
+                  organization_unit_type_id: '1'
+                  parent_id: '1'
+                  rank_id: '1'
+                  display_order: '1'
+                  is_designation: '1'
+                  status: '1'
+                  updated_at: '2021-08-23T09:40:09.000000Z'
+                  created_at: '2021-08-23T09:40:09.000000Z'
+                  id: 50
                 _response_status:
                   success: true
                   code: 201
-                  message: Human resource template added successfully
-                  started: 06 00 24
-                  finished: 06 00 25
+                  message: Human Resource Template added successfully
+                  query_time: 0
       tags:
         - human-resource-templates
   /human-resource-templates/{humanResourceTemplatesId}:
     get:
       summary: get one
-      description: API endpoint to get a HumanResourceTemlate .A successful request response will show 200 HTTP status code
+      description: API endpoint to get a HumanResourceTemplate .A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/humanResourceTemplatesId'
       responses:
@@ -3321,21 +3380,29 @@ paths:
                 $ref: '#/components/schemas/humanResourceTemplate'
               example:
                 data:
-                  id: 5
-                  organization_title_en: AKIJ GROUP_update
-                  organization_unit_title_en: GCL_update
-                  service_title_en: Service1_update
+                  id: 1
+                  title_en: Marketing(Bangking)
+                  title_bn: Marketing(Bangking)
+                  display_order: 6
+                  is_designation: 1
+                  parent_id: null
+                  parent: null
+                  organization_id: 1
+                  organization_title: Zulauf, Kohler and O'Keefe
+                  organization_unit_type_id: 1
+                  organization_unit_type_title: abc
+                  rank_id: 34
+                  rank_title_en: জেনারেল
+                  status: 1
                   row_status: 1
-                  created_at: null
-                  updated_at: '2021-08-01T05:47:25.000000Z'
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:30.000000Z'
+                  updated_at: '2021-08-22T12:10:30.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 06 00 50
-                  finished: 06 00 50
-                _links:
-                  update: http://localhost:8000/api/v1/organization-unit-services/5
-                  delete: http://localhost:8000/api/v1/organization-unit-services/5
+                  query_time: 0
       tags:
         - human-resource-templates
     put:
@@ -3362,24 +3429,32 @@ paths:
                 $ref: '#/components/schemas/humanResourceTemplate'
               example:
                 data:
-                  id: 5
-                  organization_id: 1
-                  organization_unit_id: 1
-                  service_id: 1
-                  row_status: 99
-                  created_at: null
-                  updated_at: '2021-08-02T06:01:44.000000Z'
+                  id: 1
+                  organization_id: '2'
+                  organization_unit_type_id: '1'
+                  title_en: abc
+                  title_bn: abc
+                  parent_id: '1'
+                  rank_id: '1'
+                  display_order: '1'
+                  is_designation: '1'
+                  status: '1'
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:30.000000Z'
+                  updated_at: '2021-08-23T09:48:17.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
-                  message: HumanResourceTemplate updated successfully.
-                  started: 06 01 43
-                  finished: 06 01 44
+                  message: Human Resource Template updated successfully.
+                  query_time: 0
       tags:
         - human-resource-templates
     delete:
       summary: delete
-      description: ' API endpoint to delete an organization unit type.A successful request response will show 200 HTTP status code'
+      description: ' API endpoint to delete a Human Resource Template.A successful request response will show 200 HTTP status code'
       parameters:
         - $ref: '#/components/parameters/humanResourceTemplatesId'
       responses:
@@ -3394,8 +3469,7 @@ paths:
                   success: true
                   code: 200
                   message: Human Resource Template deleted successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - human-resource-templates
   /human-resources:
@@ -3635,8 +3709,7 @@ paths:
                 response_status:
                   success: true
                   code: 200
-                  started: 12 19 19
-                  finished: 12 19 19
+                  query_time: 0
       tags:
         - human-resources
     post:
@@ -3655,8 +3728,6 @@ paths:
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/row_status'
       responses:
-        '200':
-          description: successful
         '201':
           description: create
           content:
@@ -3665,18 +3736,24 @@ paths:
                 $ref: '#/components/schemas/humanResource'
               example:
                 data:
-                  id: 5
-                  organization_title_en: AKIJ GROUP_update
-                  organization_unit_title_en: GCL_update
-                  service_title_en: Service1_update
-                  row_status: 1
-                  created_at: null
-                  updated_at: '2021-08-01T05:47:25.000000Z'
+                  title_en: abc
+                  title_bn: abc
+                  organization_id: '2'
+                  organization_unit_id: '3'
+                  parent_id: '1'
+                  human_resource_template_id: '1'
+                  rank_id: '1'
+                  display_order: '1'
+                  is_designation: '1'
+                  status: '1'
+                  updated_at: '2021-08-23T09:50:13.000000Z'
+                  created_at: '2021-08-23T09:50:13.000000Z'
+                  id: 49
                 _response_status:
                   success: true
-                  code: 200
-                  started: 06 00 50
-                  finished: 06 00 50
+                  code: 201
+                  message: Human Resource added successfully
+                  query_time: 0
       tags:
         - human-resources
   /human-resources/{humanResourceId}:
@@ -3694,21 +3771,31 @@ paths:
                 $ref: '#/components/schemas/humanResource'
               example:
                 data:
-                  id: 5
-                  organization_title_en: AKIJ GROUP_update
-                  organization_unit_title_en: GCL_update
-                  service_title_en: Service1_update
+                  id: 2
+                  title_en: Sales executive
+                  title_bn: Sales executive
+                  display_order: 6
+                  is_designation: 1
+                  parent_id: 1
+                  parent: Sales executive
+                  organization_id: 1
+                  organization_name: Zulauf, Kohler and O'Keefe
+                  organization_unit_id: 1
+                  organization_unit_name: Bangking
+                  human_resource_template_id: 2
+                  human_resource_template_name: Marketing Child(Bangking)
+                  rank_id: 26
+                  rank_title_en: লেফটেন্যান্ট জেনারেল
+                  status: 1
                   row_status: 1
-                  created_at: null
-                  updated_at: '2021-08-01T05:47:25.000000Z'
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:30.000000Z'
+                  updated_at: '2021-08-22T12:10:30.000000Z'
                 _response_status:
                   success: true
                   code: 200
-                  started: 06 00 50
-                  finished: 06 00 50
-                _links:
-                  update: http://localhost:8000/api/v1/organization-unit-services/5
-                  delete: http://localhost:8000/api/v1/organization-unit-services/5
+                  query_time: 0
       tags:
         - human-resources
     put:
@@ -3728,28 +3815,34 @@ paths:
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/row_status'
       responses:
-        '200':
-          description: successful
-          headers: {}
         '201':
           description: update
           content:
             application/json:
               example:
                 data:
-                  id: 5
-                  organization_id: 1
-                  organization_unit_id: 1
-                  service_id: 1
-                  row_status: 99
-                  created_at: null
-                  updated_at: '2021-08-02T06:01:44.000000Z'
+                  id: 2
+                  human_resource_template_id: '1'
+                  organization_id: '2'
+                  organization_unit_id: '3'
+                  title_en: abc
+                  title_bn: abc
+                  parent_id: '1'
+                  rank_id: '1'
+                  display_order: '1'
+                  is_designation: '1'
+                  status: '1'
+                  row_status: 1
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-22T12:10:30.000000Z'
+                  updated_at: '2021-08-23T09:52:12.000000Z'
+                  deleted_at: null
                 _response_status:
                   success: true
                   code: 200
-                  message: Human Resource updated successfully.
-                  started: 06 01 43
-                  finished: 06 01 44
+                  message: Human Resource updated successfully
+                  query_time: 0
       tags:
         - human-resources
     delete:
@@ -3769,8 +3862,7 @@ paths:
                   success: true
                   code: 200
                   message: Human Resource  deleted successfully.
-                  started: 06 02 03
-                  finished: 06 02 03
+                  query_time: 0
       tags:
         - human-resources
 components:
@@ -4760,14 +4852,14 @@ components:
       required: true
       schema:
         type: string
-        example: '0171122334455'
+        example: '01711223344'
     domain:
       name: domain
       in: query
       required: true
       schema:
         type: string
-        example: http://www.companyname.com
+        example: https://www.companyname.com
     fax_no:
       name: fax_no
       in: query
@@ -4781,7 +4873,7 @@ components:
       required: true
       schema:
         type: string
-        example: 01789 277788
+        example: '01789277788'
     contact_person_name:
       name: contact_person_name
       in: query
@@ -4834,10 +4926,13 @@ components:
     serviceIds:
       name: serviceIds
       in: query
-      schema:
-        type: array
-        items:
-          type: integer
+      content:
+        multipart/form-data:
+          schema:
+            type: array
+            items:
+              type: integer
+              uniqueItems: true
     organizationUnitTypeId:
       name: organizationUnitTypeId
       in: path
