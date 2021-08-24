@@ -261,15 +261,24 @@ class OrganizationUnitService
         return $response;
     }
 
+    /**
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
+     */
     public function restore(OrganizationUnit $organizationUnit): bool
     {
         return $organizationUnit->restore();
     }
 
+    /**
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
+     */
     public function forceDelete(OrganizationUnit $organizationUnit): bool
     {
         return $organizationUnit->forceDelete();
     }
+
 
     /**
      * @param OrganizationUnit $organizationUnit

@@ -175,6 +175,93 @@ class HumanResourceTemplateService
         return $humanResourceTemplate->delete();
     }
 
+    public function getTrashedHumanResourceTemplateList(Request $request, Carbon $startTime): array
+    {
+        $response = [];
+        $titleEn = $request->query('title_en');
+        $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Builder $humanResourceTemplateBuilder */
+        $humanResourceTemplateBuilder = HumanResourceTemplate::onlyTrashed()->select([
+            'human_resource_templates.id',
+            'human_resource_templates.title_en',
+            'human_resource_templates.title_bn',
+            'human_resource_templates.display_order',
+            'human_resource_templates.is_designation',
+            'human_resource_templates.parent_id',
+            't2.title_en as parent',
+            'human_resource_templates.organization_id',
+            'organizations.title_en as organization_title',
+            'human_resource_templates.organization_unit_type_id',
+            'organization_unit_types.title_en as organization_unit_type_title',
+            'human_resource_templates.rank_id',
+            'ranks.title_en as rank_title_en',
+            'human_resource_templates.status',
+            'human_resource_templates.row_status',
+            'human_resource_templates.created_by',
+            'human_resource_templates.updated_by',
+            'human_resource_templates.created_at',
+            'human_resource_templates.updated_at',
+        ]);
+
+        $humanResourceTemplateBuilder->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
+        $humanResourceTemplateBuilder->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $humanResourceTemplateBuilder->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
+        $humanResourceTemplateBuilder->orderBy('human_resource_templates.id', $order);
+
+        if (!empty($titleEn)) {
+            $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
+        } elseif (!empty($titleBn)) {
+            $humanResourceTemplateBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        /** @var Collection $humanResourceTemplates */
+
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
+            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($limit);
+            $paginateData = (object)$humanResourceTemplates->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $humanResourceTemplates = $humanResourceTemplateBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $humanResourceTemplates->toArray()['data'] ?? $humanResourceTemplates->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param HumanResourceTemplate $humanResourceTemplate
+     * @return bool
+     */
+    public function restore(HumanResourceTemplate $humanResourceTemplate): bool
+    {
+        return $humanResourceTemplate->restore();
+    }
+
+    /**
+     * @param HumanResourceTemplate $humanResourceTemplate
+     * @return bool
+     */
+    public function forceDelete(HumanResourceTemplate $humanResourceTemplate): bool
+    {
+        return $humanResourceTemplate->forceDelete();
+    }
+
     /**
      * @param Request $request
      * @param int|null $id

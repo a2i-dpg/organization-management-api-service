@@ -168,7 +168,7 @@ class OrganizationUnitController extends Controller
      */
     public function restore(int $id)
     {
-        $organizationUnit = OrganizationUnit::withTrashed()->findOrFail($id);
+        $organizationUnit = OrganizationUnit::onlyTrashed()->findOrFail($id);
         try {
             $this->organizationUnitService->restore($organizationUnit);
             $response = [
@@ -185,9 +185,13 @@ class OrganizationUnitController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
     public function forceDelete(int $id)
     {
-        $organizationUnit = OrganizationUnit::withTrashed()->findOrFail($id);
+        $organizationUnit = OrganizationUnit::onlyTrashed()->findOrFail($id);
         try {
             $this->organizationUnitService->forceDelete($organizationUnit);
             $response = [

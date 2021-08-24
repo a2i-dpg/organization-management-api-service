@@ -152,6 +152,86 @@ class SkillService
 
     /**
      * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getTrashedSkillList(Request $request, Carbon $startTime): array
+    {
+        $response = [];
+        $titleEn = $request->query('title_en');
+        $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Builder $skillBuilder */
+        $skillBuilder = Skill::onlyTrashed()->select(
+            [
+                'skills.id as id',
+                'skills.title_en',
+                'skills.title_bn',
+                'skills.description',
+                'skills.row_status',
+                'skills.created_at',
+                'skills.updated_at',
+                'skills.created_by',
+                'skills.updated_by',
+            ]
+        );
+
+        $skillBuilder->orderBy('skills.id', $order);
+
+        if (!empty($titleEn)) {
+            $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
+        } elseif (!empty($titleBn)) {
+            $skillBuilder->where('skills.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        /** @var Collection $skills */
+
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
+            $skills = $skillBuilder->paginate($limit);
+            $paginateData = (object)$skills->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $skills = $skillBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $skills->toArray()['data'] ?? $skills->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param Skill $skill
+     * @return bool
+     */
+    public function restore(Skill $skill): bool
+    {
+        return $skill->restore();
+    }
+
+    /**
+     * @param Skill $skill
+     * @return bool
+     */
+    public function forceDelete(Skill $skill): bool
+    {
+        return $skill->forceDelete();
+    }
+
+    /**
+     * @param Request $request
      * return use Illuminate\Support\Facades\Validator;
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator

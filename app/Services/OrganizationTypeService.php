@@ -145,6 +145,78 @@ class OrganizationTypeService
         return $organizationType->delete();
     }
 
+    public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
+    {
+        $response = [];
+        $titleEn = $request->query('title_en');
+        $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Builder $organizationTypeBuilder */
+        $organizationTypeBuilder = OrganizationType::onlyTrashed()->select([
+            'organization_types.id',
+            'organization_types.title_en',
+            'organization_types.title_bn',
+            'organization_types.is_government',
+            'organization_types.row_status',
+            'organization_types.created_by',
+            'organization_types.updated_by',
+            'organization_types.created_at',
+            'organization_types.updated_at'
+        ]);
+        $organizationTypeBuilder->orderBy('organization_types.id', $order);
+
+        if (!empty($titleEn)) {
+            $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
+        } elseif (!empty($titleBn)) {
+            $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        /** @var Collection $organizationTypes */
+
+        if ($paginate || $limit) {
+            $limit = $limit ?: 10;
+            $organizationTypes = $organizationTypeBuilder->paginate($limit);
+            $paginateData = (object)$organizationTypes->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizationTypes = $organizationTypeBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizationTypes->toArray()['data'] ?? $organizationTypes->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param OrganizationType $organizationType
+     * @return bool
+     */
+    public function restore(OrganizationType $organizationType): bool
+    {
+        return $organizationType->restore();
+    }
+
+    /**
+     * @param OrganizationType $organizationType
+     * @return bool
+     */
+    public function forceDelete(OrganizationType $organizationType): bool
+    {
+        return $organizationType->forceDelete();
+    }
+
     /**
      * @param Request $request
      * @param int|null $id
