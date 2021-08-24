@@ -155,7 +155,7 @@ class RankController extends Controller
     public function getTrashedData(Request $request)
     {
         try {
-            $response = $this->rankService->getAllTrashedOrganizationUnit($request, $this->startTime);
+            $response = $this->rankService->getTrashedRankList($request, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

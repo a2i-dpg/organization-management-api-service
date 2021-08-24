@@ -145,6 +145,11 @@ class OrganizationTypeService
         return $organizationType->delete();
     }
 
+    /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $response = [];
