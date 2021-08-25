@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Models\BaseModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,10 +26,10 @@ class OrganizationUnitService
      */
     public function getAllOrganizationUnit(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus=$request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -141,7 +140,7 @@ class OrganizationUnitService
         /** @var OrganizationUnit $organizationUnit */
         $organizationUnit = $organizationUnitBuilder->first();
         return [
-            "data" => $organizationUnit ?: null,
+            "data" => $organizationUnit ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,
@@ -190,7 +189,6 @@ class OrganizationUnitService
      */
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
@@ -229,6 +227,7 @@ class OrganizationUnitService
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
+
 
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');

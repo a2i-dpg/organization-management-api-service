@@ -25,10 +25,10 @@ class OccupationService
      */
     public function getOccupationList(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus=$request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -46,6 +46,7 @@ class OccupationService
             'occupations.updated_at',
         ]);
         $occupationBuilder->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
+        $occupationBuilder->whereNull('job_sectors.deleted_at');
         $occupationBuilder->orderBy('occupations.id', $order);
 
         if (!empty($titleEn)) {
@@ -60,7 +61,6 @@ class OccupationService
             $limit = $limit ?: 10;
             $occupations = $occupationBuilder->paginate($limit);
             $paginateData = (object)$occupations->toArray();
-
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
@@ -101,13 +101,14 @@ class OccupationService
             'occupations.updated_at',
         ]);
         $occupationBuilder->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
+        $occupationBuilder->whereNull('job_sectors.deleted_at');
         $occupationBuilder->where('occupations.id', '=', $id);
 
         /** @var  Occupation $occupation */
         $occupation = $occupationBuilder->first();
 
         return [
-            "data" => $occupation ?: null,
+            "data" => $occupation ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,
@@ -156,7 +157,6 @@ class OccupationService
      */
     public function getTrashedOccupationList(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);

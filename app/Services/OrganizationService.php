@@ -25,7 +25,6 @@ class OrganizationService
      */
     public function getAllOrganization(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
@@ -135,7 +134,7 @@ class OrganizationService
         $organization = $organizationBuilder->first();
 
         return [
-            "data" => $organization ?: null,
+            "data" => $organization ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,
@@ -185,10 +184,10 @@ class OrganizationService
      */
     public function getAllTrashedOrganization(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus=$request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 

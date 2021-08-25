@@ -27,10 +27,10 @@ class RankService
      */
     public function getRankList(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus=$request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -123,7 +123,7 @@ class RankService
         $rank = $rankBuilder->first();
 
         return [
-            "data" => $rank ?: null,
+            "data" => $rank ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,

@@ -16,10 +16,10 @@ class HumanResourceService
 {
     public function getHumanResourceList(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus=$request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -47,12 +47,16 @@ class HumanResourceService
             'human_resources.created_at',
             'human_resources.updated_at',
         ]);
-
         $humanResourceBuilder->join('human_resource_templates', 'human_resources.human_resource_template_id', '=', 'human_resource_templates.id');
         $humanResourceBuilder->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
         $humanResourceBuilder->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResourceBuilder->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
         $humanResourceBuilder->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $humanResourceBuilder->whereNull('human_resource_templates.deleted_at');
+        $humanResourceBuilder->whereNull('organizations.deleted_at');
+        $humanResourceBuilder->whereNull('organization_units.deleted_at');
+        $humanResourceBuilder->whereNull('ranks.deleted_at');
+        $humanResourceBuilder->whereNull('human_resources as t2.deleted_at');
         $humanResourceBuilder->orderBy('human_resource_templates.id', $order);
 
         if (!empty($titleEn)) {
@@ -123,6 +127,11 @@ class HumanResourceService
         $humanResourceBuilder->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResourceBuilder->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
         $humanResourceBuilder->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $humanResourceBuilder->whereNull('human_resource_templates.deleted_at');
+        $humanResourceBuilder->whereNull('organizations.deleted_at');
+        $humanResourceBuilder->whereNull('organization_units.deleted_at');
+        $humanResourceBuilder->whereNull('ranks.deleted_at');
+        $humanResourceBuilder->whereNull('human_resources as t2.deleted_at');
         $humanResourceBuilder->where('human_resources.id', $id);
 
 
@@ -130,7 +139,7 @@ class HumanResourceService
         $humanResource = $humanResourceBuilder->first();
 
         return [
-            "data" => $humanResource ?: null,
+            "data" => $humanResource ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,
@@ -174,7 +183,6 @@ class HumanResourceService
 
     public function getTrashedHumanResourceList(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
