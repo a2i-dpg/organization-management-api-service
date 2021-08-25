@@ -4304,6 +4304,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -4801,8 +4804,12 @@
                     {
                         "$ref": "#/components/parameters/limit"
                     },
+
                     {
                         "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -6743,6 +6750,15 @@
                 "schema": {
                     "type": "integer",
                     "example": 10
+                }
+            },
+            "row_status_optional": {
+                "name": "row_status",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         }

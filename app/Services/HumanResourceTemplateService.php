@@ -28,7 +28,7 @@ class HumanResourceTemplateService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -55,16 +55,40 @@ class HumanResourceTemplateService
             'human_resource_templates.updated_at',
         ]);
 
-        $humanResourceTemplateBuilder->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
-        $humanResourceTemplateBuilder->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
-        $humanResourceTemplateBuilder->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
-        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
+        $humanResourceTemplateBuilder->join('organizations', function ($join) use ($rowStatus) {
+            $join->on('human_resource_templates.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organizations.row_status', $rowStatus);
+            }
+        });
+        $humanResourceTemplateBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
+            $join->on('human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id')
+                ->whereNull('organization_unit_types.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organization_unit_types.row_status', $rowStatus);
+            }
+        });
+        $humanResourceTemplateBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
+            $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
+                ->whereNull('ranks.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('ranks.row_status', $rowStatus);
+            }
+        });
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', function ($join) use ($rowStatus) {
+            $join->on('human_resource_templates.parent_id', '=', 't2.id')
+                ->whereNull('t2.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('t2.row_status', $rowStatus);
+            }
+        });
+
         $humanResourceTemplateBuilder->orderBy('human_resource_templates.id', $order);
 
-        $humanResourceTemplateBuilder->whereNull('organizations.deleted_at');
-        $humanResourceTemplateBuilder->whereNull('organization_unit_types.deleted_at');
-        $humanResourceTemplateBuilder->whereNull('ranks.deleted_at');
-        $humanResourceTemplateBuilder->whereNull('human_resource_templates as t2.deleted_at');
+        if (!is_null($rowStatus)) {
+            $humanResourceTemplateBuilder->where('human_resource_templates.row_status', $rowStatus);
+        }
 
         if (!empty($titleEn)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
@@ -74,7 +98,7 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($limit);
             $paginateData = (object)$humanResourceTemplates->toArray();
@@ -126,15 +150,25 @@ class HumanResourceTemplateService
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
         ]);
+        $humanResourceTemplateBuilder->join('organizations', function ($join) {
+            $join->on('human_resource_templates.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
 
-        $humanResourceTemplateBuilder->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
-        $humanResourceTemplateBuilder->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
-        $humanResourceTemplateBuilder->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
-        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
-        $humanResourceTemplateBuilder->whereNull('organizations.deleted_at');
-        $humanResourceTemplateBuilder->whereNull('organization_unit_types.deleted_at');
-        $humanResourceTemplateBuilder->whereNull('ranks.deleted_at');
-        $humanResourceTemplateBuilder->whereNull('human_resource_templates as t2.deleted_at');
+        });
+        $humanResourceTemplateBuilder->join('organization_unit_types', function ($join)  {
+            $join->on('human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id')
+                ->whereNull('organization_unit_types.deleted_at');
+
+        });
+        $humanResourceTemplateBuilder->leftJoin('ranks', function ($join)  {
+            $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
+                ->whereNull('ranks.deleted_at');
+        });
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', function ($join) {
+            $join->on('human_resource_templates.parent_id', '=', 't2.id')
+                ->whereNull('t2.deleted_at');
+        });
+
         $humanResourceTemplateBuilder->where('human_resource_templates.id', $id);
 
         /** @var HumanResourceTemplate $humanResourceTemplate */

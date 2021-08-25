@@ -17,6 +17,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use TypeError;
 
 
 /**
@@ -96,6 +97,13 @@ class Handler extends ExceptionHandler
             ];
             return response()->json($errors);
         }
+//        elseif ($e instanceof TypeError) {
+//            $errors = [
+//                "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
+//                "message" => "Type Error",
+//            ];
+//            return response()->json($errors);
+//        }
 
         return parent::render($request, $e);
     }
