@@ -28,7 +28,7 @@ class RankTypeService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -48,9 +48,18 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         );
-        $rankTypeBuilder->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
+        $rankTypeBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
+            $join->on('rank_types.organization_id', '=', 'organizations.id')
+                ->whereNUll('organizations.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organizations.row_status', $rowStatus);
+            }
+        });
         $rankTypeBuilder->orderBy('rank_types.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
+        }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -59,7 +68,7 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $rankTypes = $rankTypeBuilder->paginate($limit);
             $paginateData = (object)$rankTypes->toArray();

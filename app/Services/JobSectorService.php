@@ -29,7 +29,7 @@ class JobSectorService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -48,6 +48,10 @@ class JobSectorService
         );
         $jobSectorBuilder->orderBy('job_sectors.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $jobSectorBuilder->where('job_sectors.row_status', $rowStatus);
+        }
+
         if (!empty($titleEn)) {
             $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -56,7 +60,7 @@ class JobSectorService
 
         /** @var Collection $jobSectors */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $jobSectors = $jobSectorBuilder->paginate($limit);
             $paginateData = (object)$jobSectors->toArray();

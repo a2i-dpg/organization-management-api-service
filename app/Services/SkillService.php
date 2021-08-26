@@ -25,7 +25,6 @@ class SkillService
      */
     public function getSkillList(Request $request, Carbon $startTime): array
     {
-
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
@@ -47,9 +46,11 @@ class SkillService
                 'skills.updated_by',
             ]
         );
-
         $skillBuilder->orderBy('skills.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $skillBuilder->where('skills.row_status', $rowStatus);
+        }
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {

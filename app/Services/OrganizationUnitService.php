@@ -29,7 +29,7 @@ class OrganizationUnitService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -62,10 +62,25 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
-        $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
+            $join->on('organization_units.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organizations.row_status', $rowStatus);
+            }
+        });
+        $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
+            $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
+                ->whereNull('organization_unit_types.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organization_unit_types.row_status', $rowStatus);
+            }
+        });
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
+        }
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -74,7 +89,7 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($limit);
             $paginateData = (object)$organizationUnits->toArray();
@@ -132,10 +147,17 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
-        $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        $organizationUnitBuilder->where('organization_units.id', '=', $id);
-        $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnitBuilder->join('organizations', function ($join) {
+            $join->on('organization_units.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+        });
 
+        $organizationUnitBuilder->join('organization_unit_types', function ($join) {
+            $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
+                ->whereNull('organization_unit_types_at');
+        });
+
+        $organizationUnitBuilder->where('organization_units.id', '=', $id);
 
         /** @var OrganizationUnit $organizationUnit */
         $organizationUnit = $organizationUnitBuilder->first();

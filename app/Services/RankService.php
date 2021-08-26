@@ -30,7 +30,7 @@ class RankService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -53,10 +53,25 @@ class RankService
                 'ranks.updated_at',
             ]
         );
-        $rankBuilder->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
-        $rankBuilder->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
+        $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
+            $join->on('ranks.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organizations.row_status', $rowStatus);
+            }
+        });
+        $rankBuilder->join('rank_types', function ($join) use ($rowStatus) {
+            $join->on('ranks.rank_type_id', '=', 'rank_types.id')
+                ->whereNull('rank_types.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('ranks.row_status', $rowStatus);
+            }
+        });
         $rankBuilder->orderBy('ranks.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $rankBuilder->where('ranks.row_status', $rowStatus);
+        }
 
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
@@ -66,7 +81,7 @@ class RankService
 
         /** @var Collection $ranks */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $ranks = $rankBuilder->paginate($limit);
             $paginateData = (object)$ranks->toArray();
@@ -115,8 +130,14 @@ class RankService
                 'ranks.updated_at',
             ]
         );
-        $rankBuilder->leftJoin('organizations', 'ranks.organization_id', '=', 'organizations.id');
-        $rankBuilder->join('rank_types', 'ranks.rank_type_id', '=', 'rank_types.id');
+        $rankBuilder->leftJoin('organizations', function ($join) {
+            $join->on('ranks.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+        });
+        $rankBuilder->join('rank_types', function ($join) {
+            $join->on('ranks.rank_type_id', '=', 'rank_types.id')
+                ->whereNull('rank_types.deleted_at');
+        });
         $rankBuilder->where('ranks.id', '=', $id);
 
         /** @var Rank $rank */

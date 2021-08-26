@@ -28,7 +28,7 @@ class OccupationService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -45,10 +45,18 @@ class OccupationService
             'occupations.created_at',
             'occupations.updated_at',
         ]);
-        $occupationBuilder->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
-        $occupationBuilder->whereNull('job_sectors.deleted_at');
+        $occupationBuilder->join('job_sectors', function ($join) use ($rowStatus) {
+            $join->on('occupations.job_sector_id', '=', 'job_sectors.id')
+                ->whereNull('job_sectors.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('job_sectors.row_status', $rowStatus);
+            }
+        });
         $occupationBuilder->orderBy('occupations.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $occupationBuilder->where('occupations.row_status', $rowStatus);
+        }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -57,7 +65,7 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $occupations = $occupationBuilder->paginate($limit);
             $paginateData = (object)$occupations->toArray();
@@ -100,8 +108,10 @@ class OccupationService
             'occupations.created_at',
             'occupations.updated_at',
         ]);
-        $occupationBuilder->join('job_sectors', 'occupations.job_sector_id', '=', 'job_sectors.id');
-        $occupationBuilder->whereNull('job_sectors.deleted_at');
+        $occupationBuilder->join('job_sectors', function ($join) {
+            $join->on('occupations.job_sector_id', '=', 'job_sectors.id')
+                ->whereNull('job_sectors.deleted_at');
+        });
         $occupationBuilder->where('occupations.id', '=', $id);
 
         /** @var  Occupation $occupation */

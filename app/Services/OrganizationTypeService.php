@@ -28,7 +28,7 @@ class OrganizationTypeService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -46,6 +46,9 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->orderBy('organization_types.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
+        }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -54,7 +57,7 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($limit);
             $paginateData = (object)$organizationTypes->toArray();
@@ -152,7 +155,6 @@ class OrganizationTypeService
      */
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);

@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use ParseError;
+use PDOException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -89,22 +91,25 @@ class Handler extends ExceptionHandler
                 "message" => "Unable to resolve dependency",
             ];
             return response()->json($errors);
-        }
-        elseif ($e instanceof ErrorException){
+        } elseif ($e instanceof ErrorException) {
             $errors = [
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
-                "message" => "Unable to resolve dependency",
+                "message" => "Error Exception",
             ];
             return response()->json($errors);
-        }
-        elseif ($e instanceof TypeError) {
+        } elseif ($e instanceof TypeError) {
             $errors = [
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
                 "message" => "Type Error",
             ];
             return response()->json($errors);
+        } elseif ($e instanceof ParseError) {
+            $errors = [
+                "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => "Parse Error",
+            ];
+            return response()->json($errors);
         }
-
         return parent::render($request, $e);
     }
 }

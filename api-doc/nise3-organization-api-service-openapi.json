@@ -71,6 +71,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -205,7 +208,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "title_en": "Goverment org",
+                                        "title_en": "Government org",
                                         "title_bn": "সরকারি",
                                         "is_government": 1,
                                         "row_status": 1,
@@ -325,6 +328,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -841,6 +847,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1209,6 +1218,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -1631,6 +1643,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -1885,6 +1900,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -2226,6 +2244,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -2565,6 +2586,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -3138,6 +3162,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -4010,6 +4037,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -4304,7 +4334,7 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_optional"
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -4804,12 +4834,11 @@
                     {
                         "$ref": "#/components/parameters/limit"
                     },
-
                     {
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_optional"
+                        "$ref": "#/components/parameters/row_status_query"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -6752,7 +6781,7 @@
                     "example": 10
                 }
             },
-            "row_status_optional": {
+            "row_status_query": {
                 "name": "row_status",
                 "in": "query",
                 "required": false,

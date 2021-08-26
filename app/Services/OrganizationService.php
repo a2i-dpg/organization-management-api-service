@@ -28,6 +28,7 @@ class OrganizationService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -58,8 +59,18 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
-        $organizationBuilder->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
+        $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
+            $join->on('organizations.organization_type_id', '=', 'organization_types.id')
+                ->whereNull('organization_types.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organization_types.row_status', $rowStatus);
+            }
+        });
         $organizationBuilder->orderBy('organizations.id', $order);
+
+        if (!is_null($rowStatus)) {
+            $organizationBuilder->where('organizations.row_status', $rowStatus);
+        }
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
@@ -69,7 +80,7 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $organizations = $organizationBuilder->paginate($limit);
             $paginateData = (object)$organizations->toArray();
@@ -126,7 +137,11 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
-        $organizationBuilder->join('organization_types', 'organizations.organization_type_id', '=', 'organization_types.id');
+        $organizationBuilder->join('organization_types', function ($join)  {
+            $join->on('organizations.organization_type_id', '=', 'organization_types.id')
+                ->whereNull('organization_types.deleted_at');
+
+        });
         $organizationBuilder->where('organizations.id', '=', $id);
 
 
@@ -187,7 +202,6 @@ class OrganizationService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus=$request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
