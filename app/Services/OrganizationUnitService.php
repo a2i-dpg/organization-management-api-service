@@ -154,7 +154,7 @@ class OrganizationUnitService
 
         $organizationUnitBuilder->join('organization_unit_types', function ($join) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
-                ->whereNull('organization_unit_types_at');
+                ->whereNull('organization_unit_types.deleted_at');
         });
 
         $organizationUnitBuilder->where('organization_units.id', '=', $id);
@@ -214,7 +214,6 @@ class OrganizationUnitService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -260,7 +259,7 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($limit);
             $paginateData = (object)$organizationUnits->toArray();

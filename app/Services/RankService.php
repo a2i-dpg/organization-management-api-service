@@ -196,7 +196,6 @@ class RankService
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -232,7 +231,7 @@ class RankService
 
         /** @var Collection $ranks */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $ranks = $rankBuilder->paginate($limit);
             $paginateData = (object)$ranks->toArray();
