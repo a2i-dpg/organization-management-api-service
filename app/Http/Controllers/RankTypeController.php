@@ -44,7 +44,7 @@ class RankTypeController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      */
-    public function getList(Request $request):JsonResponse
+    public function getList(Request $request): JsonResponse
     {
         try {
             $response = $this->rankTypeService->getRankTypeList($request, $this->startTime);
@@ -58,7 +58,7 @@ class RankTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function read(int $id):JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
@@ -74,7 +74,7 @@ class RankTypeController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    function store(Request $request):JsonResponse
+    function store(Request $request): JsonResponse
     {
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
@@ -101,7 +101,7 @@ class RankTypeController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function update(Request $request, int $id):JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
         $validated = $this->rankTypeService->validator($request, $id)->validate();
@@ -130,7 +130,7 @@ class RankTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id):JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
         try {
@@ -140,6 +140,67 @@ class RankTypeController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Rank Type deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $rankType = RankType::onlyTrashed()->findOrFail($id);
+        try {
+            $this->rankTypeService->restore($rankType);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Rank Type restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $rankType = RankType::onlyTrashed()->findOrFail($id);
+        try {
+            $this->rankTypeService->forceDelete($rankType);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Rank Type permanently deleted successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];

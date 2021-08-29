@@ -146,6 +146,68 @@ class OrganizationUnitController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->organizationUnitService->getAllTrashedOrganizationUnit($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $organizationUnit = OrganizationUnit::onlyTrashed()->findOrFail($id);
+        try {
+            $this->organizationUnitService->restore($organizationUnit);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization Unit restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $organizationUnit = OrganizationUnit::onlyTrashed()->findOrFail($id);
+        try {
+            $this->organizationUnitService->forceDelete($organizationUnit);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization Unit permanently deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     /**
      * @param Request $request
      * @param int $id

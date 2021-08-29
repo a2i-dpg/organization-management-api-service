@@ -144,4 +144,65 @@ class HumanResourceTemplateController extends Controller
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->humanResourceTemplateService->getTrashedHumanResourceTemplateList($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $humanResourceTemplate = HumanResourceTemplate::onlyTrashed()->findOrFail($id);
+        try {
+            $this->humanResourceTemplateService->restore($humanResourceTemplate);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "HumanResource Template restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $humanResourceTemplate = HumanResourceTemplate::onlyTrashed()->findOrFail($id);
+        try {
+            $this->humanResourceTemplateService->forceDelete($humanResourceTemplate);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "HumanResource Template permanently deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
 }

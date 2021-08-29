@@ -40,7 +40,7 @@ class ServiceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      */
-    public function getList(Request $request):JsonResponse
+    public function getList(Request $request): JsonResponse
     {
         try {
             $response = $this->serviceService->getServiceList($request, $this->startTime);
@@ -55,7 +55,7 @@ class ServiceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function read(int $id):JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->serviceService->getOneService($id, $this->startTime);
@@ -72,7 +72,7 @@ class ServiceController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    function store(Request $request):JsonResponse
+    function store(Request $request): JsonResponse
     {
         $validatedData = $this->serviceService->validator($request)->validate();
         try {
@@ -106,7 +106,7 @@ class ServiceController extends Controller
 
         $service = Service::findOrFail($id);
 
-        $validated = $this->serviceService->validator($request,$id)->validate();
+        $validated = $this->serviceService->validator($request, $id)->validate();
 
         try {
             $data = $this->serviceService->update($service, $validated);
@@ -134,7 +134,7 @@ class ServiceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id):JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $service = Service::findOrFail($id);
 
@@ -145,6 +145,67 @@ class ServiceController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Service deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->serviceService->getTrashedServiceList($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $service = Service::onlyTrashed()->findOrFail($id);
+        try {
+            $this->serviceService->restore($service);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Service restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $service = Service::onlyTrashed()->findOrFail($id);
+        try {
+            $this->serviceService->forceDelete($service);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Service permanently deleted successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];

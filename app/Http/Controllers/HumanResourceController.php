@@ -37,7 +37,7 @@ class HumanResourceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      */
-    public function getList(Request $request):JsonResponse
+    public function getList(Request $request): JsonResponse
     {
         try {
             $response = $this->humanResourceService->getHumanResourceList($request, $this->startTime);
@@ -53,7 +53,7 @@ class HumanResourceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function read(int $id):JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->humanResourceService->getOneHumanResource($id, $this->startTime);
@@ -70,7 +70,7 @@ class HumanResourceController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function store(Request $request):JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validatedData = $this->humanResourceService->validator($request)->validate();
         try {
@@ -98,7 +98,7 @@ class HumanResourceController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function update(Request $request, int $id):JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $humanResource = HumanResource::findOrFail($id);
 
@@ -128,7 +128,7 @@ class HumanResourceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id):JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $humanResource = HumanResource::findOrFail($id);
 
@@ -146,6 +146,67 @@ class HumanResourceController extends Controller
             return $e;
         }
 
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->humanResourceService->getTrashedHumanResourceList($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $humanResource  = HumanResource::onlyTrashed()->findOrFail($id);
+        try {
+            $this->humanResourceService->restore($humanResource );
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "HumanResource restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $humanResource  = HumanResource::onlyTrashed()->findOrFail($id);
+        try {
+            $this->humanResourceService->forceDelete($humanResource );
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "HumanResource permanently deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
