@@ -71,6 +71,7 @@ class RankService
 
         if (!is_null($rowStatus)) {
             $rankBuilder->where('ranks.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
 
         if (!empty($titleEn)) {

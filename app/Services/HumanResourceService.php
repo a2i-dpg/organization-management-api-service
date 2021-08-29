@@ -87,6 +87,7 @@ class HumanResourceService
 
         if (!is_null($rowStatus)) {
             $humanResourceBuilder->where('human_resources.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');

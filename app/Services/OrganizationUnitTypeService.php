@@ -58,6 +58,7 @@ class OrganizationUnitTypeService
 
         if (!is_null($rowStatus)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');

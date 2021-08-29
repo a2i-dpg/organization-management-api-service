@@ -88,6 +88,7 @@ class HumanResourceTemplateService
 
         if (!is_null($rowStatus)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.row_status', $rowStatus);
+            $response['row_status'] = $rowStatus;
         }
 
         if (!empty($titleEn)) {
@@ -155,12 +156,12 @@ class HumanResourceTemplateService
                 ->whereNull('organizations.deleted_at');
 
         });
-        $humanResourceTemplateBuilder->join('organization_unit_types', function ($join)  {
+        $humanResourceTemplateBuilder->join('organization_unit_types', function ($join) {
             $join->on('human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
 
         });
-        $humanResourceTemplateBuilder->leftJoin('ranks', function ($join)  {
+        $humanResourceTemplateBuilder->leftJoin('ranks', function ($join) {
             $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
         });

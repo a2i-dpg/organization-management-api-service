@@ -50,6 +50,7 @@ class SkillService
 
         if (!is_null($rowStatus)) {
             $skillBuilder->where('skills.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');

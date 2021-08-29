@@ -80,6 +80,7 @@ class OrganizationUnitService
 
         if (!is_null($rowStatus)) {
             $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
+            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
@@ -147,6 +148,7 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
+        $organizationUnitBuilder->with('services');
         $organizationUnitBuilder->join('organizations', function ($join) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
@@ -157,10 +159,12 @@ class OrganizationUnitService
                 ->whereNull('organization_unit_types.deleted_at');
         });
 
-        $organizationUnitBuilder->where('organization_units.id', '=', $id);
+        $organizationUnitBuilder->where('organization_units.id', $id);
+
 
         /** @var OrganizationUnit $organizationUnit */
         $organizationUnit = $organizationUnitBuilder->first();
+
         return [
             "data" => $organizationUnit ?: [],
             "_response_status" => [

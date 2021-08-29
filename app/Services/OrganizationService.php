@@ -70,6 +70,7 @@ class OrganizationService
 
         if (!is_null($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
 
         if (!empty($titleEn)) {

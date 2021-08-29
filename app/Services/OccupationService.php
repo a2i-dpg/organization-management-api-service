@@ -56,6 +56,7 @@ class OccupationService
 
         if (!is_null($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');

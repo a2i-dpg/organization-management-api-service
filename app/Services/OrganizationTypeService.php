@@ -48,6 +48,7 @@ class OrganizationTypeService
 
         if (!is_null($rowStatus)) {
             $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');

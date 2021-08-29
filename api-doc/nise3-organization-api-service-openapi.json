@@ -92,6 +92,7 @@
                                     "$ref": "#/components/schemas/organizationType"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -351,6 +352,7 @@
                                     "$ref": "#/components/schemas/organization"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -868,6 +870,7 @@
                                     "$ref": "#/components/schemas/rankType"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 2,
                                     "page_size": 10,
@@ -1241,6 +1244,7 @@
                                     "$ref": "#/components/schemas/rank"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 6,
                                     "page_size": 10,
@@ -1661,6 +1665,7 @@
                                     "$ref": "#/components/schemas/jobSector"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -1923,6 +1928,7 @@
                                     "$ref": "#/components/schemas/occupation"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -2265,6 +2271,7 @@
                                     "$ref": "#/components/schemas/skill"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -2609,6 +2616,7 @@
                                     "$ref": "#/components/schemas/organizationUnitType"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 2,
                                     "page_size": 10,
@@ -3182,6 +3190,7 @@
                                     "$ref": "#/components/schemas/organizationUnit"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 3,
                                     "page_size": 10,
@@ -4058,6 +4067,7 @@
                                     "$ref": "#/components/schemas/service"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -4352,6 +4362,7 @@
                                     "$ref": "#/components/schemas/humanResourceTemplate"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 5,
                                     "page_size": 10,
@@ -4856,6 +4867,7 @@
                                     "$ref": "#/components/schemas/humanResource"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 5,
                                     "page_size": 10,

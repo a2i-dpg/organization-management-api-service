@@ -50,6 +50,7 @@ class JobSectorService
 
         if (!is_null($rowStatus)) {
             $jobSectorBuilder->where('job_sectors.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
 
         if (!empty($titleEn)) {

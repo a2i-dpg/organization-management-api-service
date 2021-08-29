@@ -51,6 +51,7 @@ class ServiceService
 
         if (!is_null($rowStatus)) {
             $serviceBuilder->where('services.row_Status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');

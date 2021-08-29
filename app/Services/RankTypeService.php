@@ -59,6 +59,7 @@ class RankTypeService
 
         if (!is_null($rowStatus)) {
             $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
