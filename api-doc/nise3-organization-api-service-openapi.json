@@ -16,6 +16,9 @@
         },
         {
             "url": " https://api.bus.softbd.xyz/org/api/v1"
+        },
+        {
+            "url": "http://nise3-organization.asm/api/v1"
         }
     ],
     "paths": {
