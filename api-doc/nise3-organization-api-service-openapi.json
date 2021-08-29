@@ -74,6 +74,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -92,6 +95,7 @@
                                     "$ref": "#/components/schemas/organizationType"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -208,7 +212,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "title_en": "Goverment org",
+                                        "title_en": "Government org",
                                         "title_bn": "সরকারি",
                                         "is_government": 1,
                                         "row_status": 1,
@@ -330,6 +334,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -348,6 +355,7 @@
                                     "$ref": "#/components/schemas/organization"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -844,6 +852,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -862,6 +873,7 @@
                                     "$ref": "#/components/schemas/rankType"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 2,
                                     "page_size": 10,
@@ -1214,6 +1226,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1232,6 +1247,7 @@
                                     "$ref": "#/components/schemas/rank"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 6,
                                     "page_size": 10,
@@ -1634,6 +1650,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -1649,6 +1668,7 @@
                                     "$ref": "#/components/schemas/jobSector"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -1890,6 +1910,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1908,6 +1931,7 @@
                                     "$ref": "#/components/schemas/occupation"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -2229,6 +2253,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -2247,6 +2274,7 @@
                                     "$ref": "#/components/schemas/skill"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -2570,6 +2598,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -2588,6 +2619,7 @@
                                     "$ref": "#/components/schemas/organizationUnitType"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 2,
                                     "page_size": 10,
@@ -3143,6 +3175,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -3158,6 +3193,7 @@
                                     "$ref": "#/components/schemas/organizationUnit"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 3,
                                     "page_size": 10,
@@ -4013,6 +4049,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -4031,6 +4070,7 @@
                                     "$ref": "#/components/schemas/service"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -4307,6 +4347,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -4322,6 +4365,7 @@
                                     "$ref": "#/components/schemas/humanResourceTemplate"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 5,
                                     "page_size": 10,
@@ -4808,6 +4852,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -4823,6 +4870,7 @@
                                     "$ref": "#/components/schemas/humanResource"
                                 },
                                 "example": {
+                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 5,
                                     "page_size": 10,
@@ -6746,6 +6794,15 @@
                 "schema": {
                     "type": "integer",
                     "example": 10
+                }
+            },
+            "row_status_query": {
+                "name": "row_status",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         }

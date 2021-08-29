@@ -26,10 +26,11 @@ class ServiceService
      */
     public function getServiceList(Request $request, Carbon $startTime): array
     {
-        $response = [];
+
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -48,8 +49,9 @@ class ServiceService
         );
         $serviceBuilder->orderBy('services.id', $order);
 
-        if (!empty($organizationId)) {
-            $serviceBuilder->where('services.organization_id', '=', $organizationId);
+        if (!is_null($rowStatus)) {
+            $serviceBuilder->where('services.row_Status', $rowStatus);
+            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
@@ -59,7 +61,7 @@ class ServiceService
 
         /** @var Collection $services */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $services = $serviceBuilder->paginate($limit);
             $paginateData = (object)$services->toArray();
@@ -108,7 +110,7 @@ class ServiceService
         $service = $serviceBuilder->first();
 
         return [
-            "data" => $service ?: null,
+            "data" => $service ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,
@@ -148,6 +150,86 @@ class ServiceService
     public function destroy(Service $service): bool
     {
         return $service->delete();
+    }
+
+    /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getTrashedServiceList(Request $request, Carbon $startTime): array
+    {
+        $titleEn = $request->query('title_en');
+        $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Builder $serviceBuilder */
+        $serviceBuilder = Service::onlyTrashed()->select(
+            [
+                'services.id as id',
+                'services.title_en',
+                'services.title_bn',
+                'services.row_status',
+                'services.created_by',
+                'services.updated_by',
+                'services.created_at',
+                'services.updated_at',
+            ]
+        );
+        $serviceBuilder->orderBy('services.id', $order);
+
+        if (!empty($organizationId)) {
+            $serviceBuilder->where('services.organization_id', '=', $organizationId);
+        }
+        if (!empty($titleEn)) {
+            $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
+        } elseif (!empty($titleBn)) {
+            $serviceBuilder->where('services.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        /** @var Collection $services */
+
+        if (!is_null($paginate) || !is_null($limit)) {
+            $limit = $limit ?: 10;
+            $services = $serviceBuilder->paginate($limit);
+            $paginateData = (object)$services->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $services = $serviceBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $services->toArray()['data'] ?? $services->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param Service $service
+     * @return bool
+     */
+    public function restore(Service $service): bool
+    {
+        return $service->restore();
+    }
+
+    /**
+     * @param Service $service
+     * @return bool
+     */
+    public function forceDelete(Service $service): bool
+    {
+        return $this->forceDelete();
     }
 
     /**

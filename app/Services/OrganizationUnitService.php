@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Models\BaseModel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,10 +26,10 @@ class OrganizationUnitService
      */
     public function getAllOrganizationUnit(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -63,10 +62,26 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
-        $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
+            $join->on('organization_units.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organizations.row_status', $rowStatus);
+            }
+        });
+        $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
+            $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
+                ->whereNull('organization_unit_types.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organization_unit_types.row_status', $rowStatus);
+            }
+        });
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
+            $response['row_status'] = $rowStatus;
+        }
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -75,7 +90,7 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($limit);
             $paginateData = (object)$organizationUnits->toArray();
@@ -133,15 +148,25 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
-        $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
-        $organizationUnitBuilder->where('organization_units.id', '=', $id);
-        $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnitBuilder->with('services');
+        $organizationUnitBuilder->join('organizations', function ($join) {
+            $join->on('organization_units.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+        });
+
+        $organizationUnitBuilder->join('organization_unit_types', function ($join) {
+            $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
+                ->whereNull('organization_unit_types.deleted_at');
+        });
+
+        $organizationUnitBuilder->where('organization_units.id', $id);
 
 
         /** @var OrganizationUnit $organizationUnit */
         $organizationUnit = $organizationUnitBuilder->first();
+
         return [
-            "data" => $organizationUnit ?: null,
+            "data" => $organizationUnit ?: [],
             "_response_status" => [
                 "success" => true,
                 "code" => Response::HTTP_OK,
@@ -184,6 +209,103 @@ class OrganizationUnitService
     }
 
     /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
+    {
+        $titleEn = $request->query('title_en');
+        $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Builder $organizationUnitBuilder */
+        $organizationUnitBuilder = OrganizationUnit::onlyTrashed()->select([
+            'organization_units.id',
+            'organization_units.title_en',
+            'organization_units.title_bn',
+            'organization_units.address',
+            'organization_units.mobile',
+            'organization_units.email',
+            'organization_units.fax_no',
+            'organization_units.contact_person_name',
+            'organization_units.contact_person_mobile',
+            'organization_units.contact_person_email',
+            'organization_units.contact_person_designation',
+            'organization_units.employee_size',
+            'organization_units.organization_unit_type_id',
+            'organization_unit_types.title_en as organization_unit_type_title_en',
+            'organization_units.organization_id',
+            'organizations.title_en as organization_name',
+            'organization_units.loc_division_id',
+            'organization_units.loc_district_id',
+            'organization_units.loc_upazila_id',
+
+            'organization_units.row_status',
+            'organization_units.created_by',
+            'organization_units.updated_by',
+            'organization_units.created_at',
+            'organization_units.updated_at',
+
+        ]);
+        $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
+        $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
+        $organizationUnitBuilder->orderBy('organization_units.id', $order);
+
+
+        if (!empty($titleEn)) {
+            $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
+        } elseif (!empty($titleBn)) {
+            $organizationUnitBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        /** @var  Collection $organizationUnits */
+
+        if (!is_null($paginate) || !is_null($limit)) {
+            $limit = $limit ?: 10;
+            $organizationUnits = $organizationUnitBuilder->paginate($limit);
+            $paginateData = (object)$organizationUnits->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizationUnits = $organizationUnitBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizationUnits->toArray()['data'] ?? $organizationUnits->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
+     */
+    public function restore(OrganizationUnit $organizationUnit): bool
+    {
+        return $organizationUnit->restore();
+    }
+
+    /**
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
+     */
+    public function forceDelete(OrganizationUnit $organizationUnit): bool
+    {
+        return $organizationUnit->forceDelete();
+    }
+
+
+    /**
      * @param OrganizationUnit $organizationUnit
      * @param array $serviceIds
      * @return OrganizationUnit
@@ -201,7 +323,8 @@ class OrganizationUnitService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    public
+    function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -298,7 +421,8 @@ class OrganizationUnitService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public
+    function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
