@@ -55,7 +55,6 @@ class OrganizationUnitService
             'organization_units.loc_division_id',
             'organization_units.loc_district_id',
             'organization_units.loc_upazila_id',
-
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
@@ -63,6 +62,7 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
+
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
@@ -133,6 +133,7 @@ class OrganizationUnitService
             'organization_units.updated_at',
 
         ]);
+
         $organizationUnitBuilder->join('organizations', 'organization_units.organization_id', '=', 'organizations.id');
         $organizationUnitBuilder->where('organization_units.id', '=', $id);
         $organizationUnitBuilder->join('organization_unit_types', 'organization_units.organization_unit_type_id', '=', 'organization_unit_types.id');

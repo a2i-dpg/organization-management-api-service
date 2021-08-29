@@ -166,7 +166,7 @@ class OrganizationTypeService
                 'min:2',
             ],
             'is_government' => [
-                'required',
+                'nullable',
                 'boolean'
             ],
             'row_status' => [
