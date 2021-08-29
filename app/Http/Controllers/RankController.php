@@ -52,7 +52,7 @@ class RankController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function read(int $id):JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->rankService->getOneRank($id, $this->startTime);
@@ -68,7 +68,7 @@ class RankController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    function store(Request $request):JsonResponse
+    function store(Request $request): JsonResponse
     {
         $validated = $this->rankService->validator($request)->validate();
         try {
@@ -97,11 +97,11 @@ class RankController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function update(Request $request, int $id):JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $rank = Rank::findOrFail($id);
 
-        $validated = $this->rankService->validator($request,$id)->validate();
+        $validated = $this->rankService->validator($request, $id)->validate();
         try {
             $data = $this->rankService->update($rank, $validated);
 
@@ -128,7 +128,7 @@ class RankController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id):JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $rank = Rank::findOrFail($id);
 
@@ -139,6 +139,67 @@ class RankController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "Rank deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->rankService->getTrashedRankList($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $rank = Rank::onlyTrashed()->findOrFail($id);
+        try {
+            $this->rankService->restore( $rank);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Rank restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $rank = Rank::onlyTrashed()->findOrFail($id);
+        try {
+            $this->rankService->forceDelete( $rank);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Rank permanently deleted successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];

@@ -58,7 +58,7 @@ class OrganizationUnitTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function read(int $id):JsonResponse
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->organizationUnitTypeService->getOneOrganizationUnitType($id, $this->startTime);
@@ -74,7 +74,7 @@ class OrganizationUnitTypeController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    function store(Request $request):JsonResponse
+    function store(Request $request): JsonResponse
     {
         $validated = $this->organizationUnitTypeService->validator($request)->validate();
         try {
@@ -102,7 +102,7 @@ class OrganizationUnitTypeController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function update(Request $request, int $id):JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
 
@@ -129,7 +129,7 @@ class OrganizationUnitTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      */
-    public function destroy(int $id):JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
 
@@ -165,6 +165,67 @@ class OrganizationUnitTypeController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
                     "message" => "OrganizationUnitType  based hierarchy got successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function getTrashedData(Request $request)
+    {
+        try {
+            $response = $this->organizationUnitTypeService->getAllTrashedOrganizationUnitType($request, $this->startTime);
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response);
+    }
+
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function restore(int $id)
+    {
+        $organizationUnitType = OrganizationUnitType::onlyTrashed()->findOrFail($id);
+        try {
+            $this->organizationUnitTypeService->restore( $organizationUnitType);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "OrganizationUnitType restored successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return Exception|JsonResponse|Throwable
+     */
+    public function forceDelete(int $id)
+    {
+        $organizationUnitType = OrganizationUnitType::onlyTrashed()->findOrFail($id);
+        try {
+            $this->organizationUnitTypeService->forceDelete($organizationUnitType);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "OrganizationUnitType permanently deleted successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];

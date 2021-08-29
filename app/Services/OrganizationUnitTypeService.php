@@ -26,10 +26,10 @@ class OrganizationUnitTypeService
      */
     public function getAllOrganizationUnitType(Request $request, Carbon $startTime): array
     {
-        $response = [];
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
+        $rowStatus = $request->query('row_status');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -46,9 +46,20 @@ class OrganizationUnitTypeService
             'organization_unit_types.created_at',
             'organization_unit_types.updated_at',
         ]);
-        $organizationUnitTypeBuilder->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
+        $organizationUnitTypeBuilder->join('organizations', function ($join) use ($rowStatus) {
+            $join->on('organization_unit_types.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+            if (!is_null($rowStatus)) {
+                $join->where('organizations.row_status', $rowStatus);
+            }
+        });
+
         $organizationUnitTypeBuilder->orderBy('organization_unit_types.id', $order);
 
+        if (!is_null($rowStatus)) {
+            $organizationUnitTypeBuilder->where('organization_unit_types.row_status', $rowStatus);
+            $response['row_status']=$rowStatus;
+        }
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
@@ -57,7 +68,7 @@ class OrganizationUnitTypeService
 
         /** @var Collection $organizationUnitTypes */
 
-        if ($paginate || $limit) {
+        if (!is_null($paginate) || !is_null($limit)) {
             $limit = $limit ?: 10;
             $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($limit);
             $paginateData = (object)$organizationUnitTypes->toArray();
@@ -101,7 +112,10 @@ class OrganizationUnitTypeService
             'organization_unit_types.updated_at',
         ]);
 
-        $organizationUnitTypeBuilder->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
+        $organizationUnitTypeBuilder->join('organizations', function ($join) {
+            $join->on('organization_unit_types.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at');
+        });
         $organizationUnitTypeBuilder->where('organization_unit_types.id', '=', $id);
 
         /**@var OrganizationUnitType $organizationUnitType * */
@@ -148,6 +162,84 @@ class OrganizationUnitTypeService
     public function destroy(OrganizationUnitType $organizationUnitType): bool
     {
         return $organizationUnitType->delete();
+    }
+
+    /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getAllTrashedOrganizationUnitType(Request $request, Carbon $startTime): array
+    {
+        $titleEn = $request->query('title_en');
+        $titleBn = $request->query('title_bn');
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+
+        /** @var Builder $organizationUnitTypeBuilder */
+        $organizationUnitTypeBuilder = OrganizationUnitType::onlyTrashed()->select([
+            'organization_unit_types.id',
+            'organization_unit_types.title_en',
+            'organization_unit_types.title_bn',
+            'organization_unit_types.organization_id',
+            'organizations.title_en as organization_name',
+            'organization_unit_types.row_status',
+            'organization_unit_types.created_by',
+            'organization_unit_types.updated_by',
+            'organization_unit_types.created_at',
+            'organization_unit_types.updated_at',
+        ]);
+        $organizationUnitTypeBuilder->join('organizations', 'organization_unit_types.organization_id', '=', 'organizations.id');
+        $organizationUnitTypeBuilder->orderBy('organization_unit_types.id', $order);
+
+        if (!empty($titleEn)) {
+            $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
+        } elseif (!empty($titleBn)) {
+            $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+        }
+
+        /** @var Collection $organizationUnitTypes */
+
+        if (!is_null($paginate) || !is_null($limit)) {
+            $limit = $limit ?: 10;
+            $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($limit);
+            $paginateData = (object)$organizationUnitTypes->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizationUnitTypes = $organizationUnitTypeBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizationUnitTypes->toArray()['data'] ?? $organizationUnitTypes->toArray();
+        $response['response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param OrganizationUnitType $organizationUnitType
+     * @return bool
+     */
+    public function restore(OrganizationUnitType $organizationUnitType): bool
+    {
+        return $organizationUnitType->restore();
+    }
+
+    /**
+     * @param OrganizationUnitType $organizationUnitType
+     * @return bool
+     */
+    public function forceDelete(OrganizationUnitType $organizationUnitType): bool
+    {
+        return $organizationUnitType->forceDelete();
     }
 
     /**
