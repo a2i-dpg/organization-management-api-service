@@ -48,6 +48,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -59,6 +60,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/organizationType'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 1
                 page_size: 10
@@ -138,7 +140,7 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: Goverment org
+                  title_en: Government org
                   title_bn: সরকারি
                   is_government: 1
                   row_status: 1
@@ -212,6 +214,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -223,6 +226,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/organization'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 1
                 page_size: 10
@@ -586,6 +590,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -597,6 +602,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/rankType'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 2
                 page_size: 10
@@ -843,6 +849,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -854,6 +861,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/rank'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 6
                 page_size: 10
@@ -1143,6 +1151,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -1153,6 +1162,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/jobSector'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 1
                 page_size: 10
@@ -1309,6 +1319,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -1320,6 +1331,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/occupation'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 1
                 page_size: 10
@@ -1544,6 +1556,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -1555,6 +1568,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/skill'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 1
                 page_size: 10
@@ -1775,6 +1789,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -1786,6 +1801,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/organizationUnitType'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 2
                 page_size: 10
@@ -2219,6 +2235,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -2229,6 +2246,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/organizationUnit'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 3
                 page_size: 10
@@ -2920,6 +2938,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -2931,6 +2950,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/service'
               example:
+                row_status: '1'
                 current_page: 1
                 total_page: 1
                 page_size: 10
@@ -3111,6 +3131,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -3480,6 +3501,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_query'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -4968,3 +4990,10 @@ components:
       schema:
         type: integer
         example: 10
+    row_status_query:
+      name: row_status
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 1
