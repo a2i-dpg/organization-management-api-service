@@ -57,6 +57,8 @@ public class ServicesApi {
     /**
      * Build call for servicesGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -69,7 +71,7 @@ public class ServicesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call servicesGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call servicesGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -83,6 +85,14 @@ public class ServicesApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -116,10 +126,10 @@ public class ServicesApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call servicesGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call servicesGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = servicesGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = servicesGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -128,6 +138,8 @@ public class ServicesApi {
      * get list
      * API endpoint to get the list of services.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -139,8 +151,8 @@ public class ServicesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public Service servicesGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<Service> localVarResp = servicesGetWithHttpInfo(page, order, titleEn, titleBn);
+    public Service servicesGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<Service> localVarResp = servicesGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -148,6 +160,8 @@ public class ServicesApi {
      * get list
      * API endpoint to get the list of services.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -159,8 +173,8 @@ public class ServicesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Service> servicesGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = servicesGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<Service> servicesGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = servicesGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<Service>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -169,6 +183,8 @@ public class ServicesApi {
      * get list (asynchronously)
      * API endpoint to get the list of services.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -181,9 +197,9 @@ public class ServicesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call servicesGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<Service> _callback) throws ApiException {
+    public okhttp3.Call servicesGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<Service> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = servicesGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = servicesGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<Service>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -392,7 +408,7 @@ public class ServicesApi {
 
     /**
      * delete
-     * API endpoint to get a specified service.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified service.A successful request response will show 200 HTTP status code
      * @param serviceId  (required)
      * @return Service
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -409,7 +425,7 @@ public class ServicesApi {
 
     /**
      * delete
-     * API endpoint to get a specified service.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified service.A successful request response will show 200 HTTP status code
      * @param serviceId  (required)
      * @return ApiResponse&lt;Service&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -427,7 +443,7 @@ public class ServicesApi {
 
     /**
      * delete (asynchronously)
-     * API endpoint to get a specified service.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified service.A successful request response will show 200 HTTP status code
      * @param serviceId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -651,7 +667,7 @@ public class ServicesApi {
 
     /**
      * update
-     * ###### API endpoint to update the specified service.A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified service.A successful request response will show 200 HTTP status code
      * @param serviceId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
@@ -672,7 +688,7 @@ public class ServicesApi {
 
     /**
      * update
-     * ###### API endpoint to update the specified service.A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified service.A successful request response will show 200 HTTP status code
      * @param serviceId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
@@ -694,7 +710,7 @@ public class ServicesApi {
 
     /**
      * update (asynchronously)
-     * ###### API endpoint to update the specified service.A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified service.A successful request response will show 200 HTTP status code
      * @param serviceId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)

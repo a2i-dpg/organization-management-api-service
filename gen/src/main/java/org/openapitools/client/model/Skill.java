@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * provide skills
  */
 @ApiModel(description = "provide skills")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class Skill {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -46,10 +46,6 @@ public class Skill {
   public static final String SERIALIZED_NAME_DESCRIPTION = "description";
   @SerializedName(SERIALIZED_NAME_DESCRIPTION)
   private String description;
-
-  public static final String SERIALIZED_NAME_ORGANIZATION_ID = "organization_id";
-  @SerializedName(SERIALIZED_NAME_ORGANIZATION_ID)
-  private Integer organizationId;
 
   /**
    * Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive
@@ -102,9 +98,9 @@ public class Skill {
   @SerializedName(SERIALIZED_NAME_ROW_STATUS)
   private RowStatusEnum rowStatus;
 
-  public static final String SERIALIZED_NAME_CREATE_BY = "create_by";
-  @SerializedName(SERIALIZED_NAME_CREATE_BY)
-  private Integer createBy;
+  public static final String SERIALIZED_NAME_CREATED_BY = "created_by";
+  @SerializedName(SERIALIZED_NAME_CREATED_BY)
+  private Integer createdBy;
 
   public static final String SERIALIZED_NAME_UPDATED_BY = "updated_by";
   @SerializedName(SERIALIZED_NAME_UPDATED_BY)
@@ -202,29 +198,6 @@ public class Skill {
   }
 
 
-  public Skill organizationId(Integer organizationId) {
-    
-    this.organizationId = organizationId;
-    return this;
-  }
-
-   /**
-   * Organization id
-   * @return organizationId
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "Organization id")
-
-  public Integer getOrganizationId() {
-    return organizationId;
-  }
-
-
-  public void setOrganizationId(Integer organizationId) {
-    this.organizationId = organizationId;
-  }
-
-
   public Skill rowStatus(RowStatusEnum rowStatus) {
     
     this.rowStatus = rowStatus;
@@ -248,26 +221,26 @@ public class Skill {
   }
 
 
-  public Skill createBy(Integer createBy) {
+  public Skill createdBy(Integer createdBy) {
     
-    this.createBy = createBy;
+    this.createdBy = createdBy;
     return this;
   }
 
    /**
    * Creator
-   * @return createBy
+   * @return createdBy
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "Creator")
 
-  public Integer getCreateBy() {
-    return createBy;
+  public Integer getCreatedBy() {
+    return createdBy;
   }
 
 
-  public void setCreateBy(Integer createBy) {
-    this.createBy = createBy;
+  public void setCreatedBy(Integer createdBy) {
+    this.createdBy = createdBy;
   }
 
 
@@ -353,9 +326,8 @@ public class Skill {
         Objects.equals(this.titleEn, skill.titleEn) &&
         Objects.equals(this.titleBn, skill.titleBn) &&
         Objects.equals(this.description, skill.description) &&
-        Objects.equals(this.organizationId, skill.organizationId) &&
         Objects.equals(this.rowStatus, skill.rowStatus) &&
-        Objects.equals(this.createBy, skill.createBy) &&
+        Objects.equals(this.createdBy, skill.createdBy) &&
         Objects.equals(this.updatedBy, skill.updatedBy) &&
         Objects.equals(this.createdAt, skill.createdAt) &&
         Objects.equals(this.updatedAt, skill.updatedAt);
@@ -363,7 +335,7 @@ public class Skill {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, titleEn, titleBn, description, organizationId, rowStatus, createBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, titleEn, titleBn, description, rowStatus, createdBy, updatedBy, createdAt, updatedAt);
   }
 
 
@@ -375,9 +347,8 @@ public class Skill {
     sb.append("    titleEn: ").append(toIndentedString(titleEn)).append("\n");
     sb.append("    titleBn: ").append(toIndentedString(titleBn)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    rowStatus: ").append(toIndentedString(rowStatus)).append("\n");
-    sb.append("    createBy: ").append(toIndentedString(createBy)).append("\n");
+    sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");

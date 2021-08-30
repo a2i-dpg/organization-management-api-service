@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 <a name="occupationsGet"></a>
 # **occupationsGet**
-> Occupation occupationsGet(page, order, titleEn, titleBn)
+> Occupation occupationsGet(page, limit, rowStatus, order, titleEn, titleBn)
 
 get_list
 
@@ -34,12 +34,14 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     OccupationApi apiInstance = new OccupationApi(defaultClient);
-    Integer page = 56; // Integer | 
+    Integer page = 1; // Integer | 
+    Integer limit = 10; // Integer | 
+    Integer rowStatus = 1; // Integer | 
     String order = "order_example"; // String | 
     String titleEn = "titleEn_example"; // String | 
     String titleBn = "titleBn_example"; // String | 
     try {
-      Occupation result = apiInstance.occupationsGet(page, order, titleEn, titleBn);
+      Occupation result = apiInstance.occupationsGet(page, limit, rowStatus, order, titleEn, titleBn);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling OccupationApi#occupationsGet");
@@ -57,6 +59,8 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **Integer**|  | [optional]
+ **limit** | **Integer**|  | [optional]
+ **rowStatus** | **Integer**|  | [optional]
  **order** | **String**|  | [optional] [enum: asc, desc]
  **titleEn** | **String**|  | [optional]
  **titleBn** | **String**|  | [optional]
@@ -85,7 +89,7 @@ No authorization required
 
 delete
 
- API endpoint to delete an occupations.A successful request response will show 200 HTTP status code
+ API endpoint to delete the specified occupation.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -102,7 +106,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     OccupationApi apiInstance = new OccupationApi(defaultClient);
-    Integer occupationId = 56; // Integer | 
+    Integer occupationId = 3; // Integer | 
     try {
       Occupation result = apiInstance.occupationsOccupationIdDelete(occupationId);
       System.out.println(result);
@@ -164,7 +168,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     OccupationApi apiInstance = new OccupationApi(defaultClient);
-    Integer occupationId = 56; // Integer | 
+    Integer occupationId = 3; // Integer | 
     try {
       Occupation result = apiInstance.occupationsOccupationIdGet(occupationId);
       System.out.println(result);
@@ -209,7 +213,7 @@ No authorization required
 
 update
 
-API endpoint to update an occupations.A successful request response will show 200 HTTP status code
+API endpoint to update the specified occupation.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -226,10 +230,10 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     OccupationApi apiInstance = new OccupationApi(defaultClient);
-    Integer occupationId = 56; // Integer | 
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    Integer jobSectorId = 56; // Integer | 
+    Integer occupationId = 3; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer jobSectorId = 1; // Integer | 
     try {
       Occupation result = apiInstance.occupationsOccupationIdPut(occupationId, titleEn, titleBn, jobSectorId);
       System.out.println(result);
@@ -294,9 +298,9 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     OccupationApi apiInstance = new OccupationApi(defaultClient);
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    Integer jobSectorId = 56; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer jobSectorId = 1; // Integer | 
     Integer rowStatus = 56; // Integer | 
     try {
       Occupation result = apiInstance.occupationsPost(titleEn, titleBn, jobSectorId, rowStatus);

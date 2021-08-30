@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 <a name="skillsGet"></a>
 # **skillsGet**
-> Skill skillsGet(page, order, titleEn, titleBn)
+> Skill skillsGet(page, limit, rowStatus, order, titleEn, titleBn)
 
 get_list
 
@@ -34,12 +34,14 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     SkillsApi apiInstance = new SkillsApi(defaultClient);
-    Integer page = 56; // Integer | 
+    Integer page = 1; // Integer | 
+    Integer limit = 10; // Integer | 
+    Integer rowStatus = 1; // Integer | 
     String order = "order_example"; // String | 
     String titleEn = "titleEn_example"; // String | 
     String titleBn = "titleBn_example"; // String | 
     try {
-      Skill result = apiInstance.skillsGet(page, order, titleEn, titleBn);
+      Skill result = apiInstance.skillsGet(page, limit, rowStatus, order, titleEn, titleBn);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling SkillsApi#skillsGet");
@@ -57,6 +59,8 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **Integer**|  | [optional]
+ **limit** | **Integer**|  | [optional]
+ **rowStatus** | **Integer**|  | [optional]
  **order** | **String**|  | [optional] [enum: asc, desc]
  **titleEn** | **String**|  | [optional]
  **titleBn** | **String**|  | [optional]
@@ -81,7 +85,7 @@ No authorization required
 
 <a name="skillsPost"></a>
 # **skillsPost**
-> Skill skillsPost(organizationId, titleEn, titleBn, description, rowStatus)
+> Skill skillsPost(titleEn, titleBn, description, rowStatus)
 
 create
 
@@ -102,13 +106,12 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     SkillsApi apiInstance = new SkillsApi(defaultClient);
-    Integer organizationId = 56; // Integer | 
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    String description = "description_example"; // String | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    String description = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"; // String | 
     Integer rowStatus = 56; // Integer | 
     try {
-      Skill result = apiInstance.skillsPost(organizationId, titleEn, titleBn, description, rowStatus);
+      Skill result = apiInstance.skillsPost(titleEn, titleBn, description, rowStatus);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling SkillsApi#skillsPost");
@@ -125,7 +128,6 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **organizationId** | **Integer**|  |
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |
  **description** | **String**|  | [optional]
@@ -155,7 +157,7 @@ No authorization required
 
 delete
 
-API endpoint to delete a specified Skill.A successful request response will show 200 HTTP status code
+API endpoint to delete the specified Skill.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -172,7 +174,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     SkillsApi apiInstance = new SkillsApi(defaultClient);
-    Integer skillId = 56; // Integer | 
+    Integer skillId = 5; // Integer | 
     try {
       Skill result = apiInstance.skillsSkillIdDelete(skillId);
       System.out.println(result);
@@ -234,7 +236,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     SkillsApi apiInstance = new SkillsApi(defaultClient);
-    Integer skillId = 56; // Integer | 
+    Integer skillId = 5; // Integer | 
     try {
       Skill result = apiInstance.skillsSkillIdGet(skillId);
       System.out.println(result);
@@ -275,11 +277,11 @@ No authorization required
 
 <a name="skillsSkillIdPut"></a>
 # **skillsSkillIdPut**
-> Skill skillsSkillIdPut(organizationId, titleEn, titleBn, description, rowStatus)
+> Skill skillsSkillIdPut(skillId, organizationId, titleEn, titleBn, description, rowStatus)
 
 update
 
-API endpoint to get a specified Skill. A successful request response will show 200 HTTP status code
+API endpoint to update the specified Skill. A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -296,13 +298,14 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     SkillsApi apiInstance = new SkillsApi(defaultClient);
-    Integer organizationId = 56; // Integer | 
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    String description = "description_example"; // String | 
+    Integer skillId = 5; // Integer | 
+    Integer organizationId = 2; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    String description = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"; // String | 
     Integer rowStatus = 56; // Integer | 
     try {
-      Skill result = apiInstance.skillsSkillIdPut(organizationId, titleEn, titleBn, description, rowStatus);
+      Skill result = apiInstance.skillsSkillIdPut(skillId, organizationId, titleEn, titleBn, description, rowStatus);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling SkillsApi#skillsSkillIdPut");
@@ -319,6 +322,7 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **skillId** | **Integer**|  |
  **organizationId** | **Integer**|  |
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |

@@ -23,14 +23,15 @@ class RankTypeService
      * @param Carbon $startTime
      * @return mixed
      */
-    public function getRankTypeList(Request $request, Carbon $startTime): array
+    public function getRankTypeList(array $request, Carbon $startTime): array
     {
-        $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
+        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
+        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
+        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
+        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+        $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
 
         /** @var Builder $rankTypeBuilder */
         $rankTypeBuilder = RankType::select(
@@ -40,6 +41,7 @@ class RankTypeService
                 'rank_types.title_bn',
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organizations.title_bn as organization_title_bn',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
@@ -51,15 +53,19 @@ class RankTypeService
         $rankTypeBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('rank_types.organization_id', '=', 'organizations.id')
                 ->whereNUll('organizations.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $rankTypeBuilder->orderBy('rank_types.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
+        }
+        if (is_numeric($organizationId)) {
+            $rankTypeBuilder->where('rank_types.organization_id', $organizationId);
+            $response['organization_id'] = $organizationId;
         }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
@@ -69,7 +75,7 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
+        if (is_numeric($paginate) || is_numeric($limit)) {
             $limit = $limit ?: 10;
             $rankTypes = $rankTypeBuilder->paginate($limit);
             $paginateData = (object)$rankTypes->toArray();
@@ -108,6 +114,7 @@ class RankTypeService
                 'rank_types.description',
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organizations.title_bn as organization_title_bn',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
@@ -283,5 +290,36 @@ class RankTypeService
             ],
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC',
+            'row_status.in' => 'Row status must be within 1 or 0'
+        ];
+        if (!empty($request['order'])) {
+            $request['order'] = strtoupper($request['order']);
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|min:1',
+            'title_bn' => 'nullable|min:1',
+            'organization_id' => 'numeric|gt:0',
+            'page' => 'numeric|gt:0',
+            'limit' => 'numeric',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "numeric",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

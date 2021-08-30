@@ -39,11 +39,13 @@ class ServiceController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $filter = $this->serviceService->filterValidator($request)->validate();
         try {
-            $response = $this->serviceService->getServiceList($request, $this->startTime);
+            $response = $this->serviceService->getServiceList($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

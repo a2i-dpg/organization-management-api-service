@@ -19,18 +19,19 @@ use Symfony\Component\HttpFoundation\Response;
 class OccupationService
 {
     /**
-     * @param Request $request
+     * @param array $request
      * @param Carbon $startTime
      * @return array
      */
-    public function getOccupationList(Request $request, Carbon $startTime): array
+    public function getOccupationList(array $request, Carbon $startTime): array
     {
-        $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
+        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
+        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
+        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
+        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+
 
         /** @var Builder $occupationBuilder */
         $occupationBuilder = Occupation::select([
@@ -38,7 +39,8 @@ class OccupationService
             'occupations.title_en',
             'occupations.title_bn',
             'occupations.job_sector_id',
-            'job_sectors.title_en as job_sector_title',
+            'job_sectors.title_en as job_sector_title_en',
+            'job_sectors.title_bn as job_sector_title_bn',
             'occupations.row_status',
             'occupations.created_by',
             'occupations.updated_by',
@@ -48,15 +50,15 @@ class OccupationService
         $occupationBuilder->join('job_sectors', function ($join) use ($rowStatus) {
             $join->on('occupations.job_sector_id', '=', 'job_sectors.id')
                 ->whereNull('job_sectors.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('job_sectors.row_status', $rowStatus);
             }
         });
         $occupationBuilder->orderBy('occupations.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
@@ -66,7 +68,7 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if (!is_null($paginate) || !is_null($limit)) {
+        if (is_numeric($paginate) || is_numeric($limit)) {
             $limit = $limit ?: 10;
             $occupations = $occupationBuilder->paginate($limit);
             $paginateData = (object)$occupations->toArray();
@@ -102,7 +104,8 @@ class OccupationService
             'occupations.title_en',
             'occupations.title_bn',
             'occupations.job_sector_id',
-            'job_sectors.title_en as job_sector_title',
+            'job_sectors.title_en as job_sector_title_en',
+            'job_sectors.title_bn as job_sector_title_bn',
             'occupations.row_status',
             'occupations.created_by',
             'occupations.updated_by',
@@ -271,5 +274,37 @@ class OccupationService
             ],
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC',
+            'row_status.in' => 'Row status must be within 1 or 0'
+        ];
+
+        if (!empty($request['order'])) {
+            $request['order'] = strtoupper($request['order']);
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|min:1',
+            'title_bn' => 'nullable|min:1',
+            'page' => 'numeric|gt:0',
+            'limit' => 'numeric',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "numeric",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

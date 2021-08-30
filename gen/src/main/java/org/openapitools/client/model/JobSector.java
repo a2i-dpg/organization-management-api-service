@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * Job Sectors
  */
 @ApiModel(description = "Job Sectors")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class JobSector {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -92,7 +92,7 @@ public class JobSector {
 
   public static final String SERIALIZED_NAME_ROW_STATUS = "row_status";
   @SerializedName(SERIALIZED_NAME_ROW_STATUS)
-  private RowStatusEnum rowStatus;
+  private RowStatusEnum rowStatus = RowStatusEnum.NUMBER_1;
 
   public static final String SERIALIZED_NAME_CREATE_BY = "create_by";
   @SerializedName(SERIALIZED_NAME_CREATE_BY)

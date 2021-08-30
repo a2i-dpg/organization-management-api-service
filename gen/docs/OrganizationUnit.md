@@ -12,9 +12,9 @@ Name | Type | Description | Notes
 **titleBn** | **String** |  title in Bengali | 
 **organizationId** | **Integer** | Organization id | 
 **organizationUnitTypeId** | **Integer** | OrganizationUnitType id | 
-**locDivisionId** | **Integer** | location id of division | 
-**locDistrictId** | **Integer** | location id of district | 
-**locUpazilaId** | **Integer** | location id of upazila | 
+**locDivisionId** | **Integer** | location id of division |  [optional]
+**locDistrictId** | **Integer** | location id of district |  [optional]
+**locUpazilaId** | **Integer** | location id of upazila |  [optional]
 **address** | **String** | organization address |  [optional]
 **mobile** | **String** | Mobile number of organization |  [optional]
 **email** | **String** | email address |  [optional]

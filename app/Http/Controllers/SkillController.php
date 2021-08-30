@@ -44,11 +44,13 @@ class SkillController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $filter = $this->skillService->filterValidator($request)->validate();
         try {
-            $response = $this->skillService->getSkillList($request, $this->startTime);
+            $response = $this->skillService->getSkillList($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }
@@ -196,7 +198,7 @@ class SkillController extends Controller
     {
         $skill = Skill::onlyTrashed()->findOrFail($id);
         try {
-            $this->skillService->forceDelete( $skill);
+            $this->skillService->forceDelete($skill);
             $response = [
                 '_response_status' => [
                     "success" => true,

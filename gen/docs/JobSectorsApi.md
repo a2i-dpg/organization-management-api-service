@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 <a name="jobSectorsGet"></a>
 # **jobSectorsGet**
-> JobSector jobSectorsGet(page, order, titleEn, titleBn)
+> JobSector jobSectorsGet(page, order, rowStatus, titleEn, titleBn)
 
 get_list
 
@@ -34,12 +34,13 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     JobSectorsApi apiInstance = new JobSectorsApi(defaultClient);
-    Integer page = 56; // Integer | 
+    Integer page = 1; // Integer | 
     String order = "order_example"; // String | 
+    Integer rowStatus = 1; // Integer | 
     String titleEn = "titleEn_example"; // String | 
     String titleBn = "titleBn_example"; // String | 
     try {
-      JobSector result = apiInstance.jobSectorsGet(page, order, titleEn, titleBn);
+      JobSector result = apiInstance.jobSectorsGet(page, order, rowStatus, titleEn, titleBn);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling JobSectorsApi#jobSectorsGet");
@@ -58,6 +59,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **Integer**|  | [optional]
  **order** | **String**|  | [optional] [enum: asc, desc]
+ **rowStatus** | **Integer**|  | [optional]
  **titleEn** | **String**|  | [optional]
  **titleBn** | **String**|  | [optional]
 
@@ -85,7 +87,7 @@ No authorization required
 
 delete
 
- API endpoint to get a specified job sector.A successful request response will show 200 HTTP status code
+ API endpoint to delete the specified job sector.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -102,7 +104,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     JobSectorsApi apiInstance = new JobSectorsApi(defaultClient);
-    Integer jobSectorId = 56; // Integer | 
+    Integer jobSectorId = 1; // Integer | 
     try {
       JobSector result = apiInstance.jobSectorsJobSectorIdDelete(jobSectorId);
       System.out.println(result);
@@ -164,7 +166,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     JobSectorsApi apiInstance = new JobSectorsApi(defaultClient);
-    Integer jobSectorId = 56; // Integer | 
+    Integer jobSectorId = 1; // Integer | 
     try {
       JobSector result = apiInstance.jobSectorsJobSectorIdGet(jobSectorId);
       System.out.println(result);
@@ -226,9 +228,9 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     JobSectorsApi apiInstance = new JobSectorsApi(defaultClient);
-    Integer jobSectorId = 56; // Integer | 
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
+    Integer jobSectorId = 1; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
     Integer rowStatus = 56; // Integer | 
     try {
       JobSector result = apiInstance.jobSectorsJobSectorIdPut(jobSectorId, titleEn, titleBn, rowStatus);
@@ -273,7 +275,7 @@ No authorization required
 
 <a name="jobSectorsPost"></a>
 # **jobSectorsPost**
-> JobSector jobSectorsPost(titleEn, titleBn, rowStatus)
+> JobSector jobSectorsPost(titleEn, titleBn, limit, rowStatus)
 
 create
 
@@ -294,11 +296,12 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     JobSectorsApi apiInstance = new JobSectorsApi(defaultClient);
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer limit = 10; // Integer | 
     Integer rowStatus = 56; // Integer | 
     try {
-      JobSector result = apiInstance.jobSectorsPost(titleEn, titleBn, rowStatus);
+      JobSector result = apiInstance.jobSectorsPost(titleEn, titleBn, limit, rowStatus);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling JobSectorsApi#jobSectorsPost");
@@ -317,6 +320,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |
+ **limit** | **Integer**|  | [optional]
  **rowStatus** | **Integer**|  | [optional] [enum: 1, 0]
 
 ### Return type

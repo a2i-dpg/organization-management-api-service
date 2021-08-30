@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * Organization types
  */
 @ApiModel(description = "Organization types")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class OrganizationType {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -43,9 +43,56 @@ public class OrganizationType {
   @SerializedName(SERIALIZED_NAME_TITLE_BN)
   private String titleBn;
 
+  /**
+   * Organization status . 0 &#x3D;&gt; non govt, 1 &#x3D;&gt; govt
+   */
+  @JsonAdapter(IsGovernmentEnum.Adapter.class)
+  public enum IsGovernmentEnum {
+    NUMBER_0(0),
+    
+    NUMBER_1(1);
+
+    private Integer value;
+
+    IsGovernmentEnum(Integer value) {
+      this.value = value;
+    }
+
+    public Integer getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static IsGovernmentEnum fromValue(Integer value) {
+      for (IsGovernmentEnum b : IsGovernmentEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+    public static class Adapter extends TypeAdapter<IsGovernmentEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final IsGovernmentEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public IsGovernmentEnum read(final JsonReader jsonReader) throws IOException {
+        Integer value =  jsonReader.nextInt();
+        return IsGovernmentEnum.fromValue(value);
+      }
+    }
+  }
+
   public static final String SERIALIZED_NAME_IS_GOVERNMENT = "is_government";
   @SerializedName(SERIALIZED_NAME_IS_GOVERNMENT)
-  private Boolean isGovernment;
+  private IsGovernmentEnum isGovernment;
 
   /**
    * Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive
@@ -98,9 +145,9 @@ public class OrganizationType {
   @SerializedName(SERIALIZED_NAME_ROW_STATUS)
   private RowStatusEnum rowStatus;
 
-  public static final String SERIALIZED_NAME_CREATE_BY = "create_by";
-  @SerializedName(SERIALIZED_NAME_CREATE_BY)
-  private Integer createBy;
+  public static final String SERIALIZED_NAME_CREATED_BY = "created_by";
+  @SerializedName(SERIALIZED_NAME_CREATED_BY)
+  private Integer createdBy;
 
   public static final String SERIALIZED_NAME_UPDATED_BY = "updated_by";
   @SerializedName(SERIALIZED_NAME_UPDATED_BY)
@@ -173,7 +220,7 @@ public class OrganizationType {
   }
 
 
-  public OrganizationType isGovernment(Boolean isGovernment) {
+  public OrganizationType isGovernment(IsGovernmentEnum isGovernment) {
     
     this.isGovernment = isGovernment;
     return this;
@@ -183,14 +230,15 @@ public class OrganizationType {
    * Organization status . 0 &#x3D;&gt; non govt, 1 &#x3D;&gt; govt
    * @return isGovernment
   **/
+  @javax.annotation.Nullable
   @ApiModelProperty(required = true, value = "Organization status . 0 => non govt, 1 => govt")
 
-  public Boolean getIsGovernment() {
+  public IsGovernmentEnum getIsGovernment() {
     return isGovernment;
   }
 
 
-  public void setIsGovernment(Boolean isGovernment) {
+  public void setIsGovernment(IsGovernmentEnum isGovernment) {
     this.isGovernment = isGovernment;
   }
 
@@ -218,26 +266,26 @@ public class OrganizationType {
   }
 
 
-  public OrganizationType createBy(Integer createBy) {
+  public OrganizationType createdBy(Integer createdBy) {
     
-    this.createBy = createBy;
+    this.createdBy = createdBy;
     return this;
   }
 
    /**
    * Creator
-   * @return createBy
+   * @return createdBy
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "Creator")
 
-  public Integer getCreateBy() {
-    return createBy;
+  public Integer getCreatedBy() {
+    return createdBy;
   }
 
 
-  public void setCreateBy(Integer createBy) {
-    this.createBy = createBy;
+  public void setCreatedBy(Integer createdBy) {
+    this.createdBy = createdBy;
   }
 
 
@@ -324,7 +372,7 @@ public class OrganizationType {
         Objects.equals(this.titleBn, organizationType.titleBn) &&
         Objects.equals(this.isGovernment, organizationType.isGovernment) &&
         Objects.equals(this.rowStatus, organizationType.rowStatus) &&
-        Objects.equals(this.createBy, organizationType.createBy) &&
+        Objects.equals(this.createdBy, organizationType.createdBy) &&
         Objects.equals(this.updatedBy, organizationType.updatedBy) &&
         Objects.equals(this.createdAt, organizationType.createdAt) &&
         Objects.equals(this.updatedAt, organizationType.updatedAt);
@@ -332,7 +380,7 @@ public class OrganizationType {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, titleEn, titleBn, isGovernment, rowStatus, createBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, titleEn, titleBn, isGovernment, rowStatus, createdBy, updatedBy, createdAt, updatedAt);
   }
 
 
@@ -345,7 +393,7 @@ public class OrganizationType {
     sb.append("    titleBn: ").append(toIndentedString(titleBn)).append("\n");
     sb.append("    isGovernment: ").append(toIndentedString(isGovernment)).append("\n");
     sb.append("    rowStatus: ").append(toIndentedString(rowStatus)).append("\n");
-    sb.append("    createBy: ").append(toIndentedString(createBy)).append("\n");
+    sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");

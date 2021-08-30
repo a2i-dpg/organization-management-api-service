@@ -58,6 +58,7 @@ public class JobSectorsApi {
      * Build call for jobSectorsGet
      * @param page  (optional)
      * @param order  (optional)
+     * @param rowStatus  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
      * @param _callback Callback for upload/download progress
@@ -69,7 +70,7 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call jobSectorsGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call jobSectorsGetCall(Integer page, String order, Integer rowStatus, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -87,6 +88,10 @@ public class JobSectorsApi {
 
         if (order != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("order", order));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (titleEn != null) {
@@ -116,10 +121,10 @@ public class JobSectorsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobSectorsGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call jobSectorsGetValidateBeforeCall(Integer page, String order, Integer rowStatus, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = jobSectorsGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = jobSectorsGetCall(page, order, rowStatus, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -129,6 +134,7 @@ public class JobSectorsApi {
      * API endpoint to get the list of job sectors.A successful request response will show 200 HTTP status code
      * @param page  (optional)
      * @param order  (optional)
+     * @param rowStatus  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
      * @return JobSector
@@ -139,8 +145,8 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public JobSector jobSectorsGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<JobSector> localVarResp = jobSectorsGetWithHttpInfo(page, order, titleEn, titleBn);
+    public JobSector jobSectorsGet(Integer page, String order, Integer rowStatus, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<JobSector> localVarResp = jobSectorsGetWithHttpInfo(page, order, rowStatus, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -149,6 +155,7 @@ public class JobSectorsApi {
      * API endpoint to get the list of job sectors.A successful request response will show 200 HTTP status code
      * @param page  (optional)
      * @param order  (optional)
+     * @param rowStatus  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
      * @return ApiResponse&lt;JobSector&gt;
@@ -159,8 +166,8 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<JobSector> jobSectorsGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = jobSectorsGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<JobSector> jobSectorsGetWithHttpInfo(Integer page, String order, Integer rowStatus, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = jobSectorsGetValidateBeforeCall(page, order, rowStatus, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<JobSector>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -170,6 +177,7 @@ public class JobSectorsApi {
      * API endpoint to get the list of job sectors.A successful request response will show 200 HTTP status code
      * @param page  (optional)
      * @param order  (optional)
+     * @param rowStatus  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
      * @param _callback The callback to be executed when the API call finishes
@@ -181,9 +189,9 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call jobSectorsGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<JobSector> _callback) throws ApiException {
+    public okhttp3.Call jobSectorsGetAsync(Integer page, String order, Integer rowStatus, String titleEn, String titleBn, final ApiCallback<JobSector> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = jobSectorsGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = jobSectorsGetValidateBeforeCall(page, order, rowStatus, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<JobSector>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -247,7 +255,7 @@ public class JobSectorsApi {
 
     /**
      * delete
-     *  API endpoint to get a specified job sector.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified job sector.A successful request response will show 200 HTTP status code
      * @param jobSectorId  (required)
      * @return JobSector
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -264,7 +272,7 @@ public class JobSectorsApi {
 
     /**
      * delete
-     *  API endpoint to get a specified job sector.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified job sector.A successful request response will show 200 HTTP status code
      * @param jobSectorId  (required)
      * @return ApiResponse&lt;JobSector&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -282,7 +290,7 @@ public class JobSectorsApi {
 
     /**
      * delete (asynchronously)
-     *  API endpoint to get a specified job sector.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified job sector.A successful request response will show 200 HTTP status code
      * @param jobSectorId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -562,6 +570,7 @@ public class JobSectorsApi {
      * Build call for jobSectorsPost
      * @param titleEn  (required)
      * @param titleBn  (required)
+     * @param limit  (optional)
      * @param rowStatus  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -572,7 +581,7 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call jobSectorsPostCall(String titleEn, String titleBn, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call jobSectorsPostCall(String titleEn, String titleBn, Integer limit, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -586,6 +595,10 @@ public class JobSectorsApi {
 
         if (titleEn != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("title_en", titleEn));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
         }
 
         if (titleBn != null) {
@@ -615,7 +628,7 @@ public class JobSectorsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call jobSectorsPostValidateBeforeCall(String titleEn, String titleBn, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call jobSectorsPostValidateBeforeCall(String titleEn, String titleBn, Integer limit, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'titleEn' is set
         if (titleEn == null) {
@@ -628,7 +641,7 @@ public class JobSectorsApi {
         }
         
 
-        okhttp3.Call localVarCall = jobSectorsPostCall(titleEn, titleBn, rowStatus, _callback);
+        okhttp3.Call localVarCall = jobSectorsPostCall(titleEn, titleBn, limit, rowStatus, _callback);
         return localVarCall;
 
     }
@@ -638,6 +651,7 @@ public class JobSectorsApi {
      * API endpoint to create of job sectors.A successful request response will show 200 HTTP status code
      * @param titleEn  (required)
      * @param titleBn  (required)
+     * @param limit  (optional)
      * @param rowStatus  (optional)
      * @return JobSector
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -647,8 +661,8 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public JobSector jobSectorsPost(String titleEn, String titleBn, Integer rowStatus) throws ApiException {
-        ApiResponse<JobSector> localVarResp = jobSectorsPostWithHttpInfo(titleEn, titleBn, rowStatus);
+    public JobSector jobSectorsPost(String titleEn, String titleBn, Integer limit, Integer rowStatus) throws ApiException {
+        ApiResponse<JobSector> localVarResp = jobSectorsPostWithHttpInfo(titleEn, titleBn, limit, rowStatus);
         return localVarResp.getData();
     }
 
@@ -657,6 +671,7 @@ public class JobSectorsApi {
      * API endpoint to create of job sectors.A successful request response will show 200 HTTP status code
      * @param titleEn  (required)
      * @param titleBn  (required)
+     * @param limit  (optional)
      * @param rowStatus  (optional)
      * @return ApiResponse&lt;JobSector&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -666,8 +681,8 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<JobSector> jobSectorsPostWithHttpInfo(String titleEn, String titleBn, Integer rowStatus) throws ApiException {
-        okhttp3.Call localVarCall = jobSectorsPostValidateBeforeCall(titleEn, titleBn, rowStatus, null);
+    public ApiResponse<JobSector> jobSectorsPostWithHttpInfo(String titleEn, String titleBn, Integer limit, Integer rowStatus) throws ApiException {
+        okhttp3.Call localVarCall = jobSectorsPostValidateBeforeCall(titleEn, titleBn, limit, rowStatus, null);
         Type localVarReturnType = new TypeToken<JobSector>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -677,6 +692,7 @@ public class JobSectorsApi {
      * API endpoint to create of job sectors.A successful request response will show 200 HTTP status code
      * @param titleEn  (required)
      * @param titleBn  (required)
+     * @param limit  (optional)
      * @param rowStatus  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -687,9 +703,9 @@ public class JobSectorsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call jobSectorsPostAsync(String titleEn, String titleBn, Integer rowStatus, final ApiCallback<JobSector> _callback) throws ApiException {
+    public okhttp3.Call jobSectorsPostAsync(String titleEn, String titleBn, Integer limit, Integer rowStatus, final ApiCallback<JobSector> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = jobSectorsPostValidateBeforeCall(titleEn, titleBn, rowStatus, _callback);
+        okhttp3.Call localVarCall = jobSectorsPostValidateBeforeCall(titleEn, titleBn, limit, rowStatus, _callback);
         Type localVarReturnType = new TypeToken<JobSector>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
