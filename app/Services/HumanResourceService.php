@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\BaseModel;
 use App\Models\HumanResource;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -14,14 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HumanResourceService
 {
-    public function getHumanResourceList(Request $request, Carbon $startTime): array
+    public function getHumanResourceList(array $request, Carbon $startTime): array
     {
-        $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
+        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
+        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
+        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
+        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
         /** @var Builder $humanResourceBuilder */
         $humanResourceBuilder = HumanResource::select([
@@ -325,9 +325,9 @@ class HumanResourceService
     /**
      * @param Request $request
      * @param int|null $id
-     * @return Validator
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request, int $id = null): Validator
+    public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -393,6 +393,28 @@ class HumanResourceService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ]
         ];
-        return \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        return Validator::make($request->all(), $rules);
+    }
+
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC',
+            'row_status.in' => 'Row status must be within 1 or 0'
+        ];
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|min:1',
+            'title_bn' => 'nullable|min:1',
+            'page' => 'numeric|gt:0',
+            'limit' => 'numeric',
+            'order' => [
+                'string',
+                Rule::in([strtolower(BaseModel::ROW_ORDER_ASC), strtolower(BaseModel::ROW_ORDER_DESC)])
+            ],
+            'row_status' => [
+                "numeric",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }
