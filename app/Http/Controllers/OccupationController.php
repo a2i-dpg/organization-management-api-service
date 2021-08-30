@@ -43,11 +43,13 @@ class OccupationController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $filter = $this->occupationService->filterValidator($request)->validate();
         try {
-            $response = $this->occupationService->getOccupationList($request, $this->startTime);
+            $response = $this->occupationService->getOccupationList($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

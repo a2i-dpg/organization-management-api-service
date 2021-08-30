@@ -42,11 +42,13 @@ class OrganizationUnitTypeController extends Controller
      *
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request)
     {
+        $filter = $this->organizationUnitTypeService->filterValidator($request)->validate();
         try {
-            $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($request, $this->startTime);
+            $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

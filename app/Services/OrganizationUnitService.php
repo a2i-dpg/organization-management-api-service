@@ -20,18 +20,18 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizationUnitService
 {
     /**
-     * @param Request $request
+     * @param array $request
      * @param Carbon $startTime
      * @return array
      */
-    public function getAllOrganizationUnit(Request $request, Carbon $startTime): array
+    public function getAllOrganizationUnit(array $request, Carbon $startTime): array
     {
-        $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
+        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
+        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
+        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
+        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
         /** @var Builder $organizationUnitBuilder */
         $organizationUnitBuilder = OrganizationUnit::select([
@@ -66,20 +66,20 @@ class OrganizationUnitService
         $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
             $response['row_status'] = $rowStatus;
         }
@@ -91,7 +91,7 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if (!is_null($paginate) || !is_null($limit)) {
+        if (is_numeric($paginate) || is_numeric($limit)) {
             $limit = $limit ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($limit);
             $paginateData = (object)$organizationUnits->toArray();
@@ -424,8 +424,7 @@ class OrganizationUnitService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public
-    function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
@@ -433,5 +432,36 @@ class OrganizationUnitService
             'serviceIds.*' => 'required|integer|distinct|min:1'
         ];
         return Validator::make($data, $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC',
+            'row_status.in' => 'Row status must be within 1 or 0'
+        ];
+
+        if (!empty($request['order'])) {
+            $request['order'] = strtoupper($request['order']);
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|min:1',
+            'title_bn' => 'nullable|min:1',
+            'page' => 'numeric|gt:0',
+            'limit' => 'numeric',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "numeric",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

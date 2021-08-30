@@ -12,8 +12,17 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class HumanResourceService
+ * @package App\Services
+ */
 class HumanResourceService
 {
+    /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getHumanResourceList(array $request, Carbon $startTime): array
     {
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
@@ -56,41 +65,41 @@ class HumanResourceService
         $humanResourceBuilder->join('human_resource_templates', function ($join) use ($rowStatus) {
             $join->on('human_resources.human_resource_template_id', '=', 'human_resource_templates.id')
                 ->whereNull('human_resource_templates.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('human_resource_templates.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->join('organization_units', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_unit_id', '=', 'organization_units.id')
                 ->whereNull('organization_units.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organization_units.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
             $join->on('human_resources.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->leftJoin('human_resources as t2', function ($join) use ($rowStatus) {
             $join->on('human_resources.parent_id', '=', 't2.id')
                 ->whereNull('t2.deleted_at');
-            if (!is_null($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('t2.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->orderBy('human_resource_templates.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $humanResourceBuilder->where('human_resources.row_status', $rowStatus);
             $response['row_status'] = $rowStatus;
         }
@@ -102,7 +111,7 @@ class HumanResourceService
 
         /** @var Collection $humanResources */
 
-        if (!is_null($paginate) || !is_null($limit)) {
+        if (is_numeric($paginate) || is_numeric($limit)) {
             $limit = $limit ?: 10;
             $humanResources = $humanResourceBuilder->paginate($limit);
             $paginateData = (object)$humanResources->toArray();
@@ -233,6 +242,11 @@ class HumanResourceService
         return $humanResource->delete();
     }
 
+    /**
+     * @param Request $request
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getTrashedHumanResourceList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
@@ -396,12 +410,20 @@ class HumanResourceService
         return Validator::make($request->all(), $rules);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'order.in' => 'Order must be within ASC or DESC',
             'row_status.in' => 'Row status must be within 1 or 0'
         ];
+        if (!empty($request['order'])) {
+            $request['order'] = strtoupper($request['order']);
+        }
+
         return Validator::make($request->all(), [
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
@@ -409,7 +431,7 @@ class HumanResourceService
             'limit' => 'numeric',
             'order' => [
                 'string',
-                Rule::in([strtolower(BaseModel::ROW_ORDER_ASC), strtolower(BaseModel::ROW_ORDER_DESC)])
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
                 "numeric",

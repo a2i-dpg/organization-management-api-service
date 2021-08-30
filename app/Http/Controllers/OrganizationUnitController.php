@@ -42,11 +42,13 @@ class OrganizationUnitController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request)
     {
+        $filter = $this->organizationUnitService->filterValidator($request)->validate();
         try {
-            $response = $this->organizationUnitService->getAllOrganizationUnit($request, $this->startTime);
+            $response = $this->organizationUnitService->getAllOrganizationUnit($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

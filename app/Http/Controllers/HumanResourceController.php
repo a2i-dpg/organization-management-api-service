@@ -36,11 +36,13 @@ class HumanResourceController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $filter = $this->humanResourceService->filterValidator($request)->validate();
         try {
-            $response = $this->humanResourceService->getHumanResourceList($request, $this->startTime);
+            $response = $this->humanResourceService->getHumanResourceList($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }
@@ -170,9 +172,9 @@ class HumanResourceController extends Controller
      */
     public function restore(int $id)
     {
-        $humanResource  = HumanResource::onlyTrashed()->findOrFail($id);
+        $humanResource = HumanResource::onlyTrashed()->findOrFail($id);
         try {
-            $this->humanResourceService->restore($humanResource );
+            $this->humanResourceService->restore($humanResource);
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -193,9 +195,9 @@ class HumanResourceController extends Controller
      */
     public function forceDelete(int $id)
     {
-        $humanResource  = HumanResource::onlyTrashed()->findOrFail($id);
+        $humanResource = HumanResource::onlyTrashed()->findOrFail($id);
         try {
-            $this->humanResourceService->forceDelete($humanResource );
+            $this->humanResourceService->forceDelete($humanResource);
             $response = [
                 '_response_status' => [
                     "success" => true,
