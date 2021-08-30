@@ -29,6 +29,7 @@ class RankTypeService
         $titleBn = $request->query('title_bn');
         $limit = $request->query('limit', 10);
         $rowStatus = $request->query('row_status');
+        $organizationId = $request->query('organization_id');
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -59,7 +60,11 @@ class RankTypeService
 
         if (!is_null($rowStatus)) {
             $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
+        }
+        if (!is_null($organizationId)) {
+            $rankTypeBuilder->where('rank_types.organization_id', $organizationId);
+            $response['organization_id'] = $organizationId;
         }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');

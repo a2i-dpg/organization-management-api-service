@@ -852,6 +852,9 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "$ref": "#/components/parameters/organizationId_query"
+                    },
+                    {
                         "$ref": "#/components/parameters/row_status_query"
                     },
                     {
@@ -6734,6 +6737,15 @@
                 "schema": {
                     "type": "integer",
                     "example": 2
+                }
+            },
+            "organizationId_query": {
+                "name": "organization_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
                 }
             },
             "serviceIds": {
