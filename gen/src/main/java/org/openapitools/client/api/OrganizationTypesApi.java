@@ -57,6 +57,8 @@ public class OrganizationTypesApi {
     /**
      * Build call for organizationTypesGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -69,7 +71,7 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call organizationTypesGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -83,6 +85,14 @@ public class OrganizationTypesApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -116,18 +126,20 @@ public class OrganizationTypesApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call organizationTypesGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call organizationTypesGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = organizationTypesGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = organizationTypesGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
 
     /**
      * get_list
-     *  API endpoint to get the list organization types.A successful request response will show 200 HTTP status code
+     *  API endpoint to get the list of organization types.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -139,15 +151,17 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public OrganizationType organizationTypesGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<OrganizationType> localVarResp = organizationTypesGetWithHttpInfo(page, order, titleEn, titleBn);
+    public OrganizationType organizationTypesGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<OrganizationType> localVarResp = organizationTypesGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
     /**
      * get_list
-     *  API endpoint to get the list organization types.A successful request response will show 200 HTTP status code
+     *  API endpoint to get the list of organization types.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -159,16 +173,18 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<OrganizationType> organizationTypesGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = organizationTypesGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<OrganizationType> organizationTypesGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = organizationTypesGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * get_list (asynchronously)
-     *  API endpoint to get the list organization types.A successful request response will show 200 HTTP status code
+     *  API endpoint to get the list of organization types.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -181,9 +197,9 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<OrganizationType> _callback) throws ApiException {
+    public okhttp3.Call organizationTypesGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<OrganizationType> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = organizationTypesGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = organizationTypesGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -247,7 +263,7 @@ public class OrganizationTypesApi {
 
     /**
      * delete
-     * API endpoint to delete an organization type.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified organization type.A successful request response will show 200 HTTP status code
      * @param organizationTypeId  (required)
      * @return Object
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -264,7 +280,7 @@ public class OrganizationTypesApi {
 
     /**
      * delete
-     * API endpoint to delete an organization type.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified organization type.A successful request response will show 200 HTTP status code
      * @param organizationTypeId  (required)
      * @return ApiResponse&lt;Object&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -282,7 +298,7 @@ public class OrganizationTypesApi {
 
     /**
      * delete (asynchronously)
-     * API endpoint to delete an organization type.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified organization type.A successful request response will show 200 HTTP status code
      * @param organizationTypeId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -359,8 +375,9 @@ public class OrganizationTypesApi {
 
     /**
      * get_one
-     *  API endpoint to get an organization type by organization id.A successful request response will show 200 HTTP status code
+     *  API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code
      * @param organizationTypeId  (required)
+     * @return OrganizationType
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -368,15 +385,16 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_one </td><td>  -  </td></tr>
      </table>
      */
-    public void organizationTypesOrganizationTypeIdGet(Integer organizationTypeId) throws ApiException {
-        organizationTypesOrganizationTypeIdGetWithHttpInfo(organizationTypeId);
+    public OrganizationType organizationTypesOrganizationTypeIdGet(Integer organizationTypeId) throws ApiException {
+        ApiResponse<OrganizationType> localVarResp = organizationTypesOrganizationTypeIdGetWithHttpInfo(organizationTypeId);
+        return localVarResp.getData();
     }
 
     /**
      * get_one
-     *  API endpoint to get an organization type by organization id.A successful request response will show 200 HTTP status code
+     *  API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code
      * @param organizationTypeId  (required)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;OrganizationType&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -384,14 +402,15 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_one </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> organizationTypesOrganizationTypeIdGetWithHttpInfo(Integer organizationTypeId) throws ApiException {
+    public ApiResponse<OrganizationType> organizationTypesOrganizationTypeIdGetWithHttpInfo(Integer organizationTypeId) throws ApiException {
         okhttp3.Call localVarCall = organizationTypesOrganizationTypeIdGetValidateBeforeCall(organizationTypeId, null);
-        return localVarApiClient.execute(localVarCall);
+        Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * get_one (asynchronously)
-     *  API endpoint to get an organization type by organization id.A successful request response will show 200 HTTP status code
+     *  API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code
      * @param organizationTypeId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -402,10 +421,11 @@ public class OrganizationTypesApi {
         <tr><td> 200 </td><td> get_one </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesOrganizationTypeIdGetAsync(Integer organizationTypeId, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call organizationTypesOrganizationTypeIdGetAsync(Integer organizationTypeId, final ApiCallback<OrganizationType> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = organizationTypesOrganizationTypeIdGetValidateBeforeCall(organizationTypeId, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
+        Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
@@ -421,11 +441,10 @@ public class OrganizationTypesApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td>  </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesOrganizationTypeIdPutCall(Integer organizationTypeId, String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call organizationTypesOrganizationTypeIdPutCall(Integer organizationTypeId, String titleEn, String titleBn, Integer isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -473,7 +492,7 @@ public class OrganizationTypesApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call organizationTypesOrganizationTypeIdPutValidateBeforeCall(Integer organizationTypeId, String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call organizationTypesOrganizationTypeIdPutValidateBeforeCall(Integer organizationTypeId, String titleEn, String titleBn, Integer isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'organizationTypeId' is set
         if (organizationTypeId == null) {
@@ -503,49 +522,50 @@ public class OrganizationTypesApi {
 
     /**
      * update
-     * API endpoint to update an organization type.A successful request response will show 201 HTTP status code
+     * API endpoint to update the specified  organization type.A successful request response will show 201 HTTP status code
      * @param organizationTypeId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
      * @param isGovernment  (required)
      * @param rowStatus  (optional)
+     * @return OrganizationType
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td>  </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public void organizationTypesOrganizationTypeIdPut(Integer organizationTypeId, String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus) throws ApiException {
-        organizationTypesOrganizationTypeIdPutWithHttpInfo(organizationTypeId, titleEn, titleBn, isGovernment, rowStatus);
+    public OrganizationType organizationTypesOrganizationTypeIdPut(Integer organizationTypeId, String titleEn, String titleBn, Integer isGovernment, Integer rowStatus) throws ApiException {
+        ApiResponse<OrganizationType> localVarResp = organizationTypesOrganizationTypeIdPutWithHttpInfo(organizationTypeId, titleEn, titleBn, isGovernment, rowStatus);
+        return localVarResp.getData();
     }
 
     /**
      * update
-     * API endpoint to update an organization type.A successful request response will show 201 HTTP status code
+     * API endpoint to update the specified  organization type.A successful request response will show 201 HTTP status code
      * @param organizationTypeId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
      * @param isGovernment  (required)
      * @param rowStatus  (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;OrganizationType&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td>  </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> organizationTypesOrganizationTypeIdPutWithHttpInfo(Integer organizationTypeId, String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus) throws ApiException {
+    public ApiResponse<OrganizationType> organizationTypesOrganizationTypeIdPutWithHttpInfo(Integer organizationTypeId, String titleEn, String titleBn, Integer isGovernment, Integer rowStatus) throws ApiException {
         okhttp3.Call localVarCall = organizationTypesOrganizationTypeIdPutValidateBeforeCall(organizationTypeId, titleEn, titleBn, isGovernment, rowStatus, null);
-        return localVarApiClient.execute(localVarCall);
+        Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * update (asynchronously)
-     * API endpoint to update an organization type.A successful request response will show 201 HTTP status code
+     * API endpoint to update the specified  organization type.A successful request response will show 201 HTTP status code
      * @param organizationTypeId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -557,14 +577,14 @@ public class OrganizationTypesApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td>  </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesOrganizationTypeIdPutAsync(Integer organizationTypeId, String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call organizationTypesOrganizationTypeIdPutAsync(Integer organizationTypeId, String titleEn, String titleBn, Integer isGovernment, Integer rowStatus, final ApiCallback<OrganizationType> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = organizationTypesOrganizationTypeIdPutValidateBeforeCall(organizationTypeId, titleEn, titleBn, isGovernment, rowStatus, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
+        Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
@@ -582,7 +602,7 @@ public class OrganizationTypesApi {
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesPostCall(String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call organizationTypesPostCall(String titleEn, String titleBn, Integer isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -629,7 +649,7 @@ public class OrganizationTypesApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call organizationTypesPostValidateBeforeCall(String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call organizationTypesPostValidateBeforeCall(String titleEn, String titleBn, Integer isGovernment, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'titleEn' is set
         if (titleEn == null) {
@@ -667,7 +687,7 @@ public class OrganizationTypesApi {
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public OrganizationType organizationTypesPost(String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus) throws ApiException {
+    public OrganizationType organizationTypesPost(String titleEn, String titleBn, Integer isGovernment, Integer rowStatus) throws ApiException {
         ApiResponse<OrganizationType> localVarResp = organizationTypesPostWithHttpInfo(titleEn, titleBn, isGovernment, rowStatus);
         return localVarResp.getData();
     }
@@ -687,7 +707,7 @@ public class OrganizationTypesApi {
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<OrganizationType> organizationTypesPostWithHttpInfo(String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus) throws ApiException {
+    public ApiResponse<OrganizationType> organizationTypesPostWithHttpInfo(String titleEn, String titleBn, Integer isGovernment, Integer rowStatus) throws ApiException {
         okhttp3.Call localVarCall = organizationTypesPostValidateBeforeCall(titleEn, titleBn, isGovernment, rowStatus, null);
         Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -709,7 +729,7 @@ public class OrganizationTypesApi {
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationTypesPostAsync(String titleEn, String titleBn, Boolean isGovernment, Integer rowStatus, final ApiCallback<OrganizationType> _callback) throws ApiException {
+    public okhttp3.Call organizationTypesPostAsync(String titleEn, String titleBn, Integer isGovernment, Integer rowStatus, final ApiCallback<OrganizationType> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = organizationTypesPostValidateBeforeCall(titleEn, titleBn, isGovernment, rowStatus, _callback);
         Type localVarReturnType = new TypeToken<OrganizationType>(){}.getType();

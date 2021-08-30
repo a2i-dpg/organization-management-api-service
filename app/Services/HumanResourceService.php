@@ -31,21 +31,26 @@ class HumanResourceService
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
-            't2.title_en as parent',
+            't2.title_en as parent_title_en',
+            't2.title_bn as parent_title_bn',
             'human_resources.organization_id',
-            'organizations.title_en as organization_name',
+            'organizations.title_en as organization_title_en',
+            'organizations.title_bn as organization_title_bn',
             'human_resources.organization_unit_id',
-            'organization_units.title_en as organization_unit_name',
+            'organization_units.title_en as organization_unit_title_en',
+            'organization_units.title_bn as organization_unit_title_bn',
             'human_resources.human_resource_template_id',
-            'human_resource_templates.title_en as human_resource_template_name',
+            'human_resource_templates.title_en as human_resource_template_title_en',
+            'human_resource_templates.title_bn as human_resource_template_title_bn',
             'human_resources.rank_id',
             'ranks.title_en as rank_title_en',
+            'ranks.title_bn as rank_title_bn',
             'human_resources.status',
             'human_resources.row_status',
             'human_resources.created_by',
             'human_resources.updated_by',
             'human_resources.created_at',
-            'human_resources.updated_at',
+            'human_resources.updated_at'
         ]);
 
         $humanResourceBuilder->join('human_resource_templates', function ($join) use ($rowStatus) {
@@ -87,7 +92,7 @@ class HumanResourceService
 
         if (!is_null($rowStatus)) {
             $humanResourceBuilder->where('human_resources.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
@@ -135,21 +140,26 @@ class HumanResourceService
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
-            't2.title_en as parent',
+            't2.title_en as parent_title_en',
+            't2.title_bn as parent_title_bn',
             'human_resources.organization_id',
-            'organizations.title_en as organization_name',
+            'organizations.title_en as organization_title_en',
+            'organizations.title_bn as organization_title_bn',
             'human_resources.organization_unit_id',
-            'organization_units.title_en as organization_unit_name',
+            'organization_units.title_en as organization_unit_title_en',
+            'organization_units.title_bn as organization_unit_title_bn',
             'human_resources.human_resource_template_id',
-            'human_resource_templates.title_en as human_resource_template_name',
+            'human_resource_templates.title_en as human_resource_template_title_en',
+            'human_resource_templates.title_bn as human_resource_template_title_bn',
             'human_resources.rank_id',
             'ranks.title_en as rank_title_en',
+            'ranks.title_bn as rank_title_bn',
             'human_resources.status',
             'human_resources.row_status',
             'human_resources.created_by',
             'human_resources.updated_by',
             'human_resources.created_at',
-            'human_resources.updated_at',
+            'human_resources.updated_at'
         ]);
 
         $humanResourceBuilder->join('human_resource_templates', function ($join) {
@@ -157,20 +167,20 @@ class HumanResourceService
                 ->whereNull('human_resource_templates.deleted_at');
 
         });
-        $humanResourceBuilder->join('organizations', function ($join){
+        $humanResourceBuilder->join('organizations', function ($join) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
 
         });
-        $humanResourceBuilder->join('organization_units', function ($join)  {
+        $humanResourceBuilder->join('organization_units', function ($join) {
             $join->on('human_resources.organization_unit_id', '=', 'organization_units.id')
                 ->whereNull('organization_units.deleted_at');
         });
-        $humanResourceBuilder->leftJoin('ranks', function ($join){
+        $humanResourceBuilder->leftJoin('ranks', function ($join) {
             $join->on('human_resources.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
         });
-        $humanResourceBuilder->leftJoin('human_resources as t2', function ($join)  {
+        $humanResourceBuilder->leftJoin('human_resources as t2', function ($join) {
             $join->on('human_resources.parent_id', '=', 't2.id')
                 ->whereNull('t2.deleted_at');
         });

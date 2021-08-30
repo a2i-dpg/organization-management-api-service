@@ -59,6 +59,8 @@ public class OrganizationUnitTypesApi {
     /**
      * Build call for organizationUnitTypesGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -71,7 +73,7 @@ public class OrganizationUnitTypesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationUnitTypesGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call organizationUnitTypesGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -85,6 +87,14 @@ public class OrganizationUnitTypesApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -118,10 +128,10 @@ public class OrganizationUnitTypesApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call organizationUnitTypesGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call organizationUnitTypesGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = organizationUnitTypesGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = organizationUnitTypesGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -130,6 +140,8 @@ public class OrganizationUnitTypesApi {
      * get list
      * API endpoint to get the list of organization unit types.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -141,8 +153,8 @@ public class OrganizationUnitTypesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public OrganizationUnitType organizationUnitTypesGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<OrganizationUnitType> localVarResp = organizationUnitTypesGetWithHttpInfo(page, order, titleEn, titleBn);
+    public OrganizationUnitType organizationUnitTypesGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<OrganizationUnitType> localVarResp = organizationUnitTypesGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -150,6 +162,8 @@ public class OrganizationUnitTypesApi {
      * get list
      * API endpoint to get the list of organization unit types.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -161,8 +175,8 @@ public class OrganizationUnitTypesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<OrganizationUnitType> organizationUnitTypesGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = organizationUnitTypesGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<OrganizationUnitType> organizationUnitTypesGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = organizationUnitTypesGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<OrganizationUnitType>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -171,6 +185,8 @@ public class OrganizationUnitTypesApi {
      * get list (asynchronously)
      * API endpoint to get the list of organization unit types.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -183,9 +199,9 @@ public class OrganizationUnitTypesApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationUnitTypesGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<OrganizationUnitType> _callback) throws ApiException {
+    public okhttp3.Call organizationUnitTypesGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<OrganizationUnitType> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = organizationUnitTypesGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = organizationUnitTypesGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<OrganizationUnitType>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -415,6 +431,118 @@ public class OrganizationUnitTypesApi {
         return localVarCall;
     }
     /**
+     * Build call for organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGet
+     * @param organizationUnitTypeId  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> get-hierarchy </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetCall(Integer organizationUnitTypeId, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/organization-unit-types/{organizationUnitTypeId}/get-hierarchy"
+            .replaceAll("\\{" + "organizationUnitTypeId" + "\\}", localVarApiClient.escapeString(organizationUnitTypeId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetValidateBeforeCall(Integer organizationUnitTypeId, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'organizationUnitTypeId' is set
+        if (organizationUnitTypeId == null) {
+            throw new ApiException("Missing the required parameter 'organizationUnitTypeId' when calling organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGet(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetCall(organizationUnitTypeId, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * get-hierarchy
+     * API endpoint to get organization unit type based hierarchy e.A successful request response will show 200 HTTP status code
+     * @param organizationUnitTypeId  (required)
+     * @return OrganizationUnitType
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> get-hierarchy </td><td>  -  </td></tr>
+     </table>
+     */
+    public OrganizationUnitType organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGet(Integer organizationUnitTypeId) throws ApiException {
+        ApiResponse<OrganizationUnitType> localVarResp = organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetWithHttpInfo(organizationUnitTypeId);
+        return localVarResp.getData();
+    }
+
+    /**
+     * get-hierarchy
+     * API endpoint to get organization unit type based hierarchy e.A successful request response will show 200 HTTP status code
+     * @param organizationUnitTypeId  (required)
+     * @return ApiResponse&lt;OrganizationUnitType&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> get-hierarchy </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<OrganizationUnitType> organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetWithHttpInfo(Integer organizationUnitTypeId) throws ApiException {
+        okhttp3.Call localVarCall = organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetValidateBeforeCall(organizationUnitTypeId, null);
+        Type localVarReturnType = new TypeToken<OrganizationUnitType>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * get-hierarchy (asynchronously)
+     * API endpoint to get organization unit type based hierarchy e.A successful request response will show 200 HTTP status code
+     * @param organizationUnitTypeId  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> get-hierarchy </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetAsync(Integer organizationUnitTypeId, final ApiCallback<OrganizationUnitType> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = organizationUnitTypesOrganizationUnitTypeIdGetHierarchyGetValidateBeforeCall(organizationUnitTypeId, _callback);
+        Type localVarReturnType = new TypeToken<OrganizationUnitType>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
      * Build call for organizationUnitTypesOrganizationUnitTypeIdPut
      * @param organizationUnitTypeId  (required)
      * @param titleEn  (required)
@@ -585,7 +713,6 @@ public class OrganizationUnitTypesApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
@@ -666,16 +793,17 @@ public class OrganizationUnitTypesApi {
      * @param titleBn  (required)
      * @param organizationId  (required)
      * @param rowStatus  (optional)
+     * @return OrganizationUnitType
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public void organizationUnitTypesPost(String titleEn, String titleBn, Integer organizationId, Integer rowStatus) throws ApiException {
-        organizationUnitTypesPostWithHttpInfo(titleEn, titleBn, organizationId, rowStatus);
+    public OrganizationUnitType organizationUnitTypesPost(String titleEn, String titleBn, Integer organizationId, Integer rowStatus) throws ApiException {
+        ApiResponse<OrganizationUnitType> localVarResp = organizationUnitTypesPostWithHttpInfo(titleEn, titleBn, organizationId, rowStatus);
+        return localVarResp.getData();
     }
 
     /**
@@ -685,18 +813,18 @@ public class OrganizationUnitTypesApi {
      * @param titleBn  (required)
      * @param organizationId  (required)
      * @param rowStatus  (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;OrganizationUnitType&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> organizationUnitTypesPostWithHttpInfo(String titleEn, String titleBn, Integer organizationId, Integer rowStatus) throws ApiException {
+    public ApiResponse<OrganizationUnitType> organizationUnitTypesPostWithHttpInfo(String titleEn, String titleBn, Integer organizationId, Integer rowStatus) throws ApiException {
         okhttp3.Call localVarCall = organizationUnitTypesPostValidateBeforeCall(titleEn, titleBn, organizationId, rowStatus, null);
-        return localVarApiClient.execute(localVarCall);
+        Type localVarReturnType = new TypeToken<OrganizationUnitType>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
@@ -712,14 +840,14 @@ public class OrganizationUnitTypesApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> successful </td><td>  -  </td></tr>
         <tr><td> 201 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationUnitTypesPostAsync(String titleEn, String titleBn, Integer organizationId, Integer rowStatus, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call organizationUnitTypesPostAsync(String titleEn, String titleBn, Integer organizationId, Integer rowStatus, final ApiCallback<OrganizationUnitType> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = organizationUnitTypesPostValidateBeforeCall(titleEn, titleBn, organizationId, rowStatus, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
+        Type localVarReturnType = new TypeToken<OrganizationUnitType>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
 }

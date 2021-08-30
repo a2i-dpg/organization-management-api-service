@@ -44,8 +44,10 @@ class RankService
                 'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organizations.title_bn as organization_title_bn',
                 'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
+                'rank_types.title_bn as rank_type_title_bn',
                 'ranks.row_status',
                 'ranks.created_by',
                 'ranks.updated_by',
@@ -71,7 +73,7 @@ class RankService
 
         if (!is_null($rowStatus)) {
             $rankBuilder->where('ranks.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
         }
 
         if (!empty($titleEn)) {
@@ -122,8 +124,10 @@ class RankService
                 'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
+                'organizations.title_bn as organization_title_bn',
                 'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
+                'rank_types.title_bn as rank_type_title_bn',
                 'ranks.row_status',
                 'ranks.created_by',
                 'ranks.updated_by',

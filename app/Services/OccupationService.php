@@ -38,7 +38,8 @@ class OccupationService
             'occupations.title_en',
             'occupations.title_bn',
             'occupations.job_sector_id',
-            'job_sectors.title_en as job_sector_title',
+            'job_sectors.title_en as job_sector_title_en',
+            'job_sectors.title_bn as job_sector_title_bn',
             'occupations.row_status',
             'occupations.created_by',
             'occupations.updated_by',
@@ -56,7 +57,7 @@ class OccupationService
 
         if (!is_null($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
@@ -102,7 +103,8 @@ class OccupationService
             'occupations.title_en',
             'occupations.title_bn',
             'occupations.job_sector_id',
-            'job_sectors.title_en as job_sector_title',
+            'job_sectors.title_en as job_sector_title_en',
+            'job_sectors.title_bn as job_sector_title_bn',
             'occupations.row_status',
             'occupations.created_by',
             'occupations.updated_by',

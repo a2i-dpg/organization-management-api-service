@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * Provide rank type
  */
 @ApiModel(description = "Provide rank type")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class RankType {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -42,6 +42,10 @@ public class RankType {
   public static final String SERIALIZED_NAME_TITLE_BN = "title_bn";
   @SerializedName(SERIALIZED_NAME_TITLE_BN)
   private String titleBn;
+
+  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
+  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
+  private String description;
 
   /**
    * Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive
@@ -132,10 +136,10 @@ public class RankType {
   }
 
    /**
-   * Rank type title in English
+   *  title in English
    * @return titleEn
   **/
-  @ApiModelProperty(required = true, value = "Rank type title in English")
+  @ApiModelProperty(required = true, value = " title in English")
 
   public String getTitleEn() {
     return titleEn;
@@ -154,10 +158,10 @@ public class RankType {
   }
 
    /**
-   * Rank type title in Bengali
+   * title in Bengali
    * @return titleBn
   **/
-  @ApiModelProperty(required = true, value = "Rank type title in Bengali")
+  @ApiModelProperty(required = true, value = "title in Bengali")
 
   public String getTitleBn() {
     return titleBn;
@@ -166,6 +170,29 @@ public class RankType {
 
   public void setTitleBn(String titleBn) {
     this.titleBn = titleBn;
+  }
+
+
+  public RankType description(String description) {
+    
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * description of the ranktype
+   * @return description
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "description of the ranktype")
+
+  public String getDescription() {
+    return description;
+  }
+
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 
@@ -296,6 +323,7 @@ public class RankType {
     return Objects.equals(this.id, rankType.id) &&
         Objects.equals(this.titleEn, rankType.titleEn) &&
         Objects.equals(this.titleBn, rankType.titleBn) &&
+        Objects.equals(this.description, rankType.description) &&
         Objects.equals(this.rowStatus, rankType.rowStatus) &&
         Objects.equals(this.createBy, rankType.createBy) &&
         Objects.equals(this.updatedBy, rankType.updatedBy) &&
@@ -305,7 +333,7 @@ public class RankType {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, titleEn, titleBn, rowStatus, createBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, titleEn, titleBn, description, rowStatus, createBy, updatedBy, createdAt, updatedAt);
   }
 
 
@@ -316,6 +344,7 @@ public class RankType {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    titleEn: ").append(toIndentedString(titleEn)).append("\n");
     sb.append("    titleBn: ").append(toIndentedString(titleBn)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    rowStatus: ").append(toIndentedString(rowStatus)).append("\n");
     sb.append("    createBy: ").append(toIndentedString(createBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");

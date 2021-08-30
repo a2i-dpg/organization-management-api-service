@@ -51,7 +51,8 @@ class OrganizationService
             'organizations.loc_district_id',
             'organizations.loc_upazila_id',
             'organizations.organization_type_id',
-            'organization_types.title_en as organization_types_title',
+            'organization_types.title_en as organization_type_title_en',
+            'organization_types.title_bn as organization_type_title_bn',
             'organizations.address',
             'organizations.row_status',
             'organizations.created_by',
@@ -70,7 +71,7 @@ class OrganizationService
 
         if (!is_null($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
+            $response['row_status'] = $rowStatus;
         }
 
         if (!empty($titleEn)) {
@@ -130,7 +131,8 @@ class OrganizationService
             'organizations.loc_district_id',
             'organizations.loc_upazila_id',
             'organizations.organization_type_id',
-            'organization_types.title_en as organization_types_title',
+            'organization_types.title_en as organization_type_title_en',
+            'organization_types.title_bn as organization_type_title_bn',
             'organizations.address',
             'organizations.row_status',
             'organizations.created_by',
@@ -138,7 +140,7 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
-        $organizationBuilder->join('organization_types', function ($join)  {
+        $organizationBuilder->join('organization_types', function ($join) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
 

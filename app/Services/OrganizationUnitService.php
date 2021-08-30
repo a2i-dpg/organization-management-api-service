@@ -49,12 +49,13 @@ class OrganizationUnitService
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
+            'organization_unit_types.title_bn as organization_unit_type_title_bn',
             'organization_units.organization_id',
-            'organizations.title_en as organization_name',
+            'organizations.title_en as organization_title_en',
+            'organizations.title_bn as organization_title_bn',
             'organization_units.loc_division_id',
             'organization_units.loc_district_id',
             'organization_units.loc_upazila_id',
-
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
@@ -136,8 +137,10 @@ class OrganizationUnitService
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
+            'organization_unit_types.title_bn as organization_unit_type_title_bn',
             'organization_units.organization_id',
-            'organizations.title_en as organization_name',
+            'organizations.title_en as organization_title_en',
+            'organizations.title_bn as organization_title_bn',
             'organization_units.loc_division_id',
             'organization_units.loc_district_id',
             'organization_units.loc_upazila_id',
@@ -153,7 +156,6 @@ class OrganizationUnitService
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
         });
-
         $organizationUnitBuilder->join('organization_unit_types', function ($join) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
@@ -237,12 +239,13 @@ class OrganizationUnitService
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
+            'organization_unit_types.title_bn as organization_unit_type_title_bn',
             'organization_units.organization_id',
-            'organizations.title_en as organization_name',
+            'organizations.title_en as organization_title_en',
+            'organizations.title_bn as organization_title_bn',
             'organization_units.loc_division_id',
             'organization_units.loc_district_id',
             'organization_units.loc_upazila_id',
-
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',

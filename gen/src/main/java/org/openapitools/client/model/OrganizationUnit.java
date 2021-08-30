@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * Organization Unit type
  */
 @ApiModel(description = "Organization Unit type")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class OrganizationUnit {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -279,7 +279,8 @@ public class OrganizationUnit {
    * location id of division
    * @return locDivisionId
   **/
-  @ApiModelProperty(required = true, value = "location id of division")
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "location id of division")
 
   public Integer getLocDivisionId() {
     return locDivisionId;
@@ -301,7 +302,8 @@ public class OrganizationUnit {
    * location id of district
    * @return locDistrictId
   **/
-  @ApiModelProperty(required = true, value = "location id of district")
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "location id of district")
 
   public Integer getLocDistrictId() {
     return locDistrictId;
@@ -323,7 +325,8 @@ public class OrganizationUnit {
    * location id of upazila
    * @return locUpazilaId
   **/
-  @ApiModelProperty(required = true, value = "location id of upazila")
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "location id of upazila")
 
   public Integer getLocUpazilaId() {
     return locUpazilaId;
@@ -343,8 +346,7 @@ public class OrganizationUnit {
 
    /**
    * organization address
-   * minimum: 2
-   * maximum: 600
+   * maximum: 1000
    * @return address
   **/
   @javax.annotation.Nullable
@@ -439,7 +441,7 @@ public class OrganizationUnit {
    /**
    * Contact person name
    * minimum: 2
-   * maximum: 300
+   * maximum: 191
    * @return contactPersonName
   **/
   @javax.annotation.Nullable

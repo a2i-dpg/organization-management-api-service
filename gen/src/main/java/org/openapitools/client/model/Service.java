@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * provide services
  */
 @ApiModel(description = "provide services")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class Service {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -42,10 +42,6 @@ public class Service {
   public static final String SERIALIZED_NAME_TITLE_BN = "title_bn";
   @SerializedName(SERIALIZED_NAME_TITLE_BN)
   private String titleBn;
-
-  public static final String SERIALIZED_NAME_ORGANIZATION_ID = "organization_id";
-  @SerializedName(SERIALIZED_NAME_ORGANIZATION_ID)
-  private Integer organizationId;
 
   /**
    * Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive
@@ -170,28 +166,6 @@ public class Service {
 
   public void setTitleBn(String titleBn) {
     this.titleBn = titleBn;
-  }
-
-
-  public Service organizationId(Integer organizationId) {
-    
-    this.organizationId = organizationId;
-    return this;
-  }
-
-   /**
-   * Organization id
-   * @return organizationId
-  **/
-  @ApiModelProperty(required = true, value = "Organization id")
-
-  public Integer getOrganizationId() {
-    return organizationId;
-  }
-
-
-  public void setOrganizationId(Integer organizationId) {
-    this.organizationId = organizationId;
   }
 
 
@@ -322,7 +296,6 @@ public class Service {
     return Objects.equals(this.id, service.id) &&
         Objects.equals(this.titleEn, service.titleEn) &&
         Objects.equals(this.titleBn, service.titleBn) &&
-        Objects.equals(this.organizationId, service.organizationId) &&
         Objects.equals(this.rowStatus, service.rowStatus) &&
         Objects.equals(this.createBy, service.createBy) &&
         Objects.equals(this.updatedBy, service.updatedBy) &&
@@ -332,7 +305,7 @@ public class Service {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, titleEn, titleBn, organizationId, rowStatus, createBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, titleEn, titleBn, rowStatus, createBy, updatedBy, createdAt, updatedAt);
   }
 
 
@@ -343,7 +316,6 @@ public class Service {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    titleEn: ").append(toIndentedString(titleEn)).append("\n");
     sb.append("    titleBn: ").append(toIndentedString(titleBn)).append("\n");
-    sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    rowStatus: ").append(toIndentedString(rowStatus)).append("\n");
     sb.append("    createBy: ").append(toIndentedString(createBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");

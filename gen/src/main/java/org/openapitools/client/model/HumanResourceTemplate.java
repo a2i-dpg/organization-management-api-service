@@ -26,11 +26,11 @@ import java.io.IOException;
 import org.threeten.bp.OffsetDateTime;
 
 /**
- * provide rank
+ * Provide Human Resource Template
  */
-@ApiModel(description = "provide rank")
+@ApiModel(description = "Provide Human Resource Template")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
-public class Rank {
+public class HumanResourceTemplate {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private Integer id;
@@ -43,21 +43,82 @@ public class Rank {
   @SerializedName(SERIALIZED_NAME_TITLE_BN)
   private String titleBn;
 
-  public static final String SERIALIZED_NAME_GRADE = "grade";
-  @SerializedName(SERIALIZED_NAME_GRADE)
-  private String grade;
+  public static final String SERIALIZED_NAME_ORGANIZATION_ID = "organization_id";
+  @SerializedName(SERIALIZED_NAME_ORGANIZATION_ID)
+  private Integer organizationId;
+
+  public static final String SERIALIZED_NAME_ORGANIZATION_UNIT_TYPE_ID = "organization_unit_type_id";
+  @SerializedName(SERIALIZED_NAME_ORGANIZATION_UNIT_TYPE_ID)
+  private Integer organizationUnitTypeId;
 
   public static final String SERIALIZED_NAME_DISPLAY_ORDER = "display_order";
   @SerializedName(SERIALIZED_NAME_DISPLAY_ORDER)
   private Integer displayOrder;
 
-  public static final String SERIALIZED_NAME_ORGANIZATION_ID = "organization_id";
-  @SerializedName(SERIALIZED_NAME_ORGANIZATION_ID)
-  private Integer organizationId;
+  public static final String SERIALIZED_NAME_IS_DESIGNATION = "is_designation";
+  @SerializedName(SERIALIZED_NAME_IS_DESIGNATION)
+  private Integer isDesignation;
 
-  public static final String SERIALIZED_NAME_RANK_TYPE_ID = "rank_type_id";
-  @SerializedName(SERIALIZED_NAME_RANK_TYPE_ID)
-  private Integer rankTypeId;
+  public static final String SERIALIZED_NAME_PARENT_ID = "parent_id";
+  @SerializedName(SERIALIZED_NAME_PARENT_ID)
+  private Integer parentId;
+
+  public static final String SERIALIZED_NAME_RANK_ID = "rank_id";
+  @SerializedName(SERIALIZED_NAME_RANK_ID)
+  private Integer rankId;
+
+  /**
+   * 1 &#x3D;&gt; occupied, 2 &#x3D;&gt; vacancy ,0 &#x3D;&gt; inactive
+   */
+  @JsonAdapter(StatusEnum.Adapter.class)
+  public enum StatusEnum {
+    NUMBER_0(0),
+    
+    NUMBER_1(1),
+    
+    NUMBER_2(2);
+
+    private Integer value;
+
+    StatusEnum(Integer value) {
+      this.value = value;
+    }
+
+    public Integer getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static StatusEnum fromValue(Integer value) {
+      for (StatusEnum b : StatusEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<StatusEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final StatusEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public StatusEnum read(final JsonReader jsonReader) throws IOException {
+        Integer value =  jsonReader.nextInt();
+        return StatusEnum.fromValue(value);
+      }
+    }
+  }
+
+  public static final String SERIALIZED_NAME_STATUS = "status";
+  @SerializedName(SERIALIZED_NAME_STATUS)
+  private StatusEnum status;
 
   /**
    * Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive
@@ -141,7 +202,7 @@ public class Rank {
 
 
 
-  public Rank titleEn(String titleEn) {
+  public HumanResourceTemplate titleEn(String titleEn) {
     
     this.titleEn = titleEn;
     return this;
@@ -163,17 +224,17 @@ public class Rank {
   }
 
 
-  public Rank titleBn(String titleBn) {
+  public HumanResourceTemplate titleBn(String titleBn) {
     
     this.titleBn = titleBn;
     return this;
   }
 
    /**
-   * title in Bengali
+   *  title in Bengali
    * @return titleBn
   **/
-  @ApiModelProperty(required = true, value = "title in Bengali")
+  @ApiModelProperty(required = true, value = " title in Bengali")
 
   public String getTitleBn() {
     return titleBn;
@@ -185,63 +246,17 @@ public class Rank {
   }
 
 
-  public Rank grade(String grade) {
-    
-    this.grade = grade;
-    return this;
-  }
-
-   /**
-   * grade
-   * @return grade
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "grade")
-
-  public String getGrade() {
-    return grade;
-  }
-
-
-  public void setGrade(String grade) {
-    this.grade = grade;
-  }
-
-
-  public Rank displayOrder(Integer displayOrder) {
-    
-    this.displayOrder = displayOrder;
-    return this;
-  }
-
-   /**
-   * display order
-   * @return displayOrder
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "display order")
-
-  public Integer getDisplayOrder() {
-    return displayOrder;
-  }
-
-
-  public void setDisplayOrder(Integer displayOrder) {
-    this.displayOrder = displayOrder;
-  }
-
-
-  public Rank organizationId(Integer organizationId) {
+  public HumanResourceTemplate organizationId(Integer organizationId) {
     
     this.organizationId = organizationId;
     return this;
   }
 
    /**
-   * Organization id 
+   * Organization id
    * @return organizationId
   **/
-  @ApiModelProperty(required = true, value = "Organization id ")
+  @ApiModelProperty(required = true, value = "Organization id")
 
   public Integer getOrganizationId() {
     return organizationId;
@@ -253,29 +268,143 @@ public class Rank {
   }
 
 
-  public Rank rankTypeId(Integer rankTypeId) {
+  public HumanResourceTemplate organizationUnitTypeId(Integer organizationUnitTypeId) {
     
-    this.rankTypeId = rankTypeId;
+    this.organizationUnitTypeId = organizationUnitTypeId;
     return this;
   }
 
    /**
-   * RankType id 
-   * @return rankTypeId
+   * Organization unit type id
+   * @return organizationUnitTypeId
   **/
-  @ApiModelProperty(required = true, value = "RankType id ")
+  @ApiModelProperty(required = true, value = "Organization unit type id")
 
-  public Integer getRankTypeId() {
-    return rankTypeId;
+  public Integer getOrganizationUnitTypeId() {
+    return organizationUnitTypeId;
   }
 
 
-  public void setRankTypeId(Integer rankTypeId) {
-    this.rankTypeId = rankTypeId;
+  public void setOrganizationUnitTypeId(Integer organizationUnitTypeId) {
+    this.organizationUnitTypeId = organizationUnitTypeId;
   }
 
 
-  public Rank rowStatus(RowStatusEnum rowStatus) {
+  public HumanResourceTemplate displayOrder(Integer displayOrder) {
+    
+    this.displayOrder = displayOrder;
+    return this;
+  }
+
+   /**
+   * Display order.default &#x3D;&gt;0
+   * @return displayOrder
+  **/
+  @ApiModelProperty(required = true, value = "Display order.default =>0")
+
+  public Integer getDisplayOrder() {
+    return displayOrder;
+  }
+
+
+  public void setDisplayOrder(Integer displayOrder) {
+    this.displayOrder = displayOrder;
+  }
+
+
+  public HumanResourceTemplate isDesignation(Integer isDesignation) {
+    
+    this.isDesignation = isDesignation;
+    return this;
+  }
+
+   /**
+   * 1 &#x3D;&gt; designation, 0 &#x3D;&gt; wings or section
+   * @return isDesignation
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "1 => designation, 0 => wings or section")
+
+  public Integer getIsDesignation() {
+    return isDesignation;
+  }
+
+
+  public void setIsDesignation(Integer isDesignation) {
+    this.isDesignation = isDesignation;
+  }
+
+
+  public HumanResourceTemplate parentId(Integer parentId) {
+    
+    this.parentId = parentId;
+    return this;
+  }
+
+   /**
+   * Self parent id
+   * @return parentId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Self parent id")
+
+  public Integer getParentId() {
+    return parentId;
+  }
+
+
+  public void setParentId(Integer parentId) {
+    this.parentId = parentId;
+  }
+
+
+  public HumanResourceTemplate rankId(Integer rankId) {
+    
+    this.rankId = rankId;
+    return this;
+  }
+
+   /**
+   * Rank id
+   * @return rankId
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Rank id")
+
+  public Integer getRankId() {
+    return rankId;
+  }
+
+
+  public void setRankId(Integer rankId) {
+    this.rankId = rankId;
+  }
+
+
+  public HumanResourceTemplate status(StatusEnum status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * 1 &#x3D;&gt; occupied, 2 &#x3D;&gt; vacancy ,0 &#x3D;&gt; inactive
+   * @return status
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "1 => occupied, 2 => vacancy ,0 => inactive")
+
+  public StatusEnum getStatus() {
+    return status;
+  }
+
+
+  public void setStatus(StatusEnum status) {
+    this.status = status;
+  }
+
+
+  public HumanResourceTemplate rowStatus(RowStatusEnum rowStatus) {
     
     this.rowStatus = rowStatus;
     return this;
@@ -298,7 +427,7 @@ public class Rank {
   }
 
 
-  public Rank createBy(Integer createBy) {
+  public HumanResourceTemplate createBy(Integer createBy) {
     
     this.createBy = createBy;
     return this;
@@ -321,7 +450,7 @@ public class Rank {
   }
 
 
-  public Rank updatedBy(Integer updatedBy) {
+  public HumanResourceTemplate updatedBy(Integer updatedBy) {
     
     this.updatedBy = updatedBy;
     return this;
@@ -344,7 +473,7 @@ public class Rank {
   }
 
 
-  public Rank createdAt(OffsetDateTime createdAt) {
+  public HumanResourceTemplate createdAt(OffsetDateTime createdAt) {
     
     this.createdAt = createdAt;
     return this;
@@ -367,7 +496,7 @@ public class Rank {
   }
 
 
-  public Rank updatedAt(OffsetDateTime updatedAt) {
+  public HumanResourceTemplate updatedAt(OffsetDateTime updatedAt) {
     
     this.updatedAt = updatedAt;
     return this;
@@ -398,38 +527,44 @@ public class Rank {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Rank rank = (Rank) o;
-    return Objects.equals(this.id, rank.id) &&
-        Objects.equals(this.titleEn, rank.titleEn) &&
-        Objects.equals(this.titleBn, rank.titleBn) &&
-        Objects.equals(this.grade, rank.grade) &&
-        Objects.equals(this.displayOrder, rank.displayOrder) &&
-        Objects.equals(this.organizationId, rank.organizationId) &&
-        Objects.equals(this.rankTypeId, rank.rankTypeId) &&
-        Objects.equals(this.rowStatus, rank.rowStatus) &&
-        Objects.equals(this.createBy, rank.createBy) &&
-        Objects.equals(this.updatedBy, rank.updatedBy) &&
-        Objects.equals(this.createdAt, rank.createdAt) &&
-        Objects.equals(this.updatedAt, rank.updatedAt);
+    HumanResourceTemplate humanResourceTemplate = (HumanResourceTemplate) o;
+    return Objects.equals(this.id, humanResourceTemplate.id) &&
+        Objects.equals(this.titleEn, humanResourceTemplate.titleEn) &&
+        Objects.equals(this.titleBn, humanResourceTemplate.titleBn) &&
+        Objects.equals(this.organizationId, humanResourceTemplate.organizationId) &&
+        Objects.equals(this.organizationUnitTypeId, humanResourceTemplate.organizationUnitTypeId) &&
+        Objects.equals(this.displayOrder, humanResourceTemplate.displayOrder) &&
+        Objects.equals(this.isDesignation, humanResourceTemplate.isDesignation) &&
+        Objects.equals(this.parentId, humanResourceTemplate.parentId) &&
+        Objects.equals(this.rankId, humanResourceTemplate.rankId) &&
+        Objects.equals(this.status, humanResourceTemplate.status) &&
+        Objects.equals(this.rowStatus, humanResourceTemplate.rowStatus) &&
+        Objects.equals(this.createBy, humanResourceTemplate.createBy) &&
+        Objects.equals(this.updatedBy, humanResourceTemplate.updatedBy) &&
+        Objects.equals(this.createdAt, humanResourceTemplate.createdAt) &&
+        Objects.equals(this.updatedAt, humanResourceTemplate.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, titleEn, titleBn, grade, displayOrder, organizationId, rankTypeId, rowStatus, createBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, titleEn, titleBn, organizationId, organizationUnitTypeId, displayOrder, isDesignation, parentId, rankId, status, rowStatus, createBy, updatedBy, createdAt, updatedAt);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Rank {\n");
+    sb.append("class HumanResourceTemplate {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    titleEn: ").append(toIndentedString(titleEn)).append("\n");
     sb.append("    titleBn: ").append(toIndentedString(titleBn)).append("\n");
-    sb.append("    grade: ").append(toIndentedString(grade)).append("\n");
-    sb.append("    displayOrder: ").append(toIndentedString(displayOrder)).append("\n");
     sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
-    sb.append("    rankTypeId: ").append(toIndentedString(rankTypeId)).append("\n");
+    sb.append("    organizationUnitTypeId: ").append(toIndentedString(organizationUnitTypeId)).append("\n");
+    sb.append("    displayOrder: ").append(toIndentedString(displayOrder)).append("\n");
+    sb.append("    isDesignation: ").append(toIndentedString(isDesignation)).append("\n");
+    sb.append("    parentId: ").append(toIndentedString(parentId)).append("\n");
+    sb.append("    rankId: ").append(toIndentedString(rankId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    rowStatus: ").append(toIndentedString(rowStatus)).append("\n");
     sb.append("    createBy: ").append(toIndentedString(createBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
