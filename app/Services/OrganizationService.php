@@ -49,8 +49,14 @@ class OrganizationService
             'organizations.description',
             'organizations.logo',
             'organizations.loc_division_id',
+            'loc_divisions.title_en as loc_division_title_en',
+            'loc_divisions.title_bn as loc_division_title_bn',
             'organizations.loc_district_id',
+            'loc_districts.title_en as loc_district_title_en',
+            'loc_districts.title_bn as loc_district_title_bn',
             'organizations.loc_upazila_id',
+            'loc_upazilas.title_en as loc_upazila_title_en',
+            'loc_upazilas.title_bn as loc_upazila_title_bn',
             'organizations.organization_type_id',
             'organization_types.title_en as organization_type_title_en',
             'organization_types.title_bn as organization_type_title_bn',
@@ -68,6 +74,28 @@ class OrganizationService
                 $join->where('organization_types.row_status', $rowStatus);
             }
         });
+        $organizationBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
+            $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
+                ->whereNull('loc_divisions.deleted_at');
+            if (is_numeric($rowStatus)) {
+                $join->where('loc_divisions.row_status', $rowStatus);
+            }
+        });
+        $organizationBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
+            $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+            if (is_numeric($rowStatus)) {
+                $join->where('loc_districts.row_status', $rowStatus);
+            }
+        });
+        $organizationBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
+            $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
+            if (is_numeric($rowStatus)) {
+                $join->where('loc_upazilas.row_status', $rowStatus);
+            }
+        });
+
         $organizationBuilder->orderBy('organizations.id', $order);
 
         if (is_numeric($rowStatus)) {
@@ -129,8 +157,14 @@ class OrganizationService
             'organizations.description',
             'organizations.logo',
             'organizations.loc_division_id',
+            'loc_divisions.title_en as loc_division_title_en',
+            'loc_divisions.title_bn as loc_division_title_bn',
             'organizations.loc_district_id',
+            'loc_districts.title_en as loc_district_title_en',
+            'loc_districts.title_bn as loc_district_title_bn',
             'organizations.loc_upazila_id',
+            'loc_upazilas.title_en as loc_upazila_title_en',
+            'loc_upazilas.title_bn as loc_upazila_title_bn',
             'organizations.organization_type_id',
             'organization_types.title_en as organization_type_title_en',
             'organization_types.title_bn as organization_type_title_bn',
@@ -144,6 +178,19 @@ class OrganizationService
         $organizationBuilder->join('organization_types', function ($join) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
+        });
+        $organizationBuilder->leftjoin('loc_divisions', function ($join){
+            $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
+                ->whereNull('loc_divisions.deleted_at');
+
+        });
+        $organizationBuilder->leftjoin('loc_districts', function ($join) {
+            $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+        $organizationBuilder->leftjoin('loc_upazilas', function ($join){
+            $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
 
         });
         $organizationBuilder->where('organizations.id', '=', $id);
