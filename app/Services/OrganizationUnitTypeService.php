@@ -32,6 +32,7 @@ class OrganizationUnitTypeService
         $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+        $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
 
 
         /** @var Builder $organizationUnitTypeBuilder */
@@ -64,8 +65,12 @@ class OrganizationUnitTypeService
         }
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        elseif (!empty($titleBn)) {
             $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+        }
+        elseif (!empty($organizationId)) {
+            $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
         /** @var Collection $organizationUnitTypes */
@@ -297,6 +302,7 @@ class OrganizationUnitTypeService
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
             'limit' => 'numeric',
+            'organization_id'=>'numeric',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
