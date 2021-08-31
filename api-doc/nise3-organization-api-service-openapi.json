@@ -5461,6 +5461,340 @@
                     "human-resources"
                 ]
             }
+        },
+        "/divisions": {
+            "get": {
+                "summary": "Returns a list of divisions.",
+                "description": " API endpoint to get the list of divisions.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/division"
+                                },
+                                "example": {
+                                    "order": "asc",
+                                    "data": [
+                                        {
+                                            "id": 3,
+                                            "title_bn": "ঢাকা",
+                                            "title_en": "Dhaka",
+                                            "bbs_code": "30",
+                                            "row_status": "1"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": "1 second before"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            }
+        },
+        "/divisions/{divisionId}": {
+            "get": {
+                "summary": "get one",
+                "description": " API endpoint to get the specified division.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/divisionId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get one Division",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/division"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 4,
+                                        "title_bn": "খুলনা",
+                                        "title_en": "Khulna",
+                                        "bbs_code": "40"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": "1 second before"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "tags": [
+                    "Division"
+                ]
+            }
+        },
+        "/districts": {
+            "get": {
+                "summary": "get list",
+                "description": " API endpoint to get the list of districts.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/division"
+                                },
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "started": "10 15 45",
+                                        "finished": "10 15 45"
+                                    },
+                                    "_links": {
+                                        "paginate": [
+                                            {
+                                                "url": null,
+                                                "label": "pagination.previous",
+                                                "active": false
+                                            },
+                                            {
+                                                "url": "http://localhost:8000/api/v1/divisions?page=1",
+                                                "label": "1",
+                                                "active": true
+                                            },
+                                            {
+                                                "url": null,
+                                                "label": "pagination.next",
+                                                "active": false
+                                            }
+                                        ],
+                                        "search": {
+                                            "parameters": [
+                                                "title_en",
+                                                "title_bn"
+                                            ],
+                                            "_link": "http://localhost:8000/api/v1/divisions"
+                                        }
+                                    },
+                                    "_page": {
+                                        "size": 10,
+                                        "total_element": 9,
+                                        "total_page": 1,
+                                        "current_page": 1
+                                    },
+                                    "_order": "ASC"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            }
+        },
+        "/districts/{districtId}": {
+            "get": {
+                "summary": "get one",
+                "description": " API endpoint to get the specified district.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/districtId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get one Division",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/division"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "loc_division_id": 1,
+                                        "title_bn": "Test Title (BN)",
+                                        "title_en": "Test Title (EN)",
+                                        "bbs_code": "1000",
+                                        "division_bbs_code": "10",
+                                        "division_title_bn": "বরিশাল",
+                                        "division_title_en": "Barisal"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": "1 second before"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "tags": [
+                    "District"
+                ]
+            }
+        },
+        "/upazilas": {
+            "get": {
+                "summary": "get list",
+                "description": " API endpoint to get the list of upazilas.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_query"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_bn_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/upazila"
+                                },
+                                "example": {
+                                    "total": 494,
+                                    "order": "asc",
+                                    "row_status": 1,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "loc_district_id": 1,
+                                            "loc_division_id": 1,
+                                            "title_bn": "আমতলী ",
+                                            "title_en": "AMTALI",
+                                            "bbs_code": "09",
+                                            "row_status": "1",
+                                            "district_title_bn": "Test Title (BN)",
+                                            "district_title_en": "Test Title (EN)",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "Test Title (BN)",
+                                            "division_title_en": "Test Title (EN)"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": "1 second before"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            }
+        },
+        "/upazilas/{upazilaId}": {
+            "get": {
+                "summary": "get one",
+                "parameters": [
+                    {
+
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get one Upazila",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/upazila"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "loc_district_id": 1,
+                                        "loc_division_id": 1,
+                                        "title_bn": "আমতলী ",
+                                        "title_en": "AMTALI",
+                                        "bbs_code": "09",
+                                        "district_title_bn": "Test Title (BN)",
+                                        "district_title_en": "Test Title (EN)",
+                                        "division_bbs_code": "10",
+                                        "division_title_bn": "Test Title (BN)",
+                                        "division_title_en": "Test Title (EN)"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": "1 second before"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "tags": [
+                    "Upazila"
+                ]
+            }
         }
     },
     "components": {
@@ -6371,6 +6705,209 @@
                     "display_order",
                     "is_designation"
                 ]
+            },
+            "division": {
+                "type": "object",
+                "description": "Provide the Loc Division",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "Division Title In English",
+                        "minLength": 1,
+                        "maxLength": 255
+                    },
+                    "title_bn": {
+                        "type": "string",
+                        "description": "Division Title In Bengali",
+                        "minLength": 1,
+                        "maxLength": 500
+                    },
+                    "bbs_code": {
+                        "type": "string",
+                        "description": "Division BBS code",
+                        "minLength": 1,
+                        "maxLength": 4
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Division activation status",
+                        "enum": [
+                            1,
+                            0
+                        ]
+                    },
+                    "create_by": {
+                        "type": "integer",
+                        "description": "Division creater id"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "description": "Division modifier id"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "title_en",
+                    "title_bn"
+                ]
+            },
+            "district": {
+                "type": "object",
+                "description": "Provide the Loc District",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "Division Id"
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "District Title In English",
+                        "minLength": 1,
+                        "maxLength": 255
+                    },
+                    "title_bn": {
+                        "type": "string",
+                        "description": "District Title In Bengali",
+                        "minLength": 1,
+                        "maxLength": 500
+                    },
+                    "bbs_code": {
+                        "type": "string",
+                        "description": "District BBS code",
+                        "minLength": 1,
+                        "maxLength": 4
+                    },
+                    "division_bbs_code": {
+                        "type": "string",
+                        "description": "Division BBS code",
+                        "minLength": 1,
+                        "maxLength": 4
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "District activation status",
+                        "enum": [
+                            1,
+                            0
+                        ]
+                    },
+                    "create_by": {
+                        "type": "integer",
+                        "description": "District creater id"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "description": "District modifier id"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "loc_division_id",
+                    "title_en",
+                    "title_bn"
+                ]
+            },
+            "upazila": {
+                "type": "object",
+                "description": "Provide the Loc Upazila Data",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "Division Id"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "Division Id"
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "District Title In English",
+                        "minLength": 1,
+                        "maxLength": 255
+                    },
+                    "title_bn": {
+                        "type": "string",
+                        "description": "District Title In Bengali",
+                        "minLength": 1,
+                        "maxLength": 500
+                    },
+                    "bbs_code": {
+                        "type": "string",
+                        "description": "District BBS code",
+                        "minLength": 1,
+                        "maxLength": 4
+                    },
+                    "division_bbs_code": {
+                        "type": "string",
+                        "description": "Division BBS code",
+                        "minLength": 1,
+                        "maxLength": 4
+                    },
+                    "district_bbs_code": {
+                        "type": "string",
+                        "description": "Division BBS code",
+                        "minLength": 1,
+                        "maxLength": 4
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "District activation status",
+                        "enum": [
+                            1,
+                            0
+                        ]
+                    },
+                    "create_by": {
+                        "type": "integer",
+                        "description": "District creater id"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "description": "District modifier id"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "loc_division_id",
+                    "title_en",
+                    "title_bn"
+                ]
             }
         },
         "parameters": {
@@ -6902,6 +7439,24 @@
                 "name": "row_status",
                 "in": "query",
                 "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            "divisionId": {
+                "name": "divisionId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            "districtId": {
+                "name": "districtId",
+                "in": "path",
+                "required": true,
                 "schema": {
                     "type": "integer",
                     "example": 1

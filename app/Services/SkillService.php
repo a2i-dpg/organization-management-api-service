@@ -28,7 +28,7 @@ class SkillService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
@@ -49,9 +49,8 @@ class SkillService
         );
         $skillBuilder->orderBy('skills.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $skillBuilder->where('skills.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
@@ -61,9 +60,9 @@ class SkillService
 
         /** @var Collection $skills */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $skills = $skillBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $skills = $skillBuilder->paginate($pageSize);
             $paginateData = (object)$skills->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;

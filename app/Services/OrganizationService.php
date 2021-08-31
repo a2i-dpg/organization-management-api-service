@@ -28,7 +28,7 @@ class OrganizationService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
@@ -100,7 +100,6 @@ class OrganizationService
 
         if (is_numeric($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
 
         if (!empty($titleEn)) {
@@ -111,9 +110,9 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $organizations = $organizationBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizations = $organizationBuilder->paginate($pageSize);
             $paginateData = (object)$organizations->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -179,7 +178,7 @@ class OrganizationService
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
         });
-        $organizationBuilder->leftjoin('loc_divisions', function ($join){
+        $organizationBuilder->leftjoin('loc_divisions', function ($join) {
             $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
 
@@ -188,7 +187,7 @@ class OrganizationService
             $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
         });
-        $organizationBuilder->leftjoin('loc_upazilas', function ($join){
+        $organizationBuilder->leftjoin('loc_upazilas', function ($join) {
             $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
 
@@ -252,7 +251,7 @@ class OrganizationService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
+        $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -294,9 +293,9 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $organizations = $organizationBuilder->paginate($limit);
+        if (!is_null($paginate) || !is_null($page_size)) {
+            $page_size = $page_size ?: 10;
+            $organizations = $organizationBuilder->paginate($page_size);
             $paginateData = (object)$organizations->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -450,7 +449,7 @@ class OrganizationService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
+            'page_size' => 'numeric',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

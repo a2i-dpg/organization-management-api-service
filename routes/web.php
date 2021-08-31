@@ -32,6 +32,16 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
+    $router->get('divisions', ['as' => 'divisions.get-list', 'uses' => 'LocDivisionController@getList']);
+    $router->get('divisions/{id}', ['as' => 'divisions.read', 'uses' => 'LocDivisionController@read']);
+
+    $router->get('districts', ['as' => 'districts.get-list', 'uses' => 'LocDistrictController@getList']);
+    $router->get('districts/{id}', ['as' => 'districts.read', 'uses' => 'LocDistrictController@read']);
+
+    $router->get('upazilas', ['as' => 'upazilas.get-list', 'uses' => 'LocUpazilaController@getList']);
+    $router->get('upazilas/{id}', ['as' => 'upazilas.read', 'uses' => 'LocUpazilaController@read']);
+
+
     /** organizationType trash */
     $router->get('organization-types-trashed-data', ['as' => 'organization-types.get-trashed-data', 'uses' => 'OrganizationTypeController@getTrashedData']);
     $router->patch('organization-types-restore/{id}', ['as' => 'organization-types.restore', 'uses' => 'OrganizationTypeController@restore']);
