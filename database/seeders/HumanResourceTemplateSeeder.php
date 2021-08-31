@@ -21,8 +21,8 @@ class HumanResourceTemplateSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        HumanResourceTemplate::query()->truncate();
-        HumanResource::query()->truncate();
+//        HumanResourceTemplate::query()->truncate();
+//        HumanResource::query()->truncate();
 
         $organizationUnits = OrganizationUnit::all();
 

@@ -20,7 +20,7 @@ class LocDivisionsTableSeeder extends Seeder
 
         Schema::disableForeignKeyConstraints();
 
-        DB::table('loc_divisions')->truncate();
+//        DB::table('loc_divisions')->truncate();
 
         DB::table('loc_divisions')->insert(array(
             0 =>

@@ -32,6 +32,7 @@ class OrganizationUnitTypeService
         $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+        $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
 
 
         /** @var Builder $organizationUnitTypeBuilder */
@@ -65,6 +66,9 @@ class OrganizationUnitTypeService
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
             $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+        }
+        if (!empty($organizationId)) {
+            $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
         /** @var Collection $organizationUnitTypes */
@@ -295,6 +299,7 @@ class OrganizationUnitTypeService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
+            'organization_id'=>'numeric',
             'pageSize' => 'numeric',
             'order' => [
                 'string',
