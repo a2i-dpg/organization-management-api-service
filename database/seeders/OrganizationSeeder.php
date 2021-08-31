@@ -28,10 +28,10 @@ class OrganizationSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        OrganizationUnitType::query()->truncate();
-        OrganizationUnit::query()->truncate();
-        RankType::query()->truncate();
-        Rank::query()->truncate();
+//        OrganizationUnitType::query()->truncate();
+//        OrganizationUnit::query()->truncate();
+//        RankType::query()->truncate();
+//        Rank::query()->truncate();
 
         $organizations = Organization::all();
 

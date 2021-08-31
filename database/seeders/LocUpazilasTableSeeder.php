@@ -19,7 +19,7 @@ class LocUpazilasTableSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        DB::table('loc_upazilas')->truncate();
+//        DB::table('loc_upazilas')->truncate();
 
         DB::table('loc_upazilas')->insert(array(
             0 =>
