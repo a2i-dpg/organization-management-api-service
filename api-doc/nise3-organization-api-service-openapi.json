@@ -5648,6 +5648,9 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
+                        "$ref": "#/components/parameters/division_id_optional"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
@@ -7620,6 +7623,15 @@
                 "name": "upazilaId",
                 "in": "path",
                 "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            "division_id_optional": {
+                "name": "division_id",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "integer",
                     "example": 1

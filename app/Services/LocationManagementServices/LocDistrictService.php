@@ -64,7 +64,7 @@ class LocDistrictService
             $districtsBuilder->where('loc_districts.title_bn', 'like', '%' . $titleBn . '%');
         }
 
-        if (!empty($divisionId)) {
+        if (is_numeric($divisionId)) {
             $districtsBuilder->where('loc_districts.loc_division_id', $divisionId);
         }
 
@@ -136,7 +136,7 @@ class LocDistrictService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
-            'division_id' => 'numeric',
+            'division_id' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([(BaseModel::ROW_ORDER_ASC), (BaseModel::ROW_ORDER_DESC)])
