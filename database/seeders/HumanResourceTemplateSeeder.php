@@ -20,7 +20,7 @@ class HumanResourceTemplateSeeder extends Seeder
      */
     public function run()
     {
-//        Schema::disableForeignKeyConstraints();
+        Schema::disableForeignKeyConstraints();
 //        HumanResourceTemplate::query()->truncate();
 //        HumanResource::query()->truncate();
 
@@ -72,7 +72,7 @@ class HumanResourceTemplateSeeder extends Seeder
             ])->create();
 
         }
-//        Schema::enableForeignKeyConstraints();
+        Schema::enableForeignKeyConstraints();
 
     }
 }
