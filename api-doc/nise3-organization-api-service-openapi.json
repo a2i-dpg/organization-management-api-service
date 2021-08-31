@@ -71,10 +71,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -95,7 +95,6 @@
                                     "$ref": "#/components/schemas/organizationType"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -331,10 +330,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -355,7 +354,6 @@
                                     "$ref": "#/components/schemas/organization"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": "10",
@@ -856,13 +854,13 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/organizationId_query"
+                        "$ref": "#/components/parameters/organizationId_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -883,7 +881,6 @@
                                     "$ref": "#/components/schemas/rankType"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "organization_id": "1",
                                     "current_page": 1,
                                     "total_page": 1,
@@ -1146,10 +1143,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -1170,7 +1167,6 @@
                                     "$ref": "#/components/schemas/rank"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 6,
                                     "page_size": "10",
@@ -1595,7 +1591,7 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -1613,7 +1609,6 @@
                                     "$ref": "#/components/schemas/jobSector"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -1673,7 +1668,7 @@
                         "$ref": "#/components/parameters/title_en"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
                         "$ref": "#/components/parameters/title_bn"
@@ -1852,10 +1847,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -1876,7 +1871,6 @@
                                     "$ref": "#/components/schemas/occupation"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": "10",
@@ -2205,10 +2199,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -2229,7 +2223,6 @@
                                     "$ref": "#/components/schemas/skill"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -2550,10 +2543,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -2574,7 +2567,6 @@
                                     "$ref": "#/components/schemas/organizationUnitType"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 2,
                                     "page_size": "10",
@@ -3135,13 +3127,13 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -3159,7 +3151,6 @@
                                     "$ref": "#/components/schemas/organizationUnit"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 2,
                                     "page_size": "10",
@@ -4040,10 +4031,10 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -4064,7 +4055,6 @@
                                     "$ref": "#/components/schemas/service"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -4335,13 +4325,13 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -4359,7 +4349,6 @@
                                     "$ref": "#/components/schemas/humanResourceTemplate"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 5,
                                     "page_size": "10",
@@ -4884,13 +4873,13 @@
                         "$ref": "#/components/parameters/page"
                     },
                     {
-                        "$ref": "#/components/parameters/limit"
+                        "$ref": "#/components/parameters/page_size"
                     },
                     {
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -4908,7 +4897,6 @@
                                     "$ref": "#/components/schemas/humanResource"
                                 },
                                 "example": {
-                                    "row_status": "1",
                                     "current_page": 1,
                                     "total_page": 5,
                                     "page_size": "10",
@@ -5464,14 +5452,14 @@
         },
         "/divisions": {
             "get": {
-                "summary": "Returns a list of divisions.",
+                "summary": "get list",
                 "description": " API endpoint to get the list of divisions.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -5489,14 +5477,95 @@
                                     "$ref": "#/components/schemas/division"
                                 },
                                 "example": {
-                                    "order": "asc",
+                                    "order": "ASC",
                                     "data": [
+                                        {
+                                            "id": 1,
+                                            "title_bn": "বরিশাল",
+                                            "title_en": "Barisal",
+                                            "bbs_code": "10",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_bn": "চট্টগ্রাম",
+                                            "title_en": "Chittagong",
+                                            "bbs_code": "20",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
                                         {
                                             "id": 3,
                                             "title_bn": "ঢাকা",
                                             "title_en": "Dhaka",
                                             "bbs_code": "30",
-                                            "row_status": "1"
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_bn": "খুলনা",
+                                            "title_en": "Khulna",
+                                            "bbs_code": "40",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_bn": "রাজশাহী",
+                                            "title_en": "Rajshahi",
+                                            "bbs_code": "50",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_bn": "রংপুর",
+                                            "title_en": "Rangpur",
+                                            "bbs_code": "60",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_bn": "সিলেট",
+                                            "title_en": "Sylhet",
+                                            "bbs_code": "70",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_bn": "ময়মনসিংহ",
+                                            "title_en": "Mymensingh",
+                                            "bbs_code": "45",
+                                            "row_status": 1,
+                                            "created_by": 0,
+                                            "updated_by": 0,
+                                            "created_at": "2021-08-31T07:11:05.000000Z",
+                                            "updated_at": "2021-08-31T07:11:05.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -5539,7 +5608,12 @@
                                         "id": 4,
                                         "title_bn": "খুলনা",
                                         "title_en": "Khulna",
-                                        "bbs_code": "40"
+                                        "bbs_code": "40",
+                                        "row_status": 1,
+                                        "created_by": 0,
+                                        "updated_by": 0,
+                                        "created_at": "2021-08-31T07:11:05.000000Z",
+                                        "updated_at": "2021-08-31T07:11:05.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5565,7 +5639,7 @@
                 "description": " API endpoint to get the list of districts.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -5586,51 +5660,77 @@
                                     "$ref": "#/components/schemas/division"
                                 },
                                 "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "loc_division_id": 1,
+                                            "title_bn": "বরগুনা",
+                                            "title_en": "BARGUNA",
+                                            "bbs_code": "04",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "loc_division_id": 1,
+                                            "title_bn": "বরিশাল",
+                                            "title_en": "BARISAL",
+                                            "bbs_code": "06",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "loc_division_id": 1,
+                                            "title_bn": "ভোলা",
+                                            "title_en": "BHOLA",
+                                            "bbs_code": "09",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "loc_division_id": 1,
+                                            "title_bn": "ঝালকাঠি",
+                                            "title_en": "JHALOKATI",
+                                            "bbs_code": "42",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
+                                        }
+                                    ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "started": "10 15 45",
-                                        "finished": "10 15 45"
-                                    },
-                                    "_links": {
-                                        "paginate": [
-                                            {
-                                                "url": null,
-                                                "label": "pagination.previous",
-                                                "active": false
-                                            },
-                                            {
-                                                "url": "http://localhost:8000/api/v1/divisions?page=1",
-                                                "label": "1",
-                                                "active": true
-                                            },
-                                            {
-                                                "url": null,
-                                                "label": "pagination.next",
-                                                "active": false
-                                            }
-                                        ],
-                                        "search": {
-                                            "parameters": [
-                                                "title_en",
-                                                "title_bn"
-                                            ],
-                                            "_link": "http://localhost:8000/api/v1/divisions"
-                                        }
-                                    },
-                                    "_page": {
-                                        "size": 10,
-                                        "total_element": 9,
-                                        "total_page": 1,
-                                        "current_page": 1
-                                    },
-                                    "_order": "ASC"
+                                        "query_time": "1 second before"
+                                    }
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "description": "Unexpected error"
                     }
                 },
                 "tags": [
@@ -5659,12 +5759,17 @@
                                     "data": {
                                         "id": 1,
                                         "loc_division_id": 1,
-                                        "title_bn": "Test Title (BN)",
-                                        "title_en": "Test Title (EN)",
-                                        "bbs_code": "1000",
+                                        "title_bn": "বরগুনা",
+                                        "title_en": "BARGUNA",
+                                        "bbs_code": "04",
                                         "division_bbs_code": "10",
                                         "division_title_bn": "বরিশাল",
-                                        "division_title_en": "Barisal"
+                                        "division_title_en": "Barisal",
+                                        "row_status": 1,
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "created_at": "2021-08-31T07:11:06.000000Z",
+                                        "updated_at": "2021-08-31T07:11:06.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5674,9 +5779,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "description": "Unexpected error"
                     }
                 },
                 "tags": [
@@ -5693,7 +5795,7 @@
                         "$ref": "#/components/parameters/order"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_query"
+                        "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
@@ -5711,9 +5813,7 @@
                                     "$ref": "#/components/schemas/upazila"
                                 },
                                 "example": {
-                                    "total": 494,
-                                    "order": "asc",
-                                    "row_status": 1,
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
@@ -5728,6 +5828,60 @@
                                             "division_bbs_code": "10",
                                             "division_title_bn": "Test Title (BN)",
                                             "division_title_en": "Test Title (EN)"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "loc_district_id": 1,
+                                            "loc_division_id": 1,
+                                            "title_bn": "বামনা ",
+                                            "title_en": "BAMNA",
+                                            "bbs_code": "19",
+                                            "district_title_bn": "বরগুনা",
+                                            "district_title_en": "BARGUNA",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "loc_district_id": 1,
+                                            "loc_division_id": 1,
+                                            "title_bn": "বরগুনা সদর ",
+                                            "title_en": "BARGUNA SADAR",
+                                            "bbs_code": "28",
+                                            "district_title_bn": "বরগুনা",
+                                            "district_title_en": "BARGUNA",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "loc_district_id": 1,
+                                            "loc_division_id": 1,
+                                            "title_bn": "বেতাগী ",
+                                            "title_en": "BETAGI",
+                                            "bbs_code": "47",
+                                            "district_title_bn": "বরগুনা",
+                                            "district_title_en": "BARGUNA",
+                                            "division_bbs_code": "10",
+                                            "division_title_bn": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2021-08-31T07:11:06.000000Z",
+                                            "updated_at": "2021-08-31T07:11:06.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -5738,9 +5892,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "description": "Unexpected error"
                     }
                 },
                 "tags": [
@@ -5753,7 +5904,7 @@
                 "summary": "get one",
                 "parameters": [
                     {
-
+                        "$ref": "#/components/parameters/upazilaId"
                     }
                 ],
                 "responses": {
@@ -7366,7 +7517,7 @@
                     "example": 2
                 }
             },
-            "organizationId_query": {
+            "organizationId_optional": {
                 "name": "organization_id",
                 "in": "query",
                 "required": false,
@@ -7426,8 +7577,8 @@
                     "example": 10
                 }
             },
-            "limit": {
-                "name": "limit",
+            "page_size": {
+                "name": "page_size",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -7435,7 +7586,7 @@
                     "example": 10
                 }
             },
-            "row_status_query": {
+            "row_status_optional": {
                 "name": "row_status",
                 "in": "query",
                 "required": false,
@@ -7455,6 +7606,15 @@
             },
             "districtId": {
                 "name": "districtId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            "upazilaId": {
+                "name": "upazilaId",
                 "in": "path",
                 "required": true,
                 "schema": {
