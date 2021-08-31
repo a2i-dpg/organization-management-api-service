@@ -20,9 +20,9 @@ class HumanResourceTemplateSeeder extends Seeder
      */
     public function run()
     {
-        Schema::disableForeignKeyConstraints();
-        HumanResourceTemplate::query()->truncate();
-        HumanResource::query()->truncate();
+//        Schema::disableForeignKeyConstraints();
+//        HumanResourceTemplate::query()->truncate();
+//        HumanResource::query()->truncate();
 
         $organizationUnits = OrganizationUnit::all();
 
@@ -72,7 +72,7 @@ class HumanResourceTemplateSeeder extends Seeder
             ])->create();
 
         }
-        Schema::enableForeignKeyConstraints();
+//        Schema::enableForeignKeyConstraints();
 
     }
 }
