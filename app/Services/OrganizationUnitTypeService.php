@@ -73,6 +73,9 @@ class OrganizationUnitTypeService
             $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
+
+        echo $organizationUnitTypeBuilder->toSql();
+
         /** @var Collection $organizationUnitTypes */
 
         if (is_numeric($paginate) || is_numeric($limit)) {
