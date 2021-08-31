@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\BaseModel;
@@ -67,7 +66,7 @@ class OrganizationUnitTypeService
         } elseif (!empty($titleBn)) {
             $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }
-        if (!empty($organizationId)) {
+        if (is_numeric($organizationId)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
