@@ -28,7 +28,7 @@ class OccupationService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
@@ -58,7 +58,6 @@ class OccupationService
 
         if (is_numeric($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
@@ -68,9 +67,9 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $occupations = $occupationBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $occupations = $occupationBuilder->paginate($pageSize);
             $paginateData = (object)$occupations->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -173,7 +172,7 @@ class OccupationService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
+        $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -201,9 +200,9 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $occupations = $occupationBuilder->paginate($limit);
+        if (!is_null($paginate) || !is_null($page_size)) {
+            $page_size = $page_size ?: 10;
+            $occupations = $occupationBuilder->paginate($page_size);
             $paginateData = (object)$occupations->toArray();
 
             $response['current_page'] = $paginateData->current_page;
@@ -296,7 +295,7 @@ class OccupationService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
+            'page_size' => 'numeric',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

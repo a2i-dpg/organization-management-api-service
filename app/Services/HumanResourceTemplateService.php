@@ -28,7 +28,7 @@ class HumanResourceTemplateService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
@@ -93,7 +93,6 @@ class HumanResourceTemplateService
 
         if (is_numeric($rowStatus)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
 
         if (!empty($titleEn)) {
@@ -104,9 +103,9 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -237,7 +236,7 @@ class HumanResourceTemplateService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
+        $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -278,9 +277,9 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($limit);
+        if (!is_null($paginate) || !is_null($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -399,7 +398,7 @@ class HumanResourceTemplateService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
+            'page_size' => 'numeric',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

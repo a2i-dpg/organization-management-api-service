@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RankTypeService
 {
     /**
-     * @param Request $request
+     * @param array $request
      * @param Carbon $startTime
      * @return mixed
      */
@@ -28,7 +28,7 @@ class RankTypeService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
         $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
@@ -61,11 +61,9 @@ class RankTypeService
 
         if (is_numeric($rowStatus)) {
             $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
         if (is_numeric($organizationId)) {
             $rankTypeBuilder->where('rank_types.organization_id', $organizationId);
-            $response['organization_id'] = $organizationId;
         }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
@@ -75,9 +73,9 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $rankTypes = $rankTypeBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $rankTypes = $rankTypeBuilder->paginate($pageSize);
             $paginateData = (object)$rankTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;

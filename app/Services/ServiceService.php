@@ -30,14 +30,14 @@ class ServiceService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
         /** @var Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
-                'services.id as id',
+                'services.id',
                 'services.title_en',
                 'services.title_bn',
                 'services.row_status',
@@ -51,7 +51,6 @@ class ServiceService
 
         if (is_numeric($rowStatus)) {
             $serviceBuilder->where('services.row_Status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
@@ -61,9 +60,9 @@ class ServiceService
 
         /** @var Collection $services */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $services = $serviceBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $services = $serviceBuilder->paginate($pageSize);
             $paginateData = (object)$services->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -94,7 +93,7 @@ class ServiceService
         /** @var Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
-                'services.id as id',
+                'services.id',
                 'services.title_en',
                 'services.title_bn',
                 'services.row_status',

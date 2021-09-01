@@ -28,7 +28,7 @@ class OrganizationTypeService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
@@ -49,7 +49,6 @@ class OrganizationTypeService
 
         if (is_numeric($rowStatus)) {
             $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
@@ -59,9 +58,9 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $organizationTypes = $organizationTypeBuilder->paginate($limit);
+        if (!is_null($paginate) || !is_null($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -159,7 +158,7 @@ class OrganizationTypeService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
+        $pageSize = $request->query(' $pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -185,9 +184,9 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $organizationTypes = $organizationTypeBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -277,7 +276,7 @@ class OrganizationTypeService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
+            'pageSize' => 'numeric',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

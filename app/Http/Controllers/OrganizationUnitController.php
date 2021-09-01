@@ -225,7 +225,7 @@ class OrganizationUnitController extends Controller
         try {
             $organizationUnit = $this->organizationUnitService->assignService($organizationUnit, $validated['serviceIds']);
             $response = [
-                'data' => $organizationUnit,
+                'data' => $organizationUnit->services()->get(),
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,

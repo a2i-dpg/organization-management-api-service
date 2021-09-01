@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\BaseModel;
@@ -29,7 +28,7 @@ class OrganizationUnitTypeService
         $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
         $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
         $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $limit = array_key_exists('limit', $request) ? $request['limit'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
         $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
@@ -61,23 +60,21 @@ class OrganizationUnitTypeService
 
         if (is_numeric($rowStatus)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.row_status', $rowStatus);
-            $response['row_status'] = $rowStatus;
         }
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
-        }
-        elseif (!empty($titleBn)) {
+        } elseif (!empty($titleBn)) {
             $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }
-        elseif (!empty($organizationId)) {
+        if (is_numeric($organizationId)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
         /** @var Collection $organizationUnitTypes */
 
-        if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
-            $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnitTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -181,7 +178,7 @@ class OrganizationUnitTypeService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
+        $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -209,9 +206,9 @@ class OrganizationUnitTypeService
 
         /** @var Collection $organizationUnitTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($limit);
+        if (!is_null($paginate) || !is_null($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnitTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -301,8 +298,8 @@ class OrganizationUnitTypeService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
             'organization_id'=>'numeric',
+            'pageSize' => 'numeric',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
