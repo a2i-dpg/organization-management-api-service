@@ -19,7 +19,7 @@ class OrganizationTypeTest extends TestCase
             "is_government" => 1
         ];
         $this->post(route($this::ROUTE_PREFIX."store"), $formData)
-            ->seeStatusCode(200);
+            ->seeStatusCode(201);
 
     }
 
