@@ -30,8 +30,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
     $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
 
+    /** Assign service to organization unit */
     $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
+    /** Location Route */
     $router->get('divisions', ['as' => 'divisions.get-list', 'uses' => 'LocDivisionController@getList']);
     $router->get('divisions/{id}', ['as' => 'divisions.read', 'uses' => 'LocDivisionController@read']);
 

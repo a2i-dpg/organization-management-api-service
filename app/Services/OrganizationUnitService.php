@@ -54,8 +54,14 @@ class OrganizationUnitService
             'organizations.title_en as organization_title_en',
             'organizations.title_bn as organization_title_bn',
             'organization_units.loc_division_id',
+            'loc_divisions.title_en as loc_division_title_en',
+            'loc_divisions.title_bn as loc_division_title_bn',
             'organization_units.loc_district_id',
+            'loc_districts.title_en as loc_district_title_en',
+            'loc_districts.title_bn as loc_district_title_bn',
             'organization_units.loc_upazila_id',
+            'loc_upazilas.title_en as loc_upazila_title_en',
+            'loc_upazilas.title_bn as loc_upazila_title_bn',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
@@ -77,6 +83,28 @@ class OrganizationUnitService
                 $join->where('organization_unit_types.row_status', $rowStatus);
             }
         });
+        $organizationUnitBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
+            $join->on('organization_units.loc_division_id', '=', 'loc_divisions.id')
+                ->whereNull('loc_divisions.deleted_at');
+            if (is_numeric($rowStatus)) {
+                $join->where('loc_divisions.row_status', $rowStatus);
+            }
+        });
+        $organizationUnitBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
+            $join->on('organization_units.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+            if (is_numeric($rowStatus)) {
+                $join->where('loc_districts.row_status', $rowStatus);
+            }
+        });
+        $organizationUnitBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
+            $join->on('organization_units.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
+            if (is_numeric($rowStatus)) {
+                $join->where('loc_upazilas.row_status', $rowStatus);
+            }
+        });
+
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
         if (is_numeric($rowStatus)) {
@@ -141,8 +169,14 @@ class OrganizationUnitService
             'organizations.title_en as organization_title_en',
             'organizations.title_bn as organization_title_bn',
             'organization_units.loc_division_id',
+            'loc_divisions.title_en as loc_division_title_en',
+            'loc_divisions.title_bn as loc_division_title_bn',
             'organization_units.loc_district_id',
+            'loc_districts.title_en as loc_district_title_en',
+            'loc_districts.title_bn as loc_district_title_bn',
             'organization_units.loc_upazila_id',
+            'loc_upazilas.title_en as loc_upazila_title_en',
+            'loc_upazilas.title_bn as loc_upazila_title_bn',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
@@ -158,6 +192,19 @@ class OrganizationUnitService
         $organizationUnitBuilder->join('organization_unit_types', function ($join) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
+        });
+
+        $organizationUnitBuilder->leftjoin('loc_divisions', function ($join) {
+            $join->on('organization_units.loc_division_id', '=', 'loc_divisions.id')
+                ->whereNull('loc_divisions.deleted_at');
+        });
+        $organizationUnitBuilder->leftjoin('loc_districts', function ($join) {
+            $join->on('organization_units.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+        $organizationUnitBuilder->leftjoin('loc_upazilas', function ($join) {
+            $join->on('organization_units.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
         });
 
         $organizationUnitBuilder->where('organization_units.id', $id);
@@ -315,7 +362,7 @@ class OrganizationUnitService
     public function assignService(OrganizationUnit $organizationUnit, array $serviceIds): OrganizationUnit
     {
         $validServices = Service::whereIn('id', $serviceIds)->orderBy('id', 'ASC')->pluck('id')->toArray();
-        $organizationUnit->services()->syncWithoutDetaching($validServices);
+        $organizationUnit->services()->sync($validServices);
         return $organizationUnit;
     }
 

@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use BadMethodCallException;
 use ErrorException;
 use Exception;
+
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -103,10 +105,18 @@ class Handler extends ExceptionHandler
                 "message" => "Type Error",
             ];
             return response()->json($errors);
-        } elseif ($e instanceof ParseError) {
+        }
+        elseif ($e instanceof ParseError) {
             $errors = [
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
                 "message" => "Parse Error",
+            ];
+            return response()->json($errors);
+        }
+        elseif ($e instanceof BadMethodCallException) {
+            $errors = [
+                "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => "call a bad method call",
             ];
             return response()->json($errors);
         }

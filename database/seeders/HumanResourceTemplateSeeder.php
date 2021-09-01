@@ -42,7 +42,7 @@ class HumanResourceTemplateSeeder extends Seeder
                     ))
                 ->create();
             HumanResourceTemplate::factory()
-                ->count(3)
+                ->count(5)
                 ->state(
                     new Sequence(
                         [
@@ -63,7 +63,7 @@ class HumanResourceTemplateSeeder extends Seeder
             ])->create();
 
             HumanResource::factory()
-                ->count(3)
+                ->count(5)
                 ->state([
                 'organization_id' => $organizationUnit->organization_id,
                 'organization_unit_id' => $organizationUnit->id,
