@@ -37,7 +37,7 @@ class ServiceService
         /** @var Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
-                'services.id as id',
+                'services.id',
                 'services.title_en',
                 'services.title_bn',
                 'services.row_status',
@@ -93,7 +93,7 @@ class ServiceService
         /** @var Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
-                'services.id as id',
+                'services.id',
                 'services.title_en',
                 'services.title_bn',
                 'services.row_status',

@@ -36,7 +36,7 @@ class SkillService
         /** @var Builder $skillBuilder */
         $skillBuilder = Skill::select(
             [
-                'skills.id as id',
+                'skills.id',
                 'skills.title_en',
                 'skills.title_bn',
                 'skills.description',
@@ -93,7 +93,7 @@ class SkillService
         /** @var Builder $skillBuilder */
         $skillBuilder = Skill::select(
             [
-                'skills.id as id',
+                'skills.id',
                 'skills.title_en',
                 'skills.title_bn',
                 'skills.description',
