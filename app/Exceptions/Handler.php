@@ -83,7 +83,7 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof AuthorizationException) {
             $errors['_response_status'] = [
                 'success' => false,
-                "code" => ResponseAlias::HTTP_FORBIDDEN,
+                "code" => ResponseAlias::HTTP_UNAUTHORIZED,
                 "message" => "Unable to Access",
                 "query_time" => 0
             ];
@@ -92,7 +92,7 @@ class Handler extends ExceptionHandler
             $errors['errors'] = $e->errors();
             $errors['_response_status'] = [
                 'success' => false,
-                "code" => ResponseAlias::HTTP_FORBIDDEN,
+                "code" => ResponseAlias::HTTP_BAD_REQUEST,
                 "message" => "validation Error",
                 "query_time" => 0
             ];
