@@ -124,7 +124,7 @@ class HumanResourceService
 
         $response['order'] = $order;
         $response['data'] = $humanResources->toArray()['data'] ?? $humanResources->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now()),
@@ -308,7 +308,7 @@ class HumanResourceService
 
         $response['order'] = $order;
         $response['data'] = $humanResources->toArray()['data'] ?? $humanResources->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now()),

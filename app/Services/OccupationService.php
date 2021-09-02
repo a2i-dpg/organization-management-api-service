@@ -81,7 +81,7 @@ class OccupationService
 
         $response['order'] = $order;
         $response['data'] = $occupations->toArray()['data'] ?? $occupations->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -215,7 +215,7 @@ class OccupationService
 
         $response['order'] = $order;
         $response['data'] = $occupations->toArray()['data'] ?? $occupations->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
