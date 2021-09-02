@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use BadMethodCallException;
+use Carbon\Carbon;
 use ErrorException;
 use Exception;
 
@@ -61,65 +62,92 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+
         if ($e instanceof HttpResponseException) {
-            $errors = [
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_BAD_REQUEST,
                 "message" => "Invalid Request Format",
+                "query_time" => 0
             ];
             return response()->json($errors);
 
         } elseif ($e instanceof ModelNotFoundException || $e instanceof NotFoundHttpException) {
-            $errors = [
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_NOT_FOUND,
-                "message" => "404 not found",
+                "message" => "Method not found",
+                "query_time" => 0
             ];
             return response()->json($errors);
         } elseif ($e instanceof AuthorizationException) {
-            $errors = [
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_FORBIDDEN,
-                "message" => "Don't have permission to access",
+                "message" => "Unable to Access",
+                "query_time" => 0
             ];
             return response()->json($errors);
         } elseif ($e instanceof ValidationException) {
-            $errors = [
+            $errors['errors'] = $e->errors();
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_FORBIDDEN,
-                "message" => "Validation Fail",
-                'errors' => $e->errors()
+                "message" => "validation Error",
+                "query_time" => 0
             ];
             return response()->json($errors);
         } elseif ($e instanceof BindingResolutionException) {
-            $errors = [
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
-                "message" => "Unable to resolve dependency",
+                "message" => "Binding Resolution Error",
+                "query_time" => 0
             ];
             return response()->json($errors);
         } elseif ($e instanceof ErrorException) {
-            $errors = [
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
-                "message" => "Error Exception",
+                "message" => "Internal Server Side Error",
+                "query_time" => 0
             ];
             return response()->json($errors);
         } elseif ($e instanceof TypeError) {
-            $errors = [
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
                 "message" => "Type Error",
+                "query_time" => 0
             ];
             return response()->json($errors);
-        }
-        elseif ($e instanceof ParseError) {
-            $errors = [
+        } elseif ($e instanceof ParseError) {
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
-                "message" => "Parse Error",
+                "message" => "Parsing Error",
+                "query_time" => 0
             ];
             return response()->json($errors);
-        }
-        elseif ($e instanceof BadMethodCallException) {
-            $errors = [
+        } elseif ($e instanceof BadMethodCallException) {
+            $errors['_response_status'] = [
+                'success' => false,
                 "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
-                "message" => "call a bad method call",
+                "message" => "Call a Bad Method",
+                "query_time" => 0
             ];
             return response()->json($errors);
         }
+        elseif ($e instanceof Exception) {
+            $errors['_response_status'] = [
+                'success' => false,
+                "code" => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => "Internal Server Error",
+                "query_time" => 0
+            ];
+            return response()->json($errors);
+        }
+
         return parent::render($request, $e);
     }
 }

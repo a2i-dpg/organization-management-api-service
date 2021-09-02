@@ -132,7 +132,7 @@ class OrganizationUnitService
 
         $response['order'] = $order;
         $response['data'] = $organizationUnits->toArray()['data'] ?? $organizationUnits->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -326,7 +326,7 @@ class OrganizationUnitService
 
         $response['order'] = $order;
         $response['data'] = $organizationUnits->toArray()['data'] ?? $organizationUnits->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())

@@ -96,7 +96,7 @@ class RankService
 
         $response['order'] = $order;
         $response['data'] = $ranks->toArray()['data'] ?? $ranks->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -248,7 +248,7 @@ class RankService
 
         $response['order'] = $order;
         $response['data'] = $ranks->toArray()['data'] ?? $ranks->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())

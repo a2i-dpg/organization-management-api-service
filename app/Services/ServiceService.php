@@ -74,7 +74,7 @@ class ServiceService
 
         $response['order'] = $order;
         $response['data'] = $services->toArray()['data'] ?? $services->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -204,7 +204,7 @@ class ServiceService
 
         $response['order'] = $order;
         $response['data'] = $services->toArray()['data'] ?? $services->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())

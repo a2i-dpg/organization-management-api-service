@@ -74,7 +74,7 @@ class JobSectorService
 
         $response['order'] = $order;
         $response['data'] = $jobSectors->toArray()['data'] ?? $jobSectors->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -201,7 +201,7 @@ class JobSectorService
 
         $response['order'] = $order;
         $response['data'] = $jobSectors->toArray()['data'] ?? $jobSectors->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
