@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read  Organization organization
  * @property-read  OrganizationUnitType organizationUnitType
  * @property-read  HumanResourceTemplate parent
- * @property-read  HumanResource humanResource
  * @property-read  Rank rank
  */
 class HumanResourceTemplate extends BaseModel
@@ -88,11 +87,4 @@ class HumanResourceTemplate extends BaseModel
         return $this->hasMany(self::class, 'id');
     }
 
-    /**
-     * @return HasMany
-     */
-    public function humanResource(): HasMany
-    {
-        return $this->hasMany(HumanResource::class);
-    }
 }
