@@ -287,8 +287,14 @@ class OrganizationUnitTypeService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => 'Order must be within ASC or DESC',
-            'row_status.in' => 'Row status must be within 1 or 0'
+            'order.in' => [
+                'code' => 30000,
+                "message" => 'Order must be within ASC or DESC',
+            ],
+            'row_status.in' => [
+                'code' => 30000,
+                'message' => 'Row status must be within 1 or 0'
+            ]
         ];
         if (!empty($request['order'])) {
             $request['order'] = strtoupper($request['order']);
@@ -298,7 +304,7 @@ class OrganizationUnitTypeService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'organization_id'=>'numeric',
+            'organization_id' => 'numeric',
             'pageSize' => 'numeric',
             'order' => [
                 'string',
