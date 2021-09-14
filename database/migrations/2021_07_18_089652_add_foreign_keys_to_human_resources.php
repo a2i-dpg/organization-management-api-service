@@ -14,12 +14,6 @@ class AddForeignKeysToHumanResources extends Migration
     public function up()
     {
         Schema::table('human_resources', function (Blueprint $table) {
-            $table->foreign('human_resource_template_id', 'human_resources_fk_human_resource_template_id')
-                ->references('id')
-                ->on('human_resource_templates')
-                ->onUpdate('CASCADE')
-                ->onDelete('SET NULL');
-
             $table->foreign('organization_id', 'human_resources_fk_organization_id')
                 ->references('id')
                 ->on('organizations')

@@ -48,9 +48,6 @@ class HumanResourceService
             'human_resources.organization_unit_id',
             'organization_units.title_en as organization_unit_title_en',
             'organization_units.title_bn as organization_unit_title_bn',
-            'human_resources.human_resource_template_id',
-            'human_resource_templates.title_en as human_resource_template_title_en',
-            'human_resource_templates.title_bn as human_resource_template_title_bn',
             'human_resources.rank_id',
             'ranks.title_en as rank_title_en',
             'ranks.title_bn as rank_title_bn',
@@ -62,13 +59,6 @@ class HumanResourceService
             'human_resources.updated_at'
         ]);
 
-        $humanResourceBuilder->join('human_resource_templates', function ($join) use ($rowStatus) {
-            $join->on('human_resources.human_resource_template_id', '=', 'human_resource_templates.id')
-                ->whereNull('human_resource_templates.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('human_resource_templates.row_status', $rowStatus);
-            }
-        });
         $humanResourceBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
@@ -97,7 +87,7 @@ class HumanResourceService
                 $join->where('t2.row_status', $rowStatus);
             }
         });
-        $humanResourceBuilder->orderBy('human_resource_templates.id', $order);
+        $humanResourceBuilder->orderBy('human_resources.id', $order);
 
         if (is_numeric($rowStatus)) {
             $humanResourceBuilder->where('human_resources.row_status', $rowStatus);
@@ -110,9 +100,9 @@ class HumanResourceService
 
         /** @var Collection $humanResources */
 
-        if (is_numeric($paginate) || is_numeric( $pageSize)) {
-            $pageSize =  $pageSize ?: 10;
-            $humanResources = $humanResourceBuilder->paginate( $pageSize);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $humanResources = $humanResourceBuilder->paginate($pageSize);
             $paginateData = (object)$humanResources->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -156,9 +146,6 @@ class HumanResourceService
             'human_resources.organization_unit_id',
             'organization_units.title_en as organization_unit_title_en',
             'organization_units.title_bn as organization_unit_title_bn',
-            'human_resources.human_resource_template_id',
-            'human_resource_templates.title_en as human_resource_template_title_en',
-            'human_resource_templates.title_bn as human_resource_template_title_bn',
             'human_resources.rank_id',
             'ranks.title_en as rank_title_en',
             'ranks.title_bn as rank_title_bn',
@@ -170,11 +157,6 @@ class HumanResourceService
             'human_resources.updated_at'
         ]);
 
-        $humanResourceBuilder->join('human_resource_templates', function ($join) {
-            $join->on('human_resources.human_resource_template_id', '=', 'human_resource_templates.id')
-                ->whereNull('human_resource_templates.deleted_at');
-
-        });
         $humanResourceBuilder->join('organizations', function ($join) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
@@ -369,11 +351,6 @@ class HumanResourceService
                 'nullable',
                 'int',
                 'exists:human_resources,id'
-            ],
-            'human_resource_template_id' => [
-                'nullable',
-                'int',
-                'exists:human_resource_templates,id'
             ],
             'rank_id' => [
                 'nullable',

@@ -4,7 +4,7 @@ info:
   title: organization management api service
   description: ''
   termsOfService: ''
-  contact: {}
+  contact: { }
   license:
     name: ''
 servers:
@@ -198,7 +198,7 @@ paths:
           description: delete
           content:
             application/json:
-              schema: {}
+              schema: { }
               example:
                 _response_status:
                   success: true
@@ -2095,7 +2095,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: []
+                      children: [ ]
                     - id: 49
                       organization_id: 2
                       organization_unit_type_id: 1
@@ -2153,7 +2153,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: []
+                      children: [ ]
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -2609,7 +2609,7 @@ paths:
                   updated_by: null
                   created_at: '2021-08-30T05:56:15.000000Z'
                   updated_at: '2021-08-30T05:56:15.000000Z'
-                  services: []
+                  services: [ ]
                 _response_status:
                   success: true
                   code: 200
@@ -2824,7 +2824,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-22T12:10:24.000000Z'
                         deleted_at: null
-                      children: []
+                      children: [ ]
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -3562,32 +3562,6 @@ paths:
                 total: 48
                 order: ASC
                 data:
-                  - id: 4
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 4
-                    is_designation: 1
-                    parent_id: 1
-                    parent_title_en: Sales executive
-                    parent_title_bn: Sales executive
-                    organization_id: 1
-                    organization_title_en: Boyer PLC
-                    organization_title_bn: Boyer PLC
-                    organization_unit_id: 1
-                    organization_unit_title_en: Bangking
-                    organization_unit_title_bn: Bangking
-                    human_resource_template_id: 1
-                    human_resource_template_title_en: Marketing Child(Bangking)
-                    human_resource_template_title_bn: Marketing Child(Bangking)
-                    rank_id: 48
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
-                    rank_title_bn: ব্রিগেডিয়ার জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-30T05:56:22.000000Z'
-                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 1
                     title_en: Sales executive
                     title_bn: Sales executive
@@ -3692,136 +3666,6 @@ paths:
                     updated_by: null
                     created_at: '2021-08-30T05:56:22.000000Z'
                     updated_at: '2021-08-30T05:56:22.000000Z'
-                  - id: 5
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 1
-                    is_designation: 1
-                    parent_id: null
-                    parent_title_en: null
-                    parent_title_bn: null
-                    organization_id: 1
-                    organization_title_en: Boyer PLC
-                    organization_title_bn: Boyer PLC
-                    organization_unit_id: 2
-                    organization_unit_title_en: Bangking
-                    organization_unit_title_bn: Bangking
-                    human_resource_template_id: 5
-                    human_resource_template_title_en: Marketing Child(Bangking)
-                    human_resource_template_title_bn: Marketing Child(Bangking)
-                    rank_id: 48
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
-                    rank_title_bn: ব্রিগেডিয়ার জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-30T05:56:22.000000Z'
-                    updated_at: '2021-08-30T05:56:22.000000Z'
-                  - id: 6
-                    title_en: Sales executive
-                    title_bn: Sales executive
-                    display_order: 6
-                    is_designation: 1
-                    parent_id: 5
-                    parent_title_en: Marketing
-                    parent_title_bn: Marketing
-                    organization_id: 1
-                    organization_title_en: Boyer PLC
-                    organization_title_bn: Boyer PLC
-                    organization_unit_id: 2
-                    organization_unit_title_en: Bangking
-                    organization_unit_title_bn: Bangking
-                    human_resource_template_id: 5
-                    human_resource_template_title_en: Marketing Child(Bangking)
-                    human_resource_template_title_bn: Marketing Child(Bangking)
-                    rank_id: 44
-                    rank_title_en: লেফটেন্যান্ট জেনারেল
-                    rank_title_bn: লেফটেন্যান্ট জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-30T05:56:22.000000Z'
-                    updated_at: '2021-08-30T05:56:22.000000Z'
-                  - id: 7
-                    title_en: Sales executive
-                    title_bn: Sales executive
-                    display_order: 9
-                    is_designation: 1
-                    parent_id: 5
-                    parent_title_en: Marketing
-                    parent_title_bn: Marketing
-                    organization_id: 1
-                    organization_title_en: Boyer PLC
-                    organization_title_bn: Boyer PLC
-                    organization_unit_id: 2
-                    organization_unit_title_en: Bangking
-                    organization_unit_title_bn: Bangking
-                    human_resource_template_id: 5
-                    human_resource_template_title_en: Marketing Child(Bangking)
-                    human_resource_template_title_bn: Marketing Child(Bangking)
-                    rank_id: 21
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
-                    rank_title_bn: ব্রিগেডিয়ার জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-30T05:56:22.000000Z'
-                    updated_at: '2021-08-30T05:56:22.000000Z'
-                  - id: 11
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 1
-                    is_designation: 1
-                    parent_id: 9
-                    parent_title_en: Sales executive
-                    parent_title_bn: Sales executive
-                    organization_id: 2
-                    organization_title_en: Baumbach, O'Conner and Shields
-                    organization_title_bn: Baumbach, O'Conner and Shields
-                    organization_unit_id: 3
-                    organization_unit_title_en: Bangking
-                    organization_unit_title_bn: Bangking
-                    human_resource_template_id: 9
-                    human_resource_template_title_en: Marketing Child(Bangking)
-                    human_resource_template_title_bn: Marketing Child(Bangking)
-                    rank_id: 52
-                    rank_title_en: জেনারেল
-                    rank_title_bn: জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-30T05:56:22.000000Z'
-                    updated_at: '2021-08-30T05:56:22.000000Z'
-                  - id: 12
-                    title_en: Sales executive
-                    title_bn: Sales executive
-                    display_order: 8
-                    is_designation: 1
-                    parent_id: 9
-                    parent_title_en: Sales executive
-                    parent_title_bn: Sales executive
-                    organization_id: 2
-                    organization_title_en: Baumbach, O'Conner and Shields
-                    organization_title_bn: Baumbach, O'Conner and Shields
-                    organization_unit_id: 3
-                    organization_unit_title_en: Bangking
-                    organization_unit_title_bn: Bangking
-                    human_resource_template_id: 9
-                    human_resource_template_title_en: Marketing Child(Bangking)
-                    human_resource_template_title_bn: Marketing Child(Bangking)
-                    rank_id: 34
-                    rank_title_en: জেনারেল
-                    rank_title_bn: জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-30T05:56:22.000000Z'
-                    updated_at: '2021-08-30T05:56:22.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -3832,7 +3676,6 @@ paths:
       summary: create
       description: API endpoint to create a Human Resource.A successful request response will show 201 HTTP status code
       parameters:
-        - $ref: '#/components/parameters/human_resource_template_id'
         - $ref: '#/components/parameters/organization_id'
         - $ref: '#/components/parameters/organization_unit_id'
         - $ref: '#/components/parameters/title_en'
@@ -3857,7 +3700,6 @@ paths:
                   organization_id: '2'
                   organization_unit_id: '3'
                   parent_id: '1'
-                  human_resource_template_id: '1'
                   rank_id: '1'
                   display_order: '1'
                   is_designation: '1'
@@ -3901,9 +3743,6 @@ paths:
                   organization_unit_id: 1
                   organization_unit_title_en: Bangking
                   organization_unit_title_bn: Bangking
-                  human_resource_template_id: 1
-                  human_resource_template_title_en: Marketing Child(Bangking)
-                  human_resource_template_title_bn: Marketing Child(Bangking)
                   rank_id: 43
                   rank_title_en: জেনারেল
                   rank_title_bn: জেনারেল
@@ -3924,7 +3763,6 @@ paths:
       description: API endpoint to update an existing organization unit types.A successful request response will show 201 HTTP status code
       parameters:
         - $ref: '#/components/parameters/humanResourceId'
-        - $ref: '#/components/parameters/human_resource_template_id'
         - $ref: '#/components/parameters/organization_id'
         - $ref: '#/components/parameters/organization_unit_id'
         - $ref: '#/components/parameters/title_en'
