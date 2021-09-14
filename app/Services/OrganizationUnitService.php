@@ -471,12 +471,18 @@ class OrganizationUnitService
      */
     public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $customMessage = [
+            'row_status.in' => [
+                'code' => 30000,
+                'message' => 'Row status must be within 1 or 0'
+            ]
+        ];
         $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
             'serviceIds' => 'required|array|min:1',
             'serviceIds.*' => 'required|integer|distinct|min:1'
         ];
-        return Validator::make($data, $rules);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**

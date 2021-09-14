@@ -249,6 +249,12 @@ class OccupationService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $customMessage = [
+            'row_status.in' => [
+                'code' => 30000,
+                'message' => 'Row status must be within 1 or 0'
+            ]
+        ];
         $rules = [
             'title_en' => [
                 'required',
@@ -272,7 +278,7 @@ class OccupationService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
-        return Validator::make($request->all(), $rules);
+        return Validator::make($request->all(), $rules, $customMessage);
     }
 
 
