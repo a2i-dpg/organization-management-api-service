@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string title_en
  * @property string title_bn
  * @property int display_order
- * @property int human_resource_template_id
  * @property int organization_id
  * @property int organization_unit_id
  * @property int parent_id
@@ -22,12 +21,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int is_designation
  * @property int status
  * @property int row_status
- * @property-read HumanResourceTemplate humanResourceTemplate
  * @property-read Organization organization
  * @property-read OrganizationUnit organizationUnit
  * @property-read  HumanResource parent
  */
-
 class HumanResource extends BaseModel
 {
     use SoftDeletes, HasFactory;
@@ -59,14 +56,6 @@ class HumanResource extends BaseModel
     public function organizationUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationUnit::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function humanResourceTemplate(): BelongsTo
-    {
-        return $this->belongsTo(HumanResourceTemplate::class);
     }
 
     /**

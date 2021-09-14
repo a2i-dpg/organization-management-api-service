@@ -57,6 +57,8 @@ public class OccupationApi {
     /**
      * Build call for occupationsGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -69,7 +71,7 @@ public class OccupationApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call occupationsGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call occupationsGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -83,6 +85,14 @@ public class OccupationApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -116,10 +126,10 @@ public class OccupationApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call occupationsGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call occupationsGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = occupationsGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = occupationsGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -128,6 +138,8 @@ public class OccupationApi {
      * get_list
      * API endpoint to get the list of occupations.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -139,8 +151,8 @@ public class OccupationApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public Occupation occupationsGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<Occupation> localVarResp = occupationsGetWithHttpInfo(page, order, titleEn, titleBn);
+    public Occupation occupationsGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<Occupation> localVarResp = occupationsGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -148,6 +160,8 @@ public class OccupationApi {
      * get_list
      * API endpoint to get the list of occupations.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -159,8 +173,8 @@ public class OccupationApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Occupation> occupationsGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = occupationsGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<Occupation> occupationsGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = occupationsGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<Occupation>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -169,6 +183,8 @@ public class OccupationApi {
      * get_list (asynchronously)
      * API endpoint to get the list of occupations.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -181,9 +197,9 @@ public class OccupationApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call occupationsGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<Occupation> _callback) throws ApiException {
+    public okhttp3.Call occupationsGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<Occupation> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = occupationsGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = occupationsGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<Occupation>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -247,7 +263,7 @@ public class OccupationApi {
 
     /**
      * delete
-     *  API endpoint to delete an occupations.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified occupation.A successful request response will show 200 HTTP status code
      * @param occupationId  (required)
      * @return Occupation
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -264,7 +280,7 @@ public class OccupationApi {
 
     /**
      * delete
-     *  API endpoint to delete an occupations.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified occupation.A successful request response will show 200 HTTP status code
      * @param occupationId  (required)
      * @return ApiResponse&lt;Occupation&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -282,7 +298,7 @@ public class OccupationApi {
 
     /**
      * delete (asynchronously)
-     *  API endpoint to delete an occupations.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified occupation.A successful request response will show 200 HTTP status code
      * @param occupationId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -501,7 +517,7 @@ public class OccupationApi {
 
     /**
      * update
-     * API endpoint to update an occupations.A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified occupation.A successful request response will show 200 HTTP status code
      * @param occupationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -521,7 +537,7 @@ public class OccupationApi {
 
     /**
      * update
-     * API endpoint to update an occupations.A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified occupation.A successful request response will show 200 HTTP status code
      * @param occupationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -542,7 +558,7 @@ public class OccupationApi {
 
     /**
      * update (asynchronously)
-     * API endpoint to update an occupations.A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified occupation.A successful request response will show 200 HTTP status code
      * @param occupationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)

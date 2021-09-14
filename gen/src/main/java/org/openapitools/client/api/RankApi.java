@@ -28,7 +28,6 @@ import java.io.IOException;
 
 
 import org.openapitools.client.model.Rank;
-import org.openapitools.client.model.RankType;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -114,7 +113,7 @@ public class RankApi {
 
     /**
      * get_one
-     * API endpoint to get a rank.A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified rank.A successful request response will show 200 HTTP status code
      * @param rankId  (required)
      * @return Rank
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -131,7 +130,7 @@ public class RankApi {
 
     /**
      * get_one
-     * API endpoint to get a rank.A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified rank.A successful request response will show 200 HTTP status code
      * @param rankId  (required)
      * @return ApiResponse&lt;Rank&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -149,7 +148,7 @@ public class RankApi {
 
     /**
      * get_one (asynchronously)
-     * API endpoint to get a rank.A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified rank.A successful request response will show 200 HTTP status code
      * @param rankId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -170,6 +169,8 @@ public class RankApi {
     /**
      * Build call for ranksGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -182,7 +183,7 @@ public class RankApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call ranksGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call ranksGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -196,6 +197,14 @@ public class RankApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -229,10 +238,10 @@ public class RankApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call ranksGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call ranksGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = ranksGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = ranksGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -241,6 +250,8 @@ public class RankApi {
      * get_list
      * API endpoint to get the list of ranks .A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -252,8 +263,8 @@ public class RankApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public Rank ranksGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<Rank> localVarResp = ranksGetWithHttpInfo(page, order, titleEn, titleBn);
+    public Rank ranksGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<Rank> localVarResp = ranksGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -261,6 +272,8 @@ public class RankApi {
      * get_list
      * API endpoint to get the list of ranks .A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -272,8 +285,8 @@ public class RankApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Rank> ranksGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = ranksGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<Rank> ranksGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = ranksGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<Rank>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -282,6 +295,8 @@ public class RankApi {
      * get_list (asynchronously)
      * API endpoint to get the list of ranks .A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -294,9 +309,9 @@ public class RankApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call ranksGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<Rank> _callback) throws ApiException {
+    public okhttp3.Call ranksGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<Rank> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = ranksGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = ranksGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<Rank>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -408,7 +423,7 @@ public class RankApi {
 
     /**
      * create
-     * API endpoint to get the list of ranks.A successful request response will show 200 HTTP status code
+     * API endpoint to create a Rank.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -431,7 +446,7 @@ public class RankApi {
 
     /**
      * create
-     * API endpoint to get the list of ranks.A successful request response will show 200 HTTP status code
+     * API endpoint to create a Rank.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -455,7 +470,7 @@ public class RankApi {
 
     /**
      * create (asynchronously)
-     * API endpoint to get the list of ranks.A successful request response will show 200 HTTP status code
+     * API endpoint to create a Rank.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -538,7 +553,7 @@ public class RankApi {
 
     /**
      * delete
-     *  API endpoint to get a rank.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified rank.A successful request response will show 200 HTTP status code
      * @param rankId  (required)
      * @return Rank
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -555,7 +570,7 @@ public class RankApi {
 
     /**
      * delete
-     *  API endpoint to get a rank.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified rank.A successful request response will show 200 HTTP status code
      * @param rankId  (required)
      * @return ApiResponse&lt;Rank&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -573,7 +588,7 @@ public class RankApi {
 
     /**
      * delete (asynchronously)
-     *  API endpoint to get a rank.A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified rank.A successful request response will show 200 HTTP status code
      * @param rankId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -593,6 +608,7 @@ public class RankApi {
     }
     /**
      * Build call for ranksRankIdPut
+     * @param rankId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -609,11 +625,12 @@ public class RankApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call ranksRankIdPutCall(Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call ranksRankIdPutCall(Integer rankId, Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/ranks/{rankId}";
+        String localVarPath = "/ranks/{rankId}"
+            .replaceAll("\\{" + "rankId" + "\\}", localVarApiClient.escapeString(rankId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -668,7 +685,12 @@ public class RankApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call ranksRankIdPutValidateBeforeCall(Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call ranksRankIdPutValidateBeforeCall(Integer rankId, Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'rankId' is set
+        if (rankId == null) {
+            throw new ApiException("Missing the required parameter 'rankId' when calling ranksRankIdPut(Async)");
+        }
         
         // verify the required parameter 'organizationId' is set
         if (organizationId == null) {
@@ -691,14 +713,15 @@ public class RankApi {
         }
         
 
-        okhttp3.Call localVarCall = ranksRankIdPutCall(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus, _callback);
+        okhttp3.Call localVarCall = ranksRankIdPutCall(rankId, organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus, _callback);
         return localVarCall;
 
     }
 
     /**
      * update
-     * API endpoint to get a rank. A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified rank. A successful request response will show 200 HTTP status code
+     * @param rankId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -706,7 +729,7 @@ public class RankApi {
      * @param grade  (optional)
      * @param displayOrder  (optional)
      * @param rowStatus  (optional)
-     * @return RankType
+     * @return Rank
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -714,14 +737,15 @@ public class RankApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public RankType ranksRankIdPut(Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus) throws ApiException {
-        ApiResponse<RankType> localVarResp = ranksRankIdPutWithHttpInfo(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus);
+    public Rank ranksRankIdPut(Integer rankId, Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus) throws ApiException {
+        ApiResponse<Rank> localVarResp = ranksRankIdPutWithHttpInfo(rankId, organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus);
         return localVarResp.getData();
     }
 
     /**
      * update
-     * API endpoint to get a rank. A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified rank. A successful request response will show 200 HTTP status code
+     * @param rankId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -729,7 +753,7 @@ public class RankApi {
      * @param grade  (optional)
      * @param displayOrder  (optional)
      * @param rowStatus  (optional)
-     * @return ApiResponse&lt;RankType&gt;
+     * @return ApiResponse&lt;Rank&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -737,15 +761,16 @@ public class RankApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<RankType> ranksRankIdPutWithHttpInfo(Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus) throws ApiException {
-        okhttp3.Call localVarCall = ranksRankIdPutValidateBeforeCall(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus, null);
-        Type localVarReturnType = new TypeToken<RankType>(){}.getType();
+    public ApiResponse<Rank> ranksRankIdPutWithHttpInfo(Integer rankId, Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus) throws ApiException {
+        okhttp3.Call localVarCall = ranksRankIdPutValidateBeforeCall(rankId, organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus, null);
+        Type localVarReturnType = new TypeToken<Rank>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * update (asynchronously)
-     * API endpoint to get a rank. A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified rank. A successful request response will show 200 HTTP status code
+     * @param rankId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -762,10 +787,10 @@ public class RankApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call ranksRankIdPutAsync(Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus, final ApiCallback<RankType> _callback) throws ApiException {
+    public okhttp3.Call ranksRankIdPutAsync(Integer rankId, Integer organizationId, String titleEn, String titleBn, Integer rankTypeId, String grade, Integer displayOrder, Integer rowStatus, final ApiCallback<Rank> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = ranksRankIdPutValidateBeforeCall(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus, _callback);
-        Type localVarReturnType = new TypeToken<RankType>(){}.getType();
+        okhttp3.Call localVarCall = ranksRankIdPutValidateBeforeCall(rankId, organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus, _callback);
+        Type localVarReturnType = new TypeToken<Rank>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

@@ -20,24 +20,24 @@ class ServiceService
 {
 
     /**
-     * @param Request $request
+     * @param array $request
      * @param Carbon $startTime
      * @return array
      */
-    public function getServiceList(Request $request, Carbon $startTime): array
+    public function getServiceList(array $request, Carbon $startTime): array
     {
 
-        $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
+        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
+        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
+        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
+        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
 
         /** @var Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
-                'services.id as id',
+                'services.id',
                 'services.title_en',
                 'services.title_bn',
                 'services.row_status',
@@ -49,9 +49,8 @@ class ServiceService
         );
         $serviceBuilder->orderBy('services.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $serviceBuilder->where('services.row_Status', $rowStatus);
-            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
@@ -61,9 +60,9 @@ class ServiceService
 
         /** @var Collection $services */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $services = $serviceBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $services = $serviceBuilder->paginate($pageSize);
             $paginateData = (object)$services->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -75,7 +74,7 @@ class ServiceService
 
         $response['order'] = $order;
         $response['data'] = $services->toArray()['data'] ?? $services->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -94,7 +93,7 @@ class ServiceService
         /** @var Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
-                'services.id as id',
+                'services.id',
                 'services.title_en',
                 'services.title_bn',
                 'services.row_status',
@@ -205,7 +204,7 @@ class ServiceService
 
         $response['order'] = $order;
         $response['data'] = $services->toArray()['data'] ?? $services->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -257,5 +256,35 @@ class ServiceService
             ],
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC',
+            'row_status.in' => 'Row status must be within 1 or 0'
+        ];
+        if (!empty($request['order'])) {
+            $request['order'] = strtoupper($request['order']);
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|min:1',
+            'title_bn' => 'nullable|min:1',
+            'page' => 'numeric|gt:0',
+            'limit' => 'numeric',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "numeric",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

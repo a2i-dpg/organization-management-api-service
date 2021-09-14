@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 delete
 
- API endpoint to get the list of rank types  A successful request response will show 200 HTTP status code
+ API endpoint to get the list of rank types.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -34,7 +34,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankTypesApi apiInstance = new RankTypesApi(defaultClient);
-    Integer rankTypeId = 56; // Integer | 
+    Integer rankTypeId = 3; // Integer | 
     try {
       apiInstance.delete(rankTypeId);
     } catch (ApiException e) {
@@ -70,11 +70,11 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | get_list |  -  |
+**200** | delete |  -  |
 
 <a name="rankTypesGet"></a>
 # **rankTypesGet**
-> RankType rankTypesGet(page, order, titleEn, titleBn)
+> RankType rankTypesGet(page, limit, organizationId, rowStatus, order, titleEn, titleBn)
 
 get_list
 
@@ -95,12 +95,15 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankTypesApi apiInstance = new RankTypesApi(defaultClient);
-    Integer page = 56; // Integer | 
+    Integer page = 1; // Integer | 
+    Integer limit = 10; // Integer | 
+    Integer organizationId = 1; // Integer | 
+    Integer rowStatus = 1; // Integer | 
     String order = "order_example"; // String | 
     String titleEn = "titleEn_example"; // String | 
     String titleBn = "titleBn_example"; // String | 
     try {
-      RankType result = apiInstance.rankTypesGet(page, order, titleEn, titleBn);
+      RankType result = apiInstance.rankTypesGet(page, limit, organizationId, rowStatus, order, titleEn, titleBn);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling RankTypesApi#rankTypesGet");
@@ -118,6 +121,9 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **Integer**|  | [optional]
+ **limit** | **Integer**|  | [optional]
+ **organizationId** | **Integer**|  | [optional]
+ **rowStatus** | **Integer**|  | [optional]
  **order** | **String**|  | [optional] [enum: asc, desc]
  **titleEn** | **String**|  | [optional]
  **titleBn** | **String**|  | [optional]
@@ -163,10 +169,10 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankTypesApi apiInstance = new RankTypesApi(defaultClient);
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    Integer organizationId = 56; // Integer | 
-    String description = "description_example"; // String | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer organizationId = 5; // Integer | 
+    String description = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"; // String | 
     Integer rowStatus = 56; // Integer | 
     try {
       RankType result = apiInstance.rankTypesPost(titleEn, titleBn, organizationId, description, rowStatus);
@@ -233,7 +239,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankTypesApi apiInstance = new RankTypesApi(defaultClient);
-    Integer rankTypeId = 56; // Integer | 
+    Integer rankTypeId = 3; // Integer | 
     try {
       RankType result = apiInstance.rankTypesRankTypeIdGet(rankTypeId);
       System.out.println(result);
@@ -274,7 +280,7 @@ No authorization required
 
 <a name="rankTypesRankTypeIdPut"></a>
 # **rankTypesRankTypeIdPut**
-> RankType rankTypesRankTypeIdPut(titleEn, titleBn, organizationId, description, rowStatus)
+> RankType rankTypesRankTypeIdPut(rankTypeId, titleEn, titleBn, organizationId, description, rowStatus)
 
 update
 
@@ -295,13 +301,14 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankTypesApi apiInstance = new RankTypesApi(defaultClient);
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    Integer organizationId = 56; // Integer | 
-    String description = "description_example"; // String | 
+    Integer rankTypeId = 3; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer organizationId = 5; // Integer | 
+    String description = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"; // String | 
     Integer rowStatus = 56; // Integer | 
     try {
-      RankType result = apiInstance.rankTypesRankTypeIdPut(titleEn, titleBn, organizationId, description, rowStatus);
+      RankType result = apiInstance.rankTypesRankTypeIdPut(rankTypeId, titleEn, titleBn, organizationId, description, rowStatus);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling RankTypesApi#rankTypesRankTypeIdPut");
@@ -318,6 +325,7 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **rankTypeId** | **Integer**|  |
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |
  **organizationId** | **Integer**|  | [optional]

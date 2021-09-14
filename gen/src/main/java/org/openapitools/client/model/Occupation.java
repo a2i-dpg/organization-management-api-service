@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * occupation
  */
 @ApiModel(description = "occupation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-12T12:45:46.254269+06:00[Asia/Dhaka]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-30T13:14:58.337758300+06:00[Asia/Dhaka]")
 public class Occupation {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -136,10 +136,10 @@ public class Occupation {
   }
 
    /**
-   * Rank type title in English
+   *  title in English
    * @return titleEn
   **/
-  @ApiModelProperty(required = true, value = "Rank type title in English")
+  @ApiModelProperty(required = true, value = " title in English")
 
   public String getTitleEn() {
     return titleEn;
@@ -158,10 +158,10 @@ public class Occupation {
   }
 
    /**
-   * Rank type title in Bengali
+   *  title in Bengali
    * @return titleBn
   **/
-  @ApiModelProperty(required = true, value = "Rank type title in Bengali")
+  @ApiModelProperty(required = true, value = " title in Bengali")
 
   public String getTitleBn() {
     return titleBn;

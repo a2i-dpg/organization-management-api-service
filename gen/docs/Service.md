@@ -10,7 +10,6 @@ Name | Type | Description | Notes
 **id** | **Integer** | Primary Key |  [optional] [readonly]
 **titleEn** | **String** | title in English | 
 **titleBn** | **String** |  title in Bengali | 
-**organizationId** | **Integer** | Organization id | 
 **rowStatus** | [**RowStatusEnum**](#RowStatusEnum) | Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive |  [optional]
 **createBy** | **Integer** | Creator |  [optional]
 **updatedBy** | **Integer** | Modifier |  [optional]

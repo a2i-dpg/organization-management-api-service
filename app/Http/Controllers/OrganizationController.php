@@ -43,11 +43,13 @@ class OrganizationController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $filter = $this->organizationService->filterValidator($request)->validate();
         try {
-            $response = $this->organizationService->getAllOrganization($request, $this->startTime);
+            $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

@@ -19,11 +19,11 @@ class OrganizationTypeSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        OrganizationType::query()->truncate();
-        Organization::query()->truncate();
+//        OrganizationType::query()->truncate();
+//        Organization::query()->truncate();
 
         OrganizationType::factory()
-            ->has(Organization::factory()->count(3))
+            ->has(Organization::factory()->count(5))
             ->count(2)
             ->state(new Sequence(
                 [

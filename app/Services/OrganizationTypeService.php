@@ -19,18 +19,19 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizationTypeService
 {
     /**
-     * @param Request $request
+     * @param array $request
      * @param Carbon $startTime
      * @return array
      */
-    public function getAllOrganizationType(Request $request, Carbon $startTime): array
+    public function getAllOrganizationType(array $request, Carbon $startTime): array
     {
-        $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
-        $rowStatus = $request->query('row_status');
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
+        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
+        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
+        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
+        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
+        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+
 
         /** @var Builder $organizationTypeBuilder */
         $organizationTypeBuilder = OrganizationType::select([
@@ -46,9 +47,8 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->orderBy('organization_types.id', $order);
 
-        if (!is_null($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
-            $response['row_status']=$rowStatus;
         }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
@@ -58,9 +58,9 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $organizationTypes = $organizationTypeBuilder->paginate($limit);
+        if (!is_null($paginate) || !is_null($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -72,7 +72,7 @@ class OrganizationTypeService
 
         $response['order'] = $order;
         $response['data'] = $organizationTypes->toArray()['data'] ?? $organizationTypes->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -158,7 +158,7 @@ class OrganizationTypeService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $limit = $request->query('limit', 10);
+        $pageSize = $request->query(' $pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -184,9 +184,9 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $organizationTypes = $organizationTypeBuilder->paginate($limit);
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -198,7 +198,7 @@ class OrganizationTypeService
 
         $response['order'] = $order;
         $response['data'] = $organizationTypes->toArray()['data'] ?? $organizationTypes->toArray();
-        $response['response_status'] = [
+        $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
@@ -255,5 +255,36 @@ class OrganizationTypeService
             ],
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC',
+            'row_status.in' => 'Row status must be within 1 or 0'
+        ];
+
+        if (!empty($request['order'])) {
+            $request['order'] = strtoupper($request['order']);
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|min:1',
+            'title_bn' => 'nullable|min:1',
+            'page' => 'numeric|gt:0',
+            'pageSize' => 'numeric',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "numeric",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

@@ -15,7 +15,6 @@ class CreateHumanResourcesTable extends Migration
     {
         Schema::create('human_resources', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('human_resource_template_id')->nullable();
             $table->unsignedInteger('organization_id');
             $table->unsignedInteger('organization_unit_id');
             $table->string('title_en', 191);

@@ -13,11 +13,11 @@ Method | HTTP request | Description
 
 <a name="humanResourceTemplatesGet"></a>
 # **humanResourceTemplatesGet**
-> humanResourceTemplatesGet()
+> HumanResourceTemplate humanResourceTemplatesGet(page, limit, order, rowStatus, titleEn, titleBn)
 
 get list
 
-###### API endpoint to get the list of organization unit types A successful request response will show 200 HTTP status code
+API endpoint to get the list of Human Resource templates.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -34,8 +34,15 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     HumanResourceTemplatesApi apiInstance = new HumanResourceTemplatesApi(defaultClient);
+    Integer page = 1; // Integer | 
+    Integer limit = 10; // Integer | 
+    String order = "order_example"; // String | 
+    Integer rowStatus = 1; // Integer | 
+    String titleEn = "titleEn_example"; // String | 
+    String titleBn = "titleBn_example"; // String | 
     try {
-      apiInstance.humanResourceTemplatesGet();
+      HumanResourceTemplate result = apiInstance.humanResourceTemplatesGet(page, limit, order, rowStatus, titleEn, titleBn);
+      System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling HumanResourceTemplatesApi#humanResourceTemplatesGet");
       System.err.println("Status code: " + e.getCode());
@@ -48,11 +55,19 @@ public class Example {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **Integer**|  | [optional]
+ **limit** | **Integer**|  | [optional]
+ **order** | **String**|  | [optional] [enum: asc, desc]
+ **rowStatus** | **Integer**|  | [optional]
+ **titleEn** | **String**|  | [optional]
+ **titleBn** | **String**|  | [optional]
 
 ### Return type
 
-null (empty response body)
+[**HumanResourceTemplate**](HumanResourceTemplate.md)
 
 ### Authorization
 
@@ -70,11 +85,11 @@ No authorization required
 
 <a name="humanResourceTemplatesHumanResourceTemplatesIdDelete"></a>
 # **humanResourceTemplatesHumanResourceTemplatesIdDelete**
-> humanResourceTemplatesHumanResourceTemplatesIdDelete(humanResourceTemplatesId)
+> HumanResourceTemplate humanResourceTemplatesHumanResourceTemplatesIdDelete(humanResourceTemplatesId)
 
 delete
 
-###### API endpoint to delete an organization unit type  A successful request response will show 200 HTTP status code
+ API endpoint to delete a Human Resource Template.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -93,7 +108,8 @@ public class Example {
     HumanResourceTemplatesApi apiInstance = new HumanResourceTemplatesApi(defaultClient);
     Integer humanResourceTemplatesId = 1; // Integer | 
     try {
-      apiInstance.humanResourceTemplatesHumanResourceTemplatesIdDelete(humanResourceTemplatesId);
+      HumanResourceTemplate result = apiInstance.humanResourceTemplatesHumanResourceTemplatesIdDelete(humanResourceTemplatesId);
+      System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling HumanResourceTemplatesApi#humanResourceTemplatesHumanResourceTemplatesIdDelete");
       System.err.println("Status code: " + e.getCode());
@@ -113,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**HumanResourceTemplate**](HumanResourceTemplate.md)
 
 ### Authorization
 
@@ -131,11 +147,11 @@ No authorization required
 
 <a name="humanResourceTemplatesHumanResourceTemplatesIdGet"></a>
 # **humanResourceTemplatesHumanResourceTemplatesIdGet**
-> humanResourceTemplatesHumanResourceTemplatesIdGet(humanResourceTemplatesId)
+> HumanResourceTemplate humanResourceTemplatesHumanResourceTemplatesIdGet(humanResourceTemplatesId)
 
 get one
 
-###### API endpoint to get a organization unit type  A successful request response will show 200 HTTP status code
+API endpoint to get a HumanResourceTemplate .A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -154,7 +170,8 @@ public class Example {
     HumanResourceTemplatesApi apiInstance = new HumanResourceTemplatesApi(defaultClient);
     Integer humanResourceTemplatesId = 1; // Integer | 
     try {
-      apiInstance.humanResourceTemplatesHumanResourceTemplatesIdGet(humanResourceTemplatesId);
+      HumanResourceTemplate result = apiInstance.humanResourceTemplatesHumanResourceTemplatesIdGet(humanResourceTemplatesId);
+      System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling HumanResourceTemplatesApi#humanResourceTemplatesHumanResourceTemplatesIdGet");
       System.err.println("Status code: " + e.getCode());
@@ -174,7 +191,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**HumanResourceTemplate**](HumanResourceTemplate.md)
 
 ### Authorization
 
@@ -192,11 +209,11 @@ No authorization required
 
 <a name="humanResourceTemplatesHumanResourceTemplatesIdPut"></a>
 # **humanResourceTemplatesHumanResourceTemplatesIdPut**
-> humanResourceTemplatesHumanResourceTemplatesIdPut(humanResourceTemplatesId, organizationId, titleEn, titleBn, displayOrder, isDesignation, organizationUnitTypeId, parentId, rankId, skillIds)
+> HumanResourceTemplate humanResourceTemplatesHumanResourceTemplatesIdPut(humanResourceTemplatesId, organizationId, titleEn, titleBn, isDesignation, organizationUnitTypeId, parentId, rankId, displayOrder, status, rowStatus)
 
 update
 
-###### API endpoint to update an existing organization unit types   A successful request response will show 201 HTTP status code
+API endpoint to update an existing human resource template .A successful request response will show 201 HTTP status code
 
 ### Example
 ```java
@@ -214,17 +231,19 @@ public class Example {
 
     HumanResourceTemplatesApi apiInstance = new HumanResourceTemplatesApi(defaultClient);
     Integer humanResourceTemplatesId = 1; // Integer | 
-    Integer organizationId = 1; // Integer | 
-    String titleEn = "HRM Templete1_updated"; // String | 
-    String titleBn = "এইচআরএম টেম্পলটেম এক_আপডেটেড"; // String | 
-    BigDecimal displayOrder = new BigDecimal(78); // BigDecimal | 
-    BigDecimal isDesignation = new BigDecimal(78); // BigDecimal | 
-    BigDecimal organizationUnitTypeId = new BigDecimal(78); // BigDecimal | 
-    BigDecimal parentId = new BigDecimal(78); // BigDecimal | 
-    BigDecimal rankId = new BigDecimal(78); // BigDecimal | 
-    BigDecimal skillIds = new BigDecimal(78); // BigDecimal | 
+    Integer organizationId = 2; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer isDesignation = 1; // Integer | 
+    Integer organizationUnitTypeId = 1; // Integer | 
+    Integer parentId = 1; // Integer | 
+    Integer rankId = 1; // Integer | 
+    Integer displayOrder = 1; // Integer | 
+    Integer status = 1; // Integer | 
+    Integer rowStatus = 56; // Integer | 
     try {
-      apiInstance.humanResourceTemplatesHumanResourceTemplatesIdPut(humanResourceTemplatesId, organizationId, titleEn, titleBn, displayOrder, isDesignation, organizationUnitTypeId, parentId, rankId, skillIds);
+      HumanResourceTemplate result = apiInstance.humanResourceTemplatesHumanResourceTemplatesIdPut(humanResourceTemplatesId, organizationId, titleEn, titleBn, isDesignation, organizationUnitTypeId, parentId, rankId, displayOrder, status, rowStatus);
+      System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling HumanResourceTemplatesApi#humanResourceTemplatesHumanResourceTemplatesIdPut");
       System.err.println("Status code: " + e.getCode());
@@ -244,16 +263,17 @@ Name | Type | Description  | Notes
  **organizationId** | **Integer**|  |
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |
- **displayOrder** | **BigDecimal**|  |
- **isDesignation** | **BigDecimal**|  |
- **organizationUnitTypeId** | **BigDecimal**|  |
- **parentId** | **BigDecimal**|  | [optional]
- **rankId** | **BigDecimal**|  | [optional]
- **skillIds** | **BigDecimal**|  | [optional]
+ **isDesignation** | **Integer**|  |
+ **organizationUnitTypeId** | **Integer**|  |
+ **parentId** | **Integer**|  | [optional]
+ **rankId** | **Integer**|  | [optional]
+ **displayOrder** | **Integer**|  | [optional]
+ **status** | **Integer**|  | [optional]
+ **rowStatus** | **Integer**|  | [optional] [enum: 1, 0]
 
 ### Return type
 
-null (empty response body)
+[**HumanResourceTemplate**](HumanResourceTemplate.md)
 
 ### Authorization
 
@@ -267,16 +287,15 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** |  |  -  |
 **201** | update |  -  |
 
 <a name="humanResourceTemplatesPost"></a>
 # **humanResourceTemplatesPost**
-> humanResourceTemplatesPost(organizationId, titleEn, titleBn, displayOrder, isDesignation, organizationUnitTypeId, parentId, rankId, skillIds)
+> HumanResourceTemplate humanResourceTemplatesPost(organizationId, titleEn, titleBn, isDesignation, organizationUnitTypeId, parentId, rankId, displayOrder, status, rowStatus)
 
 create
 
-###### API endpoint to create a organization unit types  A successful request response will show 201 HTTP status code
+ API endpoint to create a Human Resource template.A successful request response will show 201 HTTP status code
 
 ### Example
 ```java
@@ -293,17 +312,19 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     HumanResourceTemplatesApi apiInstance = new HumanResourceTemplatesApi(defaultClient);
-    Integer organizationId = 1; // Integer | 
-    String titleEn = "HRM Templete1"; // String | 
-    String titleBn = "এইচআরএম টেম্পলটেম এক"; // String | 
-    BigDecimal displayOrder = new BigDecimal(78); // BigDecimal | 
-    BigDecimal isDesignation = new BigDecimal(78); // BigDecimal | 
-    BigDecimal organizationUnitTypeId = new BigDecimal(78); // BigDecimal | 
-    BigDecimal parentId = new BigDecimal(78); // BigDecimal | 
-    BigDecimal rankId = new BigDecimal(78); // BigDecimal | 
-    BigDecimal skillIds = new BigDecimal(78); // BigDecimal | 
+    Integer organizationId = 2; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer isDesignation = 1; // Integer | 
+    Integer organizationUnitTypeId = 1; // Integer | 
+    Integer parentId = 1; // Integer | 
+    Integer rankId = 1; // Integer | 
+    Integer displayOrder = 1; // Integer | 
+    Integer status = 1; // Integer | 
+    Integer rowStatus = 56; // Integer | 
     try {
-      apiInstance.humanResourceTemplatesPost(organizationId, titleEn, titleBn, displayOrder, isDesignation, organizationUnitTypeId, parentId, rankId, skillIds);
+      HumanResourceTemplate result = apiInstance.humanResourceTemplatesPost(organizationId, titleEn, titleBn, isDesignation, organizationUnitTypeId, parentId, rankId, displayOrder, status, rowStatus);
+      System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling HumanResourceTemplatesApi#humanResourceTemplatesPost");
       System.err.println("Status code: " + e.getCode());
@@ -322,16 +343,17 @@ Name | Type | Description  | Notes
  **organizationId** | **Integer**|  |
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |
- **displayOrder** | **BigDecimal**|  |
- **isDesignation** | **BigDecimal**|  |
- **organizationUnitTypeId** | **BigDecimal**|  |
- **parentId** | **BigDecimal**|  | [optional]
- **rankId** | **BigDecimal**|  | [optional]
- **skillIds** | **BigDecimal**|  | [optional]
+ **isDesignation** | **Integer**|  |
+ **organizationUnitTypeId** | **Integer**|  |
+ **parentId** | **Integer**|  | [optional]
+ **rankId** | **Integer**|  | [optional]
+ **displayOrder** | **Integer**|  | [optional]
+ **status** | **Integer**|  | [optional]
+ **rowStatus** | **Integer**|  | [optional] [enum: 1, 0]
 
 ### Return type
 
-null (empty response body)
+[**HumanResourceTemplate**](HumanResourceTemplate.md)
 
 ### Authorization
 
@@ -345,6 +367,5 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** |  |  -  |
 **201** | create |  -  |
 

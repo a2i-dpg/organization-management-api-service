@@ -55,8 +55,10 @@ public class OrganizationApi {
     }
 
     /**
-     * Build call for organizationGet
+     * Build call for organizationsGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -69,11 +71,11 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call organizationsGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/organization";
+        String localVarPath = "/organizations";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -83,6 +85,14 @@ public class OrganizationApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -116,10 +126,10 @@ public class OrganizationApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call organizationGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call organizationsGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = organizationGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = organizationsGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -128,6 +138,8 @@ public class OrganizationApi {
      * get list
      * API endpoint to get the list of organizations.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -139,8 +151,8 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public Organization organizationGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<Organization> localVarResp = organizationGetWithHttpInfo(page, order, titleEn, titleBn);
+    public Organization organizationsGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<Organization> localVarResp = organizationsGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -148,6 +160,8 @@ public class OrganizationApi {
      * get list
      * API endpoint to get the list of organizations.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -159,8 +173,8 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Organization> organizationGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = organizationGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<Organization> organizationsGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = organizationsGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<Organization>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -169,6 +183,8 @@ public class OrganizationApi {
      * get list (asynchronously)
      * API endpoint to get the list of organizations.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -181,302 +197,9 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<Organization> _callback) throws ApiException {
+    public okhttp3.Call organizationsGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<Organization> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = organizationGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
-        Type localVarReturnType = new TypeToken<Organization>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for organizationPost
-     * @param organizationTypeId  (required)
-     * @param titleEn  (required)
-     * @param titleBn  (required)
-     * @param mobile  (required)
-     * @param email  (required)
-     * @param contactPersonName  (required)
-     * @param contactPersonMobile  (required)
-     * @param contactPersonEmail  (required)
-     * @param contactPersonDesignation  (required)
-     * @param logo  (required)
-     * @param domain  (required)
-     * @param locDivisionId  (optional)
-     * @param locDistrictId  (optional)
-     * @param locUpazilaId  (optional)
-     * @param address  (optional)
-     * @param faxNo  (optional)
-     * @param description  (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call organizationPostCall(Integer organizationTypeId, String titleEn, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/organization";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (organizationTypeId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organization_type_id", organizationTypeId));
-        }
-
-        if (titleEn != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("title_en", titleEn));
-        }
-
-        if (titleBn != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("title_bn", titleBn));
-        }
-
-        if (locDivisionId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("loc_division_id", locDivisionId));
-        }
-
-        if (locDistrictId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("loc_district_id", locDistrictId));
-        }
-
-        if (locUpazilaId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("loc_upazila_id", locUpazilaId));
-        }
-
-        if (address != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("address", address));
-        }
-
-        if (mobile != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("mobile", mobile));
-        }
-
-        if (email != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("email", email));
-        }
-
-        if (faxNo != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fax_no", faxNo));
-        }
-
-        if (contactPersonName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_name", contactPersonName));
-        }
-
-        if (contactPersonMobile != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_mobile", contactPersonMobile));
-        }
-
-        if (contactPersonEmail != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_email", contactPersonEmail));
-        }
-
-        if (contactPersonDesignation != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_designation", contactPersonDesignation));
-        }
-
-        if (description != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("description", description));
-        }
-
-        if (logo != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("logo", logo));
-        }
-
-        if (domain != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("domain", domain));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call organizationPostValidateBeforeCall(Integer organizationTypeId, String titleEn, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'organizationTypeId' is set
-        if (organizationTypeId == null) {
-            throw new ApiException("Missing the required parameter 'organizationTypeId' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'titleEn' is set
-        if (titleEn == null) {
-            throw new ApiException("Missing the required parameter 'titleEn' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'titleBn' is set
-        if (titleBn == null) {
-            throw new ApiException("Missing the required parameter 'titleBn' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'mobile' is set
-        if (mobile == null) {
-            throw new ApiException("Missing the required parameter 'mobile' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'email' is set
-        if (email == null) {
-            throw new ApiException("Missing the required parameter 'email' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'contactPersonName' is set
-        if (contactPersonName == null) {
-            throw new ApiException("Missing the required parameter 'contactPersonName' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'contactPersonMobile' is set
-        if (contactPersonMobile == null) {
-            throw new ApiException("Missing the required parameter 'contactPersonMobile' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'contactPersonEmail' is set
-        if (contactPersonEmail == null) {
-            throw new ApiException("Missing the required parameter 'contactPersonEmail' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'contactPersonDesignation' is set
-        if (contactPersonDesignation == null) {
-            throw new ApiException("Missing the required parameter 'contactPersonDesignation' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'logo' is set
-        if (logo == null) {
-            throw new ApiException("Missing the required parameter 'logo' when calling organizationPost(Async)");
-        }
-        
-        // verify the required parameter 'domain' is set
-        if (domain == null) {
-            throw new ApiException("Missing the required parameter 'domain' when calling organizationPost(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = organizationPostCall(organizationTypeId, titleEn, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * create
-     * API endpoint to create a organization.A successful request response will show 200 HTTP status code
-     * @param organizationTypeId  (required)
-     * @param titleEn  (required)
-     * @param titleBn  (required)
-     * @param mobile  (required)
-     * @param email  (required)
-     * @param contactPersonName  (required)
-     * @param contactPersonMobile  (required)
-     * @param contactPersonEmail  (required)
-     * @param contactPersonDesignation  (required)
-     * @param logo  (required)
-     * @param domain  (required)
-     * @param locDivisionId  (optional)
-     * @param locDistrictId  (optional)
-     * @param locUpazilaId  (optional)
-     * @param address  (optional)
-     * @param faxNo  (optional)
-     * @param description  (optional)
-     * @return Organization
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
-     </table>
-     */
-    public Organization organizationPost(Integer organizationTypeId, String titleEn, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description) throws ApiException {
-        ApiResponse<Organization> localVarResp = organizationPostWithHttpInfo(organizationTypeId, titleEn, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description);
-        return localVarResp.getData();
-    }
-
-    /**
-     * create
-     * API endpoint to create a organization.A successful request response will show 200 HTTP status code
-     * @param organizationTypeId  (required)
-     * @param titleEn  (required)
-     * @param titleBn  (required)
-     * @param mobile  (required)
-     * @param email  (required)
-     * @param contactPersonName  (required)
-     * @param contactPersonMobile  (required)
-     * @param contactPersonEmail  (required)
-     * @param contactPersonDesignation  (required)
-     * @param logo  (required)
-     * @param domain  (required)
-     * @param locDivisionId  (optional)
-     * @param locDistrictId  (optional)
-     * @param locUpazilaId  (optional)
-     * @param address  (optional)
-     * @param faxNo  (optional)
-     * @param description  (optional)
-     * @return ApiResponse&lt;Organization&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Organization> organizationPostWithHttpInfo(Integer organizationTypeId, String titleEn, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description) throws ApiException {
-        okhttp3.Call localVarCall = organizationPostValidateBeforeCall(organizationTypeId, titleEn, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, null);
-        Type localVarReturnType = new TypeToken<Organization>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * create (asynchronously)
-     * API endpoint to create a organization.A successful request response will show 200 HTTP status code
-     * @param organizationTypeId  (required)
-     * @param titleEn  (required)
-     * @param titleBn  (required)
-     * @param mobile  (required)
-     * @param email  (required)
-     * @param contactPersonName  (required)
-     * @param contactPersonMobile  (required)
-     * @param contactPersonEmail  (required)
-     * @param contactPersonDesignation  (required)
-     * @param logo  (required)
-     * @param domain  (required)
-     * @param locDivisionId  (optional)
-     * @param locDistrictId  (optional)
-     * @param locUpazilaId  (optional)
-     * @param address  (optional)
-     * @param faxNo  (optional)
-     * @param description  (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call organizationPostAsync(Integer organizationTypeId, String titleEn, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, final ApiCallback<Organization> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = organizationPostValidateBeforeCall(organizationTypeId, titleEn, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, _callback);
+        okhttp3.Call localVarCall = organizationsGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<Organization>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -540,7 +263,7 @@ public class OrganizationApi {
 
     /**
      * delete
-     *  API endpoint to delete a specified organization  A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified organization. A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @return Organization
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -557,7 +280,7 @@ public class OrganizationApi {
 
     /**
      * delete
-     *  API endpoint to delete a specified organization  A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified organization. A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @return ApiResponse&lt;Organization&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -575,7 +298,7 @@ public class OrganizationApi {
 
     /**
      * delete (asynchronously)
-     *  API endpoint to delete a specified organization  A successful request response will show 200 HTTP status code
+     *  API endpoint to delete the specified organization. A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -652,8 +375,9 @@ public class OrganizationApi {
 
     /**
      * get one
-     * API endpoint to get a specified organization.A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
+     * @return Organization
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -661,15 +385,16 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get one </td><td>  -  </td></tr>
      </table>
      */
-    public void organizationsOrganizationIdGet(Integer organizationId) throws ApiException {
-        organizationsOrganizationIdGetWithHttpInfo(organizationId);
+    public Organization organizationsOrganizationIdGet(Integer organizationId) throws ApiException {
+        ApiResponse<Organization> localVarResp = organizationsOrganizationIdGetWithHttpInfo(organizationId);
+        return localVarResp.getData();
     }
 
     /**
      * get one
-     * API endpoint to get a specified organization.A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Organization&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -677,14 +402,15 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get one </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> organizationsOrganizationIdGetWithHttpInfo(Integer organizationId) throws ApiException {
+    public ApiResponse<Organization> organizationsOrganizationIdGetWithHttpInfo(Integer organizationId) throws ApiException {
         okhttp3.Call localVarCall = organizationsOrganizationIdGetValidateBeforeCall(organizationId, null);
-        return localVarApiClient.execute(localVarCall);
+        Type localVarReturnType = new TypeToken<Organization>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * get one (asynchronously)
-     * API endpoint to get a specified organization.A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -695,10 +421,11 @@ public class OrganizationApi {
         <tr><td> 200 </td><td> get one </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call organizationsOrganizationIdGetAsync(Integer organizationId, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call organizationsOrganizationIdGetAsync(Integer organizationId, final ApiCallback<Organization> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = organizationsOrganizationIdGetValidateBeforeCall(organizationId, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
+        Type localVarReturnType = new TypeToken<Organization>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
@@ -895,7 +622,7 @@ public class OrganizationApi {
 
     /**
      * update
-     * ###### API endpoint to get a specified organization  A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param organizationTypeId  (required)
      * @param titleEn  (required)
@@ -929,7 +656,7 @@ public class OrganizationApi {
 
     /**
      * update
-     * ###### API endpoint to get a specified organization  A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param organizationTypeId  (required)
      * @param titleEn  (required)
@@ -964,7 +691,7 @@ public class OrganizationApi {
 
     /**
      * update (asynchronously)
-     * ###### API endpoint to get a specified organization  A successful request response will show 200 HTTP status code
+     * API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
      * @param organizationId  (required)
      * @param organizationTypeId  (required)
      * @param titleEn  (required)
@@ -995,6 +722,299 @@ public class OrganizationApi {
     public okhttp3.Call organizationsOrganizationIdPutAsync(Integer organizationId, Integer organizationTypeId, String titleEn, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, String logo, final ApiCallback<Organization> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = organizationsOrganizationIdPutValidateBeforeCall(organizationId, organizationTypeId, titleEn, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, logo, _callback);
+        Type localVarReturnType = new TypeToken<Organization>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for organizationsPost
+     * @param titleEn  (required)
+     * @param organizationTypeId  (required)
+     * @param titleBn  (required)
+     * @param mobile  (required)
+     * @param email  (required)
+     * @param contactPersonName  (required)
+     * @param contactPersonMobile  (required)
+     * @param contactPersonEmail  (required)
+     * @param contactPersonDesignation  (required)
+     * @param logo  (required)
+     * @param domain  (required)
+     * @param locDivisionId  (optional)
+     * @param locDistrictId  (optional)
+     * @param locUpazilaId  (optional)
+     * @param address  (optional)
+     * @param faxNo  (optional)
+     * @param description  (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call organizationsPostCall(String titleEn, Integer organizationTypeId, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/organizations";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (titleEn != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("title_en", titleEn));
+        }
+
+        if (organizationTypeId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organization_type_id", organizationTypeId));
+        }
+
+        if (titleBn != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("title_bn", titleBn));
+        }
+
+        if (locDivisionId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("loc_division_id", locDivisionId));
+        }
+
+        if (locDistrictId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("loc_district_id", locDistrictId));
+        }
+
+        if (locUpazilaId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("loc_upazila_id", locUpazilaId));
+        }
+
+        if (address != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("address", address));
+        }
+
+        if (mobile != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("mobile", mobile));
+        }
+
+        if (email != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("email", email));
+        }
+
+        if (faxNo != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fax_no", faxNo));
+        }
+
+        if (contactPersonName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_name", contactPersonName));
+        }
+
+        if (contactPersonMobile != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_mobile", contactPersonMobile));
+        }
+
+        if (contactPersonEmail != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_email", contactPersonEmail));
+        }
+
+        if (contactPersonDesignation != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("contact_person_designation", contactPersonDesignation));
+        }
+
+        if (description != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("description", description));
+        }
+
+        if (logo != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("logo", logo));
+        }
+
+        if (domain != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("domain", domain));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call organizationsPostValidateBeforeCall(String titleEn, Integer organizationTypeId, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'titleEn' is set
+        if (titleEn == null) {
+            throw new ApiException("Missing the required parameter 'titleEn' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'organizationTypeId' is set
+        if (organizationTypeId == null) {
+            throw new ApiException("Missing the required parameter 'organizationTypeId' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'titleBn' is set
+        if (titleBn == null) {
+            throw new ApiException("Missing the required parameter 'titleBn' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'mobile' is set
+        if (mobile == null) {
+            throw new ApiException("Missing the required parameter 'mobile' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'email' is set
+        if (email == null) {
+            throw new ApiException("Missing the required parameter 'email' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'contactPersonName' is set
+        if (contactPersonName == null) {
+            throw new ApiException("Missing the required parameter 'contactPersonName' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'contactPersonMobile' is set
+        if (contactPersonMobile == null) {
+            throw new ApiException("Missing the required parameter 'contactPersonMobile' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'contactPersonEmail' is set
+        if (contactPersonEmail == null) {
+            throw new ApiException("Missing the required parameter 'contactPersonEmail' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'contactPersonDesignation' is set
+        if (contactPersonDesignation == null) {
+            throw new ApiException("Missing the required parameter 'contactPersonDesignation' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'logo' is set
+        if (logo == null) {
+            throw new ApiException("Missing the required parameter 'logo' when calling organizationsPost(Async)");
+        }
+        
+        // verify the required parameter 'domain' is set
+        if (domain == null) {
+            throw new ApiException("Missing the required parameter 'domain' when calling organizationsPost(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = organizationsPostCall(titleEn, organizationTypeId, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * create
+     * API endpoint to create a organization.A successful request response will show 200 HTTP status code
+     * @param titleEn  (required)
+     * @param organizationTypeId  (required)
+     * @param titleBn  (required)
+     * @param mobile  (required)
+     * @param email  (required)
+     * @param contactPersonName  (required)
+     * @param contactPersonMobile  (required)
+     * @param contactPersonEmail  (required)
+     * @param contactPersonDesignation  (required)
+     * @param logo  (required)
+     * @param domain  (required)
+     * @param locDivisionId  (optional)
+     * @param locDistrictId  (optional)
+     * @param locUpazilaId  (optional)
+     * @param address  (optional)
+     * @param faxNo  (optional)
+     * @param description  (optional)
+     * @return Organization
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
+     </table>
+     */
+    public Organization organizationsPost(String titleEn, Integer organizationTypeId, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description) throws ApiException {
+        ApiResponse<Organization> localVarResp = organizationsPostWithHttpInfo(titleEn, organizationTypeId, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description);
+        return localVarResp.getData();
+    }
+
+    /**
+     * create
+     * API endpoint to create a organization.A successful request response will show 200 HTTP status code
+     * @param titleEn  (required)
+     * @param organizationTypeId  (required)
+     * @param titleBn  (required)
+     * @param mobile  (required)
+     * @param email  (required)
+     * @param contactPersonName  (required)
+     * @param contactPersonMobile  (required)
+     * @param contactPersonEmail  (required)
+     * @param contactPersonDesignation  (required)
+     * @param logo  (required)
+     * @param domain  (required)
+     * @param locDivisionId  (optional)
+     * @param locDistrictId  (optional)
+     * @param locUpazilaId  (optional)
+     * @param address  (optional)
+     * @param faxNo  (optional)
+     * @param description  (optional)
+     * @return ApiResponse&lt;Organization&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Organization> organizationsPostWithHttpInfo(String titleEn, Integer organizationTypeId, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description) throws ApiException {
+        okhttp3.Call localVarCall = organizationsPostValidateBeforeCall(titleEn, organizationTypeId, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, null);
+        Type localVarReturnType = new TypeToken<Organization>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * create (asynchronously)
+     * API endpoint to create a organization.A successful request response will show 200 HTTP status code
+     * @param titleEn  (required)
+     * @param organizationTypeId  (required)
+     * @param titleBn  (required)
+     * @param mobile  (required)
+     * @param email  (required)
+     * @param contactPersonName  (required)
+     * @param contactPersonMobile  (required)
+     * @param contactPersonEmail  (required)
+     * @param contactPersonDesignation  (required)
+     * @param logo  (required)
+     * @param domain  (required)
+     * @param locDivisionId  (optional)
+     * @param locDistrictId  (optional)
+     * @param locUpazilaId  (optional)
+     * @param address  (optional)
+     * @param faxNo  (optional)
+     * @param description  (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call organizationsPostAsync(String titleEn, Integer organizationTypeId, String titleBn, String mobile, String email, String contactPersonName, String contactPersonMobile, String contactPersonEmail, String contactPersonDesignation, String logo, String domain, Integer locDivisionId, Integer locDistrictId, Integer locUpazilaId, String address, String faxNo, String description, final ApiCallback<Organization> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = organizationsPostValidateBeforeCall(titleEn, organizationTypeId, titleBn, mobile, email, contactPersonName, contactPersonMobile, contactPersonEmail, contactPersonDesignation, logo, domain, locDivisionId, locDistrictId, locUpazilaId, address, faxNo, description, _callback);
         Type localVarReturnType = new TypeToken<Organization>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

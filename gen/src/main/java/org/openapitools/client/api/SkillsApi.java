@@ -57,6 +57,8 @@ public class SkillsApi {
     /**
      * Build call for skillsGet
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -69,7 +71,7 @@ public class SkillsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call skillsGetCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call skillsGetCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -83,6 +85,14 @@ public class SkillsApi {
 
         if (page != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (rowStatus != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("row_status", rowStatus));
         }
 
         if (order != null) {
@@ -116,10 +126,10 @@ public class SkillsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call skillsGetValidateBeforeCall(Integer page, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call skillsGetValidateBeforeCall(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = skillsGetCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = skillsGetCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         return localVarCall;
 
     }
@@ -128,6 +138,8 @@ public class SkillsApi {
      * get_list
      * API endpoint to get the list of Skills.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -139,8 +151,8 @@ public class SkillsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public Skill skillsGet(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        ApiResponse<Skill> localVarResp = skillsGetWithHttpInfo(page, order, titleEn, titleBn);
+    public Skill skillsGet(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        ApiResponse<Skill> localVarResp = skillsGetWithHttpInfo(page, limit, rowStatus, order, titleEn, titleBn);
         return localVarResp.getData();
     }
 
@@ -148,6 +160,8 @@ public class SkillsApi {
      * get_list
      * API endpoint to get the list of Skills.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -159,8 +173,8 @@ public class SkillsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Skill> skillsGetWithHttpInfo(Integer page, String order, String titleEn, String titleBn) throws ApiException {
-        okhttp3.Call localVarCall = skillsGetValidateBeforeCall(page, order, titleEn, titleBn, null);
+    public ApiResponse<Skill> skillsGetWithHttpInfo(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn) throws ApiException {
+        okhttp3.Call localVarCall = skillsGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, null);
         Type localVarReturnType = new TypeToken<Skill>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -169,6 +183,8 @@ public class SkillsApi {
      * get_list (asynchronously)
      * API endpoint to get the list of Skills.A successful request response will show 200 HTTP status code
      * @param page  (optional)
+     * @param limit  (optional)
+     * @param rowStatus  (optional)
      * @param order  (optional)
      * @param titleEn  (optional)
      * @param titleBn  (optional)
@@ -181,16 +197,15 @@ public class SkillsApi {
         <tr><td> 200 </td><td> get_list </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call skillsGetAsync(Integer page, String order, String titleEn, String titleBn, final ApiCallback<Skill> _callback) throws ApiException {
+    public okhttp3.Call skillsGetAsync(Integer page, Integer limit, Integer rowStatus, String order, String titleEn, String titleBn, final ApiCallback<Skill> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = skillsGetValidateBeforeCall(page, order, titleEn, titleBn, _callback);
+        okhttp3.Call localVarCall = skillsGetValidateBeforeCall(page, limit, rowStatus, order, titleEn, titleBn, _callback);
         Type localVarReturnType = new TypeToken<Skill>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
      * Build call for skillsPost
-     * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
      * @param description  (optional)
@@ -204,7 +219,7 @@ public class SkillsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call skillsPostCall(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call skillsPostCall(String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -215,10 +230,6 @@ public class SkillsApi {
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (organizationId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organization_id", organizationId));
-        }
 
         if (titleEn != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("title_en", titleEn));
@@ -255,12 +266,7 @@ public class SkillsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call skillsPostValidateBeforeCall(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'organizationId' is set
-        if (organizationId == null) {
-            throw new ApiException("Missing the required parameter 'organizationId' when calling skillsPost(Async)");
-        }
+    private okhttp3.Call skillsPostValidateBeforeCall(String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'titleEn' is set
         if (titleEn == null) {
@@ -273,7 +279,7 @@ public class SkillsApi {
         }
         
 
-        okhttp3.Call localVarCall = skillsPostCall(organizationId, titleEn, titleBn, description, rowStatus, _callback);
+        okhttp3.Call localVarCall = skillsPostCall(titleEn, titleBn, description, rowStatus, _callback);
         return localVarCall;
 
     }
@@ -281,7 +287,6 @@ public class SkillsApi {
     /**
      * create
      * API endpoint to create a Skill.A successful request response will show 200 HTTP status code
-     * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
      * @param description  (optional)
@@ -294,15 +299,14 @@ public class SkillsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public Skill skillsPost(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
-        ApiResponse<Skill> localVarResp = skillsPostWithHttpInfo(organizationId, titleEn, titleBn, description, rowStatus);
+    public Skill skillsPost(String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
+        ApiResponse<Skill> localVarResp = skillsPostWithHttpInfo(titleEn, titleBn, description, rowStatus);
         return localVarResp.getData();
     }
 
     /**
      * create
      * API endpoint to create a Skill.A successful request response will show 200 HTTP status code
-     * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
      * @param description  (optional)
@@ -315,8 +319,8 @@ public class SkillsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Skill> skillsPostWithHttpInfo(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
-        okhttp3.Call localVarCall = skillsPostValidateBeforeCall(organizationId, titleEn, titleBn, description, rowStatus, null);
+    public ApiResponse<Skill> skillsPostWithHttpInfo(String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
+        okhttp3.Call localVarCall = skillsPostValidateBeforeCall(titleEn, titleBn, description, rowStatus, null);
         Type localVarReturnType = new TypeToken<Skill>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -324,7 +328,6 @@ public class SkillsApi {
     /**
      * create (asynchronously)
      * API endpoint to create a Skill.A successful request response will show 200 HTTP status code
-     * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
      * @param description  (optional)
@@ -338,9 +341,9 @@ public class SkillsApi {
         <tr><td> 200 </td><td> create </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call skillsPostAsync(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback<Skill> _callback) throws ApiException {
+    public okhttp3.Call skillsPostAsync(String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback<Skill> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = skillsPostValidateBeforeCall(organizationId, titleEn, titleBn, description, rowStatus, _callback);
+        okhttp3.Call localVarCall = skillsPostValidateBeforeCall(titleEn, titleBn, description, rowStatus, _callback);
         Type localVarReturnType = new TypeToken<Skill>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
@@ -404,7 +407,7 @@ public class SkillsApi {
 
     /**
      * delete
-     * API endpoint to delete a specified Skill.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified Skill.A successful request response will show 200 HTTP status code
      * @param skillId  (required)
      * @return Skill
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -421,7 +424,7 @@ public class SkillsApi {
 
     /**
      * delete
-     * API endpoint to delete a specified Skill.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified Skill.A successful request response will show 200 HTTP status code
      * @param skillId  (required)
      * @return ApiResponse&lt;Skill&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -439,7 +442,7 @@ public class SkillsApi {
 
     /**
      * delete (asynchronously)
-     * API endpoint to delete a specified Skill.A successful request response will show 200 HTTP status code
+     * API endpoint to delete the specified Skill.A successful request response will show 200 HTTP status code
      * @param skillId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -571,6 +574,7 @@ public class SkillsApi {
     }
     /**
      * Build call for skillsSkillIdPut
+     * @param skillId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -585,11 +589,12 @@ public class SkillsApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call skillsSkillIdPutCall(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call skillsSkillIdPutCall(Integer skillId, Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/skills/{skillId}";
+        String localVarPath = "/skills/{skillId}"
+            .replaceAll("\\{" + "skillId" + "\\}", localVarApiClient.escapeString(skillId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -636,7 +641,12 @@ public class SkillsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call skillsSkillIdPutValidateBeforeCall(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call skillsSkillIdPutValidateBeforeCall(Integer skillId, Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'skillId' is set
+        if (skillId == null) {
+            throw new ApiException("Missing the required parameter 'skillId' when calling skillsSkillIdPut(Async)");
+        }
         
         // verify the required parameter 'organizationId' is set
         if (organizationId == null) {
@@ -654,14 +664,15 @@ public class SkillsApi {
         }
         
 
-        okhttp3.Call localVarCall = skillsSkillIdPutCall(organizationId, titleEn, titleBn, description, rowStatus, _callback);
+        okhttp3.Call localVarCall = skillsSkillIdPutCall(skillId, organizationId, titleEn, titleBn, description, rowStatus, _callback);
         return localVarCall;
 
     }
 
     /**
      * update
-     * API endpoint to get a specified Skill. A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified Skill. A successful request response will show 200 HTTP status code
+     * @param skillId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -675,14 +686,15 @@ public class SkillsApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public Skill skillsSkillIdPut(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
-        ApiResponse<Skill> localVarResp = skillsSkillIdPutWithHttpInfo(organizationId, titleEn, titleBn, description, rowStatus);
+    public Skill skillsSkillIdPut(Integer skillId, Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
+        ApiResponse<Skill> localVarResp = skillsSkillIdPutWithHttpInfo(skillId, organizationId, titleEn, titleBn, description, rowStatus);
         return localVarResp.getData();
     }
 
     /**
      * update
-     * API endpoint to get a specified Skill. A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified Skill. A successful request response will show 200 HTTP status code
+     * @param skillId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -696,15 +708,16 @@ public class SkillsApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Skill> skillsSkillIdPutWithHttpInfo(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
-        okhttp3.Call localVarCall = skillsSkillIdPutValidateBeforeCall(organizationId, titleEn, titleBn, description, rowStatus, null);
+    public ApiResponse<Skill> skillsSkillIdPutWithHttpInfo(Integer skillId, Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus) throws ApiException {
+        okhttp3.Call localVarCall = skillsSkillIdPutValidateBeforeCall(skillId, organizationId, titleEn, titleBn, description, rowStatus, null);
         Type localVarReturnType = new TypeToken<Skill>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * update (asynchronously)
-     * API endpoint to get a specified Skill. A successful request response will show 200 HTTP status code
+     * API endpoint to update the specified Skill. A successful request response will show 200 HTTP status code
+     * @param skillId  (required)
      * @param organizationId  (required)
      * @param titleEn  (required)
      * @param titleBn  (required)
@@ -719,9 +732,9 @@ public class SkillsApi {
         <tr><td> 200 </td><td> update </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call skillsSkillIdPutAsync(Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback<Skill> _callback) throws ApiException {
+    public okhttp3.Call skillsSkillIdPutAsync(Integer skillId, Integer organizationId, String titleEn, String titleBn, String description, Integer rowStatus, final ApiCallback<Skill> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = skillsSkillIdPutValidateBeforeCall(organizationId, titleEn, titleBn, description, rowStatus, _callback);
+        okhttp3.Call localVarCall = skillsSkillIdPutValidateBeforeCall(skillId, organizationId, titleEn, titleBn, description, rowStatus, _callback);
         Type localVarReturnType = new TypeToken<Skill>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

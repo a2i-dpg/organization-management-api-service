@@ -8,8 +8,8 @@ occupation
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **Integer** | Primary Key |  [optional] [readonly]
-**titleEn** | **String** | Rank type title in English | 
-**titleBn** | **String** | Rank type title in Bengali | 
+**titleEn** | **String** |  title in English | 
+**titleBn** | **String** |  title in Bengali | 
 **jobSectorId** | **Integer** | Job sector id | 
 **rowStatus** | [**RowStatusEnum**](#RowStatusEnum) | Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive |  [optional]
 **createBy** | **Integer** | Creator |  [optional]

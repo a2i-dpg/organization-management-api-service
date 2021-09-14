@@ -21,8 +21,8 @@ class HumanResourceTemplateSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        HumanResourceTemplate::query()->truncate();
-        HumanResource::query()->truncate();
+//        HumanResourceTemplate::query()->truncate();
+//        HumanResource::query()->truncate();
 
         $organizationUnits = OrganizationUnit::all();
 
@@ -42,7 +42,7 @@ class HumanResourceTemplateSeeder extends Seeder
                     ))
                 ->create();
             HumanResourceTemplate::factory()
-                ->count(3)
+                ->count(5)
                 ->state(
                     new Sequence(
                         [
@@ -55,21 +55,19 @@ class HumanResourceTemplateSeeder extends Seeder
                     ))
                 ->create();
 
-            $humanResouceRoot=HumanResource::factory()->state([
+            $humanResouceRoot = HumanResource::factory()->state([
                 'organization_id' => $organizationUnit->organization_id,
                 'organization_unit_id' => $organizationUnit->id,
-                'human_resource_template_id' => $humanisersTemplateRoot->id,
                 'parent_id' => null
             ])->create();
 
             HumanResource::factory()
-                ->count(3)
+                ->count(5)
                 ->state([
-                'organization_id' => $organizationUnit->organization_id,
-                'organization_unit_id' => $organizationUnit->id,
-                'human_resource_template_id' => $humanisersTemplateRoot->id,
-                'parent_id' => $humanResouceRoot->id
-            ])->create();
+                    'organization_id' => $organizationUnit->organization_id,
+                    'organization_unit_id' => $organizationUnit->id,
+                    'parent_id' => $humanResouceRoot->id
+                ])->create();
 
         }
         Schema::enableForeignKeyConstraints();

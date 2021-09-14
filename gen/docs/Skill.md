@@ -11,9 +11,8 @@ Name | Type | Description | Notes
 **titleEn** | **String** | title in English | 
 **titleBn** | **String** |  title in Bengali | 
 **description** | **String** | Details of a skill |  [optional]
-**organizationId** | **Integer** | Organization id |  [optional]
 **rowStatus** | [**RowStatusEnum**](#RowStatusEnum) | Activation status .1 &#x3D;&gt; active ,0&#x3D;&gt;inactive |  [optional]
-**createBy** | **Integer** | Creator |  [optional]
+**createdBy** | **Integer** | Creator |  [optional]
 **updatedBy** | **Integer** | Modifier |  [optional]
 **createdAt** | **OffsetDateTime** |  |  [optional]
 **updatedAt** | **OffsetDateTime** |  |  [optional]

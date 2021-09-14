@@ -37,11 +37,13 @@ class RankController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request)
     {
+        $filter = $this->rankService->filterValidator($request)->validate();
         try {
-            $response = $this->rankService->getRankList($request, $this->startTime);
+            $response = $this->rankService->getRankList($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }

@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 get_one
 
-API endpoint to get a rank.A successful request response will show 200 HTTP status code
+API endpoint to get the specified rank.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -34,7 +34,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankApi apiInstance = new RankApi(defaultClient);
-    Integer rankId = 56; // Integer | 
+    Integer rankId = 1; // Integer | 
     try {
       Rank result = apiInstance.getOne1(rankId);
       System.out.println(result);
@@ -75,7 +75,7 @@ No authorization required
 
 <a name="ranksGet"></a>
 # **ranksGet**
-> Rank ranksGet(page, order, titleEn, titleBn)
+> Rank ranksGet(page, limit, rowStatus, order, titleEn, titleBn)
 
 get_list
 
@@ -96,12 +96,14 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankApi apiInstance = new RankApi(defaultClient);
-    Integer page = 56; // Integer | 
+    Integer page = 1; // Integer | 
+    Integer limit = 10; // Integer | 
+    Integer rowStatus = 1; // Integer | 
     String order = "order_example"; // String | 
     String titleEn = "titleEn_example"; // String | 
     String titleBn = "titleBn_example"; // String | 
     try {
-      Rank result = apiInstance.ranksGet(page, order, titleEn, titleBn);
+      Rank result = apiInstance.ranksGet(page, limit, rowStatus, order, titleEn, titleBn);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling RankApi#ranksGet");
@@ -119,6 +121,8 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **Integer**|  | [optional]
+ **limit** | **Integer**|  | [optional]
+ **rowStatus** | **Integer**|  | [optional]
  **order** | **String**|  | [optional] [enum: asc, desc]
  **titleEn** | **String**|  | [optional]
  **titleBn** | **String**|  | [optional]
@@ -147,7 +151,7 @@ No authorization required
 
 create
 
-API endpoint to get the list of ranks.A successful request response will show 200 HTTP status code
+API endpoint to create a Rank.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -164,12 +168,12 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankApi apiInstance = new RankApi(defaultClient);
-    Integer organizationId = 56; // Integer | 
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    Integer rankTypeId = 56; // Integer | 
-    String grade = "grade_example"; // String | 
-    Integer displayOrder = 56; // Integer | 
+    Integer organizationId = 2; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer rankTypeId = 1; // Integer | 
+    String grade = "0"; // String | 
+    Integer displayOrder = 1; // Integer | 
     Integer rowStatus = 56; // Integer | 
     try {
       Rank result = apiInstance.ranksPost(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus);
@@ -221,7 +225,7 @@ No authorization required
 
 delete
 
- API endpoint to get a rank.A successful request response will show 200 HTTP status code
+ API endpoint to delete the specified rank.A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -238,7 +242,7 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankApi apiInstance = new RankApi(defaultClient);
-    Integer rankId = 56; // Integer | 
+    Integer rankId = 1; // Integer | 
     try {
       Rank result = apiInstance.ranksRankIdDelete(rankId);
       System.out.println(result);
@@ -279,11 +283,11 @@ No authorization required
 
 <a name="ranksRankIdPut"></a>
 # **ranksRankIdPut**
-> RankType ranksRankIdPut(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus)
+> Rank ranksRankIdPut(rankId, organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus)
 
 update
 
-API endpoint to get a rank. A successful request response will show 200 HTTP status code
+API endpoint to update the specified rank. A successful request response will show 200 HTTP status code
 
 ### Example
 ```java
@@ -300,15 +304,16 @@ public class Example {
     defaultClient.setBasePath("http://localhost:8000/api/v1");
 
     RankApi apiInstance = new RankApi(defaultClient);
-    Integer organizationId = 56; // Integer | 
-    String titleEn = "titleEn_example"; // String | 
-    String titleBn = "titleBn_example"; // String | 
-    Integer rankTypeId = 56; // Integer | 
-    String grade = "grade_example"; // String | 
-    Integer displayOrder = 56; // Integer | 
+    Integer rankId = 1; // Integer | 
+    Integer organizationId = 2; // Integer | 
+    String titleEn = "abc"; // String | 
+    String titleBn = "abc"; // String | 
+    Integer rankTypeId = 1; // Integer | 
+    String grade = "0"; // String | 
+    Integer displayOrder = 1; // Integer | 
     Integer rowStatus = 56; // Integer | 
     try {
-      RankType result = apiInstance.ranksRankIdPut(organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus);
+      Rank result = apiInstance.ranksRankIdPut(rankId, organizationId, titleEn, titleBn, rankTypeId, grade, displayOrder, rowStatus);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling RankApi#ranksRankIdPut");
@@ -325,6 +330,7 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **rankId** | **Integer**|  |
  **organizationId** | **Integer**|  |
  **titleEn** | **String**|  |
  **titleBn** | **String**|  |
@@ -335,7 +341,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RankType**](RankType.md)
+[**Rank**](Rank.md)
 
 ### Authorization
 

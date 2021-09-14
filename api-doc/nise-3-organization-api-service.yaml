@@ -4,12 +4,13 @@ info:
   title: organization management api service
   description: ''
   termsOfService: ''
-  contact: {}
+  contact: { }
   license:
     name: ''
 servers:
   - url: http://localhost:8000/api/v1
   - url: ' https://api.bus.softbd.xyz/org/api/v1'
+  - url: http://nise3-organization.asm/api/v1
 paths:
   /:
     get:
@@ -47,7 +48,8 @@ paths:
       description: ' API endpoint to get the list of organization types.A successful request response will show 200 HTTP status code'
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -138,7 +140,7 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: Goverment org
+                  title_en: Government org
                   title_bn: সরকারি
                   is_government: 1
                   row_status: 1
@@ -196,7 +198,7 @@ paths:
           description: delete
           content:
             application/json:
-              schema: {}
+              schema: { }
               example:
                 _response_status:
                   success: true
@@ -211,7 +213,8 @@ paths:
       description: API endpoint to get the list of organizations.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -225,166 +228,172 @@ paths:
               example:
                 current_page: 1
                 total_page: 1
-                page_size: 10
+                page_size: '10'
                 total: 6
                 order: ASC
                 data:
                   - id: 1
-                    title_en: Senger-Roberts
-                    title_bn: Senger-Roberts
-                    domain: https://www.mertz.com
+                    title_en: Boyer PLC
+                    title_bn: Boyer PLC
+                    domain: https://www.luettgen.com
                     fax_no: '+123456'
                     mobile: '01758393749'
-                    email: kstreich@rohan.com
-                    contact_person_name: Prof. William Willms DVM
+                    email: wolff.jesse@spinka.com
+                    contact_person_name: Samanta Senger
                     contact_person_mobile: '01758393749'
-                    contact_person_email: willy48@example.com
-                    contact_person_designation: Municipal Fire Fighter
-                    description: Error omnis et nulla accusamus illo.
-                    address: |-
-                      892 Zackery Streets
-                      Walterberg, TN 25534-3582
+                    contact_person_email: vidal.nikolaus@example.com
+                    contact_person_designation: Inspector
+                    description: Quidem consequuntur rerum ducimus animi non consequatur enim.
                     logo: logo.jpg
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     organization_type_id: 1
-                    organization_types_title: Government org
+                    organization_type_title_en: Government org
+                    organization_type_title_bn: Government org
+                    address: |-
+                      11635 Jane Tunnel
+                      South Ernaberg, ID 95987
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:39.000000Z'
-                    updated_at: '2021-08-19T09:11:39.000000Z'
+                    created_at: '2021-08-30T05:56:13.000000Z'
+                    updated_at: '2021-08-30T05:56:13.000000Z'
                   - id: 2
-                    title_en: Hyatt and Sons
-                    title_bn: Hyatt and Sons
-                    domain: https://www.moore.com
+                    title_en: Baumbach, O'Conner and Shields
+                    title_bn: Baumbach, O'Conner and Shields
+                    domain: https://www.greenholt.org
                     fax_no: '+123456'
                     mobile: '01758393749'
-                    email: kub.retta@considine.com
-                    contact_person_name: Kianna Crooks
+                    email: lazaro00@boyle.com
+                    contact_person_name: Hardy Ratke
                     contact_person_mobile: '01758393749'
-                    contact_person_email: kyra.conroy@example.com
-                    contact_person_designation: Aircraft Cargo Handling Supervisor
-                    description: Non nemo doloribus facilis.
-                    address: |-
-                      1605 Ashleigh Mountain Apt. 904
-                      East Murphyborough, ID 53054-9257
+                    contact_person_email: ecronin@example.org
+                    contact_person_designation: Paper Goods Machine Operator
+                    description: Quo libero sed consectetur enim eveniet unde.
                     logo: logo.jpg
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     organization_type_id: 1
-                    organization_types_title: Government org
+                    organization_type_title_en: Government org
+                    organization_type_title_bn: Government org
+                    address: |-
+                      9434 Constance Burgs
+                      Wolffmouth, SD 42447-5946
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:39.000000Z'
-                    updated_at: '2021-08-19T09:11:39.000000Z'
+                    created_at: '2021-08-30T05:56:13.000000Z'
+                    updated_at: '2021-08-30T05:56:13.000000Z'
                   - id: 3
-                    title_en: Kutch, Wiza and Legros
-                    title_bn: Kutch, Wiza and Legros
-                    domain: https://www.fahey.info
+                    title_en: Johnson-Schuppe
+                    title_bn: Johnson-Schuppe
+                    domain: https://www.kutch.com
                     fax_no: '+123456'
                     mobile: '01758393749'
-                    email: fhaley@bailey.com
-                    contact_person_name: Mrs. Joy Rogahn
+                    email: zulauf.dalton@goldner.info
+                    contact_person_name: Katharina Williamson PhD
                     contact_person_mobile: '01758393749'
-                    contact_person_email: preilly@example.com
-                    contact_person_designation: Carpet Installer
-                    description: Pariatur enim et soluta velit.
-                    address: |-
-                      596 Maurice Manor Apt. 114
-                      West Osvaldobury, NH 13708
+                    contact_person_email: xpollich@example.net
+                    contact_person_designation: Chemistry Teacher
+                    description: Beatae ab laudantium maiores deserunt qui et minima.
                     logo: logo.jpg
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     organization_type_id: 1
-                    organization_types_title: Government org
+                    organization_type_title_en: Government org
+                    organization_type_title_bn: Government org
+                    address: |-
+                      4716 McKenzie Lakes Suite 086
+                      Lake Adrainburgh, OH 75364-5801
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:39.000000Z'
-                    updated_at: '2021-08-19T09:11:39.000000Z'
+                    created_at: '2021-08-30T05:56:13.000000Z'
+                    updated_at: '2021-08-30T05:56:13.000000Z'
                   - id: 4
-                    title_en: Renner-Carter
-                    title_bn: Renner-Carter
-                    domain: https://www.roob.com
+                    title_en: Lowe-Paucek
+                    title_bn: Lowe-Paucek
+                    domain: https://www.langosh.com
                     fax_no: '+123456'
                     mobile: '01758393749'
-                    email: ithiel@pollich.com
-                    contact_person_name: Melvina Stokes
+                    email: trudie.weber@monahan.info
+                    contact_person_name: Gwendolyn Jenkins
                     contact_person_mobile: '01758393749'
-                    contact_person_email: oberbrunner.susan@example.org
-                    contact_person_designation: Hazardous Materials Removal Worker
-                    description: Ut quod aut mollitia recusandae veritatis sunt molestiae.
-                    address: |-
-                      4776 Kian Loop
-                      Port Tomasa, MN 53763
+                    contact_person_email: cbaumbach@example.org
+                    contact_person_designation: Police Detective
+                    description: Repudiandae est et quam rerum.
                     logo: logo.jpg
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     organization_type_id: 2
-                    organization_types_title: Private org
+                    organization_type_title_en: Private org
+                    organization_type_title_bn: Private org
+                    address: |-
+                      78097 Hyatt Well
+                      East Leoratown, OK 87999-3517
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:39.000000Z'
-                    updated_at: '2021-08-19T09:11:39.000000Z'
+                    created_at: '2021-08-30T05:56:13.000000Z'
+                    updated_at: '2021-08-30T05:56:13.000000Z'
                   - id: 5
-                    title_en: Becker, Kreiger and Batz
-                    title_bn: Becker, Kreiger and Batz
-                    domain: https://www.macejkovic.net
+                    title_en: Schultz-Bernier
+                    title_bn: Schultz-Bernier
+                    domain: https://www.dubuque.net
                     fax_no: '+123456'
                     mobile: '01758393749'
-                    email: rokon@weimann.com
-                    contact_person_name: Willow Ondricka
+                    email: donnelly.maddison@romaguera.com
+                    contact_person_name: Shana Christiansen
                     contact_person_mobile: '01758393749'
-                    contact_person_email: skuhn@example.net
-                    contact_person_designation: Marketing Manager
-                    description: Provident iure modi impedit laboriosam aliquid et doloribus.
-                    address: |-
-                      529 Miller Locks
-                      Elisemouth, ID 76558
+                    contact_person_email: wankunding@example.org
+                    contact_person_designation: Real Estate Appraiser
+                    description: Ex debitis consectetur nihil et modi explicabo.
                     logo: logo.jpg
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     organization_type_id: 2
-                    organization_types_title: Private org
+                    organization_type_title_en: Private org
+                    organization_type_title_bn: Private org
+                    address: |-
+                      3181 Muhammad Forks
+                      East Eino, MA 59729
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:40.000000Z'
-                    updated_at: '2021-08-19T09:11:40.000000Z'
+                    created_at: '2021-08-30T05:56:13.000000Z'
+                    updated_at: '2021-08-30T05:56:13.000000Z'
                   - id: 6
-                    title_en: Bins Group
-                    title_bn: Bins Group
-                    domain: https://www.stehr.com
+                    title_en: Jones, Howell and Stokes
+                    title_bn: Jones, Howell and Stokes
+                    domain: https://www.witting.com
                     fax_no: '+123456'
                     mobile: '01758393749'
-                    email: amari.gleichner@langworth.com
-                    contact_person_name: Josie Torphy
+                    email: casandra60@wintheiser.net
+                    contact_person_name: Miss Marilyne Marquardt II
                     contact_person_mobile: '01758393749'
-                    contact_person_email: lboyer@example.net
-                    contact_person_designation: Private Household Cook
-                    description: Ipsum accusantium ducimus qui officia est aliquam.
-                    address: |-
-                      47239 Carroll Lakes Apt. 009
-                      Marceloburgh, WI 98784-9494
+                    contact_person_email: ebba.strosin@example.com
+                    contact_person_designation: Respiratory Therapist
+                    description: Rerum blanditiis numquam est.
                     logo: logo.jpg
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     organization_type_id: 2
-                    organization_types_title: Private org
+                    organization_type_title_en: Private org
+                    organization_type_title_bn: Private org
+                    address: |-
+                      291 Sherwood Course Suite 158
+                      Biankaside, NM 41404
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:40.000000Z'
-                    updated_at: '2021-08-19T09:11:40.000000Z'
+                    created_at: '2021-08-30T05:56:13.000000Z'
+                    updated_at: '2021-08-30T05:56:13.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -468,29 +477,30 @@ paths:
               example:
                 data:
                   id: 2
-                  title_en: abc
-                  title_bn: abc
-                  domain: https://www.companyname.com
+                  title_en: Baumbach, O'Conner and Shields
+                  title_bn: Baumbach, O'Conner and Shields
+                  domain: https://www.greenholt.org
                   fax_no: '+123456'
-                  mobile: '01711223344'
-                  email: company_name@gmail.com
-                  contact_person_name: Mr. X
-                  contact_person_mobile: '01789277788'
-                  contact_person_email: mr.x@gmail.com
-                  contact_person_designation: HR
-                  description: Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+                  mobile: '01758393749'
+                  email: lazaro00@boyle.com
+                  contact_person_name: Hardy Ratke
+                  contact_person_mobile: '01758393749'
+                  contact_person_email: ecronin@example.org
+                  contact_person_designation: Paper Goods Machine Operator
+                  description: Quo libero sed consectetur enim eveniet unde.
                   logo: logo.jpg
                   loc_division_id: 1
                   loc_district_id: 1
                   loc_upazila_id: 1
                   organization_type_id: 1
-                  organization_types_title: Government org
-                  address: Dhaka-1208
+                  organization_type_title_en: Government org
+                  organization_type_title_bn: Government org
+                  address: 9434 Constance Burgs Wolffmouth, SD 42447-5946
                   row_status: 1
                   created_by: null
                   updated_by: null
-                  created_at: '2021-08-22T12:10:22.000000Z'
-                  updated_at: '2021-08-23T09:10:38.000000Z'
+                  created_at: '2021-08-30T05:56:13.000000Z'
+                  updated_at: '2021-08-30T05:56:13.000000Z'
                 _response_status:
                   success: true
                   code: 200
@@ -585,7 +595,9 @@ paths:
       description: API endpoint to get the list of rank types.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/organizationId_optional'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -597,122 +609,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/rankType'
               example:
+                organization_id: '1'
                 current_page: 1
-                total_page: 2
-                page_size: 10
-                total: 18
+                total_page: 1
+                page_size: '10'
+                total: 3
                 order: ASC
                 data:
                   - id: 1
                     title_en: Chief of Army Staff
                     title_bn: Chief of Army Staff
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
-                    description: Quia voluptatem voluptates quo aut itaque quas assumenda dolor minima.
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
+                    description: Qui non rerum vero ipsam nam tempore porro iusto sunt.
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 2
                     title_en: Chief of General Staff
                     title_bn: Chief of General Staff
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
-                    description: Mollitia iste animi et pariatur sed est sunt corporis rerum.
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
+                    description: Et dolor repellendus et cum possimus ea incidunt blanditiis saepe.
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 3
                     title_en: Chief of brigade
                     title_bn: Chief of brigade
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
-                    description: Et tempore dolores qui occaecati adipisci et nam sit et.
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
+                    description: Facilis ex placeat occaecati expedita nihil sapiente est quam temporibus.
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
-                  - id: 4
-                    title_en: Chief of Army Staff
-                    title_bn: Chief of Army Staff
-                    organization_id: 2
-                    organization_title_en: Hyatt and Sons
-                    description: Incidunt temporibus totam dolorem autem eligendi amet unde est ea.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
-                  - id: 5
-                    title_en: Chief of General Staff
-                    title_bn: Chief of General Staff
-                    organization_id: 2
-                    organization_title_en: Hyatt and Sons
-                    description: In dolorem tempore quia omnis vel consequatur et aut eum.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
-                  - id: 6
-                    title_en: Chief of brigade
-                    title_bn: Chief of brigade
-                    organization_id: 2
-                    organization_title_en: Hyatt and Sons
-                    description: Et inventore porro minima fuga eos tenetur possimus qui voluptas.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
-                  - id: 7
-                    title_en: Chief of Army Staff
-                    title_bn: Chief of Army Staff
-                    organization_id: 3
-                    organization_title_en: Kutch, Wiza and Legros
-                    description: Optio molestias autem ea in repudiandae eaque voluptas sit saepe.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
-                  - id: 8
-                    title_en: Chief of General Staff
-                    title_bn: Chief of General Staff
-                    organization_id: 3
-                    organization_title_en: Kutch, Wiza and Legros
-                    description: Voluptatem ipsam et ea quo aspernatur aut aut et aperiam.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
-                  - id: 9
-                    title_en: Chief of brigade
-                    title_bn: Chief of brigade
-                    organization_id: 3
-                    organization_title_en: Kutch, Wiza and Legros
-                    description: Laudantium recusandae dolorem et voluptate odio possimus qui perspiciatis voluptatem.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
-                  - id: 10
-                    title_en: Chief of Army Staff
-                    title_bn: Chief of Army Staff
-                    organization_id: 4
-                    organization_title_en: Renner-Carter
-                    description: Sed sunt doloribus voluptas praesentium nihil rerum aut at assumenda.
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -842,7 +781,8 @@ paths:
       description: API endpoint to get the list of ranks .A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -856,7 +796,7 @@ paths:
               example:
                 current_page: 1
                 total_page: 6
-                page_size: 10
+                page_size: '10'
                 total: 54
                 order: ASC
                 data:
@@ -866,140 +806,160 @@ paths:
                     grade: '1'
                     display_order: 1
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 1
                     rank_type_title_en: Chief of Army Staff
+                    rank_type_title_bn: Chief of Army Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 2
                     title_en: লেফটেন্যান্ট জেনারেল
                     title_bn: লেফটেন্যান্ট জেনারেল
                     grade: '2'
                     display_order: 2
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 1
                     rank_type_title_en: Chief of Army Staff
+                    rank_type_title_bn: Chief of Army Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 3
                     title_en: ব্রিগেডিয়ার জেনারেল
                     title_bn: ব্রিগেডিয়ার জেনারেল
                     grade: '3'
                     display_order: 3
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 1
                     rank_type_title_en: Chief of Army Staff
+                    rank_type_title_bn: Chief of Army Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 4
                     title_en: জেনারেল
                     title_bn: জেনারেল
                     grade: '1'
                     display_order: 1
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 2
                     rank_type_title_en: Chief of General Staff
+                    rank_type_title_bn: Chief of General Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 5
                     title_en: লেফটেন্যান্ট জেনারেল
                     title_bn: লেফটেন্যান্ট জেনারেল
                     grade: '2'
                     display_order: 2
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 2
                     rank_type_title_en: Chief of General Staff
+                    rank_type_title_bn: Chief of General Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 6
                     title_en: ব্রিগেডিয়ার জেনারেল
                     title_bn: ব্রিগেডিয়ার জেনারেল
                     grade: '3'
                     display_order: 3
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 2
                     rank_type_title_en: Chief of General Staff
+                    rank_type_title_bn: Chief of General Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 7
                     title_en: জেনারেল
                     title_bn: জেনারেল
                     grade: '1'
                     display_order: 1
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 3
                     rank_type_title_en: Chief of brigade
+                    rank_type_title_bn: Chief of brigade
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 8
                     title_en: লেফটেন্যান্ট জেনারেল
                     title_bn: লেফটেন্যান্ট জেনারেল
                     grade: '2'
                     display_order: 2
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 3
                     rank_type_title_en: Chief of brigade
+                    rank_type_title_bn: Chief of brigade
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 9
                     title_en: ব্রিগেডিয়ার জেনারেল
                     title_bn: ব্রিগেডিয়ার জেনারেল
                     grade: '3'
                     display_order: 3
                     organization_id: 1
-                    organization_title_en: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     rank_type_id: 3
                     rank_type_title_en: Chief of brigade
+                    rank_type_title_bn: Chief of brigade
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 10
                     title_en: জেনারেল
                     title_bn: জেনারেল
                     grade: '1'
                     display_order: 1
                     organization_id: 2
-                    organization_title_en: Hyatt and Sons
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
                     rank_type_id: 4
                     rank_type_title_en: Chief of Army Staff
+                    rank_type_title_bn: Chief of Army Staff
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -1064,14 +1024,16 @@ paths:
                   grade: '1'
                   display_order: 1
                   organization_id: 1
-                  organization_title_en: Zulauf, Kohler and O'Keefe
+                  organization_title_en: Boyer PLC
+                  organization_title_bn: Boyer PLC
                   rank_type_id: 1
                   rank_type_title_en: Chief of Army Staff
+                  rank_type_title_bn: Chief of Army Staff
                   row_status: 1
                   created_by: null
                   updated_by: null
-                  created_at: '2021-08-22T12:10:24.000000Z'
-                  updated_at: '2021-08-22T12:10:24.000000Z'
+                  created_at: '2021-08-30T05:56:15.000000Z'
+                  updated_at: '2021-08-30T05:56:15.000000Z'
                 _response_status:
                   success: true
                   code: 200
@@ -1143,6 +1105,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -1194,7 +1157,7 @@ paths:
       description: API endpoint to create of job sectors.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/title_en'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/title_bn'
         - $ref: '#/components/parameters/row_status'
       responses:
@@ -1308,7 +1271,8 @@ paths:
       description: API endpoint to get the list of occupations.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -1322,100 +1286,109 @@ paths:
               example:
                 current_page: 1
                 total_page: 1
-                page_size: 10
+                page_size: '10'
                 total: 9
                 order: ASC
                 data:
                   - id: 1
-                    title_en: Creative Writer
-                    title_bn: Creative Writer
+                    title_en: Alteration Tailor
+                    title_bn: Alteration Tailor
                     job_sector_id: 1
-                    job_sector_title: Appliance Repairer
+                    job_sector_title_en: Copy Machine Operator
+                    job_sector_title_bn: Copy Machine Operator
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 2
-                    title_en: Hoist and Winch Operator
-                    title_bn: Hoist and Winch Operator
+                    title_en: Gas Distribution Plant Operator
+                    title_bn: Gas Distribution Plant Operator
                     job_sector_id: 1
-                    job_sector_title: Appliance Repairer
+                    job_sector_title_en: Copy Machine Operator
+                    job_sector_title_bn: Copy Machine Operator
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 3
-                    title_en: Home Health Aide
-                    title_bn: Home Health Aide
+                    title_en: Mixing and Blending Machine Operator
+                    title_bn: Mixing and Blending Machine Operator
                     job_sector_id: 1
-                    job_sector_title: Appliance Repairer
+                    job_sector_title_en: Copy Machine Operator
+                    job_sector_title_bn: Copy Machine Operator
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 4
-                    title_en: Airframe Mechanic
-                    title_bn: Airframe Mechanic
+                    title_en: Ambulance Driver
+                    title_bn: Ambulance Driver
                     job_sector_id: 2
-                    job_sector_title: Able Seamen
+                    job_sector_title_en: Archeologist
+                    job_sector_title_bn: Archeologist
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 5
-                    title_en: Operating Engineer
-                    title_bn: Operating Engineer
+                    title_en: Stone Sawyer
+                    title_bn: Stone Sawyer
                     job_sector_id: 2
-                    job_sector_title: Able Seamen
+                    job_sector_title_en: Archeologist
+                    job_sector_title_bn: Archeologist
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 6
-                    title_en: University
-                    title_bn: University
+                    title_en: Valve Repairer OR Regulator Repairer
+                    title_bn: Valve Repairer OR Regulator Repairer
                     job_sector_id: 2
-                    job_sector_title: Able Seamen
+                    job_sector_title_en: Archeologist
+                    job_sector_title_bn: Archeologist
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 7
-                    title_en: Manager of Air Crew
-                    title_bn: Manager of Air Crew
+                    title_en: Social Media Marketing Manager
+                    title_bn: Social Media Marketing Manager
                     job_sector_id: 3
-                    job_sector_title: Electronic Equipment Assembler
+                    job_sector_title_en: Food Tobacco Roasting
+                    job_sector_title_bn: Food Tobacco Roasting
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 8
-                    title_en: Cultural Studies Teacher
-                    title_bn: Cultural Studies Teacher
+                    title_en: Music Arranger and Orchestrator
+                    title_bn: Music Arranger and Orchestrator
                     job_sector_id: 3
-                    job_sector_title: Electronic Equipment Assembler
+                    job_sector_title_en: Food Tobacco Roasting
+                    job_sector_title_bn: Food Tobacco Roasting
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                   - id: 9
-                    title_en: Precision Instrument Repairer
-                    title_bn: Precision Instrument Repairer
+                    title_en: Eligibility Interviewer
+                    title_bn: Eligibility Interviewer
                     job_sector_id: 3
-                    job_sector_title: Electronic Equipment Assembler
+                    job_sector_title_en: Food Tobacco Roasting
+                    job_sector_title_bn: Food Tobacco Roasting
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:46.000000Z'
-                    updated_at: '2021-08-19T09:11:46.000000Z'
+                    created_at: '2021-08-30T05:56:20.000000Z'
+                    updated_at: '2021-08-30T05:56:20.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -1467,16 +1440,17 @@ paths:
                 $ref: '#/components/schemas/occupation'
               example:
                 data:
-                  id: 3
-                  title_en: Electronics Engineering Technician
-                  title_bn: Electronics Engineering Technician
+                  id: 1
+                  title_en: Alteration Tailor
+                  title_bn: Alteration Tailor
                   job_sector_id: 1
-                  job_sector_title: abc
+                  job_sector_title_en: Copy Machine Operator
+                  job_sector_title_bn: Copy Machine Operator
                   row_status: 1
                   created_by: null
                   updated_by: null
-                  created_at: '2021-08-22T12:10:28.000000Z'
-                  updated_at: '2021-08-22T12:10:28.000000Z'
+                  created_at: '2021-08-30T05:56:20.000000Z'
+                  updated_at: '2021-08-30T05:56:20.000000Z'
                 _response_status:
                   success: true
                   code: 200
@@ -1543,7 +1517,8 @@ paths:
       description: API endpoint to get the list of Skills.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -1774,10 +1749,12 @@ paths:
       description: API endpoint to get the list of organization unit types.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
       responses:
         '200':
           description: get list
@@ -1788,7 +1765,7 @@ paths:
               example:
                 current_page: 1
                 total_page: 2
-                page_size: 10
+                page_size: '10'
                 total: 12
                 order: ASC
                 data:
@@ -1796,102 +1773,112 @@ paths:
                     title_en: Payment
                     title_bn: Payment
                     organization_id: 1
-                    organization_name: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 2
-                    title_en: Mobile Bangking
-                    title_bn: Mobile Bangking
+                    title_en: Payment
+                    title_bn: Payment
                     organization_id: 1
-                    organization_name: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 3
                     title_en: Payment
                     title_bn: Payment
                     organization_id: 2
-                    organization_name: Hyatt and Sons
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 4
-                    title_en: Mobile Bangking
-                    title_bn: Mobile Bangking
+                    title_en: Payment
+                    title_bn: Payment
                     organization_id: 2
-                    organization_name: Hyatt and Sons
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 5
                     title_en: Payment
                     title_bn: Payment
                     organization_id: 3
-                    organization_name: Kutch, Wiza and Legros
+                    organization_title_en: Johnson-Schuppe
+                    organization_title_bn: Johnson-Schuppe
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 6
-                    title_en: Mobile Bangking
-                    title_bn: Mobile Bangking
+                    title_en: Payment
+                    title_bn: Payment
                     organization_id: 3
-                    organization_name: Kutch, Wiza and Legros
+                    organization_title_en: Johnson-Schuppe
+                    organization_title_bn: Johnson-Schuppe
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 7
                     title_en: Payment
                     title_bn: Payment
                     organization_id: 4
-                    organization_name: Renner-Carter
+                    organization_title_en: Lowe-Paucek
+                    organization_title_bn: Lowe-Paucek
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                   - id: 8
-                    title_en: Mobile Bangking
-                    title_bn: Mobile Bangking
+                    title_en: Payment
+                    title_bn: Payment
                     organization_id: 4
-                    organization_name: Renner-Carter
+                    organization_title_en: Lowe-Paucek
+                    organization_title_bn: Lowe-Paucek
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                   - id: 9
                     title_en: Payment
                     title_bn: Payment
                     organization_id: 5
-                    organization_name: Becker, Kreiger and Batz
+                    organization_title_en: Schultz-Bernier
+                    organization_title_bn: Schultz-Bernier
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                   - id: 10
-                    title_en: Mobile Bangking
-                    title_bn: Mobile Bangking
+                    title_en: Payment
+                    title_bn: Payment
                     organization_id: 5
-                    organization_name: Becker, Kreiger and Batz
+                    organization_title_en: Schultz-Bernier
+                    organization_title_bn: Schultz-Bernier
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:43.000000Z'
-                    updated_at: '2021-08-19T09:11:43.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -1944,15 +1931,16 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: abc
-                  title_bn: abc
-                  organization_id: 2
-                  organization_name: Douglas Ltd
+                  title_en: Payment
+                  title_bn: Payment
+                  organization_id: 1
+                  organization_title_en: Boyer PLC
+                  organization_title_bn: Boyer PLC
                   row_status: 1
                   created_by: null
                   updated_by: null
-                  created_at: '2021-08-22T12:10:24.000000Z'
-                  updated_at: '2021-08-23T07:57:19.000000Z'
+                  created_at: '2021-08-30T05:56:15.000000Z'
+                  updated_at: '2021-08-30T05:56:15.000000Z'
                 _response_status:
                   success: true
                   code: 200
@@ -2107,7 +2095,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: []
+                      children: [ ]
                     - id: 49
                       organization_id: 2
                       organization_unit_type_id: 1
@@ -2165,7 +2153,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: []
+                      children: [ ]
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -2217,8 +2205,9 @@ paths:
       description: API endpoint to get the list of organization Units. A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -2230,276 +2219,295 @@ paths:
                 $ref: '#/components/schemas/organizationUnit'
               example:
                 current_page: 1
-                total_page: 3
-                page_size: 10
-                total: 24
+                total_page: 2
+                page_size: '10'
+                total: 12
                 order: ASC
                 data:
                   - id: 1
                     title_en: Bangking
                     title_bn: Bangking
                     address: |-
-                      9853 Kub Shores Suite 832
-                      North Jacklynbury, TN 73698
+                      12179 Sally Trail Suite 270
+                      South Annabellbury, KY 96700
                     mobile: '01758393749'
-                    email: davis.nathanial@tromp.com
+                    email: schmeler.oceane@rohan.com
                     fax_no: '+123456'
-                    contact_person_name: Bret Kshlerin
+                    contact_person_name: Lucile Bailey
                     contact_person_mobile: '01758393749'
-                    contact_person_email: umills@example.net
+                    contact_person_email: ohara.davonte@example.org
                     contact_person_designation: HR
-                    employee_size: 1
+                    employee_size: 0
                     organization_unit_type_id: 1
                     organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
                     organization_id: 1
-                    organization_name: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 2
-                    title_en: Salary
-                    title_bn: Salary
+                    title_en: Bangking
+                    title_bn: Bangking
                     address: |-
-                      739 Jacobs Summit Apt. 196
-                      Port Kennith, CO 13692
+                      6548 Sporer Flat
+                      Hannashire, VA 13370-1354
                     mobile: '01758393749'
-                    email: nader.helga@bartell.com
+                    email: assunta.hermiston@altenwerth.com
                     fax_no: '+123456'
-                    contact_person_name: Darrin Wiza
+                    contact_person_name: Jamie Kunde
                     contact_person_mobile: '01758393749'
-                    contact_person_email: little.nya@example.org
+                    contact_person_email: alberto.blanda@example.com
                     contact_person_designation: HR
-                    employee_size: 8
-                    organization_unit_type_id: 1
+                    employee_size: 9
+                    organization_unit_type_id: 2
                     organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
                     organization_id: 1
-                    organization_name: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:15.000000Z'
+                    updated_at: '2021-08-30T05:56:15.000000Z'
                   - id: 3
                     title_en: Bangking
                     title_bn: Bangking
                     address: |-
-                      780 Monroe Street Apt. 445
-                      Zoiefurt, MD 40949-7780
+                      65765 Reinger Wall Apt. 388
+                      West Ernestine, GA 66147-2336
                     mobile: '01758393749'
-                    email: glennie08@walsh.com
+                    email: maye.kuhn@russel.com
                     fax_no: '+123456'
-                    contact_person_name: Ms. Imogene Watsica
+                    contact_person_name: Prof. Frankie Wintheiser
                     contact_person_mobile: '01758393749'
-                    contact_person_email: winnifred.turner@example.com
+                    contact_person_email: umckenzie@example.org
                     contact_person_designation: HR
                     employee_size: 3
-                    organization_unit_type_id: 2
-                    organization_unit_type_title_en: Mobile Bangking
-                    organization_id: 1
-                    organization_name: Senger-Roberts
+                    organization_unit_type_id: 3
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 2
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 4
-                    title_en: Salary
-                    title_bn: Salary
+                    title_en: Bangking
+                    title_bn: Bangking
                     address: |-
-                      7714 Magdalena Common Suite 235
-                      South Elissashire, WV 55097-7614
+                      46573 Antonetta Row Apt. 632
+                      West Blanche, RI 39420
                     mobile: '01758393749'
-                    email: bwelch@marks.com
+                    email: danny.marquardt@cartwright.com
                     fax_no: '+123456'
-                    contact_person_name: Rubie Bode
+                    contact_person_name: Karen Maggio Sr.
                     contact_person_mobile: '01758393749'
-                    contact_person_email: noel82@example.net
+                    contact_person_email: zbode@example.com
                     contact_person_designation: HR
                     employee_size: 1
-                    organization_unit_type_id: 2
-                    organization_unit_type_title_en: Mobile Bangking
-                    organization_id: 1
-                    organization_name: Senger-Roberts
+                    organization_unit_type_id: 4
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 2
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:41.000000Z'
-                    updated_at: '2021-08-19T09:11:41.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 5
                     title_en: Bangking
                     title_bn: Bangking
                     address: |-
-                      985 Marques Lodge
-                      New Yadira, IN 29822
+                      112 Cummerata Mission Suite 038
+                      West Nichole, AR 90094-5189
                     mobile: '01758393749'
-                    email: koconner@macejkovic.org
+                    email: guy99@ondricka.com
                     fax_no: '+123456'
-                    contact_person_name: Mr. Mathias Streich
+                    contact_person_name: Valerie Shanahan
                     contact_person_mobile: '01758393749'
-                    contact_person_email: otis58@example.com
+                    contact_person_email: omarvin@example.com
                     contact_person_designation: HR
-                    employee_size: 0
-                    organization_unit_type_id: 3
+                    employee_size: 8
+                    organization_unit_type_id: 5
                     organization_unit_type_title_en: Payment
-                    organization_id: 2
-                    organization_name: Hyatt and Sons
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 3
+                    organization_title_en: Johnson-Schuppe
+                    organization_title_bn: Johnson-Schuppe
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 6
-                    title_en: Salary
-                    title_bn: Salary
+                    title_en: Bangking
+                    title_bn: Bangking
                     address: |-
-                      907 Mozelle Islands
-                      Aliyahhaven, VT 47609-1811
+                      9755 Heidenreich Rapids Suite 338
+                      North Aubreebury, AZ 13830
                     mobile: '01758393749'
-                    email: rose01@quigley.net
+                    email: josh66@balistreri.com
                     fax_no: '+123456'
-                    contact_person_name: Mason Hauck
+                    contact_person_name: Lauretta Reinger
                     contact_person_mobile: '01758393749'
-                    contact_person_email: vrohan@example.net
+                    contact_person_email: blueilwitz@example.com
                     contact_person_designation: HR
-                    employee_size: 4
-                    organization_unit_type_id: 3
+                    employee_size: 3
+                    organization_unit_type_id: 6
                     organization_unit_type_title_en: Payment
-                    organization_id: 2
-                    organization_name: Hyatt and Sons
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 3
+                    organization_title_en: Johnson-Schuppe
+                    organization_title_bn: Johnson-Schuppe
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:16.000000Z'
+                    updated_at: '2021-08-30T05:56:16.000000Z'
                   - id: 7
                     title_en: Bangking
                     title_bn: Bangking
                     address: |-
-                      7635 Trantow Via
-                      Rosinaville, UT 15191-0389
+                      607 Carter Roads Suite 324
+                      Hermistonborough, TX 43472
                     mobile: '01758393749'
-                    email: june.turcotte@eichmann.org
+                    email: jayden04@crona.com
                     fax_no: '+123456'
-                    contact_person_name: Dr. Alphonso Lakin III
+                    contact_person_name: Karlee Walker III
                     contact_person_mobile: '01758393749'
-                    contact_person_email: gmann@example.net
+                    contact_person_email: jbraun@example.net
                     contact_person_designation: HR
-                    employee_size: 6
-                    organization_unit_type_id: 4
-                    organization_unit_type_title_en: Mobile Bangking
-                    organization_id: 2
-                    organization_name: Hyatt and Sons
+                    employee_size: 9
+                    organization_unit_type_id: 7
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 4
+                    organization_title_en: Lowe-Paucek
+                    organization_title_bn: Lowe-Paucek
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                   - id: 8
-                    title_en: Salary
-                    title_bn: Salary
+                    title_en: Bangking
+                    title_bn: Bangking
                     address: |-
-                      91669 Hammes Plains Apt. 283
-                      Hodkiewiczport, AR 21028
+                      45168 Reichel Groves
+                      South Grahamfort, LA 76983
                     mobile: '01758393749'
-                    email: lgrady@bernier.com
+                    email: tmorissette@bode.org
                     fax_no: '+123456'
-                    contact_person_name: Arielle Monahan DDS
+                    contact_person_name: Dr. Berenice Stokes PhD
                     contact_person_mobile: '01758393749'
-                    contact_person_email: dietrich.zoie@example.net
+                    contact_person_email: muller.mireille@example.net
                     contact_person_designation: HR
-                    employee_size: 4
-                    organization_unit_type_id: 4
-                    organization_unit_type_title_en: Mobile Bangking
-                    organization_id: 2
-                    organization_name: Hyatt and Sons
+                    employee_size: 2
+                    organization_unit_type_id: 8
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 4
+                    organization_title_en: Lowe-Paucek
+                    organization_title_bn: Lowe-Paucek
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                   - id: 9
                     title_en: Bangking
                     title_bn: Bangking
                     address: |-
-                      270 Julianne Camp Apt. 165
-                      Phyllischester, SD 35033-1198
+                      59909 Lemuel Lock
+                      Lake Anniebury, RI 64423
                     mobile: '01758393749'
-                    email: ima.raynor@sipes.com
+                    email: vernon00@sauer.com
                     fax_no: '+123456'
-                    contact_person_name: Robert D'Amore
+                    contact_person_name: Bette Doyle
                     contact_person_mobile: '01758393749'
-                    contact_person_email: constantin.waters@example.net
+                    contact_person_email: hammes.tiara@example.org
                     contact_person_designation: HR
-                    employee_size: 7
-                    organization_unit_type_id: 5
+                    employee_size: 5
+                    organization_unit_type_id: 9
                     organization_unit_type_title_en: Payment
-                    organization_id: 3
-                    organization_name: Kutch, Wiza and Legros
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 5
+                    organization_title_en: Schultz-Bernier
+                    organization_title_bn: Schultz-Bernier
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                   - id: 10
-                    title_en: Salary
-                    title_bn: Salary
+                    title_en: Bangking
+                    title_bn: Bangking
                     address: |-
-                      10562 Pollich Extensions Apt. 004
-                      New Lazaro, NE 70523
+                      664 Rhea Lights
+                      Juanitamouth, ID 48912
                     mobile: '01758393749'
-                    email: marcelino.huel@oconnell.net
+                    email: gusikowski.kayleigh@heaney.com
                     fax_no: '+123456'
-                    contact_person_name: Royal Hansen
+                    contact_person_name: Ms. Ollie Veum II
                     contact_person_mobile: '01758393749'
-                    contact_person_email: hgreenfelder@example.org
+                    contact_person_email: alysha09@example.org
                     contact_person_designation: HR
-                    employee_size: 2
-                    organization_unit_type_id: 5
+                    employee_size: 8
+                    organization_unit_type_id: 10
                     organization_unit_type_title_en: Payment
-                    organization_id: 3
-                    organization_name: Kutch, Wiza and Legros
+                    organization_unit_type_title_bn: Payment
+                    organization_id: 5
+                    organization_title_en: Schultz-Bernier
+                    organization_title_bn: Schultz-Bernier
                     loc_division_id: 1
                     loc_district_id: 1
                     loc_upazila_id: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:42.000000Z'
-                    updated_at: '2021-08-19T09:11:42.000000Z'
+                    created_at: '2021-08-30T05:56:17.000000Z'
+                    updated_at: '2021-08-30T05:56:17.000000Z'
                 response_status:
                   success: true
                   code: 200
-                  started: 12 09 30
-                  finished: 12 09 30
+                  query_time: 0
       tags:
         - organization-units
     post:
@@ -2573,28 +2581,39 @@ paths:
                 $ref: '#/components/schemas/organizationUnit'
               example:
                 data:
-                  id: 1
-                  title_en: asdf
-                  title_bn: বাংলা
-                  address: null
-                  mobile: null
-                  email: null
-                  fax_no: null
-                  contact_person_name: null
-                  contact_person_mobile: null
-                  contact_person_email: null
-                  contact_person_designation: null
-                  employee_size: 0
+                  id: 2
+                  title_en: Bangking
+                  title_bn: Bangking
+                  address: |-
+                    6548 Sporer Flat
+                    Hannashire, VA 13370-1354
+                  mobile: '01758393749'
+                  email: assunta.hermiston@altenwerth.com
+                  fax_no: '+123456'
+                  contact_person_name: Jamie Kunde
+                  contact_person_mobile: '01758393749'
+                  contact_person_email: alberto.blanda@example.com
+                  contact_person_designation: HR
+                  employee_size: 9
+                  organization_unit_type_id: 2
+                  organization_unit_type_title_en: Payment
+                  organization_unit_type_title_bn: Payment
+                  organization_id: 1
+                  organization_title_en: Boyer PLC
+                  organization_title_bn: Boyer PLC
+                  loc_division_id: 1
+                  loc_district_id: 1
+                  loc_upazila_id: 1
                   row_status: 1
-                  created_at: '2021-07-27T07:15:15.000000Z'
-                  updated_at: '2021-07-27T07:15:15.000000Z'
-                  organization_name: BDBL
-                  organization_unit_name: Mobile Banking
+                  created_by: null
+                  updated_by: null
+                  created_at: '2021-08-30T05:56:15.000000Z'
+                  updated_at: '2021-08-30T05:56:15.000000Z'
+                  services: [ ]
                 _response_status:
                   success: true
                   code: 200
-                  started: 17 00 54
-                  finished: 17 00 54
+                  query_time: 0
       tags:
         - organization-units
     put:
@@ -2805,7 +2824,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-22T12:10:24.000000Z'
                         deleted_at: null
-                      children: []
+                      children: [ ]
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -2919,7 +2938,8 @@ paths:
       description: API endpoint to get the list of services.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
@@ -3109,8 +3129,9 @@ paths:
       description: API endpoint to get the list of Human Resource templates.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -3123,200 +3144,240 @@ paths:
               example:
                 current_page: 1
                 total_page: 5
-                page_size: 10
+                page_size: '10'
                 total: 48
                 order: ASC
                 data:
                   - id: 1
-                    title_en: Marketing(Bangking)
-                    title_bn: Marketing(Bangking)
-                    display_order: 7
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 3
                     is_designation: 1
                     parent_id: null
-                    parent: null
+                    parent_title_en: null
+                    parent_title_bn: null
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 1
-                    organization_unit_type_title: Payment
-                    rank_id: 20
-                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 37
+                    rank_title_en: জেনারেল
+                    rank_title_bn: জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:21.000000Z'
+                    updated_at: '2021-08-30T05:56:21.000000Z'
                   - id: 2
                     title_en: Marketing Child(Bangking)
                     title_bn: Marketing Child(Bangking)
-                    display_order: 5
-                    is_designation: 1
-                    parent_id: 1
-                    parent: Marketing(Bangking)
-                    organization_id: 1
-                    organization_title: Senger-Roberts
-                    organization_unit_type_id: 1
-                    organization_unit_type_title: Payment
-                    rank_id: 16
-                    rank_title_en: জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 3
-                    title_en: Marketing(Salary)
-                    title_bn: Marketing(Salary)
                     display_order: 8
                     is_designation: 1
-                    parent_id: null
-                    parent: null
+                    parent_id: 1
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 1
-                    organization_unit_type_title: Payment
-                    rank_id: 32
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 11
                     rank_title_en: লেফটেন্যান্ট জেনারেল
+                    rank_title_bn: লেফটেন্যান্ট জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:21.000000Z'
+                    updated_at: '2021-08-30T05:56:21.000000Z'
+                  - id: 3
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 7
+                    is_designation: 1
+                    parent_id: 1
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
+                    organization_id: 1
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
+                    organization_unit_type_id: 1
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 10
+                    rank_title_en: জেনারেল
+                    rank_title_bn: জেনারেল
+                    status: 1
+                    row_status: 1
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-30T05:56:21.000000Z'
+                    updated_at: '2021-08-30T05:56:21.000000Z'
                   - id: 4
-                    title_en: Marketing Child(Salary)
-                    title_bn: Marketing Child(Salary)
-                    display_order: 1
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 0
                     is_designation: 1
-                    parent_id: 3
-                    parent: Marketing(Salary)
+                    parent_id: 1
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 1
-                    organization_unit_type_title: Payment
-                    rank_id: 5
-                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 27
+                    rank_title_en: ব্রিগেডিয়ার জেনারেল
+                    rank_title_bn: ব্রিগেডিয়ার জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:21.000000Z'
+                    updated_at: '2021-08-30T05:56:21.000000Z'
                   - id: 5
-                    title_en: Marketing(Bangking)
-                    title_bn: Marketing(Bangking)
-                    display_order: 5
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 0
                     is_designation: 1
                     parent_id: null
-                    parent: null
+                    parent_title_en: null
+                    parent_title_bn: null
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 2
-                    organization_unit_type_title: Mobile Bangking
-                    rank_id: 18
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 50
+                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    rank_title_bn: লেফটেন্যান্ট জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 6
                     title_en: Marketing Child(Bangking)
                     title_bn: Marketing Child(Bangking)
-                    display_order: 8
+                    display_order: 4
                     is_designation: 1
                     parent_id: 5
-                    parent: Marketing(Bangking)
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 2
-                    organization_unit_type_title: Mobile Bangking
-                    rank_id: 49
-                    rank_title_en: জেনারেল
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 50
+                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    rank_title_bn: লেফটেন্যান্ট জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 7
-                    title_en: Marketing(Salary)
-                    title_bn: Marketing(Salary)
-                    display_order: 6
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 9
                     is_designation: 1
-                    parent_id: null
-                    parent: null
+                    parent_id: 5
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 2
-                    organization_unit_type_title: Mobile Bangking
-                    rank_id: 48
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 9
                     rank_title_en: ব্রিগেডিয়ার জেনারেল
+                    rank_title_bn: ব্রিগেডিয়ার জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 8
-                    title_en: Marketing Child(Salary)
-                    title_bn: Marketing Child(Salary)
-                    display_order: 7
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 2
                     is_designation: 1
-                    parent_id: 7
-                    parent: Marketing(Salary)
+                    parent_id: 5
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
                     organization_id: 1
-                    organization_title: Senger-Roberts
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_type_id: 2
-                    organization_unit_type_title: Mobile Bangking
-                    rank_id: 37
-                    rank_title_en: জেনারেল
-                    status: 1
-                    row_status: 1
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 9
-                    title_en: Marketing(Bangking)
-                    title_bn: Marketing(Bangking)
-                    display_order: 6
-                    is_designation: 1
-                    parent_id: null
-                    parent: null
-                    organization_id: 2
-                    organization_title: Hyatt and Sons
-                    organization_unit_type_id: 3
-                    organization_unit_type_title: Payment
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
                     rank_id: 52
                     rank_title_en: জেনারেল
+                    rank_title_bn: জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
+                  - id: 9
+                    title_en: Marketing Child(Bangking)
+                    title_bn: Marketing Child(Bangking)
+                    display_order: 4
+                    is_designation: 1
+                    parent_id: null
+                    parent_title_en: null
+                    parent_title_bn: null
+                    organization_id: 2
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
+                    organization_unit_type_id: 3
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 3
+                    rank_title_en: ব্রিগেডিয়ার জেনারেল
+                    rank_title_bn: ব্রিগেডিয়ার জেনারেল
+                    status: 1
+                    row_status: 1
+                    created_by: null
+                    updated_by: null
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 10
                     title_en: Marketing Child(Bangking)
                     title_bn: Marketing Child(Bangking)
-                    display_order: 5
+                    display_order: 7
                     is_designation: 1
                     parent_id: 9
-                    parent: Marketing(Bangking)
+                    parent_title_en: Marketing Child(Bangking)
+                    parent_title_bn: Marketing Child(Bangking)
                     organization_id: 2
-                    organization_title: Hyatt and Sons
+                    organization_title_en: Baumbach, O'Conner and Shields
+                    organization_title_bn: Baumbach, O'Conner and Shields
                     organization_unit_type_id: 3
-                    organization_unit_type_title: Payment
-                    rank_id: 42
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
+                    organization_unit_type_title_en: Payment
+                    organization_unit_type_title_bn: Payment
+                    rank_id: 44
+                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    rank_title_bn: লেফটেন্যান্ট জেনারেল
                     status: 1
                     row_status: 1
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -3381,24 +3442,28 @@ paths:
               example:
                 data:
                   id: 1
-                  title_en: Marketing(Bangking)
-                  title_bn: Marketing(Bangking)
-                  display_order: 6
+                  title_en: Marketing Child(Bangking)
+                  title_bn: Marketing Child(Bangking)
+                  display_order: 3
                   is_designation: 1
                   parent_id: null
-                  parent: null
+                  parent_title_en: null
+                  parent_title_bn: null
                   organization_id: 1
-                  organization_title: Zulauf, Kohler and O'Keefe
+                  organization_title_en: Boyer PLC
+                  organization_title_bn: Boyer PLC
                   organization_unit_type_id: 1
-                  organization_unit_type_title: abc
-                  rank_id: 34
+                  organization_unit_type_title_en: Payment
+                  organization_unit_type_title_bn: Payment
+                  rank_id: 37
                   rank_title_en: জেনারেল
+                  rank_title_bn: জেনারেল
                   status: 1
                   row_status: 1
                   created_by: null
                   updated_by: null
-                  created_at: '2021-08-22T12:10:30.000000Z'
-                  updated_at: '2021-08-22T12:10:30.000000Z'
+                  created_at: '2021-08-30T05:56:21.000000Z'
+                  updated_at: '2021-08-30T05:56:21.000000Z'
                 _response_status:
                   success: true
                   code: 200
@@ -3478,8 +3543,9 @@ paths:
       description: ' API endpoint to get the list of Human Resources.A successful request response will show 200 HTTP status code'
       parameters:
         - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
       responses:
@@ -3492,220 +3558,114 @@ paths:
               example:
                 current_page: 1
                 total_page: 5
-                page_size: 10
+                page_size: '10'
                 total: 48
                 order: ASC
                 data:
-                  - id: 2
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 6
+                  - id: 1
+                    title_en: Sales executive
+                    title_bn: Sales executive
+                    display_order: 7
                     is_designation: 1
-                    parent_id: 1
-                    parent: Marketing
-                    organization_unit_name: Bangking
+                    parent_id: null
+                    parent_title_en: null
+                    parent_title_bn: null
                     organization_id: 1
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_id: 1
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 2
-                    human_resource_template_name: Marketing Child(Bangking)
-                    rank_id: 17
+                    organization_unit_title_en: Bangking
+                    organization_unit_title_bn: Bangking
+                    human_resource_template_id: 1
+                    human_resource_template_title_en: Marketing Child(Bangking)
+                    human_resource_template_title_bn: Marketing Child(Bangking)
+                    rank_id: 14
+                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    rank_title_bn: লেফটেন্যান্ট জেনারেল
                     status: 1
                     row_status: 1
-                    rank_title_en: লেফটেন্যান্ট জেনারেল
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 1
-                    title_en: Marketing
-                    title_bn: Marketing
+                    created_at: '2021-08-30T05:56:21.000000Z'
+                    updated_at: '2021-08-30T05:56:21.000000Z'
+                  - id: 2
+                    title_en: Sales executive
+                    title_bn: Sales executive
                     display_order: 5
                     is_designation: 1
-                    parent_id: null
-                    parent: null
-                    organization_unit_name: Bangking
+                    parent_id: 1
+                    parent_title_en: Sales executive
+                    parent_title_bn: Sales executive
                     organization_id: 1
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
                     organization_unit_id: 1
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 2
-                    human_resource_template_name: Marketing Child(Bangking)
-                    rank_id: 37
+                    organization_unit_title_en: Bangking
+                    organization_unit_title_bn: Bangking
+                    human_resource_template_id: 1
+                    human_resource_template_title_en: Marketing Child(Bangking)
+                    human_resource_template_title_bn: Marketing Child(Bangking)
+                    rank_id: 43
+                    rank_title_en: জেনারেল
+                    rank_title_bn: জেনারেল
                     status: 1
                     row_status: 1
-                    rank_title_en: জেনারেল
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 3
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 6
-                    is_designation: 1
-                    parent_id: null
-                    parent: null
-                    organization_unit_name: Salary
-                    organization_id: 1
-                    organization_unit_id: 2
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 4
-                    human_resource_template_name: Marketing Child(Salary)
-                    rank_id: 43
-                    status: 1
-                    row_status: 1
-                    rank_title_en: জেনারেল
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 4
                     title_en: Sales executive
                     title_bn: Sales executive
-                    display_order: 9
+                    display_order: 2
                     is_designation: 1
-                    parent_id: 3
-                    parent: Marketing
-                    organization_unit_name: Salary
+                    parent_id: 1
+                    parent_title_en: Sales executive
+                    parent_title_bn: Sales executive
                     organization_id: 1
-                    organization_unit_id: 2
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 4
-                    human_resource_template_name: Marketing Child(Salary)
-                    rank_id: 43
-                    status: 1
-                    row_status: 1
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
+                    organization_unit_id: 1
+                    organization_unit_title_en: Bangking
+                    organization_unit_title_bn: Bangking
+                    human_resource_template_id: 1
+                    human_resource_template_title_en: Marketing Child(Bangking)
+                    human_resource_template_title_bn: Marketing Child(Bangking)
+                    rank_id: 4
                     rank_title_en: জেনারেল
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 5
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 8
-                    is_designation: 1
-                    parent_id: null
-                    parent: null
-                    organization_unit_name: Bangking
-                    organization_id: 1
-                    organization_unit_id: 3
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 6
-                    human_resource_template_name: Marketing Child(Bangking)
-                    rank_id: 11
+                    rank_title_bn: জেনারেল
                     status: 1
                     row_status: 1
-                    rank_title_en: লেফটেন্যান্ট জেনারেল
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 6
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 6
-                    is_designation: 1
-                    parent_id: 5
-                    parent: Marketing
-                    organization_unit_name: Bangking
-                    organization_id: 1
-                    organization_unit_id: 3
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 6
-                    human_resource_template_name: Marketing Child(Bangking)
-                    rank_id: 45
-                    status: 1
-                    row_status: 1
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 7
-                    title_en: Sales executive
-                    title_bn: Sales executive
-                    display_order: 0
-                    is_designation: 1
-                    parent_id: null
-                    parent: null
-                    organization_unit_name: Salary
-                    organization_id: 1
-                    organization_unit_id: 4
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 8
-                    human_resource_template_name: Marketing Child(Salary)
-                    rank_id: 38
-                    status: 1
-                    row_status: 1
-                    rank_title_en: লেফটেন্যান্ট জেনারেল
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                   - id: 8
                     title_en: Sales executive
                     title_bn: Sales executive
-                    display_order: 1
-                    is_designation: 1
-                    parent_id: 7
-                    parent: Sales executive
-                    organization_unit_name: Salary
-                    organization_id: 1
-                    organization_unit_id: 4
-                    organization_name: Senger-Roberts
-                    human_resource_template_id: 8
-                    human_resource_template_name: Marketing Child(Salary)
-                    rank_id: 40
-                    status: 1
-                    row_status: 1
-                    rank_title_en: জেনারেল
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 9
-                    title_en: Marketing
-                    title_bn: Marketing
                     display_order: 5
                     is_designation: 1
-                    parent_id: null
-                    parent: null
-                    organization_unit_name: Bangking
-                    organization_id: 2
-                    organization_unit_id: 5
-                    organization_name: Hyatt and Sons
-                    human_resource_template_id: 10
-                    human_resource_template_name: Marketing Child(Bangking)
-                    rank_id: 13
+                    parent_id: 5
+                    parent_title_en: Marketing
+                    parent_title_bn: Marketing
+                    organization_id: 1
+                    organization_title_en: Boyer PLC
+                    organization_title_bn: Boyer PLC
+                    organization_unit_id: 2
+                    organization_unit_title_en: Bangking
+                    organization_unit_title_bn: Bangking
+                    human_resource_template_id: 5
+                    human_resource_template_title_en: Marketing Child(Bangking)
+                    human_resource_template_title_bn: Marketing Child(Bangking)
+                    rank_id: 41
+                    rank_title_en: লেফটেন্যান্ট জেনারেল
+                    rank_title_bn: লেফটেন্যান্ট জেনারেল
                     status: 1
                     row_status: 1
-                    rank_title_en: জেনারেল
                     created_by: null
                     updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
-                  - id: 10
-                    title_en: Marketing
-                    title_bn: Marketing
-                    display_order: 1
-                    is_designation: 1
-                    parent_id: 9
-                    parent: Marketing
-                    organization_unit_name: Bangking
-                    organization_id: 2
-                    organization_unit_id: 5
-                    organization_name: Hyatt and Sons
-                    human_resource_template_id: 10
-                    human_resource_template_name: Marketing Child(Bangking)
-                    rank_id: 24
-                    status: 1
-                    row_status: 1
-                    rank_title_en: ব্রিগেডিয়ার জেনারেল
-                    created_by: null
-                    updated_by: null
-                    created_at: '2021-08-19T09:11:48.000000Z'
-                    updated_at: '2021-08-19T09:11:48.000000Z'
+                    created_at: '2021-08-30T05:56:22.000000Z'
+                    updated_at: '2021-08-30T05:56:22.000000Z'
                 response_status:
                   success: true
                   code: 200
@@ -3716,7 +3676,6 @@ paths:
       summary: create
       description: API endpoint to create a Human Resource.A successful request response will show 201 HTTP status code
       parameters:
-        - $ref: '#/components/parameters/human_resource_template_id'
         - $ref: '#/components/parameters/organization_id'
         - $ref: '#/components/parameters/organization_unit_id'
         - $ref: '#/components/parameters/title_en'
@@ -3741,7 +3700,6 @@ paths:
                   organization_id: '2'
                   organization_unit_id: '3'
                   parent_id: '1'
-                  human_resource_template_id: '1'
                   rank_id: '1'
                   display_order: '1'
                   is_designation: '1'
@@ -3774,24 +3732,26 @@ paths:
                   id: 2
                   title_en: Sales executive
                   title_bn: Sales executive
-                  display_order: 6
+                  display_order: 5
                   is_designation: 1
                   parent_id: 1
-                  parent: Sales executive
+                  parent_title_en: Sales executive
+                  parent_title_bn: Sales executive
                   organization_id: 1
-                  organization_name: Zulauf, Kohler and O'Keefe
+                  organization_title_en: Boyer PLC
+                  organization_title_bn: Boyer PLC
                   organization_unit_id: 1
-                  organization_unit_name: Bangking
-                  human_resource_template_id: 2
-                  human_resource_template_name: Marketing Child(Bangking)
-                  rank_id: 26
-                  rank_title_en: লেফটেন্যান্ট জেনারেল
+                  organization_unit_title_en: Bangking
+                  organization_unit_title_bn: Bangking
+                  rank_id: 43
+                  rank_title_en: জেনারেল
+                  rank_title_bn: জেনারেল
                   status: 1
                   row_status: 1
                   created_by: null
                   updated_by: null
-                  created_at: '2021-08-22T12:10:30.000000Z'
-                  updated_at: '2021-08-22T12:10:30.000000Z'
+                  created_at: '2021-08-30T05:56:22.000000Z'
+                  updated_at: '2021-08-30T05:56:22.000000Z'
                 _response_status:
                   success: true
                   code: 200
@@ -3803,7 +3763,6 @@ paths:
       description: API endpoint to update an existing organization unit types.A successful request response will show 201 HTTP status code
       parameters:
         - $ref: '#/components/parameters/humanResourceId'
-        - $ref: '#/components/parameters/human_resource_template_id'
         - $ref: '#/components/parameters/organization_id'
         - $ref: '#/components/parameters/organization_unit_id'
         - $ref: '#/components/parameters/title_en'
@@ -3865,6 +3824,369 @@ paths:
                   query_time: 0
       tags:
         - human-resources
+  /divisions:
+    get:
+      summary: get list
+      description: ' API endpoint to get the list of divisions.A successful request response will show 200 HTTP status code'
+      parameters:
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_optional'
+        - $ref: '#/components/parameters/title_en_optional'
+        - $ref: '#/components/parameters/title_bn_optional'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/division'
+              example:
+                order: ASC
+                data:
+                  - id: 1
+                    title_bn: বরিশাল
+                    title_en: Barisal
+                    bbs_code: '10'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 2
+                    title_bn: চট্টগ্রাম
+                    title_en: Chittagong
+                    bbs_code: '20'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 3
+                    title_bn: ঢাকা
+                    title_en: Dhaka
+                    bbs_code: '30'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 4
+                    title_bn: খুলনা
+                    title_en: Khulna
+                    bbs_code: '40'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 5
+                    title_bn: রাজশাহী
+                    title_en: Rajshahi
+                    bbs_code: '50'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 6
+                    title_bn: রংপুর
+                    title_en: Rangpur
+                    bbs_code: '60'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 7
+                    title_bn: সিলেট
+                    title_en: Sylhet
+                    bbs_code: '70'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                  - id: 9
+                    title_bn: ময়মনসিংহ
+                    title_en: Mymensingh
+                    bbs_code: '45'
+                    row_status: 1
+                    created_by: 0
+                    updated_by: 0
+                    created_at: '2021-08-31T07:11:05.000000Z'
+                    updated_at: '2021-08-31T07:11:05.000000Z'
+                _response_status:
+                  success: true
+                  code: 200
+                  query_time: 1 second before
+        default:
+          description: Unexpected error
+      tags:
+        - Division
+  /divisions/{divisionId}:
+    get:
+      summary: get one
+      description: ' API endpoint to get the specified division.A successful request response will show 200 HTTP status code'
+      parameters:
+        - $ref: '#/components/parameters/divisionId'
+      responses:
+        '200':
+          description: Get one Division
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/division'
+              example:
+                data:
+                  id: 4
+                  title_bn: খুলনা
+                  title_en: Khulna
+                  bbs_code: '40'
+                  row_status: 1
+                  created_by: 0
+                  updated_by: 0
+                  created_at: '2021-08-31T07:11:05.000000Z'
+                  updated_at: '2021-08-31T07:11:05.000000Z'
+                _response_status:
+                  success: true
+                  code: 200
+                  query_time: 1 second before
+        default:
+          description: Unexpected error
+      tags:
+        - Division
+  /districts:
+    get:
+      summary: get list
+      description: ' API endpoint to get the list of districts.A successful request response will show 200 HTTP status code'
+      parameters:
+        - $ref: '#/components/parameters/row_status_optional'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/division_id_optional'
+        - $ref: '#/components/parameters/title_en_optional'
+        - $ref: '#/components/parameters/title_bn_optional'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/division'
+              example:
+                order: ASC
+                data:
+                  - id: 1
+                    loc_division_id: 1
+                    title_bn: বরগুনা
+                    title_en: BARGUNA
+                    bbs_code: '04'
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                  - id: 2
+                    loc_division_id: 1
+                    title_bn: বরিশাল
+                    title_en: BARISAL
+                    bbs_code: '06'
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                  - id: 3
+                    loc_division_id: 1
+                    title_bn: ভোলা
+                    title_en: BHOLA
+                    bbs_code: '09'
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                  - id: 4
+                    loc_division_id: 1
+                    title_bn: ঝালকাঠি
+                    title_en: JHALOKATI
+                    bbs_code: '42'
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                _response_status:
+                  success: true
+                  code: 200
+                  query_time: 1 second before
+      tags:
+        - District
+  /districts/{districtId}:
+    get:
+      summary: get one
+      description: ' API endpoint to get the specified district.A successful request response will show 200 HTTP status code'
+      parameters:
+        - $ref: '#/components/parameters/districtId'
+      responses:
+        '200':
+          description: Get one Division
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/division'
+              example:
+                data:
+                  id: 1
+                  loc_division_id: 1
+                  title_bn: বরগুনা
+                  title_en: BARGUNA
+                  bbs_code: '04'
+                  division_bbs_code: '10'
+                  division_title_bn: বরিশাল
+                  division_title_en: Barisal
+                  row_status: 1
+                  created_by: 1
+                  updated_by: 1
+                  created_at: '2021-08-31T07:11:06.000000Z'
+                  updated_at: '2021-08-31T07:11:06.000000Z'
+                _response_status:
+                  success: true
+                  code: 200
+                  query_time: 1 second before
+      tags:
+        - District
+  /upazilas:
+    get:
+      summary: get list
+      description: ' API endpoint to get the list of upazilas.A successful request response will show 200 HTTP status code'
+      parameters:
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/row_status_optional'
+        - $ref: '#/components/parameters/division_id_optional'
+        - $ref: '#/components/parameters/district_id_optional'
+        - $ref: '#/components/parameters/title_en_optional'
+        - $ref: '#/components/parameters/title_bn_optional'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/upazila'
+              example:
+                order: ASC
+                data:
+                  - id: 1
+                    loc_district_id: 1
+                    loc_division_id: 1
+                    title_bn: 'আমতলী '
+                    title_en: AMTALI
+                    bbs_code: '09'
+                    row_status: '1'
+                    district_title_bn: Test Title (BN)
+                    district_title_en: Test Title (EN)
+                    division_bbs_code: '10'
+                    division_title_bn: Test Title (BN)
+                    division_title_en: Test Title (EN)
+                  - id: 2
+                    loc_district_id: 1
+                    loc_division_id: 1
+                    title_bn: 'বামনা '
+                    title_en: BAMNA
+                    bbs_code: '19'
+                    district_title_bn: বরগুনা
+                    district_title_en: BARGUNA
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                  - id: 3
+                    loc_district_id: 1
+                    loc_division_id: 1
+                    title_bn: 'বরগুনা সদর '
+                    title_en: BARGUNA SADAR
+                    bbs_code: '28'
+                    district_title_bn: বরগুনা
+                    district_title_en: BARGUNA
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                  - id: 4
+                    loc_district_id: 1
+                    loc_division_id: 1
+                    title_bn: 'বেতাগী '
+                    title_en: BETAGI
+                    bbs_code: '47'
+                    district_title_bn: বরগুনা
+                    district_title_en: BARGUNA
+                    division_bbs_code: '10'
+                    division_title_bn: বরিশাল
+                    division_title_en: Barisal
+                    row_status: 1
+                    created_by: 1
+                    updated_by: 1
+                    created_at: '2021-08-31T07:11:06.000000Z'
+                    updated_at: '2021-08-31T07:11:06.000000Z'
+                _response_status:
+                  success: true
+                  code: 200
+                  query_time: 1 second before
+      tags:
+        - Upazila
+  /upazilas/{upazilaId}:
+    get:
+      summary: get one
+      parameters:
+        - $ref: '#/components/parameters/upazilaId'
+      responses:
+        '200':
+          description: Get one Upazila
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/upazila'
+              example:
+                data:
+                  id: 1
+                  loc_district_id: 1
+                  loc_division_id: 1
+                  title_bn: 'আমতলী '
+                  title_en: AMTALI
+                  bbs_code: '09'
+                  district_title_bn: Test Title (BN)
+                  district_title_en: Test Title (EN)
+                  division_bbs_code: '10'
+                  division_title_bn: Test Title (BN)
+                  division_title_en: Test Title (EN)
+                _response_status:
+                  success: true
+                  code: 200
+                  query_time: 1 second before
+        default:
+          description: Unexpected error
+      tags:
+        - Upazila
 components:
   schemas:
     organizationType:
@@ -4568,6 +4890,164 @@ components:
         - organization_unit_id
         - display_order
         - is_designation
+    division:
+      type: object
+      description: Provide the Loc Division
+      properties:
+        id:
+          type: integer
+          description: Primary Key
+          readOnly: true
+        title_en:
+          type: string
+          description: Division Title In English
+          minLength: 1
+          maxLength: 255
+        title_bn:
+          type: string
+          description: Division Title In Bengali
+          minLength: 1
+          maxLength: 500
+        bbs_code:
+          type: string
+          description: Division BBS code
+          minLength: 1
+          maxLength: 4
+        row_status:
+          type: integer
+          description: Division activation status
+          enum:
+            - 1
+            - 0
+        create_by:
+          type: integer
+          description: Division creater id
+        updated_by:
+          type: integer
+          description: Division modifier id
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - title_en
+        - title_bn
+    district:
+      type: object
+      description: Provide the Loc District
+      properties:
+        id:
+          type: integer
+          description: Primary Key
+          readOnly: true
+        loc_division_id:
+          type: integer
+          description: Division Id
+        title_en:
+          type: string
+          description: District Title In English
+          minLength: 1
+          maxLength: 255
+        title_bn:
+          type: string
+          description: District Title In Bengali
+          minLength: 1
+          maxLength: 500
+        bbs_code:
+          type: string
+          description: District BBS code
+          minLength: 1
+          maxLength: 4
+        division_bbs_code:
+          type: string
+          description: Division BBS code
+          minLength: 1
+          maxLength: 4
+        row_status:
+          type: integer
+          description: District activation status
+          enum:
+            - 1
+            - 0
+        create_by:
+          type: integer
+          description: District creater id
+        updated_by:
+          type: integer
+          description: District modifier id
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - loc_division_id
+        - title_en
+        - title_bn
+    upazila:
+      type: object
+      description: Provide the Loc Upazila Data
+      properties:
+        id:
+          type: integer
+          description: Primary Key
+          readOnly: true
+        loc_division_id:
+          type: integer
+          description: Division Id
+        loc_district_id:
+          type: integer
+          description: Division Id
+        title_en:
+          type: string
+          description: District Title In English
+          minLength: 1
+          maxLength: 255
+        title_bn:
+          type: string
+          description: District Title In Bengali
+          minLength: 1
+          maxLength: 500
+        bbs_code:
+          type: string
+          description: District BBS code
+          minLength: 1
+          maxLength: 4
+        division_bbs_code:
+          type: string
+          description: Division BBS code
+          minLength: 1
+          maxLength: 4
+        district_bbs_code:
+          type: string
+          description: Division BBS code
+          minLength: 1
+          maxLength: 4
+        row_status:
+          type: integer
+          description: District activation status
+          enum:
+            - 1
+            - 0
+        create_by:
+          type: integer
+          description: District creater id
+        updated_by:
+          type: integer
+          description: District modifier id
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - loc_division_id
+        - title_en
+        - title_bn
   parameters:
     human_resource_template_id:
       name: human_resource_template_id
@@ -4923,6 +5403,13 @@ components:
       schema:
         type: integer
         example: 2
+    organizationId_optional:
+      name: organization_id
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 1
     serviceIds:
       name: serviceIds
       in: query
@@ -4961,10 +5448,52 @@ components:
       schema:
         type: integer
         example: 10
-    limit:
-      name: limit
+    page_size:
+      name: page_size
       in: query
       required: false
       schema:
         type: integer
         example: 10
+    row_status_optional:
+      name: row_status
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 1
+    divisionId:
+      name: divisionId
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 1
+    districtId:
+      name: districtId
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 1
+    upazilaId:
+      name: upazilaId
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 1
+    division_id_optional:
+      name: division_id
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 1
+    district_id_optional:
+      name: district_id
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 1
