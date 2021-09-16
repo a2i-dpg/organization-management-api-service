@@ -714,6 +714,9 @@
                         "$ref": "#/components/parameters/organizationId"
                     },
                     {
+                        "$ref": "#/components/parameters/permission_sub_group_id"
+                    },
+                    {
                         "$ref": "#/components/parameters/organization_type_id"
                     },
                     {
