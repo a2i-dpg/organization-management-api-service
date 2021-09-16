@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -74,24 +76,60 @@ class OrganizationController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return Exception|Throwable|JsonResponse
      * @throws ValidationException
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
+        $organization = new Organization();
+
         $validated = $this->organizationService->validator($request)->validate();
+
+        DB::beginTransaction();
         try {
-            $data = $this->organizationService->store($validated);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Organization added successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+            $organization = $this->organizationService->store($organization, $validated);
+            if ($organization) {
+                $validated['organization_id'] = $organization->id;
+                $createUser = $this->organizationService->createUser($validated);
+                Log::info('id_user_info:' . json_encode($createUser));
+                if ($createUser && $createUser['_response_status']['success']) {
+                    $response = [
+                        'data' => $organization ?: [],
+                        '_response_status' => [
+                            "success" => true,
+                            "code" => ResponseAlias::HTTP_CREATED,
+                            "message" => "Organization Successfully Create",
+                            "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                        ]
+                    ];
+                    DB::commit();
+                } else {
+                    if ($createUser && $createUser['_response_status']['code'] == 400) {
+                        $response = [
+                            'errors' => $createUser['errors'] ?? [],
+                            '_response_status' => [
+                                "success" => false,
+                                "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                                "message" => "Validation Error",
+                                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                            ]
+                        ];
+                    } else {
+                        $response = [
+                            '_response_status' => [
+                                "success" => false,
+                                "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
+                                "message" => "Unprocessable Request,Please contact",
+                                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                            ]
+                        ];
+                    }
+
+                    DB::rollBack();
+                }
+            }
         } catch (Throwable $e) {
+            DB::rollBack();
             return $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);

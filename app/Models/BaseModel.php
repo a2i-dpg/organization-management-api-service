@@ -19,4 +19,9 @@ abstract class BaseModel extends Model
     public const ROW_ORDER_ASC = 'ASC';
     public const ROW_ORDER_DESC = 'DESC';
 
+    public const ORGANIZATION_TYPE='organization';
+
+    public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL='http://localhost:8001/api/v1/';
+    public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE='http://nise3-core-api-service.default/api/v1/';
+
 }

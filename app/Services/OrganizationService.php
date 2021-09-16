@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Models\BaseModel;
 use Carbon\Carbon;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use App\Models\Organization;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -212,12 +214,39 @@ class OrganizationService
      * @param array $data
      * @return Organization
      */
-    public function store(array $data): Organization
+    public function store(Organization $organization, array $data): Organization
     {
-        $organization = new Organization();
         $organization->fill($data);
         $organization->save();
         return $organization;
+    }
+
+    /**
+     * @param array $data
+     * @throws RequestException
+     */
+    public function createUser(array $data)
+    {
+        $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL . 'register-users';
+        if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
+            $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'register-users';
+        }
+        $username = str_replace('', '_', $data['title_en']);
+
+        $userPostField = [
+            'permission_sub_group_id' => $data['permission_sub_group_id'],
+            'user_type' => BaseModel::ORGANIZATION_TYPE,
+            'username' => strtolower($username),
+            'organization_id' => $data['organization_id'],
+            'name_en' => $data['title_en'],
+            'name_bn' => $data['title_bn'] ?? "",
+            'email' => $data['email'],
+            'mobile' => $data['mobile'],
+        ];
+
+        return Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
+            return $e;
+        })->json();
     }
 
     /**
@@ -342,6 +371,10 @@ class OrganizationService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
+            'permission_sub_group_id' => [
+                'required',
+                'numeric'
+            ],
             'title_en' => [
                 'required',
                 'string',
@@ -359,7 +392,7 @@ class OrganizationService
                 'int'
             ],
             'domain' => [
-                'required',
+                'nullable',
                 'string',
                 'max:191',
                 'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
