@@ -4,7 +4,7 @@ info:
   title: organization management api service
   description: ''
   termsOfService: ''
-  contact: { }
+  contact: {}
   license:
     name: ''
 servers:
@@ -198,7 +198,7 @@ paths:
           description: delete
           content:
             application/json:
-              schema: { }
+              schema: {}
               example:
                 _response_status:
                   success: true
@@ -404,6 +404,7 @@ paths:
       summary: create
       description: API endpoint to create a organization.A successful request response will show 200 HTTP status code
       parameters:
+        - $ref: '#/components/parameters/permission_sub_group_id'
         - $ref: '#/components/parameters/title_en'
         - $ref: '#/components/parameters/organization_type_id'
         - $ref: '#/components/parameters/title_bn'
@@ -512,6 +513,7 @@ paths:
       description: API endpoint to get the specified organization.A successful request response will show 200 HTTP status code
       parameters:
         - $ref: '#/components/parameters/organizationId'
+        - $ref: '#/components/parameters/permission_sub_group_id'
         - $ref: '#/components/parameters/organization_type_id'
         - $ref: '#/components/parameters/title_en'
         - $ref: '#/components/parameters/title_bn'
@@ -2095,7 +2097,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: [ ]
+                      children: []
                     - id: 49
                       organization_id: 2
                       organization_unit_type_id: 1
@@ -2153,7 +2155,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: [ ]
+                      children: []
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -2609,7 +2611,7 @@ paths:
                   updated_by: null
                   created_at: '2021-08-30T05:56:15.000000Z'
                   updated_at: '2021-08-30T05:56:15.000000Z'
-                  services: [ ]
+                  services: []
                 _response_status:
                   success: true
                   code: 200
@@ -2824,7 +2826,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-22T12:10:24.000000Z'
                         deleted_at: null
-                      children: [ ]
+                      children: []
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -3781,7 +3783,6 @@ paths:
               example:
                 data:
                   id: 2
-                  human_resource_template_id: '1'
                   organization_id: '2'
                   organization_unit_id: '3'
                   title_en: abc
@@ -5382,6 +5383,12 @@ components:
       schema:
         type: string
         example: company_name@gmail.com
+    permission_sub_group_id:
+      name: permission_sub_group_id
+      in: query
+      required: true
+      schema:
+        type: integer
     logo:
       name: logo
       in: query

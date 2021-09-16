@@ -231,7 +231,7 @@ class OrganizationService
         if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
             $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'register-users';
         }
-        $username = str_replace('', '_', $data['title_en']);
+        $username = str_replace(' ', '_', $data['title_en']);
 
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
