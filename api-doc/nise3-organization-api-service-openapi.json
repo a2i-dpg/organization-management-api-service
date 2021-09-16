@@ -542,6 +542,9 @@
                 "description": "API endpoint to create a organization.A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/permission_sub_group_id"
+                    },
+                    {
                         "$ref": "#/components/parameters/title_en"
                     },
                     {
@@ -7321,6 +7324,14 @@
                 "schema": {
                     "type": "string",
                     "example": "company_name@gmail.com"
+                }
+            },
+            "permission_sub_group_id": {
+                "name": "permission_sub_group_id",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "logo": {

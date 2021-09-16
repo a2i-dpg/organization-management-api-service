@@ -27,8 +27,8 @@ class CreateOrganizationsTable extends Migration
             $table->unsignedMediumInteger('loc_upazila_id')->nullable()->index('org_loc_upazila_id_inx');
 
             $table->string('address', 1000)->nullable();
-            $table->string('mobile', 15)->nullable();
-            $table->string('email', 191)->nullable();
+            $table->string('mobile', 15);
+            $table->string('email', 191);
             $table->string('fax_no', 30)->nullable();
 
             $table->string('contact_person_name', 500)->nullable();
