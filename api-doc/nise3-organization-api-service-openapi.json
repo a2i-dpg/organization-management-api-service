@@ -1162,6 +1162,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_bn_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id_optional"
                     }
                 ],
                 "responses": {

@@ -33,6 +33,7 @@ class RankService
         $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
         $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
         $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+        $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
 
         /** @var Builder $rankBuilder */
         $rankBuilder = Rank::select(
@@ -71,8 +72,12 @@ class RankService
         });
         $rankBuilder->orderBy('ranks.id', $order);
 
+
         if (is_numeric($rowStatus)) {
             $rankBuilder->where('ranks.row_status', $rowStatus);
+        }
+        if (is_numeric($organizationId)) {
+            $rankBuilder->where('ranks.organization_id', $organizationId);
         }
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
@@ -341,6 +346,7 @@ class RankService
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
             'pageSize' => 'numeric',
+            'organization_id' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
