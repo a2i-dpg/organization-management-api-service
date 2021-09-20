@@ -27,12 +27,13 @@ class OrganizationService
      */
     public function getAllOrganization(array $request, Carbon $startTime): array
     {
-        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
-        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
-        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
-        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
-        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+        $titleEn = $request['title_en'] ?? "";
+        $titleBn = $request['title_bn'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+        $organizationTypeId = $request['organization_type_id'] ?? "ASC";
 
 
         /** @var Builder organizationBuilder */
@@ -102,6 +103,10 @@ class OrganizationService
 
         if (is_numeric($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
+        }
+
+        if (is_numeric($organizationTypeId)) {
+            $organizationBuilder->where('organizations.organization_type_id', $organizationTypeId);
         }
 
         if (!empty($titleEn)) {
@@ -494,7 +499,8 @@ class OrganizationService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'page_size' => 'numeric',
+            'page_size' => 'numeric|gt:0',
+            'organization_type_id' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

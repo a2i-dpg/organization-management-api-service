@@ -25,13 +25,13 @@ class OrganizationUnitTypeService
      */
     public function getAllOrganizationUnitType(array $request, Carbon $startTime): array
     {
-        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
-        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
-        $paginate = array_key_exists('page', $request) ? $request['page'] : "";
-        $pageSize = array_key_exists('page_size', $request) ? $request['page_size'] : "";
-        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
-        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
-        $organizationId = array_key_exists('organization_id', $request) ? $request['organization_id'] : "";
+        $titleEn = $request['title_en'] ?? "";
+        $titleBn = $request['title_bn'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+        $organizationId = $request['organization_id'] ?? "";
 
 
         /** @var Builder $organizationUnitTypeBuilder */
@@ -310,7 +310,7 @@ class OrganizationUnitTypeService
             'title_en' => 'nullable|min:1',
             'title_bn' => 'nullable|min:1',
             'page' => 'numeric|gt:0',
-            'organization_id' => 'numeric',
+            'organization_id' => 'numeric|gt:0',
             'pageSize' => 'numeric',
             'order' => [
                 'string',

@@ -343,6 +343,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_bn_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_type_id_optional"
                     }
                 ],
                 "responses": {
@@ -3152,6 +3155,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_bn_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_type_id_optional"
                     }
                 ],
                 "responses": {
@@ -4350,6 +4359,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_bn_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_type_id_optional"
                     }
                 ],
                 "responses": {
@@ -4898,6 +4913,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_bn_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_id_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/organization_unit_id_optional"
                     }
                 ],
                 "responses": {
@@ -6958,6 +6979,14 @@
                     "example": 1
                 }
             },
+            "organization_unit_type_id_optional": {
+                "name": "organization_unit_type_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "skill_ids": {
                 "name": "skill_ids",
                 "in": "query",
@@ -7001,6 +7030,14 @@
                 "schema": {
                     "type": "integer",
                     "example": 3
+                }
+            },
+            "organization_unit_id_optional": {
+                "name": "organization_unit_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "skillId": {
@@ -7054,8 +7091,7 @@
                 "required": false,
                 "style": "form",
                 "schema": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 }
             },
             "order": {
@@ -7171,8 +7207,7 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "example": 5
+                    "type": "integer"
                 }
             },
             "is_government": {
@@ -7222,6 +7257,14 @@
                 "schema": {
                     "type": "integer",
                     "example": 1
+                }
+            },
+            "organization_type_id_optional": {
+                "name": "organization_type_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "loc_division_id": {
@@ -7372,8 +7415,7 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 }
             },
             "serviceIds": {
@@ -7432,8 +7474,7 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "integer"
                 }
             },
             "row_status_optional": {
@@ -7441,8 +7482,7 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 }
             },
             "divisionId": {
@@ -7477,8 +7517,7 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 }
             },
             "district_id_optional": {
@@ -7486,8 +7525,7 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 }
             }
         }

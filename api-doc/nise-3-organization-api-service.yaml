@@ -4,7 +4,7 @@ info:
   title: organization management api service
   description: ''
   termsOfService: ''
-  contact: { }
+  contact: {}
   license:
     name: ''
 servers:
@@ -198,7 +198,7 @@ paths:
           description: delete
           content:
             application/json:
-              schema: { }
+              schema: {}
               example:
                 _response_status:
                   success: true
@@ -218,6 +218,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_type_id_optional'
       responses:
         '200':
           description: get list
@@ -2098,7 +2099,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: [ ]
+                      children: []
                     - id: 49
                       organization_id: 2
                       organization_unit_type_id: 1
@@ -2156,7 +2157,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-23T07:57:19.000000Z'
                         deleted_at: null
-                      children: [ ]
+                      children: []
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -2213,6 +2214,8 @@ paths:
         - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
+        - $ref: '#/components/parameters/organization_unit_type_id_optional'
       responses:
         '200':
           description: get list
@@ -2612,7 +2615,7 @@ paths:
                   updated_by: null
                   created_at: '2021-08-30T05:56:15.000000Z'
                   updated_at: '2021-08-30T05:56:15.000000Z'
-                  services: [ ]
+                  services: []
                 _response_status:
                   success: true
                   code: 200
@@ -2827,7 +2830,7 @@ paths:
                         created_at: '2021-08-22T12:10:24.000000Z'
                         updated_at: '2021-08-22T12:10:24.000000Z'
                         deleted_at: null
-                      children: [ ]
+                      children: []
                   organization:
                     id: 1
                     organization_type_id: 1
@@ -3137,6 +3140,8 @@ paths:
         - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
+        - $ref: '#/components/parameters/organization_unit_type_id_optional'
       responses:
         '200':
           description: get list
@@ -3551,6 +3556,8 @@ paths:
         - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
+        - $ref: '#/components/parameters/organization_unit_id_optional'
       responses:
         '200':
           description: get list
@@ -5093,6 +5100,12 @@ components:
       schema:
         type: integer
         example: 1
+    organization_unit_type_id_optional:
+      name: organization_unit_type_id
+      in: query
+      required: false
+      schema:
+        type: integer
     skill_ids:
       name: skill_ids
       in: query
@@ -5128,6 +5141,12 @@ components:
       schema:
         type: integer
         example: 3
+    organization_unit_id_optional:
+      name: organization_unit_id
+      in: query
+      required: false
+      schema:
+        type: integer
     skillId:
       name: skillId
       in: path
@@ -5170,7 +5189,6 @@ components:
       style: form
       schema:
         type: integer
-        example: 1
     order:
       in: query
       name: order
@@ -5261,7 +5279,6 @@ components:
       required: false
       schema:
         type: integer
-        example: 5
     is_government:
       name: is_government
       in: query
@@ -5300,6 +5317,12 @@ components:
       schema:
         type: integer
         example: 1
+    organization_type_id_optional:
+      name: organization_type_id
+      in: query
+      required: false
+      schema:
+        type: integer
     loc_division_id:
       name: loc_division_id
       in: query
@@ -5417,7 +5440,6 @@ components:
       required: false
       schema:
         type: integer
-        example: 1
     serviceIds:
       name: serviceIds
       in: query
@@ -5462,14 +5484,12 @@ components:
       required: false
       schema:
         type: integer
-        example: 10
     row_status_optional:
       name: row_status
       in: query
       required: false
       schema:
         type: integer
-        example: 1
     divisionId:
       name: divisionId
       in: path
@@ -5497,11 +5517,9 @@ components:
       required: false
       schema:
         type: integer
-        example: 1
     district_id_optional:
       name: district_id
       in: query
       required: false
       schema:
         type: integer
-        example: 1
