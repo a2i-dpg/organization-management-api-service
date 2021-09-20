@@ -218,6 +218,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_type_id_optional'
       responses:
         '200':
           description: get list
@@ -788,6 +789,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
       responses:
         '200':
           description: get_list
@@ -2212,6 +2214,8 @@ paths:
         - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
+        - $ref: '#/components/parameters/organization_unit_type_id_optional'
       responses:
         '200':
           description: get list
@@ -3136,6 +3140,8 @@ paths:
         - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
+        - $ref: '#/components/parameters/organization_unit_type_id_optional'
       responses:
         '200':
           description: get list
@@ -3550,6 +3556,8 @@ paths:
         - $ref: '#/components/parameters/row_status_optional'
         - $ref: '#/components/parameters/title_en_optional'
         - $ref: '#/components/parameters/title_bn_optional'
+        - $ref: '#/components/parameters/organization_id_optional'
+        - $ref: '#/components/parameters/organization_unit_id_optional'
       responses:
         '200':
           description: get list
@@ -5092,6 +5100,12 @@ components:
       schema:
         type: integer
         example: 1
+    organization_unit_type_id_optional:
+      name: organization_unit_type_id
+      in: query
+      required: false
+      schema:
+        type: integer
     skill_ids:
       name: skill_ids
       in: query
@@ -5127,6 +5141,12 @@ components:
       schema:
         type: integer
         example: 3
+    organization_unit_id_optional:
+      name: organization_unit_id
+      in: query
+      required: false
+      schema:
+        type: integer
     skillId:
       name: skillId
       in: path
@@ -5169,7 +5189,6 @@ components:
       style: form
       schema:
         type: integer
-        example: 1
     order:
       in: query
       name: order
@@ -5260,7 +5279,6 @@ components:
       required: false
       schema:
         type: integer
-        example: 5
     is_government:
       name: is_government
       in: query
@@ -5299,6 +5317,12 @@ components:
       schema:
         type: integer
         example: 1
+    organization_type_id_optional:
+      name: organization_type_id
+      in: query
+      required: false
+      schema:
+        type: integer
     loc_division_id:
       name: loc_division_id
       in: query
@@ -5416,7 +5440,6 @@ components:
       required: false
       schema:
         type: integer
-        example: 1
     serviceIds:
       name: serviceIds
       in: query
@@ -5461,14 +5484,12 @@ components:
       required: false
       schema:
         type: integer
-        example: 10
     row_status_optional:
       name: row_status
       in: query
       required: false
       schema:
         type: integer
-        example: 1
     divisionId:
       name: divisionId
       in: path
@@ -5496,11 +5517,9 @@ components:
       required: false
       schema:
         type: integer
-        example: 1
     district_id_optional:
       name: district_id
       in: query
       required: false
       schema:
         type: integer
-        example: 1
