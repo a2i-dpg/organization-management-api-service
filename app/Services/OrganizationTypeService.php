@@ -158,9 +158,9 @@ class OrganizationTypeService
     {
         $titleEn = $request->query('title_en');
         $titleBn = $request->query('title_bn');
-        $pageSize = $request->query(' $pageSize', 10);
+        $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
+        $order =$request->query('order','ASC');
 
         /** @var Builder $organizationTypeBuilder */
         $organizationTypeBuilder = OrganizationType::onlyTrashed()->select([

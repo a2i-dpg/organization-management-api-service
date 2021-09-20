@@ -32,8 +32,8 @@ class OrganizationUnitService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $organizationId = $request['organization_id'] ?? "ASC";
-        $organizationUnitTypeId = $request['organization_unit_type_id'] ?? "ASC";
+        $organizationId = $request['organization_id'] ?? "";
+        $organizationUnitTypeId = $request['organization_unit_type_id'] ?? "";
 
         /** @var Builder $organizationUnitBuilder */
         $organizationUnitBuilder = OrganizationUnit::select([

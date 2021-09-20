@@ -33,7 +33,7 @@ class OrganizationService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $organizationTypeId = $request['organization_type_id'] ?? "ASC";
+        $organizationTypeId = $request['organization_type_id'] ?? "";
 
 
         /** @var Builder organizationBuilder */

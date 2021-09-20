@@ -31,8 +31,8 @@ class HumanResourceService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $organizationId = $request['organization_id'] ?? "ASC";
-        $organizationUnitId = $request['organization_unit_id'] ?? "ASC";
+        $organizationId = $request['organization_id'] ?? "";
+        $organizationUnitId = $request['organization_unit_id'] ?? "";
 
         /** @var Builder $humanResourceBuilder */
         $humanResourceBuilder = HumanResource::select([
@@ -335,7 +335,7 @@ class HumanResourceService
         $customMessage = [
             'row_status.in' => [
                 'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
+                'message' => 'Row status must be either 1 or 0'
             ]
         ];
         $rules = [
