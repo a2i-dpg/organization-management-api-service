@@ -228,7 +228,7 @@ class ServiceService
      */
     public function forceDelete(Service $service): bool
     {
-        return $this->forceDelete();
+        return $service->forceDelete();
     }
 
     /**
@@ -285,10 +285,10 @@ class ServiceService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:191|min:2',
+            'title_bn' => 'nullable|max:1000|min:2',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
+            'page_size' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

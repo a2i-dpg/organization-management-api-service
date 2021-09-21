@@ -216,6 +216,7 @@ class OrganizationService
     }
 
     /**
+     * @param Organization $organization
      * @param array $data
      * @return Organization
      */
@@ -228,6 +229,7 @@ class OrganizationService
 
     /**
      * @param array $data
+     * @return array|mixed
      * @throws RequestException
      */
     public function createUser(array $data)
@@ -416,7 +418,7 @@ class OrganizationService
             'fax_no' => [
                 'nullable',
                 'string',
-                'max: 50',
+                'max: 30',
             ],
             'loc_division_id' => [
                 'nullable',
@@ -432,6 +434,7 @@ class OrganizationService
             ],
             'contact_person_mobile' => [
                 'required',
+                 'max:15',
                 'regex: /^(?:\+88|88)?(01[3-9]\d{8})$/',
             ],
             'contact_person_name' => [
@@ -446,15 +449,18 @@ class OrganizationService
             ],
             'contact_person_email' => [
                 'required',
-                'email'
+                'email',
+                'max:191'
             ],
             'mobile' => [
                 'required',
+                'max:15',
                 'regex: /^(?:\+88|88)?(01[3-9]\d{8})$/',
             ],
             'email' => [
                 'required',
                 'email',
+                'max:191'
             ],
             'logo' => [
                 'required_if:' . $id . ',null',
@@ -496,11 +502,11 @@ class OrganizationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:300|min:2',
+            'title_bn' => 'nullable|max:1000|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',
-            'organization_type_id' => 'numeric|gt:0',
+            'organization_type_id' => 'numeric|gt:0|exists:organization_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

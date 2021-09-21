@@ -317,11 +317,11 @@ class RankTypeService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'organization_id' => 'numeric|gt:0',
+            'title_en' => 'nullable|max:191|min:2',
+            'title_bn' => 'nullable|max:500|min:2',
+            'organization_id' => 'numeric|exists:organizations,id',
             'page' => 'numeric|gt:0',
-            'limit' => 'numeric',
+            'page_size' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

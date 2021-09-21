@@ -259,7 +259,7 @@ class OccupationService
             'title_en' => [
                 'required',
                 'string',
-                'max:200',
+                'max:300',
                 'min:2',
             ],
             'title_bn' => [
@@ -304,8 +304,8 @@ class OccupationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:300|min:2',
+            'title_bn' => 'nullable|max:800|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric',
             'order' => [
