@@ -20,11 +20,11 @@ class LocDistrictService
      */
     public function getAllDistricts(array $request, Carbon $startTime): array
     {
-        $titleEn = array_key_exists('title_en', $request) ? $request['title_en'] : "";
-        $titleBn = array_key_exists('title_bn', $request) ? $request['title_bn'] : "";
-        $rowStatus = array_key_exists('row_status', $request) ? $request['row_status'] : "";
-        $divisionId = array_key_exists('division_id', $request) ? $request['division_id'] : "";
-        $order = array_key_exists('order', $request) ? $request['order'] : "ASC";
+        $titleEn = $request['title_en'] ?? "";
+        $titleBn = $request['title_bn'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $divisionId = $request['division_id'] ?? "";
+        $order = $request['order'] ?? "ASC";
 
         /** @var Builder $districtsBuilder */
         $districtsBuilder = LocDistrict::select([
@@ -140,9 +140,9 @@ class LocDistrictService
         ];
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'division_id' => 'numeric|gt:0',
+            'title_en' => 'nullable|max:191|min:2',
+            'title_bn' => 'nullable|max:500|min:2',
+            'division_id' => 'numeric|exists:divisions,id',
             'order' => [
                 'string',
                 Rule::in([(BaseModel::ROW_ORDER_ASC), (BaseModel::ROW_ORDER_DESC)])

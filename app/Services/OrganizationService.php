@@ -110,9 +110,9 @@ class OrganizationService
         }
 
         if (!empty($titleEn)) {
-            $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationBuilder->where('organizations.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizations */
@@ -434,7 +434,7 @@ class OrganizationService
             ],
             'contact_person_mobile' => [
                 'required',
-                 'max:15',
+                'max:15',
                 'regex: /^(?:\+88|88)?(01[3-9]\d{8})$/',
             ],
             'contact_person_name' => [

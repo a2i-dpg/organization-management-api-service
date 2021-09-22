@@ -101,9 +101,9 @@ class HumanResourceService
             $humanResourceBuilder->where('human_resources.organization_unit_id', $organizationUnitId);
         }
         if (!empty($titleEn)) {
-            $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
+            $humanResourceBuilder->where('human_resources.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $humanResourceBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceBuilder->where('human_resources.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $humanResources */
@@ -379,15 +379,6 @@ class HumanResourceService
             'is_designation' => [
                 'required',
                 'int',
-            ],
-            'skill_ids' => [
-                'nullable',
-                'array'
-            ],
-            'skill_ids.*' => [
-                'nullable',
-                'int',
-                'distinct'
             ],
             'status' => [
                 'int',

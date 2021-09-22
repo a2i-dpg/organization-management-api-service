@@ -53,7 +53,7 @@ class JobSectorService
         }
 
         if (!empty($titleEn)) {
-            $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
+            $jobSectorBuilder->where('job_sectors.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
             $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }

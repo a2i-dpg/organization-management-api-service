@@ -62,9 +62,9 @@ class OrganizationUnitTypeService
             $organizationUnitTypeBuilder->where('organization_unit_types.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
-            $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
+            $organizationUnitTypeBuilder->where('organization_unit_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationUnitTypeBuilder->where('organization_unit_types.title_bn', 'like', '%' . $titleBn . '%');
         }
         if (is_numeric($organizationId)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);

@@ -35,14 +35,6 @@ class HumanResource extends BaseModel
     protected $guarded = ['id'];
 
     /**
-     * @var string[]
-     */
-    protected $casts = [
-        'skill_ids' => 'array',
-    ];
-
-
-    /**
      * @return BelongsTo
      */
     public function organization(): BelongsTo

@@ -121,7 +121,7 @@ class OrganizationUnitService
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationUnitBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationUnitBuilder->where('organization_units.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var  Collection $organizationUnits */
