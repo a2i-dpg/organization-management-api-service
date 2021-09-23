@@ -7,6 +7,7 @@ use App\Models\LocDivision;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,14 +49,16 @@ class LocDivisionService
         }
         if (!empty($titleEn)) {
             $divisionsBuilder->where('title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $divisionsBuilder->where('title_bn', 'like', '%' . $titleBn . '%');
         }
 
-        $divisionsBuilder = $divisionsBuilder->get();
+        /** @var Collection $divisions */
+        $divisions = $divisionsBuilder->get();
 
         $response['order'] = $order;
-        $response['data'] = $divisionsBuilder->toArray()['data'] ?? $divisionsBuilder->toArray();
+        $response['data'] = $divisions->toArray()['data'] ?? $divisions->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -86,7 +89,7 @@ class LocDivisionService
         ]);
         $divisionsBuilder->where('id', $id);
 
-        /** @var  $divisions */
+        /** @var  LocDivision $divisions */
         $divisions = $divisionsBuilder->first();
 
         return [

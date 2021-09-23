@@ -67,7 +67,8 @@ class RankTypeService
         }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $rankTypeBuilder->where('rank_types.title_bn', 'like', '%' . $titleBn . '%');
         }
 

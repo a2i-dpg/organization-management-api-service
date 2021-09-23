@@ -278,7 +278,8 @@ class HumanResourceService
 
         if (!empty($titleEn)) {
             $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $humanResourceBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
         }
 

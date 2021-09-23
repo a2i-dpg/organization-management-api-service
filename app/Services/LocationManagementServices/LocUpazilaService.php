@@ -8,6 +8,7 @@ use App\Models\BaseModel;
 use App\Models\LocUpazila;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -28,21 +29,21 @@ class LocUpazilaService
         $titleEn = $request['title_en'] ?? "";
         $titleBn = $request['title_bn'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
-        $districtId = $request['district_id'] ?? "";
-        $divisionId = $request['division_id'] ?? "";
+        $districtId = $request['loc_district_id'] ?? "";
+        $divisionId = $request['loc_division_id'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var LocUpazila|Builder $upazilasBuilder */
         $upazilasBuilder = LocUpazila::select([
             'loc_upazilas.id',
-            'loc_upazilas.loc_district_id',
-            'loc_upazilas.loc_division_id',
             'loc_upazilas.title_bn',
             'loc_upazilas.title_en',
             'loc_upazilas.bbs_code',
+            'loc_upazilas.loc_district_id',
             'loc_districts.title_bn as district_title_bn',
             'loc_districts.title_en as district_title_en',
             'loc_districts.division_bbs_code',
+            'loc_upazilas.loc_division_id',
             'loc_divisions.title_bn as division_title_bn',
             'loc_divisions.title_en as division_title_en',
             'loc_upazilas.row_status',
@@ -76,22 +77,23 @@ class LocUpazilaService
 
         if (!empty($titleEn)) {
             $upazilasBuilder->where('loc_upazilas.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $upazilasBuilder->where('loc_upazilas.title_bn', 'like', '%' . $titleBn . '%');
         }
 
-        if (!empty($districtId)) {
+        if (is_numeric($districtId)) {
             $upazilasBuilder->where('loc_upazilas.loc_district_id', $districtId);
         }
 
-        if (!empty($divisionId)) {
+        if (is_numeric($divisionId)) {
             $upazilasBuilder->where('loc_upazilas.loc_division_id', $divisionId);
         }
-
-        $upazilasBuilder = $upazilasBuilder->get();
+        /** @var Collection $upazilas */
+        $upazilas = $upazilasBuilder->get();
 
         $response['order'] = $order;
-        $response['data'] = $upazilasBuilder->toArray()['data'] ?? $upazilasBuilder->toArray();
+        $response['data'] = $upazilas->toArray()['data'] ?? $upazilas->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -170,8 +172,8 @@ class LocUpazilaService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:191|min:2',
             'title_bn' => 'nullable|max:500|min:2',
-            'district_id' => 'numeric|exists:districts,id',
-            'division_id' => 'numeric|exists:divisions,id',
+            'loc_district_id' => 'numeric|exists:loc_districts,id',
+            'loc_division_id' => 'numeric|exists:loc_divisions,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

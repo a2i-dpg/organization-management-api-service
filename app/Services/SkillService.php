@@ -54,7 +54,8 @@ class SkillService
         }
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $skillBuilder->where('skills.title_bn', 'like', '%' . $titleBn . '%');
         }
 

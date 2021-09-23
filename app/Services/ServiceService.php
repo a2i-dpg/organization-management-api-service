@@ -184,7 +184,8 @@ class ServiceService
         }
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $serviceBuilder->where('services.title_bn', 'like', '%' . $titleBn . '%');
         }
 

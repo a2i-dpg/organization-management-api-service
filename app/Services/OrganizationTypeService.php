@@ -52,13 +52,14 @@ class OrganizationTypeService
         }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizationTypes */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();

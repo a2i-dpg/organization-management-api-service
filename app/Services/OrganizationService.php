@@ -111,7 +111,8 @@ class OrganizationService
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $organizationBuilder->where('organizations.title_bn', 'like', '%' . $titleBn . '%');
         }
 

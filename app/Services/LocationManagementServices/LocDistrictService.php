@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\LocDistrict;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -23,17 +24,17 @@ class LocDistrictService
         $titleEn = $request['title_en'] ?? "";
         $titleBn = $request['title_bn'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
-        $divisionId = $request['division_id'] ?? "";
+        $divisionId = $request['loc_division_id'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $districtsBuilder */
         $districtsBuilder = LocDistrict::select([
             'loc_districts.id',
-            'loc_districts.loc_division_id',
             'loc_districts.title_bn',
             'loc_districts.title_en',
             'loc_districts.bbs_code',
             'loc_districts.division_bbs_code',
+            'loc_districts.loc_division_id',
             'loc_divisions.title_bn as division_title_bn',
             'loc_divisions.title_en as division_title_en',
             'loc_districts.row_status',
@@ -60,18 +61,19 @@ class LocDistrictService
 
         if (!empty($titleEn)) {
             $districtsBuilder->where('loc_districts.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $districtsBuilder->where('loc_districts.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         if (is_numeric($divisionId)) {
             $districtsBuilder->where('loc_districts.loc_division_id', $divisionId);
         }
-
-        $districtsBuilder = $districtsBuilder->get();
+        /** @var Collection $districts */
+        $districts = $districtsBuilder->get();
 
         $response['order'] = $order;
-        $response['data'] = $districtsBuilder->toArray()['data'] ?? $districtsBuilder->toArray();
+        $response['data'] = $districts->toArray()['data'] ?? $districts->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -142,7 +144,7 @@ class LocDistrictService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:191|min:2',
             'title_bn' => 'nullable|max:500|min:2',
-            'division_id' => 'numeric|exists:divisions,id',
+            'loc_division_id' => 'numeric|exists:loc_divisions,id',
             'order' => [
                 'string',
                 Rule::in([(BaseModel::ROW_ORDER_ASC), (BaseModel::ROW_ORDER_DESC)])

@@ -63,7 +63,8 @@ class OrganizationUnitTypeService
         }
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.title_bn', 'like', '%' . $titleBn . '%');
         }
         if (is_numeric($organizationId)) {

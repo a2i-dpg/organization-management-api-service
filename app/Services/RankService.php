@@ -81,7 +81,8 @@ class RankService
         }
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $rankBuilder->where('ranks.title_bn', 'like', '%' . $titleBn . '%');
         }
 
