@@ -136,6 +136,70 @@ class OrganizationController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return Exception|JsonResponse|Throwable
+     * @throws ValidationException
+     */
+    public function organizationRegister(Request $request):JsonResponse
+   {
+
+       $organization = new Organization();
+
+       $validated = $this->organizationService->registerOrganizationvalidator($request)->validate();
+
+       DB::beginTransaction();
+       try {
+           $organization = $this->organizationService->store($organization, $validated);
+           if ($organization) {
+
+               $validated['organization_id'] = $organization->id;
+               $createRegisterUser = $this->organizationService->createRegisterUser($validated);
+
+               if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
+                   $response = [
+                       'data' => $organization ?: [],
+                       '_response_status' => [
+                           "success" => true,
+                           "code" => ResponseAlias::HTTP_CREATED,
+                           "message" => "Organization Successfully Create",
+                           "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                       ]
+                   ];
+                   DB::commit();
+               } else {
+                   if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
+                       $response = [
+                           'errors' => $createRegisterUser['errors'] ?? [],
+                           '_response_status' => [
+                               "success" => false,
+                               "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                               "message" => "Validation Error",
+                               "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                           ]
+                       ];
+                   } else {
+                       $response = [
+                           '_response_status' => [
+                               "success" => false,
+                               "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
+                               "message" => "Unprocessable Request,Please contact",
+                               "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                           ]
+                       ];
+                   }
+
+                   DB::rollBack();
+               }
+           }
+
+       } catch (Throwable $e) {
+           DB::rollBack();
+           return $e;
+       }
+       return Response::json($response, ResponseAlias::HTTP_CREATED);
+   }
+
+    /**
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
