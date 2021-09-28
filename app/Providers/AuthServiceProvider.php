@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\Classes\HttpClientRequest;
 use App\Models\User;
 use App\Services\UserRolePermissionManagementServices\UserService;
 use Illuminate\Support\Facades\Gate;
@@ -34,6 +35,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('token', function ($request) {
             $token = $request->header('Token');
+            Log::info($token);
             $authUser = null;
             if ($token) {
                 $header = explode(" ", $token);
@@ -42,8 +44,8 @@ class AuthServiceProvider extends ServiceProvider
                     if (count($tokenParts) == 3) {
                         $tokenPayload = base64_decode($tokenParts[1]);
                         $jwtPayload = json_decode($tokenPayload);
-                        $userService = $this->app->make(UserService::class);
-                        $authUser = $userService->getAuthPermission($jwtPayload->sub ?? null);
+                        $clientRequest = new HttpClientRequest();
+                        $authUser = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
                     }
                 }
                 Log::info("userInfoWithIdpId:" . json_encode($authUser));

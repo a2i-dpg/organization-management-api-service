@@ -47,7 +47,7 @@ class OrganizationController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function getList(Request $request): JsonResponse
+    public function getList(Request $request):JsonResponse
     {
         $filter = $this->organizationService->filterValidator($request)->validate();
         try {
