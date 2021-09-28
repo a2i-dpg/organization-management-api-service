@@ -389,141 +389,6 @@
                                             "updated_by": null,
                                             "created_at": "2021-08-30T05:56:13.000000Z",
                                             "updated_at": "2021-08-30T05:56:13.000000Z"
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title_en": "Baumbach, O'Conner and Shields",
-                                            "title_bn": "Baumbach, O'Conner and Shields",
-                                            "domain": "https://www.greenholt.org",
-                                            "fax_no": "+123456",
-                                            "mobile": "01758393749",
-                                            "email": "lazaro00@boyle.com",
-                                            "contact_person_name": "Hardy Ratke",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "ecronin@example.org",
-                                            "contact_person_designation": "Paper Goods Machine Operator",
-                                            "description": "Quo libero sed consectetur enim eveniet unde.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 1,
-                                            "loc_district_id": 1,
-                                            "loc_upazila_id": 1,
-                                            "organization_type_id": 1,
-                                            "organization_type_title_en": "Government org",
-                                            "organization_type_title_bn": "Government org",
-                                            "address": "9434 Constance Burgs\nWolffmouth, SD 42447-5946",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:13.000000Z",
-                                            "updated_at": "2021-08-30T05:56:13.000000Z"
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title_en": "Johnson-Schuppe",
-                                            "title_bn": "Johnson-Schuppe",
-                                            "domain": "https://www.kutch.com",
-                                            "fax_no": "+123456",
-                                            "mobile": "01758393749",
-                                            "email": "zulauf.dalton@goldner.info",
-                                            "contact_person_name": "Katharina Williamson PhD",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "xpollich@example.net",
-                                            "contact_person_designation": "Chemistry Teacher",
-                                            "description": "Beatae ab laudantium maiores deserunt qui et minima.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 1,
-                                            "loc_district_id": 1,
-                                            "loc_upazila_id": 1,
-                                            "organization_type_id": 1,
-                                            "organization_type_title_en": "Government org",
-                                            "organization_type_title_bn": "Government org",
-                                            "address": "4716 McKenzie Lakes Suite 086\nLake Adrainburgh, OH 75364-5801",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:13.000000Z",
-                                            "updated_at": "2021-08-30T05:56:13.000000Z"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "title_en": "Lowe-Paucek",
-                                            "title_bn": "Lowe-Paucek",
-                                            "domain": "https://www.langosh.com",
-                                            "fax_no": "+123456",
-                                            "mobile": "01758393749",
-                                            "email": "trudie.weber@monahan.info",
-                                            "contact_person_name": "Gwendolyn Jenkins",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "cbaumbach@example.org",
-                                            "contact_person_designation": "Police Detective",
-                                            "description": "Repudiandae est et quam rerum.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 1,
-                                            "loc_district_id": 1,
-                                            "loc_upazila_id": 1,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private org",
-                                            "organization_type_title_bn": "Private org",
-                                            "address": "78097 Hyatt Well\nEast Leoratown, OK 87999-3517",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:13.000000Z",
-                                            "updated_at": "2021-08-30T05:56:13.000000Z"
-                                        },
-                                        {
-                                            "id": 5,
-                                            "title_en": "Schultz-Bernier",
-                                            "title_bn": "Schultz-Bernier",
-                                            "domain": "https://www.dubuque.net",
-                                            "fax_no": "+123456",
-                                            "mobile": "01758393749",
-                                            "email": "donnelly.maddison@romaguera.com",
-                                            "contact_person_name": "Shana Christiansen",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "wankunding@example.org",
-                                            "contact_person_designation": "Real Estate Appraiser",
-                                            "description": "Ex debitis consectetur nihil et modi explicabo.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 1,
-                                            "loc_district_id": 1,
-                                            "loc_upazila_id": 1,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private org",
-                                            "organization_type_title_bn": "Private org",
-                                            "address": "3181 Muhammad Forks\nEast Eino, MA 59729",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:13.000000Z",
-                                            "updated_at": "2021-08-30T05:56:13.000000Z"
-                                        },
-                                        {
-                                            "id": 6,
-                                            "title_en": "Jones, Howell and Stokes",
-                                            "title_bn": "Jones, Howell and Stokes",
-                                            "domain": "https://www.witting.com",
-                                            "fax_no": "+123456",
-                                            "mobile": "01758393749",
-                                            "email": "casandra60@wintheiser.net",
-                                            "contact_person_name": "Miss Marilyne Marquardt II",
-                                            "contact_person_mobile": "01758393749",
-                                            "contact_person_email": "ebba.strosin@example.com",
-                                            "contact_person_designation": "Respiratory Therapist",
-                                            "description": "Rerum blanditiis numquam est.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 1,
-                                            "loc_district_id": 1,
-                                            "loc_upazila_id": 1,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private org",
-                                            "organization_type_title_bn": "Private org",
-                                            "address": "291 Sherwood Course Suite 158\nBiankaside, NM 41404",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:13.000000Z",
-                                            "updated_at": "2021-08-30T05:56:13.000000Z"
                                         }
                                     ],
                                     "response_status": {
@@ -854,6 +719,39 @@
                 ]
             }
         },
+        "/register-organization": {
+             "post": {
+                 "summary": "Register an Organization",
+                 "description": "Register an Organization",
+                 "requestBody": {
+                     "content": {
+                         "application/x-www-form-urlencoded": {
+                             "schema": {
+                                 "$ref": "#/components/schemas/organizationRegister"
+                             }
+                         }
+                     }
+                 },
+                 "responses": {
+                     "200": {
+                         "description": "success",
+                         "content": {
+                             "application/json": {
+                                 "schema": {
+                                     "$ref": "#/components/schemas/organizationRegister"
+                                 },
+                                 "example": {
+
+                                 }
+                             }
+                         }
+                     }
+                 },
+                 "tags": [
+                     "organization"
+                 ]
+             }
+        },
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -910,34 +808,6 @@
                                             "updated_by": null,
                                             "created_at": "2021-08-30T05:56:15.000000Z",
                                             "updated_at": "2021-08-30T05:56:15.000000Z"
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title_en": "Chief of General Staff",
-                                            "title_bn": "Chief of General Staff",
-                                            "organization_id": 1,
-                                            "organization_title_en": "Boyer PLC",
-                                            "organization_title_bn": "Boyer PLC",
-                                            "description": "Et dolor repellendus et cum possimus ea incidunt blanditiis saepe.",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:15.000000Z",
-                                            "updated_at": "2021-08-30T05:56:15.000000Z"
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title_en": "Chief of brigade",
-                                            "title_bn": "Chief of brigade",
-                                            "organization_id": 1,
-                                            "organization_title_en": "Boyer PLC",
-                                            "organization_title_bn": "Boyer PLC",
-                                            "description": "Facilis ex placeat occaecati expedita nihil sapiente est quam temporibus.",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-08-30T05:56:16.000000Z",
-                                            "updated_at": "2021-08-30T05:56:16.000000Z"
                                         }
                                     ],
                                     "response_status": {
@@ -6921,6 +6791,87 @@
                     "loc_division_id",
                     "title_en",
                     "title_bn"
+                ]
+            },
+            "organizationRegister": {
+                "type": "object",
+                "properties": {
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "title_bn": {
+                        "type": "string",
+                        "description": " title in Bengali",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "organization_type_id": {
+                        "type": "integer",
+                        "description": "Organization type id"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "email address"
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "description": "Mobile number of organization"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string",
+                        "description": "Head of office"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string",
+                        "description": "Head of office Designation "
+                    },
+                    "address": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "contact_person_name": {
+                        "type": "string",
+                        "description": "Contact person name"
+                    },
+                    "contact_person_designation": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "contact_person_email": {
+                        "type": "string",
+                        "description": "Contact person email address"
+                    },
+                    "contact_person_mobile": {
+                        "type": "string",
+                        "description": "Contact person mobile number"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": [
+                    "organization_type_id",
+                    "title_en",
+                    "title_bn",
+                    "email",
+                    "head_of_office",
+                    "contact_person_name",
+                    "contact_person_designation",
+                    "contact_person_email",
+                    "contact_person_mobile",
+                    "password",
+                    "password_confirmation",
+                    "mobile"
                 ]
             }
         },

@@ -287,6 +287,7 @@ class SkillService
                 'message' => 'Row status must be within 1 or 0'
             ]
         ];
+
         if (!empty($request['order'])) {
             $request['order'] = strtoupper($request['order']);
         }
