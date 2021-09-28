@@ -246,12 +246,12 @@ class OrganizationService
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
             'user_type' => BaseModel::ORGANIZATION_TYPE,
-            'username' => strtolower($username),
             'organization_id' => $data['organization_id'],
-            'name_en' => $data['title_en'],
-            'name_bn' => $data['title_bn'] ?? "",
-            'email' => $data['email'],
-            'mobile' => $data['mobile'],
+            'username' => $data['contact_person_mobile'],
+            'name_en' => $data['contact_person_name'],
+            'name_bn' => $data['contact_person_name'],
+            'email' => $data['contact_person_email'],
+            'mobile' => $data['contact_person_mobile'],
         ];
 
         return Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
