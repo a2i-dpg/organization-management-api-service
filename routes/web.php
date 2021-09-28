@@ -43,6 +43,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('upazilas', ['as' => 'upazilas.get-list', 'uses' => 'LocUpazilaController@getList']);
     $router->get('upazilas/{id}', ['as' => 'upazilas.read', 'uses' => 'LocUpazilaController@read']);
 
+    /** organization registration */
+    $router->post("register-organization",["as"=>"register.organization","uses"=>"OrganizationController@organizationRegister"]);
+
+
+
 
     /** organizationType trash */
     $router->get('organization-types-trashed-data', ['as' => 'organization-types.get-trashed-data', 'uses' => 'OrganizationTypeController@getTrashedData']);
