@@ -120,8 +120,9 @@ class OrganizationUnitService
         }
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        }
+        if (!empty($titleBn)) {
+            $organizationUnitBuilder->where('organization_units.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var  Collection $organizationUnits */
@@ -451,7 +452,8 @@ class OrganizationUnitService
             'contact_person_email' => [
                 'nullable',
                 'string',
-                'email'
+                'email',
+                'max:191'
             ],
             'contact_person_designation' => [
                 'nullable',
@@ -515,12 +517,12 @@ class OrganizationUnitService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:191|min:2',
+            'title_bn' => 'nullable|max:600|min:2',
             'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
-            'organization_id' => 'numeric|gt:0',
-            'organization_unit_type_id' => 'numeric|gt:0',
+            'pageSize' => 'numeric|gt:0',
+            'organization_id' => 'numeric|exists:organizations,id',
+            'organization_unit_type_id' => 'numeric|exists:organization_unit_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

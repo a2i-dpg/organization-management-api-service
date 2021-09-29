@@ -112,9 +112,10 @@ class OrganizationService
         }
 
         if (!empty($titleEn)) {
-            $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($titleBn)) {
+            $organizationBuilder->where('organizations.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizations */
@@ -220,6 +221,7 @@ class OrganizationService
     }
 
     /**
+     * @param Organization $organization
      * @param array $data
      * @return Organization
      */
@@ -232,6 +234,7 @@ class OrganizationService
 
     /**
      * @param array $data
+     * @return array|mixed
      * @throws RequestException
      */
     public function createUser(array $data)
@@ -240,8 +243,6 @@ class OrganizationService
         if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
             $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'organization-or-institute-user-create';
         }
-
-        $username = str_replace(' ', '_', $data['title_en']);
 
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
@@ -458,7 +459,7 @@ class OrganizationService
             'fax_no' => [
                 'nullable',
                 'string',
-                'max: 50',
+                'max: 30',
             ],
             'loc_division_id' => [
                 'nullable',
@@ -488,7 +489,8 @@ class OrganizationService
             ],
             'contact_person_email' => [
                 'required',
-                'email'
+                'email',
+                'max:191'
             ],
             'mobile' => [
                 'required',
@@ -497,6 +499,7 @@ class OrganizationService
             'email' => [
                 'required',
                 'email',
+                'max:191'
             ],
             'logo' => [
                 'required_if:' . $id . ',null',
@@ -607,11 +610,11 @@ class OrganizationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:300|min:2',
+            'title_bn' => 'nullable|max:1000|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',
-            'organization_type_id' => 'numeric|gt:0',
+            'organization_type_id' => 'numeric|gt:0|exists:organization_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

@@ -107,7 +107,8 @@ class HumanResourceTemplateService
 
         if (!empty($titleEn)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
         }
 
@@ -417,12 +418,12 @@ class HumanResourceTemplateService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:191|min:2',
+            'title_bn' => 'nullable|max:500|min:2',
             'page' => 'numeric|gt:0',
-            'page_size' => 'numeric',
-            'organization_id' => 'numeric|gt:0',
-            'organization_unit_type_id' => 'numeric|gt:0',
+            'page_size' => 'numeric|gt:0',
+            'organization_id' => 'numeric|exists:organizations,id',
+            'organization_unit_type_id' => 'numeric|exists:organization_unit_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

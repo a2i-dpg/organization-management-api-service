@@ -20,7 +20,7 @@ class CreateLocUpazilasTable extends Migration
             $table->unsignedMediumInteger('loc_district_id');
             $table->char('division_bbs_code', 4)->nullable();
             $table->char('district_bbs_code', 5)->nullable();
-            $table->string('title_en');
+            $table->string('title_en',191);
             $table->string('title_bn', 500);
             $table->char('bbs_code', 6)->nullable();
             $table->unsignedTinyInteger('row_status')->default(1);
