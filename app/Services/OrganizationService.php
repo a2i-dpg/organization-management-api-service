@@ -241,8 +241,6 @@ class OrganizationService
             $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'organization-or-institute-user-create';
         }
 
-        $username = str_replace(' ', '_', $data['title_en']);
-
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
             'user_type' => BaseModel::ORGANIZATION_TYPE,
