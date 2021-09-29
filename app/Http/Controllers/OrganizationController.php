@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -47,8 +49,10 @@ class OrganizationController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function getList(Request $request):JsonResponse
+    public function getList(Request $request) : JsonResponse
     {
+        $this->authorize('viewAny', Organization::class);
+
         $filter = $this->organizationService->filterValidator($request)->validate();
         try {
             $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
@@ -67,6 +71,7 @@ class OrganizationController extends Controller
     {
         try {
             $response = $this->organizationService->getOneOrganization($id, $this->startTime);
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }
@@ -82,6 +87,8 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $organization = new Organization();
+
+        $this->authorize('create', $organization);
 
         $validated = $this->organizationService->validator($request)->validate();
 
@@ -144,6 +151,8 @@ class OrganizationController extends Controller
    {
 
        $organization = new Organization();
+
+       $this->authorize('create', $organization);
 
        $validated = $this->organizationService->registerOrganizationvalidator($request)->validate();
 
@@ -209,6 +218,9 @@ class OrganizationController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $organization = Organization::findOrFail($id);
+
+        $this->authorize('update', $organization);
+
         $validated = $this->organizationService->validator($request, $id)->validate();
         try {
             $data = $this->organizationService->update($organization, $validated);
@@ -234,9 +246,12 @@ class OrganizationController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $organizationTYpe = Organization::findOrFail($id);
+        $organization = Organization::findOrFail($id);
+
+        $this->authorize('delete', $organization);
+
         try {
-            $this->organizationService->destroy($organizationTYpe);
+            $this->organizationService->destroy($organization);
             $response = [
                 '_response_status' => [
                     "success" => true,

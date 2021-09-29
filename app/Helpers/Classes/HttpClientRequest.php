@@ -5,6 +5,7 @@ namespace App\Helpers\Classes;
 use App\Models\BaseModel;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class HttpClientRequest
 {
@@ -21,13 +22,13 @@ class HttpClientRequest
             "idp_user_id" => $idp_user_id
         ];
 
-        $responsetData = Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
+        $responseData = Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
             return $e;
         })->json('data');
 
-        Log::info("userInfo:" . json_encode($responsetData));
+        Log::info("userInfo:" . json_encode($responseData));
 
-        return $responsetData;
+        return $responseData;
     }
 
 }

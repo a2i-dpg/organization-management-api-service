@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class RankType
@@ -37,5 +38,14 @@ class RankType extends BaseModel
     public function rank(): HasMany
     {
         return $this->hasMany(Rank::class);
+    }
+
+    public function scopeByOrganization($query)
+    {
+        $authUser = Auth::user();
+        if($authUser->user_type == BaseModel::ORGANIZATION_USER && $authUser->organization_id){  //Organization User
+            return $query->where('organization_id', $authUser->organization_id);
+        }
+        return $query;
     }
 }

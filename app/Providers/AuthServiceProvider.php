@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Helpers\Classes\HttpClientRequest;
+use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
+use App\Policies\OrganizationPolicy;
 use App\Services\UserRolePermissionManagementServices\UserService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +48,13 @@ class AuthServiceProvider extends ServiceProvider
                         $tokenPayload = base64_decode($tokenParts[1]);
                         $jwtPayload = json_decode($tokenPayload);
                         $clientRequest = new HttpClientRequest();
-                        $authUser = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
+                        $user = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
+                        if($user){
+                            $role = new Role($user['role']);
+                            $authUser = new User($user);
+                            $authUser->role = $role;
+                            $authUser->permissions = collect('permissions');
+                        }
                     }
                 }
                 Log::info("userInfoWithIdpId:" . json_encode($authUser));
