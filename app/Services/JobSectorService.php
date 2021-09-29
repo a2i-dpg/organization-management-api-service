@@ -53,8 +53,9 @@ class JobSectorService
         }
 
         if (!empty($titleEn)) {
-            $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+            $jobSectorBuilder->where('job_sectors.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($titleBn)) {
             $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
         }
 
@@ -284,10 +285,10 @@ class JobSectorService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:300|min:2',
+            'title_bn' => 'nullable|max:500|min:2',
             'page' => 'numeric|gt:0',
-            'page_size' => 'numeric',
+            'page_size' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

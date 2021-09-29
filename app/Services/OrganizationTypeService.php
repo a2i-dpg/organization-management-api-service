@@ -52,13 +52,14 @@ class OrganizationTypeService
         }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
+        }
+        if (!empty($titleBn)) {
             $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizationTypes */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
@@ -160,7 +161,7 @@ class OrganizationTypeService
         $titleBn = $request->query('title_bn');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
-        $order =$request->query('order','ASC');
+        $order = $request->query('order', 'ASC');
 
         /** @var Builder $organizationTypeBuilder */
         $organizationTypeBuilder = OrganizationType::onlyTrashed()->select([
@@ -284,10 +285,10 @@ class OrganizationTypeService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
+            'title_en' => 'nullable|max:191|min:2',
+            'title_bn' => 'nullable|max:400|min:1',
             'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
+            'pageSize' => 'numeric|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
