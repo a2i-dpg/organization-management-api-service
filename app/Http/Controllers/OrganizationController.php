@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -47,7 +48,7 @@ class OrganizationController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function getList(Request $request) : JsonResponse
     {
@@ -82,7 +83,7 @@ class OrganizationController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return Exception|Throwable|JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function store(Request $request)
     {
@@ -145,7 +146,7 @@ class OrganizationController extends Controller
     /**
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function organizationRegister(Request $request):JsonResponse
    {
