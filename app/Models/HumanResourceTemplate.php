@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class HumanResourceTemplate
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class HumanResourceTemplate extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory,ScopeFilterByOrganization;
 
     /**
      * @var string[]
@@ -75,9 +77,13 @@ class HumanResourceTemplate extends BaseModel
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function childTemplate(): HasMany
     {
         return $this->hasMany(self::class, 'id');
     }
+
 
 }

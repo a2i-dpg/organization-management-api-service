@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class OrganizationType
@@ -16,7 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class OrganizationType extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory,ScopeFilterByOrganization;
 
     /**
      * @var string[]
@@ -27,6 +29,6 @@ class OrganizationType extends BaseModel
     public function organizations(): HasMany
     {
         return $this->hasMany(Organization::class);
-
     }
+
 }

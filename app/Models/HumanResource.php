@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class HumanResource
@@ -27,7 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class HumanResource extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory,ScopeFilterByOrganization;
 
     /**
      * @var string[]
@@ -73,4 +75,5 @@ class HumanResource extends BaseModel
     {
         return $this->belongsTo(Rank::class);
     }
+
 }
