@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class OrganizationUnitType
@@ -19,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * */
 class OrganizationUnitType extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, ScopeFilterByOrganization;
 
     /**
      * @var string[]
@@ -51,6 +53,9 @@ class OrganizationUnitType extends BaseModel
     }
 
 
+    /**
+     * @return null
+     */
     public function getHierarchy()
     {
         $topRoot = $this->humanResourceTemplate->where('parent_id', null)->first();
@@ -63,6 +68,10 @@ class OrganizationUnitType extends BaseModel
         return $this->makeHierarchy($topRoot);
     }
 
+    /**
+     * @param $root
+     * @return mixed
+     */
     public function makeHierarchy($root)
     {
         $root['parent'] = $root->parent_id;
@@ -81,4 +90,5 @@ class OrganizationUnitType extends BaseModel
         }
         return $root;
     }
+
 }

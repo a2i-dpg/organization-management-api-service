@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeFilterByOrganizationTrait;
+use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class RankType extends BaseModel
 {
-    use SoftDeletes, HasFactory, ScopeFilterByOrganizationTrait;
+    use SoftDeletes, HasFactory, ScopeFilterByOrganization;
 
     /**
      * @var string[]
@@ -40,4 +40,5 @@ class RankType extends BaseModel
     {
         return $this->hasMany(Rank::class);
     }
+
 }

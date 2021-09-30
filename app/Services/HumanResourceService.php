@@ -59,7 +59,8 @@ class HumanResourceService
             'human_resources.updated_by',
             'human_resources.created_at',
             'human_resources.updated_at'
-        ]);
+
+        ])->byOrganization('human_resources');
 
         $humanResourceBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')

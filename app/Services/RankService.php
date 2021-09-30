@@ -55,7 +55,8 @@ class RankService
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
-        );
+        )->byOrganization('ranks');
+
         $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('ranks.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');

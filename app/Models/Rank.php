@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Rank
@@ -21,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Rank extends BaseModel
 {
-    use softDeletes, HasFactory;
+    use softDeletes, HasFactory,ScopeFilterByOrganization;
 
     /**
      * @var string[]
@@ -43,4 +45,5 @@ class Rank extends BaseModel
     {
         return $this->belongsTo(RankType::class);
     }
+
 }

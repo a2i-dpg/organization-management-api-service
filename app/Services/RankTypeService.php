@@ -49,7 +49,7 @@ class RankTypeService
                 'rank_types.created_at',
                 'rank_types.updated_at',
             ]
-        )->byOrganization();
+        )->byOrganization('rank_types');
 
         $rankTypeBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('rank_types.organization_id', '=', 'organizations.id')

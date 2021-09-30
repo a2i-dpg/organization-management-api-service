@@ -34,7 +34,7 @@ class User extends BaseModel
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
 
-    public function hasPermission($key)
+    public function hasPermission($key): bool
     {
         return $this->permissions->contains($key);
     }
