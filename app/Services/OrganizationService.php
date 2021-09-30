@@ -239,11 +239,7 @@ class OrganizationService
      */
     public function createUser(array $data)
     {
-        $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL . 'organization-or-institute-user-create';
-        if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
-            $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'organization-or-institute-user-create';
-        }
-
+        $url =clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
             'user_type' => BaseModel::ORGANIZATION_TYPE,
@@ -268,10 +264,7 @@ class OrganizationService
      */
     public function createRegisterUser(array $data)
     {
-        $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL . 'register-user';
-        if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
-            $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'register-user';
-        }
+        $url =clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
 
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_TYPE,
