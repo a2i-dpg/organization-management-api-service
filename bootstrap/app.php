@@ -63,6 +63,7 @@ $app->configure('app');
 $app->configure('auth');
 $app->configure('services');
 $app->configure('filesystems');
+$app->configure('httpclientendpoint');
 
 /*
 |--------------------------------------------------------------------------
