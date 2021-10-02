@@ -241,7 +241,7 @@ class OrganizationTypeService
         ];
         $rules = [
             'title_en' => [
-                'max:191',
+                'max:300',
                 'min:2',
                 'required',
                 'string'

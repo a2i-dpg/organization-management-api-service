@@ -603,7 +603,7 @@ class OrganizationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
+            'title_en' => 'nullable|max:500|min:2',
             'title_bn' => 'nullable|max:1000|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',

@@ -415,7 +415,7 @@ class HumanResourceService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:191|min:2',
+            'title_en' => 'nullable|max:300|min:2',
             'title_bn' => 'nullable|max:600|min:2',
             'page' => 'numeric|gt:0',
             'organization_id' => 'numeric|exists:organizations,id',
