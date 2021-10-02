@@ -18,7 +18,7 @@ class HumanResourcePolicy
      */
     public function viewAny(User $authUser)
     {
-        return $authUser->hasPermission('view_any_Rank');
+        return $authUser->hasPermission('view_any_human_resource');
 
     }
 
@@ -31,7 +31,7 @@ class HumanResourcePolicy
      */
     public function view(User $authUser, HumanResource $humanResource)
     {
-        return $authUser->hasPermission('view_single_Rank');
+        return $authUser->hasPermission('view_single_human_resource');
 
     }
 
@@ -43,7 +43,7 @@ class HumanResourcePolicy
      */
     public function create(User $authUser)
     {
-        return $authUser->hasPermission('create_Rank');
+        return $authUser->hasPermission('create_human_resource');
 
     }
 
@@ -56,7 +56,7 @@ class HumanResourcePolicy
      */
     public function update(User $authUser, HumanResource $humanResource): bool
     {
-        return $authUser->hasPermission('update_Rank');
+        return $authUser->hasPermission('update_human_resource');
 
     }
 
@@ -65,10 +65,11 @@ class HumanResourcePolicy
      *
      * @param User $authUser
      * @param HumanResource $humanResource
-     * @return void
+     * @return bool
      */
     public function delete(User $authUser, HumanResource $humanResource)
     {
-        //
+        return $authUser->hasPermission('delete_human_resource');
+
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\JobSector;
-use App\User;
+use App\Models\JobSector;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class JobSectorPolicy
@@ -13,58 +13,60 @@ class JobSectorPolicy
     /**
      * Determine whether the user can view any jobSectors.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('view_any_job_sector');
+
     }
 
     /**
      * Determine whether the user can view the jobSector.
      *
-     * @param  App\User  $user
-     * @param  App\JobSector  $jobSector
-     * @return mixed
+     * @param User $authUser
+     * @param JobSector $jobSector
+     * @return bool
      */
-    public function view(User $user, JobSector $jobSector)
+    public function view(User $authUser, JobSector $jobSector): bool
     {
-        //
+        return $authUser->hasPermission('view_single_job_sector');
+
     }
 
     /**
      * Determine whether the user can create jobSectors.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('create_job_sector');
     }
 
     /**
      * Determine whether the user can update the jobSector.
      *
-     * @param  App\User  $user
-     * @param  App\JobSector  $jobSector
-     * @return mixed
+     * @param User $authUser
+     * @param JobSector $jobSector
+     * @return bool
      */
-    public function update(User $user, JobSector $jobSector)
+    public function update(User $authUser, JobSector $jobSector): bool
     {
-        //
+        return $authUser->hasPermission('update_job_sector');
     }
 
     /**
      * Determine whether the user can delete the jobSector.
      *
-     * @param  App\User  $user
-     * @param  App\JobSector  $jobSector
-     * @return mixed
+     * @param User $authUser
+     * @param JobSector $jobSector
+     * @return bool
      */
-    public function delete(User $user, JobSector $jobSector)
+    public function delete(User $authUser, JobSector $jobSector): bool
     {
-        //
+        return $authUser->hasPermission('delete_job_sector');
     }
 }
