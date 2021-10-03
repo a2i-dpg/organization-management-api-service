@@ -19,7 +19,6 @@ class LocUpazilasTableSeeder extends Seeder
 
         DB::table('loc_upazilas')->truncate();
 
-
         DB::table('loc_upazilas')->insert(array(
             array('id' => '1','loc_division_id' => '4','loc_district_id' => '35','title_en' => 'BAGERHAT SADAR','title_bn' => 'বাগেরহাট সদর','is_sadar_upazila' => '1','bbs_code' => NULL,'row_status' => '1','created_at' => NULL,'updated_at' => '2017-09-17 19:18:13','deleted_at' => NULL),
             array('id' => '2','loc_division_id' => '4','loc_district_id' => '35','title_en' => 'CHITALMARI','title_bn' => 'চিতলমারী','is_sadar_upazila' => '0','bbs_code' => NULL,'row_status' => '1','created_at' => NULL,'updated_at' => '2017-09-17 19:18:13','deleted_at' => NULL),
