@@ -25,21 +25,21 @@ class CreateOrganizationsTable extends Migration
             $table->unsignedMediumInteger('loc_district_id')->nullable()->index('org_loc_district_id_inx');
             $table->unsignedMediumInteger('loc_upazila_id')->nullable()->index('org_loc_upazila_id_inx');
 
-            $table->string('address', 1000)->nullable();
+            $table->string('address', 1000)->nullable(); // TODO: need separate column for english
             $table->char("country", 3)->default("BD")->comment('ISO Country Code');
             $table->char("phone_code", 5)->default("880")->comment('Country Code for Phone number');
             $table->string('mobile', 11);
             $table->string('email', 191);
             $table->string('fax_no', 30)->nullable();
 
-            $table->string("name_of_the_office_head", 300)->nullable();
-            $table->string("name_of_the_office_head_designation", 300)->nullable();
-            $table->string('contact_person_name', 500)->nullable();
+            $table->string("name_of_the_office_head", 600)->nullable(); // TODO: need separate column for english
+            $table->string("name_of_the_office_head_designation", 300)->nullable(); // TODO: need separate column for english
+            $table->string('contact_person_name', 500)->nullable(); // TODO: need separate column for english
             $table->string('contact_person_mobile', 15)->nullable();
             $table->string('contact_person_email', 191)->nullable();
-            $table->string('contact_person_designation', 300)->nullable();
+            $table->string('contact_person_designation', 300)->nullable(); // TODO: need separate column for english
 
-            $table->text('description')->nullable();
+            $table->text('description')->nullable(); // TODO: need separate column for english
             $table->string('logo', 500)->nullable();
             $table->string('domain', 250)->nullable();
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

@@ -26,15 +26,15 @@ class CreateOrganizationUnitsTable extends Migration
             $table->unsignedMediumInteger('loc_district_id')->nullable()->index('org_unit_loc_district_id_inx');
             $table->unsignedMediumInteger('loc_upazila_id')->nullable()->index('org_unit_loc_upazila_id_inx');
 
-            $table->string('address', 1000)->nullable();
-            $table->string('mobile', 20)->nullable();
+            $table->string('address', 1000)->nullable(); // TODO: need separate column for english
+            $table->string('mobile', 15)->nullable();
             $table->string('email', 191)->nullable();
             $table->string('fax_no', 50)->nullable();
 
-            $table->string('contact_person_name', 191)->nullable();
-            $table->string('contact_person_mobile', 20)->nullable();
+            $table->string('contact_person_name', 191)->nullable(); // TODO: need separate column for english
+            $table->string('contact_person_mobile', 15)->nullable();
             $table->string('contact_person_email', 191)->nullable();
-            $table->string('contact_person_designation', 191)->nullable();
+            $table->string('contact_person_designation', 191)->nullable(); // TODO: need separate column for english
 
 
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

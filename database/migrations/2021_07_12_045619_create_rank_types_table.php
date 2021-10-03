@@ -18,7 +18,7 @@ class CreateRankTypesTable extends Migration
             $table->unsignedInteger('organization_id')->nullable();
             $table->string('title_en', 300);
             $table->string('title_bn', 500)->nullable();
-            $table->text('description')->nullable();
+            $table->text('description')->nullable(); // TODO: need separate column for english
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

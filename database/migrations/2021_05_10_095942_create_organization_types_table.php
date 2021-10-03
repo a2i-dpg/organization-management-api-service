@@ -16,7 +16,7 @@ class CreateOrganizationTypesTable extends Migration
         Schema::create('organization_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title_en', 300);
-            $table->string('title_bn', 400)->nullable();
+            $table->string('title_bn', 500)->nullable();
             $table->unsignedTinyInteger('is_government')->nullable()->comment('0 => non govt, 1 => govt');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
