@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -62,7 +62,6 @@ $app->singleton(
 $app->configure('app');
 $app->configure('auth');
 $app->configure('services');
-$app->configure('filesystems');
 $app->configure('httpclientendpoint');
 
 /*
@@ -76,16 +75,15 @@ $app->configure('httpclientendpoint');
 |
 */
 
- $app->middleware([
-     App\Http\Middleware\CorsMiddleware::class,
-     LumenMiddlewareTrimOrConvertString\TrimStrings::class,
-     LumenMiddlewareTrimOrConvertString\ConvertEmptyStringsToNull::class,
- ]);
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class,
+    LumenMiddlewareTrimOrConvertString\TrimStrings::class,
+    LumenMiddlewareTrimOrConvertString\ConvertEmptyStringsToNull::class,
+]);
 
- $app->routeMiddleware([
-     'auth' => App\Http\Middleware\Authenticate::class,
- ]);
-
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -99,10 +97,11 @@ $app->configure('httpclientendpoint');
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
-$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-
 $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -118,7 +117,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;
