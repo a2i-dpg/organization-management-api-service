@@ -27,9 +27,9 @@ class HumanResourcePolicy
      *
      * @param User $authUser
      * @param HumanResource $humanResource
-     * @return mixed
+     * @return bool
      */
-    public function view(User $authUser, HumanResource $humanResource)
+    public function view(User $authUser, HumanResource $humanResource): bool
     {
         return $authUser->hasPermission('view_single_human_resource');
 

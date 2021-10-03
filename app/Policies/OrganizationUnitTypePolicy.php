@@ -30,7 +30,7 @@ class OrganizationUnitTypePolicy
      */
     public function view(User $authUser, OrganizationUnitType $organizationUnitType): bool
     {
-        return $authUser->hasPermission('view_organization_unit_type');
+        return $authUser->hasPermission('view_single_organization_unit_type');
     }
 
     /**

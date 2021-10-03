@@ -30,7 +30,7 @@ class ServicePolicy
      */
     public function view(User $authUser, Service $service): bool
     {
-        return $authUser->hasPermission('view_service');
+        return $authUser->hasPermission('view_single_service');
     }
 
     /**

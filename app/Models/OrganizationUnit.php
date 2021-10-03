@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class OrganizationUnit extends BaseModel
 {
-    use SoftDeletes, HasFactory,ScopeFilterByOrganization;
+    use SoftDeletes, HasFactory, ScopeFilterByOrganization;
 
     /**
      * @var string[]

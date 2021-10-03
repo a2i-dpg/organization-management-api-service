@@ -14,7 +14,6 @@ class HttpClientRequest
     {
 
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'auth-user-info';
-
         $userPostField = [
             "idp_user_id" => $idp_user_id
         ];

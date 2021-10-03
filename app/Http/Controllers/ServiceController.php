@@ -65,6 +65,10 @@ class ServiceController extends Controller
     {
         try {
             $response = $this->serviceService->getOneService($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }

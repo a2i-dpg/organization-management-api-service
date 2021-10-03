@@ -72,7 +72,7 @@ class JobSectorController extends Controller
             if (!$response) {
                 abort(ResponseAlias::HTTP_NOT_FOUND);
             }
-            $this->authorize('view', $response);
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }
@@ -120,7 +120,7 @@ class JobSectorController extends Controller
     {
         $jobSector = JobSector::findOrFail($id);
 
-        $this->authorize('update', JobSector::class);
+        $this->authorize('update', $jobSector);
 
         $validated = $this->jobSectorService->validator($request, $id)->validate();
 

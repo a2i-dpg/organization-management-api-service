@@ -47,7 +47,7 @@ class OrganizationUnitController extends Controller
      */
     public function getList(Request $request)
     {
-        $this->authorize('viewAny',OrganizationUnit::class);
+        $this->authorize('viewAny', OrganizationUnit::class);
         $filter = $this->organizationUnitService->filterValidator($request)->validate();
         try {
             $response = $this->organizationUnitService->getAllOrganizationUnit($filter, $this->startTime);
@@ -69,7 +69,7 @@ class OrganizationUnitController extends Controller
             if (!$response) {
                 abort(ResponseAlias::HTTP_NOT_FOUND);
             }
-            $this->authorize('view', $response);
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }
@@ -116,7 +116,7 @@ class OrganizationUnitController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
-        $this->authorize('update', OrganizationUnit::class);
+        $this->authorize('update', $organizationUnit);
 
         $validated = $this->organizationUnitService->validator($request, $id)->validate();
         try {
@@ -230,9 +230,12 @@ class OrganizationUnitController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function assignServiceToOrganizationUnit(Request $request, int $id)
     {
+        $this->authorize('create', OrganizationUnit::class);
+
         $organizationUnit = OrganizationUnit::findOrFail($id);
 
         $validated = $this->organizationUnitService->serviceValidator($request)->validated();
@@ -258,11 +261,12 @@ class OrganizationUnitController extends Controller
     /**
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function getHierarchy(int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::find($id);
-
+        $this->authorize('view', $organizationUnit);
         try {
             $data = optional($organizationUnit->getHierarchy())->toArray();
             $response = [

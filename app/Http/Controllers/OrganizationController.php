@@ -50,7 +50,7 @@ class OrganizationController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException|AuthorizationException
      */
-    public function getList(Request $request) : JsonResponse
+    public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Organization::class);
 
@@ -72,6 +72,9 @@ class OrganizationController extends Controller
     {
         try {
             $response = $this->organizationService->getOneOrganization($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
             $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
@@ -148,66 +151,66 @@ class OrganizationController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException|AuthorizationException
      */
-    public function organizationRegister(Request $request):JsonResponse
-   {
+    public function organizationRegister(Request $request): JsonResponse
+    {
 
-       $organization = new Organization();
+        $organization = new Organization();
 
-       $this->authorize('create', $organization);
+        $this->authorize('create', $organization);
 
-       $validated = $this->organizationService->registerOrganizationvalidator($request)->validate();
+        $validated = $this->organizationService->registerOrganizationvalidator($request)->validate();
 
-       DB::beginTransaction();
-       try {
-           $organization = $this->organizationService->store($organization, $validated);
-           if ($organization) {
+        DB::beginTransaction();
+        try {
+            $organization = $this->organizationService->store($organization, $validated);
+            if ($organization) {
 
-               $validated['organization_id'] = $organization->id;
-               $createRegisterUser = $this->organizationService->createRegisterUser($validated);
+                $validated['organization_id'] = $organization->id;
+                $createRegisterUser = $this->organizationService->createRegisterUser($validated);
 
-               if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
-                   $response = [
-                       'data' => $organization ?: [],
-                       '_response_status' => [
-                           "success" => true,
-                           "code" => ResponseAlias::HTTP_CREATED,
-                           "message" => "Organization Successfully Create",
-                           "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
-                       ]
-                   ];
-                   DB::commit();
-               } else {
-                   if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
-                       $response = [
-                           'errors' => $createRegisterUser['errors'] ?? [],
-                           '_response_status' => [
-                               "success" => false,
-                               "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                               "message" => "Validation Error",
-                               "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-                           ]
-                       ];
-                   } else {
-                       $response = [
-                           '_response_status' => [
-                               "success" => false,
-                               "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
-                               "message" => "Unprocessable Request,Please contact",
-                               "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-                           ]
-                       ];
-                   }
+                if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
+                    $response = [
+                        'data' => $organization ?: [],
+                        '_response_status' => [
+                            "success" => true,
+                            "code" => ResponseAlias::HTTP_CREATED,
+                            "message" => "Organization Successfully Create",
+                            "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                        ]
+                    ];
+                    DB::commit();
+                } else {
+                    if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
+                        $response = [
+                            'errors' => $createRegisterUser['errors'] ?? [],
+                            '_response_status' => [
+                                "success" => false,
+                                "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                                "message" => "Validation Error",
+                                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                            ]
+                        ];
+                    } else {
+                        $response = [
+                            '_response_status' => [
+                                "success" => false,
+                                "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
+                                "message" => "Unprocessable Request,Please contact",
+                                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                            ]
+                        ];
+                    }
 
-                   DB::rollBack();
-               }
-           }
+                    DB::rollBack();
+                }
+            }
 
-       } catch (Throwable $e) {
-           DB::rollBack();
-           return $e;
-       }
-       return Response::json($response, ResponseAlias::HTTP_CREATED);
-   }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
 
     /**
      * Update the specified resource in storage.

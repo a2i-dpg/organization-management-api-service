@@ -71,7 +71,7 @@ class HumanResourceTemplateController extends Controller
             if (!$response) {
                 abort(ResponseAlias::HTTP_NOT_FOUND);
             }
-            $this->authorize('view', $response);
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }

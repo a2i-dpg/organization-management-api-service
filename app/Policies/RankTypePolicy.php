@@ -6,6 +6,9 @@ use App\Models\RankType;
 use App\MOdels\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ *
+ */
 class RankTypePolicy
 {
     use HandlesAuthorization;
@@ -27,11 +30,11 @@ class RankTypePolicy
      *
      * @param User $authUser
      * @param RankType $rankType
-     * @return void
+     * @return bool
      */
-    public function view(User $authUser, RankType $rankType)
+    public function view(User $authUser, RankType $rankType): bool
     {
-        $authUser->hasPermission('view_single_rank_type');
+        return $authUser->hasPermission('view_single_rank_type');
 
     }
 
@@ -41,7 +44,7 @@ class RankTypePolicy
      * @param User $authUser
      * @return bool
      */
-    public function create(User $authUser)
+    public function create(User $authUser): bool
     {
         return $authUser->hasPermission('create_rank_type');
 
@@ -54,7 +57,7 @@ class RankTypePolicy
      * @param RankType $rankType
      * @return bool
      */
-    public function update(User $authUser, RankType $rankType)
+    public function update(User $authUser, RankType $rankType): bool
     {
         return $authUser->hasPermission('update_rank_type');
 

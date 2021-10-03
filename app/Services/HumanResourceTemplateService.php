@@ -61,7 +61,7 @@ class HumanResourceTemplateService
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
 
-        ])->byOrganization('human_resource_templates');
+        ]);
 
         $humanResourceTemplateBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_id', '=', 'organizations.id')
