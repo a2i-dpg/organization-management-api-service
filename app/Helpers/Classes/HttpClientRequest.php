@@ -13,10 +13,7 @@ class HttpClientRequest
     public function getAuthPermission(?string $idp_user_id)
     {
 
-        $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL . 'auth-user-info';
-        if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
-            $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'auth-user-info';
-        }
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'auth-user-info';
 
         $userPostField = [
             "idp_user_id" => $idp_user_id

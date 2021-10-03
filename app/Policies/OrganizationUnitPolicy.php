@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\OrganizationUnit;
-use App\User;
+use App\Models\OrganizationUnit;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class OrganizationUnitPolicy
@@ -13,58 +13,58 @@ class OrganizationUnitPolicy
     /**
      * Determine whether the user can view any organizationUnits.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('view_any_organization_unit');
     }
 
     /**
      * Determine whether the user can view the organizationUnit.
      *
-     * @param  App\User  $user
-     * @param  App\OrganizationUnit  $organizationUnit
-     * @return mixed
+     * @param User $authUser
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
      */
-    public function view(User $user, OrganizationUnit $organizationUnit)
+    public function view(User $authUser, OrganizationUnit $organizationUnit): bool
     {
-        //
+        return $authUser->hasPermission('view_single_organization_unit');
     }
 
     /**
      * Determine whether the user can create organizationUnits.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('create_organization_unit');
     }
 
     /**
      * Determine whether the user can update the organizationUnit.
      *
-     * @param  App\User  $user
-     * @param  App\OrganizationUnit  $organizationUnit
-     * @return mixed
+     * @param User $authUser
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
      */
-    public function update(User $user, OrganizationUnit $organizationUnit)
+    public function update(User $authUser, OrganizationUnit $organizationUnit): bool
     {
-        //
+        return $authUser->hasPermission('update_organization_unit');
     }
 
     /**
      * Determine whether the user can delete the organizationUnit.
      *
-     * @param  App\User  $user
-     * @param  App\OrganizationUnit  $organizationUnit
-     * @return mixed
+     * @param User $authUser
+     * @param OrganizationUnit $organizationUnit
+     * @return bool
      */
-    public function delete(User $user, OrganizationUnit $organizationUnit)
+    public function delete(User $authUser, OrganizationUnit $organizationUnit): bool
     {
-        //
+        return $authUser->hasPermission('delete_organization_unit');
     }
 }

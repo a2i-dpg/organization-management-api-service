@@ -215,6 +215,7 @@ class OrganizationController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -244,6 +245,7 @@ class OrganizationController extends Controller
      * Remove the specified resource from storage.
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {

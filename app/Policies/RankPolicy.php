@@ -18,7 +18,7 @@ class RankPolicy
      */
     public function viewAny(User $authUser): bool
     {
-        return $authUser->hasPermission('view_any_Rank');
+        return $authUser->hasPermission('view_any_rank');
     }
 
     /**
@@ -30,7 +30,7 @@ class RankPolicy
      */
     public function view(User $authUser, Rank $rank): bool
     {
-        return $authUser->hasPermission('view_single_Rank');
+        return $authUser->hasPermission('view_single_rank');
     }
 
     /**
@@ -41,7 +41,7 @@ class RankPolicy
      */
     public function create(User $authUser): bool
     {
-        return $authUser->hasPermission('create_Rank');
+        return $authUser->hasPermission('create_rank');
     }
 
     /**
@@ -53,7 +53,7 @@ class RankPolicy
      */
     public function update(User $authUser, Rank $rank): bool
     {
-        return $authUser->hasPermission('update_Rank');
+        return $authUser->hasPermission('update_rank');
     }
 
     /**
@@ -65,6 +65,6 @@ class RankPolicy
      */
     public function delete(User $authUser, Rank $rank): bool
     {
-        return $authUser->hasPermission('delete_Rank');
+        return $authUser->hasPermission('delete_rank');
     }
 }
