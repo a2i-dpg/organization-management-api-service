@@ -431,21 +431,21 @@ class OrganizationService
                 'int',
             ],
             'contact_person_mobile' => [
-                'required',
+                'nullable',
                 'regex: /^(?:\+88|88)?(01[3-9]\d{8})$/',
             ],
             'contact_person_name' => [
-                'required',
+                'nullable',
                 'max: 500',
                 'min:2'
             ],
             'contact_person_designation' => [
-                'required',
+                'nullable',
                 'max: 300',
                 "min:2"
             ],
             'contact_person_email' => [
-                'required',
+                'nullable',
                 'email'
             ],
             'mobile' => [
