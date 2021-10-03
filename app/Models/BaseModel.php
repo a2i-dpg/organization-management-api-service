@@ -24,6 +24,6 @@ abstract class BaseModel extends Model
     public const ORGANIZATION_TYPE=2;
 
     public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL='http://localhost:8000/api/v1/';
-    public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE="https://core.local:8008/api/v1/";
+    public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE="http://core.local:8008/api/v1/";
 
 }
