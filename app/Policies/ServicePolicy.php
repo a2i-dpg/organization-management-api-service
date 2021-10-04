@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Service;
-use App\User;
+use App\Models\Service;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ServicePolicy
@@ -13,58 +13,58 @@ class ServicePolicy
     /**
      * Determine whether the user can view any services.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('view_any_service');
     }
 
     /**
      * Determine whether the user can view the service.
      *
-     * @param  App\User  $user
-     * @param  App\Service  $service
-     * @return mixed
+     * @param User $authUser
+     * @param Service $service
+     * @return bool
      */
-    public function view(User $user, Service $service)
+    public function view(User $authUser, Service $service): bool
     {
-        //
+        return $authUser->hasPermission('view_single_service');
     }
 
     /**
      * Determine whether the user can create services.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('create_service');
     }
 
     /**
      * Determine whether the user can update the service.
      *
-     * @param  App\User  $user
-     * @param  App\Service  $service
-     * @return mixed
+     * @param User $authUser
+     * @param Service $service
+     * @return bool
      */
-    public function update(User $user, Service $service)
+    public function update(User $authUser, Service $service): bool
     {
-        //
+        return $authUser->hasPermission('update_service');
     }
 
     /**
      * Determine whether the user can delete the service.
      *
-     * @param  App\User  $user
-     * @param  App\Service  $service
-     * @return mixed
+     * @param User $authUser
+     * @param Service $service
+     * @return bool
      */
-    public function delete(User $user, Service $service)
+    public function delete(User $authUser, Service $service): bool
     {
-        //
+        return $authUser->hasPermission('delete_service');
     }
 }

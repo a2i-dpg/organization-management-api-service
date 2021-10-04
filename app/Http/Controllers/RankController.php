@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rank;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -38,9 +39,12 @@ class RankController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request)
     {
+        $this->authorize('viewAny', Rank::class);
+
         $filter = $this->rankService->filterValidator($request)->validate();
         try {
             $response = $this->rankService->getRankList($filter, $this->startTime);
@@ -58,6 +62,10 @@ class RankController extends Controller
     {
         try {
             $response = $this->rankService->getOneRank($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }
@@ -69,9 +77,12 @@ class RankController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Rank::class);
+
         $validated = $this->rankService->validator($request)->validate();
         try {
             $data = $this->rankService->store($validated);
@@ -98,10 +109,12 @@ class RankController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $rank = Rank::findOrFail($id);
+        $this->authorize('update', $rank);
 
         $validated = $this->rankService->validator($request, $id)->validate();
         try {
@@ -129,11 +142,12 @@ class RankController extends Controller
      * Remove the specified resource from storage
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
         $rank = Rank::findOrFail($id);
-
+        $this->authorize('delete', $rank);
         try {
             $this->rankService->destroy($rank);
             $response = [
@@ -173,7 +187,7 @@ class RankController extends Controller
     {
         $rank = Rank::onlyTrashed()->findOrFail($id);
         try {
-            $this->rankService->restore( $rank);
+            $this->rankService->restore($rank);
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -196,7 +210,7 @@ class RankController extends Controller
     {
         $rank = Rank::onlyTrashed()->findOrFail($id);
         try {
-            $this->rankService->forceDelete( $rank);
+            $this->rankService->forceDelete($rank);
             $response = [
                 '_response_status' => [
                     "success" => true,

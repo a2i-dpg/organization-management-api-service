@@ -6,6 +6,7 @@ use App\Models\HumanResource;
 use App\Services\HumanResourceService;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -37,9 +38,12 @@ class HumanResourceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', HumanResource::class);
+
         $filter = $this->humanResourceService->filterValidator($request)->validate();
         try {
             $response = $this->humanResourceService->getHumanResourceList($filter, $this->startTime);
@@ -59,6 +63,11 @@ class HumanResourceController extends Controller
     {
         try {
             $response = $this->humanResourceService->getOneHumanResource($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
+
         } catch (Throwable $e) {
             return $e;
         }
@@ -71,9 +80,12 @@ class HumanResourceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', HumanResource::class);
+
         $validatedData = $this->humanResourceService->validator($request)->validate();
         try {
             $data = $this->humanResourceService->store($validatedData);
@@ -99,10 +111,12 @@ class HumanResourceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $humanResource = HumanResource::findOrFail($id);
+        $this->authorize('update', $humanResource);
 
         $validated = $this->humanResourceService->validator($request, $id)->validate();
         try {
@@ -129,10 +143,12 @@ class HumanResourceController extends Controller
      * Remove the specified resource from storage.
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
         $humanResource = HumanResource::findOrFail($id);
+        $this->authorize('delete', $humanResource);
 
         try {
             $this->humanResourceService->destroy($humanResource);

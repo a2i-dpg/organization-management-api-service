@@ -42,6 +42,7 @@ class AuthServiceProvider extends ServiceProvider
             $authUser = null;
             if ($token) {
                 $header = explode(" ", $token);
+
                 if (count($header) > 1) {
                     $tokenParts = explode(".", $header[1]);
                     if (count($tokenParts) == 3) {
@@ -49,14 +50,15 @@ class AuthServiceProvider extends ServiceProvider
                         $jwtPayload = json_decode($tokenPayload);
                         $clientRequest = new HttpClientRequest();
                         $user = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
-                        if($user){
+                        if ($user) {
                             $role = new Role($user['role']);
                             $authUser = new User($user);
                             $authUser->role = $role;
-                            $authUser->permissions = collect('permissions');
+                            $authUser->permissions = collect($user['permissions']);
                         }
                     }
                 }
+
                 Log::info("userInfoWithIdpId:" . json_encode($authUser));
             }
             return $authUser;

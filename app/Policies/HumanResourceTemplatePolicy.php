@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\HumanResourceTemplate;
-use App\User;
+use App\Models\HumanResourceTemplate;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class HumanResourceTemplatePolicy
@@ -13,58 +13,60 @@ class HumanResourceTemplatePolicy
     /**
      * Determine whether the user can view any humanResourceTemplates.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('view_any_human_resource_template');
     }
 
     /**
      * Determine whether the user can view the humanResourceTemplate.
      *
-     * @param  App\User  $user
-     * @param  App\HumanResourceTemplate  $humanResourceTemplate
-     * @return mixed
+     * @param User $authUser
+     * @param HumanResourceTemplate $humanResourceTemplate
+     * @return bool
      */
-    public function view(User $user, HumanResourceTemplate $humanResourceTemplate)
+    public function view(User $authUser, HumanResourceTemplate $humanResourceTemplate): bool
     {
-        //
+        return $authUser->hasPermission('view_single_human_resource_template');
     }
 
     /**
      * Determine whether the user can create humanResourceTemplates.
      *
-     * @param  App\User  $user
-     * @return mixed
+     * @param User $authUser
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $authUser): bool
     {
-        //
+        return $authUser->hasPermission('create_human_resource_template');
     }
 
     /**
      * Determine whether the user can update the humanResourceTemplate.
      *
-     * @param  App\User  $user
-     * @param  App\HumanResourceTemplate  $humanResourceTemplate
-     * @return mixed
+     * @param User $authUser
+     * @param HumanResourceTemplate $humanResourceTemplate
+     * @return bool
      */
-    public function update(User $user, HumanResourceTemplate $humanResourceTemplate)
+    public function update(User $authUser, HumanResourceTemplate $humanResourceTemplate)
     {
-        //
+        return $authUser->hasPermission('update_human_resource_template');
+
     }
 
     /**
      * Determine whether the user can delete the humanResourceTemplate.
      *
-     * @param  App\User  $user
-     * @param  App\HumanResourceTemplate  $humanResourceTemplate
-     * @return mixed
+     * @param User $authUser
+     * @param HumanResourceTemplate $humanResourceTemplate
+     * @return bool
      */
-    public function delete(User $user, HumanResourceTemplate $humanResourceTemplate)
+    public function delete(User $authUser, HumanResourceTemplate $humanResourceTemplate)
     {
-        //
+        return $authUser->hasPermission('delete_human_resource_template');
+
     }
 }

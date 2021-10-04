@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RankType;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\RankTypeService;
@@ -45,12 +46,15 @@ class RankTypeController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', RankType::class);
+
         $filter = $this->rankTypeService->filterValidator($request)->validate();
         try {
-            $response = $this->rankTypeService->getRankTypeList($filter ,$this->startTime);
+            $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
         } catch (Throwable $e) {
             return $e;
         }
@@ -65,6 +69,10 @@ class RankTypeController extends Controller
     {
         try {
             $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
             return $e;
         }
@@ -76,9 +84,12 @@ class RankTypeController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', RankType::class);
+
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
             $data = $this->rankTypeService->store($validated);
@@ -103,10 +114,13 @@ class RankTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
+        $this->authorize('update', $rankType);
+
         $validated = $this->rankTypeService->validator($request, $id)->validate();
 
         try {
@@ -132,10 +146,13 @@ class RankTypeController extends Controller
      * Delete the specified resource from the storage
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
+        $this->authorize('delete', $rankType);
+
         try {
             $this->rankTypeService->destroy($rankType);
             $response = [

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HumanResource;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -43,9 +45,12 @@ class OrganizationUnitTypeController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request)
     {
+        $this->authorize('viewAny', OrganizationUnitType::class);
+
         $filter = $this->organizationUnitTypeService->filterValidator($request)->validate();
         try {
             $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($filter, $this->startTime);
@@ -64,6 +69,11 @@ class OrganizationUnitTypeController extends Controller
     {
         try {
             $response = $this->organizationUnitTypeService->getOneOrganizationUnitType($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
+
         } catch (Throwable $e) {
             return $e;
         }
@@ -75,9 +85,12 @@ class OrganizationUnitTypeController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', OrganizationUnitType::class);
+
         $validated = $this->organizationUnitTypeService->validator($request)->validate();
         try {
             $data = $this->organizationUnitTypeService->store($validated);
@@ -103,10 +116,12 @@ class OrganizationUnitTypeController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
+        $this->authorize('update', $organizationUnitType);
 
         $validated = $this->organizationUnitTypeService->validator($request, $id)->validate();
         try {
@@ -130,10 +145,12 @@ class OrganizationUnitTypeController extends Controller
      * remove the specified resource from storage
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
+        $this->authorize('delete', $organizationUnitType);
 
         try {
             $this->organizationUnitTypeService->destroy($organizationUnitType);
@@ -199,7 +216,7 @@ class OrganizationUnitTypeController extends Controller
     {
         $organizationUnitType = OrganizationUnitType::onlyTrashed()->findOrFail($id);
         try {
-            $this->organizationUnitTypeService->restore( $organizationUnitType);
+            $this->organizationUnitTypeService->restore($organizationUnitType);
             $response = [
                 '_response_status' => [
                     "success" => true,
