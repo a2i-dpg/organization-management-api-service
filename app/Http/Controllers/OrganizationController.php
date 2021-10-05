@@ -149,23 +149,21 @@ class OrganizationController extends Controller
     /**
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException|AuthorizationException
+     * @throws ValidationException
      */
-    public function organizationRegister(Request $request): JsonResponse
+    public function organizationRegistration(Request $request): JsonResponse
     {
 
         $organization = new Organization();
-
-        $this->authorize('create', $organization);
-
-        $validated = $this->organizationService->registerOrganizationvalidator($request)->validate();
+        $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
 
         DB::beginTransaction();
         try {
             $organization = $this->organizationService->store($organization, $validated);
-            if ($organization) {
 
+            if ($organization) {
                 $validated['organization_id'] = $organization->id;
+
                 $createRegisterUser = $this->organizationService->createRegisterUser($validated);
 
                 if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {

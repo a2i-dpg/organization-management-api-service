@@ -239,7 +239,7 @@ class OrganizationService
      */
     public function createUser(array $data)
     {
-        $url =clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
             'user_type' => BaseModel::ORGANIZATION_TYPE,
@@ -264,7 +264,7 @@ class OrganizationService
      */
     public function createRegisterUser(array $data)
     {
-        $url =clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-registration';
 
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_TYPE,
@@ -276,7 +276,6 @@ class OrganizationService
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
         ];
-
         return Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
             return $e;
         })->json();
@@ -511,7 +510,7 @@ class OrganizationService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
-    public function registerOrganizationvalidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function registerOrganizationValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title_en' => [
@@ -538,6 +537,10 @@ class OrganizationService
                 'required',
                 BaseModel::MOBILE_REGEX
             ],
+            'contact_person_mobile' => [
+                'required',
+                BaseModel::MOBILE_REGEX
+            ],
             "name_of_the_office_head" => [
                 "required",
                 "string"
@@ -545,10 +548,6 @@ class OrganizationService
             "name_of_the_office_head_designation" => [
                 "nullable",
                 "string"
-            ],
-            'contact_person_mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX
             ],
             'contact_person_name' => [
                 'required',
