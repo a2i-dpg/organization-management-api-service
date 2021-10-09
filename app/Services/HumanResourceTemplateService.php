@@ -43,8 +43,8 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.parent_id',
-            't2.title_en as parent_title_en',
-            't2.title as parent_title_bn',
+            'human_res_tem_2.title_en as parent_title_en',
+            'human_res_tem_2.title as parent_title_bn',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title_en',
             'organizations.title as organization_title_bn',
@@ -53,7 +53,7 @@ class HumanResourceTemplateService
             'organization_unit_types.title as organization_unit_type_title_bn',
             'human_resource_templates.rank_id',
             'ranks.title_en as rank_title_en',
-            'ranks.title_en as rank_title_bn',
+            'ranks.title as rank_title_bn',
             'human_resource_templates.status',
             'human_resource_templates.row_status',
             'human_resource_templates.created_by',
@@ -84,11 +84,11 @@ class HumanResourceTemplateService
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
-        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', function ($join) use ($rowStatus) {
-            $join->on('human_resource_templates.parent_id', '=', 't2.id')
-                ->whereNull('t2.deleted_at');
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as human_res_tem_2', function ($join) use ($rowStatus) {
+            $join->on('human_resource_templates.parent_id', '=', 'human_res_tem_2.id')
+                ->whereNull('human_res_tem_2.deleted_at');
             if (is_numeric($rowStatus)) {
-                $join->where('t2.row_status', $rowStatus);
+                $join->where('human_res_tem_2.row_status', $rowStatus);
             }
         });
 
@@ -153,8 +153,8 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.parent_id',
-            't2.title_en as parent_title_en',
-            't2.title as parent_title_bn',
+            'human_res_tem_2.title_en as parent_title_en',
+            'human_res_tem_2.title as parent_title_bn',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title_en',
             'organizations.title as organization_title_bn',
@@ -163,7 +163,7 @@ class HumanResourceTemplateService
             'organization_unit_types.title as organization_unit_type_title_bn',
             'human_resource_templates.rank_id',
             'ranks.title_en as rank_title_en',
-            'ranks.title_en as rank_title_bn',
+            'ranks.title as rank_title_bn',
             'human_resource_templates.status',
             'human_resource_templates.row_status',
             'human_resource_templates.created_by',
@@ -185,9 +185,9 @@ class HumanResourceTemplateService
             $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
         });
-        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', function ($join) {
-            $join->on('human_resource_templates.parent_id', '=', 't2.id')
-                ->whereNull('t2.deleted_at');
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as human_res_tem_2', function ($join) {
+            $join->on('human_resource_templates.parent_id', '=', 'human_res_tem_2.id')
+                ->whereNull('human_res_tem_2.deleted_at');
         });
 
         $humanResourceTemplateBuilder->where('human_resource_templates.id', $id);
@@ -260,7 +260,8 @@ class HumanResourceTemplateService
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.parent_id',
-            't2.title_en as parent',
+            'human_res_tem_2.title_en as parent_title_en',
+            'human_res_tem_2.title as parent_title_bn',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title',
             'human_resource_templates.organization_unit_type_id',
@@ -278,7 +279,7 @@ class HumanResourceTemplateService
         $humanResourceTemplateBuilder->join('organizations', 'human_resource_templates.organization_id', '=', 'organizations.id');
         $humanResourceTemplateBuilder->join('organization_unit_types', 'human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id');
         $humanResourceTemplateBuilder->leftJoin('ranks', 'human_resource_templates.rank_id', '=', 'ranks.id');
-        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as t2', 'human_resource_templates.parent_id', '=', 't2.id');
+        $humanResourceTemplateBuilder->leftJoin('human_resource_templates as human_res_tem_2', 'human_resource_templates.parent_id', '=', 'human_res_tem_2.id');
         $humanResourceTemplateBuilder->orderBy('human_resource_templates.id', $order);
 
         if (!empty($titleEn)) {
@@ -345,52 +346,52 @@ class HumanResourceTemplateService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max: 191',
+                'max: 400',
                 'min: 2'
             ],
             'title' => [
                 'required',
                 'string',
-                'max: 500',
+                'max: 800',
                 'min: 2'
             ],
             'organization_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:organizations,id'
             ],
             'organization_unit_type_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:organization_unit_types,id'
             ],
             'parent_id' => [
                 'nullable',
-                'int',
+                'integer',
                 'exists:human_resource_templates,id'
             ],
             'rank_id' => [
                 'nullable',
-                'int',
+                'integer',
                 'exists:ranks,id'
             ],
             'display_order' => [
                 'required',
-                'int',
+                'integer',
                 'min:0',
             ],
             'is_designation' => [
                 'required',
-                'int',
+                'integer',
             ],
             'status' => [
-                'int',
+                'integer',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                'int',
+                'integer',
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
@@ -419,18 +420,18 @@ class HumanResourceTemplateService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:500|min:2',
-            'page' => 'numeric|gt:0',
-            'page_size' => 'numeric|gt:0',
-            'organization_id' => 'numeric|exists:organizations,id',
-            'organization_unit_type_id' => 'numeric|exists:organization_unit_types,id',
+            'title_en' => 'nullable|max:400|min:2',
+            'title' => 'nullable|max:800|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'organization_id' => 'integer|exists:organizations,id',
+            'organization_unit_type_id' => 'integer|exists:organization_unit_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

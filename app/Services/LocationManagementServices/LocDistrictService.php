@@ -33,7 +33,6 @@ class LocDistrictService
             'loc_districts.title',
             'loc_districts.title_en',
             'loc_districts.bbs_code',
-            'loc_districts.division_bbs_code',
             'loc_districts.loc_division_id',
             'loc_divisions.title as division_title_bn',
             'loc_divisions.title_en as division_title_en',
@@ -97,7 +96,6 @@ class LocDistrictService
             'loc_districts.title',
             'loc_districts.title_en',
             'loc_districts.bbs_code',
-            'loc_districts.division_bbs_code',
             'loc_divisions.title as division_title_bn',
             'loc_divisions.title_en as division_title_en',
             'loc_districts.row_status',
@@ -142,15 +140,15 @@ class LocDistrictService
         ];
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:191|min:2',
+            'title_en' => 'nullable|max:250|min:2',
             'title' => 'nullable|max:500|min:2',
-            'loc_division_id' => 'numeric|exists:loc_divisions,id',
+            'loc_division_id' => 'integer|exists:loc_divisions,id',
             'order' => [
                 'string',
                 Rule::in([(BaseModel::ROW_ORDER_ASC), (BaseModel::ROW_ORDER_DESC)])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

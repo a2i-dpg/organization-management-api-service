@@ -42,16 +42,21 @@ class OrganizationService
             'organizations.title_en',
             'organizations.title',
             'organizations.name_of_the_office_head',
+            'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
+            'organizations.name_of_the_office_head_designation_en',
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
             'organizations.email',
             'organizations.contact_person_name',
+            'organizations.contact_person_name_en',
             'organizations.contact_person_mobile',
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
-            'organizations.description',
+            'organizations.contact_person_designation_en',
+//            'organizations.description',
+//            'organizations.description_en',
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
@@ -66,6 +71,7 @@ class OrganizationService
             'organization_types.title_en as organization_type_title_en',
             'organization_types.title as organization_type_title_bn',
             'organizations.address',
+            'organizations.address_en',
             'organizations.row_status',
             'organizations.created_by',
             'organizations.updated_by',
@@ -156,16 +162,21 @@ class OrganizationService
             'organizations.title_en',
             'organizations.title',
             'organizations.name_of_the_office_head',
+            'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
+            'organizations.name_of_the_office_head_designation_en',
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
             'organizations.email',
             'organizations.contact_person_name',
+            'organizations.contact_person_name_en',
             'organizations.contact_person_mobile',
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
+            'organizations.contact_person_designation_en',
             'organizations.description',
+            'organizations.description_en',
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
@@ -180,6 +191,7 @@ class OrganizationService
             'organization_types.title_en as organization_type_title_en',
             'organization_types.title as organization_type_title_bn',
             'organizations.address',
+            'organizations.address_en',
             'organizations.row_status',
             'organizations.created_by',
             'organizations.updated_by',
@@ -414,20 +426,20 @@ class OrganizationService
                 'numeric'
             ],
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:300',
+                'max:600',
                 'min:2',
             ],
             'title' => [
                 'required',
                 'string',
-                'max:1000',
+                'max:1200',
                 'min:2'
             ],
             'organization_type_id' => [
                 'required',
-                'int'
+                'integer'
             ],
             "head_of_office" => [
                 "required",
@@ -455,15 +467,15 @@ class OrganizationService
             ],
             'loc_division_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'loc_district_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'loc_upazila_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'contact_person_mobile' => [
                 'required',
@@ -474,8 +486,18 @@ class OrganizationService
                 'max: 500',
                 'min:2'
             ],
+            'contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
             'contact_person_designation' => [
                 'required',
+                'max: 600',
+                "min:2"
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
                 'max: 300',
                 "min:2"
             ],
@@ -499,7 +521,12 @@ class OrganizationService
             ],
             'address' => [
                 'required',
-                'max: 1000',
+                'max: 1200',
+                'min:2'
+            ],
+            'address_en' => [
+                'nullable',
+                'max: 600',
                 'min:2'
             ],
             'row_status' => [
@@ -514,20 +541,20 @@ class OrganizationService
     {
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:300',
+                'max:600',
                 'min:2',
             ],
             'title' => [
                 'required',
                 'string',
-                'max:1000',
+                'max:1200',
                 'min:2'
             ],
             'organization_type_id' => [
                 'required',
-                'int'
+                'integer'
             ],
             'email' => [
                 'required',
@@ -543,18 +570,44 @@ class OrganizationService
             ],
             "name_of_the_office_head" => [
                 "required",
-                "string"
+                "string",
+                'max:600',
+                'min:2'
+            ],
+            "name_of_the_office_head_en" => [
+                "nullable",
+                "string",
+                'max:300',
+                'min:2'
             ],
             "name_of_the_office_head_designation" => [
                 "nullable",
-                "string"
+                "string",
+                'max:600',
+                'min:2'
+            ],
+            "name_of_the_office_head_designation_en" => [
+                "nullable",
+                "string",
+                'max:300',
+                'min:2'
             ],
             'contact_person_name' => [
                 'required',
                 'max: 500',
                 'min:2'
             ],
+            'contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
             'contact_person_designation' => [
+                'required',
+                'max: 600',
+                "min:2"
+            ],
+            'contact_person_designation_en' => [
                 'required',
                 'max: 300',
                 "min:2"
@@ -565,7 +618,12 @@ class OrganizationService
             ],
             'address' => [
                 'required',
-                'max: 1000',
+                'max: 1200',
+                'min:2'
+            ],
+            'address_en' => [
+                'required',
+                'max: 600',
                 'min:2'
             ],
             "password" => [
@@ -602,17 +660,17 @@ class OrganizationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:500|min:2',
-            'title' => 'nullable|max:1000|min:2',
-            'page' => 'numeric|gt:0',
-            'page_size' => 'numeric|gt:0',
-            'organization_type_id' => 'numeric|gt:0|exists:organization_types,id',
+            'title_en' => 'nullable|max:600|min:2',
+            'title' => 'nullable|max:1200|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'organization_type_id' => 'integer|gt:0|exists:organization_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

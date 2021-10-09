@@ -297,20 +297,20 @@ class RankService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:191',
+                'max:300',
                 'min:2'
             ],
             'title' => [
                 'required',
                 'string',
-                'max:500',
+                'max:600',
                 'min:2'
             ],
             'rank_type_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:rank_types,id',
             ],
             'grade' => [
@@ -320,11 +320,11 @@ class RankService
             ],
             'display_order' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'organization_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:organizations,id',
             ],
             'row_status' => [
@@ -357,16 +357,16 @@ class RankService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:500|min:2',
-            'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
-            'organization_id' => 'numeric|exists:organizations,id',
+            'title' => 'nullable|max:600|min:2',
+            'page' => 'integer|gt:0',
+            'pageSize' => 'integer',
+            'organization_id' => 'integer|exists:organizations,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

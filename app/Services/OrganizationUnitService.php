@@ -45,9 +45,11 @@ class OrganizationUnitService
             'organization_units.email',
             'organization_units.fax_no',
             'organization_units.contact_person_name',
+            'organization_units.contact_person_name_en',
             'organization_units.contact_person_mobile',
             'organization_units.contact_person_email',
             'organization_units.contact_person_designation',
+            'organization_units.contact_person_designation_en',
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
@@ -164,13 +166,16 @@ class OrganizationUnitService
             'organization_units.title_en',
             'organization_units.title',
             'organization_units.address',
+            'organization_units.address_en',
             'organization_units.mobile',
             'organization_units.email',
             'organization_units.fax_no',
             'organization_units.contact_person_name',
+            'organization_units.contact_person_name_en',
             'organization_units.contact_person_mobile',
             'organization_units.contact_person_email',
             'organization_units.contact_person_designation',
+            'organization_units.contact_person_designation_en',
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
@@ -386,9 +391,9 @@ class OrganizationUnitService
     {
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:191',
+                'max:300',
                 'min:2'
             ],
             'title' => [
@@ -399,26 +404,26 @@ class OrganizationUnitService
             ],
             'organization_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:organizations,id',
             ],
             'organization_unit_type_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:organization_unit_types,id',
             ],
 
             'loc_division_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'loc_district_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'loc_upazila_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'address' => [
                 'nullable',
@@ -428,7 +433,7 @@ class OrganizationUnitService
             'mobile' => [
                 'nullable',
                 'string',
-                'max:20',
+                'max:15',
             ],
             'email' => [
                 'nullable',
@@ -438,12 +443,17 @@ class OrganizationUnitService
             'fax_no' => [
                 'nullable',
                 'string',
-                'max:50',
+                'max:30',
             ],
             'contact_person_name' => [
                 'nullable',
                 'string',
-                'max:191',
+                'max:500',
+            ],
+            'contact_person_name_en' => [
+                'nullable',
+                'string',
+                'max:250',
             ],
             'contact_person_mobile' => [
                 'nullable',
@@ -459,11 +469,16 @@ class OrganizationUnitService
             'contact_person_designation' => [
                 'nullable',
                 'string',
-                'max:191',
+                'max:600',
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
+                'string',
+                'max:300',
             ],
             'employee_size' => [
                 'required',
-                'int',
+                'integer',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
@@ -518,18 +533,18 @@ class OrganizationUnitService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:191|min:2',
+            'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric|gt:0',
-            'organization_id' => 'numeric|exists:organizations,id',
-            'organization_unit_type_id' => 'numeric|exists:organization_unit_types,id',
+            'page' => 'integer|gt:0',
+            'pageSize' => 'integer|gt:0',
+            'organization_id' => 'integer|exists:organizations,id',
+            'organization_unit_type_id' => 'integer|exists:organization_unit_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

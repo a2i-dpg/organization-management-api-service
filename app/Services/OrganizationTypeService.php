@@ -241,15 +241,15 @@ class OrganizationTypeService
         ];
         $rules = [
             'title_en' => [
+                'nullable',
+                'string',
                 'max:300',
-                'min:2',
-                'required',
-                'string'
+                'min:2'
             ],
             'title' => [
                 'required',
                 'string',
-                'max:400',
+                'max:600',
                 'min:2',
             ],
             'is_government' => [
@@ -285,16 +285,16 @@ class OrganizationTypeService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:191|min:2',
-            'title' => 'nullable|max:400|min:1',
-            'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric|gt:0',
+            'title_en' => 'nullable|max:300|min:2',
+            'title' => 'nullable|max:600|min:1',
+            'page' => 'integer|gt:0',
+            'pageSize' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

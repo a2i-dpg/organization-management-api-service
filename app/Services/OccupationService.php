@@ -63,7 +63,7 @@ class OccupationService
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleBn . '%');
+            $occupationBuilder->where('occupations.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $occupations */
@@ -196,7 +196,7 @@ class OccupationService
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleBn . '%');
+            $occupationBuilder->where('occupations.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $occupations */
@@ -258,9 +258,9 @@ class OccupationService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:300',
+                'max:400',
                 'min:2',
             ],
             'title' => [
@@ -271,7 +271,7 @@ class OccupationService
             ],
             'job_sector_id' => [
                 'required',
-                'int',
+                'integer',
                 'exists:job_sectors,id'
             ],
             'row_status' => [
@@ -305,16 +305,16 @@ class OccupationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
+            'title_en' => 'nullable|max:400|min:2',
             'title' => 'nullable|max:800|min:2',
-            'page' => 'numeric|gt:0',
-            'page_size' => 'numeric',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

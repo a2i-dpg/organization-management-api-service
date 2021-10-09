@@ -42,7 +42,7 @@ class RankTypeService
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'organizations.title as organization_title_bn',
-                'rank_types.description',
+//                'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
                 'rank_types.updated_by',
@@ -112,6 +112,7 @@ class RankTypeService
                 'rank_types.title_en',
                 'rank_types.title',
                 'rank_types.description',
+                'rank_types.description_en',
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'organizations.title as organization_title_bn',
@@ -194,6 +195,7 @@ class RankTypeService
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.description',
+                'rank_types.description_en',
                 'rank_types.row_status',
                 'rank_types.created_by',
                 'rank_types.updated_by',
@@ -271,18 +273,18 @@ class RankTypeService
             'title_en' => [
                 'required',
                 'string',
-                'max:191',
+                'max:300',
                 'min:2'
             ],
             'title' => [
                 'required',
                 'string',
-                'max: 500',
+                'max: 600',
                 'min:2'
             ],
             'organization_id' => [
                 'nullable',
-                'int',
+                'integer',
                 'exists:organizations,id',
             ],
             'description' => [
@@ -291,7 +293,7 @@ class RankTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                'int',
+                'integer',
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
@@ -320,16 +322,16 @@ class RankTypeService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:500|min:2',
-            'organization_id' => 'numeric|exists:organizations,id',
-            'page' => 'numeric|gt:0',
-            'page_size' => 'numeric|gt:0',
+            'title' => 'nullable|max:600|min:2',
+            'organization_id' => 'integer|exists:organizations,id',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

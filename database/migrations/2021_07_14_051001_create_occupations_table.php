@@ -26,6 +26,7 @@ class CreateOccupationsTable extends Migration
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
             $table->foreign('job_sector_id', 'occupations_fk_job_sector_id')
                 ->references('id')
                 ->on('job_sectors')

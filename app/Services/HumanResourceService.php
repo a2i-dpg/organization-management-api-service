@@ -42,8 +42,8 @@ class HumanResourceService
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
-            't2.title_en as parent_title_en',
-            't2.title as parent_title_bn',
+            'human_res_2.title_en as parent_title_en',
+            'human_res_2.title as parent_title_bn',
             'human_resources.organization_id',
             'organizations.title_en as organization_title_en',
             'organizations.title as organization_title_bn',
@@ -83,11 +83,11 @@ class HumanResourceService
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
-        $humanResourceBuilder->leftJoin('human_resources as t2', function ($join) use ($rowStatus) {
-            $join->on('human_resources.parent_id', '=', 't2.id')
-                ->whereNull('t2.deleted_at');
+        $humanResourceBuilder->leftJoin('human_resources as human_res_2', function ($join) use ($rowStatus) {
+            $join->on('human_resources.parent_id', '=', 'human_res_2.id')
+                ->whereNull('human_res_2.deleted_at');
             if (is_numeric($rowStatus)) {
-                $join->where('t2.row_status', $rowStatus);
+                $join->where('human_res_2.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->orderBy('human_resources.id', $order);
@@ -147,8 +147,8 @@ class HumanResourceService
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
-            't2.title_en as parent_title_en',
-            't2.title as parent_title_bn',
+            'human_res_2.title_en as parent_title_en',
+            'human_res_2.title as parent_title_bn',
             'human_resources.organization_id',
             'organizations.title_en as organization_title_en',
             'organizations.title as organization_title_bn',
@@ -179,9 +179,9 @@ class HumanResourceService
             $join->on('human_resources.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
         });
-        $humanResourceBuilder->leftJoin('human_resources as t2', function ($join) {
-            $join->on('human_resources.parent_id', '=', 't2.id')
-                ->whereNull('t2.deleted_at');
+        $humanResourceBuilder->leftJoin('human_resources as human_res_2', function ($join) {
+            $join->on('human_resources.parent_id', '=', 'human_res_2.id')
+                ->whereNull('human_res_2.deleted_at');
         });
         $humanResourceBuilder->where('human_resources.id', $id);
 
@@ -253,7 +253,7 @@ class HumanResourceService
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
-            't2.title_en as parent',
+            'human_res_2.title_en as parent',
             'human_resources.organization_id',
             'organizations.title_en as organization_name',
             'human_resources.organization_unit_id',
@@ -274,7 +274,7 @@ class HumanResourceService
         $humanResourceBuilder->join('organizations', 'human_resources.organization_id', '=', 'organizations.id');
         $humanResourceBuilder->join('organization_units', 'human_resources.organization_unit_id', '=', 'organization_units.id');
         $humanResourceBuilder->leftJoin('ranks', 'human_resources.rank_id', '=', 'ranks.id');
-        $humanResourceBuilder->leftJoin('human_resources as t2', 'human_resources.parent_id', '=', 't2.id');
+        $humanResourceBuilder->leftJoin('human_resources as human_res_2', 'human_resources.parent_id', '=', 't2.id');
         $humanResourceBuilder->orderBy('human_resource_templates.id', $order);
 
         if (!empty($titleEn)) {
@@ -342,9 +342,9 @@ class HumanResourceService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max: 191',
+                'max: 300',
                 'min:2'
             ],
             'title' => [
@@ -417,16 +417,16 @@ class HumanResourceService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'page' => 'numeric|gt:0',
-            'organization_id' => 'numeric|exists:organizations,id',
-            'organization_unit_id' => 'numeric|exists:organization_units,id',
-            'page_size' => 'numeric|gt:0',
+            'page' => 'integer|gt:0',
+            'organization_id' => 'integer|exists:organizations,id',
+            'organization_unit_id' => 'integer|exists:organization_units,id',
+            'page_size' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

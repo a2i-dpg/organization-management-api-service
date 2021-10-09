@@ -16,7 +16,7 @@ class CreateRankTypesTable extends Migration
         Schema::create('rank_types', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('organization_id')->nullable();
-            $table->string('title', 500);
+            $table->string('title', 600);
             $table->string('title_en', 300)->nullable();
             $table->text('description')->nullable();
             $table->text('description_en')->nullable();

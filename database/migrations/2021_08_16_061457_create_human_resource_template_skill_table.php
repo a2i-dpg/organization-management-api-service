@@ -13,9 +13,16 @@ class CreateHumanResourceTemplateSkillTable extends Migration
      */
     public function up()
     {
-        Schema::create('human_resource_template_skill', function (Blueprint $table) {
+        Schema::create('human_resource_template_skills', function (Blueprint $table) {
             $table->unsignedInteger('human_resource_template_id');
             $table->unsignedInteger('skill_id');
+
+            $table->foreign('human_resource_template_id')
+                ->references('id')
+                ->on('human_resource_templates')
+                ->onDelete('cascade');
+
+
             $table->foreign('skill_id')
                 ->references('id')
                 ->on('skills')

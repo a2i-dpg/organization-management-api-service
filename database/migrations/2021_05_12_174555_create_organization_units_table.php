@@ -22,22 +22,28 @@ class CreateOrganizationUnitsTable extends Migration
             $table->unsignedInteger('organization_id');
             $table->unsignedInteger('organization_unit_type_id');
 
-            $table->unsignedMediumInteger('loc_division_id')->nullable()->index('org_unit_loc_division_id_inx');
-            $table->unsignedMediumInteger('loc_district_id')->nullable()->index('org_unit_loc_district_id_inx');
-            $table->unsignedMediumInteger('loc_upazila_id')->nullable()->index('org_unit_loc_upazila_id_inx');
+            $table->unsignedMediumInteger('loc_division_id')
+                ->nullable()->index('org_unit_loc_division_id_inx');
+            $table->unsignedMediumInteger('loc_district_id')
+                ->nullable()->index('org_unit_loc_district_id_inx');
+            $table->unsignedMediumInteger('loc_upazila_id')
+                ->nullable()->index('org_unit_loc_upazila_id_inx');
 
-            $table->string('address', 1000)->nullable(); // TODO: need separate column for english
+            $table->string('address', 1200)->nullable();
+            $table->string('address_en', 600)->nullable();
             $table->string('mobile', 15)->nullable();
             $table->string('email', 191)->nullable();
             $table->string('fax_no', 50)->nullable();
 
-            $table->string('contact_person_name', 191)->nullable(); // TODO: need separate column for english
+            $table->string('contact_person_name', 500)->nullable();
+            $table->string('contact_person_name_en', 250)->nullable();
             $table->string('contact_person_mobile', 15)->nullable();
             $table->string('contact_person_email', 191)->nullable();
-            $table->string('contact_person_designation', 191)->nullable(); // TODO: need separate column for english
+            $table->string('contact_person_designation', 600)->nullable();
+            $table->string('contact_person_designation_en', 300)->nullable();
 
-
-            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
+            $table->unsignedTinyInteger('row_status')
+                ->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
