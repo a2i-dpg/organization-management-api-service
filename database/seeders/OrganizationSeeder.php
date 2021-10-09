@@ -35,12 +35,12 @@ class OrganizationSeeder extends Seeder
             OrganizationUnitType::factory()
                 ->count(3)
                 ->state(['organization_id' => $organization->id])
-                ->has(
-                    OrganizationUnit::factory()
-                        ->count(5)
-                        ->state(['organization_id' => $organization->id])
-                        ->hasAttached(Service::factory()->count(4))
-                )
+//                ->has(                                  //TODO: fix organization seeder
+//                    OrganizationUnit::factory()
+//                        ->count(5)
+//                        ->state(['organization_id' => $organization->id])
+//                        ->hasAttached(Service::factory()->count(4))
+//                )
                 ->create();
 
             RankType::factory()
