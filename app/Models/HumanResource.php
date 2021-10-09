@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 /**
  * Class HumanResource
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read Organization organization
  * @property-read OrganizationUnit organizationUnit
  * @property-read  HumanResource parent
+ * @property-read  Collection skills
  */
 class HumanResource extends BaseModel
 {
@@ -35,6 +37,11 @@ class HumanResource extends BaseModel
      * @var string[]
      */
     protected $guarded = ['id'];
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = ["pivot"];
 
     /**
      * @return BelongsTo
@@ -76,6 +83,9 @@ class HumanResource extends BaseModel
         return $this->belongsTo(Rank::class);
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function skills(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'human_resource_skills');

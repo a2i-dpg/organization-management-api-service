@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Traits\Scopes\ScopeFilterByOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -27,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
  * @property-read  OrganizationUnitType organizationUnitType
  * @property-read  HumanResourceTemplate parent
  * @property-read  Rank rank
+ * @property-read  Collection skills
  */
 class HumanResourceTemplate extends BaseModel
 {
@@ -36,6 +39,11 @@ class HumanResourceTemplate extends BaseModel
      * @var string[]
      */
     protected $guarded = ['id'];
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = ["pivot"];
 
     /**
      * @return BelongsTo
@@ -85,5 +93,12 @@ class HumanResourceTemplate extends BaseModel
         return $this->hasMany(self::class, 'id');
     }
 
+    /**
+     * @return BelongsToMany
+     */
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'human_resource_template_skills');
+    }
 
 }

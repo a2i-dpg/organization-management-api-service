@@ -39,7 +39,6 @@ class SkillService
                 'skills.id',
                 'skills.title_en',
                 'skills.title',
-                'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
@@ -97,7 +96,6 @@ class SkillService
                 'skills.id',
                 'skills.title_en',
                 'skills.title',
-                'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
@@ -173,7 +171,6 @@ class SkillService
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title',
-                'skills.description',
                 'skills.row_status',
                 'skills.created_at',
                 'skills.updated_at',
@@ -249,9 +246,9 @@ class SkillService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:191',
+                'max:300',
                 'min:2',
             ],
             'title' => [
@@ -259,10 +256,6 @@ class SkillService
                 'string',
                 'max: 600',
                 'min:2'
-            ],
-            'description' => [
-                'nullable',
-                'string',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
@@ -296,14 +289,14 @@ class SkillService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|min:600|min:2',
-            'page' => 'numeric|gt:0',
-            '$pageSize' => 'numeric|gt:0',
+            'page' => 'integer|gt:0',
+            '$pageSize' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
+                "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
