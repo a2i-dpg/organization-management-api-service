@@ -28,6 +28,7 @@ use Illuminate\Support\Collection;
  * @property-read OrganizationUnit organizationUnit
  * @property-read  HumanResource parent
  * @property-read  Collection skills
+ * @property-read  Collection children
  */
 class HumanResource extends BaseModel
 {

@@ -5,10 +5,7 @@ namespace Database\Seeders;
 use App\Models\HumanResource;
 use App\Models\HumanResourceTemplate;
 use App\Models\OrganizationUnit;
-use Faker\Factory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class HumanResourceTemplateSeeder extends Seeder
@@ -21,8 +18,6 @@ class HumanResourceTemplateSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-//        HumanResourceTemplate::query()->truncate();
-//        HumanResource::query()->truncate();
 
         $organizationUnits = OrganizationUnit::all();
 
@@ -30,46 +25,46 @@ class HumanResourceTemplateSeeder extends Seeder
 
             /** @var HumanResourceTemplate $humanisersTemplate */
             $humanisersTemplateRoot = HumanResourceTemplate::factory()
-                ->state(
-                    new Sequence(
-                        [
-                            'organization_id' => $organizationUnit->organization_id,
-                            'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
-                            'title_en' => "Marketing Child(" . $organizationUnit->title_en . ")",
-                            "title" => "Marketing Child(" . $organizationUnit->title . ")",
-                            "parent_id" => null
-                        ]
-                    ))
+                ->state(function (array $attributes) use ($organizationUnit) {
+                    return [
+                        'organization_id' => $organizationUnit->organization_id,
+                        'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
+                    ];
+                })
                 ->create();
+
             HumanResourceTemplate::factory()
                 ->count(5)
-                ->state(
-                    new Sequence(
-                        [
-                            'organization_id' => $organizationUnit->organization_id,
-                            'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
-                            'title_en' => "Marketing Child(" . $organizationUnit->title_en . ")",
-                            "title" => "Marketing Child(" . $organizationUnit->title . ")",
-                            "parent_id" => $humanisersTemplateRoot->id
-                        ]
-                    ))
+                ->state(function (array $attributes) use ($organizationUnit, $humanisersTemplateRoot) {
+                    return [
+                        'organization_id' => $organizationUnit->organization_id,
+                        'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
+                        "parent_id" => $humanisersTemplateRoot->id
+                    ];
+                })
                 ->create();
 
-            $humanResouceRoot = HumanResource::factory()->state([
-                'organization_id' => $organizationUnit->organization_id,
-                'organization_unit_id' => $organizationUnit->id,
-                'parent_id' => null
-            ])->create();
-
-            HumanResource::factory()
-                ->count(5)
+            $humanResouceRoots = HumanResource::factory()
+                ->count(2)
                 ->state([
                     'organization_id' => $organizationUnit->organization_id,
                     'organization_unit_id' => $organizationUnit->id,
-                    'parent_id' => $humanResouceRoot->id
-                ])->create();
+                    'parent_id' => null
+                ])
+                ->create();
 
+            foreach ($humanResouceRoots as $humanResouceRoot) {
+                HumanResource::factory()
+                    ->count(10)
+                    ->state([
+                        'organization_id' => $organizationUnit->organization_id,
+                        'organization_unit_id' => $organizationUnit->id,
+                        'parent_id' => $humanResouceRoot->id
+                    ])
+                    ->create();
+            }
         }
+
         Schema::enableForeignKeyConstraints();
 
     }

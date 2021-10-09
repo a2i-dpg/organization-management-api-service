@@ -36,7 +36,7 @@ class RankType extends BaseModel
     }
 
     /** @return HasMany */
-    public function rank(): HasMany
+    public function ranks(): HasMany
     {
         return $this->hasMany(Rank::class);
     }

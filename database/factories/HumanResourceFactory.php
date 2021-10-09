@@ -12,7 +12,7 @@ class HumanResourceFactory extends Factory
 
     public function definition(): array
     {
-        $title = $this->faker->randomElement(["Marketing", "Sales executive"]);
+        $title = $this->faker->randomElement(["Marketing Executive", "Sales Executive", "Finance Executive ", 'HR Manager', 'Admin Manager']);
         $rank = Rank::inRandomOrder()->first();
 
         return [

@@ -17,10 +17,10 @@ class JobSectorSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-//        JobSector::query()->truncate();
-//        Occupation::query()->truncate();
-        JobSector::factory()->has(Occupation::factory()->count(2))
-            ->count(20)->create();
+        JobSector::factory()
+            ->count(10)
+            ->has(Occupation::factory()->count(10))
+            ->create();
         Schema::disableForeignKeyConstraints();
     }
 }

@@ -39,17 +39,17 @@ class OrganizationUnitType extends BaseModel
     /**
      * @return HasMany
      */
-    public function humanResourceTemplate(): HasMany
+    public function humanResourceTemplates(): HasMany
     {
-        return $this->hasMany(HumanResourceTemplate::class);
+        return $this->hasMany(HumanResourceTemplate::class, 'organization_unit_type_id');
     }
 
     /**
      * @return HasMany
      */
-    public function organizationUnit(): HasMany
+    public function organizationUnits(): HasMany
     {
-        return $this->hasMany(OrganizationUnit::class);
+        return $this->hasMany(OrganizationUnit::class, 'organization_unit_type_id');
     }
 
 

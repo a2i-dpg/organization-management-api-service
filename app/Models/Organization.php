@@ -47,13 +47,18 @@ class Organization extends BaseModel
         return $this->belongsTo(OrganizationType::class);
     }
 
-    public function organizationUnitType():HasMany
+    public function organizationUnitTypes(): HasMany
     {
-        return $this->hasMany(OrganizationUnitType::class);
+        return $this->hasMany(OrganizationUnitType::class, 'organization_id');
     }
 
-    public function rankType():HasMany
+    public function organizationUnits(): HasMany
     {
-        return $this->hasMany(RankType::class);
+        return $this->hasMany(OrganizationUnit::class, 'organization_id');
+    }
+
+    public function rankTypes(): HasMany
+    {
+        return $this->hasMany(RankType::class, 'organization_id');
     }
 }

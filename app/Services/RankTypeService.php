@@ -290,6 +290,12 @@ class RankTypeService
             'description' => [
                 'nullable',
                 'string',
+                'max: 600',
+            ],
+            'description_en' => [
+                'nullable',
+                'string',
+                'max: 300',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

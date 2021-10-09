@@ -16,6 +16,12 @@ class CreateOrganizationUnitServicesTable extends Migration
         Schema::create('organization_unit_services', function (Blueprint $table) {
             $table->unsignedInteger('organization_unit_id');
             $table->unsignedInteger('service_id');
+
+            $table->foreign('organization_unit_id')
+                ->references('id')
+                ->on('organization_units')
+                ->onDelete('cascade');
+
             $table->foreign('service_id')
                 ->references('id')
                 ->on('services')

@@ -30,6 +30,8 @@ use Illuminate\Support\Facades\Auth;
  * @property-read  HumanResourceTemplate parent
  * @property-read  Rank rank
  * @property-read  Collection skills
+ * @property-read  Collection childTemplates
+ * @property-read  Collection children
  */
 class HumanResourceTemplate extends BaseModel
 {
@@ -88,7 +90,7 @@ class HumanResourceTemplate extends BaseModel
     /**
      * @return HasMany
      */
-    public function childTemplate(): HasMany
+    public function childTemplates(): HasMany
     {
         return $this->hasMany(self::class, 'id');
     }
