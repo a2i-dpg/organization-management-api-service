@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Occupation
  * @package App\Models
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property int job_sector_id
  * @property int row_status
  * @property-read jobSector jobSector

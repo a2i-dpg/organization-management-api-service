@@ -26,7 +26,7 @@ class RankTypeService
     public function getRankTypeList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -38,10 +38,10 @@ class RankTypeService
             [
                 'rank_types.id',
                 'rank_types.title_en',
-                'rank_types.title_bn',
+                'rank_types.title',
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
-                'organizations.title_bn as organization_title_bn',
+                'organizations.title as organization_title_bn',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
@@ -70,7 +70,7 @@ class RankTypeService
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $rankTypeBuilder->where('rank_types.title_bn', 'like', '%' . $titleBn . '%');
+            $rankTypeBuilder->where('rank_types.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $rankTypes */
@@ -110,11 +110,11 @@ class RankTypeService
             [
                 'rank_types.id',
                 'rank_types.title_en',
-                'rank_types.title_bn',
+                'rank_types.title',
                 'rank_types.description',
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
-                'organizations.title_bn as organization_title_bn',
+                'organizations.title as organization_title_bn',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
@@ -180,7 +180,7 @@ class RankTypeService
     public function getTrashedRankTypeList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -190,7 +190,7 @@ class RankTypeService
             [
                 'rank_types.id',
                 'rank_types.title_en',
-                'rank_types.title_bn',
+                'rank_types.title',
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'rank_types.description',
@@ -207,7 +207,7 @@ class RankTypeService
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $rankTypeBuilder->where('rank_types.title_bn', 'like', '%' . $titleBn . '%');
+            $rankTypeBuilder->where('rank_types.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $rankTypes */
@@ -274,7 +274,7 @@ class RankTypeService
                 'max:191',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max: 500',
@@ -320,7 +320,7 @@ class RankTypeService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title_bn' => 'nullable|max:500|min:2',
+            'title' => 'nullable|max:500|min:2',
             'organization_id' => 'numeric|exists:organizations,id',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',

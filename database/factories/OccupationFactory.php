@@ -25,7 +25,7 @@ class OccupationFactory extends Factory
         $title = $this->faker->unique->jobTitle;
         return [
             'title_en' => ucfirst($title),
-            'title_bn' => ucfirst($title),
+            'title' => ucfirst($title),
         ];
     }
 }

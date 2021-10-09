@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * Class OrganizationType
  * @package App\Models
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property int is_government
  * @property int row_status
  */

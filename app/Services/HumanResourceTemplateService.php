@@ -26,7 +26,7 @@ class HumanResourceTemplateService
     public function getHumanResourceTemplateList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -39,18 +39,18 @@ class HumanResourceTemplateService
         $humanResourceTemplateBuilder = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
-            'human_resource_templates.title_bn',
+            'human_resource_templates.title',
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.parent_id',
             't2.title_en as parent_title_en',
-            't2.title_bn as parent_title_bn',
+            't2.title as parent_title_bn',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title_bn',
             'human_resource_templates.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
-            'organization_unit_types.title_bn as organization_unit_type_title_bn',
+            'organization_unit_types.title as organization_unit_type_title_bn',
             'human_resource_templates.rank_id',
             'ranks.title_en as rank_title_en',
             'ranks.title_en as rank_title_bn',
@@ -110,7 +110,7 @@ class HumanResourceTemplateService
             $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $humanResourceTemplateBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceTemplateBuilder->where('human_resource_templates.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $humanResourceTemplates */
@@ -149,18 +149,18 @@ class HumanResourceTemplateService
         $humanResourceTemplateBuilder = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
-            'human_resource_templates.title_bn',
+            'human_resource_templates.title',
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.parent_id',
             't2.title_en as parent_title_en',
-            't2.title_bn as parent_title_bn',
+            't2.title as parent_title_bn',
             'human_resource_templates.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title_bn',
             'human_resource_templates.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
-            'organization_unit_types.title_bn as organization_unit_type_title_bn',
+            'organization_unit_types.title as organization_unit_type_title_bn',
             'human_resource_templates.rank_id',
             'ranks.title_en as rank_title_en',
             'ranks.title_en as rank_title_bn',
@@ -247,7 +247,7 @@ class HumanResourceTemplateService
     public function getTrashedHumanResourceTemplateList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -256,7 +256,7 @@ class HumanResourceTemplateService
         $humanResourceTemplateBuilder = HumanResourceTemplate::onlyTrashed()->select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
-            'human_resource_templates.title_bn',
+            'human_resource_templates.title',
             'human_resource_templates.display_order',
             'human_resource_templates.is_designation',
             'human_resource_templates.parent_id',
@@ -284,7 +284,7 @@ class HumanResourceTemplateService
         if (!empty($titleEn)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $humanResourceTemplateBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceTemplateBuilder->where('human_resource_templates.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $humanResourceTemplates */
@@ -350,7 +350,7 @@ class HumanResourceTemplateService
                 'max: 191',
                 'min: 2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max: 500',
@@ -420,7 +420,7 @@ class HumanResourceTemplateService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title_bn' => 'nullable|max:500|min:2',
+            'title' => 'nullable|max:500|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',
             'organization_id' => 'numeric|exists:organizations,id',

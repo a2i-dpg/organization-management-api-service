@@ -25,7 +25,7 @@ class OrganizationTypeFactory extends Factory
 
         return [
             'title_en' => $title,
-            'title_bn' => $title,
+            'title' => $title,
             'is_government' => $this->faker->randomElement([0, 1]),
         ];
     }

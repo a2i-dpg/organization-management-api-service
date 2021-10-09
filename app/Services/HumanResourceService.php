@@ -26,7 +26,7 @@ class HumanResourceService
     public function getHumanResourceList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -38,21 +38,21 @@ class HumanResourceService
         $humanResourceBuilder = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
-            'human_resources.title_bn',
+            'human_resources.title',
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
             't2.title_en as parent_title_en',
-            't2.title_bn as parent_title_bn',
+            't2.title as parent_title_bn',
             'human_resources.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title_bn',
             'human_resources.organization_unit_id',
             'organization_units.title_en as organization_unit_title_en',
-            'organization_units.title_bn as organization_unit_title_bn',
+            'organization_units.title as organization_unit_title_bn',
             'human_resources.rank_id',
             'ranks.title_en as rank_title_en',
-            'ranks.title_bn as rank_title_bn',
+            'ranks.title as rank_title_bn',
             'human_resources.status',
             'human_resources.row_status',
             'human_resources.created_by',
@@ -104,7 +104,7 @@ class HumanResourceService
         if (!empty($titleEn)) {
             $humanResourceBuilder->where('human_resources.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $humanResourceBuilder->where('human_resources.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceBuilder->where('human_resources.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $humanResources */
@@ -143,21 +143,21 @@ class HumanResourceService
         $humanResourceBuilder = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
-            'human_resources.title_bn',
+            'human_resources.title',
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
             't2.title_en as parent_title_en',
-            't2.title_bn as parent_title_bn',
+            't2.title as parent_title_bn',
             'human_resources.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title_bn',
             'human_resources.organization_unit_id',
             'organization_units.title_en as organization_unit_title_en',
-            'organization_units.title_bn as organization_unit_title_bn',
+            'organization_units.title as organization_unit_title_bn',
             'human_resources.rank_id',
             'ranks.title_en as rank_title_en',
-            'ranks.title_bn as rank_title_bn',
+            'ranks.title as rank_title_bn',
             'human_resources.status',
             'human_resources.row_status',
             'human_resources.created_by',
@@ -240,7 +240,7 @@ class HumanResourceService
     public function getTrashedHumanResourceList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $page_size = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -249,7 +249,7 @@ class HumanResourceService
         $humanResourceBuilder = HumanResource::onlyTrashed()->select([
             'human_resources.id',
             'human_resources.title_en',
-            'human_resources.title_bn',
+            'human_resources.title',
             'human_resources.display_order',
             'human_resources.is_designation',
             'human_resources.parent_id',
@@ -281,7 +281,7 @@ class HumanResourceService
             $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $humanResourceBuilder->where('human_resource_templates.title_bn', 'like', '%' . $titleBn . '%');
+            $humanResourceBuilder->where('human_resource_templates.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $humanResources */
@@ -347,7 +347,7 @@ class HumanResourceService
                 'max: 191',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max: 600',
@@ -416,7 +416,7 @@ class HumanResourceService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title_bn' => 'nullable|max:600|min:2',
+            'title' => 'nullable|max:600|min:2',
             'page' => 'numeric|gt:0',
             'organization_id' => 'numeric|exists:organizations,id',
             'organization_unit_id' => 'numeric|exists:organization_units,id',

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Skill
  * @package App\Models
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property int | null description
  * @property int row_status
  * @property-read Organization organization

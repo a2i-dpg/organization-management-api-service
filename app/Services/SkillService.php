@@ -26,7 +26,7 @@ class SkillService
     public function getSkillList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -38,7 +38,7 @@ class SkillService
             [
                 'skills.id',
                 'skills.title_en',
-                'skills.title_bn',
+                'skills.title',
                 'skills.description',
                 'skills.row_status',
                 'skills.created_at',
@@ -56,7 +56,7 @@ class SkillService
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $skillBuilder->where('skills.title_bn', 'like', '%' . $titleBn . '%');
+            $skillBuilder->where('skills.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $skills */
@@ -96,7 +96,7 @@ class SkillService
             [
                 'skills.id',
                 'skills.title_en',
-                'skills.title_bn',
+                'skills.title',
                 'skills.description',
                 'skills.row_status',
                 'skills.created_at',
@@ -162,7 +162,7 @@ class SkillService
     public function getTrashedSkillList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -172,7 +172,7 @@ class SkillService
             [
                 'skills.id as id',
                 'skills.title_en',
-                'skills.title_bn',
+                'skills.title',
                 'skills.description',
                 'skills.row_status',
                 'skills.created_at',
@@ -187,7 +187,7 @@ class SkillService
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $skillBuilder->where('skills.title_bn', 'like', '%' . $titleBn . '%');
+            $skillBuilder->where('skills.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $skills */
@@ -254,7 +254,7 @@ class SkillService
                 'max:191',
                 'min:2',
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max: 600',
@@ -295,7 +295,7 @@ class SkillService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title_bn' => 'nullable|min:600|min:2',
+            'title' => 'nullable|min:600|min:2',
             'page' => 'numeric|gt:0',
             '$pageSize' => 'numeric|gt:0',
             'order' => [

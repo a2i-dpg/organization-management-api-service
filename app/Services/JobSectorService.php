@@ -27,7 +27,7 @@ class JobSectorService
     public function getJobSectorList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -38,7 +38,7 @@ class JobSectorService
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
-                'job_sectors.title_bn',
+                'job_sectors.title',
                 'job_sectors.row_status',
                 'job_sectors.created_by',
                 'job_sectors.updated_by',
@@ -56,7 +56,7 @@ class JobSectorService
             $jobSectorBuilder->where('job_sectors.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $jobSectors */
@@ -96,7 +96,7 @@ class JobSectorService
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
-                'job_sectors.title_bn',
+                'job_sectors.title',
                 'job_sectors.row_status',
                 'job_sectors.created_by',
                 'job_sectors.updated_by',
@@ -160,7 +160,7 @@ class JobSectorService
     public function getTrashedJobSectorList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -170,7 +170,7 @@ class JobSectorService
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
-                'job_sectors.title_bn',
+                'job_sectors.title',
                 'job_sectors.row_status',
                 'job_sectors.created_by',
                 'job_sectors.updated_by',
@@ -183,7 +183,7 @@ class JobSectorService
         if (!empty($titleEn)) {
             $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $jobSectors */
@@ -249,7 +249,7 @@ class JobSectorService
                 'max:300',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max:500',
@@ -286,7 +286,7 @@ class JobSectorService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title_bn' => 'nullable|max:500|min:2',
+            'title' => 'nullable|max:500|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',
             'order' => [

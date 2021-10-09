@@ -26,14 +26,14 @@ class LocDivisionService
     public function getAllDivisions(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $divisionsBuilder */
         $divisionsBuilder = LocDivision::select([
             'id',
-            'title_bn',
+            'title',
             'title_en',
             'bbs_code',
             'row_status',
@@ -51,7 +51,7 @@ class LocDivisionService
             $divisionsBuilder->where('title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $divisionsBuilder->where('title_bn', 'like', '%' . $titleBn . '%');
+            $divisionsBuilder->where('title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $divisions */
@@ -78,7 +78,7 @@ class LocDivisionService
         /** @var LocDivision|Builder $divisionsBuilder */
         $divisionsBuilder = LocDivision::select([
             'id',
-            'title_bn',
+            'title',
             'title_en',
             'bbs_code',
             'row_status',
@@ -119,7 +119,7 @@ class LocDivisionService
         ];
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:191|min:2',
-            'title_bn' => 'nullable|max:500|min:2',
+            'title' => 'nullable|max:500|min:2',
             'order' => [
                 'string',
                 Rule::in([(BaseModel::ROW_ORDER_ASC), (BaseModel::ROW_ORDER_DESC)])

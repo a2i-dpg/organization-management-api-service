@@ -15,7 +15,7 @@ class SkillFactory extends Factory
         $title = $this->faker->unique->jobTitle;
         return [
             'title_en' => ucfirst($title),
-            'title_bn' => ucfirst($title),
+            'title' => ucfirst($title),
             'description' => $this->faker->paragraph(50)
         ];
 

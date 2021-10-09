@@ -28,7 +28,7 @@ class OrganizationService
     public function getAllOrganization(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -40,7 +40,7 @@ class OrganizationService
         $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
-            'organizations.title_bn',
+            'organizations.title',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_designation',
             'organizations.domain',
@@ -55,16 +55,16 @@ class OrganizationService
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title_bn as loc_division_title_bn',
+            'loc_divisions.title as loc_division_title_bn',
             'organizations.loc_district_id',
             'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title_bn as loc_district_title_bn',
+            'loc_districts.title as loc_district_title_bn',
             'organizations.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title_bn as loc_upazila_title_bn',
+            'loc_upazilas.title as loc_upazila_title_bn',
             'organizations.organization_type_id',
             'organization_types.title_en as organization_type_title_en',
-            'organization_types.title_bn as organization_type_title_bn',
+            'organization_types.title as organization_type_title_bn',
             'organizations.address',
             'organizations.row_status',
             'organizations.created_by',
@@ -115,7 +115,7 @@ class OrganizationService
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $organizationBuilder->where('organizations.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationBuilder->where('organizations.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizations */
@@ -154,7 +154,7 @@ class OrganizationService
         $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
-            'organizations.title_bn',
+            'organizations.title',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_designation',
             'organizations.domain',
@@ -169,16 +169,16 @@ class OrganizationService
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title_bn as loc_division_title_bn',
+            'loc_divisions.title as loc_division_title_bn',
             'organizations.loc_district_id',
             'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title_bn as loc_district_title_bn',
+            'loc_districts.title as loc_district_title_bn',
             'organizations.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title_bn as loc_upazila_title_bn',
+            'loc_upazilas.title as loc_upazila_title_bn',
             'organizations.organization_type_id',
             'organization_types.title_en as organization_type_title_en',
-            'organization_types.title_bn as organization_type_title_bn',
+            'organization_types.title as organization_type_title_bn',
             'organizations.address',
             'organizations.row_status',
             'organizations.created_by',
@@ -311,7 +311,7 @@ class OrganizationService
     public function getAllTrashedOrganization(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -320,7 +320,7 @@ class OrganizationService
         $organizationBuilder = Organization::onlyTrashed()->select([
             'organizations.id',
             'organizations.title_en',
-            'organizations.title_bn',
+            'organizations.title',
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
@@ -349,7 +349,7 @@ class OrganizationService
         if (!empty($titleEn)) {
             $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizations */
@@ -419,7 +419,7 @@ class OrganizationService
                 'max:300',
                 'min:2',
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max:1000',
@@ -519,7 +519,7 @@ class OrganizationService
                 'max:300',
                 'min:2',
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max:1000',
@@ -603,7 +603,7 @@ class OrganizationService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:500|min:2',
-            'title_bn' => 'nullable|max:1000|min:2',
+            'title' => 'nullable|max:1000|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',
             'organization_type_id' => 'numeric|gt:0|exists:organization_types,id',

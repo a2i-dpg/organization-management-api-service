@@ -21,7 +21,7 @@ class HumanResourceFactory extends Factory
             'is_designation' => 1,
             'status' => 1,
             'title_en' => $title,
-            'title_bn' => $title,
+            'title' => $title,
         ];
     }
 }

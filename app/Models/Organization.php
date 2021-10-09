@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  * @property int id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property string address
  * @property string mobile
  * @property string email

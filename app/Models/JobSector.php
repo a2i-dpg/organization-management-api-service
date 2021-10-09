@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class JobSector
  * @package App\Models
  * @property string title_en
- * @property string title_bn
+ * @property string title
  */
 
 class JobSector extends BaseModel

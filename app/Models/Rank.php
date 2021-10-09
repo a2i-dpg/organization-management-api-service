@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
  * @package App\Models
  * @property int organization_id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property string|null grade
  * @property int|null display_order
  * @property int rank_type_id

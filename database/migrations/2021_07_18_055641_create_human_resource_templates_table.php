@@ -17,8 +17,8 @@ class CreateHumanResourceTemplatesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('organization_id');
             $table->unsignedInteger('organization_unit_type_id');
-            $table->string('title_en', 300);
-            $table->string('title_bn', 500)->nullable();
+            $table->string('title', 600);
+            $table->string('title_en', 300)->nullable();
             $table->unsignedInteger('parent_id')->nullable()->comment('self parent id');
             $table->unsignedInteger('rank_id')->nullable();
             $table->unsignedInteger('display_order')->default(0);

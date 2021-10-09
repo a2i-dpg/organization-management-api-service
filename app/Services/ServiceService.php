@@ -28,7 +28,7 @@ class ServiceService
     {
 
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -39,7 +39,7 @@ class ServiceService
             [
                 'services.id',
                 'services.title_en',
-                'services.title_bn',
+                'services.title',
                 'services.row_status',
                 'services.created_by',
                 'services.updated_by',
@@ -55,7 +55,7 @@ class ServiceService
         if (!empty($titleEn)) {
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $serviceBuilder->where('services.title_bn', 'like', '%' . $titleBn . '%');
+            $serviceBuilder->where('services.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $services */
@@ -95,7 +95,7 @@ class ServiceService
             [
                 'services.id',
                 'services.title_en',
-                'services.title_bn',
+                'services.title',
                 'services.row_status',
                 'services.created_by',
                 'services.updated_by',
@@ -159,7 +159,7 @@ class ServiceService
     public function getTrashedServiceList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -169,7 +169,7 @@ class ServiceService
             [
                 'services.id as id',
                 'services.title_en',
-                'services.title_bn',
+                'services.title',
                 'services.row_status',
                 'services.created_by',
                 'services.updated_by',
@@ -186,7 +186,7 @@ class ServiceService
             $serviceBuilder->where('services.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $serviceBuilder->where('services.title_bn', 'like', '%' . $titleBn . '%');
+            $serviceBuilder->where('services.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $services */
@@ -251,7 +251,7 @@ class ServiceService
                 'max:191',
                 'min:2',
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max: 1000',
@@ -287,7 +287,7 @@ class ServiceService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:500|min:2',
-            'title_bn' => 'nullable|max:1000|min:2',
+            'title' => 'nullable|max:1000|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric|gt:0',
             'order' => [

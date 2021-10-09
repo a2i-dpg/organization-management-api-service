@@ -26,7 +26,7 @@ class OccupationService
     public function getOccupationList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -37,10 +37,10 @@ class OccupationService
         $occupationBuilder = Occupation::select([
             'occupations.id',
             'occupations.title_en',
-            'occupations.title_bn',
+            'occupations.title',
             'occupations.job_sector_id',
             'job_sectors.title_en as job_sector_title_en',
-            'job_sectors.title_bn as job_sector_title_bn',
+            'job_sectors.title as job_sector_title_bn',
             'occupations.row_status',
             'occupations.created_by',
             'occupations.updated_by',
@@ -102,10 +102,10 @@ class OccupationService
         $occupationBuilder = Occupation::select([
             'occupations.id',
             'occupations.title_en',
-            'occupations.title_bn',
+            'occupations.title',
             'occupations.job_sector_id',
             'job_sectors.title_en as job_sector_title_en',
-            'job_sectors.title_bn as job_sector_title_bn',
+            'job_sectors.title as job_sector_title_bn',
             'occupations.row_status',
             'occupations.created_by',
             'occupations.updated_by',
@@ -172,7 +172,7 @@ class OccupationService
     public function getTrashedOccupationList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -181,7 +181,7 @@ class OccupationService
         $occupationBuilder = Occupation::onlyTrashed()->select([
             'occupations.id',
             'occupations.title_en',
-            'occupations.title_bn',
+            'occupations.title',
             'occupations.job_sector_id',
             'job_sectors.title_en as job_sector_title',
             'occupations.row_status',
@@ -263,7 +263,7 @@ class OccupationService
                 'max:300',
                 'min:2',
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max:800',
@@ -306,7 +306,7 @@ class OccupationService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
-            'title_bn' => 'nullable|max:800|min:2',
+            'title' => 'nullable|max:800|min:2',
             'page' => 'numeric|gt:0',
             'page_size' => 'numeric',
             'order' => [

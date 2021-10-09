@@ -36,7 +36,7 @@ class HumanResourceTemplateSeeder extends Seeder
                             'organization_id' => $organizationUnit->organization_id,
                             'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
                             'title_en' => "Marketing Child(" . $organizationUnit->title_en . ")",
-                            "title_bn" => "Marketing Child(" . $organizationUnit->title_bn . ")",
+                            "title" => "Marketing Child(" . $organizationUnit->title . ")",
                             "parent_id" => null
                         ]
                     ))
@@ -49,7 +49,7 @@ class HumanResourceTemplateSeeder extends Seeder
                             'organization_id' => $organizationUnit->organization_id,
                             'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
                             'title_en' => "Marketing Child(" . $organizationUnit->title_en . ")",
-                            "title_bn" => "Marketing Child(" . $organizationUnit->title_bn . ")",
+                            "title" => "Marketing Child(" . $organizationUnit->title . ")",
                             "parent_id" => $humanisersTemplateRoot->id
                         ]
                     ))

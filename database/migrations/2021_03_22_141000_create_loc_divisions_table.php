@@ -16,8 +16,8 @@ class CreateLocDivisionsTable extends Migration {
 		Schema::create('loc_divisions', function(Blueprint $table)
 		{
 			$table->mediumIncrements('id');
-			$table->string('title_en');
-			$table->string('title_bn', 500);
+            $table->string('title', 500);
+            $table->string('title_en');
 			$table->char('bbs_code', 4)->nullable();
 			$table->unsignedTinyInteger('row_status')->default(1);
 			$table->timestamps();

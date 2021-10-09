@@ -25,7 +25,7 @@ class OrganizationFactory extends Factory
         $title = $this->faker->unique()->company;
         return [
             'title_en' => ucfirst($title),
-            'title_bn' => ucfirst($title),
+            'title' => ucfirst($title),
             'loc_division_id' => 1,
             'loc_district_id' => 1,
             'loc_upazila_id' => 1,

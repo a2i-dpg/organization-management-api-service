@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
  * @package App\Models
  * @property int id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property int organization_id
  * @property int organization_unit_type_id
  * @property string address

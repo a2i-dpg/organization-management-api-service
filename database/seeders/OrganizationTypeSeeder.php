@@ -28,12 +28,12 @@ class OrganizationTypeSeeder extends Seeder
             ->state(new Sequence(
                 [
                     'title_en' => "Government org",
-                    'title_bn' => "Government org",
+                    'title' => "Government org",
                     'is_government' => 1,
                 ],
                 [
                     'title_en' => "Private org",
-                    'title_bn' => "Private org",
+                    'title' => "Private org",
                     'is_government' => 2,
                 ]
             ))

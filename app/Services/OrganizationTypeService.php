@@ -26,7 +26,7 @@ class OrganizationTypeService
     public function getAllOrganizationType(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $titleBn = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -37,7 +37,7 @@ class OrganizationTypeService
         $organizationTypeBuilder = OrganizationType::select([
             'organization_types.id',
             'organization_types.title_en',
-            'organization_types.title_bn',
+            'organization_types.title',
             'organization_types.is_government',
             'organization_types.row_status',
             'organization_types.created_by',
@@ -54,7 +54,7 @@ class OrganizationTypeService
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($titleBn)) {
-            $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizationTypes */
@@ -93,7 +93,7 @@ class OrganizationTypeService
         $organizationTypeBuilder = OrganizationType::select([
             'organization_types.id',
             'organization_types.title_en',
-            'organization_types.title_bn',
+            'organization_types.title',
             'organization_types.is_government',
             'organization_types.row_status',
             'organization_types.created_by',
@@ -158,7 +158,7 @@ class OrganizationTypeService
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $titleBn = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = $request->query('order', 'ASC');
@@ -167,7 +167,7 @@ class OrganizationTypeService
         $organizationTypeBuilder = OrganizationType::onlyTrashed()->select([
             'organization_types.id',
             'organization_types.title_en',
-            'organization_types.title_bn',
+            'organization_types.title',
             'organization_types.is_government',
             'organization_types.row_status',
             'organization_types.created_by',
@@ -180,7 +180,7 @@ class OrganizationTypeService
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         } elseif (!empty($titleBn)) {
-            $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
         }
 
         /** @var Collection $organizationTypes */
@@ -246,7 +246,7 @@ class OrganizationTypeService
                 'required',
                 'string'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max:400',
@@ -286,7 +286,7 @@ class OrganizationTypeService
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:191|min:2',
-            'title_bn' => 'nullable|max:400|min:1',
+            'title' => 'nullable|max:400|min:1',
             'page' => 'numeric|gt:0',
             'pageSize' => 'numeric|gt:0',
             'order' => [

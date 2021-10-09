@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
  * Class OrganizationUnitType
  * @package App\Models
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property-read int organization_id
  * @property-read HumanResourceTemplate humanResourceTemplate
  * @property int row_status

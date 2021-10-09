@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
  * @package App\Models
  * @property int id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property int display_order
  * @property int is_designation
  * @property int parent_id
