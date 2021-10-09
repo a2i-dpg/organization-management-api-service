@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  *
  * @property int $id
- * @property string $title_bn
+ * @property string $title
  * @property string|null $title_en
  * @property string|null $bbs_code
  * @property int |null $created_by
