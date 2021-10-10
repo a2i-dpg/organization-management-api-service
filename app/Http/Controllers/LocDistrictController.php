@@ -44,7 +44,7 @@ class LocDistrictController extends Controller
         try {
             $response = $this->locDistrictService->getAllDistricts($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -60,7 +60,7 @@ class LocDistrictController extends Controller
         try {
             $response = $this->locDistrictService->getOneDistrict($id, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }

@@ -55,7 +55,7 @@ class HumanResourceTemplateController extends Controller
         try {
             $response = $this->humanResourceTemplateService->getHumanResourceTemplateList($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -73,7 +73,7 @@ class HumanResourceTemplateController extends Controller
             }
             $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -101,7 +101,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -132,7 +132,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -158,7 +158,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -172,7 +172,7 @@ class HumanResourceTemplateController extends Controller
         try {
             $response = $this->humanResourceTemplateService->getTrashedHumanResourceTemplateList($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -196,7 +196,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -219,7 +219,7 @@ class HumanResourceTemplateController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

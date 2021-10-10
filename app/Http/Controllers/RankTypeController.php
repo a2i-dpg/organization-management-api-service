@@ -56,7 +56,7 @@ class RankTypeController extends Controller
         try {
             $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -74,7 +74,7 @@ class RankTypeController extends Controller
             }
             $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -103,7 +103,7 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -137,7 +137,7 @@ class RankTypeController extends Controller
             ];
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -164,7 +164,7 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -178,7 +178,7 @@ class RankTypeController extends Controller
         try {
             $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -202,7 +202,7 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -225,7 +225,7 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

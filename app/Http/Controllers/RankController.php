@@ -49,7 +49,7 @@ class RankController extends Controller
         try {
             $response = $this->rankService->getRankList($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -67,7 +67,7 @@ class RankController extends Controller
             }
             $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -97,7 +97,7 @@ class RankController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -131,7 +131,7 @@ class RankController extends Controller
             ];
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -159,7 +159,7 @@ class RankController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -173,7 +173,7 @@ class RankController extends Controller
         try {
             $response = $this->rankService->getTrashedRankList($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -197,7 +197,7 @@ class RankController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -220,7 +220,7 @@ class RankController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

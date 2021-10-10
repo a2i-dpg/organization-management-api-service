@@ -56,7 +56,7 @@ class OrganizationTypeController extends Controller
         try {
             $response = $this->organizationTypeService->getAllOrganizationType($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -76,7 +76,7 @@ class OrganizationTypeController extends Controller
             $this->authorize('view', $response['data']);
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -105,7 +105,7 @@ class OrganizationTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -136,7 +136,7 @@ class OrganizationTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -163,7 +163,7 @@ class OrganizationTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -177,7 +177,7 @@ class OrganizationTypeController extends Controller
         try {
             $response = $this->organizationTypeService->getAllTrashedOrganizationUnit($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -201,7 +201,7 @@ class OrganizationTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -224,7 +224,7 @@ class OrganizationTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

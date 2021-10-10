@@ -39,6 +39,7 @@ class HumanResourceController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function getList(Request $request): JsonResponse
     {
@@ -48,7 +49,7 @@ class HumanResourceController extends Controller
         try {
             $response = $this->humanResourceService->getHumanResourceList($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response);
@@ -69,7 +70,7 @@ class HumanResourceController extends Controller
             $this->authorize('view', $response['data']);
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
 
@@ -99,7 +100,7 @@ class HumanResourceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -133,7 +134,7 @@ class HumanResourceController extends Controller
             ];
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -161,7 +162,7 @@ class HumanResourceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_OK);
@@ -176,7 +177,7 @@ class HumanResourceController extends Controller
         try {
             $response = $this->humanResourceService->getTrashedHumanResourceList($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -200,7 +201,7 @@ class HumanResourceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -223,7 +224,7 @@ class HumanResourceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

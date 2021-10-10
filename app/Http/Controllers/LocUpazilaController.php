@@ -44,7 +44,7 @@ class LocUpazilaController extends Controller
         try {
             $response = $this->locUpazilaService->getAllUpazilas($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -58,7 +58,7 @@ class LocUpazilaController extends Controller
         try {
             $response = $this->locUpazilaService->getOneUpazila($id, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
