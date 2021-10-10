@@ -205,7 +205,7 @@ class OrganizationController extends Controller
 
         } catch (Throwable $e) {
             DB::rollBack();
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
