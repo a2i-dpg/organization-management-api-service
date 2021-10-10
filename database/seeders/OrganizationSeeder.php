@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Organization;
-use App\Models\OrganizationUnit;
 use App\Models\OrganizationUnitType;
 use App\Models\Rank;
 use App\Models\RankType;
-use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
