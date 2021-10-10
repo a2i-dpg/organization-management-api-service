@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Carbon;
+
 if (!function_exists("clientUrl")) {
     function clientUrl($type)
     {
@@ -33,5 +35,24 @@ if (!function_exists("clientUrl")) {
             }
         }
         return "";
+    }
+}
+if (!function_exists('formatApiResponse')) {
+    /**
+     * @param $data
+     * @param $startTime
+     * @param int $statusCode
+     * @return array
+     */
+    function formatApiResponse($data, $startTime, int $statusCode = 200): array
+    {
+        return [
+            "data" => $data ?: null,
+            "_response_status" => [
+                "success" => true,
+                "code" => $startTime,
+                "query_time" => $startTime->diffForHumans(Carbon::now())
+            ]
+        ];
     }
 }
