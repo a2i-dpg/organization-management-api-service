@@ -263,9 +263,14 @@ class OrganizationService
             'mobile' => $data['contact_person_mobile'],
         ];
 
-        return Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
-            return $e;
-        })->json();
+        return Http::retry(3)
+            ->withOptions(['debug' => config("nise3.is_dev_mode"), 'verify' => config("nise3.should_ssl_verify")])
+//            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
+            ->post($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
     }
 
 
@@ -288,9 +293,10 @@ class OrganizationService
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
         ];
-        
+
         return Http::retry(3)
-            ->withOptions(['debug' => true, 'verify' => true])
+            ->withOptions(['debug' => config("nise3.is_dev_mode"), 'verify' => config("nise3.should_ssl_verify")])
+//            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 return $e;

@@ -3,13 +3,16 @@
 namespace App\Helpers\Classes;
 
 use App\Models\BaseModel;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class HttpClientRequest
 {
 
+    /**
+     * @throws RequestException
+     */
     public function getAuthPermission(?string $idp_user_id)
     {
 
@@ -18,9 +21,14 @@ class HttpClientRequest
             "idp_user_id" => $idp_user_id
         ];
 
-        $responseData = Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
-            return $e;
-        })->json('data');
+        $responseData = Http::retry(3)
+            ->withOptions(['debug' => config("nise3.is_dev_mode"), 'verify' => config("nise3.should_ssl_verify")])
+//            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
+            ->post($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json('data');
 
         Log::info("userInfo:" . json_encode($responseData));
 
