@@ -44,7 +44,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('upazilas/{id}', ['as' => 'upazilas.read', 'uses' => 'LocUpazilaController@read']);
 
     /** organization registration */
-    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationRegistration"]);
+    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
 
 
     /** organizationType trash */

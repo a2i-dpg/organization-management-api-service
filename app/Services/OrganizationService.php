@@ -254,7 +254,7 @@ class OrganizationService
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
-            'user_type' => BaseModel::ORGANIZATION_TYPE,
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'organization_id' => $data['organization_id'],
             'username' => $data['contact_person_mobile'],
             'name_en' => $data['contact_person_name'],
@@ -274,12 +274,12 @@ class OrganizationService
      * @return array|mixed
      * @throws RequestException
      */
-    public function createRegisterUser(array $data)
+    public function createOpenRegisterUser(array $data)
     {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-registration';
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
 
         $userPostField = [
-            'user_type' => BaseModel::ORGANIZATION_TYPE,
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'username' => $data['contact_person_mobile'],
             'organization_id' => $data['organization_id'],
             'name_en' => $data['contact_person_name'],

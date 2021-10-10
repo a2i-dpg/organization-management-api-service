@@ -151,7 +151,7 @@ class OrganizationController extends Controller
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
      */
-    public function organizationRegistration(Request $request): JsonResponse
+    public function organizationOpenRegistration(Request $request): JsonResponse
     {
 
         $organization = new Organization();
@@ -164,7 +164,7 @@ class OrganizationController extends Controller
             if ($organization) {
                 $validated['organization_id'] = $organization->id;
 
-                $createRegisterUser = $this->organizationService->createRegisterUser($validated);
+                $createRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
 
                 if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
                     $response = [

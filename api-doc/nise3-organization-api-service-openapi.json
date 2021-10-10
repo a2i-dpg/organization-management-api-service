@@ -4404,7 +4404,12 @@
                 "summary": "Register Organization",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/title_en"
+                        "name": "title_en",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "example": "abc"
+                        }
                     },
                     {
                         "$ref": "#/components/parameters/title"
@@ -4424,6 +4429,15 @@
                     {
                         "name": "name_of_the_office_head",
                         "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Abdur gaffar"
+                        }
+                    },
+                    {
+                        "name": "name_of_the_office_head_en",
+                        "in": "query",
                         "schema": {
                             "type": "string",
                             "example": "Abdur gaffar"
@@ -4438,16 +4452,56 @@
                         }
                     },
                     {
-                        "$ref": "#/components/parameters/address"
+                        "name": "name_of_the_office_head_designation_en",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "example": "Chairman"
+                        }
                     },
                     {
                         "$ref": "#/components/parameters/contact_person_name"
                     },
                     {
+                        "name": "contact_person_name_en",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "example": "Mr. X"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/contact_person_designation"
                     },
                     {
+                        "name": "contact_person_designation_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "HR"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/contact_person_email"
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Street 4/6B"
+                        }
+                    },
+                    {
+                        "name": "address_en",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Street 4/6B"
+                        }
                     },
                     {
                         "name": "password",
