@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class OrganizationUnit
+ * Class Organization Unit
  * @package App\Models
  * @property int id
  * @property string title_en
  * @property string title
- * @property int organization_id
- * @property int organization_unit_type_id
+ * @property integer organization_id
+ * @property integer organization_unit_type_id
  * @property string address
  * @property string mobile
  * @property string email
@@ -25,8 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string contact_person_email
  * @property string contact_person_mobile
  * @property string contact_person_designation
- * @property int employee_size
- * @property int row_status
+ * @property integer employee_size
+ * @property integer row_status
  * @property-read Organization organization
  * @property-read OrganizationUnitType organizationUnitType
  */
