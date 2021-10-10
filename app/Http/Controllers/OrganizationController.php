@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
-use App\Models\User;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -150,7 +149,10 @@ class OrganizationController extends Controller
     /**
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws CustomException
+     * @throws Throwable
      * @throws ValidationException
+     * @throws RequestException
      */
     public function organizationOpenRegistration(Request $request): JsonResponse
     {
