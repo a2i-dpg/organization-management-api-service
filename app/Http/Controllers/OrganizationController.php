@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CustomException;
 use App\Models\User;
 use App\Services\OrganizationService;
 use App\Models\Organization;
@@ -161,53 +162,55 @@ class OrganizationController extends Controller
         try {
             $organization = $this->organizationService->store($organization, $validated);
 
-            if ($organization) {
-                $validated['organization_id'] = $organization->id;
+            if (!$organization) {
+                throw new CustomException('Organization/Industry has not been properly saved to db.');
+            }
 
-                $createRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
+            $validated['organization_id'] = $organization->id;
 
-                if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
+            $createRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
+
+            if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
+                $response = [
+                    'data' => $organization ?: [],
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_CREATED,
+                        "message" => "Organization Successfully Create",
+                        "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                    ]
+                ];
+                DB::commit();
+            } else {
+                if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
                     $response = [
-                        'data' => $organization ?: [],
+                        'errors' => $createRegisterUser['errors'] ?? [],
                         '_response_status' => [
-                            "success" => true,
-                            "code" => ResponseAlias::HTTP_CREATED,
-                            "message" => "Organization Successfully Create",
-                            "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                            "success" => false,
+                            "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                            "message" => "Validation Error",
+                            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
                         ]
                     ];
-                    DB::commit();
                 } else {
-                    if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
-                        $response = [
-                            'errors' => $createRegisterUser['errors'] ?? [],
-                            '_response_status' => [
-                                "success" => false,
-                                "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                                "message" => "Validation Error",
-                                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-                            ]
-                        ];
-                    } else {
-                        $response = [
-                            '_response_status' => [
-                                "success" => false,
-                                "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
-                                "message" => "Unprocessable Request,Please contact",
-                                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-                            ]
-                        ];
-                    }
-
-                    DB::rollBack();
+                    $response = [
+                        '_response_status' => [
+                            "success" => false,
+                            "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
+                            "message" => "Unprocessable Request,Please contact",
+                            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                        ]
+                    ];
                 }
             }
+
+            DB::rollBack();
+            return Response::json($response, ResponseAlias::HTTP_CREATED);
 
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**

@@ -107,6 +107,8 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['message'] = "Type Error";
         } elseif ($e instanceof ParseError) {
             $errors['_response_status']['message'] = "Parsing Error";
+        }  elseif ($e instanceof CustomException) {
+            $errors['_response_status']['message'] = $e->getMessage();
         } elseif ($e instanceof Exception) {
             $errors['_response_status']['message'] = $e->getMessage();
         }
