@@ -162,7 +162,7 @@ class OrganizationController extends Controller
         try {
             $organization = $this->organizationService->store($organization, $validated);
 
-            if (!$organization) {
+            if (!($organization && $organization->id)) {
                 throw new CustomException('Organization/Industry has not been properly saved to db.');
             }
 
@@ -172,7 +172,7 @@ class OrganizationController extends Controller
 
             if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
                 $response = [
-                    'data' => $organization ?: [],
+                    'data' => $organization,
                     '_response_status' => [
                         "success" => true,
                         "code" => ResponseAlias::HTTP_CREATED,
