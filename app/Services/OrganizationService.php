@@ -288,11 +288,14 @@ class OrganizationService
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
         ];
-        return Http::retry(3)->withOptions(['debug' => true, 'verify' => true])
+        
+        return Http::retry(3)
+            ->withOptions(['debug' => true, 'verify' => true])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 return $e;
-            })->json();
+            })
+            ->json();
     }
 
     /**

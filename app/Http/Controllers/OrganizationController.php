@@ -204,9 +204,9 @@ class OrganizationController extends Controller
                         ]
                     ];
                 }
+                DB::rollBack();
             }
 
-            DB::rollBack();
             return Response::json($response, ResponseAlias::HTTP_CREATED);
 
         } catch (Throwable $e) {
