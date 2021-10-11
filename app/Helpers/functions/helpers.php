@@ -30,7 +30,7 @@ if (!function_exists("clientUrl")) {
                 return config("httpclientendpoint.institute.local");
 //                return $config["institute"]["local"];
             } elseif ($type == "IDP_SERVER") {
-                config("nise3.is_dev_mode") ? config("httpclientendpoint.idp_server.dev") : config("httpclientendpoint.idp_server.prod");
+               return config("nise3.is_dev_mode") ? config("httpclientendpoint.idp_server.dev") : config("httpclientendpoint.idp_server.prod");
 //                return config("nise3.is_dev_mode") ? $config["idp_server"]["dev"] : $config["idp_server"]["prod"];
             }
         }

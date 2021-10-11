@@ -46,7 +46,7 @@ class OrganizationTypeController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function getList(Request $request): JsonResponse
     {

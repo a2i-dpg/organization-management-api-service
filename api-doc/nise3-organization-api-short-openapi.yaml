@@ -1,143 +1,573 @@
-openapi: 3.0.3
-info:
-  version: 1.0.0
-  title: organization management api service
-  description: ''
-  termsOfService: ''
-  contact: {}
-  license:
-    name: 'MIT'
-servers:
-  - url: http://organization.local:8010/api/v1
-  - url: http://localhost:8000/api/v1
-  - url: http://localhost:8002/api/v1
-  - url: https://api.bus.softbd.xyz/org/api/v1
-  - url: http://nise3-organization.asm/api/v1
-paths:
-  /organization-registration:
-    post:
-      summary: Register Organization
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/organizationRegister'
-      responses:
-        '200':
-          description: Register an organization
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/organizationRegister'
-              example:
-                data:
-                  id: 1
-                  title_en: Roob-Stanton
-                  title: Roob-Stanton
-                  organization_type_id: 1
-                  email: jadyn05@osinski.biz
-                  mobile: '01758393749'
-                  name_of_the_office_head: Roob-Stanton
-                  name_of_the_office_head_designation: Chairman
-                  address: |-
-                    97645 Roxanne Stream
-                     West Cleorashire, UT 17550-13...
-                  contact_person_name: Roob-Stanton
-                  contact_person_designation: Chairman
-                  contact_person_email: jadyn05@osinski.biz
-                  contact_person_mobile: '01758393749'
-                  password: '12345678'
-                  password_confirmation: '12345678'
-                _response_status:
-                  success: true
-                  code: 200
-                  query_time: 1 second before
-      tags:
-        - Organization Registration
-components:
-  schemas:
-    organizationRegister:
-      type: object
-      description: Organization Registration
-      properties:
-        title_en:
-          type: string
-          description: title in English
-          minLength: 2
-          maxLength: 300
-        title:
-          type: string
-          description: ' title in Bengali'
-          minLength: 2
-          maxLength: 1000
-        organization_type_id:
-          type: integer
-          description: Organization type id
-        email:
-          type: string
-          description: email address
-        mobile:
-          type: string
-          description: Mobile number of organization
-        contact_person_mobile:
-          type: string
-          description: Contact person mobile number
-        name_of_the_office_head:
-          type: string
-          description: Head of office
-        name_of_the_office_head_en:
-          type: string
-          description: Head of office
-        name_of_the_office_head_designation:
-          type: string
-          description: 'Head of office Designation '
-        name_of_the_office_head_designation_en:
-          type: string
-          description: 'Head of office Designation '
-        contact_person_name:
-          type: string
-          description: Contact person name
-        contact_person_name_en:
-          type: string
-          description: Contact person name
-        contact_person_designation:
-          type: string
-          description: Contact person's designation
-        contact_person_designation_en:
-          type: string
-          description: Contact person's designation
-        contact_person_email:
-          type: string
-          description: Contact person email address
-        address:
-          type: string
-          maximum: 1000
-          minimum: 2
-          description: organization address
-        address_en:
-          type: string
-          maximum: 1000
-          minimum: 2
-          description: organization address
-        password:
-          type: string
-          format: password
-        password_confirmation:
-          type: string
-          format: password
-      required:
-        - title_en
-        - title
-        - organization_type_id
-        - email
-        - mobile
-        - contact_person_mobile
-        - name_of_the_office_head
-        - contact_person_name
-        - contact_person_designation
-        - contact_person_designation_en
-        - contact_person_email
-        - address
-        - address_en
-        - password
-        - password_confirmation
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "organization management api service",
+    "description": "",
+    "termsOfService": "",
+    "contact": { },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://organization.local:8010/api/v1"
+    },
+    {
+      "url": "http://localhost:8000/api/v1"
+    },
+    {
+      "url": "http://localhost:8002/api/v1"
+    },
+    {
+      "url": "https://api.bus.softbd.xyz/org/api/v1"
+    },
+    {
+      "url": "http://nise3-organization.asm/api/v1"
+    }
+  ],
+  "paths": {
+    "/organization-registration": {
+      "post": {
+        "summary": "Register Organization",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/organizationRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Register an organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/organizationRegister"
+                },
+                "example": {
+                  "data": {
+                    "id": 1,
+                    "title_en": "Roob-Stanton",
+                    "title": "Roob-Stanton",
+                    "organization_type_id": 1,
+                    "email": "jadyn05@osinski.biz",
+                    "mobile": "01758393749",
+                    "name_of_the_office_head": "Roob-Stanton",
+                    "name_of_the_office_head_designation": "Chairman",
+                    "address": "97645 Roxanne Stream\n West Cleorashire, UT 17550-13...",
+                    "contact_person_name": "Roob-Stanton",
+                    "contact_person_designation": "Chairman",
+                    "contact_person_email": "jadyn05@osinski.biz",
+                    "contact_person_mobile": "01758393749",
+                    "password": "12345678",
+                    "password_confirmation": "12345678"
+                  },
+                  "_response_status": {
+                    "success": true,
+                    "code": 200,
+                    "query_time": "1 second before"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+            "Organization Registration"
+        ]
+      }
+    },
+    "/organization-types": {
+      "get": {
+        "summary": "get_list",
+        "description": " API endpoint to get the list of organization types.A successful request response will show 200 HTTP status code",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/page_size"
+          },
+          {
+            "$ref": "#/components/parameters/row_status_optional"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          },
+          {
+            "$ref": "#/components/parameters/title_en_optional"
+          },
+          {
+            "$ref": "#/components/parameters/title_optional"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get_list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/organizationType"
+                },
+                "example": {
+                  "current_page": 1,
+                  "total_page": 1,
+                  "page_size": 10,
+                  "total": 2,
+                  "order": "ASC",
+                  "data": [
+                    {
+                      "id": 1,
+                      "title_en": "Government org",
+                      "title": "Government org",
+                      "is_government": 1,
+                      "row_status": 1,
+                      "created_by": null,
+                      "updated_by": null,
+                      "created_at": "2021-08-19T09:11:39.000000Z",
+                      "updated_at": "2021-08-19T09:11:39.000000Z"
+                    },
+                    {
+                      "id": 2,
+                      "title_en": "Private org",
+                      "title": "Private org",
+                      "is_government": 2,
+                      "row_status": 1,
+                      "created_by": null,
+                      "updated_by": null,
+                      "created_at": "2021-08-19T09:11:39.000000Z",
+                      "updated_at": "2021-08-19T09:11:39.000000Z"
+                    }
+                  ],
+                  "response_status": {
+                    "success": true,
+                    "code": 200,
+                    "query_time": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+            "OrganizationType"
+        ]
+      },
+      "post": {
+        "summary": "create",
+        "description": "API endpoint to create an organization type.A successful request response will show 201 HTTP status code",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/organizationType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "create",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/organizationType"
+                },
+                "example": {
+                  "data": {
+                    "title_en": "Private bank 2",
+                    "title": "বেসরকারি ব্যাংক",
+                    "is_government": 1,
+                    "row_status": 1,
+                    "created_by": null,
+                    "updated_by": null,
+                    "updated_at": "2021-07-26T09:53:48.000000Z",
+                    "created_at": "2021-07-26T09:53:48.000000Z",
+                    "id": 1
+                  },
+                  "_response_status": {
+                    "success": true,
+                    "code": 201,
+                    "message": "Organization type added successfully.",
+                    "query_time": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+            "OrganizationType"
+        ]
+      }
+    },
+    "/organization-types/{organizationTypeId}": {
+      "get": {
+        "summary": "get_one",
+        "description": " API endpoint to get the specified organization type.A successful request response will show 200 HTTP status code",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationTypeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get_one",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/organizationType"
+                },
+                "example": {
+                  "data": {
+                    "id": 1,
+                    "title_en": "Government org",
+                    "title": "সরকারি",
+                    "is_government": 1,
+                    "row_status": 1,
+                    "created_by": null,
+                    "updated_by": null,
+                    "created_at": "2021-08-22T12:10:22.000000Z",
+                    "updated_at": "2021-08-22T12:10:22.000000Z"
+                  },
+                  "_response_status": {
+                    "success": true,
+                    "code": 200,
+                    "query_time": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+            "OrganizationType"
+        ]
+      },
+      "put": {
+        "summary": "update",
+        "description": "API endpoint to update the specified  organization type.A successful request response will show 201 HTTP status code",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationTypeId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/organizationType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/organizationType"
+                },
+                "example": {
+                  "data": {
+                    "id": 1,
+                    "title_en": "Goverment org",
+                    "title": "সরকারি",
+                    "is_government": 1,
+                    "row_status": 1,
+                    "created_at": "2021-07-26T09:53:48.000000Z",
+                    "updated_at": "2021-07-26T09:58:41.000000Z",
+                    "created_by": null,
+                    "updated_by": null
+                  },
+                  "_response_status": {
+                    "success": true,
+                    "code": 200,
+                    "message": "organization Type updated successfully.",
+                    "query_time": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+            "OrganizationType"
+        ]
+      },
+      "delete": {
+        "summary": "delete",
+        "description": "API endpoint to delete the specified organization type.A successful request response will show 200 HTTP status code",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationTypeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "delete",
+            "content": {
+              "application/json": {
+                "schema": { },
+                "example": {
+                  "_response_status": {
+                    "success": true,
+                    "code": 200,
+                    "message": "Organization type deleted successfully.",
+                    "query_time": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+            "OrganizationType"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "organizationRegister": {
+        "type": "object",
+        "description": "Organization Registration",
+        "properties": {
+          "title_en": {
+            "type": "string",
+            "description": "title in English",
+            "minLength": 2,
+            "maxLength": 300
+          },
+          "title": {
+            "type": "string",
+            "description": " title in Bengali",
+            "minLength": 2,
+            "maxLength": 1000
+          },
+          "organization_type_id": {
+            "type": "integer",
+            "description": "Organization type id"
+          },
+          "email": {
+            "type": "string",
+            "description": "email address"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "Mobile number of organization"
+          },
+          "contact_person_mobile": {
+            "type": "string",
+            "description": "Contact person mobile number"
+          },
+          "name_of_the_office_head": {
+            "type": "string",
+            "description": "Head of office"
+          },
+          "name_of_the_office_head_en": {
+            "type": "string",
+            "description": "Head of office"
+          },
+          "name_of_the_office_head_designation": {
+            "type": "string",
+            "description": "Head of office Designation "
+          },
+          "name_of_the_office_head_designation_en": {
+            "type": "string",
+            "description": "Head of office Designation "
+          },
+          "contact_person_name": {
+            "type": "string",
+            "description": "Contact person name"
+          },
+          "contact_person_name_en": {
+            "type": "string",
+            "description": "Contact person name"
+          },
+          "contact_person_designation": {
+            "type": "string",
+            "description": "Contact person's designation"
+          },
+          "contact_person_designation_en": {
+            "type": "string",
+            "description": "Contact person's designation"
+          },
+          "contact_person_email": {
+            "type": "string",
+            "description": "Contact person email address"
+          },
+          "address": {
+            "type": "string",
+            "maximum": 1000,
+            "minimum": 2,
+            "description": "organization address"
+          },
+          "address_en": {
+            "type": "string",
+            "maximum": 1000,
+            "minimum": 2,
+            "description": "organization address"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "password_confirmation": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": [
+            "title_en",
+            "title",
+            "organization_type_id",
+            "email",
+            "mobile",
+            "contact_person_mobile",
+            "name_of_the_office_head",
+            "contact_person_name",
+            "contact_person_designation",
+            "contact_person_designation_en",
+            "contact_person_email",
+            "address",
+            "address_en",
+            "password",
+            "password_confirmation"
+        ]
+      },
+      "organizationType": {
+        "type": "object",
+        "description": "Organization types",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Primary Key",
+            "readOnly": true
+          },
+          "title_en": {
+            "type": "string",
+            "description": "title in English",
+            "minLength": 2,
+            "maxLength": 300
+          },
+          "title": {
+            "type": "string",
+            "description": "title in Bengali",
+            "minLength": 2,
+            "maxLength": 600
+          },
+          "is_government": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Organization status . 0 => non govt, 1 => govt",
+            "enum": [
+                0,
+                1
+            ]
+          },
+          "row_status": {
+            "type": "integer",
+            "description": "Activation status .1 => active ,0=>inactive",
+            "enum": [
+                0,
+                1
+            ],
+            "example": 1
+          },
+          "created_by": {
+            "nullable": true,
+            "type": "integer",
+            "description": "Creator"
+          },
+          "updated_by": {
+            "nullable": true,
+            "type": "integer",
+            "description": "Modifier"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+            "title_en"
+        ]
+      }
+    },
+    "parameters": {
+      "organizationTypeId": {
+        "name": "organizationTypeId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "example": 2
+        }
+      },
+      "title_optional": {
+        "name": "title",
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "title_en_optional": {
+        "name": "title_en",
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "order": {
+        "in": "query",
+        "name": "order",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+              "asc",
+              "desc"
+          ]
+        }
+      },
+      "row_status_optional": {
+        "name": "row_status",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "page_size": {
+        "name": "page_size",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

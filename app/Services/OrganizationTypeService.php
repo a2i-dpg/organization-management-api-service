@@ -47,7 +47,7 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->orderBy('organization_types.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
@@ -59,7 +59,7 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
@@ -185,7 +185,7 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
@@ -287,14 +287,14 @@ class OrganizationTypeService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:1',
-            'page' => 'integer|gt:0',
-            'pageSize' => 'integer|gt:0',
+            'page' => 'int|gt:0',
+            'pageSize' => 'int|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "integer",
+                "int",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);

@@ -388,6 +388,7 @@ class HumanResourceTemplateService
             ],
             'status' => [
                 'integer',
+
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',

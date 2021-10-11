@@ -271,7 +271,6 @@ class RankTypeService
         ];
         $rules = [
             'title_en' => [
-                'required',
                 'string',
                 'max:300',
                 'min:2'

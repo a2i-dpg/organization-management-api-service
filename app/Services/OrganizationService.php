@@ -55,8 +55,8 @@ class OrganizationService
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
             'organizations.contact_person_designation_en',
-//            'organizations.description',
-//            'organizations.description_en',
+            'organizations.description',
+            'organizations.description_en',
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
@@ -432,9 +432,13 @@ class OrganizationService
             ]
         ];
         $rules = [
-            'permission_sub_group_id' => [
+            'organization_type_id' => [
                 'required',
-                'numeric'
+                'integer'
+            ],
+            'permission_sub_group_id' => [
+                'required_if:' . $id . ',==,null',
+                'int'
             ],
             'title_en' => [
                 'nullable',
@@ -448,34 +452,6 @@ class OrganizationService
                 'max:1200',
                 'min:2'
             ],
-            'organization_type_id' => [
-                'required',
-                'integer'
-            ],
-            "head_of_office" => [
-                "required",
-                "string"
-            ],
-            "head_of_office_designation" => [
-                "nullable",
-                "string"
-            ],
-            'domain' => [
-                'nullable',
-                'string',
-                'max:191',
-                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'unique:organizations,domain,' . $id
-            ],
-            'description' => [
-                'nullable',
-                'string',
-            ],
-            'fax_no' => [
-                'nullable',
-                'string',
-                'max: 30',
-            ],
             'loc_division_id' => [
                 'nullable',
                 'integer',
@@ -488,9 +464,67 @@ class OrganizationService
                 'nullable',
                 'integer',
             ],
-            'contact_person_mobile' => [
+            "location_latitude" => [
+                'nullable',
+                'integer',
+            ],
+            "location_longitude" => [
+                'nullable',
+                'integer',
+            ],
+            "google_map_src" => [
+                'nullable',
+                'integer',
+            ],
+            'address' => [
+                'required',
+                'max: 1200',
+                'min:2'
+            ],
+            'address_en' => [
+                'nullable',
+                'max: 600',
+                'min:2'
+            ],
+            "country" => [
+                "nullable",
+                "string"
+            ],
+            "phone_code" => [
+                "nullable",
+                "string"
+            ],
+            'mobile' => [
                 'required',
                 BaseModel::MOBILE_REGEX
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
+            'fax_no' => [
+                'nullable',
+                'string',
+                'max: 30',
+            ],
+            "name_of_the_office_head" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "name_of_the_office_head_en" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "name_of_the_office_head_designation" => [
+                "nullable",
+                "string"
+            ],
+            "name_of_the_office_head_designation_en" => [
+                "nullable",
+                "string"
             ],
             'contact_person_name' => [
                 'required',
@@ -502,6 +536,15 @@ class OrganizationService
                 'max: 250',
                 'min:2'
             ],
+            'contact_person_mobile' => [
+                'required',
+                BaseModel::MOBILE_REGEX
+            ],
+            'contact_person_email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
             'contact_person_designation' => [
                 'required',
                 'max: 600',
@@ -512,33 +555,25 @@ class OrganizationService
                 'max: 300',
                 "min:2"
             ],
-            'contact_person_email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'logo' => [
-                'required_if:' . $id . ',null',
+            'description' => [
+                'nullable',
                 'string',
             ],
-            'address' => [
-                'required',
-                'max: 1200',
-                'min:2'
-            ],
-            'address_en' => [
+            'description_en' => [
                 'nullable',
-                'max: 600',
-                'min:2'
+                'string',
+            ],
+            'domain' => [
+                'nullable',
+                'string',
+                'max:191',
+                'unique:organizations,domain,' . $id,
+                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
+
+            ],
+            'logo' => [
+                'nullable',
+                'string',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
@@ -619,7 +654,7 @@ class OrganizationService
                 "min:2"
             ],
             'contact_person_designation_en' => [
-                'required',
+                'nullable',
                 'max: 300',
                 "min:2"
             ],
@@ -633,7 +668,7 @@ class OrganizationService
                 'min:2'
             ],
             'address_en' => [
-                'required',
+                'nullable',
                 'max: 600',
                 'min:2'
             ],
