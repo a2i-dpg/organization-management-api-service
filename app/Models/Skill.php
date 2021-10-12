@@ -12,7 +12,6 @@ use Illuminate\Support\Collection;
  * @package App\Models
  * @property string title_en
  * @property string title
- * @property int row_status
  * @property-read  Collection humanResources
  * @property-read  Collection humanResourceTemplates
  */

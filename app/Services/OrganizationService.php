@@ -295,7 +295,7 @@ class OrganizationService
         ];
 
         return Http::retry(3)
-            ->withOptions(['debug' => config("nise3.is_dev_mode"), 'verify' => config("nise3.should_ssl_verify")])
+            ->withOptions(['verify' => config("nise3.should_ssl_verify")])
 //            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
