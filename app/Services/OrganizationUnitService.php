@@ -72,7 +72,7 @@ class OrganizationUnitService
             'organization_units.created_at',
             'organization_units.updated_at',
 
-        ])->byOrganization('organization_units');;
+        ])->byOrganization('organization_units');
 
         $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
@@ -327,7 +327,7 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnits->toArray();
@@ -403,16 +403,15 @@ class OrganizationUnitService
                 'min:2'
             ],
             'organization_id' => [
-                'required',
-                'integer',
                 'exists:organizations,id',
+                'required',
+                'integer'
             ],
             'organization_unit_type_id' => [
-                'required',
-                'integer',
                 'exists:organization_unit_types,id',
+                'required',
+                'integer'
             ],
-
             'loc_division_id' => [
                 'nullable',
                 'integer',
@@ -482,7 +481,7 @@ class OrganizationUnitService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ]
         ];
 
@@ -506,7 +505,7 @@ class OrganizationUnitService
         $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
             'serviceIds' => 'required|array|min:1',
-            'serviceIds.*' => 'required|integer|distinct|exists:services,id'
+            'serviceIds.*' => 'required|exists:services,id|integer|distinct'
         ];
         return Validator::make($data, $rules, $customMessage);
     }
@@ -536,16 +535,16 @@ class OrganizationUnitService
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
             'page' => 'integer|gt:0',
-            'pageSize' => 'integer|gt:0',
-            'organization_id' => 'integer|exists:organizations,id',
-            'organization_unit_type_id' => 'integer|exists:organization_unit_types,id',
+            'page_size' => 'integer|gt:0',
+            'organization_id' => 'exists:organizations,id|integer',
+            'organization_unit_type_id' => 'exists:organization_unit_types,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

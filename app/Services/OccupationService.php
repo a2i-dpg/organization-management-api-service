@@ -201,7 +201,7 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if (!is_null($paginate) || !is_null($page_size)) {
+        if (!is_int($paginate) || !is_int($page_size)) {
             $page_size = $page_size ?: 10;
             $occupations = $occupationBuilder->paginate($page_size);
             $paginateData = (object)$occupations->toArray();
@@ -270,13 +270,13 @@ class OccupationService
                 'min:2'
             ],
             'job_sector_id' => [
+                'exists:job_sectors,id',
                 'required',
-                'integer',
-                'exists:job_sectors,id'
+                'integer'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -315,7 +315,7 @@ class OccupationService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

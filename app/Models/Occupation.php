@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,7 +17,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Occupation extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     /**
      * @var string[]

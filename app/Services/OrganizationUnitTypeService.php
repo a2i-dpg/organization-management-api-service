@@ -209,7 +209,7 @@ class OrganizationUnitTypeService
 
         /** @var Collection $organizationUnitTypes */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnitTypes->toArray();
@@ -277,13 +277,13 @@ class OrganizationUnitTypeService
                 'min:2',
             ],
             'organization_id' => [
-                'required',
-                'int',
                 'exists:organizations,id',
+                'required',
+                'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([OrganizationUnitType::ROW_STATUS_ACTIVE, OrganizationUnitType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -313,15 +313,15 @@ class OrganizationUnitTypeService
             'title_en' => 'nullable|max: 300|min:2',
             'title' => 'nullable|max: 600|min:2',
             'page' => 'integer|gt:0',
-            'organization_id' => 'integer|exists:organizations,id',
-            'pageSize' => 'integer|gt:0',
+            'organization_id' => 'exists:organizations,id|integer',
+            'page_size' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([OrganizationUnitType::ROW_STATUS_ACTIVE, OrganizationUnitType::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

@@ -241,7 +241,7 @@ class RankService
 
         /** @var Collection $ranks */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $ranks = $rankBuilder->paginate($pageSize);
             $paginateData = (object)$ranks->toArray();
@@ -309,9 +309,9 @@ class RankService
                 'min:2'
             ],
             'rank_type_id' => [
-                'required',
-                'integer',
                 'exists:rank_types,id',
+                'required',
+                'int'
             ],
             'grade' => [
                 'nullable',
@@ -323,13 +323,13 @@ class RankService
                 'integer',
             ],
             'organization_id' => [
-                'required',
-                'integer',
                 'exists:organizations,id',
+                'required',
+                'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -367,7 +367,7 @@ class RankService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

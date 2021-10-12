@@ -290,7 +290,7 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
@@ -358,42 +358,42 @@ class HumanResourceTemplateService
                 'min: 2'
             ],
             'organization_id' => [
+                'exists:organizations,id',
                 'required',
-                'integer',
-                'exists:organizations,id'
+                'integer'
+
             ],
             'organization_unit_type_id' => [
+                'exists:organization_unit_types,id',
                 'required',
-                'integer',
-                'exists:organization_unit_types,id'
+                'integer'
             ],
             'parent_id' => [
+                'exists:human_resource_templates,id',
                 'nullable',
-                'integer',
-                'exists:human_resource_templates,id'
+                'integer'
             ],
             'rank_id' => [
+                'exists:ranks,id',
                 'nullable',
-                'integer',
-                'exists:ranks,id'
+                'integer'
             ],
             'display_order' => [
                 'required',
                 'integer',
-                'min:0',
+                'min:0'
             ],
             'is_designation' => [
                 'required',
-                'integer',
+                'integer'
             ],
             'status' => [
                 'integer',
-
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'integer',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -425,15 +425,15 @@ class HumanResourceTemplateService
             'title' => 'nullable|max:800|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'organization_id' => 'integer|exists:organizations,id',
-            'organization_unit_type_id' => 'integer|exists:organization_unit_types,id',
+            'organization_id' => 'exists:organizations,id|integer',
+            'organization_unit_type_id' => 'exists:organization_unit_types,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

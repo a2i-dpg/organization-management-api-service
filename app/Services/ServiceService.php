@@ -160,7 +160,7 @@ class ServiceService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $limit = $request->query('limit', 10);
+        $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -191,9 +191,9 @@ class ServiceService
 
         /** @var Collection $services */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $services = $serviceBuilder->paginate($limit);
+        if (!is_int($paginate) || !is_int($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $services = $serviceBuilder->paginate($pageSize);
             $paginateData = (object)$services->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -259,7 +259,7 @@ class ServiceService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -296,7 +296,7 @@ class ServiceService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

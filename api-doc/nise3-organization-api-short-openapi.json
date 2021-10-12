@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.3",
+    "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
         "title": "organization management api service",
@@ -782,17 +782,19 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "title_en": "Chief of General Staff",
-                                        "title": "Chief of General Staff",
-                                        "description": "Ipsa similique quia tempora vitae quis deserunt voluptas atque expedita.",
-                                        "organization_id": 4,
-                                        "organization_title_en": "Pubali Bank",
+                                        "id": 3,
+                                        "title_en": "Infantry",
+                                        "title": "Infantry",
+                                        "description": "Facilis consectetur et et dolorum nemo eos numquam dolor quasi assumenda molestiae dolores repellendus maxime voluptatem amet nulla enim est est sapiente sit expedita odit illum sed atque eum aut laboriosam odit quis voluptas nam dolorem distinctio expedita incidunt in nostrum a porro similique in molestiae accusamus eos voluptatem facere.",
+                                        "description_en": "Ut suscipit doloremque dolor laborum eligendi qui soluta ea voluptas officia a nulla doloribus et non qui explicabo quia est illo sit harum consequatur dolores voluptate praesentium ad optio quibusdam placeat reiciendis tempora at nemo nemo impedit rerum et voluptas asperiores beatae qui aspernatur voluptas cum et esse culpa molestiae.",
+                                        "organization_id": 1,
+                                        "organization_title_en": "Jacobson-Wyman",
+                                        "organization_title": "Jacobson-Wyman",
                                         "row_status": 1,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-08-10T12:19:25.000000Z",
-                                        "updated_at": "2021-08-10T12:19:25.000000Z"
+                                        "created_at": "2021-10-12T08:51:33.000000Z",
+                                        "updated_at": "2021-10-12T08:51:33.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1644,9 +1646,6 @@
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_optional"
-                    },
-                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -1665,36 +1664,60 @@
                                     "$ref": "#/components/schemas/skill"
                                 },
                                 "example": {
-                                    "current_page": 1,
-                                    "total_page": 1,
-                                    "page_size": 10,
-                                    "total": 10,
                                     "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Heavy Equipment Mechanic",
-                                            "title": "Heavy Equipment Mechanic",
-                                            "description": "Sed omnis nemo sint consequatur qui quia maiores. Est non labore et. Dolorum sapiente dolorum earum cupiditate. Qui velit nam sequi hic est quisquam. Mollitia enim dicta iure consequatur. Nam aut non est maxime aspernatur. Quidem cumque eius numquam eos repellendus. Eum reprehenderit ullam et ut voluptatem natus quia. Voluptas voluptatibus cupiditate distinctio minima enim. Eaque nihil qui qui delectus. Modi sed aut soluta qui. Numquam veniam fuga a veniam ea eligendi. Hic odit illo nihil ab. Sapiente et sit ut at nulla qui nostrum. Eaque ea qui aut iusto quaerat quae non est. Eum et ex et aut a aut. Debitis repellat ex omnis aut quisquam magnam sequi maxime. Repudiandae laborum eum harum enim optio vero. Sunt et voluptatem aut architecto natus a fuga. Et odit magni dicta accusamus molestiae culpa eaque. Esse doloremque quasi ipsam ea dolorem aut. Esse non adipisci quod omnis nisi magni. Et ea corrupti minus consequatur quo molestiae. Sunt quisquam et voluptatibus omnis voluptas at eum. Iure asperiores doloribus id. Laudantium optio error aut ut ratione et nulla. Consequatur officiis odio et eos. Illo porro in nulla et consequatur id. Molestiae reprehenderit dicta nihil omnis. Qui debitis incidunt quis eum dolorum. Qui illo quas vero aut eum. Aperiam et eum voluptas autem recusandae quis. Delectus enim voluptatibus qui hic et. Quidem dolores possimus omnis eveniet voluptatibus. Quam possimus suscipit occaecati commodi architecto. Harum tempora minima id voluptatem expedita aliquam. Repudiandae ut minima dolorum alias fugiat officiis repudiandae. Ratione corrupti tempore et doloribus aut doloribus quasi quidem. Praesentium soluta et debitis eaque voluptatem architecto corporis. Aut laudantium harum sed. Dolores optio impedit a animi veniam illum. Qui expedita praesentium ut nam dolores distinctio. Ipsum rerum aliquid aliquam eligendi vel a. Debitis magnam rem adipisci non qui. Iure reprehenderit a id deserunt eligendi qui incidunt velit. Sint aut et ea sapiente optio impedit autem. Quasi enim ea recusandae omnis mollitia consequuntur ipsam. Doloremque incidunt facere quisquam est aut voluptatem. Aut labore autem id omnis.",
-                                            "row_status": 1,
-                                            "created_at": "2021-08-19T08:55:03.000000Z",
-                                            "updated_at": "2021-08-19T08:55:03.000000Z",
-                                            "created_by": null,
-                                            "updated_by": null
+                                            "title_en": "Technical Writing",
+                                            "title": "টেকনিকাল রাইটিং"
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "Logging Supervisor",
-                                            "title": "Logging Supervisor",
-                                            "description": "Quasi unde necessitatibus ut sequi est adipisci. Accusamus in sit deserunt voluptate. Sunt aspernatur architecto delectus. Incidunt sit voluptatem qui cum autem eum ut. Voluptatem eos et consequatur optio sit. Eveniet excepturi accusantium ipsum. Est nihil delectus at et. Saepe totam ipsa laboriosam tenetur. Et voluptate aut fugit error voluptate. Est dolorem sapiente dolore asperiores amet. Nemo dolor rerum eveniet voluptatem cumque et. Quidem qui corrupti vero repellat sunt. Non vel consequatur rerum deleniti voluptas. Impedit architecto libero et suscipit. Eveniet est dolorem qui. Ea eum nobis enim sed. Nulla cupiditate vero cupiditate non reprehenderit error. Quo quae quod velit enim ratione deserunt. Qui et numquam qui et quo maxime veniam sit. Rerum expedita occaecati sed in saepe et et. Et consequatur repudiandae quia. Mollitia nulla consequatur omnis. Doloremque optio ipsum cumque unde nisi. Quod molestiae quos quia nulla officiis. Dolore impedit sit architecto laboriosam. Sint nisi dolore ut enim. Sit non quae qui nesciunt temporibus a. Inventore odio non harum reiciendis. Vero eligendi sequi deserunt consequatur non velit. Voluptatem quia veritatis voluptatem ipsum odio dolorem. Fuga voluptates consectetur magni rerum. Accusantium assumenda atque magnam temporibus a placeat laudantium. Reprehenderit ut consequuntur magnam praesentium. Distinctio nobis aliquid optio. Iure est tempore officia quas recusandae hic quisquam. Soluta aut aut delectus maxime tenetur porro. Qui dolor maiores veritatis odio tenetur et. Voluptatem omnis velit eos similique perferendis ut. Temporibus dolore aut ex hic quisquam. Sequi quo optio quasi qui facere eius. Sint sint voluptas qui culpa tempora qui eveniet. Vero laborum labore et quod nulla ut. Quis iste qui a dolor dolorum nulla possimus. Illum necessitatibus maiores ad voluptatem possimus. Blanditiis eaque ut ut maxime eius autem occaecati. Quibusdam nihil sint non dolores vel quia. Eos facilis doloremque eligendi deleniti id. Esse qui velit praesentium quaerat qui a accusamus. Perspiciatis excepturi harum deleniti in doloremque est dolorum ipsa. In molestiae corrupti quo quos corporis aut. Aut necessitatibus temporibus non natus blanditiis iste. Maiores aut quod praesentium deserunt error deserunt in. Earum iusto autem asperiores tenetur unde. Libero ipsa corporis commodi atque incidunt. Ratione qui ea ab doloremque porro aut cupiditate sit. Et fugiat ad nihil officia.",
-                                            "row_status": 1,
-                                            "created_at": "2021-08-19T08:55:03.000000Z",
-                                            "updated_at": "2021-08-19T08:55:03.000000Z",
-                                            "created_by": null,
-                                            "updated_by": null
+                                            "title_en": "Project Management",
+                                            "title": "প্রজেক্ট ম্যানেজমেন্ট"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title_en": "Computer Programming",
+                                            "title": "কম্পিউটার প্রোগ্রামিং"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title_en": "Data Science",
+                                            "title": "ডাটা সাইন্স"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title_en": "Accounting",
+                                            "title": "একাউন্টিং"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title_en": "Internet",
+                                            "title": "ইন্টারনেট"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title_en": "Data Entry",
+                                            "title": "ডাটা এন্ট্রি"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title_en": "Database Administration",
+                                            "title": "ডাটাবেজ অ্যাডমিনিস্ট্রেশন"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title_en": "MySQL",
+                                            "title": "মাই.এস.কিউ.এল."
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title_en": "Oracle",
+                                            "title": "ওরাকল"
                                         }
                                     ],
-                                    "response_status": {
+                                    "_response_status": {
                                         "success": true,
                                         "code": 200,
                                         "query_time": 0
@@ -3742,7 +3765,7 @@
                     },
                     "title": {
                         "type": "string",
-                        "description": " title in Bengali",
+                        "description": " title in Native",
                         "minLength": 2,
                         "maxLength": 1000
                     },
@@ -3861,7 +3884,7 @@
                     },
                     "title": {
                         "type": "string",
-                        "description": "title in Bengali",
+                        "description": "title in Native",
                         "minLength": 2,
                         "maxLength": 600
                     },
@@ -3933,7 +3956,7 @@
                     },
                     "title": {
                         "type": "string",
-                        "description": " title in Bengali",
+                        "description": " title in Native",
                         "minLength": 2,
                         "maxLength": 1000
                     },
@@ -4118,7 +4141,7 @@
                     },
                     "title": {
                         "type": "string",
-                        "description": " title in Bengali",
+                        "description": " title in Native",
                         "minLength": 2,
                         "maxLength": 1000
                     },
@@ -4538,31 +4561,6 @@
                         "description": " title in Native",
                         "minLength": 2,
                         "maxLength": 600
-                    },
-                    "row_status": {
-                        "type": "integer",
-                        "description": "Activation status .1 => active ,0=>inactive",
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 },
                 "required": [
@@ -4586,7 +4584,7 @@
                     },
                     "title": {
                         "type": "string",
-                        "description": " title in Bengali",
+                        "description": " title in Native",
                         "minLength": 2,
                         "maxLength": 600
                     },

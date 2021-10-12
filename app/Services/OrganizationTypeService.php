@@ -258,7 +258,7 @@ class OrganizationTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -295,7 +295,7 @@ class OrganizationTypeService
             ],
             'row_status' => [
                 "int",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

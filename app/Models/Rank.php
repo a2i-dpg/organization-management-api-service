@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use App\Traits\Scopes\ScopeFilterByOrganization;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Rank
@@ -23,7 +22,10 @@ use Illuminate\Support\Facades\Auth;
  */
 class Rank extends BaseModel
 {
-    use softDeletes, HasFactory,ScopeFilterByOrganization;
+    use softDeletes, ScopeRowStatusTrait, ScopeFilterByOrganization;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     /**
      * @var string[]

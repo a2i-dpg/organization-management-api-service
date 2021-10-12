@@ -102,7 +102,7 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof ParseError) {
             $errors['_response_status']['message'] = "Parsing Error";
         } elseif ($e instanceof Exception) {
-            $errors['_response_status']['message'] = "dkkdkdkkdkd";
+            $errors['_response_status']['message'] = "Error Exception";
         }
 
         return response()->json($errors, $errors['_response_status']['code']);

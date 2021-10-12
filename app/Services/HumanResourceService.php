@@ -241,7 +241,7 @@ class HumanResourceService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $page_size = $request->query('limit', 10);
+        $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -354,24 +354,26 @@ class HumanResourceService
                 'min:2'
             ],
             'organization_id' => [
+                'exists:organizations,id',
                 'required',
-                'int',
-                'exists:organizations,id'
+                'int'
             ],
             'organization_unit_id' => [
+                'exists:organization_units,id',
                 'required',
                 'int',
-                'exists:organization_units,id'
             ],
             'parent_id' => [
+                'exists:human_resources,id',
                 'nullable',
                 'int',
-                'exists:human_resources,id'
+
             ],
             'rank_id' => [
+                'exists:ranks,id',
                 'nullable',
                 'int',
-                'exists:ranks,id'
+
             ],
             'display_order' => [
                 'required',
@@ -387,7 +389,7 @@ class HumanResourceService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
             ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -418,8 +420,8 @@ class HumanResourceService
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
             'page' => 'integer|gt:0',
-            'organization_id' => 'integer|exists:organizations,id',
-            'organization_unit_id' => 'integer|exists:organization_units,id',
+            'organization_id' => 'exists:organizations,id|integer',
+            'organization_unit_id' => 'exists:organization_units,id | integer',
             'page_size' => 'integer|gt:0',
             'order' => [
                 'string',
@@ -427,7 +429,7 @@ class HumanResourceService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -21,7 +21,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Service extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     protected $guarded = ['id'];
 

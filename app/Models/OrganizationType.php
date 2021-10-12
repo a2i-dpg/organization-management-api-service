@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeFilterByOrganization;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class OrganizationType
@@ -18,7 +16,10 @@ use Illuminate\Support\Facades\Auth;
  */
 class OrganizationType extends BaseModel
 {
-    use SoftDeletes, HasFactory,ScopeFilterByOrganization;
+    use SoftDeletes, ScopeRowStatusTrait;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     /**
      * @var string[]

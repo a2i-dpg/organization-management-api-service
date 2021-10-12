@@ -42,7 +42,8 @@ class RankTypeService
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'organizations.title as organization_title',
-//                'rank_types.description',
+                'rank_types.description_en',
+                'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
                 'rank_types.updated_by',
@@ -116,6 +117,8 @@ class RankTypeService
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'organizations.title as organization_title',
+                'rank_types.description_en',
+                'rank_types.description',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
@@ -182,7 +185,7 @@ class RankTypeService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $limit = $request->query('limit', 10);
+        $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -214,9 +217,9 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $rankTypes = $rankTypeBuilder->paginate($limit);
+        if (!is_int($paginate) || !is_int($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $rankTypes = $rankTypeBuilder->paginate($pageSize);
             $paginateData = (object)$rankTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -271,6 +274,7 @@ class RankTypeService
         ];
         $rules = [
             'title_en' => [
+                'nullable',
                 'string',
                 'max:300',
                 'min:2'
@@ -299,7 +303,7 @@ class RankTypeService
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'integer',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -337,7 +341,7 @@ class RankTypeService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

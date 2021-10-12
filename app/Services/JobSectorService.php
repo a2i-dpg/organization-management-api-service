@@ -188,7 +188,7 @@ class JobSectorService
 
         /** @var Collection $jobSectors */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $jobSectors = $jobSectorBuilder->paginate($pageSize);
             $paginateData = (object)$jobSectors->toArray();
@@ -257,7 +257,7 @@ class JobSectorService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([JobSector::ROW_STATUS_ACTIVE, JobSector::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -295,7 +295,7 @@ class JobSectorService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([JobSector::ROW_STATUS_ACTIVE, JobSector::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }
