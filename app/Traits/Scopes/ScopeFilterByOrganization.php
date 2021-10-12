@@ -12,7 +12,6 @@ trait ScopeFilterByOrganization
     {
         $authUser = Auth::user();
 
-    Log::info($authUser->user_type);
         if ($authUser->user_type == BaseModel::ORGANIZATION_USER_TYPE && $authUser->organization_id) {  //Organization User
             return $query->where($table.'.organization_id', $authUser->organization_id);
         }
