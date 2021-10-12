@@ -28,7 +28,7 @@ class RankService
     public function getRankList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -60,36 +60,36 @@ class RankService
         $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('ranks.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $rankBuilder->join('rank_types', function ($join) use ($rowStatus) {
             $join->on('ranks.rank_type_id', '=', 'rank_types.id')
                 ->whereNull('rank_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
         $rankBuilder->orderBy('ranks.id', $order);
 
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $rankBuilder->where('ranks.row_status', $rowStatus);
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $rankBuilder->where('ranks.organization_id', $organizationId);
         }
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $rankBuilder->where('ranks.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $rankBuilder->where('ranks.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $ranks */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $ranks = $rankBuilder->paginate($pageSize);
             $paginateData = (object)$ranks->toArray();
@@ -204,7 +204,7 @@ class RankService
     public function getTrashedRankList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -235,8 +235,8 @@ class RankService
 
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $rankBuilder->where('ranks.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $rankBuilder->where('ranks.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $ranks */

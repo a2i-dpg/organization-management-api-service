@@ -26,7 +26,7 @@ class SkillService
     public function getSkillList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -48,19 +48,19 @@ class SkillService
         );
         $skillBuilder->orderBy('skills.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $skillBuilder->where('skills.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $skillBuilder->where('skills.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $skillBuilder->where('skills.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $skills */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $skills = $skillBuilder->paginate($pageSize);
             $paginateData = (object)$skills->toArray();
@@ -160,7 +160,7 @@ class SkillService
     public function getTrashedSkillList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -183,8 +183,8 @@ class SkillService
 
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $skillBuilder->where('skills.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $skillBuilder->where('skills.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $skills */

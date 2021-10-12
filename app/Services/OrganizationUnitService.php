@@ -27,7 +27,7 @@ class OrganizationUnitService
     public function getAllOrganizationUnit(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -77,60 +77,60 @@ class OrganizationUnitService
         $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_divisions.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_districts.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_upazilas.row_status', $rowStatus);
             }
         });
 
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $organizationUnitBuilder->where('organization_units.organization_id', $organizationId);
         }
-        if (is_numeric($organizationUnitTypeId)) {
+        if (is_int($organizationUnitTypeId)) {
             $organizationUnitBuilder->where('organization_units.organization_unit_type_id', $organizationUnitTypeId);
         }
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $organizationUnitBuilder->where('organization_units.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $organizationUnitBuilder->where('organization_units.title', 'like', '%' . $title . '%');
         }
 
         /** @var  Collection $organizationUnits */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnits->toArray();
@@ -279,7 +279,7 @@ class OrganizationUnitService
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -321,8 +321,8 @@ class OrganizationUnitService
 
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationUnitBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var  Collection $organizationUnits */
@@ -506,7 +506,7 @@ class OrganizationUnitService
         $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
             'serviceIds' => 'required|array|min:1',
-            'serviceIds.*' => 'required|integer|distinct|min:1'
+            'serviceIds.*' => 'required|integer|distinct|exists:services,id'
         ];
         return Validator::make($data, $rules, $customMessage);
     }

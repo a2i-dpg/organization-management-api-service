@@ -26,7 +26,7 @@ class OrganizationUnitTypeService
     public function getAllOrganizationUnitType(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -53,29 +53,29 @@ class OrganizationUnitTypeService
         $organizationUnitTypeBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_unit_types.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
 
         $organizationUnitTypeBuilder->orderBy('organization_unit_types.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $organizationUnitTypeBuilder->where('organization_unit_types.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $organizationUnitTypeBuilder->where('organization_unit_types.title', 'like', '%' . $title . '%');
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
         /** @var Collection $organizationUnitTypes */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnitTypes->toArray();
@@ -180,7 +180,7 @@ class OrganizationUnitTypeService
     public function getAllTrashedOrganizationUnitType(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -203,8 +203,8 @@ class OrganizationUnitTypeService
 
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitTypeBuilder->where('job_sectors.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationUnitTypeBuilder->where('job_sectors.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizationUnitTypes */

@@ -22,7 +22,7 @@ class LocDistrictService
     public function getAllDistricts(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $divisionId = $request['loc_division_id'] ?? "";
         $order = $request['order'] ?? "ASC";
@@ -47,25 +47,25 @@ class LocDistrictService
         $districtsBuilder->leftJoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('loc_divisions.id', '=', 'loc_districts.loc_division_id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_divisions.row_status', $rowStatus);
             }
         });
 
         $districtsBuilder->orderBy('loc_districts.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $districtsBuilder->where('loc_districts.row_status', $rowStatus);
         }
 
         if (!empty($titleEn)) {
             $districtsBuilder->where('loc_districts.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $districtsBuilder->where('loc_districts.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $districtsBuilder->where('loc_districts.title', 'like', '%' . $title . '%');
         }
 
-        if (is_numeric($divisionId)) {
+        if (is_int($divisionId)) {
             $districtsBuilder->where('loc_districts.loc_division_id', $divisionId);
         }
         /** @var Collection $districts */

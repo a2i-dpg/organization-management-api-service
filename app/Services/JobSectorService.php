@@ -27,7 +27,7 @@ class JobSectorService
     public function getJobSectorList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -48,20 +48,20 @@ class JobSectorService
         );
         $jobSectorBuilder->orderBy('job_sectors.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $jobSectorBuilder->where('job_sectors.row_status', $rowStatus);
         }
 
         if (!empty($titleEn)) {
             $jobSectorBuilder->where('job_sectors.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $jobSectors */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $jobSectors = $jobSectorBuilder->paginate($pageSize);
             $paginateData = (object)$jobSectors->toArray();
@@ -160,7 +160,7 @@ class JobSectorService
     public function getTrashedJobSectorList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -182,8 +182,8 @@ class JobSectorService
 
         if (!empty($titleEn)) {
             $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $jobSectors */

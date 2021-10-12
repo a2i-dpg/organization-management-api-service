@@ -26,7 +26,7 @@ class OrganizationTypeService
     public function getAllOrganizationType(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -53,8 +53,8 @@ class OrganizationTypeService
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizationTypes */
@@ -158,7 +158,7 @@ class OrganizationTypeService
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = $request->query('order', 'ASC');
@@ -179,8 +179,8 @@ class OrganizationTypeService
 
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizationTypes */

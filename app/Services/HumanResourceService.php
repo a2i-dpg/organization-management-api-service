@@ -26,7 +26,7 @@ class HumanResourceService
     public function getHumanResourceList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -65,51 +65,51 @@ class HumanResourceService
         $humanResourceBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->join('organization_units', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_unit_id', '=', 'organization_units.id')
                 ->whereNull('organization_units.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_units.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
             $join->on('human_resources.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->leftJoin('human_resources as human_res_2', function ($join) use ($rowStatus) {
             $join->on('human_resources.parent_id', '=', 'human_res_2.id')
                 ->whereNull('human_res_2.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('human_res_2.row_status', $rowStatus);
             }
         });
         $humanResourceBuilder->orderBy('human_resources.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $humanResourceBuilder->where('human_resources.row_status', $rowStatus);
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $humanResourceBuilder->where('human_resources.organization_id', $organizationId);
         }
-        if (is_numeric($organizationUnitId)) {
+        if (is_int($organizationUnitId)) {
             $humanResourceBuilder->where('human_resources.organization_unit_id', $organizationUnitId);
         }
         if (!empty($titleEn)) {
             $humanResourceBuilder->where('human_resources.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $humanResourceBuilder->where('human_resources.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $humanResourceBuilder->where('human_resources.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $humanResources */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $humanResources = $humanResourceBuilder->paginate($pageSize);
             $paginateData = (object)$humanResources->toArray();
@@ -240,7 +240,7 @@ class HumanResourceService
     public function getTrashedHumanResourceList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $page_size = $request->query('limit', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -280,8 +280,8 @@ class HumanResourceService
         if (!empty($titleEn)) {
             $humanResourceBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $humanResourceBuilder->where('human_resource_templates.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $humanResourceBuilder->where('human_resource_templates.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $humanResources */

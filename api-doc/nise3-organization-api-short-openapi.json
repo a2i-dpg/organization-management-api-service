@@ -3,7 +3,7 @@
     "info": {
         "version": "1.0.0",
         "title": "organization management api service",
-        "description": "",
+        "description": " 'It is a organization management api service that manages services related to organization'",
         "termsOfService": "",
         "contact": {},
         "license": {
@@ -25,6 +25,11 @@
         },
         {
             "url": "http://nise3-organization.asm/api/v1"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
         }
     ],
     "paths": {
@@ -422,7 +427,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/organization"
+                                "$ref": "#/components/schemas/organizationStore"
                             }
                         }
                     }
@@ -1163,7 +1168,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "get_list",
+                        "description": "success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1302,6 +1307,11 @@
             "put": {
                 "summary": "update",
                 "description": "API endpoint to get a specified job sector.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobSectorId"
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
@@ -1313,7 +1323,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "update",
+                        "description": "success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1539,6 +1549,11 @@
             "put": {
                 "summary": "update",
                 "description": "API endpoint to update the specified occupation.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/occupationId"
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
@@ -3459,7 +3474,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "get list",
+                        "description": "success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3529,7 +3544,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "create",
+                        "description": "success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3733,7 +3748,14 @@
                     },
                     "organization_type_id": {
                         "type": "integer",
-                        "description": "Organization type id"
+                        "description": "'1 => Government, 2 => Private,3=>NGO,4=>International",
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "example": 2
                     },
                     "email": {
                         "type": "string",
@@ -3850,7 +3872,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "row_status": {
                         "type": "integer",
@@ -3884,17 +3907,24 @@
                     "title"
                 ]
             },
-            "organization": {
+            "organizationStore": {
                 "type": "object",
                 "description": "provide organizations",
                 "properties": {
                     "permission_sub_group_id": {
                         "type": "integer",
-                        "description": "Required for storing a organization"
+                        "description": "Permission sub groud id"
                     },
                     "organization_type_id": {
                         "type": "integer",
-                        "description": "Organization type id"
+                        "description": "'1 => Government, 2 => Private,3=>NGO,4=>International",
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "example": 2
                     },
                     "id": {
                         "type": "integer",
@@ -3949,10 +3979,12 @@
                         "description": "organization address"
                     },
                     "country": {
-                        "type": "string"
+                        "type": "string",
+                        "readOnly": true
                     },
                     "phone_code": {
-                        "type": "string"
+                        "type": "string",
+                        "readOnly": true
                     },
                     "mobile": {
                         "type": "string",
@@ -4029,7 +4061,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4052,7 +4085,191 @@
                 },
                 "required": [
                     "title",
+                    "permission_sub_group_id",
                     "organization_type_id",
+                    "contact_person_name",
+                    "contact_person_mobile",
+                    "contact_person_designation",
+                    "contact_person_email",
+                    "mobile",
+                    "email",
+                    "address"
+                ]
+            },
+            "organization": {
+                "type": "object",
+                "description": "provide organizations",
+                "properties": {
+                    "organization_type_id": {
+                        "type": "integer",
+                        "description": "'1 => Government, 2 => Private,3=>NGO,4=>International",
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "example": 2
+                    },
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": " title in Bengali",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "location id of division"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "location id of district"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "location id of upazila"
+                    },
+                    "location_latitude": {
+                        "type": "string",
+                        "description": "Latitude of the location"
+                    },
+                    "location_longitude": {
+                        "type": "string",
+                        "description": "longitue of the location"
+                    },
+                    "google_map_src": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "country": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "phone_code": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "description": "Mobile number of organization"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "email address"
+                    },
+                    "fax_no": {
+                        "type": "string",
+                        "maximum": 50,
+                        "description": " fax number"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "contact_person_name": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 500,
+                        "minimum": 2
+                    },
+                    "contact_person_name_en": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 250,
+                        "minimum": 2
+                    },
+                    "contact_person_mobile": {
+                        "type": "string",
+                        "description": "Contact person mobile number"
+                    },
+                    "contact_person_email": {
+                        "type": "string",
+                        "description": "Contact person email address"
+                    },
+                    "contact_person_designation": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "description_en": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "logo": {
+                        "type": "string",
+                        "description": "Logo of the organization"
+                    },
+                    "domain": {
+                        "type": "string",
+                        "description": "Unique Website domain of the organization"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    },
+                    "created_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "Creator"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "Modifier"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "title",
                     "contact_person_name",
                     "contact_person_mobile",
                     "contact_person_designation",
@@ -4097,7 +4314,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4166,7 +4384,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4219,7 +4438,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4273,7 +4493,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4324,7 +4545,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4378,7 +4600,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4513,7 +4736,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4566,7 +4790,8 @@
                         "enum": [
                             0,
                             1
-                        ]
+                        ],
+                        "example": 1
                     },
                     "created_by": {
                         "type": "integer",
@@ -4766,6 +4991,13 @@
                 ]
             }
         },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
         "parameters": {
             "serviceIds": {
                 "name": "serviceIds",
@@ -4893,7 +5125,13 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ]
                 }
             },
             "organizationTypeId": {
@@ -4940,7 +5178,11 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ]
                 }
             },
             "page": {

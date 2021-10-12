@@ -26,7 +26,7 @@ class LocDivisionService
     public function getAllDivisions(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
@@ -44,14 +44,14 @@ class LocDivisionService
         ]);
         $divisionsBuilder->orderBy('id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $divisionsBuilder->where('row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
             $divisionsBuilder->where('title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $divisionsBuilder->where('title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $divisionsBuilder->where('title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $divisions */

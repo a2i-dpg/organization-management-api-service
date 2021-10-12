@@ -28,7 +28,7 @@ class OrganizationService
     public function getAllOrganization(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -81,52 +81,52 @@ class OrganizationService
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_types.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_divisions.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_districts.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_upazilas.row_status', $rowStatus);
             }
         });
 
         $organizationBuilder->orderBy('organizations.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
         }
 
-        if (is_numeric($organizationTypeId)) {
+        if (is_int($organizationTypeId)) {
             $organizationBuilder->where('organizations.organization_type_id', $organizationTypeId);
         }
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $organizationBuilder->where('organizations.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizations */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizations = $organizationBuilder->paginate($pageSize);
             $paginateData = (object)$organizations->toArray();
@@ -334,7 +334,7 @@ class OrganizationService
     public function getAllTrashedOrganization(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -371,8 +371,8 @@ class OrganizationService
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizations */
@@ -434,7 +434,8 @@ class OrganizationService
         $rules = [
             'organization_type_id' => [
                 'required',
-                'integer'
+                'int',
+                Rule::in(BaseModel::ORGANIZATION_TYPE)
             ],
             'permission_sub_group_id' => [
                 'required_if:' . $id . ',==,null',
@@ -580,6 +581,7 @@ class OrganizationService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
+        dd($rules);
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
