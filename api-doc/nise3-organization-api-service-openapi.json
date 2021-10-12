@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.3",
+    "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
         "title": "organization management api service",
@@ -12,19 +12,10 @@
     },
     "servers": [
         {
-            "url": "http://organization.local:8010/api/v1"
-        },
-        {
-            "url": "http://localhost:8000/api/v1"
+            "url": "https://org.bus-staging.softbdltd.com/api/v1"
         },
         {
             "url": "http://localhost:8002/api/v1"
-        },
-        {
-            "url": " https://api.bus.softbd.xyz/org/api/v1"
-        },
-        {
-            "url": "http://nise3-organization.asm/api/v1"
         }
     ],
     "paths": {

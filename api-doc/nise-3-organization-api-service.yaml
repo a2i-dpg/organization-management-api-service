@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
-  version: '1.0.0'
+  version: 1.0.0
   title: organization management api service
   description: ''
   termsOfService: ''
@@ -8,10 +8,8 @@ info:
   license:
     name: ''
 servers:
-  - url: http://localhost:8000/api/v1
+  - url: https://org.bus-staging.softbdltd.com/api/v1
   - url: http://localhost:8002/api/v1
-  - url: ' https://api.bus.softbd.xyz/org/api/v1'
-  - url: http://nise3-organization.asm/api/v1
 paths:
   /:
     get:
@@ -2917,13 +2915,23 @@ paths:
     post:
       summary: Register Organization
       parameters:
-        - $ref: '#/components/parameters/title_en'
+        - name: title_en
+          in: query
+          schema:
+            type: string
+            example: abc
         - $ref: '#/components/parameters/title'
         - $ref: '#/components/parameters/organization_type_id'
         - $ref: '#/components/parameters/email'
         - $ref: '#/components/parameters/mobile'
         - $ref: '#/components/parameters/contact_person_mobile'
         - name: name_of_the_office_head
+          in: query
+          required: true
+          schema:
+            type: string
+            example: Abdur gaffar
+        - name: name_of_the_office_head_en
           in: query
           schema:
             type: string
@@ -2933,10 +2941,37 @@ paths:
           schema:
             type: string
             example: Chairman
-        - $ref: '#/components/parameters/address'
+        - name: name_of_the_office_head_designation_en
+          in: query
+          schema:
+            type: string
+            example: Chairman
         - $ref: '#/components/parameters/contact_person_name'
+        - name: contact_person_name_en
+          in: query
+          schema:
+            type: string
+            example: Mr. X
         - $ref: '#/components/parameters/contact_person_designation'
+        - name: contact_person_designation_en
+          in: query
+          required: true
+          schema:
+            type: string
+            example: HR
         - $ref: '#/components/parameters/contact_person_email'
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+            example: Street 4/6B
+        - name: address_en
+          in: query
+          required: true
+          schema:
+            type: string
+            example: Street 4/6B
         - name: password
           in: query
           schema:
