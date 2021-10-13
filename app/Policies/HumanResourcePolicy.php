@@ -14,9 +14,9 @@ class HumanResourcePolicy
      * Determine whether the user can view any humanResources.
      *
      * @param User $authUser
-     * @return mixed
+     * @return bool
      */
-    public function viewAny(User $authUser)
+    public function viewAny(User $authUser): bool
     {
         return $authUser->hasPermission('view_any_human_resource');
 
@@ -39,9 +39,9 @@ class HumanResourcePolicy
      * Determine whether the user can create humanResources.
      *
      * @param User $authUser
-     * @return mixed
+     * @return bool
      */
-    public function create(User $authUser)
+    public function create(User $authUser): bool
     {
         return $authUser->hasPermission('create_human_resource');
 

@@ -28,7 +28,7 @@ class OrganizationService
     public function getAllOrganization(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -55,8 +55,8 @@ class OrganizationService
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
             'organizations.contact_person_designation_en',
-//            'organizations.description',
-//            'organizations.description_en',
+            'organizations.description',
+            'organizations.description_en',
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
@@ -81,52 +81,52 @@ class OrganizationService
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_types.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_divisions.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_districts.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_upazilas.row_status', $rowStatus);
             }
         });
 
         $organizationBuilder->orderBy('organizations.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
         }
 
-        if (is_numeric($organizationTypeId)) {
+        if (is_int($organizationTypeId)) {
             $organizationBuilder->where('organizations.organization_type_id', $organizationTypeId);
         }
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $organizationBuilder->where('organizations.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizations */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizations = $organizationBuilder->paginate($pageSize);
             $paginateData = (object)$organizations->toArray();
@@ -187,7 +187,8 @@ class OrganizationService
             'organizations.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
             'loc_upazilas.title as loc_upazila_title',
-            'organizations.organization_type_id',
+            'organizations.location_latitude',
+            'organizations.location_longitude',
             'organization_types.title_en as organization_type_title_en',
             'organization_types.title as organization_type_title',
             'organizations.address',
@@ -264,7 +265,7 @@ class OrganizationService
         ];
 
         return Http::retry(3)
-            ->withOptions(['debug' => config("nise3.is_dev_mode"), 'verify' => config("nise3.should_ssl_verify")])
+//            ->withOptions(['verify' => config("nise3.should_ssl_verify")])
 //            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
@@ -334,7 +335,7 @@ class OrganizationService
     public function getAllTrashedOrganization(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -371,13 +372,13 @@ class OrganizationService
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizations */
 
-        if (!is_null($paginate) || !is_null($page_size)) {
+        if (!is_int($paginate) || !is_int($page_size)) {
             $page_size = $page_size ?: 10;
             $organizations = $organizationBuilder->paginate($page_size);
             $paginateData = (object)$organizations->toArray();
@@ -432,9 +433,16 @@ class OrganizationService
             ]
         ];
         $rules = [
-            'permission_sub_group_id' => [
+            'organization_type_id' => [
                 'required',
-                'numeric'
+                Rule::in(Organization::ORGANIZATION_TYPE),
+                'int'
+            ],
+            'permission_sub_group_id' => [
+                Rule::requiredIf(function () use ($id) {
+                    return $id == null;
+                }),
+                'int'
             ],
             'title_en' => [
                 'nullable',
@@ -448,34 +456,6 @@ class OrganizationService
                 'max:1200',
                 'min:2'
             ],
-            'organization_type_id' => [
-                'required',
-                'integer'
-            ],
-            "head_of_office" => [
-                "required",
-                "string"
-            ],
-            "head_of_office_designation" => [
-                "nullable",
-                "string"
-            ],
-            'domain' => [
-                'nullable',
-                'string',
-                'max:191',
-                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'unique:organizations,domain,' . $id
-            ],
-            'description' => [
-                'nullable',
-                'string',
-            ],
-            'fax_no' => [
-                'nullable',
-                'string',
-                'max: 30',
-            ],
             'loc_division_id' => [
                 'nullable',
                 'integer',
@@ -488,47 +468,17 @@ class OrganizationService
                 'nullable',
                 'integer',
             ],
-            'contact_person_mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX
-            ],
-            'contact_person_name' => [
-                'required',
-                'max: 500',
-                'min:2'
-            ],
-            'contact_person_name_en' => [
+            "location_latitude" => [
                 'nullable',
-                'max: 250',
-                'min:2'
+                'integer',
             ],
-            'contact_person_designation' => [
-                'required',
-                'max: 600',
-                "min:2"
-            ],
-            'contact_person_designation_en' => [
+            "location_longitude" => [
                 'nullable',
-                'max: 300',
-                "min:2"
+                'integer',
             ],
-            'contact_person_email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'logo' => [
-                'required_if:' . $id . ',null',
-                'string',
+            "google_map_src" => [
+                'nullable',
+                'integer',
             ],
             'address' => [
                 'required',
@@ -540,9 +490,98 @@ class OrganizationService
                 'max: 600',
                 'min:2'
             ],
+            "country" => [
+                "nullable",
+                "string"
+            ],
+            "phone_code" => [
+                "nullable",
+                "string"
+            ],
+            'mobile' => [
+                BaseModel::MOBILE_REGEX,
+                'required'
+
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
+            'fax_no' => [
+                'nullable',
+                'string',
+                'max: 30',
+            ],
+            "name_of_the_office_head" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "name_of_the_office_head_en" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "name_of_the_office_head_designation" => [
+                "nullable",
+                "string"
+            ],
+            "name_of_the_office_head_designation_en" => [
+                "nullable",
+                "string"
+            ],
+            'contact_person_name' => [
+                'required',
+                'max: 500',
+                'min:2'
+            ],
+            'contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
+            'contact_person_mobile' => [
+                BaseModel::MOBILE_REGEX,
+                'required'
+            ],
+            'contact_person_email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
+            'contact_person_designation' => [
+                'required',
+                'max: 600',
+                "min:2"
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
+                'max: 300',
+                "min:2"
+            ],
+            'description' => [
+                'nullable',
+                'string',
+            ],
+            'description_en' => [
+                'nullable',
+                'string',
+            ],
+            'domain' => [
+                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
+                'nullable',
+                'string',
+                'max:191',
+                'unique:organizations,domain,' . $id
+            ],
+            'logo' => [
+                'nullable',
+                'string',
+            ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -572,12 +611,14 @@ class OrganizationService
                 'email',
             ],
             'mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX
+                BaseModel::MOBILE_REGEX,
+                'required'
+
             ],
             'contact_person_mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX
+                BaseModel::MOBILE_REGEX,
+                'required'
+
             ],
             "name_of_the_office_head" => [
                 "required",
@@ -619,7 +660,7 @@ class OrganizationService
                 "min:2"
             ],
             'contact_person_designation_en' => [
-                'required',
+                'nullable',
                 'max: 300',
                 "min:2"
             ],
@@ -633,7 +674,7 @@ class OrganizationService
                 'min:2'
             ],
             'address_en' => [
-                'required',
+                'nullable',
                 'max: 600',
                 'min:2'
             ],
@@ -682,7 +723,7 @@ class OrganizationService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

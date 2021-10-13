@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
@@ -17,7 +16,7 @@ use Illuminate\Support\Collection;
  */
 class Skill extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes;
 
     /**
      * @var string[]

@@ -59,6 +59,8 @@ class HumanResourceController extends Controller
      * Display the specified resource.
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
+     * @throws Throwable
      */
     public function read(int $id): JsonResponse
     {
@@ -81,7 +83,7 @@ class HumanResourceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function store(Request $request): JsonResponse
     {
@@ -112,7 +114,7 @@ class HumanResourceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -144,7 +146,7 @@ class HumanResourceController extends Controller
      * Remove the specified resource from storage.
      * @param int $id
      * @return Exception|JsonResponse|Throwable
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function destroy(int $id): JsonResponse
     {
@@ -170,9 +172,10 @@ class HumanResourceController extends Controller
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
         try {
             $response = $this->humanResourceService->getTrashedHumanResourceList($request, $this->startTime);
@@ -185,9 +188,10 @@ class HumanResourceController extends Controller
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $humanResource = HumanResource::onlyTrashed()->findOrFail($id);
         try {
@@ -208,9 +212,10 @@ class HumanResourceController extends Controller
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $humanResource = HumanResource::onlyTrashed()->findOrFail($id);
         try {

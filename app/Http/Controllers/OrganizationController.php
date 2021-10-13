@@ -66,9 +66,11 @@ class OrganizationController extends Controller
     /**
      * Display a specified resource
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      */
-    public function read(int $id)
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->organizationService->getOneOrganization($id, $this->startTime);

@@ -26,7 +26,7 @@ class HumanResourceTemplateService
     public function getHumanResourceTemplateList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -61,61 +61,61 @@ class HumanResourceTemplateService
             'human_resource_templates.created_at',
             'human_resource_templates.updated_at',
 
-        ]);
+        ])->byOrganization('human_resource_templates');
 
         $humanResourceTemplateBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $humanResourceTemplateBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
             }
         });
         $humanResourceTemplateBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
         $humanResourceTemplateBuilder->leftJoin('human_resource_templates as human_res_tem_2', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.parent_id', '=', 'human_res_tem_2.id')
                 ->whereNull('human_res_tem_2.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('human_res_tem_2.row_status', $rowStatus);
             }
         });
 
         $humanResourceTemplateBuilder->orderBy('human_resource_templates.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.row_status', $rowStatus);
         }
 
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.organization_id', $organizationId);
         }
 
-        if (is_numeric($organizationUnitTypeId)) {
+        if (is_int($organizationUnitTypeId)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.organization_unit_type_id', $organizationUnitTypeId);
         }
 
         if (!empty($titleEn)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $humanResourceTemplateBuilder->where('human_resource_templates.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $humanResourceTemplateBuilder->where('human_resource_templates.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $humanResourceTemplates */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
@@ -247,7 +247,7 @@ class HumanResourceTemplateService
     public function getTrashedHumanResourceTemplateList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -284,13 +284,13 @@ class HumanResourceTemplateService
 
         if (!empty($titleEn)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $humanResourceTemplateBuilder->where('human_resource_templates.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $humanResourceTemplateBuilder->where('human_resource_templates.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $humanResourceTemplates */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
@@ -358,33 +358,34 @@ class HumanResourceTemplateService
                 'min: 2'
             ],
             'organization_id' => [
+                'exists:organizations,id',
                 'required',
-                'integer',
-                'exists:organizations,id'
+                'integer'
+
             ],
             'organization_unit_type_id' => [
+                'exists:organization_unit_types,id',
                 'required',
-                'integer',
-                'exists:organization_unit_types,id'
+                'integer'
             ],
             'parent_id' => [
+                'exists:human_resource_templates,id',
                 'nullable',
-                'integer',
-                'exists:human_resource_templates,id'
+                'integer'
             ],
             'rank_id' => [
+                'exists:ranks,id',
                 'nullable',
-                'integer',
-                'exists:ranks,id'
+                'integer'
             ],
             'display_order' => [
                 'required',
                 'integer',
-                'min:0',
+                'min:0'
             ],
             'is_designation' => [
                 'required',
-                'integer',
+                'integer'
             ],
             'status' => [
                 'integer',
@@ -392,7 +393,7 @@ class HumanResourceTemplateService
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'integer',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -424,15 +425,15 @@ class HumanResourceTemplateService
             'title' => 'nullable|max:800|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'organization_id' => 'integer|exists:organizations,id',
-            'organization_unit_type_id' => 'integer|exists:organization_unit_types,id',
+            'organization_id' => 'exists:organizations,id|integer',
+            'organization_unit_type_id' => 'exists:organization_unit_types,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

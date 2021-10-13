@@ -26,7 +26,7 @@ class RankTypeService
     public function getRankTypeList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -42,7 +42,8 @@ class RankTypeService
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'organizations.title as organization_title',
-//                'rank_types.description',
+                'rank_types.description_en',
+                'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
                 'rank_types.updated_by',
@@ -54,28 +55,28 @@ class RankTypeService
         $rankTypeBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('rank_types.organization_id', '=', 'organizations.id')
                 ->whereNUll('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $rankTypeBuilder->orderBy('rank_types.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $rankTypeBuilder->where('rank_types.organization_id', $organizationId);
         }
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $rankTypeBuilder->where('rank_types.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $rankTypeBuilder->where('rank_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $rankTypes */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $rankTypes = $rankTypeBuilder->paginate($pageSize);
             $paginateData = (object)$rankTypes->toArray();
@@ -116,6 +117,8 @@ class RankTypeService
                 'rank_types.organization_id',
                 'organizations.title_en as organization_title_en',
                 'organizations.title as organization_title',
+                'rank_types.description_en',
+                'rank_types.description',
                 'rank_types.description',
                 'rank_types.row_status',
                 'rank_types.created_by',
@@ -181,8 +184,8 @@ class RankTypeService
     public function getTrashedRankTypeList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
-        $limit = $request->query('limit', 10);
+        $title = $request->query('title');
+        $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -208,15 +211,15 @@ class RankTypeService
 
         if (!empty($titleEn)) {
             $rankTypeBuilder->where('rank_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $rankTypeBuilder->where('rank_types.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $rankTypeBuilder->where('rank_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $rankTypes */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $rankTypes = $rankTypeBuilder->paginate($limit);
+        if (!is_int($paginate) || !is_int($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $rankTypes = $rankTypeBuilder->paginate($pageSize);
             $paginateData = (object)$rankTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -271,7 +274,7 @@ class RankTypeService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
                 'max:300',
                 'min:2'
@@ -300,7 +303,7 @@ class RankTypeService
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'integer',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -338,7 +341,7 @@ class RankTypeService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

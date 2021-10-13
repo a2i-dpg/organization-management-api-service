@@ -27,7 +27,7 @@ class LocUpazilaService
     {
 
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $districtId = $request['loc_district_id'] ?? "";
         $divisionId = $request['loc_division_id'] ?? "";
@@ -56,7 +56,7 @@ class LocUpazilaService
         $upazilasBuilder->leftJoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('loc_divisions.id', '=', 'loc_upazilas.loc_division_id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_divisions.row_status', $rowStatus);
             }
         });
@@ -64,29 +64,29 @@ class LocUpazilaService
         $upazilasBuilder->leftJoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('loc_upazilas.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('loc_districts.row_status', $rowStatus);
             }
         });
 
         $upazilasBuilder->orderBy('loc_upazilas.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $upazilasBuilder->where('loc_upazilas.row_status', $rowStatus);
         }
 
         if (!empty($titleEn)) {
             $upazilasBuilder->where('loc_upazilas.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $upazilasBuilder->where('loc_upazilas.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $upazilasBuilder->where('loc_upazilas.title', 'like', '%' . $title . '%');
         }
 
-        if (is_numeric($districtId)) {
+        if (is_int($districtId)) {
             $upazilasBuilder->where('loc_upazilas.loc_district_id', $districtId);
         }
 
-        if (is_numeric($divisionId)) {
+        if (is_int($divisionId)) {
             $upazilasBuilder->where('loc_upazilas.loc_division_id', $divisionId);
         }
         /** @var Collection $upazilas */

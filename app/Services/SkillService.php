@@ -26,10 +26,9 @@ class SkillService
     public function getSkillList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
-        $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
 
@@ -39,28 +38,20 @@ class SkillService
                 'skills.id',
                 'skills.title_en',
                 'skills.title',
-                'skills.row_status',
-                'skills.created_at',
-                'skills.updated_at',
-                'skills.created_by',
-                'skills.updated_by',
             ]
         );
         $skillBuilder->orderBy('skills.id', $order);
 
-        if (is_numeric($rowStatus)) {
-            $skillBuilder->where('skills.row_status', $rowStatus);
-        }
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $skillBuilder->where('skills.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $skillBuilder->where('skills.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $skills */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $skills = $skillBuilder->paginate($pageSize);
             $paginateData = (object)$skills->toArray();
@@ -95,12 +86,7 @@ class SkillService
             [
                 'skills.id',
                 'skills.title_en',
-                'skills.title',
-                'skills.row_status',
-                'skills.created_at',
-                'skills.updated_at',
-                'skills.created_by',
-                'skills.updated_by',
+                'skills.title'
             ]
         );
 
@@ -160,8 +146,8 @@ class SkillService
     public function getTrashedSkillList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
-        $limit = $request->query('limit', 10);
+        $title = $request->query('title');
+        $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -171,11 +157,6 @@ class SkillService
                 'skills.id as id',
                 'skills.title_en',
                 'skills.title',
-                'skills.row_status',
-                'skills.created_at',
-                'skills.updated_at',
-                'skills.created_by',
-                'skills.updated_by',
             ]
         );
 
@@ -183,15 +164,15 @@ class SkillService
 
         if (!empty($titleEn)) {
             $skillBuilder->where('skills.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $skillBuilder->where('skills.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $skillBuilder->where('skills.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $skills */
 
-        if (!is_null($paginate) || !is_null($limit)) {
-            $limit = $limit ?: 10;
-            $skills = $skillBuilder->paginate($limit);
+        if (!is_int($paginate) || !is_int($pageSize)) {
+            $pageSize = $pageSize ?: 10;
+            $skills = $skillBuilder->paginate($pageSize);
             $paginateData = (object)$skills->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
@@ -256,11 +237,7 @@ class SkillService
                 'string',
                 'max: 600',
                 'min:2'
-            ],
-            'row_status' => [
-                'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
-            ],
+            ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }
@@ -294,11 +271,7 @@ class SkillService
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
-            ],
-            'row_status' => [
-                "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
-            ],
+            ]
         ], $customMessage);
     }
 }

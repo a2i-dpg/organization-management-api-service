@@ -15,7 +15,7 @@ class CreateHumanResourceSkillTable extends Migration
     {
         Schema::create('human_resource_skills', function (Blueprint $table) {
             $table->unsignedInteger('human_resource_id');
-            $table->unsignedInteger('skill_id');
+            $table->unsignedMediumInteger('skill_id');
 
             $table->foreign('human_resource_id')
                 ->references('id')

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
@@ -15,14 +15,16 @@ use Illuminate\Support\Collection;
  * @property string title
  * @property-read  Collection children
  */
-
 class JobSector extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     protected $guarded = ['id'];
 
-    public function occupations():HasMany
+    public function occupations(): HasMany
     {
         return $this->hasMany(Occupation::class);
     }

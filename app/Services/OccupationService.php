@@ -26,7 +26,7 @@ class OccupationService
     public function getOccupationList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -50,25 +50,25 @@ class OccupationService
         $occupationBuilder->join('job_sectors', function ($join) use ($rowStatus) {
             $join->on('occupations.job_sector_id', '=', 'job_sectors.id')
                 ->whereNull('job_sectors.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('job_sectors.row_status', $rowStatus);
             }
         });
         $occupationBuilder->orderBy('occupations.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (!empty($titleBn)) {
-            $occupationBuilder->where('occupations.title', 'like', '%' . $titleBn . '%');
+        if (!empty($title)) {
+            $occupationBuilder->where('occupations.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $occupations */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $occupations = $occupationBuilder->paginate($pageSize);
             $paginateData = (object)$occupations->toArray();
@@ -172,7 +172,7 @@ class OccupationService
     public function getTrashedOccupationList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title');
+        $title = $request->query('title');
         $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -195,13 +195,13 @@ class OccupationService
 
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $occupationBuilder->where('occupations.title', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $occupationBuilder->where('occupations.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $occupations */
 
-        if (!is_null($paginate) || !is_null($page_size)) {
+        if (!is_int($paginate) || !is_int($page_size)) {
             $page_size = $page_size ?: 10;
             $occupations = $occupationBuilder->paginate($page_size);
             $paginateData = (object)$occupations->toArray();
@@ -270,13 +270,13 @@ class OccupationService
                 'min:2'
             ],
             'job_sector_id' => [
+                'exists:job_sectors,id',
                 'required',
-                'integer',
-                'exists:job_sectors,id'
+                'integer'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -315,7 +315,7 @@ class OccupationService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }
