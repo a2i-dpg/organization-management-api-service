@@ -45,7 +45,7 @@ class HumanResourceTemplateController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function getList(Request $request): JsonResponse
     {
@@ -63,6 +63,8 @@ class HumanResourceTemplateController extends Controller
     /**
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
+     * @throws Throwable
      */
     public function read(int $id): JsonResponse
     {
@@ -82,7 +84,7 @@ class HumanResourceTemplateController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     function store(Request $request): JsonResponse
     {
@@ -111,7 +113,7 @@ class HumanResourceTemplateController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
