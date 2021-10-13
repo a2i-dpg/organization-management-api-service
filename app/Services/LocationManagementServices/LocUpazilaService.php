@@ -181,7 +181,7 @@ class LocUpazilaService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([LocUpazila::ROW_STATUS_ACTIVE, LocUpazila::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

@@ -286,9 +286,9 @@ class RankTypeService
                 'min:2'
             ],
             'organization_id' => [
+                'exists:organizations,id',
                 'nullable',
                 'integer',
-                'exists:organizations,id',
             ],
             'description' => [
                 'nullable',
@@ -332,7 +332,7 @@ class RankTypeService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'organization_id' => 'integer|exists:organizations,id',
+            'organization_id' => 'exists:organizations,id|integer',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
             'order' => [

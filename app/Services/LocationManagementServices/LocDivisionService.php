@@ -126,7 +126,7 @@ class LocDivisionService
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([LocDivision::ROW_STATUS_ACTIVE, LocDivision::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

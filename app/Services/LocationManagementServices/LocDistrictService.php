@@ -142,14 +142,14 @@ class LocDistrictService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:250|min:2',
             'title' => 'nullable|max:500|min:2',
-            'loc_division_id' => 'integer|exists:loc_divisions,id',
+            'loc_division_id' => 'exists:loc_divisions,id|integer',
             'order' => [
                 'string',
                 Rule::in([(BaseModel::ROW_ORDER_ASC), (BaseModel::ROW_ORDER_DESC)])
             ],
             'row_status' => [
                 "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([LocDistrict::ROW_STATUS_ACTIVE, LocDistrict::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }
