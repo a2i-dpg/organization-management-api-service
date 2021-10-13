@@ -173,8 +173,8 @@ class LocUpazilaService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:250|min:2',
             'title' => 'nullable|max:500|min:2',
-            'loc_district_id' => 'integer|exists:loc_districts,id',
-            'loc_division_id' => 'integer|exists:loc_divisions,id',
+            'loc_district_id' => 'exists:loc_districts,id|integer',
+            'loc_division_id' => 'exists:loc_divisions,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
