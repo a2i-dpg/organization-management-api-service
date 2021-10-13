@@ -42,10 +42,10 @@ class OrganizationUnitController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException|AuthorizationException
+     * @return JsonResponse
+     * @throws ValidationException|AuthorizationException|Throwable
      */
-    public function getList(Request $request)
+    public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', OrganizationUnit::class);
         $filter = $this->organizationUnitService->filterValidator($request)->validate();

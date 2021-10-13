@@ -51,7 +51,7 @@ class HumanResourceTemplatePolicy
      * @param HumanResourceTemplate $humanResourceTemplate
      * @return bool
      */
-    public function update(User $authUser, HumanResourceTemplate $humanResourceTemplate)
+    public function update(User $authUser, HumanResourceTemplate $humanResourceTemplate): bool
     {
         return $authUser->hasPermission('update_human_resource_template');
 
@@ -64,7 +64,7 @@ class HumanResourceTemplatePolicy
      * @param HumanResourceTemplate $humanResourceTemplate
      * @return bool
      */
-    public function delete(User $authUser, HumanResourceTemplate $humanResourceTemplate)
+    public function delete(User $authUser, HumanResourceTemplate $humanResourceTemplate): bool
     {
         return $authUser->hasPermission('delete_human_resource_template');
 
