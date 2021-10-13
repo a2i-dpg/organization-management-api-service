@@ -31,6 +31,9 @@ class LocDistrict extends BaseModel
 {
     use ScopeRowStatusTrait, SoftDeletes;
 
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
+
     protected $table = 'loc_districts';
     protected $guarded = ['id'];
 

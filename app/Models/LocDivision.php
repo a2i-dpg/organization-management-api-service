@@ -27,11 +27,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class LocDivision extends BaseModel
 {
-    use ScopeRowStatusTrait, SoftDeletes,HasFactory;
+    use ScopeRowStatusTrait, SoftDeletes, HasFactory;
 
     protected $table = 'loc_divisions';
     protected $guarded = ['id'];
 
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     public function locUpazilas(): HasMany
     {
