@@ -1,14 +1,14 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: organization management api service
+  title: Organization API Service
   description: ' ''It is a organization management api service that manages services related to organization'''
   termsOfService: ''
   contact: {}
   license:
     name: MIT
 servers:
-  - url: https://org.bus-staging.softbdltd.com
+  - url: https://org.bus-staging.softbdltd.com/api/v1
   - url: http://organization.local:8010/api/v1
   - url: http://localhost:8000/api/v1
   - url: http://localhost:8002/api/v1
