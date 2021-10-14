@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Policies\OrganizationPolicy;
 use App\Services\UserRolePermissionManagementServices\UserService;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
      * Boot the authentication services for the application.
      *
      * @return void
+     * @throws RequestException
      */
     public function boot()
     {
