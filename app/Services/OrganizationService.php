@@ -277,10 +277,9 @@ class OrganizationService
 
     /**
      * @param array $data
-     * @return array|mixed
-     * @throws RequestException
+     * @return mixed
      */
-    public function createOpenRegisterUser(array $data)
+    public function createOpenRegisterUser(array $data): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
 
@@ -288,15 +287,15 @@ class OrganizationService
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'username' => $data['contact_person_mobile'],
             'organization_id' => $data['organization_id'],
-            'name_en' => $data['contact_person_name'],
-            'name_bn' => $data['contact_person_name'],
+            'name_en' => $data['contact_person_name_en'],
+            'name_bn' => $data['contact_person_name_en'],
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
         ];
 
         return Http::retry(3)
-            ->withOptions(['verify' => false])
+            ->withOptions(['verify' => config('nise3.should_ssl_verify')])
             ->post($url, $userPostField)
             ->json();
     }
