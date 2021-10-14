@@ -65,6 +65,7 @@ if (!function_exists("idpUserErrorMessage")) {
 
     /**
      * @param $exception
+     * @return array
      */
     function idUserErrorMessage($exception): array
     {
