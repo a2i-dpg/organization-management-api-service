@@ -608,12 +608,10 @@ class OrganizationService
             'mobile' => [
                 BaseModel::MOBILE_REGEX,
                 'required'
-
             ],
             'contact_person_mobile' => [
                 BaseModel::MOBILE_REGEX,
                 'required'
-
             ],
             "name_of_the_office_head" => [
                 "required",
