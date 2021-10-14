@@ -161,7 +161,6 @@ class OrganizationController extends Controller
 
         $organization = new Organization();
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
-
         DB::beginTransaction();
         try {
             $organization = $this->organizationService->store($organization, $validated);

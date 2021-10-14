@@ -360,7 +360,7 @@ class RankService
             'title' => 'nullable|max:600|min:2',
             'page' => 'integer|gt:0',
             'pageSize' => 'integer',
-            'organization_id' => 'integer|exists:organizations,id',
+            'organization_id' => 'exists:organizations,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

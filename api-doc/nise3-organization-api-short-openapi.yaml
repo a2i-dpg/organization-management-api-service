@@ -1,14 +1,14 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: organization management api service
+  title: Organization API Service
   description: ' ''It is a organization management api service that manages services related to organization'''
   termsOfService: ''
   contact: {}
   license:
     name: MIT
 servers:
-  - url: https://org.bus-staging.softbdltd.com
+  - url: https://org.bus-staging.softbdltd.com/api/v1
   - url: http://organization.local:8010/api/v1
   - url: http://localhost:8000/api/v1
   - url: http://localhost:8002/api/v1
@@ -17,6 +17,36 @@ servers:
 security:
   - bearerAuth: []
 paths:
+  /:
+    get:
+      summary: Organization Service Information
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                service_name: NISE-3 Organization Management API Service
+                service_version: V1
+                lumen_version: Lumen (8.2.4) (Laravel Components ^8.0)
+                module_list:
+                  - OrganizationType
+                  - Organization
+                  - RankType
+                  - Rank
+                  - Service
+                  - Skill
+                  - JobSector
+                  - Occupation
+                  - OrganizationUnitType
+                  - OrganizationUnit
+                  - organizationUnitService
+                  - HumanResource
+                  - HumanResourceTemplate
+                description:
+                  - It is a organization management api service that manages services related to organization
+      tags:
+        - APi info
   /organization-registration:
     post:
       summary: Register Organization
@@ -2708,7 +2738,6 @@ components:
           type: string
           format: password
       required:
-        - title_en
         - title
         - organization_type_id
         - email
@@ -2720,7 +2749,6 @@ components:
         - contact_person_designation_en
         - contact_person_email
         - address
-        - address_en
         - password
         - password_confirmation
     organizationType:

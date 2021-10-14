@@ -34,6 +34,9 @@ class LocUpazila extends BaseModel
     protected $table = 'loc_upazilas';
     protected $guarded = ['id'];
 
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
+
     public function locDistrict(): BelongsTo
     {
         return $this->belongsTo(LocDistrict::class, 'loc_district_id');

@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 if (!function_exists("clientUrl")) {
     function clientUrl($type)
@@ -47,5 +50,56 @@ if (!function_exists('formatApiResponse')) {
                 "query_time" => $startTime->diffForHumans(Carbon::now())
             ]
         ];
+    }
+}
+
+if (!function_exists("idpUserErrorMessage")) {
+
+    /**
+     * @param $exception
+     */
+    function idUserErrorMessage($exception): array
+    {
+        $statusCode = $exception->getCode();
+        Log::info("status.code".$statusCode);
+        $errors = [
+            '_response_status' => [
+                'success' => false,
+                'code' => ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => "Idp User unknown error",
+                "query_time" => 0
+            ]
+        ];
+
+        switch ($statusCode) {
+            case ResponseAlias::HTTP_UNPROCESSABLE_ENTITY:
+            {
+                $errors['_response_status']['code'] = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
+                $errors['_response_status']['message'] = "Username already exists in IDP";
+                return $errors;
+            }
+            case ResponseAlias::HTTP_NOT_FOUND:
+            {
+                $errors['_response_status']['code'] = ResponseAlias::HTTP_NOT_FOUND;
+                $errors['_response_status']['message'] = "IDP user not found";
+                return $errors;
+            }
+            case ResponseAlias::HTTP_UNAUTHORIZED:
+            {
+                $errors['_response_status']['code'] = ResponseAlias::HTTP_UNAUTHORIZED;
+                $errors['_response_status']['message'] = "HTTP 401 Unauthorized Error in IDP server";
+                return $errors;
+            }
+            case 0:
+            {
+                $errors['_response_status']['message'] = $exception->getHandlerContext()['error'] ?? " SSL Certificate Error: An expansion of the 400 Bad Request response code, used when the client has provided an invalid client certificate";
+                return $errors;
+            }
+            default:
+            {
+                return $errors;
+            }
+
+        }
     }
 }
