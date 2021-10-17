@@ -17,23 +17,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $title
  * @property string|null $title_en
  * @property string|null $bbs_code
- * @property int |null $created_by
- * @property int |null $updated_by
- * @property int $row_status
- * @property Carbon $created_at
- * @property Carbon $updated_at
  * @property-read Collection|LocUpazila[] $locUpazilas
  * @property-read Collection|LocDistrict[] $locDistricts
  */
 class LocDivision extends BaseModel
 {
-    use ScopeRowStatusTrait, SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory;
+
+    public $timestamps = false;
 
     protected $table = 'loc_divisions';
     protected $guarded = ['id'];
-
-    public const ROW_STATUS_ACTIVE = 1;
-    public const ROW_STATUS_INACTIVE = 0;
 
     public function locUpazilas(): HasMany
     {

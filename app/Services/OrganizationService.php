@@ -88,23 +88,14 @@ class OrganizationService
         $organizationBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_int($rowStatus)) {
-                $join->where('loc_divisions.row_status', $rowStatus);
-            }
         });
         $organizationBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_int($rowStatus)) {
-                $join->where('loc_districts.row_status', $rowStatus);
-            }
         });
         $organizationBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_int($rowStatus)) {
-                $join->where('loc_upazilas.row_status', $rowStatus);
-            }
         });
 
         $organizationBuilder->orderBy('organizations.id', $order);

@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Services\LocationManagementServices;
+
 
 class LocationSeederHelper
 {
@@ -11,7 +13,7 @@ class LocationSeederHelper
     // khulna: 22.820000, 89.550003 // 4, 39,
     // Mymensingh: 24.743448, 90.398384. // 8, 27, 294
 
-    public static array $data =  [
+    public static array $data = [
         // Dhaka
         [
             'loc_division_id' => 3,
