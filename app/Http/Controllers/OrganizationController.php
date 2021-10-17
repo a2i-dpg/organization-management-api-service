@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CustomException;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -45,15 +48,17 @@ class OrganizationController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Organization::class);
+
         $filter = $this->organizationService->filterValidator($request)->validate();
         try {
             $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -61,14 +66,20 @@ class OrganizationController extends Controller
     /**
      * Display a specified resource
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      */
-    public function read(int $id)
+    public function read(int $id): JsonResponse
     {
         try {
             $response = $this->organizationService->getOneOrganization($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -77,11 +88,13 @@ class OrganizationController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return Exception|Throwable|JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function store(Request $request)
     {
         $organization = new Organization();
+
+        $this->authorize('create', $organization);
 
         $validated = $this->organizationService->validator($request)->validate();
 
@@ -130,7 +143,7 @@ class OrganizationController extends Controller
             }
         } catch (Throwable $e) {
             DB::rollBack();
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -138,66 +151,70 @@ class OrganizationController extends Controller
     /**
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
+     * @throws CustomException
+     * @throws Throwable
      * @throws ValidationException
+     * @throws RequestException
      */
-    public function organizationRegister(Request $request):JsonResponse
-   {
+    public function organizationOpenRegistration(Request $request): JsonResponse
+    {
 
-       $organization = new Organization();
+        $organization = new Organization();
+        $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
+        DB::beginTransaction();
+        try {
+            $organization = $this->organizationService->store($organization, $validated);
 
-       $validated = $this->organizationService->registerOrganizationvalidator($request)->validate();
+            if (!($organization && $organization->id)) {
+                throw new CustomException('Organization/Industry has not been properly saved to db.');
+            }
 
-       DB::beginTransaction();
-       try {
-           $organization = $this->organizationService->store($organization, $validated);
-           if ($organization) {
+            $validated['organization_id'] = $organization->id;
 
-               $validated['organization_id'] = $organization->id;
-               $createRegisterUser = $this->organizationService->createRegisterUser($validated);
+            $createRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
 
-               if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
-                   $response = [
-                       'data' => $organization ?: [],
-                       '_response_status' => [
-                           "success" => true,
-                           "code" => ResponseAlias::HTTP_CREATED,
-                           "message" => "Organization Successfully Create",
-                           "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
-                       ]
-                   ];
-                   DB::commit();
-               } else {
-                   if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
-                       $response = [
-                           'errors' => $createRegisterUser['errors'] ?? [],
-                           '_response_status' => [
-                               "success" => false,
-                               "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                               "message" => "Validation Error",
-                               "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-                           ]
-                       ];
-                   } else {
-                       $response = [
-                           '_response_status' => [
-                               "success" => false,
-                               "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
-                               "message" => "Unprocessable Request,Please contact",
-                               "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-                           ]
-                       ];
-                   }
+            if ($createRegisterUser && $createRegisterUser['_response_status']['success']) {
+                $response = [
+                    'data' => $organization,
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_CREATED,
+                        "message" => "Organization Successfully Create",
+                        "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                    ]
+                ];
+                DB::commit();
+            } else {
+                if ($createRegisterUser && $createRegisterUser['_response_status']['code'] == ResponseAlias::HTTP_UNPROCESSABLE_ENTITY) {
+                    $response = [
+                        'errors' => $createRegisterUser['errors'] ?? [],
+                        '_response_status' => [
+                            "success" => false,
+                            "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                            "message" => "Validation Error",
+                            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                        ]
+                    ];
+                } else {
+                    $response = [
+                        '_response_status' => [
+                            "success" => false,
+                            "code" => ResponseAlias::HTTP_UNPROCESSABLE_ENTITY,
+                            "message" => "Unprocessable Request,Please contact",
+                            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+                        ]
+                    ];
+                }
+                DB::rollBack();
+            }
 
-                   DB::rollBack();
-               }
-           }
+            return Response::json($response, ResponseAlias::HTTP_CREATED);
 
-       } catch (Throwable $e) {
-           DB::rollBack();
-           return $e;
-       }
-       return Response::json($response, ResponseAlias::HTTP_CREATED);
-   }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -205,10 +222,14 @@ class OrganizationController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $organization = Organization::findOrFail($id);
+
+        $this->authorize('update', $organization);
+
         $validated = $this->organizationService->validator($request, $id)->validate();
         try {
             $data = $this->organizationService->update($organization, $validated);
@@ -222,7 +243,7 @@ class OrganizationController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -231,12 +252,16 @@ class OrganizationController extends Controller
      * Remove the specified resource from storage.
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
-        $organizationTYpe = Organization::findOrFail($id);
+        $organization = Organization::findOrFail($id);
+
+        $this->authorize('delete', $organization);
+
         try {
-            $this->organizationService->destroy($organizationTYpe);
+            $this->organizationService->destroy($organization);
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -246,7 +271,7 @@ class OrganizationController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -260,7 +285,7 @@ class OrganizationController extends Controller
         try {
             $response = $this->organizationService->getAllTrashedOrganization($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -284,7 +309,7 @@ class OrganizationController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -307,7 +332,7 @@ class OrganizationController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

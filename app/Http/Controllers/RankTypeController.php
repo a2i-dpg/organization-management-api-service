@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\RankType;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\RankTypeService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -42,30 +44,40 @@ class RankTypeController extends Controller
     /**
      * Display a listing  of  the resources
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', RankType::class);
+
         $filter = $this->rankTypeService->filterValidator($request)->validate();
         try {
-            $response = $this->rankTypeService->getRankTypeList($filter ,$this->startTime);
+            $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      */
     public function read(int $id): JsonResponse
     {
         try {
             $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -73,11 +85,15 @@ class RankTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', RankType::class);
+
         $validated = $this->rankTypeService->validator($request)->validate();
         try {
             $data = $this->rankTypeService->store($validated);
@@ -91,7 +107,7 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -100,12 +116,16 @@ class RankTypeController extends Controller
      * Update a specified resource to storage
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
+        $this->authorize('update', $rankType);
+
         $validated = $this->rankTypeService->validator($request, $id)->validate();
 
         try {
@@ -122,7 +142,7 @@ class RankTypeController extends Controller
             ];
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -130,11 +150,15 @@ class RankTypeController extends Controller
     /**
      * Delete the specified resource from the storage
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      */
     public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
+        $this->authorize('delete', $rankType);
+
         try {
             $this->rankTypeService->destroy($rankType);
             $response = [
@@ -146,21 +170,22 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
     public function getTrashedData(Request $request)
     {
         try {
             $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -168,7 +193,8 @@ class RankTypeController extends Controller
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
     public function restore(int $id)
     {
@@ -184,14 +210,15 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
     public function forceDelete(int $id)
     {
@@ -207,7 +234,7 @@ class RankTypeController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

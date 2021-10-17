@@ -3,7 +3,7 @@
 namespace App\Models;
 
 
-use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,18 +12,22 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class BaseModel extends Model
 {
-    use ScopeRowStatusTrait;
+    use HasFactory;
 
-    public const ROW_STATUS_ACTIVE = 1;
-    public const ROW_STATUS_INACTIVE = 0;
+    public const COMMON_GUARDED_FIELDS_SIMPLE = ['id', 'created_at', 'updated_at'];
+    public const COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    public const COMMON_GUARDED_FIELDS_SOFT_DELETE = ['id', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at'];
+    public const COMMON_GUARDED_FIELDS_NON_SOFT_DELETE = ['id', 'created_by', 'updated_by', 'created_at', 'updated_at'];
+
     public const ROW_ORDER_ASC = 'ASC';
     public const ROW_ORDER_DESC = 'DESC';
 
-    public const MOBILE_REGEX= 'regex: /^(01[3-9]\d{8})$/';
 
-    public const ORGANIZATION_TYPE=2;
+    public const MOBILE_REGEX = 'regex: /^(01[3-9]\d{8})$/';
 
-    public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL='http://localhost:8000/api/v1/';
-    public const ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE="http://core.local:8008/api/v1/";
+    public const ORGANIZATION_USER_TYPE = 2;
+
+    /** Client Url End Point Type*/
+    public const CORE_CLIENT_URL_TYPE = "CORE";
 
 }

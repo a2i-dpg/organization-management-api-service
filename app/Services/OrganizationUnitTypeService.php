@@ -26,7 +26,7 @@ class OrganizationUnitTypeService
     public function getAllOrganizationUnitType(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -38,41 +38,44 @@ class OrganizationUnitTypeService
         $organizationUnitTypeBuilder = OrganizationUnitType::select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
-            'organization_unit_types.title_bn',
+            'organization_unit_types.title',
             'organization_unit_types.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title',
             'organization_unit_types.row_status',
             'organization_unit_types.created_by',
             'organization_unit_types.updated_by',
             'organization_unit_types.created_at',
             'organization_unit_types.updated_at',
-        ]);
+
+        ])->byOrganization('organization_unit_types');
+
         $organizationUnitTypeBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_unit_types.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
 
         $organizationUnitTypeBuilder->orderBy('organization_unit_types.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
-            $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationUnitTypeBuilder->where('organization_unit_types.title_en', 'like', '%' . $titleEn . '%');
         }
-        if (is_numeric($organizationId)) {
+        if (!empty($title)) {
+            $organizationUnitTypeBuilder->where('organization_unit_types.title', 'like', '%' . $title . '%');
+        }
+        if (is_int($organizationId)) {
             $organizationUnitTypeBuilder->where('organization_unit_types.organization_id', $organizationId);
         }
 
         /** @var Collection $organizationUnitTypes */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnitTypes->toArray();
@@ -106,10 +109,10 @@ class OrganizationUnitTypeService
         $organizationUnitTypeBuilder = OrganizationUnitType::select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
-            'organization_unit_types.title_bn',
+            'organization_unit_types.title',
             'organization_unit_types.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title',
             'organization_unit_types.row_status',
             'organization_unit_types.created_by',
             'organization_unit_types.updated_by',
@@ -177,7 +180,7 @@ class OrganizationUnitTypeService
     public function getAllTrashedOrganizationUnitType(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -186,7 +189,7 @@ class OrganizationUnitTypeService
         $organizationUnitTypeBuilder = OrganizationUnitType::onlyTrashed()->select([
             'organization_unit_types.id',
             'organization_unit_types.title_en',
-            'organization_unit_types.title_bn',
+            'organization_unit_types.title',
             'organization_unit_types.organization_id',
             'organizations.title_en as organization_name',
             'organization_unit_types.row_status',
@@ -200,13 +203,13 @@ class OrganizationUnitTypeService
 
         if (!empty($titleEn)) {
             $organizationUnitTypeBuilder->where('$jobSectors.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitTypeBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationUnitTypeBuilder->where('job_sectors.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizationUnitTypes */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnitTypes = $organizationUnitTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnitTypes->toArray();
@@ -262,25 +265,25 @@ class OrganizationUnitTypeService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max: 191',
+                'max: 300',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max: 600',
                 'min:2',
             ],
             'organization_id' => [
-                'required',
-                'int',
                 'exists:organizations,id',
+                'required',
+                'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([OrganizationUnitType::ROW_STATUS_ACTIVE, OrganizationUnitType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -307,18 +310,18 @@ class OrganizationUnitTypeService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'page' => 'numeric|gt:0',
-            'organization_id' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
+            'title_en' => 'nullable|max: 300|min:2',
+            'title' => 'nullable|max: 600|min:2',
+            'page' => 'integer|gt:0',
+            'organization_id' => 'exists:organizations,id|integer',
+            'page_size' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                "integer",
+                Rule::in([OrganizationUnitType::ROW_STATUS_ACTIVE, OrganizationUnitType::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

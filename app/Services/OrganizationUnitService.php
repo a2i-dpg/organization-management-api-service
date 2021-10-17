@@ -27,7 +27,7 @@ class OrganizationUnitService
     public function getAllOrganizationUnit(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -39,94 +39,89 @@ class OrganizationUnitService
         $organizationUnitBuilder = OrganizationUnit::select([
             'organization_units.id',
             'organization_units.title_en',
-            'organization_units.title_bn',
+            'organization_units.title',
             'organization_units.address',
             'organization_units.mobile',
             'organization_units.email',
             'organization_units.fax_no',
             'organization_units.contact_person_name',
+            'organization_units.contact_person_name_en',
             'organization_units.contact_person_mobile',
             'organization_units.contact_person_email',
             'organization_units.contact_person_designation',
+            'organization_units.contact_person_designation_en',
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
-            'organization_unit_types.title_bn as organization_unit_type_title_bn',
+            'organization_unit_types.title as organization_unit_type_title',
             'organization_units.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title',
             'organization_units.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title_bn as loc_division_title_bn',
+            'loc_divisions.title as loc_division_title',
             'organization_units.loc_district_id',
             'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title_bn as loc_district_title_bn',
+            'loc_districts.title as loc_district_title',
             'organization_units.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title_bn as loc_upazila_title_bn',
+            'loc_upazilas.title as loc_upazila_title',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
             'organization_units.created_at',
             'organization_units.updated_at',
 
-        ]);
+        ])->byOrganization('organization_units');
+
         $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
             }
         });
         $organizationUnitBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('loc_divisions.row_status', $rowStatus);
-            }
         });
         $organizationUnitBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('loc_districts.row_status', $rowStatus);
-            }
         });
         $organizationUnitBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('loc_upazilas.row_status', $rowStatus);
-            }
         });
 
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $organizationUnitBuilder->where('organization_units.organization_id', $organizationId);
         }
-        if (is_numeric($organizationUnitTypeId)) {
+        if (is_int($organizationUnitTypeId)) {
             $organizationUnitBuilder->where('organization_units.organization_unit_type_id', $organizationUnitTypeId);
         }
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        }
+        if (!empty($title)) {
+            $organizationUnitBuilder->where('organization_units.title', 'like', '%' . $title . '%');
         }
 
         /** @var  Collection $organizationUnits */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnits->toArray();
@@ -160,31 +155,34 @@ class OrganizationUnitService
         $organizationUnitBuilder = OrganizationUnit::select([
             'organization_units.id',
             'organization_units.title_en',
-            'organization_units.title_bn',
+            'organization_units.title',
             'organization_units.address',
+            'organization_units.address_en',
             'organization_units.mobile',
             'organization_units.email',
             'organization_units.fax_no',
             'organization_units.contact_person_name',
+            'organization_units.contact_person_name_en',
             'organization_units.contact_person_mobile',
             'organization_units.contact_person_email',
             'organization_units.contact_person_designation',
+            'organization_units.contact_person_designation_en',
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
-            'organization_unit_types.title_bn as organization_unit_type_title_bn',
+            'organization_unit_types.title as organization_unit_type_title',
             'organization_units.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title',
             'organization_units.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title_bn as loc_division_title_bn',
+            'loc_divisions.title as loc_division_title',
             'organization_units.loc_district_id',
             'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title_bn as loc_district_title_bn',
+            'loc_districts.title as loc_district_title',
             'organization_units.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title_bn as loc_upazila_title_bn',
+            'loc_upazilas.title as loc_upazila_title',
             'organization_units.row_status',
             'organization_units.created_by',
             'organization_units.updated_by',
@@ -272,7 +270,7 @@ class OrganizationUnitService
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -281,7 +279,7 @@ class OrganizationUnitService
         $organizationUnitBuilder = OrganizationUnit::onlyTrashed()->select([
             'organization_units.id',
             'organization_units.title_en',
-            'organization_units.title_bn',
+            'organization_units.title',
             'organization_units.address',
             'organization_units.mobile',
             'organization_units.email',
@@ -293,10 +291,10 @@ class OrganizationUnitService
             'organization_units.employee_size',
             'organization_units.organization_unit_type_id',
             'organization_unit_types.title_en as organization_unit_type_title_en',
-            'organization_unit_types.title_bn as organization_unit_type_title_bn',
+            'organization_unit_types.title as organization_unit_type_title',
             'organization_units.organization_id',
             'organizations.title_en as organization_title_en',
-            'organizations.title_bn as organization_title_bn',
+            'organizations.title as organization_title',
             'organization_units.loc_division_id',
             'organization_units.loc_district_id',
             'organization_units.loc_upazila_id',
@@ -314,13 +312,13 @@ class OrganizationUnitService
 
         if (!empty($titleEn)) {
             $organizationUnitBuilder->where('organization_units.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationUnitBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationUnitBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var  Collection $organizationUnits */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationUnits = $organizationUnitBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnits->toArray();
@@ -384,39 +382,38 @@ class OrganizationUnitService
     {
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:191',
+                'max:300',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
                 'max:600',
                 'min:2'
             ],
             'organization_id' => [
-                'required',
-                'int',
                 'exists:organizations,id',
+                'required',
+                'integer'
             ],
             'organization_unit_type_id' => [
-                'required',
-                'int',
                 'exists:organization_unit_types,id',
+                'required',
+                'integer'
             ],
-
             'loc_division_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'loc_district_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'loc_upazila_id' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'address' => [
                 'nullable',
@@ -426,7 +423,7 @@ class OrganizationUnitService
             'mobile' => [
                 'nullable',
                 'string',
-                'max:20',
+                'max:15',
             ],
             'email' => [
                 'nullable',
@@ -436,12 +433,17 @@ class OrganizationUnitService
             'fax_no' => [
                 'nullable',
                 'string',
-                'max:50',
+                'max:30',
             ],
             'contact_person_name' => [
                 'nullable',
                 'string',
-                'max:191',
+                'max:500',
+            ],
+            'contact_person_name_en' => [
+                'nullable',
+                'string',
+                'max:250',
             ],
             'contact_person_mobile' => [
                 'nullable',
@@ -451,20 +453,26 @@ class OrganizationUnitService
             'contact_person_email' => [
                 'nullable',
                 'string',
-                'email'
+                'email',
+                'max:191'
             ],
             'contact_person_designation' => [
                 'nullable',
                 'string',
-                'max:191',
+                'max:600',
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
+                'string',
+                'max:300',
             ],
             'employee_size' => [
                 'required',
-                'int',
+                'integer',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ]
         ];
 
@@ -488,7 +496,7 @@ class OrganizationUnitService
         $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
         $rules = [
             'serviceIds' => 'required|array|min:1',
-            'serviceIds.*' => 'required|integer|distinct|min:1'
+            'serviceIds.*' => 'required|exists:services,id|integer|distinct'
         ];
         return Validator::make($data, $rules, $customMessage);
     }
@@ -515,19 +523,19 @@ class OrganizationUnitService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
-            'organization_id' => 'numeric|gt:0',
-            'organization_unit_type_id' => 'numeric|gt:0',
+            'title_en' => 'nullable|max:300|min:2',
+            'title' => 'nullable|max:600|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'organization_id' => 'exists:organizations,id|integer',
+            'organization_unit_type_id' => 'exists:organization_unit_types,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                "integer",
+                Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

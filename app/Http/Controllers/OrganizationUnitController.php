@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\OrganizationUnitService;
 use App\Models\OrganizationUnit;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -41,16 +42,17 @@ class OrganizationUnitController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
+     * @throws ValidationException|AuthorizationException|Throwable
      */
-    public function getList(Request $request)
+    public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', OrganizationUnit::class);
         $filter = $this->organizationUnitService->filterValidator($request)->validate();
         try {
             $response = $this->organizationUnitService->getAllOrganizationUnit($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -64,8 +66,12 @@ class OrganizationUnitController extends Controller
     {
         try {
             $response = $this->organizationUnitService->getOneOrganizationUnit($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -75,9 +81,12 @@ class OrganizationUnitController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', OrganizationUnit::class);
+
         $validated = $this->organizationUnitService->validator($request)->validate();
         try {
             $data = $this->organizationUnitService->store($validated);
@@ -91,7 +100,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -102,10 +111,13 @@ class OrganizationUnitController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
+        $this->authorize('update', $organizationUnit);
+
         $validated = $this->organizationUnitService->validator($request, $id)->validate();
         try {
             $data = $this->organizationUnitService->update($organizationUnit, $validated);
@@ -119,7 +131,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -128,10 +140,13 @@ class OrganizationUnitController extends Controller
      * Delete the specified resource from the storage
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::findOrFail($id);
+        $this->authorize('delete', $organizationUnit);
+
         try {
             $this->organizationUnitService->destroy($organizationUnit);
             $response = [
@@ -143,7 +158,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -158,7 +173,7 @@ class OrganizationUnitController extends Controller
         try {
             $response = $this->organizationUnitService->getAllTrashedOrganizationUnit($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -182,7 +197,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -205,7 +220,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -215,9 +230,12 @@ class OrganizationUnitController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function assignServiceToOrganizationUnit(Request $request, int $id)
     {
+        $this->authorize('create', OrganizationUnit::class);
+
         $organizationUnit = OrganizationUnit::findOrFail($id);
 
         $validated = $this->organizationUnitService->serviceValidator($request)->validated();
@@ -234,7 +252,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -243,11 +261,12 @@ class OrganizationUnitController extends Controller
     /**
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function getHierarchy(int $id): JsonResponse
     {
         $organizationUnit = OrganizationUnit::find($id);
-
+        $this->authorize('view', $organizationUnit);
         try {
             $data = optional($organizationUnit->getHierarchy())->toArray();
             $response = [
@@ -260,7 +279,7 @@ class OrganizationUnitController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

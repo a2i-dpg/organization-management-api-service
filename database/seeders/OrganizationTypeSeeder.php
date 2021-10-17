@@ -19,24 +19,32 @@ class OrganizationTypeSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-//        OrganizationType::query()->truncate();
-//        Organization::query()->truncate();
 
         OrganizationType::factory()
-            ->has(Organization::factory()->count(5))
-            ->count(2)
+            ->count(4)
             ->state(new Sequence(
                 [
-                    'title_en' => "Government org",
-                    'title_bn' => "Government org",
+                    'title_en' => "Government Org",
+                    'title' => "Government Org",
                     'is_government' => 1,
                 ],
                 [
-                    'title_en' => "Private org",
-                    'title_bn' => "Private org",
+                    'title_en' => "Private Org",
+                    'title' => "Private Org",
+                    'is_government' => 2,
+                ],
+                [
+                    'title_en' => "NGO",
+                    'title' => "NGO",
+                    'is_government' => 2,
+                ],
+                [
+                    'title_en' => "International",
+                    'title' => "International",
                     'is_government' => 2,
                 ]
             ))
+            ->has(Organization::factory()->count(10))
             ->create();
 
         Schema::enableForeignKeyConstraints();

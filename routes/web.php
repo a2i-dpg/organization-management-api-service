@@ -10,6 +10,9 @@ $customRouter = function (string $as = '') use ($router) {
     return $custom->as($as);
 };
 
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
     $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
@@ -44,9 +47,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('upazilas/{id}', ['as' => 'upazilas.read', 'uses' => 'LocUpazilaController@read']);
 
     /** organization registration */
-    $router->post("register-organization",["as"=>"register.organization","uses"=>"OrganizationController@organizationRegister"]);
-
-
+    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
 
 
     /** organizationType trash */

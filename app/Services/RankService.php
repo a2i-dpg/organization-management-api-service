@@ -28,7 +28,7 @@ class RankService
     public function getRankList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -40,54 +40,56 @@ class RankService
             [
                 'ranks.id',
                 'ranks.title_en',
-                'ranks.title_bn',
+                'ranks.title',
                 'ranks.grade',
                 'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
-                'organizations.title_bn as organization_title_bn',
+                'organizations.title as organization_title',
                 'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
-                'rank_types.title_bn as rank_type_title_bn',
+                'rank_types.title as rank_type_title',
                 'ranks.row_status',
                 'ranks.created_by',
                 'ranks.updated_by',
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
-        );
+        )->byOrganization('ranks');
+
         $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('ranks.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $rankBuilder->join('rank_types', function ($join) use ($rowStatus) {
             $join->on('ranks.rank_type_id', '=', 'rank_types.id')
                 ->whereNull('rank_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
         $rankBuilder->orderBy('ranks.id', $order);
 
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $rankBuilder->where('ranks.row_status', $rowStatus);
         }
-        if (is_numeric($organizationId)) {
+        if (is_int($organizationId)) {
             $rankBuilder->where('ranks.organization_id', $organizationId);
         }
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $rankBuilder->where('ranks.title_bn', 'like', '%' . $titleBn . '%');
+        }
+        if (!empty($title)) {
+            $rankBuilder->where('ranks.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $ranks */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $ranks = $rankBuilder->paginate($pageSize);
             $paginateData = (object)$ranks->toArray();
@@ -122,15 +124,15 @@ class RankService
             [
                 'ranks.id',
                 'ranks.title_en',
-                'ranks.title_bn',
+                'ranks.title',
                 'ranks.grade',
                 'ranks.display_order',
                 'ranks.organization_id',
                 'organizations.title_en as organization_title_en',
-                'organizations.title_bn as organization_title_bn',
+                'organizations.title as organization_title',
                 'rank_types.id as rank_type_id',
                 'rank_types.title_en as rank_type_title_en',
-                'rank_types.title_bn as rank_type_title_bn',
+                'rank_types.title as rank_type_title',
                 'ranks.row_status',
                 'ranks.created_by',
                 'ranks.updated_by',
@@ -202,7 +204,7 @@ class RankService
     public function getTrashedRankList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -212,7 +214,7 @@ class RankService
             [
                 'ranks.id',
                 'ranks.title_en',
-                'ranks.title_bn',
+                'ranks.title',
                 'ranks.grade',
                 'ranks.display_order',
                 'ranks.organization_id',
@@ -233,13 +235,13 @@ class RankService
 
         if (!empty($titleEn)) {
             $rankBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $rankBuilder->where('ranks.title_bn', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $rankBuilder->where('ranks.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $ranks */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $ranks = $rankBuilder->paginate($pageSize);
             $paginateData = (object)$ranks->toArray();
@@ -295,21 +297,21 @@ class RankService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
-                'max:191',
+                'max:300',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
-                'max:500',
+                'max:600',
                 'min:2'
             ],
             'rank_type_id' => [
-                'required',
-                'int',
                 'exists:rank_types,id',
+                'required',
+                'int'
             ],
             'grade' => [
                 'nullable',
@@ -318,16 +320,16 @@ class RankService
             ],
             'display_order' => [
                 'nullable',
-                'int',
+                'integer',
             ],
             'organization_id' => [
-                'required',
-                'int',
                 'exists:organizations,id',
+                'required',
+                'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -354,18 +356,18 @@ class RankService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
-            'organization_id' => 'numeric|gt:0',
+            'title_en' => 'nullable|max:300|min:2',
+            'title' => 'nullable|max:600|min:2',
+            'page' => 'integer|gt:0',
+            'pageSize' => 'integer',
+            'organization_id' => 'exists:organizations,id|integer',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                "integer",
+                Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

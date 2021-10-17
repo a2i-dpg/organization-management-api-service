@@ -18,14 +18,15 @@ class CreateOccupationsTable extends Migration
     {
         Schema::create('occupations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title_en',300);
-            $table->string('title_bn', 800)->nullable();
+            $table->string('title', 800);
+            $table->string('title_en',400)->nullable();
             $table->unsignedInteger('job_sector_id')->index('occupations_fk_job_sector_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
             $table->foreign('job_sector_id', 'occupations_fk_job_sector_id')
                 ->references('id')
                 ->on('job_sectors')

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  * @property int id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property string address
  * @property string mobile
  * @property string email
@@ -32,12 +32,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Organization extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     /**
      * @var string[]
      */
     protected $guarded = ['id'];
+
+    public const ORGANIZATION_TYPE_GOVT = 1;
+    public const ORGANIZATION_TYPE_PRIVATE = 2;
+    public const ORGANIZATION_TYPE_NGO = 3;
+    public const ORGANIZATION_TYPE_INTERNATIONAL = 4;
+
+    public const ORGANIZATION_TYPE = [
+        self::ORGANIZATION_TYPE_GOVT => 1,
+        self::ORGANIZATION_TYPE_PRIVATE => 2,
+        self:: ORGANIZATION_TYPE_NGO => 3,
+        self::ORGANIZATION_TYPE_INTERNATIONAL => 4,
+    ];
 
     /**
      * @return BelongsTo
@@ -47,13 +62,18 @@ class Organization extends BaseModel
         return $this->belongsTo(OrganizationType::class);
     }
 
-    public function organizationUnitType():HasMany
+    public function organizationUnitTypes(): HasMany
     {
-        return $this->hasMany(OrganizationUnitType::class);
+        return $this->hasMany(OrganizationUnitType::class, 'organization_id');
     }
 
-    public function rankType():HasMany
+    public function organizationUnits(): HasMany
     {
-        return $this->hasMany(RankType::class);
+        return $this->hasMany(OrganizationUnit::class, 'organization_id');
+    }
+
+    public function rankTypes(): HasMany
+    {
+        return $this->hasMany(RankType::class, 'organization_id');
     }
 }

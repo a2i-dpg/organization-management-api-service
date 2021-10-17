@@ -18,12 +18,10 @@ class CreateLocUpazilasTable extends Migration {
 			$table->mediumIncrements('id');
 			$table->unsignedMediumInteger('loc_division_id');
 			$table->unsignedMediumInteger('loc_district_id');
-			$table->string('title_en');
-			$table->string('title_bn', 500);
+            $table->string('title', 500);
+            $table->string('title_en');
 			$table->unsignedTinyInteger('is_sadar_upazila')->default(0);
 			$table->char('bbs_code', 6)->nullable();
-			$table->unsignedTinyInteger('row_status')->default(1);
-            $table->timestamps();
             $table->softDeletes();
 
         });

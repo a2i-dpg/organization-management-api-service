@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeFilterByOrganization;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class OrganizationUnitType
  * @package App\Models
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property-read int organization_id
  * @property-read HumanResourceTemplate humanResourceTemplate
  * @property int row_status
@@ -19,7 +20,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * */
 class OrganizationUnitType extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait, ScopeFilterByOrganization;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     /**
      * @var string[]
@@ -37,20 +41,23 @@ class OrganizationUnitType extends BaseModel
     /**
      * @return HasMany
      */
-    public function humanResourceTemplate(): HasMany
+    public function humanResourceTemplates(): HasMany
     {
-        return $this->hasMany(HumanResourceTemplate::class);
+        return $this->hasMany(HumanResourceTemplate::class, 'organization_unit_type_id');
     }
 
     /**
      * @return HasMany
      */
-    public function organizationUnit(): HasMany
+    public function organizationUnits(): HasMany
     {
-        return $this->hasMany(OrganizationUnit::class);
+        return $this->hasMany(OrganizationUnit::class, 'organization_unit_type_id');
     }
 
 
+    /**
+     * @return null
+     */
     public function getHierarchy()
     {
         $topRoot = $this->humanResourceTemplate->where('parent_id', null)->first();
@@ -63,6 +70,10 @@ class OrganizationUnitType extends BaseModel
         return $this->makeHierarchy($topRoot);
     }
 
+    /**
+     * @param $root
+     * @return mixed
+     */
     public function makeHierarchy($root)
     {
         $root['parent'] = $root->parent_id;
@@ -81,4 +92,5 @@ class OrganizationUnitType extends BaseModel
         }
         return $root;
     }
+
 }

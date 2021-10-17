@@ -27,7 +27,7 @@ class JobSectorService
     public function getJobSectorList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -38,7 +38,7 @@ class JobSectorService
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
-                'job_sectors.title_bn',
+                'job_sectors.title',
                 'job_sectors.row_status',
                 'job_sectors.created_by',
                 'job_sectors.updated_by',
@@ -48,19 +48,20 @@ class JobSectorService
         );
         $jobSectorBuilder->orderBy('job_sectors.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $jobSectorBuilder->where('job_sectors.row_status', $rowStatus);
         }
 
         if (!empty($titleEn)) {
-            $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+            $jobSectorBuilder->where('job_sectors.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $jobSectors */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $jobSectors = $jobSectorBuilder->paginate($pageSize);
             $paginateData = (object)$jobSectors->toArray();
@@ -95,7 +96,7 @@ class JobSectorService
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
-                'job_sectors.title_bn',
+                'job_sectors.title',
                 'job_sectors.row_status',
                 'job_sectors.created_by',
                 'job_sectors.updated_by',
@@ -159,7 +160,7 @@ class JobSectorService
     public function getTrashedJobSectorList(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $title = $request->query('title');
         $pageSize = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -169,7 +170,7 @@ class JobSectorService
             [
                 'job_sectors.id',
                 'job_sectors.title_en',
-                'job_sectors.title_bn',
+                'job_sectors.title',
                 'job_sectors.row_status',
                 'job_sectors.created_by',
                 'job_sectors.updated_by',
@@ -181,13 +182,13 @@ class JobSectorService
 
         if (!empty($titleEn)) {
             $jobSectorBuilder->where('$jobSectorBuilder.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $jobSectorBuilder->where('job_sectors.title_bn', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $jobSectorBuilder->where('job_sectors.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $jobSectors */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (!is_int($paginate) || !is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $jobSectors = $jobSectorBuilder->paginate($pageSize);
             $paginateData = (object)$jobSectors->toArray();
@@ -243,20 +244,20 @@ class JobSectorService
         ];
         $rules = [
             'title_en' => [
-                'required',
+                'nullable',
                 'string',
                 'max:300',
                 'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
-                'max:500',
+                'max:600',
                 'min:2'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([JobSector::ROW_STATUS_ACTIVE, JobSector::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -284,17 +285,17 @@ class JobSectorService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'page' => 'numeric|gt:0',
-            'page_size' => 'numeric',
+            'title_en' => 'nullable|max:300|min:2',
+            'title' => 'nullable|max:500|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                "integer",
+                Rule::in([JobSector::ROW_STATUS_ACTIVE, JobSector::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

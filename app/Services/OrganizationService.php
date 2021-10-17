@@ -28,7 +28,7 @@ class OrganizationService
     public function getAllOrganization(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -40,30 +40,38 @@ class OrganizationService
         $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
-            'organizations.title_bn',
+            'organizations.title',
+            'organizations.name_of_the_office_head',
+            'organizations.name_of_the_office_head_en',
+            'organizations.name_of_the_office_head_designation',
+            'organizations.name_of_the_office_head_designation_en',
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
             'organizations.email',
             'organizations.contact_person_name',
+            'organizations.contact_person_name_en',
             'organizations.contact_person_mobile',
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
+            'organizations.contact_person_designation_en',
             'organizations.description',
+            'organizations.description_en',
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title_bn as loc_division_title_bn',
+            'loc_divisions.title as loc_division_title',
             'organizations.loc_district_id',
             'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title_bn as loc_district_title_bn',
+            'loc_districts.title as loc_district_title',
             'organizations.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title_bn as loc_upazila_title_bn',
+            'loc_upazilas.title as loc_upazila_title',
             'organizations.organization_type_id',
             'organization_types.title_en as organization_type_title_en',
-            'organization_types.title_bn as organization_type_title_bn',
+            'organization_types.title as organization_type_title',
             'organizations.address',
+            'organizations.address_en',
             'organizations.row_status',
             'organizations.created_by',
             'organizations.updated_by',
@@ -73,51 +81,43 @@ class OrganizationService
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            if (is_int($rowStatus)) {
                 $join->where('organization_types.row_status', $rowStatus);
             }
         });
         $organizationBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('loc_divisions.row_status', $rowStatus);
-            }
         });
         $organizationBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('loc_districts.row_status', $rowStatus);
-            }
         });
         $organizationBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organizations.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_numeric($rowStatus)) {
-                $join->where('loc_upazilas.row_status', $rowStatus);
-            }
         });
 
         $organizationBuilder->orderBy('organizations.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
         }
 
-        if (is_numeric($organizationTypeId)) {
+        if (is_int($organizationTypeId)) {
             $organizationBuilder->where('organizations.organization_type_id', $organizationTypeId);
         }
 
         if (!empty($titleEn)) {
-            $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizations */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizations = $organizationBuilder->paginate($pageSize);
             $paginateData = (object)$organizations->toArray();
@@ -151,30 +151,39 @@ class OrganizationService
         $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
-            'organizations.title_bn',
+            'organizations.title',
+            'organizations.name_of_the_office_head',
+            'organizations.name_of_the_office_head_en',
+            'organizations.name_of_the_office_head_designation',
+            'organizations.name_of_the_office_head_designation_en',
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
             'organizations.email',
             'organizations.contact_person_name',
+            'organizations.contact_person_name_en',
             'organizations.contact_person_mobile',
             'organizations.contact_person_email',
             'organizations.contact_person_designation',
+            'organizations.contact_person_designation_en',
             'organizations.description',
+            'organizations.description_en',
             'organizations.logo',
             'organizations.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title_bn as loc_division_title_bn',
+            'loc_divisions.title as loc_division_title',
             'organizations.loc_district_id',
             'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title_bn as loc_district_title_bn',
+            'loc_districts.title as loc_district_title',
             'organizations.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title_bn as loc_upazila_title_bn',
-            'organizations.organization_type_id',
+            'loc_upazilas.title as loc_upazila_title',
+            'organizations.location_latitude',
+            'organizations.location_longitude',
             'organization_types.title_en as organization_type_title_en',
-            'organization_types.title_bn as organization_type_title_bn',
+            'organization_types.title as organization_type_title',
             'organizations.address',
+            'organizations.address_en',
             'organizations.row_status',
             'organizations.created_by',
             'organizations.updated_by',
@@ -216,6 +225,7 @@ class OrganizationService
     }
 
     /**
+     * @param Organization $organization
      * @param array $data
      * @return Organization
      */
@@ -228,30 +238,57 @@ class OrganizationService
 
     /**
      * @param array $data
+     * @return array|mixed
      * @throws RequestException
      */
     public function createUser(array $data)
     {
-        $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_LOCAL . 'register-users';
-        if (!in_array(request()->getHost(), ['localhost', '127.0.0.1'])) {
-            $url = BaseModel::ORGANIZATION_USER_REGISTRATION_ENDPOINT_REMOTE . 'register-users';
-        }
-        $username = str_replace(' ', '_', $data['title_en']);
-
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'],
-            'user_type' => BaseModel::ORGANIZATION_TYPE,
-            'username' => strtolower($username),
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'organization_id' => $data['organization_id'],
-            'name_en' => $data['title_en'],
-            'name_bn' => $data['title_bn'] ?? "",
-            'email' => $data['email'],
-            'mobile' => $data['mobile'],
+            'username' => $data['contact_person_mobile'],
+            'name_en' => $data['contact_person_name'],
+            'name_bn' => $data['contact_person_name'],
+            'email' => $data['contact_person_email'],
+            'mobile' => $data['contact_person_mobile'],
         ];
 
-        return Http::retry(3)->post($url, $userPostField)->throw(function ($response, $e) {
-            return $e;
-        })->json();
+        return Http::retry(3)
+//            ->withOptions(['verify' => config("nise3.should_ssl_verify")])
+//            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
+            ->post($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+    }
+
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function createOpenRegisterUser(array $data): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
+
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'username' => $data['contact_person_mobile'],
+            'organization_id' => $data['organization_id'],
+            'name_en' => $data['contact_person_name_en'],
+            'name_bn' => $data['contact_person_name_en'],
+            'email' => $data['contact_person_email'],
+            'mobile' => $data['contact_person_mobile'],
+            'password' => $data['password']
+        ];
+
+        return Http::retry(3)
+            ->withOptions(['verify' => config('nise3.should_ssl_verify')])
+            ->post($url, $userPostField)
+            ->json();
     }
 
     /**
@@ -284,7 +321,7 @@ class OrganizationService
     public function getAllTrashedOrganization(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $title = $request->query('title');
         $page_size = $request->query('page_size', 10);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
@@ -293,7 +330,7 @@ class OrganizationService
         $organizationBuilder = Organization::onlyTrashed()->select([
             'organizations.id',
             'organizations.title_en',
-            'organizations.title_bn',
+            'organizations.title',
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
@@ -321,13 +358,13 @@ class OrganizationService
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizations */
 
-        if (!is_null($paginate) || !is_null($page_size)) {
+        if (!is_int($paginate) || !is_int($page_size)) {
             $page_size = $page_size ?: 10;
             $organizations = $organizationBuilder->paginate($page_size);
             $paginateData = (object)$organizations->toArray();
@@ -382,95 +419,258 @@ class OrganizationService
             ]
         ];
         $rules = [
-            'permission_sub_group_id' => [
-                'required',
-                'numeric'
-            ],
-            'title_en' => [
-                'required',
-                'string',
-                'max:300',
-                'min:2',
-            ],
-            'title_bn' => [
-                'required',
-                'string',
-                'max:1000',
-                'min:2'
-            ],
             'organization_type_id' => [
                 'required',
+                Rule::in(Organization::ORGANIZATION_TYPE),
                 'int'
             ],
-            'domain' => [
+            'permission_sub_group_id' => [
+                Rule::requiredIf(function () use ($id) {
+                    return $id == null;
+                }),
+                'int'
+            ],
+            'title_en' => [
                 'nullable',
                 'string',
-                'max:191',
-                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'unique:organizations,domain,' . $id
+                'max:600',
+                'min:2',
+            ],
+            'title' => [
+                'required',
+                'string',
+                'max:1200',
+                'min:2'
+            ],
+            'loc_division_id' => [
+                'nullable',
+                'integer',
+            ],
+            'loc_district_id' => [
+                'nullable',
+                'integer',
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'integer',
+            ],
+            "location_latitude" => [
+                'nullable',
+                'integer',
+            ],
+            "location_longitude" => [
+                'nullable',
+                'integer',
+            ],
+            "google_map_src" => [
+                'nullable',
+                'integer',
+            ],
+            'address' => [
+                'required',
+                'max: 1200',
+                'min:2'
+            ],
+            'address_en' => [
+                'nullable',
+                'max: 600',
+                'min:2'
+            ],
+            "country" => [
+                "nullable",
+                "string"
+            ],
+            "phone_code" => [
+                "nullable",
+                "string"
+            ],
+            'mobile' => [
+                BaseModel::MOBILE_REGEX,
+                'required'
+
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
+            'fax_no' => [
+                'nullable',
+                'string',
+                'max: 30',
+            ],
+            "name_of_the_office_head" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "name_of_the_office_head_en" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "name_of_the_office_head_designation" => [
+                "nullable",
+                "string"
+            ],
+            "name_of_the_office_head_designation_en" => [
+                "nullable",
+                "string"
+            ],
+            'contact_person_name' => [
+                'required',
+                'max: 500',
+                'min:2'
+            ],
+            'contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
+            'contact_person_mobile' => [
+                BaseModel::MOBILE_REGEX,
+                'required'
+            ],
+            'contact_person_email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
+            'contact_person_designation' => [
+                'required',
+                'max: 600',
+                "min:2"
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
+                'max: 300',
+                "min:2"
             ],
             'description' => [
                 'nullable',
                 'string',
             ],
-            'fax_no' => [
+            'description_en' => [
                 'nullable',
                 'string',
-                'max: 50',
             ],
-            'loc_division_id' => [
+            'domain' => [
+                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
                 'nullable',
-                'int',
+                'string',
+                'max:191',
+                'unique:organizations,domain,' . $id
             ],
-            'loc_district_id' => [
+            'logo' => [
                 'nullable',
-                'int',
+                'string',
             ],
-            'loc_upazila_id' => [
-                'nullable',
-                'int',
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
             ],
-            'contact_person_mobile' => [
+        ];
+        return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+    public function registerOrganizationValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'title_en' => [
                 'nullable',
-                'regex: /^(?:\+88|88)?(01[3-9]\d{8})$/',
+                'string',
+                'max:600',
+                'min:2',
             ],
-            'contact_person_name' => [
-                'nullable',
-                'max: 500',
+            'title' => [
+                'required',
+                'string',
+                'max:1200',
                 'min:2'
             ],
-            'contact_person_designation' => [
-                'nullable',
-                'max: 300',
-                "min:2"
-            ],
-            'contact_person_email' => [
-                'nullable',
-                'email'
-            ],
-            'mobile' => [
+            'organization_type_id' => [
                 'required',
-                'regex: /^(?:\+88|88)?(01[3-9]\d{8})$/',
+                'integer'
             ],
             'email' => [
                 'required',
                 'email',
             ],
-            'logo' => [
-                'required_if:' . $id . ',null',
-                'string',
+            'mobile' => [
+                BaseModel::MOBILE_REGEX,
+                'required'
+            ],
+            'contact_person_mobile' => [
+                BaseModel::MOBILE_REGEX,
+                'required'
+            ],
+            "name_of_the_office_head" => [
+                "required",
+                "string",
+                'max:600',
+                'min:2'
+            ],
+            "name_of_the_office_head_en" => [
+                "nullable",
+                "string",
+                'max:300',
+                'min:2'
+            ],
+            "name_of_the_office_head_designation" => [
+                "nullable",
+                "string",
+                'max:600',
+                'min:2'
+            ],
+            "name_of_the_office_head_designation_en" => [
+                "nullable",
+                "string",
+                'max:300',
+                'min:2'
+            ],
+            'contact_person_name' => [
+                'required',
+                'max: 500',
+                'min:2'
+            ],
+            'contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
+            'contact_person_designation' => [
+                'required',
+                'max: 600',
+                "min:2"
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
+                'max: 300',
+                "min:2"
+            ],
+            'contact_person_email' => [
+                'required',
+                'email'
             ],
             'address' => [
                 'required',
-                'max: 1000',
+                'max: 1200',
                 'min:2'
             ],
-            'row_status' => [
-                'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            'address_en' => [
+                'nullable',
+                'max: 600',
+                'min:2'
             ],
+            "password" => [
+                'required_with:password_confirmation',
+                'string',
+                'confirmed'
+            ],
+            "password_confirmation" => 'required_with:password',
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+
+        return Validator::make($request->all(), $rules);
     }
 
 
@@ -496,18 +696,18 @@ class OrganizationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'page' => 'numeric|gt:0',
-            'page_size' => 'numeric|gt:0',
-            'organization_type_id' => 'numeric|gt:0',
+            'title_en' => 'nullable|max:600|min:2',
+            'title' => 'nullable|max:1200|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'organization_type_id' => 'integer|gt:0|exists:organization_types,id',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                "integer",
+                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeFilterByOrganization;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 /**
  * Class HumanResource
  * @package App\Models
  * @property int id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property int display_order
  * @property int organization_id
  * @property int organization_unit_id
@@ -24,10 +27,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read Organization organization
  * @property-read OrganizationUnit organizationUnit
  * @property-read  HumanResource parent
+ * @property-read  Collection skills
+ * @property-read  Collection children
  */
 class HumanResource extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait, ScopeFilterByOrganization;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
+
 
     /**
      * @var string[]
@@ -37,10 +46,7 @@ class HumanResource extends BaseModel
     /**
      * @var string[]
      */
-    protected $casts = [
-        'skill_ids' => 'array',
-    ];
-
+    protected $hidden = ["pivot"];
 
     /**
      * @return BelongsTo
@@ -80,5 +86,13 @@ class HumanResource extends BaseModel
     public function rank(): BelongsTo
     {
         return $this->belongsTo(Rank::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'human_resource_skills');
     }
 }

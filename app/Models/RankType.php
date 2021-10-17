@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Scopes\ScopeFilterByOrganization;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,13 +13,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models\
  * @property int|null organization_id
  * @property string title_en
- * @property string title_bn
+ * @property string title
  * @property string|null description
  * @property-read Organization organization
  */
 class RankType extends BaseModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, ScopeRowStatusTrait, ScopeFilterByOrganization;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 
     /**
      * @var string[]
@@ -34,8 +38,9 @@ class RankType extends BaseModel
     }
 
     /** @return HasMany */
-    public function rank(): HasMany
+    public function ranks(): HasMany
     {
         return $this->hasMany(Rank::class);
     }
+
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJobSectorsTable extends Migration
+class CreateOrganizationTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,16 @@ class CreateJobSectorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_sectors', function (Blueprint $table) {
+        Schema::create('organization_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title_en', 300);
-            $table->string('title_bn', 500)->nullable();
-            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
+            $table->string('title', 600);
+            $table->string('title_en', 300)->nullable();
+            $table->unsignedTinyInteger('is_government')
+                ->nullable()
+                ->comment('0 => non govt, 1 => govt');
+            $table->unsignedTinyInteger('row_status')
+                ->default(1)
+                ->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
@@ -32,6 +37,6 @@ class CreateJobSectorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_sectors');
+        Schema::dropIfExists('organization_types');
     }
 }

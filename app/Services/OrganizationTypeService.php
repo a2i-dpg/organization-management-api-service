@@ -26,7 +26,7 @@ class OrganizationTypeService
     public function getAllOrganizationType(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
-        $titleBn = $request['title_bn'] ?? "";
+        $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -37,7 +37,7 @@ class OrganizationTypeService
         $organizationTypeBuilder = OrganizationType::select([
             'organization_types.id',
             'organization_types.title_en',
-            'organization_types.title_bn',
+            'organization_types.title',
             'organization_types.is_government',
             'organization_types.row_status',
             'organization_types.created_by',
@@ -47,18 +47,19 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->orderBy('organization_types.id', $order);
 
-        if (is_numeric($rowStatus)) {
+        if (is_int($rowStatus)) {
             $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        }
+        if (!empty($title)) {
+            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizationTypes */
 
-        if (!is_null($paginate) || !is_null($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
@@ -92,7 +93,7 @@ class OrganizationTypeService
         $organizationTypeBuilder = OrganizationType::select([
             'organization_types.id',
             'organization_types.title_en',
-            'organization_types.title_bn',
+            'organization_types.title',
             'organization_types.is_government',
             'organization_types.row_status',
             'organization_types.created_by',
@@ -157,16 +158,16 @@ class OrganizationTypeService
     public function getAllTrashedOrganizationUnit(Request $request, Carbon $startTime): array
     {
         $titleEn = $request->query('title_en');
-        $titleBn = $request->query('title_bn');
+        $title = $request->query('title');
         $pageSize = $request->query('pageSize', 10);
         $paginate = $request->query('page');
-        $order =$request->query('order','ASC');
+        $order = $request->query('order', 'ASC');
 
         /** @var Builder $organizationTypeBuilder */
         $organizationTypeBuilder = OrganizationType::onlyTrashed()->select([
             'organization_types.id',
             'organization_types.title_en',
-            'organization_types.title_bn',
+            'organization_types.title',
             'organization_types.is_government',
             'organization_types.row_status',
             'organization_types.created_by',
@@ -178,13 +179,13 @@ class OrganizationTypeService
 
         if (!empty($titleEn)) {
             $organizationTypeBuilder->where('organization_types.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($titleBn)) {
-            $organizationTypeBuilder->where('organization_types.title_bn', 'like', '%' . $titleBn . '%');
+        } elseif (!empty($title)) {
+            $organizationTypeBuilder->where('organization_types.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $organizationTypes */
 
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
+        if (is_int($paginate) || is_int($pageSize)) {
             $pageSize = $pageSize ?: 10;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
@@ -240,15 +241,15 @@ class OrganizationTypeService
         ];
         $rules = [
             'title_en' => [
-                'max:191',
-                'min:2',
-                'required',
-                'string'
+                'nullable',
+                'string',
+                'max:300',
+                'min:2'
             ],
-            'title_bn' => [
+            'title' => [
                 'required',
                 'string',
-                'max:400',
+                'max:600',
                 'min:2',
             ],
             'is_government' => [
@@ -257,7 +258,7 @@ class OrganizationTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -284,17 +285,17 @@ class OrganizationTypeService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|min:1',
-            'title_bn' => 'nullable|min:1',
-            'page' => 'numeric|gt:0',
-            'pageSize' => 'numeric',
+            'title_en' => 'nullable|max:300|min:2',
+            'title' => 'nullable|max:600|min:1',
+            'page' => 'int|gt:0',
+            'pageSize' => 'int|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
-                "numeric",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+                "int",
+                Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
     }

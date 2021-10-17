@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Lumen'),
+    'name' => env('APP_NAME', 'NISE3 Industry API Service'),
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'base64:homQ9iQQocNeNT+k5mU2E4iSmeOYCAG7GQLQ0K1bHgA='),
 
     'cipher' => 'AES-256-CBC',
 

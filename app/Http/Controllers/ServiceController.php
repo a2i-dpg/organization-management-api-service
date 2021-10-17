@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -40,14 +41,17 @@ class ServiceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Service::class);
+
         $filter = $this->serviceService->filterValidator($request)->validate();
         try {
             $response = $this->serviceService->getServiceList($filter, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -61,8 +65,12 @@ class ServiceController extends Controller
     {
         try {
             $response = $this->serviceService->getOneService($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
 
@@ -73,9 +81,12 @@ class ServiceController extends Controller
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Service::class);
+
         $validatedData = $this->serviceService->validator($request)->validate();
         try {
             $data = $this->serviceService->store($validatedData);
@@ -90,7 +101,7 @@ class ServiceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -102,11 +113,13 @@ class ServiceController extends Controller
      * @param int $id
      * @return Exception|JsonResponse|Throwable
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id)
     {
 
         $service = Service::findOrFail($id);
+        $this->authorize('update', $service);
 
         $validated = $this->serviceService->validator($request, $id)->validate();
 
@@ -124,7 +137,7 @@ class ServiceController extends Controller
             ];
 
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -135,11 +148,12 @@ class ServiceController extends Controller
      *  remove the specified resource from storage
      * @param int $id
      * @return Exception|JsonResponse|Throwable
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
         $service = Service::findOrFail($id);
-
+        $this->authorize('delete', $service);
         try {
             $this->serviceService->destroy($service);
             $response = [
@@ -151,7 +165,7 @@ class ServiceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -165,7 +179,7 @@ class ServiceController extends Controller
         try {
             $response = $this->serviceService->getTrashedServiceList($request, $this->startTime);
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response);
     }
@@ -189,7 +203,7 @@ class ServiceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -212,7 +226,7 @@ class ServiceController extends Controller
                 ]
             ];
         } catch (Throwable $e) {
-            return $e;
+            throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
