@@ -8,7 +8,9 @@ use App\Models\Role;
 use App\Models\User;
 use App\Policies\OrganizationPolicy;
 use App\Services\UserRolePermissionManagementServices\UserService;
+use App\Services\YouthManagementServices\YouthProfileService;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -43,27 +45,59 @@ class AuthServiceProvider extends ServiceProvider
             Log::info($token);
             $authUser = null;
             if ($token) {
-                $header = explode(" ", $token);
+                //$header = explode(" ", $token);
+                $token = trim(str_replace('Bearer', '', $token));
 
-                if (count($header) > 1) {
-                    $tokenParts = explode(".", $header[1]);
-                    if (count($tokenParts) == 3) {
-                        $tokenPayload = base64_decode($tokenParts[1]);
-                        $jwtPayload = json_decode($tokenPayload);
-                        $clientRequest = new HttpClientRequest();
-                        $user = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
-                        if ($user) {
-                            $role = new Role($user['role']);
-                            $authUser = new User($user);
-                            $authUser->role = $role;
-                            $authUser->permissions = collect($user['permissions']);
-                        }
+                $idpServerId = $this->getIdpServerIdFromToken($token);
+                Log::info("Auth idp user id-->" . $idpServerId);
+                if($idpServerId){
+                    $clientRequest = new HttpClientRequest();
+                    $user = $clientRequest->getAuthPermission($idpServerId);
+                    if ($user) {
+                        $role = new Role($user['role']);
+                        $authUser = new User($user);
+                        $authUser->role = $role;
+                        $authUser->permissions = collect($user['permissions']);
                     }
+                    Log::info("userInfoWithIdpId:" . json_encode($authUser));
+                    return $authUser;
                 }
-
-                Log::info("userInfoWithIdpId:" . json_encode($authUser));
             }
+//            if ($token) {
+//                $header = explode(" ", $token);
+//
+//                if (count($header) > 1) {
+//                    $tokenParts = explode(".", $header[1]);
+//                    if (count($tokenParts) == 3) {
+//                        $tokenPayload = base64_decode($tokenParts[1]);
+//                        $jwtPayload = json_decode($tokenPayload);
+//                        $clientRequest = new HttpClientRequest();
+//                        $user = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
+//                        if ($user) {
+//                            $role = new Role($user['role']);
+//                            $authUser = new User($user);
+//                            $authUser->role = $role;
+//                            $authUser->permissions = collect($user['permissions']);
+//                        }
+//                    }
+//                }
+//
+//                Log::info("userInfoWithIdpId:" . json_encode($authUser));
+//            }
             return $authUser;
         });
+    }
+
+    private function getIdpServerIdFromToken($data, $verify = false)
+    {
+        $sections = explode('.', $data);
+        if (count($sections) < 3) {
+            throw new \Exception('Invalid number of sections of Tokens (<3)');
+        }
+
+        list($header, $claims, $signature) = $sections;
+        preg_match("/['\"]sub['\"]:['\"](.*?)['\"][,]/", base64_decode($claims), $matches);
+
+        return count($matches) > 1 ? $matches[1] : "";
     }
 }
