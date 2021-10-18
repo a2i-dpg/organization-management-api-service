@@ -279,7 +279,7 @@ class OrganizationService
             'username' => $data['contact_person_mobile'],
             'organization_id' => $data['organization_id'],
             'name_en' => $data['contact_person_name_en'],
-            'name_bn' => $data['contact_person_name_en'],
+            'name' => $data['contact_person_name_en'],
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
@@ -601,6 +601,7 @@ class OrganizationService
                 'required'
             ],
             'contact_person_mobile' => [
+                'unique:organizations,contact_person_mobile',
                 BaseModel::MOBILE_REGEX,
                 'required'
             ],
