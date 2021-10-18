@@ -279,7 +279,7 @@ class OrganizationService
             'username' => $data['contact_person_mobile'],
             'organization_id' => $data['organization_id'],
             'name_en' => $data['contact_person_name_en'],
-            'name' => $data['contact_person_name_en'],
+            'name' => $data['contact_person_name'],
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
