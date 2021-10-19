@@ -161,9 +161,11 @@ class OrganizationController extends Controller
 
         $organization = new Organization();
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
+        Log::channel('org_reg')->info('organization_registration_validated_data', $validated);
         DB::beginTransaction();
         try {
             $organization = $this->organizationService->store($organization, $validated);
+            Log::channel('org_reg')->info('organization_stored_data', $organization->toArray());
 
             if (!($organization && $organization->id)) {
                 throw new CustomException('Organization/Industry has not been properly saved to db.');

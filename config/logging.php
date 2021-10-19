@@ -35,6 +35,11 @@ return [
     */
 
     'channels' => [
+        'org_reg' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/org_reg.log'),
+            'level' => 'info',
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['daily'],
