@@ -8,6 +8,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -273,18 +274,19 @@ class OrganizationService
     public function createOpenRegisterUser(array $data): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
-
+        Log::channel('org_reg')->info("organization registration core hit point");
+        Log::channel('org_reg')->info($url);
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'username' => $data['contact_person_mobile'],
             'organization_id' => $data['organization_id'],
             'name_en' => $data['contact_person_name_en'],
-            'name_bn' => $data['contact_person_name_en'],
+            'name' => $data['contact_person_name'],
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
             'password' => $data['password']
         ];
-
+        Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
         return Http::retry(3)
             ->withOptions(['verify' => config('nise3.should_ssl_verify')])
             ->post($url, $userPostField)
@@ -529,6 +531,7 @@ class OrganizationService
             ],
             'contact_person_mobile' => [
                 BaseModel::MOBILE_REGEX,
+                'unique:organizations,contact_person_mobile',
                 'required'
             ],
             'contact_person_email' => [
@@ -601,6 +604,7 @@ class OrganizationService
                 'required'
             ],
             'contact_person_mobile' => [
+                'unique:organizations,contact_person_mobile',
                 BaseModel::MOBILE_REGEX,
                 'required'
             ],

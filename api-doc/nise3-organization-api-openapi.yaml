@@ -475,25 +475,6 @@ paths:
                   query_time: 0
       tags:
         - organization
-  /register-organization:
-    post:
-      summary: Register an Organization
-      description: Register an Organization
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/organizationRegister'
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/organizationRegister'
-              example: {}
-      tags:
-        - organization
   /rank-types:
     get:
       summary: get_list
@@ -2607,8 +2588,6 @@ components:
         - name_of_the_office_head
         - contact_person_mobile
         - contact_person_name
-        - contact_person_designation
-        - contact_person_designation_en
         - contact_person_email
         - address
         - password
