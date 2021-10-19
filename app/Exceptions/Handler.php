@@ -8,6 +8,7 @@ use ErrorException;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Client\RequestException as IlluminateRequestException;
@@ -19,7 +20,6 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use ParseError;
 use PDOException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -32,12 +32,7 @@ class Handler extends ExceptionHandler
      *
      * @var array
      */
-    protected $dontReport = [
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
-    ];
+    protected $dontReport = [];
 
     /**
      * Report or log an exception.
@@ -79,6 +74,9 @@ class Handler extends ExceptionHandler
         if ($e instanceof HttpResponseException) {
             $errors['_response_status']['code'] = ResponseAlias::HTTP_NOT_FOUND;
             $errors['_response_status']['message'] = "Invalid Request Format";
+        } elseif ($e instanceof AuthenticationException) {
+            $errors['_response_status']['code'] = ResponseAlias::HTTP_UNAUTHORIZED;
+            $errors['_response_status']['message'] = "Unauthenticated";
         } elseif ($e instanceof AuthorizationException) {
             $errors['_response_status']['code'] = ResponseAlias::HTTP_FORBIDDEN;
             $errors['_response_status']['message'] = "Unable to Access";
@@ -102,6 +100,9 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['message'] = $e->getMessage();
         } elseif ($e instanceof BadMethodCallException) {
             $errors['_response_status']['message'] = "Bad Method has been Called";
+        } elseif ($e instanceof PDOException) {
+            $errors['_response_status']['code'] = ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
+            $errors['_response_status']['message'] = "PDO Error";
         } elseif ($e instanceof ErrorException) {
             $errors['_response_status']['code'] = ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
             $errors['_response_status']['message'] = "Internal Server Side Error";
@@ -110,10 +111,10 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['message'] = "Type Error";
         } elseif ($e instanceof ParseError) {
             $errors['_response_status']['message'] = "Parsing Error";
-        } elseif ($e instanceof PDOException) {
+        }  elseif ($e instanceof \RuntimeException) {
             $errors['_response_status']['code'] = ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
-            $errors['_response_status']['message'] = "PDO Error";
-        } elseif ($e instanceof Exception) {
+            $errors['_response_status']['message'] = $e->getMessage();
+        }elseif ($e instanceof Exception) {
             $errors['_response_status']['code'] = $e->getCode() ?? ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
             $errors['_response_status']['message'] = $e->getMessage();
         }
