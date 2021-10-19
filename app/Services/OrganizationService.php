@@ -287,8 +287,7 @@ class OrganizationService
             'password' => $data['password']
         ];
         Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
-        return Http::retry(3)
-            ->withOptions(['verify' => config('nise3.should_ssl_verify')])
+        return Http::withOptions(['verify' => config('nise3.should_ssl_verify')])
             ->post($url, $userPostField)
             ->json();
     }
