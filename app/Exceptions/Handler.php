@@ -91,7 +91,7 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['code'] = ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
             $errors['_response_status']['message'] = "Binding Resolution Error";
         } else if ($e instanceof IlluminateRequestException || $e instanceof RequestException) {
-            $errors=idUserErrorMessage($e);
+            $errors = idUserErrorMessage($e);
         } elseif ($e instanceof ModelNotFoundException) {
             $errors['_response_status']['code'] = ResponseAlias::HTTP_NOT_FOUND;
             $errors['_response_status']['message'] = 'Entry or Row for ' . str_replace('App\\', '', $e->getModel()) . ' was not Found'; //$e->getMessage();
@@ -111,10 +111,10 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['message'] = "Type Error";
         } elseif ($e instanceof ParseError) {
             $errors['_response_status']['message'] = "Parsing Error";
-        }  elseif ($e instanceof \RuntimeException) {
+        } elseif ($e instanceof \RuntimeException) {
             $errors['_response_status']['code'] = ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
             $errors['_response_status']['message'] = $e->getMessage();
-        }elseif ($e instanceof Exception) {
+        } elseif ($e instanceof Exception) {
             $errors['_response_status']['code'] = $e->getCode() ?? ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
             $errors['_response_status']['message'] = $e->getMessage();
         }
