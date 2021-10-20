@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -665,10 +666,14 @@ class OrganizationService
                 'max: 600',
                 'min:2'
             ],
+
             "password" => [
-                'required_with:password_confirmation',
-                'string',
-                'confirmed'
+                "required",
+                "confirmed",
+                Password::min(BaseModel::PASSWORD_MIN_LENGTH)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
             ],
             "password_confirmation" => 'required_with:password',
         ];

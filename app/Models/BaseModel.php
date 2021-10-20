@@ -22,6 +22,8 @@ abstract class BaseModel extends Model
     public const ROW_ORDER_ASC = 'ASC';
     public const ROW_ORDER_DESC = 'DESC';
 
+    public const PASSWORD_MIN_LENGTH = 8;
+    public const PASSWORD_MAX_LENGTH = 50;
 
     public const MOBILE_REGEX = 'regex: /^(01[3-9]\d{8})$/';
 
