@@ -415,11 +415,9 @@ class OrganizationService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+
         $rules = [
             'organization_type_id' => [
                 'required',
@@ -430,6 +428,7 @@ class OrganizationService
                 Rule::requiredIf(function () use ($id) {
                     return $id == null;
                 }),
+                'nullable',
                 'int'
             ],
             'title_en' => [
@@ -487,9 +486,8 @@ class OrganizationService
                 "string"
             ],
             'mobile' => [
+                'required',
                 BaseModel::MOBILE_REGEX,
-                'required'
-
             ],
             'email' => [
                 'required',
@@ -530,9 +528,9 @@ class OrganizationService
                 'min:2'
             ],
             'contact_person_mobile' => [
+                'required',
                 BaseModel::MOBILE_REGEX,
                 'unique:organizations,contact_person_mobile',
-                'required'
             ],
             'contact_person_email' => [
                 'required',
@@ -558,8 +556,8 @@ class OrganizationService
                 'string',
             ],
             'domain' => [
-                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
                 'nullable',
+                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
                 'string',
                 'max:191',
                 'unique:organizations,domain,' . $id
@@ -570,7 +568,8 @@ class OrganizationService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
-                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
+                'nullable',
+                Rule::in(Organization::ROW_STATUSES),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -600,13 +599,14 @@ class OrganizationService
                 'email',
             ],
             'mobile' => [
+                'required',
                 BaseModel::MOBILE_REGEX,
-                'required'
             ],
             'contact_person_mobile' => [
+                'required',
                 'unique:organizations,contact_person_mobile',
                 BaseModel::MOBILE_REGEX,
-                'required'
+
             ],
             "name_of_the_office_head" => [
                 "required",
@@ -666,7 +666,6 @@ class OrganizationService
                 'max: 600',
                 'min:2'
             ],
-
             "password" => [
                 "required",
                 "confirmed",
@@ -676,6 +675,10 @@ class OrganizationService
                     ->numbers()
             ],
             "password_confirmation" => 'required_with:password',
+            'row_status' => [
+                'nullable',
+                Rule::in([BaseModel::ROW_STATUS_PENDING])
+            ]
         ];
 
         return Validator::make($request->all(), $rules);
@@ -689,18 +692,12 @@ class OrganizationService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC. [30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
@@ -714,8 +711,9 @@ class OrganizationService
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                "nullable",
                 "integer",
-                Rule::in([Organization::ROW_STATUS_ACTIVE, Organization::ROW_STATUS_INACTIVE]),
+                Rule::in(Organization::ROW_STATUSES),
             ],
         ], $customMessage);
     }

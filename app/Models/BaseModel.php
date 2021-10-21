@@ -22,6 +22,12 @@ abstract class BaseModel extends Model
     public const ROW_ORDER_ASC = 'ASC';
     public const ROW_ORDER_DESC = 'DESC';
 
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
+
+    public const ROW_STATUS_PENDING = 2;
+    public const ROW_STATUS_REJECTED = 3;
+
     public const PASSWORD_MIN_LENGTH = 8;
     public const PASSWORD_MAX_LENGTH = 50;
 

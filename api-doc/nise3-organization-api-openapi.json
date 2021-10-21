@@ -390,7 +390,7 @@
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_optional"
+                        "$ref": "#/components/parameters/organization_row_status"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -4042,12 +4042,14 @@
                     },
                     "row_status": {
                         "type": "integer",
-                        "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
                             0,
-                            1
+                            1,
+                            2,
+                            3
                         ],
-                        "example": 1
+                        "default": 2,
+                        "description": "0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected"
                     },
                     "created_by": {
                         "type": "integer",
@@ -4925,6 +4927,22 @@
                         "asc",
                         "desc"
                     ]
+                }
+            },
+            "organization_row_status": {
+                "name": "row_status",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ],
+                    "default": 2,
+                    "description": "0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected"
                 }
             },
             "row_status_optional": {
