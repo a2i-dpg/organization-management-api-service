@@ -3681,26 +3681,7 @@
                         "enum": [
                             0,
                             1
-                        ],
-                        "example": 1
-                    },
-                    "created_by": {
-                        "nullable": true,
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "nullable": true,
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
+                        ]
                     }
                 },
                 "required": [
@@ -3863,24 +3844,6 @@
                             1
                         ],
                         "example": 1
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "nullable": true,
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "nullable": true,
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 },
                 "required": [
@@ -4114,10 +4077,9 @@
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
+                            1,
+                            0
+                        ]
                     },
                     "created_by": {
                         "type": "integer",
@@ -4184,26 +4146,9 @@
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
+                            1,
+                            0
+                        ]
                     }
                 },
                 "required": [
@@ -4238,10 +4183,9 @@
                         "default": 1,
                         "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
+                            1,
+                            0
+                        ]
                     },
                     "created_by": {
                         "type": "integer",
@@ -4487,8 +4431,7 @@
                         "enum": [
                             0,
                             1
-                        ],
-                        "example": 1
+                        ]
                     },
                     "created_by": {
                         "type": "integer",
@@ -4539,26 +4482,9 @@
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
+                            1,
+                            0
+                        ]
                     }
                 },
                 "required": [
@@ -4624,25 +4550,9 @@
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
                         "enum": [
-                            0,
-                            1
+                            1,
+                            0
                         ]
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 },
                 "required": [
@@ -4720,22 +4630,6 @@
                             1
                         ],
                         "example": 1
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "description": "Creator"
-                    },
-                    "updated_by": {
-                        "type": "integer",
-                        "description": "Modifier"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 },
                 "required": [
@@ -4880,6 +4774,7 @@
                 "name": "organization_type_id",
                 "in": "query",
                 "required": false,
+                "description": "1 => Government, 2 => Private,3=>NGO,4=>International",
                 "schema": {
                     "type": "integer",
                     "enum": [
