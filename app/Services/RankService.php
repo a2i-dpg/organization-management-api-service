@@ -60,24 +60,24 @@ class RankService
         $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('ranks.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_int($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
             }
         });
         $rankBuilder->join('rank_types', function ($join) use ($rowStatus) {
             $join->on('ranks.rank_type_id', '=', 'rank_types.id')
                 ->whereNull('rank_types.deleted_at');
-            if (is_int($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
             }
         });
         $rankBuilder->orderBy('ranks.id', $order);
 
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $rankBuilder->where('ranks.row_status', $rowStatus);
         }
-        if (is_int($organizationId)) {
+        if (is_numeric($organizationId)) {
             $rankBuilder->where('ranks.organization_id', $organizationId);
         }
         if (!empty($titleEn)) {
@@ -89,8 +89,8 @@ class RankService
 
         /** @var Collection $ranks */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $ranks = $rankBuilder->paginate($pageSize);
             $paginateData = (object)$ranks->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -205,7 +205,7 @@ class RankService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('pageSize', 10);
+        $pageSize = $request->query('pageSize', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -241,8 +241,8 @@ class RankService
 
         /** @var Collection $ranks */
 
-        if (!is_int($paginate) || !is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $ranks = $rankBuilder->paginate($pageSize);
             $paginateData = (object)$ranks->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -290,10 +290,7 @@ class RankService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
             'title_en' => [
@@ -309,7 +306,7 @@ class RankService
                 'min:2'
             ],
             'rank_type_id' => [
-                'exists:rank_types,id',
+                'exists:rank_types,id,deleted_at,NULL',
                 'required',
                 'int'
             ],
@@ -323,12 +320,13 @@ class RankService
                 'integer',
             ],
             'organization_id' => [
-                'exists:organizations,id',
+                'exists:organizations,id,deleted_at,NULL',
                 'required',
                 'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],
         ];
@@ -342,30 +340,27 @@ class RankService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'page' => 'integer|gt:0',
-            'pageSize' => 'integer',
-            'organization_id' => 'exists:organizations,id|integer',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'organization_id' => 'nullable||integer|exists:organizations,id,deleted_at,NULL',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "integer",
                 Rule::in([Rank::ROW_STATUS_ACTIVE, Rank::ROW_STATUS_INACTIVE]),
             ],

@@ -38,4 +38,7 @@ abstract class BaseModel extends Model
     /** Client Url End Point Type*/
     public const CORE_CLIENT_URL_TYPE = "CORE";
 
+    /** pagination default size */
+    public const DEFAULT_PAGE_SIZE = 10;
+
 }
