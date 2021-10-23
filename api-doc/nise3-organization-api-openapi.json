@@ -3601,6 +3601,18 @@
                         "type": "string",
                         "description": "Contact person email address"
                     },
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "location id of division"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "location id of district"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "location id of upazila"
+                    },
                     "address": {
                         "type": "string",
                         "maximum": 1000,
@@ -3638,7 +3650,9 @@
                     "contact_person_email",
                     "address",
                     "password",
-                    "password_confirmation"
+                    "password_confirmation",
+                    "loc_division_id",
+                    "loc_district_id"
                 ]
             },
             "organizationType": {
@@ -3854,7 +3868,9 @@
                     "contact_person_email",
                     "mobile",
                     "email",
-                    "address"
+                    "address",
+                    "loc_division_id",
+                    "loc_district_id"
                 ]
             },
             "organization": {
@@ -4021,7 +4037,9 @@
                     "contact_person_email",
                     "mobile",
                     "email",
-                    "address"
+                    "address",
+                    "loc_division_id",
+                    "loc_district_id"
                 ]
             },
             "rankType": {
