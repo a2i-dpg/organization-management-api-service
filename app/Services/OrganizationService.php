@@ -444,11 +444,11 @@ class OrganizationService
                 'min:2'
             ],
             'loc_division_id' => [
-                'nullable',
+                'required',
                 'integer',
             ],
             'loc_district_id' => [
-                'nullable',
+                'required',
                 'integer',
             ],
             'loc_upazila_id' => [
@@ -655,6 +655,18 @@ class OrganizationService
             'contact_person_email' => [
                 'required',
                 'email'
+            ],
+            'loc_division_id' => [
+                'required',
+                'integer',
+            ],
+            'loc_district_id' => [
+                'required',
+                'integer',
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'integer',
             ],
             'address' => [
                 'required',
