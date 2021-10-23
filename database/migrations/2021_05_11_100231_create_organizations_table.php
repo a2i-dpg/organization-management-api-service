@@ -19,7 +19,7 @@ class CreateOrganizationsTable extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('organization_type_id')->nullable()->default(2)
-                ->comment('1 => Government, 2 => Private, 3=>NGO, 4=>International');
+                ->comment('Example: Government, Private,NGO, International etc. Coming From organization_types table.');
 
             $table->string('title', 1200);
             $table->string('title_en', 600)->nullable();
