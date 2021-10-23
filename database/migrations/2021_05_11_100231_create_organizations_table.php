@@ -18,7 +18,8 @@ class CreateOrganizationsTable extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('organization_type_id')->nullable()->default(2)
+            $table->unsignedInteger('organization_type_id')
+                ->default(1)
                 ->comment('Example: Government, Private,NGO, International etc. Coming From organization_types table.');
 
             $table->string('title', 1200);
@@ -67,6 +68,7 @@ class CreateOrganizationsTable extends Migration
 
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

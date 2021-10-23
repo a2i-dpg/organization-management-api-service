@@ -420,15 +420,15 @@ class OrganizationService
         $rules = [
             'organization_type_id' => [
                 'required',
-                Rule::in(Organization::ORGANIZATION_TYPE),
-                'int'
+                'int',
+                'exists:organization_types,id,deleted_at,NULL'
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
-                    return $id == null;
+                    return is_null($id);
                 }),
                 'nullable',
-                'int'
+                'integer'
             ],
             'title_en' => [
                 'nullable',
@@ -443,12 +443,12 @@ class OrganizationService
                 'min:2'
             ],
             'loc_division_id' => [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_division,id,deleted_at,NULL'
             ],
             'loc_district_id' => [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_districts,id,deleted_at,NULL'
             ],
@@ -578,7 +578,6 @@ class OrganizationService
                 'string',
             ],
             'row_status' => [
-                'required_if:' . $id . ',!=,null',
                 'nullable',
                 Rule::in(Organization::ROW_STATUSES),
             ],
@@ -603,7 +602,8 @@ class OrganizationService
             ],
             'organization_type_id' => [
                 'required',
-                'integer'
+                'integer',
+                'exists:organization_types,id,deleted_at,NULL'
             ],
             'email' => [
                 'required',
@@ -670,6 +670,21 @@ class OrganizationService
             'contact_person_email' => [
                 'required',
                 'email'
+            ],
+            'loc_division_id' => [
+                'required',
+                'integer',
+                'exists:loc_division,id,deleted_at,NULL'
+            ],
+            'loc_district_id' => [
+                'required',
+                'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
             ],
             'address' => [
                 'required',

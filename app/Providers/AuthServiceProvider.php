@@ -65,28 +65,6 @@ class AuthServiceProvider extends ServiceProvider
             return $authUser;
         });
 
-//            if ($token) {
-//                $header = explode(" ", $token);
-//
-//                if (count($header) > 1) {
-//                    $tokenParts = explode(".", $header[1]);
-//                    if (count($tokenParts) == 3) {
-//                        $tokenPayload = base64_decode($tokenParts[1]);
-//                        $jwtPayload = json_decode($tokenPayload);
-//                        $clientRequest = new HttpClientRequest();
-//                        $user = $clientRequest->getAuthPermission($jwtPayload->sub ?? null);
-//                        if ($user) {
-//                            $role = new Role($user['role']);
-//                            $authUser = new User($user);
-//                            $authUser->role = $role;
-//                            $authUser->permissions = collect($user['permissions']);
-//                        }
-//                    }
-//                }
-//
-//                Log::info("userInfoWithIdpId:" . json_encode($authUser));
-//            }
-
     }
 
 
