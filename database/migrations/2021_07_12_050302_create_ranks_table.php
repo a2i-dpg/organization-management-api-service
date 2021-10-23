@@ -17,10 +17,13 @@ class CreateRanksTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('organization_id');
             $table->unsignedInteger('rank_type_id');
+
             $table->string('title', 600);
             $table->string('title_en', 300)->nullable();
+
             $table->string('grade', 100)->nullable();
             $table->unsignedInteger('display_order')->nullable()->default(0);
+
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

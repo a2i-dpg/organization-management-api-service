@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Rank
  * @package App\Models
  * @property int organization_id
+ * @property int id
  * @property string title_en
  * @property string title
  * @property string|null grade

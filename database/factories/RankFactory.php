@@ -11,8 +11,10 @@ class RankFactory extends Factory
 
     public function definition(): array
     {
+        $title = $this->faker->unique()->jobTitle;
         return [
-
+            'title_en' => ucfirst($title),
+            'title' => ucfirst($title),
         ];
     }
 }

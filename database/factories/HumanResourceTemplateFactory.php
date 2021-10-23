@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\HumanResourceTemplate;
-use App\Models\Rank;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class HumanResourceTemplateFactory extends Factory
@@ -12,16 +11,28 @@ class HumanResourceTemplateFactory extends Factory
 
     public function definition(): array
     {
-        $rank = Rank::inRandomOrder()->first();
-        $title = $this->faker->unique()->jobTitle;
+        $title = $this->faker->randomElement([
+            "Marketing Executive",
+            "Assistant Marketing Executive",
+            "Junior Marketing Executive",
+            "Sales Executive",
+            "Assistant Sales Executive",
+            "Junior Sales Executive",
+            "Finance Executive",
+            "Assistant Finance Executive",
+            "Junior Finance Executive",
+            'HR Manager',
+            'Assistant HR Manager',
+            'Admin Manager',
+            'Assistant Admin Manager',
+            'Executive'
+        ]);
         return [
             'title_en' => ucfirst($title),
             'title' => ucfirst($title),
-            'rank_id' => $rank->id,
             'display_order' => $this->faker->randomDigit(),
             'is_designation' => 1,
             'status' => 1
-
         ];
     }
 }
