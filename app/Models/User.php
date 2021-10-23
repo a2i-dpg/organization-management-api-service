@@ -14,17 +14,17 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string email
  * @property string mobile
  * @property string profile_pic
- * @property int $role_id
- * @property int $user_type
+ * @property int role_id
+ * @property int user_type
  * @property int organization_id
  * @property int institute_id
  * @property int loc_division_id
  * @property int loc_district_id
  * @property int loc_upazila_id
- * @property int $row_status
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Role $role
+ * @property int row_status
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Role role
  * @property Collection $permissions
  */
 class User extends BaseModel
@@ -36,7 +36,7 @@ class User extends BaseModel
 
     public function hasPermission($key): bool
     {
-        return $this->permissions->contains($key);
+        return $this->permissions && $this->permissions->contains($key);
     }
 
 }

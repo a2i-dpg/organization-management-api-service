@@ -28,7 +28,7 @@ class OrganizationUnitType extends BaseModel
     /**
      * @var string[]
      */
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
     /**
      * @return BelongsTo

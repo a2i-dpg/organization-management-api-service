@@ -83,7 +83,7 @@ class OrganizationService
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
-            if (is_int($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('organization_types.row_status', $rowStatus);
             }
         });
@@ -102,11 +102,11 @@ class OrganizationService
 
         $organizationBuilder->orderBy('organizations.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $organizationBuilder->where('organizations.row_status', $rowStatus);
         }
 
-        if (is_int($organizationTypeId)) {
+        if (is_numeric($organizationTypeId)) {
             $organizationBuilder->where('organizations.organization_type_id', $organizationTypeId);
         }
 
@@ -119,8 +119,8 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizations = $organizationBuilder->paginate($pageSize);
             $paginateData = (object)$organizations->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -252,14 +252,13 @@ class OrganizationService
             'organization_id' => $data['organization_id'],
             'username' => $data['contact_person_mobile'],
             'name_en' => $data['contact_person_name'],
-            'name_bn' => $data['contact_person_name'],
+            'name' => $data['contact_person_name'],
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
         ];
-
+        Log::channel("org_reg")->info("Admin reg organization payload sent to core below");
+        Log::channel("org_reg")->info(json_encode($userPostField));
         return Http::retry(3)
-//            ->withOptions(['verify' => config("nise3.should_ssl_verify")])
-//            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 return $e;
@@ -324,7 +323,7 @@ class OrganizationService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $page_size = $request->query('page_size', 10);
+        $page_size = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -366,8 +365,8 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
-        if (!is_int($paginate) || !is_int($page_size)) {
-            $page_size = $page_size ?: 10;
+        if (is_numeric($paginate) || is_numeric($page_size)) {
+            $page_size = $page_size ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizations = $organizationBuilder->paginate($page_size);
             $paginateData = (object)$organizations->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -421,15 +420,15 @@ class OrganizationService
         $rules = [
             'organization_type_id' => [
                 'required',
-                Rule::in(Organization::ORGANIZATION_TYPE),
-                'int'
+                'int',
+                'exists:organization_types,id,deleted_at,NULL'
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
-                    return $id == null;
+                    return is_null($id);
                 }),
                 'nullable',
-                'int'
+                'integer'
             ],
             'title_en' => [
                 'nullable',
@@ -446,14 +445,17 @@ class OrganizationService
             'loc_division_id' => [
                 'required',
                 'integer',
+                'exists:loc_division,id,deleted_at,NULL'
             ],
             'loc_district_id' => [
                 'required',
                 'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
             ],
             'loc_upazila_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
             ],
             "location_latitude" => [
                 'nullable',
@@ -529,8 +531,13 @@ class OrganizationService
             ],
             'contact_person_mobile' => [
                 'required',
+                Rule::unique('organizations', 'contact_person_mobile')
+                    ->ignore($id)
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    }),
                 BaseModel::MOBILE_REGEX,
-                'unique:organizations,contact_person_mobile',
+
             ],
             'contact_person_email' => [
                 'required',
@@ -560,14 +567,17 @@ class OrganizationService
                 'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
                 'string',
                 'max:191',
-                'unique:organizations,domain,' . $id
+                Rule::unique('organizations', 'domain')
+                    ->ignore($id)
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    })
             ],
             'logo' => [
                 'nullable',
                 'string',
             ],
             'row_status' => [
-                'required_if:' . $id . ',!=,null',
                 'nullable',
                 Rule::in(Organization::ROW_STATUSES),
             ],
@@ -592,7 +602,8 @@ class OrganizationService
             ],
             'organization_type_id' => [
                 'required',
-                'integer'
+                'integer',
+                'exists:organization_types,id,deleted_at,NULL'
             ],
             'email' => [
                 'required',
@@ -604,7 +615,11 @@ class OrganizationService
             ],
             'contact_person_mobile' => [
                 'required',
-                'unique:organizations,contact_person_mobile',
+                Rule::unique('organizations', 'contact_person_mobile')
+                    ->ignore($id)
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    }),
                 BaseModel::MOBILE_REGEX,
 
             ],
@@ -659,14 +674,17 @@ class OrganizationService
             'loc_division_id' => [
                 'required',
                 'integer',
+                'exists:loc_division,id,deleted_at,NULL'
             ],
             'loc_district_id' => [
                 'required',
                 'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
             ],
             'loc_upazila_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
             ],
             'address' => [
                 'required',
@@ -704,7 +722,7 @@ class OrganizationService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => 'Order must be within ASC or DESC. [30000]',
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
@@ -717,7 +735,7 @@ class OrganizationService
             'title' => 'nullable|max:1200|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'organization_type_id' => 'integer|gt:0|exists:organization_types,id',
+            'organization_type_id' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

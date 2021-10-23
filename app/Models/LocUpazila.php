@@ -28,7 +28,7 @@ class LocUpazila extends BaseModel
     public $timestamps = false;
 
     protected $table = 'loc_upazilas';
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_ONLY_SOFT_DELETE;
 
     public function locDistrict(): BelongsTo
     {

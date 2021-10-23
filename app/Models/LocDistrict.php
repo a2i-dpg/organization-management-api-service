@@ -30,7 +30,7 @@ class LocDistrict extends BaseModel
     public $timestamps = false;
 
     protected $table = 'loc_districts';
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_ONLY_SOFT_DELETE;
 
     public function locDivision(): BelongsTo
     {
