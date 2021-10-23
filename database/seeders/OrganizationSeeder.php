@@ -35,8 +35,6 @@ class OrganizationSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        $skillIdCollection = Skill::all()->pluck('id');
-
         /** @var OrganizationService $organizationService */
         $organizationService = app(OrganizationService::class);
 
@@ -56,7 +54,6 @@ class OrganizationSeeder extends Seeder
 
                     $orgData = $organization->toArray();
                     unset($orgData['id']);
-                    $orgData['password'] = '12345678';
                     $orgData['organization_id'] = $organization->id;
                     $orgData['permission_sub_group_id'] = 3;
 
@@ -152,29 +149,12 @@ class OrganizationSeeder extends Seeder
                 $orgUnitType->fill($orgUnitTypesDatum);
                 $orgUnitType->save();
 
-               $humanResourceTemplates = HumanResourceTemplate::factory()
-                    ->state([
-                        'organization_id' => $organization->id,
-                        'organization_unit_type_id' => $orgUnitType->id,
-                        'rank_id' => $rankIds->random(),
-                    ])
-                    ->count(10)
-                    ->create();
-
                 $organizationUnits = OrganizationUnit::factory()
                     ->state([
                         'organization_id' => $organization->id,
                         'organization_unit_type_id' => $orgUnitType->id,
                     ])
                     ->count(3)
-                    ->has(
-                        HumanResource::factory()
-                            ->state([
-                                'organization_id' => $organization->id,
-                                'rank_id' => $rankIds->random()
-                            ])
-                            ->count(10)
-                    )
                     ->create();
 
 
@@ -183,17 +163,6 @@ class OrganizationSeeder extends Seeder
                     $organizationUnit->services()->sync($serviceIds->random(3)->all());
                 }
 
-                $humanResources = HumanResource::where('organization_id', $organization->id)->get();
-
-                foreach ($humanResources as $humanResource) {
-                    /** @var HumanResource $humanResource */
-                    $humanResource->skills()->sync($skillIdCollection->random(3)->all());
-                }
-
-                foreach ($humanResourceTemplates as $humanResourceTemplate) {
-                    /** @var HumanResourceTemplate $humanResourceTemplate */
-                    $humanResourceTemplate->skills()->sync($skillIdCollection->random(3)->all());
-                }
             }
 
         }

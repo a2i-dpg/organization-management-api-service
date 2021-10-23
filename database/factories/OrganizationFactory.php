@@ -39,6 +39,7 @@ class OrganizationFactory extends Factory
         return [
             'title_en' => $title,
             'title' => $title,
+            'organization_type_id' => random_int(2, 3),
             'loc_division_id' => $location['loc_division_id'],
             'loc_district_id' => $location['loc_district_id'],
             'loc_upazila_id' => $location['loc_upazila_id'],

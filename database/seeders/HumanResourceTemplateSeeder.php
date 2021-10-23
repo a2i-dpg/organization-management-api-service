@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\HumanResource;
 use App\Models\HumanResourceTemplate;
 use App\Models\OrganizationUnit;
+use App\Models\Skill;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -19,32 +21,32 @@ class HumanResourceTemplateSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
+        $skillIdCollection = Skill::all()->pluck('id');
+
         $organizationUnits = OrganizationUnit::all();
 
         foreach ($organizationUnits as $organizationUnit) {
 
-            /** @var HumanResourceTemplate $humanisersTemplate */
+            /** @var HumanResourceTemplate $humanisersTemplateRoot */
             $humanisersTemplateRoot = HumanResourceTemplate::factory()
-                ->state(function (array $attributes) use ($organizationUnit) {
-                    return [
-                        'organization_id' => $organizationUnit->organization_id,
-                        'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
-                    ];
-                })
+                ->state([
+                    'organization_id' => $organizationUnit->organization_id,
+                    'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
+                ])
                 ->create();
 
             HumanResourceTemplate::factory()
                 ->count(5)
-                ->state(function (array $attributes) use ($organizationUnit, $humanisersTemplateRoot) {
-                    return [
-                        'organization_id' => $organizationUnit->organization_id,
-                        'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
-                        "parent_id" => $humanisersTemplateRoot->id
-                    ];
-                })
+                ->state([
+                    'organization_id' => $organizationUnit->organization_id,
+                    'organization_unit_type_id' => $organizationUnit->organization_unit_type_id,
+                    "parent_id" => $humanisersTemplateRoot->id
+                ])
                 ->create();
 
-            $humanResouceRoots = HumanResource::factory()
+            /** @var HumanResource $humanResourceRoot */
+            /** @var Collection $humanResourceRoots */
+            $humanResourceRoots = HumanResource::factory()
                 ->count(2)
                 ->state([
                     'organization_id' => $organizationUnit->organization_id,
@@ -53,16 +55,29 @@ class HumanResourceTemplateSeeder extends Seeder
                 ])
                 ->create();
 
-            foreach ($humanResouceRoots as $humanResouceRoot) {
+            foreach ($humanResourceRoots as $humanResourceRoot) {
                 HumanResource::factory()
                     ->count(10)
                     ->state([
                         'organization_id' => $organizationUnit->organization_id,
                         'organization_unit_id' => $organizationUnit->id,
-                        'parent_id' => $humanResouceRoot->id
+                        'parent_id' => $humanResourceRoot->id
                     ])
                     ->create();
             }
+        }
+
+        $humanResources = HumanResource::all();
+
+        foreach ($humanResources as $humanResource) {
+            /** @var HumanResource $humanResource */
+            $humanResource->skills()->sync($skillIdCollection->random(3)->all());
+        }
+
+        $humanResourceTemplates = HumanResourceTemplate::all();
+        foreach ($humanResourceTemplates as $humanResourceTemplate) {
+            /** @var HumanResourceTemplate $humanResourceTemplate */
+            $humanResourceTemplate->skills()->sync($skillIdCollection->random(3)->all());
         }
 
         Schema::enableForeignKeyConstraints();

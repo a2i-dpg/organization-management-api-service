@@ -25,13 +25,18 @@ class OrganizationTypeSeeder extends Seeder
 
         $organizationTypes = [
             [
-                'title_en' => "Government Org",
-                'title' => "Government Org",
+                'title_en' => "Government Organization",
+                'title' => "Government Organization",
                 'is_government' => 1,
             ],
             [
-                'title_en' => "Private Org",
-                'title' => "Private Org",
+                'title_en' => "Private Organization",
+                'title' => "Private Organization",
+                'is_government' => 0,
+            ],
+            [
+                'title_en' => "Public Corporation",
+                'title' => "Public Corporation",
                 'is_government' => 0,
             ],
             [

@@ -71,6 +71,13 @@ class CreateOrganizationsTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+
+
+            $table->foreign('organization_type_id', 'organizations_fk_organization_type_id')
+                ->references('id')
+                ->on('organization_types')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
