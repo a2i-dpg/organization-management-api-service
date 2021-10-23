@@ -252,14 +252,13 @@ class OrganizationService
             'organization_id' => $data['organization_id'],
             'username' => $data['contact_person_mobile'],
             'name_en' => $data['contact_person_name'],
-            'name_bn' => $data['contact_person_name'],
+            'name' => $data['contact_person_name'],
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
         ];
-
+        Log::channel("org_reg")->info("Admin reg organization payload sent to core below");
+        Log::channel("org_reg")->info(json_encode($userPostField));
         return Http::retry(3)
-//            ->withOptions(['verify' => config("nise3.should_ssl_verify")])
-//            ->withOptions(['debug' => env("IS_DEVELOPMENT_MOOD", false), 'verify' => env("IS_SSL_VERIFY", false)])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 return $e;
