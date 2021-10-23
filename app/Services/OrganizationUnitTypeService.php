@@ -306,7 +306,7 @@ class OrganizationUnitTypeService
             'title_en' => 'nullable|max: 300|min:2',
             'title' => 'nullable|max: 600|min:2',
             'page' => 'nullable|integer|gt:0',
-            'organization_id' => 'nullable|exists:organizations,id,deleted_at,NULL|integer',
+            'organization_id' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'nullable',

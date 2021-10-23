@@ -418,8 +418,8 @@ class HumanResourceTemplateService
             'title' => 'nullable|max:800|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'organization_id' => 'exists:organizations,id,deleted_at,NULL|integer',
-            'organization_unit_type_id' => 'exists:organization_unit_types,id,deleted_at,NULL|integer',
+            'organization_id' => 'nullable|integer|gt:0',
+            'organization_unit_type_id' => 'nullable|integer|gt:0',
             'order' => [
                 'nullable',
                 'string',

@@ -720,7 +720,7 @@ class OrganizationService
             'title' => 'nullable|max:1200|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'organization_type_id' => 'nullable|integer|gt:0|exists:organization_types,id,deleted_at,NULL',
+            'organization_type_id' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

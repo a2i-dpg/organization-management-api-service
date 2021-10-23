@@ -413,8 +413,8 @@ class HumanResourceService
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
             'page' => 'nullable|integer|gt:0',
-            'organization_id' => 'nullable|integer|exists:organizations,id,deleted_at,NULL',
-            'organization_unit_id' => 'nullable|integer|exists:organization_units,id,deleted_at,NULL',
+            'organization_id' => 'nullable|integer|gt:0',
+            'organization_unit_id' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
