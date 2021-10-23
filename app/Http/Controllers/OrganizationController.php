@@ -57,11 +57,7 @@ class OrganizationController extends Controller
         $this->authorize('viewAny', Organization::class);
 
         $filter = $this->organizationService->filterValidator($request)->validate();
-        try {
-            $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
         return Response::json($response);
     }
 
@@ -74,15 +70,11 @@ class OrganizationController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->organizationService->getOneOrganization($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
+        $response = $this->organizationService->getOneOrganization($id, $this->startTime);
+        if (!$response) {
+            abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+        $this->authorize('view', $response['data']);
         return Response::json($response);
     }
 
@@ -146,11 +138,12 @@ class OrganizationController extends Controller
                     DB::rollBack();
                 }
             }
+            return Response::json($response, ResponseAlias::HTTP_CREATED);
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
+
     }
 
     /**

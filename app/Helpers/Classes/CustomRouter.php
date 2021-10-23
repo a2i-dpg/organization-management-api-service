@@ -52,4 +52,5 @@ class CustomRouter
         $this->router->put($this->uri . '/{id}', ['as' => $this->as . '.update', 'uses' => $this->controller . '@update']);
         $this->router->delete($this->uri . '/{id}', ['as' => $this->as . '.destroy', 'uses' => $this->controller . '@destroy']);
     }
+
 }
