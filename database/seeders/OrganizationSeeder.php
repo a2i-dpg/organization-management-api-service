@@ -2,15 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\HumanResource;
-use App\Models\HumanResourceTemplate;
 use App\Models\Organization;
 use App\Models\OrganizationUnit;
 use App\Models\OrganizationUnitType;
 use App\Models\Rank;
 use App\Models\RankType;
 use App\Models\Service;
-use App\Models\Skill;
 use App\Services\OrganizationService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
@@ -64,6 +61,11 @@ class OrganizationSeeder extends Seeder
                     Log::debug($e->getCode() . ' - ' . $e->getMessage());
                 }
             }
+
+            RankType::query()->truncate();
+            Rank::query()->truncate();
+            OrganizationUnitType::query()->truncate();
+            OrganizationUnit::query()->truncate();
 
             /** @var RankType $rankType */
             $rankType = app(RankType::class);

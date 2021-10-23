@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Organization;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use App\Models\OrganizationType;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 

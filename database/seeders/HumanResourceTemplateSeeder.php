@@ -25,6 +25,9 @@ class HumanResourceTemplateSeeder extends Seeder
 
         $organizationUnits = OrganizationUnit::all();
 
+        HumanResourceTemplate::query()->truncate();
+        HumanResource::query()->truncate();
+
         foreach ($organizationUnits as $organizationUnit) {
 
             /** @var HumanResourceTemplate $humanisersTemplateRoot */
