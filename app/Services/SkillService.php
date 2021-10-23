@@ -51,8 +51,8 @@ class SkillService
 
         /** @var Collection $skills */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $skills = $skillBuilder->paginate($pageSize);
             $paginateData = (object)$skills->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -147,7 +147,7 @@ class SkillService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('page_size', 10);
+        $pageSize = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -170,8 +170,8 @@ class SkillService
 
         /** @var Collection $skills */
 
-        if (!is_int($paginate) || !is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $skills = $skillBuilder->paginate($pageSize);
             $paginateData = (object)$skills->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -220,10 +220,7 @@ class SkillService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
             'title_en' => [
@@ -249,27 +246,21 @@ class SkillService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
         ];
 
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|min:600|min:2',
-            'page' => 'integer|gt:0',
-            '$pageSize' => 'integer|gt:0',
+            'page' => 'nullable|integer|gt:0',
+            '$pageSize' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
+                'nullable',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ]
         ], $customMessage);

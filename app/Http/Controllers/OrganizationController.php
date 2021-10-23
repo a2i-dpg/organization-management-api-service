@@ -47,8 +47,10 @@ class OrganizationController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException|AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
@@ -72,11 +74,15 @@ class OrganizationController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $response = $this->organizationService->getOneOrganization($id, $this->startTime);
-        if (!$response) {
-            abort(ResponseAlias::HTTP_NOT_FOUND);
+        try {
+            $response = $this->organizationService->getOneOrganization($id, $this->startTime);
+            if (!$response) {
+                abort(ResponseAlias::HTTP_NOT_FOUND);
+            }
+            $this->authorize('view', $response['data']);
+        } catch (Throwable $e) {
+            throw $e;
         }
-        $this->authorize('view', $response['data']);
         return Response::json($response);
     }
 
@@ -84,7 +90,10 @@ class OrganizationController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException|AuthorizationException
+     * @throws AuthorizationException
+     * @throws RequestException
+     * @throws Throwable
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -107,7 +116,7 @@ class OrganizationController extends Controller
                         '_response_status' => [
                             "success" => true,
                             "code" => ResponseAlias::HTTP_CREATED,
-                            "message" => "Organization has been Successfully Created",
+                            "message" => "Organization Successfully Create",
                             "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
                         ]
                     ];
@@ -217,9 +226,10 @@ class OrganizationController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -248,8 +258,9 @@ class OrganizationController extends Controller
     /**
      * Remove the specified resource from storage.
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function destroy(int $id): JsonResponse
     {
@@ -275,7 +286,8 @@ class OrganizationController extends Controller
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
     public function getTrashedData(Request $request)
     {
