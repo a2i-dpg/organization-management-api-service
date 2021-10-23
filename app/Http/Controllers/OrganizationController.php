@@ -72,22 +72,18 @@ class OrganizationController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->organizationService->getOneOrganization($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
+        $response = $this->organizationService->getOneOrganization($id, $this->startTime);
+        if (!$response) {
+            abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+        $this->authorize('view', $response['data']);
         return Response::json($response);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|Throwable|JsonResponse
+     * @return JsonResponse
      * @throws ValidationException|AuthorizationException
      */
     public function store(Request $request)
@@ -111,7 +107,7 @@ class OrganizationController extends Controller
                         '_response_status' => [
                             "success" => true,
                             "code" => ResponseAlias::HTTP_CREATED,
-                            "message" => "Organization Successfully Create",
+                            "message" => "Organization has been Successfully Created",
                             "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
                         ]
                     ];
@@ -150,11 +146,10 @@ class OrganizationController extends Controller
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws CustomException
      * @throws Throwable
      * @throws ValidationException
-     * @throws RequestException
      */
     public function organizationOpenRegistration(Request $request): JsonResponse
     {
