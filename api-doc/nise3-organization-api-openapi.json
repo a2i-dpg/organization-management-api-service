@@ -4063,6 +4063,9 @@
                         "minLength": 2,
                         "maxLength": 600
                     },
+                    "organization_id": {
+                        "type": "integer"
+                    },
                     "description": {
                         "type": "string",
                         "description": "description of the rankType"
@@ -4082,7 +4085,8 @@
                     }
                 },
                 "required": [
-                    "title"
+                    "title",
+                    "organization_id"
                 ]
             },
             "rank": {
