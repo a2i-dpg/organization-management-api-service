@@ -47,12 +47,12 @@ class AuthServiceProvider extends ServiceProvider
 
             Log::info('Bearer Token: ' . $token);
             $authUser = null;
-            $idpServerId = AuthUtility::getIdpServerIdFromToken($token);
-            Log::info("Auth idp user id-->" . $idpServerId);
+            $idpServerUserId = AuthUtility::getIdpServerIdFromToken($token);
+            Log::info("Auth idp user id-->" . $idpServerUserId);
 
-            if ($idpServerId) {
+            if ($idpServerUserId) {
                 $clientRequest = new HttpClientRequest();
-                $user = $clientRequest->getAuthPermission($idpServerId);
+                $user = $clientRequest->getAuthPermission($idpServerUserId);
                 if ($user) {
                     $role = new Role($user['role']);
                     $authUser = new User($user);

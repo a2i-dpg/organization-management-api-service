@@ -258,7 +258,12 @@ class OrganizationService
         ];
         Log::channel("org_reg")->info("Admin reg organization payload sent to core below");
         Log::channel("org_reg")->info(json_encode($userPostField));
-        return Http::retry(3)
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 return $e;
@@ -270,6 +275,7 @@ class OrganizationService
     /**
      * @param array $data
      * @return mixed
+     * @throws RequestException
      */
     public function createOpenRegisterUser(array $data): mixed
     {
@@ -292,8 +298,16 @@ class OrganizationService
 
         Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
 
-        return Http::withOptions(['verify' => config('nise3.should_ssl_verify')])
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
             ->post($url, $userPostField)
+            ->throw(function ($response, $e) {
+                throw $e;
+            })
             ->json();
     }
 
