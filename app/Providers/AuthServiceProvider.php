@@ -60,7 +60,6 @@ class AuthServiceProvider extends ServiceProvider
                     $authUser->permissions = collect($user['permissions']);
                 }
                 Log::info("userInfoWithIdpId:" . json_encode($authUser));
-
             }
             return $authUser;
         });

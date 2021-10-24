@@ -256,8 +256,10 @@ class OrganizationService
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
         ];
+
         Log::channel("org_reg")->info("Admin reg organization payload sent to core below");
         Log::channel("org_reg")->info(json_encode($userPostField));
+
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
@@ -305,7 +307,8 @@ class OrganizationService
                 'timeout' => config('nise3.http_timeout'),
             ])
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) {
+            ->throw(function ($response, $e) use ($url) {
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
                 throw $e;
             })
             ->json();
