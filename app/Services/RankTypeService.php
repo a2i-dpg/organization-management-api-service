@@ -283,7 +283,7 @@ class RankTypeService
                 'min:2'
             ],
             'organization_id' => [
-                'nullable',
+                'required',
                 'integer',
                 'exists:organizations,id,deleted_at,NULL'
             ],
