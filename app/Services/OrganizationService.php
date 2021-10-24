@@ -260,7 +260,9 @@ class OrganizationService
         Log::channel("org_reg")->info(json_encode($userPostField));
         return Http::withOptions(
             [
-                'verify' => config('nise3.should_ssl_verify')
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
             ])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
