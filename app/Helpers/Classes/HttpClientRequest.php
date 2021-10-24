@@ -19,7 +19,7 @@ class HttpClientRequest
         $userPostField = [
             "idp_user_id" => $idp_user_id
         ];
-        $responseData = Http::retry(3)
+        $responseData = Http::withOptions(['verify' => config('nise3.should_ssl_verify')])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 throw $e;

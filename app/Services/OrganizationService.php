@@ -256,9 +256,16 @@ class OrganizationService
             'email' => $data['contact_person_email'],
             'mobile' => $data['contact_person_mobile'],
         ];
+
         Log::channel("org_reg")->info("Admin reg organization payload sent to core below");
         Log::channel("org_reg")->info(json_encode($userPostField));
-        return Http::retry(3)
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
             ->post($url, $userPostField)
             ->throw(function ($response, $e) {
                 return $e;
@@ -270,6 +277,7 @@ class OrganizationService
     /**
      * @param array $data
      * @return mixed
+     * @throws RequestException
      */
     public function createOpenRegisterUser(array $data): mixed
     {
@@ -292,8 +300,17 @@ class OrganizationService
 
         Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
 
-        return Http::withOptions(['verify' => config('nise3.should_ssl_verify')])
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
             ->post($url, $userPostField)
+            ->throw(function ($response, $e) use ($url) {
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
+                throw $e;
+            })
             ->json();
     }
 
@@ -450,7 +467,7 @@ class OrganizationService
             'loc_division_id' => [
                 'required',
                 'integer',
-                'exists:loc_division,id,deleted_at,NULL'
+                'exists:loc_divisions,id,deleted_at,NULL'
             ],
             'loc_district_id' => [
                 'required',
@@ -486,7 +503,8 @@ class OrganizationService
             ],
             "country" => [
                 "nullable",
-                "string"
+                "string",
+                "min:2"
             ],
             "phone_code" => [
                 "nullable",
