@@ -500,7 +500,8 @@ class OrganizationService
             ],
             "country" => [
                 "nullable",
-                "string"
+                "string",
+                "min:2"
             ],
             "phone_code" => [
                 "nullable",
