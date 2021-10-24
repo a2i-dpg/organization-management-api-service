@@ -174,6 +174,9 @@ class OrganizationUnitService
             'organization_units.organization_id',
             'organizations.title_en as organization_title_en',
             'organizations.title as organization_title',
+            'organization_units.location_latitude',
+            'organization_units.location_longitude',
+            'organization_units.google_map_src',
             'organization_units.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
             'loc_divisions.title as loc_division_title',
@@ -418,7 +421,26 @@ class OrganizationUnitService
             'address' => [
                 'nullable',
                 'string',
-                'max:191',
+                'max:1000',
+            ],
+            'address_en' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
+            'google_map_src' => [
+                'nullable',
+                'string'
+            ],
+            'location_latitude' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+            'location_longitude' => [
+                'nullable',
+                'string',
+                'max:50'
             ],
             'mobile' => [
                 'nullable',
