@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HumanResource;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -43,70 +42,60 @@ class OrganizationUnitTypeController extends Controller
     /**
      *
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws ValidationException
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
-    public function getList(Request $request)
+    public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', OrganizationUnitType::class);
 
         $filter = $this->organizationUnitTypeService->filterValidator($request)->validate();
-        try {
-            $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->organizationUnitTypeService->getAllOrganizationUnitType($filter, $this->startTime);
         return Response::json($response);
     }
 
     /**
      * * Display a specified resource
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->organizationUnitTypeService->getOneOrganizationUnitType($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-
-        } catch (Throwable $e) {
-            throw $e;
+        $response = $this->organizationUnitTypeService->getOneOrganizationUnitType($id, $this->startTime);
+        if (!$response) {
+            abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+        $this->authorize('view', $response['data']);
         return Response::json($response);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $this->authorize('create', OrganizationUnitType::class);
 
         $validated = $this->organizationUnitTypeService->validator($request)->validate();
-        try {
-            $data = $this->organizationUnitTypeService->store($validated);
+        $data = $this->organizationUnitTypeService->store($validated);
 
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Organization Unit Type added successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Organization Unit Type added successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
@@ -114,9 +103,9 @@ class OrganizationUnitTypeController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -124,133 +113,111 @@ class OrganizationUnitTypeController extends Controller
         $this->authorize('update', $organizationUnitType);
 
         $validated = $this->organizationUnitTypeService->validator($request, $id)->validate();
-        try {
-            $data = $this->organizationUnitTypeService->update($organizationUnitType, $validated);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Organization Unit Type updated successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->organizationUnitTypeService->update($organizationUnitType, $validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Organization Unit Type updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * remove the specified resource from storage
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function destroy(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::findOrFail($id);
         $this->authorize('delete', $organizationUnitType);
 
-        try {
-            $this->organizationUnitTypeService->destroy($organizationUnitType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Organization Unit Type deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->organizationUnitTypeService->destroy($organizationUnitType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Organization Unit Type deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
-    public function getHierarchy(int $id)
+    public function getHierarchy(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::find($id);
-        try {
-            $data = optional($organizationUnitType->getHierarchy())->toArray();
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "OrganizationUnitType  based hierarchy got successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = optional($organizationUnitType->getHierarchy())->toArray();
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "OrganizationUnitType  based hierarchy got successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
-        try {
-            $response = $this->organizationUnitTypeService->getAllTrashedOrganizationUnitType($request, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->organizationUnitTypeService->getAllTrashedOrganizationUnitType($request, $this->startTime);
         return Response::json($response);
     }
 
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::onlyTrashed()->findOrFail($id);
-        try {
-            $this->organizationUnitTypeService->restore($organizationUnitType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "OrganizationUnitType restored successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->organizationUnitTypeService->restore($organizationUnitType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "OrganizationUnitType restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $organizationUnitType = OrganizationUnitType::onlyTrashed()->findOrFail($id);
-        try {
-            $this->organizationUnitTypeService->forceDelete($organizationUnitType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "OrganizationUnitType permanently deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->organizationUnitTypeService->forceDelete($organizationUnitType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "OrganizationUnitType permanently deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

@@ -288,7 +288,7 @@ class OrganizationController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
         $response = $this->organizationService->getAllTrashedOrganization($request, $this->startTime);
         return Response::json($response);
@@ -297,7 +297,7 @@ class OrganizationController extends Controller
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
     public function restore(int $id)
     {
@@ -318,7 +318,7 @@ class OrganizationController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $organization = Organization::onlyTrashed()->findOrFail($id);
         $this->organizationService->forceDelete($organization);

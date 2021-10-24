@@ -43,77 +43,65 @@ class HumanResourceTemplateController extends Controller
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
      * @throws ValidationException
-     * @throws AuthorizationException|Throwable
      */
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', HumanResourceTemplate::class);
 
         $filter = $this->humanResourceTemplateService->filterValidator($request)->validate();
-        try {
-            $response = $this->humanResourceTemplateService->getHumanResourceTemplateList($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->humanResourceTemplateService->getHumanResourceTemplateList($filter, $this->startTime);
         return Response::json($response);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
      * @throws Throwable
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->humanResourceTemplateService->getOneHumanResourceTemplate($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
+        $response = $this->humanResourceTemplateService->getOneHumanResourceTemplate($id, $this->startTime);
+        if (!$response) {
+            abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+        $this->authorize('view', $response['data']);
         return Response::json($response);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
      * @throws ValidationException
-     * @throws AuthorizationException|Throwable
      */
     function store(Request $request): JsonResponse
     {
         $this->authorize('create', HumanResourceTemplate::class);
 
         $validatedData = $this->humanResourceTemplateService->validator($request)->validate();
-        try {
-            $data = $this->humanResourceTemplateService->store($validatedData);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Human Resource Template added successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->humanResourceTemplateService->store($validatedData);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Human Resource Template added successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
      * @throws ValidationException
-     * @throws AuthorizationException|Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -122,107 +110,91 @@ class HumanResourceTemplateController extends Controller
         $this->authorize('update', $humanResourceTemplate);
 
         $validated = $this->humanResourceTemplateService->validator($request, $id)->validate();
-        try {
-            $data = $this->humanResourceTemplateService->update($humanResourceTemplate, $validated);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Human Resource Template updated successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->humanResourceTemplateService->update($humanResourceTemplate, $validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Human Resource Template updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function destroy(int $id): JsonResponse
     {
         $humanResourceTemplate = HumanResourceTemplate::findOrFail($id);
         $this->authorize('delete', $humanResourceTemplate);
-        try {
-            $this->humanResourceTemplateService->destroy($humanResourceTemplate);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "HumanResource Template delete successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->humanResourceTemplateService->destroy($humanResourceTemplate);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "HumanResource Template delete successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
-        try {
-            $response = $this->humanResourceTemplateService->getTrashedHumanResourceTemplateList($request, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->humanResourceTemplateService->getTrashedHumanResourceTemplateList($request, $this->startTime);
         return Response::json($response);
     }
 
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $humanResourceTemplate = HumanResourceTemplate::onlyTrashed()->findOrFail($id);
-        try {
-            $this->humanResourceTemplateService->restore($humanResourceTemplate);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "HumanResource Template restored successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->humanResourceTemplateService->restore($humanResourceTemplate);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "HumanResource Template restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $humanResourceTemplate = HumanResourceTemplate::onlyTrashed()->findOrFail($id);
-        try {
-            $this->humanResourceTemplateService->forceDelete($humanResourceTemplate);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "HumanResource Template permanently deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->humanResourceTemplateService->forceDelete($humanResourceTemplate);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "HumanResource Template permanently deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

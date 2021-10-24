@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\RankType;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\RankTypeService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -54,11 +52,7 @@ class RankTypeController extends Controller
         $this->authorize('viewAny', RankType::class);
 
         $filter = $this->rankTypeService->filterValidator($request)->validate();
-        try {
-            $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
         return Response::json($response);
     }
 
@@ -70,15 +64,11 @@ class RankTypeController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
+        $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
+        if (!$response) {
+            abort(ResponseAlias::HTTP_NOT_FOUND);
         }
+        $this->authorize('view', $response['data']);
         return Response::json($response);
     }
 
@@ -95,20 +85,16 @@ class RankTypeController extends Controller
         $this->authorize('create', RankType::class);
 
         $validated = $this->rankTypeService->validator($request)->validate();
-        try {
-            $data = $this->rankTypeService->store($validated);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Rank Type added successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->rankTypeService->store($validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Rank Type added successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
@@ -128,22 +114,17 @@ class RankTypeController extends Controller
 
         $validated = $this->rankTypeService->validator($request, $id)->validate();
 
-        try {
-            $data = $this->rankTypeService->update($rankType, $validated);
+        $data = $this->rankTypeService->update($rankType, $validated);
 
-            $response = [
-                'data' => $data ? $data : null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type updated successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = [
+            'data' => $data ? $data : null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
@@ -159,19 +140,15 @@ class RankTypeController extends Controller
         $rankType = RankType::findOrFail($id);
         $this->authorize('delete', $rankType);
 
-        try {
-            $this->rankTypeService->destroy($rankType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankTypeService->destroy($rankType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -180,13 +157,9 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
-        try {
-            $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
         return Response::json($response);
     }
 
@@ -196,22 +169,18 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $rankType = RankType::onlyTrashed()->findOrFail($id);
-        try {
-            $this->rankTypeService->restore($rankType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type restored successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankTypeService->restore($rankType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -220,22 +189,18 @@ class RankTypeController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $rankType = RankType::onlyTrashed()->findOrFail($id);
-        try {
-            $this->rankTypeService->forceDelete($rankType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type permanently deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankTypeService->forceDelete($rankType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type permanently deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
