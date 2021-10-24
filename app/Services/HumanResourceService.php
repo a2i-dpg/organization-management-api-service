@@ -65,23 +65,23 @@ class HumanResourceService
         $humanResourceBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceBuilder->join('organization_units', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_unit_id', '=', 'organization_units.id')
                 ->whereNull('organization_units.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organization_units.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
             $join->on('human_resources.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceBuilder->leftJoin('human_resources as human_res_2', function ($join) use ($rowStatus) {
             $join->on('human_resources.parent_id', '=', 'human_res_2.id')

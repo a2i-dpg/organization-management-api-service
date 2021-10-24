@@ -66,23 +66,23 @@ class HumanResourceTemplateService
         $humanResourceTemplateBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceTemplateBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceTemplateBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceTemplateBuilder->leftJoin('human_resource_templates as human_res_tem_2', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.parent_id', '=', 'human_res_tem_2.id')

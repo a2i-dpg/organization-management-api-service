@@ -60,9 +60,9 @@ class RankService
         $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('ranks.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $rankBuilder->join('rank_types', function ($join) use ($rowStatus) {
             $join->on('ranks.rank_type_id', '=', 'rank_types.id')

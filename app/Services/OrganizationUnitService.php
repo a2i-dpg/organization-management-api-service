@@ -77,16 +77,16 @@ class OrganizationUnitService
         $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
-            }
+            }*/
         });
         $organizationUnitBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_division_id', '=', 'loc_divisions.id')

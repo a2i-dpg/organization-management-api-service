@@ -50,9 +50,9 @@ class OccupationService
         $occupationBuilder->join('job_sectors', function ($join) use ($rowStatus) {
             $join->on('occupations.job_sector_id', '=', 'job_sectors.id')
                 ->whereNull('job_sectors.deleted_at');
-            if (is_numeric($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('job_sectors.row_status', $rowStatus);
-            }
+            }*/
         });
         $occupationBuilder->orderBy('occupations.id', $order);
 
