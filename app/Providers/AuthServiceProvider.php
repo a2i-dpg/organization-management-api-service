@@ -72,7 +72,6 @@ class AuthServiceProvider extends ServiceProvider
                         $role = app(Role::class, $userWithRolePermission['role']);
                     }
 
-                    /** @var User $authUser */
                     $authUser = new User($userWithRolePermission);
                     $authUser->setRole($role);
 
