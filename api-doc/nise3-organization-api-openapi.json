@@ -4486,7 +4486,7 @@
                     "organization_id",
                     "organization_unit_type_id",
                     "display_order",
-                    "is"
+                    "is_designation"
                 ]
             },
             "humanResource": {
