@@ -366,7 +366,7 @@ class HumanResourceService
                     if(!empty($data['parent_id']) && !is_numeric($data['parent_id'])){
                         $failed('The parent id must be an integer.[32000]');
                     }
-                    if(!empty($data['organization_unit_id'] && !empty($data['parent_id'] && is_numeric($data['parent_id'])))){
+                    if(!empty($data['organization_unit_id'] && empty($data['parent_id']))){
                         $humanResourceWithParentIdNull = HumanResource::where('organization_unit_id',$data['organization_unit_id'])->where('parent_id', null)->first();
                         if($humanResourceWithParentIdNull){
                             $failed('Parent item already added for this organization unit');
