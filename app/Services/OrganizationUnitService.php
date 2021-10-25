@@ -409,14 +409,17 @@ class OrganizationUnitService
             'loc_division_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_divisions,id,deleted_at,NULL'
             ],
             'loc_district_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
             ],
             'loc_upazila_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
             ],
             'address' => [
                 'nullable',
