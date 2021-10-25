@@ -368,17 +368,18 @@ class HumanResourceTemplateService
                 'exists:organization_unit_types,id,deleted_at,NULL',
             ],
             'parent_id' => [
-                'nullable',
-                'integer',
-                'exists:human_resource_templates,id,deleted_at,NULL',
-                function($attr,$value,$failed) use ($data){
+                function($attr,$value,$failed) use ($data) {
+                    if(!empty($data['parent_id']) && !is_numeric($data['parent_id'])){
+                        $failed('The parent id must be an integer.[32000]');
+                    }
                     if(!empty($data['organization_unit_type_id'] && empty($data['parent_id']))){
-                        $humanResourceTemplateWithParentIdNull = HumanResourceTemplate::where('organization_unit_type_id',$data['organization_unit_type_id'])->where('parent_id', null)->first();
+                        $humanResourceTemplateWithParentIdNull = HumanResource::where('organization_unit_type_id',$data['organization_unit_type_id'])->where('parent_id', null)->first();
                         if($humanResourceTemplateWithParentIdNull){
                             $failed('Parent item already added for this organization unit type');
                         }
                     }
-                }
+                },
+                'exists:human_resource_templates,id,deleted_at,NULL',
             ],
             'rank_id' => [
                 'nullable',
