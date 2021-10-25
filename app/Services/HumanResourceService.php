@@ -362,13 +362,16 @@ class HumanResourceService
                 'int',
             ],
             'parent_id' => [
-                function($attr,$value,$failed) use ($data) {
-                    if(!empty($data['parent_id']) && !is_numeric($data['parent_id'])){
+                function ($attr, $value, $failed) use ($id, $data) {
+                    if (!empty($data['parent_id']) && !is_numeric($data['parent_id'])) {
                         $failed('The parent id must be an integer.[32000]');
                     }
-                    if(!empty($data['organization_unit_id'] && empty($data['parent_id']))){
-                        $humanResourceWithParentIdNull = HumanResource::where('organization_unit_id',$data['organization_unit_id'])->where('parent_id', null)->first();
-                        if($humanResourceWithParentIdNull){
+                    if (!empty($data['organization_unit_id'] && empty($data['parent_id']))) {
+                        $humanResourceWithParentIdNull = HumanResource::where('organization_unit_id', $data['organization_unit_id'])->where('parent_id', null)->first();
+
+                        if ($id == null && $humanResourceWithParentIdNull) {
+                            $failed('Parent item already added for this organization unit');
+                        } else if ($id && $humanResourceWithParentIdNull && $humanResourceWithParentIdNull->id !== $id) {
                             $failed('Parent item already added for this organization unit');
                         }
                     }
