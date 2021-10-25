@@ -257,7 +257,7 @@ class SkillService
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|min:600|min:2',
             'page' => 'nullable|integer|gt:0',
-            '$pageSize' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
                 'nullable',

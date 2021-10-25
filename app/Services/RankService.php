@@ -320,8 +320,8 @@ class RankService
                 'integer',
             ],
             'organization_id' => [
-                'exists:organizations,id,deleted_at,NULL',
                 'required',
+                'exists:organizations,id,deleted_at,NULL',
                 'int'
             ],
             'row_status' => [
