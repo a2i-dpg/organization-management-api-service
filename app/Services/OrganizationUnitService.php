@@ -519,8 +519,8 @@ class OrganizationUnitService
         $data = $request->all();
         $data["serviceIds"] = is_array($data['serviceIds']) ? $data['serviceIds'] : explode(',', $data['serviceIds']);
         $rules = [
-            'serviceIds' => 'required|array|min:1',
-            'serviceIds.*' => 'required|exists:services,id,deleted_at,NULL|integer|distinct'
+            'serviceIds' => 'nullable|array',
+            'serviceIds.*' => 'nullable|integer|distinct|exists:services,id,deleted_at,NULL|integer'
         ];
         return Validator::make($data, $rules, $customMessage);
     }
@@ -532,8 +532,8 @@ class OrganizationUnitService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => 'Order must be within ASC or DESC.[30000]',
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+            'order . in' => 'Order must be within ASC or DESC . [30000]',
+            'row_status . in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
         if ($request->filled('order')) {
@@ -541,12 +541,12 @@ class OrganizationUnitService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:600|min:2',
-            'page' => 'nullable|integer|gt:0',
-            'page_size' => 'nullable|integer|gt:0',
-            'organization_id' => 'nullable|integer|gt:0',
-            'organization_unit_type_id' => 'nullable|integer|gt:0',
+            'title_en' => 'nullable | max:300 | min:2',
+            'title' => 'nullable | max:600 | min:2',
+            'page' => 'nullable | integer | gt:0',
+            'page_size' => 'nullable | integer | gt:0',
+            'organization_id' => 'nullable | integer | gt:0',
+            'organization_unit_type_id' => 'nullable | integer | gt:0',
             'order' => [
                 'nullable',
                 'string',
