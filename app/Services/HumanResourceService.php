@@ -368,7 +368,6 @@ class HumanResourceService
                     }
                     if (!empty($data['organization_unit_id'] && empty($data['parent_id']))) {
                         $humanResourceWithParentIdNull = HumanResource::where('organization_unit_id', $data['organization_unit_id'])->where('parent_id', null)->first();
-
                         if ($id == null && $humanResourceWithParentIdNull) {
                             $failed('Parent item already added for this organization unit');
                         } else if ($id && $humanResourceWithParentIdNull && $humanResourceWithParentIdNull->id !== $id) {
@@ -376,7 +375,7 @@ class HumanResourceService
                         }
                     }
                 },
-                'exists:human_resources,id,deleted_at,NULL',
+                //'exists:human_resources,id,deleted_at,NULL',
 
             ],
             'rank_id' => [
