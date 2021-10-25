@@ -368,18 +368,19 @@ class HumanResourceTemplateService
                 'exists:organization_unit_types,id,deleted_at,NULL',
             ],
             'parent_id' => [
-                function($attr,$value,$failed) use ($data) {
-                    if(!empty($data['parent_id']) && !is_numeric($data['parent_id'])){
+                function ($attr, $value, $failed) use ($id, $data) {
+                    if (!empty($data['parent_id']) && !is_numeric($data['parent_id'])) {
                         $failed('The parent id must be an integer.[32000]');
                     }
-                    if(!empty($data['organization_unit_type_id'] && empty($data['parent_id']))){
-                        $humanResourceTemplateWithParentIdNull = HumanResource::where('organization_unit_type_id',$data['organization_unit_type_id'])->where('parent_id', null)->first();
-                        if($humanResourceTemplateWithParentIdNull){
+                    if (!empty($data['organization_unit_type_id'] && empty($data['parent_id']))) {
+                        $humanResourceTemplateWithParentIdNull = HumanResource::where('organization_unit_type_id', $data['organization_unit_type_id'])->where('parent_id', null)->first();
+                        if ($id == null && $humanResourceTemplateWithParentIdNull) {
+                            $failed('Parent item already added for this organization unit');
+                        } else if ($id && $humanResourceTemplateWithParentIdNull && $humanResourceTemplateWithParentIdNull->id !== $id) {
                             $failed('Parent item already added for this organization unit type');
                         }
                     }
-                },
-                'exists:human_resource_templates,id,deleted_at,NULL',
+                }
             ],
             'rank_id' => [
                 'nullable',
