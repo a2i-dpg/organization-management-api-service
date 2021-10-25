@@ -79,9 +79,10 @@ class HumanResourceController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $this->authorize('create', HumanResource::class);
+        //$this->authorize('create', HumanResource::class);
 
         $validatedData = $this->humanResourceService->validator($request)->validate();
+        dd($validatedData);
         $data = $this->humanResourceService->store($validatedData);
         $response = [
             'data' => $data ?: null,
