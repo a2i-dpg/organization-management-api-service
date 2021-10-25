@@ -37,6 +37,8 @@ class User extends BaseModel implements
 {
     use Authenticatable, Authorizable;
 
+    protected $guarded=[];
+
     protected Collection $permissions;
     protected Role $role;
 
