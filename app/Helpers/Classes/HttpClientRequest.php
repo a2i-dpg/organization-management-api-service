@@ -20,8 +20,7 @@ class HttpClientRequest
             "idp_user_id" => $idp_user_id
         ];
 
-        $responseData = Http::withOptions(
-            [
+        $responseData = Http::withOptions([
                 'verify' => config('nise3.should_ssl_verify'),
                 'debug' => config('nise3.http_debug'),
                 'timeout' => config('nise3.http_timeout'),
