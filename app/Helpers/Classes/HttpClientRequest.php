@@ -19,9 +19,16 @@ class HttpClientRequest
         $userPostField = [
             "idp_user_id" => $idp_user_id
         ];
-        $responseData = Http::withOptions(['verify' => config('nise3.should_ssl_verify')])
+
+        $responseData = Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) {
+            ->throw(function ($response, $e) use($url) {
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
                 throw $e;
             })
             ->json('data');

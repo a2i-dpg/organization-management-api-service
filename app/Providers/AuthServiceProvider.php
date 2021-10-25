@@ -8,11 +8,15 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
+    private array $policies = [
+    ];
+
     /**
      * Register any application services.
      *
@@ -37,6 +41,16 @@ class AuthServiceProvider extends ServiceProvider
         // should return either a User instance or null. You're free to obtain
         // the User instance via an API token or any other method necessary.
 
+        if (count($this->policies)) {
+            /** Registering Policies
+             * @var string $modelName
+             * @var string $policyName
+             */
+            foreach ($this->policies as $modelName => $policyName) {
+                Gate::policy($modelName, $policyName);
+            }
+        }
+
         $this->app['auth']->viaRequest('token', function (Request $request) {
 
             $token = $request->bearerToken();
@@ -52,12 +66,20 @@ class AuthServiceProvider extends ServiceProvider
 
             if ($idpServerUserId) {
                 $clientRequest = new HttpClientRequest();
-                $user = $clientRequest->getAuthPermission($idpServerUserId);
-                if ($user) {
-                    $role = new Role($user['role']);
-                    $authUser = new User($user);
+                $userWithRolePermission = $clientRequest->getAuthPermission($idpServerUserId);
+                if ($userWithRolePermission) {
+                    $role = app(Role::class);
+                    if (isset($userWithRolePermission['role'])) {
+                        $role = app(Role::class, $userWithRolePermission['role']);
+                    }
+                    $authUser = app(User::class, $userWithRolePermission);
                     $authUser->role = $role;
-                    $authUser->permissions = collect($user['permissions']);
+
+                    $permissions = collect([]);
+                    if (isset($userWithRolePermission['permissions'])) {
+                        $permissions = collect($userWithRolePermission['permissions']);
+                    }
+                    $authUser->permissions = $permissions;
                 }
                 Log::info("userInfoWithIdpId:" . json_encode($authUser));
             }
