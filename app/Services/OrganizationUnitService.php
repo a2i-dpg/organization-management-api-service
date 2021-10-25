@@ -520,7 +520,7 @@ class OrganizationUnitService
         $data["serviceIds"] = is_array($data['serviceIds']) ? $data['serviceIds'] : explode(',', $data['serviceIds']);
         $rules = [
             'serviceIds' => 'nullable|array',
-            'serviceIds.*' => 'nullable|integer|distinct|exists:services,id,deleted_at,NULL|integer'
+            'serviceIds.*' => 'nullable|integer|distinct|exists:services,id,deleted_at,NULL'
         ];
         return Validator::make($data, $rules, $customMessage);
     }
