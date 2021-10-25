@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string title
  * @property-read int id
  * @property-read int organization_id
- * @property-read HumanResourceTemplate humanResourceTemplate
+ * @property-read HumanResourceTemplate humanResourceTemplates
  * @property int row_status
  * @property-read Organization $organization
  * */
@@ -61,7 +61,7 @@ class OrganizationUnitType extends BaseModel
      */
     public function getHierarchy()
     {
-        $topRoot = $this->humanResourceTemplate->where('parent_id', null)->first();
+        $topRoot = $this->humanResourceTemplates->where('parent_id', null)->first();
 
         if (!$topRoot) {
             return null;
