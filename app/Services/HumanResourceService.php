@@ -375,8 +375,6 @@ class HumanResourceService
                         }
                     }
                 },
-                //'exists:human_resources,id,deleted_at,NULL',
-
             ],
             'rank_id' => [
                 'exists:ranks,id,deleted_at,NULL',
