@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
+use App\Models\HumanResource;
 use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -338,6 +339,8 @@ class HumanResourceTemplateService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
+
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -368,6 +371,14 @@ class HumanResourceTemplateService
                 'nullable',
                 'integer',
                 'exists:human_resource_templates,id,deleted_at,NULL',
+                function($attr,$value,$failed) use ($data){
+                    if(!empty($data['organization_unit_type_id'] && empty($data['parent_id']))){
+                        $humanResourceTemplateWithParentIdNull = HumanResourceTemplate::where('organization_unit_type_id',$data['organization_unit_type_id'])->where('parent_id', null)->first();
+                        if($humanResourceTemplateWithParentIdNull){
+                            $failed('Parent item already added for this organization unit type');
+                        }
+                    }
+                }
             ],
             'rank_id' => [
                 'nullable',
@@ -393,7 +404,7 @@ class HumanResourceTemplateService
                 Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**

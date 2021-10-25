@@ -334,6 +334,7 @@ class HumanResourceService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -364,6 +365,14 @@ class HumanResourceService
                 'exists:human_resources,id,deleted_at,NULL',
                 'nullable',
                 'int',
+                function($attr,$value,$failed) use ($data){
+                    if(!empty($data['organization_unit_id'] && empty($data['parent_id']))){
+                        $humanResourceWithParentIdNull = HumanResource::where('organization_unit_id',$data['organization_unit_id'])->where('parent_id', null)->first();
+                        if($humanResourceWithParentIdNull){
+                            $failed('Parent item already added for this organization unit');
+                        }
+                    }
+                }
 
             ],
             'rank_id' => [
@@ -391,7 +400,7 @@ class HumanResourceService
                 Rule::in([HumanResource::ROW_STATUS_ACTIVE, HumanResource::ROW_STATUS_INACTIVE]),
             ]
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**
