@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Helpers\Classes\AuthUtility;
-use App\Helpers\Classes\HttpClientRequest;
+use App\Facade\AuthTokenUtility;
+use App\Facade\ServiceToServiceCall;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Throwable;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,8 +31,7 @@ class AuthServiceProvider extends ServiceProvider
      * Boot the authentication services for the application.
      *
      * @return void
-     * @throws RequestException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function boot()
     {
@@ -60,27 +59,32 @@ class AuthServiceProvider extends ServiceProvider
             }
 
             Log::info('Bearer Token: ' . $token);
+
             $authUser = null;
-            $idpServerUserId = AuthUtility::getIdpServerIdFromToken($token);
+            $idpServerUserId = AuthTokenUtility::getIdpServerIdFromToken($token);
             Log::info("Auth idp user id-->" . $idpServerUserId);
 
             if ($idpServerUserId) {
-                $clientRequest = new HttpClientRequest();
-                $userWithRolePermission = $clientRequest->getAuthPermission($idpServerUserId);
+                $userWithRolePermission = ServiceToServiceCall::getAuthUserWithRolePermission($idpServerUserId);
                 if ($userWithRolePermission) {
                     $role = app(Role::class);
                     if (isset($userWithRolePermission['role'])) {
                         $role = app(Role::class, $userWithRolePermission['role']);
                     }
+
+                    /** @var User $authUser */
                     $authUser = app(User::class, $userWithRolePermission);
-                    $authUser->role = $role;
+
+                    $authUser->setRole($role);
 
                     $permissions = collect([]);
                     if (isset($userWithRolePermission['permissions'])) {
                         $permissions = collect($userWithRolePermission['permissions']);
                     }
-                    $authUser->permissions = $permissions;
+
+                    $authUser->setPermissions($permissions);
                 }
+
                 Log::info("userInfoWithIdpId:" . json_encode($authUser));
             }
             return $authUser;

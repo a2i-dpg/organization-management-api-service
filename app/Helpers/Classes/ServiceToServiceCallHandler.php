@@ -7,17 +7,19 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class HttpClientRequest
+class ServiceToServiceCallHandler
 {
 
     /**
+     * @param string $idpUserId
+     * @return mixed
      * @throws RequestException
      */
-    public function getAuthPermission(?string $idp_user_id)
+    public function getAuthUserWithRolePermission(string $idpUserId): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'auth-user-info';
         $userPostField = [
-            "idp_user_id" => $idp_user_id
+            "idp_user_id" => $idpUserId
         ];
 
         $responseData = Http::withOptions(
@@ -27,12 +29,11 @@ class HttpClientRequest
                 'timeout' => config('nise3.http_timeout'),
             ])
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) use($url) {
+            ->throw(function ($response, $e) use ($url) {
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
                 throw $e;
             })
             ->json('data');
-
 
         Log::info("userInfo:" . json_encode($responseData));
 
