@@ -62,11 +62,16 @@ class OrganizationUnitController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $response = $this->organizationUnitService->getOneOrganizationUnit($id, $this->startTime);
-        if (!$response) {
-            abort(ResponseAlias::HTTP_NOT_FOUND);
-        }
-        $this->authorize('view', $response['data']);
+        $organizationUnit = $this->organizationUnitService->getOneOrganizationUnit($id);
+        $this->authorize('view', $organizationUnit);
+        $response = [
+            "data" => $organizationUnit ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response);
     }
 

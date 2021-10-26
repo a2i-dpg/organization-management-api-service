@@ -146,12 +146,11 @@ class OrganizationUnitService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return OrganizationUnit
      */
-    public function getOneOrganizationUnit(int $id, Carbon $startTime): array
+    public function getOneOrganizationUnit(int $id): OrganizationUnit
     {
-        /** @var Builder $organizationUnitBuilder */
+        /** @var OrganizationUnit|Builder $organizationUnitBuilder */
         $organizationUnitBuilder = OrganizationUnit::select([
             'organization_units.id',
             'organization_units.title_en',
@@ -218,18 +217,8 @@ class OrganizationUnitService
 
         $organizationUnitBuilder->where('organization_units.id', $id);
 
+        return $organizationUnitBuilder->firstOrFail();
 
-        /** @var OrganizationUnit $organizationUnit */
-        $organizationUnit = $organizationUnitBuilder->first();
-
-        return [
-            "data" => $organizationUnit ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
     }
 
     /**

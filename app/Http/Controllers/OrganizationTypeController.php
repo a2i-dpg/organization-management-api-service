@@ -65,11 +65,16 @@ class OrganizationTypeController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $response = $this->organizationTypeService->getOneOrganizationType($id, $this->startTime);
-        if (!$response) {
-            abort(ResponseAlias::HTTP_NOT_FOUND);
-        }
-        $this->authorize('view', $response['data']);
+        $organizationType = $this->organizationTypeService->getOneOrganizationType($id);
+        $this->authorize('view', $organizationType);
+        $response = [
+            "data" => $organizationType ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response);
     }
 

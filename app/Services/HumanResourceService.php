@@ -134,12 +134,11 @@ class HumanResourceService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return HumanResource
      */
-    public function getOneHumanResource(int $id): HumanResource
+    public function getOneHumanResource(int $id):HumanResource
     {
-        /** @var Builder $humanResourceBuilder */
+        /** @var HumanResource|Builder $humanResourceBuilder */
         $humanResourceBuilder = HumanResource::select([
             'human_resources.id',
             'human_resources.title_en',
@@ -186,10 +185,8 @@ class HumanResourceService
         $humanResourceBuilder->where('human_resources.id', $id);
 
 
-        /** @var HumanResource $humanResource */
-        $humanResource = $humanResourceBuilder->firstOrFail();
 
-        return $humanResource;
+        return $humanResourceBuilder->firstOrFail();
     }
 
     /**

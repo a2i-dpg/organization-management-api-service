@@ -60,9 +60,8 @@ class HumanResourceController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $humanResource = $this->humanResourceService->getOneHumanResource($id, $this->startTime);
+        $humanResource = $this->humanResourceService->getOneHumanResource($id);
         $this->authorize('view', $humanResource);
-
         $response = [
             "data" => $humanResource,
             "_response_status" => [

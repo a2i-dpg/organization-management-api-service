@@ -85,12 +85,11 @@ class ServiceService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
      * @return array
      */
-    public function getOneService(int $id, Carbon $startTime): array
+    public function getOneService(int $id): Service
     {
-        /** @var Builder $serviceBuilder */
+        /** @var Service|Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
                 'services.id',
@@ -105,17 +104,7 @@ class ServiceService
         );
         $serviceBuilder->where('services.id', '=', $id);
 
-        /** @var  Service $service */
-        $service = $serviceBuilder->first();
-
-        return [
-            "data" => $service ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $serviceBuilder->firstOrFail();
     }
 
     /**

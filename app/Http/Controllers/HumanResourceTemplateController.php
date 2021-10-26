@@ -64,12 +64,17 @@ class HumanResourceTemplateController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $response = $this->humanResourceTemplateService->getOneHumanResourceTemplate($id, $this->startTime);
-        if (!$response) {
-            abort(ResponseAlias::HTTP_NOT_FOUND);
-        }
-        $this->authorize('view', $response['data']);
-        return Response::json($response);
+        $humanResourceTemplate = $this->humanResourceTemplateService->getOneHumanResourceTemplate($id);
+        $this->authorize('view', $humanResourceTemplate);
+        $response = [
+            "data" => $humanResourceTemplate,
+            "_response_status" => [
+                "success" => true,
+                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+        return Response::json($humanResourceTemplate);
     }
 
     /**

@@ -144,12 +144,11 @@ class OrganizationService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return Organization
      */
-    public function getOneOrganization(int $id, Carbon $startTime): array
+    public function getOneOrganization(int $id): Organization
     {
-        /** @var Builder $organizationBuilder */
+        /** @var Organization|Builder $organizationBuilder */
         $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
@@ -212,18 +211,7 @@ class OrganizationService
         });
         $organizationBuilder->where('organizations.id', '=', $id);
 
-
-        /** @var Organization $organization */
-        $organization = $organizationBuilder->first();
-
-        return [
-            "data" => $organization ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ],
-        ];
+        return $organizationBuilder->firstOrFail();
     }
 
     /**

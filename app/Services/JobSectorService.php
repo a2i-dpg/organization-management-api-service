@@ -86,12 +86,11 @@ class JobSectorService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return JobSector
      */
-    public function getOneJobSector(int $id, Carbon $startTime): array
+    public function getOneJobSector(int $id): JobSector
     {
-        /** @var Builder $jobSectorBuilder */
+        /** @var JobSector| Builder $jobSectorBuilder */
         $jobSectorBuilder = JobSector::select(
             [
                 'job_sectors.id',
@@ -106,17 +105,8 @@ class JobSectorService
         );
         $jobSectorBuilder->where('job_sectors.id', '=', $id);
 
-        /** @var JobSector $jobSector */
-        $jobSector = $jobSectorBuilder->first();
+        return $jobSectorBuilder->firstOrFail();
 
-        return [
-            "data" => $jobSector ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
     }
 
     /**

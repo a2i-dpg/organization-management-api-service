@@ -101,12 +101,11 @@ class RankTypeService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return RankType
      */
-    public function getOneRankType(int $id, Carbon $startTime): array
+    public function getOneRankType(int $id): RankType
     {
-        /** @var Builder $rankTypeBuilder */
+        /** @var RankType|Builder $rankTypeBuilder */
         $rankTypeBuilder = RankType::select(
             [
                 'rank_types.id',
@@ -127,20 +126,13 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         );
-        $rankTypeBuilder->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
+        $rankTypeBuilder->leftJoin('organizations', function ($join) {
+            $join->on('rank_types.organization_id', '=', 'organizations.id')
+                ->whereNUll('organizations.deleted_at');
+        });
         $rankTypeBuilder->where('rank_types.id', '=', $id);
 
-        /** @var RankType $rankType */
-        $rankType = $rankTypeBuilder->first();
-
-        return [
-            "data" => $rankType ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $rankTypeBuilder->firstOrFail();
     }
 
     /**

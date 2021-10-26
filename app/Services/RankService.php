@@ -114,12 +114,11 @@ class RankService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return Rank
      */
-    public function getOneRank(int $id, Carbon $startTime): array
+    public function getOneRank(int $id): Rank
     {
-        /** @var Builder $rankBuilder */
+        /** @var Rank|Builder $rankBuilder */
         $rankBuilder = Rank::select(
             [
                 'ranks.id',
@@ -150,17 +149,7 @@ class RankService
         });
         $rankBuilder->where('ranks.id', '=', $id);
 
-        /** @var Rank $rank */
-        $rank = $rankBuilder->first();
-
-        return [
-            "data" => $rank ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $rankBuilder->firstOrFail();
     }
 
     /**

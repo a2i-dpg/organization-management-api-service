@@ -139,14 +139,14 @@ class HumanResourceTemplateService
         return $response;
     }
 
+
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return HumanResourceTemplate
      */
-    public function getOneHumanResourceTemplate(int $id, Carbon $startTime): array
+    public function getOneHumanResourceTemplate(int $id): HumanResourceTemplate
     {
-        /** @var Builder $humanResourceTemplateBuilder */
+        /** @var HumanResourceTemplate|Builder $humanResourceTemplateBuilder */
         $humanResourceTemplateBuilder = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
@@ -193,17 +193,8 @@ class HumanResourceTemplateService
 
         $humanResourceTemplateBuilder->where('human_resource_templates.id', $id);
 
-        /** @var HumanResourceTemplate $humanResourceTemplate */
-        $humanResourceTemplate = $humanResourceTemplateBuilder->first();
 
-        return [
-            "data" => $humanResourceTemplate ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now()),
-            ]
-        ];
+        return $humanResourceTemplateBuilder->firstOrFail();
     }
 
     /**

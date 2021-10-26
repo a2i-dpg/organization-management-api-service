@@ -64,11 +64,16 @@ class RankTypeController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
-        if (!$response) {
-            abort(ResponseAlias::HTTP_NOT_FOUND);
-        }
-        $this->authorize('view', $response['data']);
+        $rankType = $this->rankTypeService->getOneRankType($id);
+        $this->authorize('view', $rankType);
+        $response = [
+            "data" => $rankType ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response);
     }
 

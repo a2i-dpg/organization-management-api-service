@@ -84,12 +84,11 @@ class OrganizationTypeService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return OrganizationType
      */
-    public function getOneOrganizationType(int $id, carbon $startTime): array
+    public function getOneOrganizationType(int $id): OrganizationType
     {
-        /** @var Builder $organizationTypeBuilder */
+        /** @var OrganizationType|Builder $organizationTypeBuilder */
         $organizationTypeBuilder = OrganizationType::select([
             'organization_types.id',
             'organization_types.title_en',
@@ -103,18 +102,7 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->where('organization_types.id', '=', $id);
 
-
-        /** @var OrganizationType $organizationType */
-        $organizationType = $organizationTypeBuilder->first();
-
-        return [
-            "data" => $organizationType ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $organizationTypeBuilder->firstOrFail();
     }
 
     /**

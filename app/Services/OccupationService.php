@@ -93,12 +93,11 @@ class OccupationService
 
     /**
      * @param $id
-     * @param Carbon $startTime
-     * @return array
+     * @return Occupation
      */
-    public function getOneOccupation($id, Carbon $startTime): array
+    public function getOneOccupation($id): Occupation
     {
-        /** @var Builder $occupationBuilder */
+        /** @var Occupation|Builder $occupationBuilder */
         $occupationBuilder = Occupation::select([
             'occupations.id',
             'occupations.title_en',
@@ -118,17 +117,8 @@ class OccupationService
         });
         $occupationBuilder->where('occupations.id', '=', $id);
 
-        /** @var  Occupation $occupation */
-        $occupation = $occupationBuilder->first();
 
-        return [
-            "data" => $occupation ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $occupationBuilder->firstOrFail();
     }
 
     /**

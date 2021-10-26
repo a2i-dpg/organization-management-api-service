@@ -63,11 +63,16 @@ class JobSectorController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $response = $this->jobSectorService->getOneJobSector($id, $this->startTime);
-        if (!$response) {
-            abort(ResponseAlias::HTTP_NOT_FOUND);
-        }
-        $this->authorize('view', $response['data']);
+        $jobSector = $this->jobSectorService->getOneJobSector($id);
+        $this->authorize('view', $jobSector);
+        $response = [
+            "data" => $jobSector ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response);
     }
 
