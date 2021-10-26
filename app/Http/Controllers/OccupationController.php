@@ -53,7 +53,7 @@ class OccupationController extends Controller
 
         $filter = $this->occupationService->filterValidator($request)->validate();
         $response = $this->occupationService->getOccupationList($filter, $this->startTime);
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -70,11 +70,11 @@ class OccupationController extends Controller
             "data" => $occupation ?: [],
             "_response_status" => [
                 "success" => true,
-                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**

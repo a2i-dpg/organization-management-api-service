@@ -53,7 +53,7 @@ class RankTypeController extends Controller
 
         $filter = $this->rankTypeService->filterValidator($request)->validate();
         $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -70,11 +70,11 @@ class RankTypeController extends Controller
             "data" => $rankType ?: [],
             "_response_status" => [
                 "success" => true,
-                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**

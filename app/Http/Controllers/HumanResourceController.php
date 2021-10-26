@@ -48,7 +48,7 @@ class HumanResourceController extends Controller
         $filter = $this->humanResourceService->filterValidator($request)->validate();
         $response = $this->humanResourceService->getHumanResourceList($filter, $this->startTime);
 
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -66,12 +66,12 @@ class HumanResourceController extends Controller
             "data" => $humanResource,
             "_response_status" => [
                 "success" => true,
-                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ]
         ];
 
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
 
     }
 

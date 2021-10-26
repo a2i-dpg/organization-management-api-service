@@ -47,7 +47,7 @@ class RankController extends Controller
 
         $filter = $this->rankService->filterValidator($request)->validate();
         $response = $this->rankService->getRankList($filter, $this->startTime);
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -63,11 +63,11 @@ class RankController extends Controller
             "data" => $rank ?: [],
             "_response_status" => [
                 "success" => true,
-                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**

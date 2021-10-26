@@ -59,7 +59,7 @@ class OrganizationController extends Controller
 
         $filter = $this->organizationService->filterValidator($request)->validate();
         $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -77,11 +77,11 @@ class OrganizationController extends Controller
             "data" => $organization ?: [],
             "_response_status" => [
                 "success" => true,
-                "code" => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+                "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
