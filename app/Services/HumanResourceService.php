@@ -137,7 +137,7 @@ class HumanResourceService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOneHumanResource(int $id, Carbon $startTime): HumanResource
+    public function getOneHumanResource(int $id): HumanResource
     {
         /** @var Builder $humanResourceBuilder */
         $humanResourceBuilder = HumanResource::select([
