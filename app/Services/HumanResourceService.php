@@ -137,7 +137,7 @@ class HumanResourceService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOneHumanResource(int $id, Carbon $startTime): array
+    public function getOneHumanResource(int $id, Carbon $startTime): HumanResource
     {
         /** @var Builder $humanResourceBuilder */
         $humanResourceBuilder = HumanResource::select([
@@ -187,16 +187,9 @@ class HumanResourceService
 
 
         /** @var HumanResource $humanResource */
-        $humanResource = $humanResourceBuilder->first();
+        $humanResource = $humanResourceBuilder->firstOrFail();
 
-        return [
-            "data" => $humanResource ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now()),
-            ]
-        ];
+        return $humanResource;
     }
 
     /**
