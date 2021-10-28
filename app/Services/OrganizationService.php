@@ -471,11 +471,11 @@ class OrganizationService
             ],
             "location_latitude" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             "location_longitude" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             "google_map_src" => [
                 'nullable',
