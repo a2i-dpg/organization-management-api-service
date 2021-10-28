@@ -181,6 +181,8 @@ class OrganizationService
             'loc_upazilas.title as loc_upazila_title',
             'organizations.location_latitude',
             'organizations.location_longitude',
+            'organizations.google_map_src',
+            'organizations.organization_type_id',
             'organization_types.title_en as organization_type_title_en',
             'organization_types.title as organization_type_title',
             'organizations.address',
