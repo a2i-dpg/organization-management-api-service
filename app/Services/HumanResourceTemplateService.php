@@ -364,7 +364,7 @@ class HumanResourceTemplateService
                         $failed('The parent id must be an integer.[32000]');
                     }
                     if (!empty($data['organization_unit_type_id'] && empty($data['parent_id']))) {
-                        $humanResourceTemplateWithParentIdNull = HumanResource::where('organization_unit_type_id', $data['organization_unit_type_id'])->where('parent_id', null)->first();
+                        $humanResourceTemplateWithParentIdNull = HumanResourceTemplate::where('organization_unit_type_id', $data['organization_unit_type_id'])->where('parent_id', null)->first();
                         if ($id == null && $humanResourceTemplateWithParentIdNull) {
                             $failed('Parent item already added for this organization unit');
                         } else if ($id && $humanResourceTemplateWithParentIdNull && $humanResourceTemplateWithParentIdNull->id !== $id) {
