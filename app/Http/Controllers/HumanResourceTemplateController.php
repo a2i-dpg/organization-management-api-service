@@ -74,7 +74,7 @@ class HumanResourceTemplateController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ]
         ];
-        return Response::json($humanResourceTemplate,ResponseAlias::HTTP_OK);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
