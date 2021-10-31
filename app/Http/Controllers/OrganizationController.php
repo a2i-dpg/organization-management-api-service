@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
+use App\Models\BaseModel;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
@@ -69,10 +70,15 @@ class OrganizationController extends Controller
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function read(int $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         $organization = $this->organizationService->getOneOrganization($id);
-        $this->authorize('view', $organization);
+
+        $requestHeaders = $request->header();
+        if(empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
+            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE){
+            $this->authorize('view', $organization);
+        }
         $response = [
             "data" => $organization ?: [],
             "_response_status" => [
