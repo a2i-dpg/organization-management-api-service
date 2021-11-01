@@ -65,10 +65,10 @@ class OrganizationController extends Controller
 
     /**
      * Display a specified resource
+     * @param Request $request
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
-     * @throws Throwable
      */
     public function read(Request $request, int $id): JsonResponse
     {
