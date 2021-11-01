@@ -279,13 +279,13 @@ class OrganizationService
 
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
-            'username' => $data['contact_person_mobile'],
-            'organization_id' => $data['organization_id'],
-            'name_en' => $data['contact_person_name_en'],
-            'name' => $data['contact_person_name'],
-            'email' => $data['contact_person_email'],
-            'mobile' => $data['contact_person_mobile'],
-            'password' => $data['password']
+            'username' => !empty($data['contact_person_mobile']) ? $data['contact_person_mobile'] : "",
+            'organization_id' => !empty($data['organization_id']) ? $data['organization_id'] : "",
+            'name_en' => !empty($data['contact_person_name_en']) ? $data['contact_person_name_en'] : "",
+            'name' => !empty($data['contact_person_name']) ? $data['contact_person_name'] : "",
+            'email' => !empty($data['contact_person_email']) ? $data['contact_person_email'] : "",
+            'mobile' => !empty($data['contact_person_mobile']) ? $data['contact_person_mobile'] : "",
+            'password' => !empty($data['password']) ? $data['password'] : ""
         ];
 
         Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
