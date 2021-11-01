@@ -237,14 +237,14 @@ class OrganizationService
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
         $userPostField = [
-            'permission_sub_group_id' => $data['permission_sub_group_id'],
+            'permission_sub_group_id' => $data['permission_sub_group_id'] ?? "",
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
-            'organization_id' => $data['organization_id'],
-            'username' => $data['contact_person_mobile'],
-            'name_en' => $data['contact_person_name'],
-            'name' => $data['contact_person_name'],
-            'email' => $data['contact_person_email'],
-            'mobile' => $data['contact_person_mobile'],
+            'organization_id' => $data['organization_id'] ?? "",
+            'username' => $data['contact_person_mobile'] ?? "",
+            'name_en' => $data['contact_person_name'] ?? "",
+            'name' => $data['contact_person_name'] ?? "",
+            'email' => $data['contact_person_email'] ?? "",
+            'mobile' => $data['contact_person_mobile'] ?? ""
         ];
 
         Log::channel("org_reg")->info("Admin reg organization payload sent to core below");
@@ -279,13 +279,13 @@ class OrganizationService
 
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
-            'username' => !empty($data['contact_person_mobile']) ? $data['contact_person_mobile'] : "",
-            'organization_id' => !empty($data['organization_id']) ? $data['organization_id'] : "",
-            'name_en' => !empty($data['contact_person_name_en']) ? $data['contact_person_name_en'] : "",
-            'name' => !empty($data['contact_person_name']) ? $data['contact_person_name'] : "",
-            'email' => !empty($data['contact_person_email']) ? $data['contact_person_email'] : "",
-            'mobile' => !empty($data['contact_person_mobile']) ? $data['contact_person_mobile'] : "",
-            'password' => !empty($data['password']) ? $data['password'] : ""
+            'username' => $data['contact_person_mobile'] ?? "",
+            'organization_id' => $data['organization_id'] ?? "",
+            'name_en' => $data['contact_person_name_en'] ?? "",
+            'name' => $data['contact_person_name'] ?? "",
+            'email' => $data['contact_person_email'] ?? "",
+            'mobile' => $data['contact_person_mobile'] ?? "",
+            'password' => $data['password'] ?? ""
         ];
 
         Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
