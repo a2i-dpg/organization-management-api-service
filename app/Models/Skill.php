@@ -21,7 +21,7 @@ class Skill extends BaseModel
     /**
      * @var string[]
      */
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
     protected $hidden = ["pivot"];
 

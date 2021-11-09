@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
+use App\Models\HumanResource;
 use App\Models\HumanResourceTemplate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -66,43 +67,43 @@ class HumanResourceTemplateService
         $humanResourceTemplateBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceTemplateBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceTemplateBuilder->leftJoin('ranks', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.rank_id', '=', 'ranks.id')
                 ->whereNull('ranks.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('ranks.row_status', $rowStatus);
-            }
+            }*/
         });
         $humanResourceTemplateBuilder->leftJoin('human_resource_templates as human_res_tem_2', function ($join) use ($rowStatus) {
             $join->on('human_resource_templates.parent_id', '=', 'human_res_tem_2.id')
                 ->whereNull('human_res_tem_2.deleted_at');
-            if (is_int($rowStatus)) {
+            if (is_numeric($rowStatus)) {
                 $join->where('human_res_tem_2.row_status', $rowStatus);
             }
         });
 
         $humanResourceTemplateBuilder->orderBy('human_resource_templates.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.row_status', $rowStatus);
         }
 
-        if (is_int($organizationId)) {
+        if (is_numeric($organizationId)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.organization_id', $organizationId);
         }
 
-        if (is_int($organizationUnitTypeId)) {
+        if (is_numeric($organizationUnitTypeId)) {
             $humanResourceTemplateBuilder->where('human_resource_templates.organization_unit_type_id', $organizationUnitTypeId);
         }
 
@@ -115,8 +116,8 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -138,14 +139,14 @@ class HumanResourceTemplateService
         return $response;
     }
 
+
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return HumanResourceTemplate
      */
-    public function getOneHumanResourceTemplate(int $id, Carbon $startTime): array
+    public function getOneHumanResourceTemplate(int $id): HumanResourceTemplate
     {
-        /** @var Builder $humanResourceTemplateBuilder */
+        /** @var HumanResourceTemplate|Builder $humanResourceTemplateBuilder */
         $humanResourceTemplateBuilder = HumanResourceTemplate::select([
             'human_resource_templates.id',
             'human_resource_templates.title_en',
@@ -192,17 +193,8 @@ class HumanResourceTemplateService
 
         $humanResourceTemplateBuilder->where('human_resource_templates.id', $id);
 
-        /** @var HumanResourceTemplate $humanResourceTemplate */
-        $humanResourceTemplate = $humanResourceTemplateBuilder->first();
 
-        return [
-            "data" => $humanResourceTemplate ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now()),
-            ]
-        ];
+        return $humanResourceTemplateBuilder->firstOrFail();
     }
 
     /**
@@ -248,7 +240,7 @@ class HumanResourceTemplateService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('page_size', 10);
+        $pageSize = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -290,8 +282,8 @@ class HumanResourceTemplateService
 
         /** @var Collection $humanResourceTemplates */
 
-        if (!is_int($paginate) || !is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $humanResourceTemplates = $humanResourceTemplateBuilder->paginate($pageSize);
             $paginateData = (object)$humanResourceTemplates->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -338,11 +330,10 @@ class HumanResourceTemplateService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
+
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
             'title_en' => [
@@ -358,25 +349,34 @@ class HumanResourceTemplateService
                 'min: 2'
             ],
             'organization_id' => [
-                'exists:organizations,id',
                 'required',
-                'integer'
-
+                'integer',
+                'exists:organizations,id,deleted_at,NULL',
             ],
             'organization_unit_type_id' => [
-                'exists:organization_unit_types,id',
                 'required',
-                'integer'
+                'integer',
+                'exists:organization_unit_types,id,deleted_at,NULL',
             ],
             'parent_id' => [
-                'exists:human_resource_templates,id',
-                'nullable',
-                'integer'
+                function ($attr, $value, $failed) use ($id, $data) {
+                    if (!empty($data['parent_id']) && !is_numeric($data['parent_id'])) {
+                        $failed('The parent id must be an integer.[32000]');
+                    }
+                    if (!empty($data['organization_unit_type_id'] && empty($data['parent_id']))) {
+                        $humanResourceTemplateWithParentIdNull = HumanResourceTemplate::where('organization_unit_type_id', $data['organization_unit_type_id'])->where('parent_id', null)->first();
+                        if ($id == null && $humanResourceTemplateWithParentIdNull) {
+                            $failed('Parent item already added for this organization unit');
+                        } else if ($id && $humanResourceTemplateWithParentIdNull && $humanResourceTemplateWithParentIdNull->id !== $id) {
+                            $failed('Parent item already added for this organization unit type');
+                        }
+                    }
+                }
             ],
             'rank_id' => [
-                'exists:ranks,id',
                 'nullable',
-                'integer'
+                'integer',
+                'exists:ranks,id,deleted_at,NULL',
             ],
             'display_order' => [
                 'required',
@@ -392,11 +392,12 @@ class HumanResourceTemplateService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 'integer',
                 Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**
@@ -405,33 +406,31 @@ class HumanResourceTemplateService
      */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
+
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:400|min:2',
             'title' => 'nullable|max:800|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'organization_id' => 'exists:organizations,id|integer',
-            'organization_unit_type_id' => 'exists:organization_unit_types,id|integer',
+            'organization_id' => 'nullable|integer|gt:0',
+            'organization_unit_type_id' => 'nullable|integer|gt:0',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "integer",
                 Rule::in([HumanResourceTemplate::ROW_STATUS_ACTIVE, HumanResourceTemplate::ROW_STATUS_INACTIVE]),
             ],

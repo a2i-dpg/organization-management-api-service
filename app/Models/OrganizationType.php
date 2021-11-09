@@ -21,10 +21,13 @@ class OrganizationType extends BaseModel
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
 
+    public const ORGANIZATION_TYPE_IS_GOVERNMENT_TRUE = 1;
+    public const ORGANIZATION_TYPE_IS_GOVERNMENT_FALSE = 0;
+
     /**
      * @var string[]
      */
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
     /** @return HasMany */
     public function organizations(): HasMany

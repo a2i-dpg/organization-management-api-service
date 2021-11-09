@@ -37,68 +37,62 @@ class RankController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws ValidationException
      * @throws AuthorizationException
      */
-    public function getList(Request $request)
+    public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Rank::class);
 
         $filter = $this->rankService->filterValidator($request)->validate();
-        try {
-            $response = $this->rankService->getRankList($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
-        return Response::json($response);
+        $response = $this->rankService->getRankList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->rankService->getOneRank($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
-        }
-        return Response::json($response);
+        $rank = $this->rankService->getOneRank($id);
+        $this->authorize('view', $rank);
+        $response = [
+            "data" => $rank ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $this->authorize('create', Rank::class);
 
         $validated = $this->rankService->validator($request)->validate();
-        try {
-            $data = $this->rankService->store($validated);
+        $data = $this->rankService->store($validated);
 
-            $response = [
-                'data' => $data ? $data : null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Rank added successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = [
+            'data' => $data ? $data : null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Rank added successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -107,9 +101,9 @@ class RankController extends Controller
      * Update the specified resource in storage
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -117,22 +111,17 @@ class RankController extends Controller
         $this->authorize('update', $rank);
 
         $validated = $this->rankService->validator($request, $id)->validate();
-        try {
-            $data = $this->rankService->update($rank, $validated);
+        $data = $this->rankService->update($rank, $validated);
 
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank updated successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
 
@@ -141,40 +130,33 @@ class RankController extends Controller
     /**
      * Remove the specified resource from storage
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function destroy(int $id): JsonResponse
     {
         $rank = Rank::findOrFail($id);
         $this->authorize('delete', $rank);
-        try {
-            $this->rankService->destroy($rank);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankService->destroy($rank);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
-        try {
-            $response = $this->rankService->getTrashedRankList($request, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->rankService->getTrashedRankList($request, $this->startTime);
         return Response::json($response);
     }
 
@@ -186,42 +168,34 @@ class RankController extends Controller
     public function restore(int $id)
     {
         $rank = Rank::onlyTrashed()->findOrFail($id);
-        try {
-            $this->rankService->restore($rank);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank restored successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankService->restore($rank);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $rank = Rank::onlyTrashed()->findOrFail($id);
-        try {
-            $this->rankService->forceDelete($rank);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank permanently deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankService->forceDelete($rank);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank permanently deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

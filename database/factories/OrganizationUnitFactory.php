@@ -29,7 +29,10 @@ class OrganizationUnitFactory extends Factory
         $index = random_int(0, $len - 1);
         $location = LocationSeederHelper::$data[$index];
 
+        $unitAddress = $this->faker->address();
         $designation = $this->faker->randomElement(["DC", "UNO", "Marketing Executive", "Sales Executive", "Finance Executive ", 'HR Manager', 'Admin Manager']);
+        $contactPersonName = ucfirst($this->faker->name());
+
         return [
             'title_en' => ucfirst($title),
             'title' => ucfirst($title),
@@ -39,13 +42,13 @@ class OrganizationUnitFactory extends Factory
             'loc_upazila_id' => $location['loc_upazila_id'],
             'location_latitude' => $location['location_longitude'],
             'location_longitude' => $location['location_longitude'],
-            'address' => $this->faker->address(),
-            'address_en' => $this->faker->address(),
+            'address' => $unitAddress,
+            'address_en' => $unitAddress,
             'mobile' => $this->faker->numerify('017########'),
             'email' => $this->faker->companyEmail(),
             'fax_no' => "+123456",
-            'contact_person_name' => $this->faker->name(),
-            'contact_person_name_en' => $this->faker->name(),
+            'contact_person_name' => $contactPersonName,
+            'contact_person_name_en' => $contactPersonName,
             'contact_person_mobile' => $this->faker->numerify('017########'),
             'contact_person_email' => $this->faker->safeEmail(),
             'contact_person_designation' => $designation,

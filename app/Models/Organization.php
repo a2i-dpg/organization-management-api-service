@@ -34,13 +34,17 @@ class Organization extends BaseModel
 {
     use SoftDeletes, ScopeRowStatusTrait;
 
-    public const ROW_STATUS_ACTIVE = 1;
-    public const ROW_STATUS_INACTIVE = 0;
+    public const ROW_STATUSES = [
+        self::ROW_STATUS_INACTIVE,
+        self::ROW_STATUS_ACTIVE, /** Approved Status */
+        self::ROW_STATUS_PENDING,
+        self::ROW_STATUS_REJECTED
+    ];
 
     /**
      * @var string[]
      */
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
     public const ORGANIZATION_TYPE_GOVT = 1;
     public const ORGANIZATION_TYPE_PRIVATE = 2;
@@ -48,10 +52,10 @@ class Organization extends BaseModel
     public const ORGANIZATION_TYPE_INTERNATIONAL = 4;
 
     public const ORGANIZATION_TYPE = [
-        self::ORGANIZATION_TYPE_GOVT => 1,
-        self::ORGANIZATION_TYPE_PRIVATE => 2,
-        self:: ORGANIZATION_TYPE_NGO => 3,
-        self::ORGANIZATION_TYPE_INTERNATIONAL => 4,
+        self::ORGANIZATION_TYPE_GOVT,
+        self::ORGANIZATION_TYPE_PRIVATE,
+        self:: ORGANIZATION_TYPE_NGO,
+        self::ORGANIZATION_TYPE_INTERNATIONAL
     ];
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class RankType
  * @package App\Models\
+ * @property int id
  * @property int|null organization_id
  * @property string title_en
  * @property string title
@@ -27,7 +28,7 @@ class RankType extends BaseModel
     /**
      * @var string[]
      */
-    protected $guarded = ['id'];
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
     /**
      * @return BelongsTo

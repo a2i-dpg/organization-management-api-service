@@ -49,7 +49,7 @@ class ServiceService
         );
         $serviceBuilder->orderBy('services.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $serviceBuilder->where('services.row_Status', $rowStatus);
         }
         if (!empty($titleEn)) {
@@ -60,8 +60,8 @@ class ServiceService
 
         /** @var Collection $services */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $services = $serviceBuilder->paginate($pageSize);
             $paginateData = (object)$services->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -85,12 +85,11 @@ class ServiceService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
      * @return array
      */
-    public function getOneService(int $id, Carbon $startTime): array
+    public function getOneService(int $id): Service
     {
-        /** @var Builder $serviceBuilder */
+        /** @var Service|Builder $serviceBuilder */
         $serviceBuilder = Service::select(
             [
                 'services.id',
@@ -105,17 +104,7 @@ class ServiceService
         );
         $serviceBuilder->where('services.id', '=', $id);
 
-        /** @var  Service $service */
-        $service = $serviceBuilder->first();
-
-        return [
-            "data" => $service ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $serviceBuilder->firstOrFail();
     }
 
     /**
@@ -160,7 +149,7 @@ class ServiceService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('page_size', 10);
+        $pageSize = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -191,8 +180,8 @@ class ServiceService
 
         /** @var Collection $services */
 
-        if (!is_int($paginate) || !is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $services = $serviceBuilder->paginate($pageSize);
             $paginateData = (object)$services->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -239,10 +228,7 @@ class ServiceService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
             'title_en' => [
@@ -259,6 +245,7 @@ class ServiceService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],
         ];
@@ -272,29 +259,26 @@ class ServiceService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:500|min:2',
             'title' => 'nullable|max:1000|min:2',
-            'page' => 'integer|gt:0',
-            'page_size' => 'integer|gt:0',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "integer",
                 Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],

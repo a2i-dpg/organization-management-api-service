@@ -55,16 +55,16 @@ class RankTypeService
         $rankTypeBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('rank_types.organization_id', '=', 'organizations.id')
                 ->whereNUll('organizations.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $rankTypeBuilder->orderBy('rank_types.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $rankTypeBuilder->where('rank_types.row_status', $rowStatus);
         }
-        if (is_int($organizationId)) {
+        if (is_numeric($organizationId)) {
             $rankTypeBuilder->where('rank_types.organization_id', $organizationId);
         }
         if (!empty($titleEn)) {
@@ -76,8 +76,8 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $rankTypes = $rankTypeBuilder->paginate($pageSize);
             $paginateData = (object)$rankTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -101,12 +101,11 @@ class RankTypeService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return RankType
      */
-    public function getOneRankType(int $id, Carbon $startTime): array
+    public function getOneRankType(int $id): RankType
     {
-        /** @var Builder $rankTypeBuilder */
+        /** @var RankType|Builder $rankTypeBuilder */
         $rankTypeBuilder = RankType::select(
             [
                 'rank_types.id',
@@ -127,20 +126,13 @@ class RankTypeService
                 'rank_types.updated_at',
             ]
         );
-        $rankTypeBuilder->leftJoin('organizations', 'rank_types.organization_id', '=', 'organizations.id');
+        $rankTypeBuilder->leftJoin('organizations', function ($join) {
+            $join->on('rank_types.organization_id', '=', 'organizations.id')
+                ->whereNUll('organizations.deleted_at');
+        });
         $rankTypeBuilder->where('rank_types.id', '=', $id);
 
-        /** @var RankType $rankType */
-        $rankType = $rankTypeBuilder->first();
-
-        return [
-            "data" => $rankType ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $rankTypeBuilder->firstOrFail();
     }
 
     /**
@@ -185,7 +177,7 @@ class RankTypeService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('page_size', 10);
+        $pageSize = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -217,8 +209,8 @@ class RankTypeService
 
         /** @var Collection $rankTypes */
 
-        if (!is_int($paginate) || !is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $rankTypes = $rankTypeBuilder->paginate($pageSize);
             $paginateData = (object)$rankTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -267,10 +259,7 @@ class RankTypeService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
             'title_en' => [
@@ -286,9 +275,9 @@ class RankTypeService
                 'min:2'
             ],
             'organization_id' => [
-                'nullable',
+                'required',
                 'integer',
-                'exists:organizations,id',
+                'exists:organizations,id,deleted_at,NULL'
             ],
             'description' => [
                 'nullable',
@@ -302,6 +291,7 @@ class RankTypeService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 'integer',
                 Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],
@@ -316,30 +306,27 @@ class RankTypeService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'organization_id' => 'integer|exists:organizations,id',
-            'page' => 'integer|gt:0',
-            'page_size' => 'integer|gt:0',
+            'organization_id' => 'nullable||integer|gt:0',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "integer",
                 Rule::in([RankType::ROW_STATUS_ACTIVE, RankType::ROW_STATUS_INACTIVE]),
             ],

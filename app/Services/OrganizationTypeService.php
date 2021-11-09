@@ -47,7 +47,7 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->orderBy('organization_types.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $organizationTypeBuilder->where('organization_types.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
@@ -59,8 +59,8 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -84,12 +84,11 @@ class OrganizationTypeService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return OrganizationType
      */
-    public function getOneOrganizationType(int $id, carbon $startTime): array
+    public function getOneOrganizationType(int $id): OrganizationType
     {
-        /** @var Builder $organizationTypeBuilder */
+        /** @var OrganizationType|Builder $organizationTypeBuilder */
         $organizationTypeBuilder = OrganizationType::select([
             'organization_types.id',
             'organization_types.title_en',
@@ -103,18 +102,7 @@ class OrganizationTypeService
         ]);
         $organizationTypeBuilder->where('organization_types.id', '=', $id);
 
-
-        /** @var OrganizationType $organizationType */
-        $organizationType = $organizationTypeBuilder->first();
-
-        return [
-            "data" => $organizationType ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $organizationTypeBuilder->firstOrFail();
     }
 
     /**
@@ -159,7 +147,7 @@ class OrganizationTypeService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('pageSize', 10);
+        $pageSize = $request->query('pageSize', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = $request->query('order', 'ASC');
 
@@ -185,8 +173,8 @@ class OrganizationTypeService
 
         /** @var Collection $organizationTypes */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizationTypes = $organizationTypeBuilder->paginate($pageSize);
             $paginateData = (object)$organizationTypes->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -235,8 +223,7 @@ class OrganizationTypeService
     {
         $customMessage = [
             'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
+                'row_status.in' => 'Row status must be within 1 or 0. [30000]'
             ]
         ];
         $rules = [
@@ -254,10 +241,12 @@ class OrganizationTypeService
             ],
             'is_government' => [
                 'nullable',
-                'boolean'
+                'integer',
+                Rule::in(OrganizationType::ORGANIZATION_TYPE_IS_GOVERNMENT_TRUE, OrganizationType::ORGANIZATION_TYPE_IS_GOVERNMENT_FALSE)
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],
         ];
@@ -271,29 +260,26 @@ class OrganizationTypeService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:1',
-            'page' => 'int|gt:0',
-            'pageSize' => 'int|gt:0',
+            'page' => 'nullable|int|gt:0',
+            'page_size' => 'nullable|int|gt:0',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "int",
                 Rule::in([OrganizationType::ROW_STATUS_ACTIVE, OrganizationType::ROW_STATUS_INACTIVE]),
             ],

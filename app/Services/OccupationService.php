@@ -50,13 +50,13 @@ class OccupationService
         $occupationBuilder->join('job_sectors', function ($join) use ($rowStatus) {
             $join->on('occupations.job_sector_id', '=', 'job_sectors.id')
                 ->whereNull('job_sectors.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('job_sectors.row_status', $rowStatus);
-            }
+            }*/
         });
         $occupationBuilder->orderBy('occupations.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
@@ -68,8 +68,8 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $occupations = $occupationBuilder->paginate($pageSize);
             $paginateData = (object)$occupations->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -93,12 +93,11 @@ class OccupationService
 
     /**
      * @param $id
-     * @param Carbon $startTime
-     * @return array
+     * @return Occupation
      */
-    public function getOneOccupation($id, Carbon $startTime): array
+    public function getOneOccupation($id): Occupation
     {
-        /** @var Builder $occupationBuilder */
+        /** @var Occupation|Builder $occupationBuilder */
         $occupationBuilder = Occupation::select([
             'occupations.id',
             'occupations.title_en',
@@ -118,17 +117,8 @@ class OccupationService
         });
         $occupationBuilder->where('occupations.id', '=', $id);
 
-        /** @var  Occupation $occupation */
-        $occupation = $occupationBuilder->first();
 
-        return [
-            "data" => $occupation ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        return $occupationBuilder->firstOrFail();
     }
 
     /**
@@ -173,7 +163,7 @@ class OccupationService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $page_size = $request->query('page_size', 10);
+        $page_size = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -201,8 +191,8 @@ class OccupationService
 
         /** @var Collection $occupations */
 
-        if (!is_int($paginate) || !is_int($page_size)) {
-            $page_size = $page_size ?: 10;
+        if (is_numeric($paginate) || is_numeric($page_size)) {
+            $page_size = $page_size ?: BaseModel::DEFAULT_PAGE_SIZE;
             $occupations = $occupationBuilder->paginate($page_size);
             $paginateData = (object)$occupations->toArray();
 
@@ -251,10 +241,7 @@ class OccupationService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
             'title_en' => [
@@ -270,12 +257,13 @@ class OccupationService
                 'min:2'
             ],
             'job_sector_id' => [
-                'exists:job_sectors,id',
                 'required',
-                'integer'
+                'integer',
+                'exists:job_sectors,id,deleted_at,NULL',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],
         ];
@@ -290,30 +278,27 @@ class OccupationService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
+
 
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:400|min:2',
             'title' => 'nullable|max:800|min:2',
-            'page' => 'integer|gt:0',
-            'page_size' => 'integer',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "integer",
                 Rule::in([Occupation::ROW_STATUS_ACTIVE, Occupation::ROW_STATUS_INACTIVE]),
             ],

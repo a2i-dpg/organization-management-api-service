@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Skill;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class SkillSeeder extends Seeder
@@ -17,7 +16,9 @@ class SkillSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        DB::table('skills')->truncate();
+
+        Skill::query()->truncate();
+
         $skills = [
             [
                 'id' => '1',
@@ -148,7 +149,18 @@ class SkillSeeder extends Seeder
                 'id' => '26',
                 "title" => "মাছ চাষ",
                 "title_en" => "Fish Farming"
+            ],
+            [
+                'id' => '27',
+                "title" => "মেশিন লার্নিং",
+                "title_en" => "Machine Learning"
+            ],
+            [
+                'id' => '28',
+                "title" => "কম্পিউটার প্রশিক্ষণ",
+                "title_en" => "Computer Training"
             ]
+
         ];
 
         Skill::insert($skills);

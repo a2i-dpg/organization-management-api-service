@@ -77,48 +77,39 @@ class OrganizationUnitService
         $organizationUnitBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organizations.row_status', $rowStatus);
-            }
+            }*/
         });
         $organizationUnitBuilder->join('organization_unit_types', function ($join) use ($rowStatus) {
             $join->on('organization_units.organization_unit_type_id', '=', 'organization_unit_types.id')
                 ->whereNull('organization_unit_types.deleted_at');
-            if (is_int($rowStatus)) {
+            /*if (is_numeric($rowStatus)) {
                 $join->where('organization_unit_types.row_status', $rowStatus);
-            }
+            }*/
         });
         $organizationUnitBuilder->leftjoin('loc_divisions', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_division_id', '=', 'loc_divisions.id')
                 ->whereNull('loc_divisions.deleted_at');
-            if (is_int($rowStatus)) {
-                $join->where('loc_divisions.row_status', $rowStatus);
-            }
         });
         $organizationUnitBuilder->leftjoin('loc_districts', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_district_id', '=', 'loc_districts.id')
                 ->whereNull('loc_districts.deleted_at');
-            if (is_int($rowStatus)) {
-                $join->where('loc_districts.row_status', $rowStatus);
-            }
         });
         $organizationUnitBuilder->leftjoin('loc_upazilas', function ($join) use ($rowStatus) {
             $join->on('organization_units.loc_upazila_id', '=', 'loc_upazilas.id')
                 ->whereNull('loc_upazilas.deleted_at');
-            if (is_int($rowStatus)) {
-                $join->where('loc_upazilas.row_status', $rowStatus);
-            }
         });
 
         $organizationUnitBuilder->orderBy('organization_units.id', $order);
 
-        if (is_int($rowStatus)) {
+        if (is_numeric($rowStatus)) {
             $organizationUnitBuilder->where('organization_units.row_status', $rowStatus);
         }
-        if (is_int($organizationId)) {
+        if (is_numeric($organizationId)) {
             $organizationUnitBuilder->where('organization_units.organization_id', $organizationId);
         }
-        if (is_int($organizationUnitTypeId)) {
+        if (is_numeric($organizationUnitTypeId)) {
             $organizationUnitBuilder->where('organization_units.organization_unit_type_id', $organizationUnitTypeId);
         }
         if (!empty($titleEn)) {
@@ -130,8 +121,8 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if (is_int($paginate) || is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizationUnits = $organizationUnitBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnits->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -155,12 +146,11 @@ class OrganizationUnitService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return OrganizationUnit
      */
-    public function getOneOrganizationUnit(int $id, Carbon $startTime): array
+    public function getOneOrganizationUnit(int $id): OrganizationUnit
     {
-        /** @var Builder $organizationUnitBuilder */
+        /** @var OrganizationUnit|Builder $organizationUnitBuilder */
         $organizationUnitBuilder = OrganizationUnit::select([
             'organization_units.id',
             'organization_units.title_en',
@@ -183,6 +173,9 @@ class OrganizationUnitService
             'organization_units.organization_id',
             'organizations.title_en as organization_title_en',
             'organizations.title as organization_title',
+            'organization_units.location_latitude',
+            'organization_units.location_longitude',
+            'organization_units.google_map_src',
             'organization_units.loc_division_id',
             'loc_divisions.title_en as loc_division_title_en',
             'loc_divisions.title as loc_division_title',
@@ -224,18 +217,8 @@ class OrganizationUnitService
 
         $organizationUnitBuilder->where('organization_units.id', $id);
 
+        return $organizationUnitBuilder->firstOrFail();
 
-        /** @var OrganizationUnit $organizationUnit */
-        $organizationUnit = $organizationUnitBuilder->first();
-
-        return [
-            "data" => $organizationUnit ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
     }
 
     /**
@@ -280,7 +263,7 @@ class OrganizationUnitService
     {
         $titleEn = $request->query('title_en');
         $title = $request->query('title');
-        $pageSize = $request->query('pageSize', 10);
+        $pageSize = $request->query('pageSize', BaseModel::DEFAULT_PAGE_SIZE);
         $paginate = $request->query('page');
         $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
 
@@ -327,8 +310,8 @@ class OrganizationUnitService
 
         /** @var  Collection $organizationUnits */
 
-        if (!is_int($paginate) || !is_int($pageSize)) {
-            $pageSize = $pageSize ?: 10;
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizationUnits = $organizationUnitBuilder->paginate($pageSize);
             $paginateData = (object)$organizationUnits->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -403,31 +386,53 @@ class OrganizationUnitService
                 'min:2'
             ],
             'organization_id' => [
-                'exists:organizations,id',
                 'required',
-                'integer'
+                'integer',
+                'exists:organizations,id,deleted_at,NULL',
             ],
             'organization_unit_type_id' => [
-                'exists:organization_unit_types,id',
                 'required',
-                'integer'
+                'integer',
+                'exists:organization_unit_types,id,deleted_at,NULL',
             ],
             'loc_division_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_divisions,id,deleted_at,NULL'
             ],
             'loc_district_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
             ],
             'loc_upazila_id' => [
                 'nullable',
                 'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
             ],
             'address' => [
                 'nullable',
                 'string',
-                'max:191',
+                'max:1000',
+            ],
+            'address_en' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
+            'google_map_src' => [
+                'nullable',
+                'string'
+            ],
+            'location_latitude' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+            'location_longitude' => [
+                'nullable',
+                'string',
+                'max:50'
             ],
             'mobile' => [
                 'nullable',
@@ -481,6 +486,7 @@ class OrganizationUnitService
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
+                'nullable',
                 Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ]
         ];
@@ -497,15 +503,13 @@ class OrganizationUnitService
     public function serviceValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        $data["serviceIds"] = is_array($request['serviceIds']) ? $request['serviceIds'] : explode(',', $request['serviceIds']);
+        $data = $request->all();
+        $data["serviceIds"] = is_array($data['serviceIds']) ? $data['serviceIds'] : explode(',', $data['serviceIds']);
         $rules = [
-            'serviceIds' => 'required|array|min:1',
-            'serviceIds.*' => 'required|exists:services,id|integer|distinct'
+            'serviceIds' => 'nullable|array',
+            'serviceIds.*' => 'nullable|integer|distinct|exists:services,id,deleted_at,NULL'
         ];
         return Validator::make($data, $rules, $customMessage);
     }
@@ -517,32 +521,28 @@ class OrganizationUnitService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'order.in' => [
-                'code' => 30000,
-                "message" => 'Order must be within ASC or DESC',
-            ],
-            'row_status.in' => [
-                'code' => 30000,
-                'message' => 'Row status must be within 1 or 0'
-            ]
+            'order . in' => 'Order must be within ASC or DESC . [30000]',
+            'row_status . in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request['order'])) {
-            $request['order'] = strtoupper($request['order']);
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:600|min:2',
-            'page' => 'integer|gt:0',
-            'page_size' => 'integer|gt:0',
-            'organization_id' => 'exists:organizations,id|integer',
-            'organization_unit_type_id' => 'exists:organization_unit_types,id|integer',
+            'title_en' => 'nullable | max:300 | min:2',
+            'title' => 'nullable | max:600 | min:2',
+            'page' => 'nullable | integer | gt:0',
+            'page_size' => 'nullable | integer | gt:0',
+            'organization_id' => 'nullable | integer | gt:0',
+            'organization_unit_type_id' => 'nullable | integer | gt:0',
             'order' => [
+                'nullable',
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
             'row_status' => [
+                'nullable',
                 "integer",
                 Rule::in([Service::ROW_STATUS_ACTIVE, Service::ROW_STATUS_INACTIVE]),
             ],

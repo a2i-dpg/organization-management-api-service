@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\JobSector;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\JsonResponse;
@@ -43,68 +42,62 @@ class JobSectorController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws ValidationException
      * @throws AuthorizationException
      */
-    public function getList(Request $request)
+    public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', JobSector::class);
 
         $filter = $this->jobSectorService->filterValidator($request)->validate();
-        try {
-            $response = $this->jobSectorService->getJobSectorList($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
-        return Response::json($response);
+        $response = $this->jobSectorService->getJobSectorList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
      * Display the specified resource
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->jobSectorService->getOneJobSector($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
-        }
-        return Response::json($response);
+        $jobSector = $this->jobSectorService->getOneJobSector($id);
+        $this->authorize('view', $jobSector);
+        $response = [
+            "data" => $jobSector ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $this->authorize('create', JobSector::class);
 
         $validated = $this->jobSectorService->validator($request)->validate();
-        try {
-            $data = $this->jobSectorService->store($validated);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "JobSector added successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->jobSectorService->store($validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "JobSector added successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
@@ -112,9 +105,9 @@ class JobSectorController extends Controller
      * update the specified resource in storage
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -124,27 +117,23 @@ class JobSectorController extends Controller
 
         $validated = $this->jobSectorService->validator($request, $id)->validate();
 
-        try {
-            $data = $this->jobSectorService->update($jobSector, $validated);
-            $response = [
-                'data' => $data ? $data : null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "JobSector updated successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->jobSectorService->update($jobSector, $validated);
+        $response = [
+            'data' => $data ? $data : null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "JobSector updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
@@ -152,80 +141,67 @@ class JobSectorController extends Controller
         $JobSector = JobSector::findOrFail($id);
         $this->authorize('delete', $JobSector);
 
-        try {
-            $this->jobSectorService->destroy($JobSector);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "JobSector deleted successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->jobSectorService->destroy($JobSector);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "JobSector deleted successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
-        try {
-            $response = $this->jobSectorService->getTrashedJobSectorList($request, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->jobSectorService->getTrashedJobSectorList($request, $this->startTime);
         return Response::json($response);
     }
 
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $jobSector = JobSector::onlyTrashed()->findOrFail($id);
-        try {
-            $this->jobSectorService->restore($jobSector);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "JobSector restored successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->jobSectorService->restore($jobSector);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "JobSector restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $JobSector = JobSector::onlyTrashed()->findOrFail($id);
-        try {
-            $this->jobSectorService->forceDelete($JobSector);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "JobSector permanently deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->jobSectorService->forceDelete($JobSector);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "JobSector permanently deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

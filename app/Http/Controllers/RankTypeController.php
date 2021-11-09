@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\RankType;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\RankTypeService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -44,67 +42,64 @@ class RankTypeController extends Controller
     /**
      * Display a listing  of  the resources
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', RankType::class);
 
         $filter = $this->rankTypeService->filterValidator($request)->validate();
-        try {
-            $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
-        return Response::json($response);
+        $response = $this->rankTypeService->getRankTypeList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
      */
     public function read(int $id): JsonResponse
     {
-        try {
-            $response = $this->rankTypeService->getOneRankType($id, $this->startTime);
-            if (!$response) {
-                abort(ResponseAlias::HTTP_NOT_FOUND);
-            }
-            $this->authorize('view', $response['data']);
-        } catch (Throwable $e) {
-            throw $e;
-        }
-        return Response::json($response);
+        $rankType = $this->rankTypeService->getOneRankType($id);
+        $this->authorize('view', $rankType);
+        $response = [
+            "data" => $rankType ?: [],
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
      */
     function store(Request $request): JsonResponse
     {
         $this->authorize('create', RankType::class);
 
         $validated = $this->rankTypeService->validator($request)->validate();
-        try {
-            $data = $this->rankTypeService->store($validated);
-            $response = [
-                'data' => $data ?: null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Rank Type added successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $data = $this->rankTypeService->store($validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Rank Type added successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
@@ -112,9 +107,10 @@ class RankTypeController extends Controller
      * Update a specified resource to storage
      * @param Request $request
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
-     * @throws ValidationException
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -123,110 +119,93 @@ class RankTypeController extends Controller
 
         $validated = $this->rankTypeService->validator($request, $id)->validate();
 
-        try {
-            $data = $this->rankTypeService->update($rankType, $validated);
+        $data = $this->rankTypeService->update($rankType, $validated);
 
-            $response = [
-                'data' => $data ? $data : null,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type updated successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = [
+            'data' => $data ? $data : null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * Delete the specified resource from the storage
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function destroy(int $id): JsonResponse
     {
         $rankType = RankType::findOrFail($id);
         $this->authorize('delete', $rankType);
 
-        try {
-            $this->rankTypeService->destroy($rankType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankTypeService->destroy($rankType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function getTrashedData(Request $request)
+    public function getTrashedData(Request $request): JsonResponse
     {
-        try {
-            $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $response = $this->rankTypeService->getTrashedRankTypeList($request, $this->startTime);
         return Response::json($response);
     }
 
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $rankType = RankType::onlyTrashed()->findOrFail($id);
-        try {
-            $this->rankTypeService->restore($rankType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type restored successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankTypeService->restore($rankType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $rankType = RankType::onlyTrashed()->findOrFail($id);
-        try {
-            $this->rankTypeService->forceDelete($rankType);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Rank Type permanently deleted successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $this->rankTypeService->forceDelete($rankType);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Rank Type permanently deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

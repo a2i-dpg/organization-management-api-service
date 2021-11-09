@@ -18,14 +18,20 @@ class CreateOrganizationsTable extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('organization_type_id')->nullable()->default(2)
-                ->comment('1 => Government, 2 => Private,3=>NGO,4=>International');
+            $table->unsignedInteger('organization_type_id')
+                ->default(1)
+                ->comment('Example: Government, Private,NGO, International etc. Coming From organization_types table.');
+
             $table->string('title', 1200);
             $table->string('title_en', 600)->nullable();
 
-            $table->unsignedMediumInteger('loc_division_id')->nullable()->index('org_loc_division_id_inx');
-            $table->unsignedMediumInteger('loc_district_id')->nullable()->index('org_loc_district_id_inx');
-            $table->unsignedMediumInteger('loc_upazila_id')->nullable()->index('org_loc_upazila_id_inx');
+            $table->unsignedMediumInteger('loc_division_id')->nullable()
+                ->index('org_loc_division_id_inx');
+            $table->unsignedMediumInteger('loc_district_id')->nullable()
+                ->index('org_loc_district_id_inx');
+            $table->unsignedMediumInteger('loc_upazila_id')->nullable()
+                ->index('org_loc_upazila_id_inx');
+
             $table->string('location_latitude', 50)->nullable();
             $table->string('location_longitude', 50)->nullable();
             $table->text('google_map_src')->nullable();
@@ -56,11 +62,22 @@ class CreateOrganizationsTable extends Migration
             $table->string('logo', 500)->nullable();
             $table->string('domain', 250)->nullable();
 
-            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
+            $table->unsignedTinyInteger('row_status')
+                ->default(2)
+                ->comment('0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected');
+
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
+
+
+            $table->foreign('organization_type_id', 'organizations_fk_organization_type_id')
+                ->references('id')
+                ->on('organization_types')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
