@@ -224,8 +224,8 @@ class OrganizationService
     {
         return Organization::select([
             "id",
-            "title_en",
-            "title_bn"
+            "title",
+            "title_en"
         ])->whereIn("id", $request->get('organization_ids'))
             ->get()->keyBy("id")->toArray();
     }
