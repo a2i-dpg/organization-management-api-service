@@ -234,6 +234,20 @@ class OrganizationService
     }
 
     /**
+     * @param Request $request
+     * @return array
+     */
+    public function getOrganizationTitle(Request $request): array
+    {
+        return Organization::select([
+            "id",
+            "title_en",
+            "title_bn"
+        ])->whereIn("id", $request->get('organization_ids'))
+            ->get()->keyBy("id")->toArray();
+    }
+
+    /**
      * @param Organization $organization
      * @param array $data
      * @return Organization

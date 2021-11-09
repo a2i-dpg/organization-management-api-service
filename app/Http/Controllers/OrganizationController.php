@@ -150,11 +150,11 @@ class OrganizationController extends Controller
 
     /**
      * @param Request $request
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      * @throws CustomException
+     * @throws RequestException
      * @throws Throwable
      * @throws ValidationException
-     * @throws RequestException
      */
     public function organizationOpenRegistration(Request $request): JsonResponse
     {
@@ -277,6 +277,28 @@ class OrganizationController extends Controller
     }
 
     /**
+     * @throws Throwable
+     */
+    public function getOrganizationTitleByIds(Request $request): JsonResponse
+    {
+        throw_if(!is_array($request->get('organization_ids')), ValidationException::withMessages([
+            "The Organization ids must be array.[8000]"
+        ]));
+
+        $organizationTitle = $this->organizationService->getOrganizationTitle($request);
+        $response = [
+            "data" => $organizationTitle,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Organization Title List.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return Exception|JsonResponse|Throwable
      */
@@ -316,7 +338,7 @@ class OrganizationController extends Controller
 
     /**
      * @param int $id
-     * @return Exception|JsonResponse|Throwable
+     * @return JsonResponse
      */
     public function forceDelete(int $id)
     {

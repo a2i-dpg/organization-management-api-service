@@ -111,4 +111,12 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('human-resources-restore/{id}', ['as' => 'human-resources.restore', 'uses' => 'HumanResourceController@restore']);
     $router->delete('human-resources-force-delete/{id}', ['as' => 'human-resources.force-delete', 'uses' => 'HumanResourceController@forceDelete']);
 
+    /** Organization Title by Ids for Internal Api */
+    $router->post("get-organization-title-by-ids",
+        [
+            "as"=>"organizations.get-organization-title-by-ids",
+            "uses"=>"OrganizationController@getOrganizationTitleByIds"
+        ]
+    );
+
 });
