@@ -55,7 +55,7 @@ class RankService
                 'ranks.created_at',
                 'ranks.updated_at',
             ]
-        )->byOrganization('ranks');
+        )->byOrganization();
 
         $rankBuilder->leftJoin('organizations', function ($join) use ($rowStatus) {
             $join->on('ranks.organization_id', '=', 'organizations.id')
