@@ -29,6 +29,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    $customRouter()->resourceRoute('publications', 'PublicationController')->render();
 
 
     $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
