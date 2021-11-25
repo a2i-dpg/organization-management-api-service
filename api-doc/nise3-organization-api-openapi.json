@@ -3525,10 +3525,284 @@
                     "human-resources"
                 ]
             }
+        },
+        "/publications": {
+            "get": {
+                "summary": "Get a publication",
+                "description": "API endpoint to create a Publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description_en",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "Hi rise collapses",
+                                            "title_en": null,
+                                            "description": "A 21-storey luxury .",
+                                            "description_en": null,
+                                            "image_path": null
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "Rise up",
+                                            "title_en": null,
+                                            "description": "A 21-storey luxury .",
+                                            "description_en": null,
+                                            "image_path": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Publications"]
+            },
+            "post": {
+                "summary": "Create a publication",
+                "description": "API endpoint to create a publication.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Publication"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "title_en": null,
+                                        "title": "Maruf's Plan",
+                                        "description": "AN UnAvoidable Blow",
+                                        "description_en": "DO you see the hunger in her eye?",
+                                        "image_path": "http://ghhg",
+                                        "updated_at": "2021-11-25T10:00:39.000000Z",
+                                        "created_at": "2021-11-25T10:00:39.000000Z",
+                                        "id": 8
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "publication added successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Publications"]
+            }
+        },
+        "/publications/{publicationId}": {
+            "get": {
+                "summary": "Get a Publication by Id",
+                "description": "API endpoint to get a publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/publicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "succesfull",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "data": {
+                                            "id": 4,
+                                            "title": "Cry My Name44444",
+                                            "title_en": "aaaa",
+                                            "description": "Ammon Ammarth",
+                                            "description_en": "Feel the black birds cry",
+                                            "image_path": null
+                                        },
+                                        "_response_status": {
+                                            "success": true,
+                                            "code": 200,
+                                            "query_time": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Publications"]
+
+            },
+            "put": {
+                "summary": "Update a publication",
+                "description": "API endpoint to update a publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/publicationId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Publication"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfully",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title": "Tumi Ke?",
+                                        "title_en": null,
+                                        "description": "No description........",
+                                        "description_en": null,
+                                        "image_path": null,
+                                        "deleted_at": null,
+                                        "created_at": "2021-11-25T06:57:16.000000Z",
+                                        "updated_at": "2021-11-25T10:13:39.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Publication updated successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Publications"]
+            },
+            "delete": {
+                "summary": "Delete a publication",
+                "description": "API endpoint to delete a publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/publicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "publication deleted successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                },
+                "tags": ["Publications"]
+            }
+        },
+        "/publications-restore/{publicationId}": {
+            "patch": {
+                "summary": "Restore a deleted publication",
+                "description": "API endpoint to restore a Publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/publicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                },
+                "tags": ["Publications"]
+
+            }
         }
     },
     "components": {
         "schemas": {
+            "Publication": {
+                "type": "object",
+                "description": "Publication management",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English_En",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 1000
+                    },
+                    "description_en": {
+                        "type": "string",
+                        "maxLength": 1000
+                    },
+                    "image_path": {
+                        "type": "string"
+                    }
+
+                }
+            },
             "organizationRegister": {
                 "type": "object",
                 "description": "Organization Registration",
@@ -4596,6 +4870,14 @@
             }
         },
         "parameters": {
+            "publicationId": {
+                "name": "publicationId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "serviceIds": {
                 "name": "serviceIds",
                 "in": "query",
