@@ -29,6 +29,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
 
 
     $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
@@ -105,8 +106,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",
         [
-            "as"=>"organizations.get-organization-title-by-ids",
-            "uses"=>"OrganizationController@getOrganizationTitleByIds"
+            "as" => "organizations.get-organization-title-by-ids",
+            "uses" => "OrganizationController@getOrganizationTitleByIds"
         ]
     );
 
