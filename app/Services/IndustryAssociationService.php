@@ -10,15 +10,45 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
+/**
+ *
+ */
 class IndustryAssociationService
 {
 
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @param array $data
+     * @return IndustryAssociation
+     */
     public function store(IndustryAssociation $industryAssociation, array $data): IndustryAssociation
     {
         $industryAssociation->fill($data);
         $industryAssociation->save();
         return $industryAssociation;
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @param array $data
+     * @return IndustryAssociation
+     */
+    public function update(IndustryAssociation $industryAssociation, array $data): IndustryAssociation
+    {
+        $industryAssociation->fill($data);
+        $industryAssociation->save();
+        return $industryAssociation;
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return bool
+     */
+    public function destroy(IndustryAssociation $industryAssociation): bool
+    {
+        return $industryAssociation->delete();
     }
 
     /**
@@ -56,6 +86,47 @@ class IndustryAssociationService
     }
 
 
+    /**
+     * @param array $data
+     * @return array|null
+     * @throws RequestException
+     */
+    public function createOpenRegisterUser(array $data): array|null
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
+
+        $userPostField = [
+            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
+            'username' => $data['contact_person_mobile'] ?? "",
+            'industry_association_id' => $data['organization_id'] ?? "",
+            'name_en' => $data['contact_person_name_en'] ?? "",
+            'name' => $data['contact_person_name'] ?? "",
+            'email' => $data['contact_person_email'] ?? "",
+            'mobile' => $data['contact_person_mobile'] ?? "",
+            'password' => $data['password'] ?? ""
+        ];
+
+        Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->post($url, $userPostField)
+            ->throw(function ($response, $e) use ($url) {
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
+                throw $e;
+            })
+            ->json();
+    }
+
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
@@ -88,7 +159,7 @@ class IndustryAssociationService
                 'min:2'
             ],
             'loc_division_id' => [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_divisions,id,deleted_at,NULL'
             ],
@@ -258,8 +329,13 @@ class IndustryAssociationService
                 'max:1200',
                 'min:2'
             ],
+            'trade_number' => [
+                'required',
+                'string',
+                'max:100'
+            ],
             'loc_division_id' => [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_divisions,id,deleted_at,NULL'
             ],
@@ -272,56 +348,6 @@ class IndustryAssociationService
                 'nullable',
                 'integer',
                 'exists:loc_upazilas,id,deleted_at,NULL'
-            ],
-            "location_latitude" => [
-                'nullable',
-                'string',
-            ],
-            "location_longitude" => [
-                'nullable',
-                'string',
-            ],
-            "google_map_src" => [
-                'nullable',
-                'integer',
-            ],
-            'address' => [
-                'nullable',
-                'max: 1200',
-                'min:2'
-            ],
-            'address_en' => [
-                'nullable',
-                'max: 600',
-                'min:2'
-            ],
-            "country" => [
-                "nullable",
-                "string",
-                "min:2"
-            ],
-            "phone_code" => [
-                "nullable",
-                "string"
-            ],
-            'mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX,
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'fax_no' => [
-                'nullable',
-                'string',
-                'max: 30',
-            ],
-            'trade_number' => [
-                'required',
-                'string',
-                'max:100'
             ],
             "name_of_the_office_head" => [
                 "required",
@@ -341,6 +367,25 @@ class IndustryAssociationService
                 "nullable",
                 "string"
             ],
+            'address' => [
+                'nullable',
+                'max: 1200',
+                'min:2'
+            ],
+            'address_en' => [
+                'nullable',
+                'max: 600',
+                'min:2'
+            ],
+            'mobile' => [
+                'required',
+                BaseModel::MOBILE_REGEX,
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:191'
+            ],
             'contact_person_name' => [
                 'required',
                 'max: 500',
@@ -354,12 +399,10 @@ class IndustryAssociationService
             'contact_person_mobile' => [
                 'required',
                 Rule::unique('industry_associations', 'contact_person_mobile')
-                    ->ignore($id)
                     ->where(function (\Illuminate\Database\Query\Builder $query) {
                         return $query->whereNull('deleted_at');
                     }),
                 BaseModel::MOBILE_REGEX,
-
             ],
             'contact_person_email' => [
                 'required',
@@ -376,25 +419,15 @@ class IndustryAssociationService
                 'max: 300',
                 "min:2"
             ],
-            'domain' => [
-                'nullable',
-                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'string',
-                'max:191',
-                Rule::unique('industry_associations', 'domain')
-                    ->ignore($id)
-                    ->where(function (\Illuminate\Database\Query\Builder $query) {
-                        return $query->whereNull('deleted_at');
-                    })
+            "password" => [
+                "required",
+                "confirmed",
+                Password::min(BaseModel::PASSWORD_MIN_LENGTH)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
             ],
-            'logo' => [
-                'nullable',
-                'string',
-            ],
-            'row_status' => [
-                'nullable',
-                Rule::in(IndustryAssociation::ROW_STATUSES),
-            ],
+            "password_confirmation" => 'required_with:password',
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }

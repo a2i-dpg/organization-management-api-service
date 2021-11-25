@@ -76,8 +76,6 @@ class IndustryAssociationController extends Controller
             $createdRegisterUser = $this->industryAssociationService->createUser($validated);
 
 
-
-
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  IndustryAssociation Creation has been failed!', 500);
             }
@@ -124,7 +122,7 @@ class IndustryAssociationController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Industry Open Registration.
      * @param Request $request
      * @return JsonResponse
      * @throws CustomException
@@ -145,7 +143,7 @@ class IndustryAssociationController extends Controller
             }
 
             $validated['industry_association_id'] = $industryAssociation->id;
-            $createdRegisterUser = $this->industryAssociationService->createUser($validated);
+            $createdRegisterUser = $this->industryAssociationService->createOpenRegisterUser($validated);
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  IndustryAssociation Creation has been failed!', 500);
@@ -192,14 +190,28 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource from storage.
      * @param Request $request
      * @param int $id
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
+        $industryAssociation = IndustryAssociation::findOrFail($id);
 
+        $validated = $this->industryAssociationService->validator($request, $id)->validate();
+        $data = $this->industryAssociationService->update($industryAssociation, $validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "IndustryAssociation updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
 
@@ -211,12 +223,15 @@ class IndustryAssociationController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
+        $industryAssociation = IndustryAssociation::findOrFail($id);
+
+        $this->industryAssociationService->destroy($industryAssociation);
 
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization deleted successfully.",
+                "message" => "IndustryAssociation deleted successfully.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -228,7 +243,7 @@ class IndustryAssociationController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $response = [
             '_response_status' => [
