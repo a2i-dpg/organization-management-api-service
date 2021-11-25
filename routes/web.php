@@ -103,6 +103,12 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('human-resources-restore/{id}', ['as' => 'human-resources.restore', 'uses' => 'HumanResourceController@restore']);
     $router->delete('human-resources-force-delete/{id}', ['as' => 'human-resources.force-delete', 'uses' => 'HumanResourceController@forceDelete']);
 
+    /**Publication Trash */
+    $router->get('publications-trashed-data', ['as' => 'publications.get-trashed-data', 'uses' => 'PublicationController@getTrashedData']);
+    $router->patch('publications-restore/{id}', ['as' => 'publications.restore', 'uses' => 'PublicationController@restore']);
+    $router->delete('publications-force-delete/{id}', ['as' => 'publications.force-delete', 'uses' => 'PublicationController@forceDelete']);
+
+
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",
         [
