@@ -30,6 +30,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
     $customRouter()->resourceRoute('publications', 'PublicationController')->render();
+    $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
 
 
     $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
@@ -38,8 +39,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** Assign Service to Organization Unit */
     $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
-    /** Organization Registration */
+    /** Industry Association open  Registration */
     $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
+
+
+    /** Organization Registration */
+    $router->post("industry-association-registration", ["as" => "register.industryAssociation", "uses" => "IndustryAssociationController@industryAssociationOpenRegistration"]);
+
 
     /** TODO: Properly Organize Trashed Routes through CustomRouter */
     /** OrganizationType Trash */
@@ -112,8 +118,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",
         [
-            "as"=>"organizations.get-organization-title-by-ids",
-            "uses"=>"OrganizationController@getOrganizationTitleByIds"
+            "as" => "organizations.get-organization-title-by-ids",
+            "uses" => "OrganizationController@getOrganizationTitleByIds"
         ]
     );
 

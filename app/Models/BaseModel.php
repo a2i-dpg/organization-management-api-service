@@ -35,6 +35,7 @@ abstract class BaseModel extends Model
     public const MOBILE_REGEX = 'regex: /^(01[3-9]\d{8})$/';
 
     public const ORGANIZATION_USER_TYPE = 2;
+    public const INDUSTRY_ASSOCIATION_USER_TYPE = 5;
 
     /** Client Url End Point Type*/
     public const CORE_CLIENT_URL_TYPE = "CORE";
