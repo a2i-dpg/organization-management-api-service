@@ -99,7 +99,7 @@ class OrganizationController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         /** @var Organization $organization */
         $organization = app(Organization::class);
