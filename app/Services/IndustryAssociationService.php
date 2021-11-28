@@ -52,6 +52,15 @@ class IndustryAssociationService
     }
 
     /**
+     * @param IndustryAssociation $industryAssociation
+     * @return bool
+     */
+    public function restore(IndustryAssociation $industryAssociation): bool
+    {
+        return $industryAssociation->restore();
+    }
+
+    /**
      * industryAssociation validator
      * @param array $data
      * @return mixed|null

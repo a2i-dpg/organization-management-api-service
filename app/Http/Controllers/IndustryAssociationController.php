@@ -245,11 +245,15 @@ class IndustryAssociationController extends Controller
      */
     public function restore(int $id): JsonResponse
     {
+
+        $industryAssociation = IndustryAssociation::onlyTrashed()->findOrFail($id);
+        $this->industryAssociationService->restore($industryAssociation);
+
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization restored successfully",
+                "message" => "IndustryAssociation restored successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
