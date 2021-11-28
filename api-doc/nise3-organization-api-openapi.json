@@ -3538,20 +3538,16 @@
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
-                        "name": "description",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "$ref": "#/components/parameters/page"
                     },
                     {
-                        "name": "description_en",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
                     }
                 ],
                 "responses": {
@@ -3564,19 +3560,33 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title": "Hi rise collapses",
+                                            "title": "aaaaaaaaaaa",
                                             "title_en": null,
-                                            "description": "A 21-storey luxury .",
+                                            "author": null,
+                                            "author_en": null,
+                                            "description": "ccccccccccccc",
                                             "description_en": null,
-                                            "image_path": null
+                                            "image_path": null,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-11-28T10:33:27.000000Z",
+                                            "updated_at": "2021-11-28T10:35:31.000000Z",
+                                            "row_status": 1
                                         },
                                         {
                                             "id": 2,
-                                            "title": "Rise up",
+                                            "title": "Madagaskaar",
                                             "title_en": null,
-                                            "description": "A 21-storey luxury .",
+                                            "author": null,
+                                            "author_en": null,
+                                            "description": "ShutUp",
                                             "description_en": null,
-                                            "image_path": null
+                                            "image_path": null,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-11-28T10:34:52.000000Z",
+                                            "updated_at": "2021-11-28T10:37:45.000000Z",
+                                            "row_status": 1
                                         }
                                     ],
                                     "_response_status": {
@@ -3611,13 +3621,14 @@
                                 "example": {
                                     "data": {
                                         "title_en": null,
-                                        "title": "Maruf's Plan",
-                                        "description": "AN UnAvoidable Blow",
-                                        "description_en": "DO you see the hunger in her eye?",
-                                        "image_path": "http://ghhg",
-                                        "updated_at": "2021-11-25T10:00:39.000000Z",
-                                        "created_at": "2021-11-25T10:00:39.000000Z",
-                                        "id": 8
+                                        "title": "NewTitle",
+                                        "description": "My Desription",
+                                        "description_en": null,
+                                        "image_path": null,
+                                        "row_status": "1",
+                                        "updated_at": "2021-11-28T10:33:27.000000Z",
+                                        "created_at": "2021-11-28T10:33:27.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -3693,17 +3704,22 @@
                         "description": "successfully",
                         "content": {
                             "application/json": {
-                                "example": {
+                                "example":{
                                     "data": {
                                         "id": 1,
-                                        "title": "Tumi Ke?",
+                                        "title": "aaaaaaaaaaa",
                                         "title_en": null,
-                                        "description": "No description........",
+                                        "description": "ccccccccccccc",
                                         "description_en": null,
                                         "image_path": null,
+                                        "author": null,
+                                        "author_en": null,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "row_status": "1",
                                         "deleted_at": null,
-                                        "created_at": "2021-11-25T06:57:16.000000Z",
-                                        "updated_at": "2021-11-25T10:13:39.000000Z"
+                                        "created_at": "2021-11-28T10:33:27.000000Z",
+                                        "updated_at": "2021-11-28T10:35:31.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -3759,7 +3775,46 @@
                         "description": "Successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "aaaaaaaaaaa",
+                                            "title_en": null,
+                                            "author": null,
+                                            "author_en": null,
+                                            "description": "ccccccccccccc",
+                                            "description_en": null,
+                                            "image_path": null,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-11-28T10:33:27.000000Z",
+                                            "updated_at": "2021-11-28T10:35:31.000000Z",
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "Madagaskaar",
+                                            "title_en": null,
+                                            "author": null,
+                                            "author_en": null,
+                                            "description": "ShutUp",
+                                            "description_en": null,
+                                            "image_path": null,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-11-28T10:34:52.000000Z",
+                                            "updated_at": "2021-11-28T10:37:45.000000Z",
+                                            "row_status": 1
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -4490,6 +4545,13 @@
                         "minLength": 2,
                         "maxLength": 300
                     },
+                    "author": {
+                        "type": "string"
+                    },
+                    "author_en": {
+                        "type": "string",
+                        "maxLength": 1000
+                    },
                     "description": {
                         "type": "string",
                         "maxLength": 1000
@@ -4500,12 +4562,22 @@
                     },
                     "image_path": {
                         "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
                     }
 
                 },
                 "required": [
                     "title",
-                    "description"
+                    "description",
+                    "author"
                 ]
             },
             "organizationRegister": {

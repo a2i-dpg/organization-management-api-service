@@ -29,7 +29,11 @@ class PublicationService
         $titleEn = $request['title_en'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
+        $author = $request['author'] ?? "";
+        $authorEn = $request['author_en'] ?? "";
         $order = $request['order'] ?? "ASC";
+        $rowStatus = $request['row_status'] ?? "";
+
 
 
         /** @var Builder $publicationBuilder */
@@ -38,9 +42,17 @@ class PublicationService
                 'publications.id',
                 'publications.title',
                 'publications.title_en',
+                'publications.author',
+                'publications.author_en',
+                'publications.title_en',
                 'publications.description',
                 'publications.description_en',
-                'publications.image_path'
+                'publications.image_path',
+                'publications.created_by',
+                'publications.updated_by',
+                'publications.created_at',
+                'publications.updated_at',
+                'publications.row_status'
 
             ]
         );
@@ -51,6 +63,15 @@ class PublicationService
         }
         if (!empty($title)) {
             $publicationBuilder->where('publications.title', 'like', '%' . $title . '%');
+        }
+        if (is_numeric($rowStatus)) {
+            $publicationBuilder->where('publications.row_status', $rowStatus);
+        }
+        if (!empty($author)) {
+            $publicationBuilder->where('publications.author', 'like', '%' . $author . '%');
+        }
+        if (!empty($authorEn)) {
+            $publicationBuilder->where('publications.author_en', 'like', '%' . $authorEn . '%');
         }
 
         /** @var Collection $publications */
@@ -69,12 +90,7 @@ class PublicationService
 
         $response['order'] = $order;
         $response['data'] = $publications->toArray()['data'] ?? $publications->toArray();
-        $response['_response_status'] = [
-            "success" => true,
-            "code" => Response::HTTP_OK,
-            "query_time" => $startTime->diffInSeconds(Carbon::now())
-        ];
-
+        $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
         return $response;
     }
 
@@ -91,9 +107,17 @@ class PublicationService
                 'publications.id',
                 'publications.title',
                 'publications.title_en',
+                'publications.author',
+                'publications.author_en',
+                'publications.title_en',
                 'publications.description',
                 'publications.description_en',
                 'publications.image_path',
+                'publications.created_by',
+                'publications.updated_by',
+                'publications.created_at',
+                'publications.updated_at',
+                'publications.row_status'
             ]
         );
 
@@ -219,6 +243,8 @@ class PublicationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
+            'author' => 'nullable|max:600|min:2',
+            'author_en' => 'nullable|max:600|min:2',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
