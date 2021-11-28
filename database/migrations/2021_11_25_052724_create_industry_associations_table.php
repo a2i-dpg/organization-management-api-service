@@ -14,7 +14,7 @@ class CreateIndustryAssociationsTable extends Migration
     public function up()
     {
         Schema::create('industry_associations', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('industry_association_type_id')->default(2)->comment('1=> Govt, 2=> Non govt , 3=> Others');
 
             $table->string('title', 1200);

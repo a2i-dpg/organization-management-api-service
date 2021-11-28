@@ -237,9 +237,19 @@ class OrganizationService
      */
     public function store(Organization $organization, array $data): Organization
     {
+
         $organization->fill($data);
         $organization->save();
+        $this->assignOrganizationInIndustryAssociation($organization);
         return $organization;
+    }
+
+    public function assignOrganizationInIndustryAssociation(Organization $organization)
+    {
+        $organization->industryAssociations()->attach($organization->industry_association_id, [
+            'row_status' => $organization->row_status ?: 2
+        ]);
+
     }
 
     /**
@@ -442,7 +452,6 @@ class OrganizationService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-
         $rules = [
             'organization_type_id' => [
                 'required',

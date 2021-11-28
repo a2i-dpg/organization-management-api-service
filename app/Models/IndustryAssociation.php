@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Scopes\ScopeRowStatusTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -75,5 +76,15 @@ class IndustryAssociation extends BaseModel
         self::ROW_STATUS_PENDING,
         self::ROW_STATUS_REJECTED
     ];
+
+
+    /**
+     * @return BelongsToMany
+     */
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'industry_association_organization');
+    }
+
 
 }

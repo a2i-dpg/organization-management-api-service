@@ -12,6 +12,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -60,7 +61,7 @@ class OrganizationController extends Controller
 
         $filter = $this->organizationService->filterValidator($request)->validate();
         $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -75,8 +76,8 @@ class OrganizationController extends Controller
         $organization = $this->organizationService->getOneOrganization($id);
 
         $requestHeaders = $request->header();
-        if(empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
-            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE){
+        if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
+            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
             $this->authorize('view', $organization);
         }
         $response = [
@@ -87,7 +88,7 @@ class OrganizationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -333,7 +334,7 @@ class OrganizationController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $organization = Organization::onlyTrashed()->findOrFail($id);
         $this->organizationService->restore($organization);
@@ -348,13 +349,12 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function forceDelete(int $id): JsonResponse
+
+    public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
-        $organization = Organization::onlyTrashed()->findOrFail($id);
+        $organizationId = $id ?: Auth::id();
+        $industryAssociationId=$request->industry_association;
+        $organization = Organization::indOrFail($industryAssociationId);
         $this->organizationService->forceDelete($organization);
         $response = [
             '_response_status' => [
