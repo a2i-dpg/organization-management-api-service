@@ -3819,7 +3819,111 @@
                 },
                 "tags": ["Industry-Association"]
             }
+        },
+        "/industry-associations/{IndustryAssocId}": {
+            "put": {
+                "summary": "Update a specific industry association",
+                "description": "API endpoint to update a new industry association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IndustryAssociation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 10,
+                                        "industry_association_type_id": "1",
+                                        "title": "hhh",
+                                        "title_en": null,
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "23",
+                                        "loc_upazila_id": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": null,
+                                        "phone_code": null,
+                                        "mobile": "01489766779",
+                                        "email": "ii@gmail.com",
+                                        "fax_no": null,
+                                        "trade_number": "122",
+                                        "name_of_the_office_head": "ggg",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "jjjj",
+                                        "name_of_the_office_head_designation_en": null,
+                                        "contact_person_name": "dddd",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01990899889",
+                                        "contact_person_email": "ff@gmail.com",
+                                        "contact_person_designation": "ffff",
+                                        "contact_person_designation_en": null,
+                                        "logo": null,
+                                        "domain": null,
+                                        "row_status": "2",
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-11-28T05:28:51.000000Z",
+                                        "updated_at": "2021-11-28T05:57:12.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Industry-Association"]
+            },
+            "delete": {
+                "summary": "Delete a industry Association",
+                "description": "API endpoint to delete an industry association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Industry-Association"]
+            }
         }
+
 
     },
     "components": {
@@ -5056,6 +5160,14 @@
             }
         },
         "parameters": {
+            "IndustryAssocId": {
+                "name": "IndustryAssocId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "publicationId": {
                 "name": "publicationId",
                 "in": "path",
