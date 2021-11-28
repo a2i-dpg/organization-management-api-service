@@ -124,11 +124,11 @@ class IndustryAssociationService
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $organizations = $industryAssociationBuilder->get();
+            $industryAssociations = $industryAssociationBuilder->get();
         }
 
         $response['order'] = $order;
-        $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
+        $response['data'] = $industryAssociations->toArray()['data'] ?? $industryAssociations->toArray();
         $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
 
         return $response;
