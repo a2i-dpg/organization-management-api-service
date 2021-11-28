@@ -10,7 +10,6 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
@@ -34,6 +33,7 @@ class IndustryAssociationController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
+     * @return JsonResponse
      * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
@@ -135,7 +135,7 @@ class IndustryAssociationController extends Controller
                 "success" => false,
                 "code" => $httpStatusCode,
                 "message" => "Error Occurred. Please Contact.",
-                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ];
 
             if (!empty($createdRegisterUser['errors'])) {
@@ -204,7 +204,7 @@ class IndustryAssociationController extends Controller
                 "success" => false,
                 "code" => $httpStatusCode,
                 "message" => "Error Occurred. Please Contact.",
-                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ];
 
             if (!empty($createdRegisterUser['errors'])) {
