@@ -3769,6 +3769,150 @@
             }
         },
         "/industry-associations": {
+            "get": {
+                "summary": "Get all industry association",
+                "description": "API endpoint to get all industry association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "name": "industry_association_type_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "name": "row_status",
+                        "in": "query",
+                        "description": "",
+                        "schema": {
+                            "type": "integer",
+                            "description": "0=> INACTIVE , 1=>ACTIVE  , 2=> PENDING , 3=> REJECTED",
+                            "enum": [0,1,2,3,4]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 8,
+                                            "industry_association_type_id": 1,
+                                            "title_en": null,
+                                            "title": "ppp",
+                                            "loc_division_id": 1,
+                                            "loc_division_title_en": "Barisal",
+                                            "loc_division_title": "বরিশাল",
+                                            "loc_district_id": 1,
+                                            "loc_district_title_en": "BARGUNA",
+                                            "loc_district_title": "বরগুনা",
+                                            "loc_upazila_id": null,
+                                            "loc_upazila_title_en": null,
+                                            "loc_upazila_title": null,
+                                            "location_latitude": null,
+                                            "location_longitude": null,
+                                            "google_map_src": null,
+                                            "name_of_the_office_head": "mUGAMBO",
+                                            "name_of_the_office_head_en": null,
+                                            "name_of_the_office_head_designation": "ssss",
+                                            "name_of_the_office_head_designation_en": null,
+                                            "address": null,
+                                            "address_en": null,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "mobile": "01990898989",
+                                            "email": "AAA@GMAIL.COM",
+                                            "fax_no": null,
+                                            "trade_number": "233",
+                                            "contact_person_name": "mUGAMBO",
+                                            "contact_person_name_en": null,
+                                            "contact_person_mobile": "01889909090",
+                                            "contact_person_email": "HH@GMAIL.COM",
+                                            "contact_person_designation": "batman",
+                                            "contact_person_designation_en": null,
+                                            "logo": null,
+                                            "domain": null,
+                                            "row_status": 0,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-11-28T05:27:28.000000Z",
+                                            "updated_at": "2021-11-28T05:27:28.000000Z"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "industry_association_type_id": 1,
+                                            "title_en": null,
+                                            "title": "ppp",
+                                            "loc_division_id": 1,
+                                            "loc_division_title_en": "Barisal",
+                                            "loc_division_title": "বরিশাল",
+                                            "loc_district_id": 1,
+                                            "loc_district_title_en": "BARGUNA",
+                                            "loc_district_title": "বরগুনা",
+                                            "loc_upazila_id": null,
+                                            "loc_upazila_title_en": null,
+                                            "loc_upazila_title": null,
+                                            "location_latitude": null,
+                                            "location_longitude": null,
+                                            "google_map_src": null,
+                                            "name_of_the_office_head": "mUGAMBO",
+                                            "name_of_the_office_head_en": null,
+                                            "name_of_the_office_head_designation": "ssss",
+                                            "name_of_the_office_head_designation_en": null,
+                                            "address": null,
+                                            "address_en": null,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "mobile": "01990898989",
+                                            "email": "AAA@GMAIL.COM",
+                                            "fax_no": null,
+                                            "trade_number": "233",
+                                            "contact_person_name": "mUGAMBO",
+                                            "contact_person_name_en": null,
+                                            "contact_person_mobile": "01889909099",
+                                            "contact_person_email": "HH@GMAIL.COM",
+                                            "contact_person_designation": "batman",
+                                            "contact_person_designation_en": null,
+                                            "logo": null,
+                                            "domain": null,
+                                            "row_status": 0,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-11-28T05:28:10.000000Z",
+                                            "updated_at": "2021-11-28T05:28:10.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Industry-Association"]
+            },
             "post": {
                 "summary": "Create a new industry association",
                 "description": "API endpoint to Create a new industry association.A successful request response will show 201 HTTP status code",
@@ -3819,8 +3963,78 @@
                 },
                 "tags": ["Industry-Association"]
             }
+
         },
         "/industry-associations/{IndustryAssocId}": {
+            "get": {
+                "summary": "Get a single industry association",
+                "description": "API endpoint to get a single industry association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 9,
+                                        "industry_association_type_id": 1,
+                                        "title_en": null,
+                                        "title": "ppp",
+                                        "loc_division_id": 1,
+                                        "loc_division_title_en": "Barisal",
+                                        "loc_division_title": "বরিশাল",
+                                        "loc_district_id": 1,
+                                        "loc_district_title_en": "BARGUNA",
+                                        "loc_district_title": "বরগুনা",
+                                        "loc_upazila_id": null,
+                                        "loc_upazila_title_en": null,
+                                        "loc_upazila_title": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "name_of_the_office_head": "mUGAMBO",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "ssss",
+                                        "name_of_the_office_head_designation_en": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01990898989",
+                                        "email": "AAA@GMAIL.COM",
+                                        "fax_no": null,
+                                        "trade_number": "233",
+                                        "contact_person_name": "mUGAMBO",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01889909099",
+                                        "contact_person_email": "HH@GMAIL.COM",
+                                        "contact_person_designation": "batman",
+                                        "contact_person_designation_en": null,
+                                        "logo": null,
+                                        "domain": null,
+                                        "row_status": 0,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-11-28T05:28:10.000000Z",
+                                        "updated_at": "2021-11-28T05:28:10.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Industry-Association"]
+            },
             "put": {
                 "summary": "Update a specific industry association",
                 "description": "API endpoint to update a new industry association.A successful request response will show 201 HTTP status code",
@@ -3922,12 +4136,151 @@
                 },
                 "tags": ["Industry-Association"]
             }
+        },
+        "/industry-association-registration": {
+            "post": {
+                "summary": "Register an industry association",
+                "description": "API endpoint to register a industry association.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/industryAssociationRegistration"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Industry Association Registration"
+                ]
+            }
         }
 
 
     },
     "components": {
         "schemas": {
+            "industryAssociationRegistration": {
+                "type": "object",
+                "description": "Industry Association registration",
+                "properties": {
+                    "industry_association_type_id": {
+                        "type": "integer",
+                        "description": "INDUSTRY_ASSOCIATION_TYPE_GOVT = 1; INDUSTRY_ASSOCIATION_TYPE_NON_GOVT = 2; INDUSTRY_ASSOCIATION_TYPE_OTHERS = 3;",
+                        "enum": [1,2,3]
+                    },
+                    "title": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "trade_number": {
+                        "type": "string"
+                    },
+                    "loc_division_id": {
+                        "type": "integer"
+                    },
+                    "loc_district_id": {
+                        "type": "integer"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "description": "regex: /^(01[3-9]\\d{8})$/",
+                        "minimum": 2
+                    },
+                    "email": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "contact_person_name": {
+                        "type": "string"
+                    },
+                    "contact_person_name_en": {
+                        "type": "string"
+                    },
+                    "contact_person_mobile": {
+                        "type": "string"
+                    },
+                    "contact_person_email": {
+                        "type": "string"
+                    },
+                    "contact_person_designation": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "password": {
+                        "type": "string",
+                        "minimum": 8,
+                        "description": "regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$/"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "description": "Required with password"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [2],
+                        "description": "ROW_STATUS_PENDING = 2"
+                    }
+                },
+                "required": [
+                    "industry_association_type_id",
+                    "title",
+                    "trade_number",
+                    "loc_division_id",
+                    "loc_district_id",
+                    "name_of_the_office_head",
+                    "name_of_the_office_head_designation",
+                    "mobile",
+                    "email",
+                    "contact_person_name",
+                    "contact_person_mobile",
+                    "contact_person_email",
+                    "contact_person_designation",
+                    "password",
+                    "password_confirmation"
+                ]
+            },
             "IndustryAssociation": {
                 "type": "object",
                 "description": "Industry Association management",
