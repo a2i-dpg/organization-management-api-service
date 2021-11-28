@@ -3745,9 +3745,7 @@
                     }
                 },
                 "tags": ["Publications"]
-            }
-        },
-        "/publications-restore/{publicationId}": {
+            },
             "patch": {
                 "summary": "Restore a deleted publication",
                 "description": "API endpoint to restore a Publication.A successful request response will show 201 HTTP status code",
@@ -3769,10 +3767,194 @@
                 "tags": ["Publications"]
 
             }
+        },
+        "/industry-associations": {
+            "post": {
+                "summary": "Create a new industry association",
+                "description": "API endpoint to Create a new industry association.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IndustryAssociation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "IndustryAssociation has been Created Successfully",
+                                        "query_time": 1
+                                    },
+                                    "data": {
+                                        "industry_association_type_id": "1",
+                                        "title": "ppp",
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
+                                        "mobile": "01990898989",
+                                        "email": "AAA@GMAIL.COM",
+                                        "trade_number": "233",
+                                        "name_of_the_office_head": "mUGAMBO",
+                                        "name_of_the_office_head_designation": "ssss",
+                                        "contact_person_name": "mUGAMBO",
+                                        "contact_person_mobile": "01889909089",
+                                        "contact_person_email": "HH@GMAIL.COM",
+                                        "contact_person_designation": "batman",
+                                        "row_status": "0",
+                                        "updated_at": "2021-11-28T05:28:51.000000Z",
+                                        "created_at": "2021-11-28T05:28:51.000000Z",
+                                        "id": 10
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Industry-Association"]
+            }
         }
+
     },
     "components": {
         "schemas": {
+            "IndustryAssociation": {
+                "type": "object",
+                "description": "Industry Association management",
+                "properties": {
+                    "industry_association_type_id": {
+                        "type": "integer",
+                        "description": "INDUSTRY_ASSOCIATION_TYPE_GOVT = 1; INDUSTRY_ASSOCIATION_TYPE_NON_GOVT = 2; INDUSTRY_ASSOCIATION_TYPE_OTHERS = 3;",
+                        "enum": [1,2,3]
+                    },
+                    "permission_sub_group_id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "loc_division_id": {
+                        "type": "integer"
+                    },
+                    "loc_district_id": {
+                        "type": "integer"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer"
+                    },
+                    "location_latitude": {
+                        "type": "string"
+                    },
+                    "location_longitude": {
+                        "type": "string"
+                    },
+                    "google_map_src": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "country": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "phone_code": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "description": "regex: /^(01[3-9]\\d{8})$/",
+                        "minimum": 2
+                    },
+                    "email": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "fax_no": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "trade_number": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "contact_person_name": {
+                        "type": "string"
+                    },
+                    "contact_person_name_en": {
+                        "type": "string"
+                    },
+                    "contact_person_mobile": {
+                        "type": "string"
+                    },
+                    "contact_person_email": {
+                        "type": "string"
+                    },
+                    "contact_person_designation": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "minimum": 2
+                    },
+                    "domain": {
+                        "type": "string",
+                        "description": "regex:/^(http|https):\\/\\/[a-zA-Z-\\-\\.0-9]+$/"
+                    },
+                    "logo": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [0,1,2,3],
+                        "description": "0=> INACTIVE , 1=>ACTIVE  , 2=> PENDING , 3=> REJECTED"
+                    }
+                },
+                "required": [
+                    "industry_association_type_id",
+                    "title",
+                    "loc_division_id",
+                    "loc_district_id",
+                    "mobile",
+                    "email",
+                    "trade_number",
+                    "name_of_the_office_head",
+                    "name_of_the_office_head_designation",
+                    "contact_person_name",
+                    "contact_person_mobile",
+                    "contact_person_email",
+                    "contact_person_designation"
+                ]
+            },
             "Publication": {
                 "type": "object",
                 "description": "Publication management",
@@ -3801,7 +3983,11 @@
                         "type": "string"
                     }
 
-                }
+                },
+                "required": [
+                    "title",
+                    "description"
+                ]
             },
             "organizationRegister": {
                 "type": "object",
