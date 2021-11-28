@@ -4,19 +4,204 @@ namespace App\Services;
 
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
  */
 class IndustryAssociationService
 {
+
+    /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getIndustryAssociationList(array $request, Carbon $startTime): array
+    {
+        $titleEn = $request['title_en'] ?? "";
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+        $industryAssociationTypeId = $request['industry_association_type_id'] ?? "";
+
+        /** @var Builder organizationBuilder */
+        $industryAssociationBuilder = IndustryAssociation::select([
+            'industry_associations.id',
+            'industry_associations.industry_association_type_id',
+            'industry_associations.title_en',
+            'industry_associations.title',
+            'industry_associations.loc_division_id',
+            'loc_divisions.title_en as loc_division_title_en',
+            'loc_divisions.title as loc_division_title',
+            'industry_associations.loc_district_id',
+            'loc_districts.title_en as loc_district_title_en',
+            'loc_districts.title as loc_district_title',
+            'industry_associations.loc_upazila_id',
+            'loc_upazilas.title_en as loc_upazila_title_en',
+            'loc_upazilas.title as loc_upazila_title',
+            'loc_upazilas.title as location_latitude',
+            'loc_upazilas.title as location_longitude',
+            'loc_upazilas.title as google_map_src',
+            'industry_associations.name_of_the_office_head',
+            'industry_associations.name_of_the_office_head_en',
+            'industry_associations.name_of_the_office_head_designation',
+            'industry_associations.name_of_the_office_head_designation_en',
+            'industry_associations.address',
+            'industry_associations.address_en',
+            'industry_associations.country',
+            'industry_associations.phone_code',
+            'industry_associations.mobile',
+            'industry_associations.email',
+            'industry_associations.fax_no',
+            'industry_associations.trade_number',
+            'industry_associations.contact_person_name',
+            'industry_associations.contact_person_name_en',
+            'industry_associations.contact_person_mobile',
+            'industry_associations.contact_person_email',
+            'industry_associations.contact_person_designation',
+            'industry_associations.contact_person_designation_en',
+            'industry_associations.logo',
+            'industry_associations.domain',
+            'industry_associations.row_status',
+            'industry_associations.created_by',
+            'industry_associations.updated_by',
+            'industry_associations.created_at',
+            'industry_associations.updated_at'
+        ]);
+
+        $industryAssociationBuilder->leftjoin('loc_divisions', function ($join) {
+            $join->on('industry_associations.loc_division_id', '=', 'loc_divisions.id')
+                ->whereNull('loc_divisions.deleted_at');
+        });
+        $industryAssociationBuilder->leftjoin('loc_districts', function ($join) {
+            $join->on('industry_associations.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+        $industryAssociationBuilder->leftjoin('loc_upazilas', function ($join) {
+            $join->on('industry_associations.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
+        });
+
+        $industryAssociationBuilder->orderBy('industry_associations.id', $order);
+
+
+        if (is_numeric($rowStatus)) {
+            $industryAssociationBuilder->where('industry_associations.row_status', $rowStatus);
+        }
+
+        if (is_numeric($industryAssociationTypeId)) {
+            $industryAssociationBuilder->where('industry_associations.organization_type_id', $industryAssociationTypeId);
+        }
+
+        if (!empty($titleEn)) {
+            $industryAssociationBuilder->where('industry_associations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $industryAssociationBuilder->where('industry_associations.title', 'like', '%' . $title . '%');
+        }
+
+        /** @var Collection $organizations */
+
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $industryAssociations = $industryAssociationBuilder->paginate($pageSize);
+            $paginateData = (object)$industryAssociations->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizations = $industryAssociationBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
+        $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
+
+        return $response;
+    }
+
+    /**
+     * @param int $id
+     * @return Model|Builder
+     */
+    public function getOneIndustryAssociation(int $id): Model|Builder
+    {
+        /** @var Builder $industryAssociationBuilder */
+        $industryAssociationBuilder = IndustryAssociation::select([
+            'industry_associations.id',
+            'industry_associations.industry_association_type_id',
+            'industry_associations.title_en',
+            'industry_associations.title',
+            'industry_associations.loc_division_id',
+            'loc_divisions.title_en as loc_division_title_en',
+            'loc_divisions.title as loc_division_title',
+            'industry_associations.loc_district_id',
+            'loc_districts.title_en as loc_district_title_en',
+            'loc_districts.title as loc_district_title',
+            'industry_associations.loc_upazila_id',
+            'loc_upazilas.title_en as loc_upazila_title_en',
+            'loc_upazilas.title as loc_upazila_title',
+            'loc_upazilas.title as location_latitude',
+            'loc_upazilas.title as location_longitude',
+            'loc_upazilas.title as google_map_src',
+            'industry_associations.name_of_the_office_head',
+            'industry_associations.name_of_the_office_head_en',
+            'industry_associations.name_of_the_office_head_designation',
+            'industry_associations.name_of_the_office_head_designation_en',
+            'industry_associations.address',
+            'industry_associations.address_en',
+            'industry_associations.country',
+            'industry_associations.phone_code',
+            'industry_associations.mobile',
+            'industry_associations.email',
+            'industry_associations.fax_no',
+            'industry_associations.trade_number',
+            'industry_associations.contact_person_name',
+            'industry_associations.contact_person_name_en',
+            'industry_associations.contact_person_mobile',
+            'industry_associations.contact_person_email',
+            'industry_associations.contact_person_designation',
+            'industry_associations.contact_person_designation_en',
+            'industry_associations.logo',
+            'industry_associations.domain',
+            'industry_associations.row_status',
+            'industry_associations.created_by',
+            'industry_associations.updated_by',
+            'industry_associations.created_at',
+            'industry_associations.updated_at'
+        ]);
+
+        $industryAssociationBuilder->leftjoin('loc_divisions', function ($join) {
+            $join->on('industry_associations.loc_division_id', '=', 'loc_divisions.id')
+                ->whereNull('loc_divisions.deleted_at');
+        });
+        $industryAssociationBuilder->leftjoin('loc_districts', function ($join) {
+            $join->on('industry_associations.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+        $industryAssociationBuilder->leftjoin('loc_upazilas', function ($join) {
+            $join->on('industry_associations.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
+        });
+
+        $industryAssociationBuilder->where('industry_associations.id', '=', $id);
+
+        return $industryAssociationBuilder->firstOrFail();
+    }
 
     /**
      * @param IndustryAssociation $industryAssociation
@@ -317,7 +502,7 @@ class IndustryAssociationService
     public function industryAssociationRegistrationValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+            'password.regex' => BaseModel::PASSWORD_VALIDATION_MESSAGE
         ];
 
         $rules = [
@@ -428,17 +613,60 @@ class IndustryAssociationService
                 'max: 300',
                 "min:2"
             ],
+            /**Commented it for custom validation message*/
+//            "password" => [
+//                "required",
+//                "confirmed",
+//                Password::min(BaseModel::PASSWORD_MIN_LENGTH)
+//                    ->letters()
+//                    ->mixedCase()
+//                    ->numbers()
+//            ],
             "password" => [
-                "required",
-                "confirmed",
-                Password::min(BaseModel::PASSWORD_MIN_LENGTH)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
+                'required',
+                'min:' . BaseModel::PASSWORD_MIN_LENGTH,
+                BaseModel::PASSWORD_REGEX
             ],
             "password_confirmation" => 'required_with:password',
+            'row_status' => [
+                'nullable',
+                Rule::in([BaseModel::ROW_STATUS_PENDING])
+            ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|max:600|min:2',
+            'title' => 'nullable|max:1200|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'industry_association_type_id' => 'nullable|integer|gt:0',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "nullable",
+                "integer",
+                Rule::in(IndustryAssociation::ROW_STATUSES),
+            ],
+        ], $customMessage);
     }
 
 

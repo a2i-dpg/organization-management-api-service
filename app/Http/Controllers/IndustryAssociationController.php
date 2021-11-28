@@ -10,7 +10,6 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
@@ -34,9 +33,30 @@ class IndustryAssociationController extends Controller
     /**
      * Display a listing of the resource.
      * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $filter = $this->industryAssociationService->filterValidator($request)->validate();
+        $returnedData = $this->industryAssociationService->getIndustryAssociationList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
 
@@ -49,6 +69,16 @@ class IndustryAssociationController extends Controller
      */
     public function read(Request $request, int $id): JsonResponse
     {
+        $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
+        $response = [
+            "data" => $industryAssociation ?: null,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
 
@@ -105,7 +135,7 @@ class IndustryAssociationController extends Controller
                 "success" => false,
                 "code" => $httpStatusCode,
                 "message" => "Error Occurred. Please Contact.",
-                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ];
 
             if (!empty($createdRegisterUser['errors'])) {
@@ -174,7 +204,7 @@ class IndustryAssociationController extends Controller
                 "success" => false,
                 "code" => $httpStatusCode,
                 "message" => "Error Occurred. Please Contact.",
-                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ];
 
             if (!empty($createdRegisterUser['errors'])) {

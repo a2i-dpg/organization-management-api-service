@@ -34,6 +34,9 @@ abstract class BaseModel extends Model
 
     public const MOBILE_REGEX = 'regex: /^(01[3-9]\d{8})$/';
 
+    public const PASSWORD_REGEX = 'regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
+    public const PASSWORD_VALIDATION_MESSAGE = 'The password must contain at least one uppercase, lowercase letter and at least one number.[66000]';
+
     public const ORGANIZATION_USER_TYPE = 2;
     public const INDUSTRY_ASSOCIATION_USER_TYPE = 5;
 
