@@ -4135,6 +4135,34 @@
                     }
                 },
                 "tags": ["Industry-Association"]
+            },
+            "patch": {
+                "summary": "Restore a deleted Industry Association",
+                "description": "API endpoint to restore a deleted Industry Association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation restored successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Industry-Association"]
+
             }
         },
         "/industry-association-registration": {
