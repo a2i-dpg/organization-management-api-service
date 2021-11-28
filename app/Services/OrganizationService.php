@@ -449,6 +449,11 @@ class OrganizationService
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
+            'industry_association_id' => [
+                'required',
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
+            ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
                     return is_null($id);
@@ -564,7 +569,6 @@ class OrganizationService
                         return $query->whereNull('deleted_at');
                     }),
                 BaseModel::MOBILE_REGEX,
-
             ],
             'contact_person_email' => [
                 'required',
@@ -631,6 +635,11 @@ class OrganizationService
                 'required',
                 'integer',
                 'exists:organization_types,id,deleted_at,NULL'
+            ],
+            'industry_association_id' => [
+                'required',
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
             ],
             'email' => [
                 'required',
