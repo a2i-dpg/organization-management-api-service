@@ -15,11 +15,12 @@ class CreatePublicationsTable extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
-            $table->string('title',length: 400);
-            $table->string('title_en',length: 400)->nullable();
-            $table->string('description',length: 2000);
-            $table->string('description_en',length: 2000)->nullable();
-            $table->string('image_path',length: 400)->nullable();
+            $table->string('title', 400);
+            $table->string('title_en', 400)->nullable();
+            $table->text('description');
+            $table->text('description_en')->nullable();
+            $table->string('image_path', 400)->nullable();
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->softDeletes();
             $table->timestamps();
         });

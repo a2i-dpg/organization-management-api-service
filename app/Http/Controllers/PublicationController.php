@@ -31,7 +31,7 @@ class PublicationController extends Controller
     public function __construct(PublicationService $publicationService)
     {
         $this->startTime = Carbon::now();
-        $this->publicationService = $publicationService ;
+        $this->publicationService = $publicationService;
     }
 
     /**
@@ -41,14 +41,13 @@ class PublicationController extends Controller
      * @throws ValidationException
      */
 
-    public function getList(Request $request)
+    public function getList(Request $request): JsonResponse
     {
         $filter = $this->publicationService->filterValidator($request)->validate();
-        $response = $this->publicationService->getPublicationList($filter,$this->startTime);
-        return \Illuminate\Support\Facades\Response::json($response,ResponseAlias::HTTP_OK);
+        $response = $this->publicationService->getPublicationList($filter, $this->startTime);
+        return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
-
 
     /**
      * @param int $id
@@ -57,9 +56,8 @@ class PublicationController extends Controller
     public function read(int $id): JsonResponse
     {
         $publication = $this->publicationService->getOnePublication($id, $this->startTime);
-        return \Illuminate\Support\Facades\Response::json($publication,ResponseAlias::HTTP_OK);
+        return Response::json($publication, ResponseAlias::HTTP_OK);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -80,7 +78,7 @@ class PublicationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return \Illuminate\Support\Facades\Response::json($response, ResponseAlias::HTTP_CREATED);
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
 
@@ -106,9 +104,8 @@ class PublicationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return \Illuminate\Support\Facades\Response::json($response, ResponseAlias::HTTP_CREATED);
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
-
 
 
     /**
@@ -129,14 +126,11 @@ class PublicationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return \Illuminate\Support\Facades\Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-
-
-
-
     /**
+     * Restore the specified  soft deleted resource
      * @param int $id
      * @return JsonResponse
      */
@@ -152,28 +146,7 @@ class PublicationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return \Illuminate\Support\Facades\Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-
-
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function forceDelete(int $id): JsonResponse
-    {
-        $Publication = Publication::onlyTrashed()->findOrFail($id);
-        $this->publicationService->forceDelete($Publication);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Publication permanently deleted successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return \Illuminate\Support\Facades\Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
 }

@@ -27,15 +27,13 @@ class PublicationService
     {
         $title = $request['title'] ?? "";
         $titleEn = $request['title_en'] ?? "";
-        $description = $request['description'] ?? "";
-        $description_en = $request['description_en'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $order = $request['order'] ?? "ASC";
 
 
-        /** @var Builder $pulicationBuilder */
-        $pulicationBuilder = Publication::select(
+        /** @var Builder $publicationBuilder */
+        $publicationBuilder = Publication::select(
             [
                 'publications.id',
                 'publications.title',
@@ -46,27 +44,27 @@ class PublicationService
 
             ]
         );
-        $pulicationBuilder->orderBy('publications.id', $order);
+        $publicationBuilder->orderBy('publications.id', $order);
 
         if (!empty($titleEn)) {
-            $pulicationBuilder->where('publications.title_en', 'like', '%' . $titleEn . '%');
+            $publicationBuilder->where('publications.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
-            $pulicationBuilder->where('publications.title', 'like', '%' . $title . '%');
+            $publicationBuilder->where('publications.title', 'like', '%' . $title . '%');
         }
 
         /** @var Collection $publications */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $publications = $pulicationBuilder->paginate($pageSize);
+            $publications = $publicationBuilder->paginate($pageSize);
             $paginateData = (object)$publications->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $publications = $pulicationBuilder->get();
+            $publications = $publicationBuilder->get();
         }
 
         $response['order'] = $order;
@@ -87,8 +85,8 @@ class PublicationService
      */
     public function getOnePublication(int $id, Carbon $startTime): array
     {
-        /** @var Builder $pulicationBuilder */
-        $pulicationBuilder = Publication::select(
+        /** @var Builder $publicationBuilder */
+        $publicationBuilder = Publication::select(
             [
                 'publications.id',
                 'publications.title',
@@ -99,10 +97,10 @@ class PublicationService
             ]
         );
 
-        $pulicationBuilder->where('publications.id', '=', $id);
+        $publicationBuilder->where('publications.id', '=', $id);
 
         /** @var Publication $publication */
-        $publication = $pulicationBuilder->first();
+        $publication = $publicationBuilder->first();
 
         return [
             "data" => $publication ?: [],
@@ -148,61 +146,6 @@ class PublicationService
     }
 
     /**
-     * @param Request $request
-     * @param Carbon $startTime
-     * @return array
-     */
-    public function getTrashedPublicationList(Request $request, Carbon $startTime): array
-    {
-        $titleEn = $request->query('title_en');
-        $title = $request->query('title');
-        $pageSize = $request->query('page_size', BaseModel::DEFAULT_PAGE_SIZE);
-        $paginate = $request->query('page');
-        $order = !empty($request->query('order')) ? $request->query('order') : 'ASC';
-
-        /** @var Builder $pulicationBuilder */
-        $pulicationBuilder = Publication::onlyTrashed()->select(
-            [
-                'publications.id as id',
-                'publications.title_en',
-                'publications.title',
-            ]
-        );
-
-        $pulicationBuilder->orderBy('publications.id', $order);
-
-        if (!empty($titleEn)) {
-            $pulicationBuilder->where('publications.title_en', 'like', '%' . $titleEn . '%');
-        } elseif (!empty($title)) {
-            $pulicationBuilder->where('publications.title', 'like', '%' . $title . '%');
-        }
-
-        /** @var Collection $publications */
-
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
-            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $publications = $pulicationBuilder->paginate($pageSize);
-            $paginateData = (object)$publications->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
-        } else {
-            $publications = $pulicationBuilder->get();
-        }
-
-        $response['order'] = $order;
-        $response['data'] = $publications->toArray()['data'] ?? $publications->toArray();
-        $response['_response_status'] = [
-            "success" => true,
-            "code" => Response::HTTP_OK,
-            "query_time" => $startTime->diffInSeconds(Carbon::now())
-        ];
-
-        return $response;
-    }
-
-    /**
      * @param Publication $publication
      * @return bool
      */
@@ -211,14 +154,6 @@ class PublicationService
         return $publication->restore();
     }
 
-    /**
-     * @param Publication $publication
-     * @return bool
-     */
-    public function forceDelete(Publication $publication): bool
-    {
-        return $publication->forceDelete();
-    }
 
     /**
      * @param Request $request
@@ -247,21 +182,22 @@ class PublicationService
             'description' => [
                 'required',
                 'string',
-                'max: 1000',
-                'min:2'
             ],
             'description_en' => [
                 'nullable',
                 'string',
-                'max: 1000',
-                'min:2'
             ],
             'image_path' => [
                 'nullable',
                 'string',
                 'max: 1000',
                 'min:2'
-            ]
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'nullable',
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }
@@ -283,15 +219,18 @@ class PublicationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'description' => 'nullable|max:1000|min:2',
-            'description_en' => 'nullable|max:1000|min:2',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
                 'nullable',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
-            ]
+            ],
+            'row_status' => [
+                "nullable",
+                "integer",
+                Rule::in(BaseModel::ROW_STATUS_ACTIVE,BaseModel::ROW_STATUS_INACTIVE),
+            ],
         ], $customMessage);
     }
 }
