@@ -29,6 +29,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    $customRouter()->resourceRoute('publications', 'PublicationController')->render();
     $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
 
 
@@ -107,6 +108,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('human-resources-trashed-data', ['as' => 'human-resources.get-trashed-data', 'uses' => 'HumanResourceController@getTrashedData']);
     $router->patch('human-resources-restore/{id}', ['as' => 'human-resources.restore', 'uses' => 'HumanResourceController@restore']);
     $router->delete('human-resources-force-delete/{id}', ['as' => 'human-resources.force-delete', 'uses' => 'HumanResourceController@forceDelete']);
+
+
 
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",
