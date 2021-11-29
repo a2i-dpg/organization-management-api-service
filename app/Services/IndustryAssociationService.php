@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use App\Models\Organization;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -244,6 +245,29 @@ class IndustryAssociationService
     {
         return $industryAssociation->restore();
     }
+
+    /**
+     * @param Organization $organization
+     * @param IndustryAssociation $industryAssociation
+     */
+    public function industryAssociationMembershipApproval(Organization $organization, IndustryAssociation $industryAssociation)
+    {
+        $industryAssociation->organizations()->updateExistingPivot($organization->id, [
+            'row_status' => 1
+        ]);
+    }
+
+    /**
+     * @param Organization $organization
+     * @param IndustryAssociation $industryAssociation
+     */
+    public function industryAssociationMembershipRejection(Organization $organization, IndustryAssociation $industryAssociation)
+    {
+        $industryAssociation->organizations()->updateExistingPivot($organization->id, [
+            'row_status' => 4
+        ]);
+    }
+
 
     /**
      * industryAssociation validator

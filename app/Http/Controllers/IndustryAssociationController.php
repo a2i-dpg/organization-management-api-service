@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
 use App\Models\IndustryAssociation;
+use App\Models\Organization;
 use App\Services\IndustryAssociationService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -284,6 +286,54 @@ class IndustryAssociationController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "IndustryAssociation restored successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     *  IndustryAssociation membership approval
+     * @param Request $request
+     * @param int $organizationId
+     * @return JsonResponse
+     */
+    public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
+    {
+        $industryAssociationId = $request->input('industry_association_id') ?: Auth::id();
+
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $organization = Organization::findOrFail($organizationId);
+
+        $this->industryAssociationService->industryAssociationMembershipApproval($organization, $industryAssociation);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "IndustryAssociation membership approved successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }    /**
+     *  IndustryAssociation membership approval
+     * @param Request $request
+     * @param int $organizationId
+     * @return JsonResponse
+     */
+    public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
+    {
+        $industryAssociationId = $request->input('industry_association_id') ?: Auth::id();
+
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $organization = Organization::findOrFail($organizationId);
+
+        $this->industryAssociationService->industryAssociationMembershipRejection($organization, $industryAssociation);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "IndustryAssociation membership rejected successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
