@@ -4596,6 +4596,9 @@
                         "minLength": 2,
                         "maxLength": 1000
                     },
+                    "industry_association_id": {
+                        "type": "integer"
+                    },
                     "organization_type_id": {
                         "type": "integer",
                         "description": "'1 => Government, 2 => Private,3=>NGO,4=>International",
@@ -4697,6 +4700,7 @@
                     "organization_type_id",
                     "email",
                     "mobile",
+                    "industry_association_id",
                     "name_of_the_office_head",
                     "contact_person_mobile",
                     "contact_person_name",
@@ -4789,6 +4793,9 @@
                         "description": "title in English",
                         "minLength": 2,
                         "maxLength": 300
+                    },
+                    "industry_association_id": {
+                        "type": "integer"
                     },
                     "loc_division_id": {
                         "type": "integer",
@@ -4914,6 +4921,7 @@
                 },
                 "required": [
                     "title",
+                    "industry_association_id",
                     "permission_sub_group_id",
                     "organization_type_id",
                     "contact_person_name",

@@ -502,7 +502,10 @@ class OrganizationService
                 'exists:organization_types,id,deleted_at,NULL'
             ],
             'industry_association_id' => [
-                'required',
+                Rule::requiredIf(function () use ($id) {
+                    return is_null($id);
+                }),
+                'nullable',
                 'integer',
                 'exists:industry_associations,id,deleted_at,NULL'
             ],
