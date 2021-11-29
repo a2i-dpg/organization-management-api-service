@@ -265,9 +265,15 @@ class OrganizationService
     public function IndustryAssociationMembershipApplication(array $data)
     {
         $organization = Organization::findOrFail($data['organization_id']);
-        $organization->industryAssociations()->attach($data['industry_association_id'], [
+        $dataUpdate = $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
             'row_status' => 2
         ]);
+        if (!$dataUpdate) {
+            $organization->industryAssociations()->attach($data['industry_association_id'], [
+                'row_status' => 2
+            ]);
+        }
+
     }
 
     public function IndustryAssociationMembershipValidation(Request $request): \Illuminate\Contracts\Validation\Validator
@@ -284,8 +290,8 @@ class OrganizationService
                 'exists:organizations,id,deleted_at,NULL',
                 Rule::unique('industry_association_organization', 'organization_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
-                        return $query->where('industry_association_id', $request->input('industry_association_id'))
-                            ->where('row_status', "", 2);
+                        return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
+                            ->whereIn('row_status', [1, 2]);
                     })
             ],
 

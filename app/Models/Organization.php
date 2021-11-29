@@ -88,6 +88,6 @@ class Organization extends BaseModel
      */
     public function industryAssociations(): BelongsToMany
     {
-        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization');
+        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization')->withTimestamps();
     }
 }
