@@ -143,6 +143,57 @@ class OrganizationService
         return $response;
     }
 
+    public function getOrganizationListFilterByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    {
+        $titleEn = $request['title_en'] ?? "";
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
+            $q->where('industry_association_id', $industryAssociationId);
+        });
+
+        $organizationBuilder->orderBy('organizations.id', $order);
+
+        if (!empty($titleEn)) {
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (is_numeric($rowStatus)) {
+            $organizationBuilder->where('organizations.row_status', $rowStatus);
+        }
+
+        /** @var Collection $organizations */
+
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $organizations = $organizationBuilder->paginate($pageSize);
+            $paginateData = (object)$organizations->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizations = $organizationBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
     /**
      * @param int $id
      * @return Organization

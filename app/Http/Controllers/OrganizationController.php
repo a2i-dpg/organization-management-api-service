@@ -59,9 +59,16 @@ class OrganizationController extends Controller
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Organization::class);
-
         $filter = $this->organizationService->filterValidator($request)->validate();
-        $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
+        if (!empty(Auth::user())) {
+            $authUser = Auth::user();
+            $industryAssociationId = $authUser->industry_association_id;
+            $response = $this->organizationService->getOrganizationListFilterByIndustryAssociation($filter, $industryAssociationId, $this->startTime,);
+
+        } else {
+            $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
+
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -357,7 +364,13 @@ class OrganizationController extends Controller
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
+
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
+
+        if (empty($validatedData['organization_id'])) {
+            $user = Auth::user();
+            $validatedData['organization_id'] = $user['organization_id'];
+        }
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
 
 

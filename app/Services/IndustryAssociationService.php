@@ -247,12 +247,12 @@ class IndustryAssociationService
     }
 
     /**
+     * @param array $data
      * @param Organization $organization
-     * @param IndustryAssociation $industryAssociation
      */
-    public function industryAssociationMembershipApproval(Organization $organization, IndustryAssociation $industryAssociation)
+    public function industryAssociationMembershipApproval(array $data, Organization $organization)
     {
-        $industryAssociation->organizations()->updateExistingPivot($organization->id, [
+        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
             'row_status' => 1
         ]);
     }
@@ -266,6 +266,23 @@ class IndustryAssociationService
         $industryAssociation->organizations()->updateExistingPivot($organization->id, [
             'row_status' => 4
         ]);
+    }
+
+    public function industryAssociationMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'industry_association_id' => [
+                'required',
+                'integer',
+                'exists:industry_associations,id',
+                Rule::exists('industry_association_organization', 'industry_association_id')
+                    ->where(function ($query) use ($organizationId) {
+                        $query->where('organization_id', $organizationId)
+                            ->where('row_status', BaseModel::ROW_STATUS_PENDING);
+                    })
+            ]
+        ];
+        return Validator::make($request->all(), $rules);
     }
 
 

@@ -297,15 +297,18 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
-        $industryAssociationId = $request->input('industry_association_id') ?: Auth::id();
-
-        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $authUser = Auth::user();
+        if ($authUser && $authUser->industry_association_id) {
+            $industryAssociationId = $request->input('industry_association_id') ?: $authUser->industry_association_id;
+        }
         $organization = Organization::findOrFail($organizationId);
 
-        $this->industryAssociationService->industryAssociationMembershipApproval($organization, $industryAssociation);
+        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+        $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
         $response = [
             '_response_status' => [
                 "success" => true,
@@ -315,7 +318,9 @@ class IndustryAssociationController extends Controller
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
-    }    /**
+    }
+
+    /**
      *  IndustryAssociation membership approval
      * @param Request $request
      * @param int $organizationId
@@ -323,8 +328,8 @@ class IndustryAssociationController extends Controller
      */
     public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
-        $industryAssociationId = $request->input('industry_association_id') ?: Auth::id();
-
+        $authUser = Auth::user();
+        $industryAssociationId = $request->input('industry_association_id') ?: $authUser['industry_association_id'];
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
         $organization = Organization::findOrFail($organizationId);
 

@@ -21,6 +21,7 @@ use Laravel\Lumen\Auth\Authorizable;
  * @property int $role_id
  * @property int $user_type
  * @property int organization_id
+ * @property int industry_association_id
  * @property int institute_id
  * @property int loc_division_id
  * @property int loc_district_id
@@ -37,7 +38,7 @@ class User extends BaseModel implements
 {
     use Authenticatable, Authorizable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     protected Collection $permissions;
     protected Role $role;
