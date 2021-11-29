@@ -259,7 +259,7 @@ class OrganizationService
     }
 
     /**
-     * Industry application for the industryAssociation membership
+     *industryAssociation membership application from industry
      * @param array $data
      */
     public function IndustryAssociationMembershipApplication(array $data)
@@ -276,6 +276,10 @@ class OrganizationService
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function IndustryAssociationMembershipValidation(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
