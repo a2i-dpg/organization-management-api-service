@@ -44,7 +44,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
     /** Organization Registration */
-    $router->post("industry-association-registration", ["as" => "register.industryAssociation", "uses" => "IndustryAssociationController@industryAssociationOpenRegistration"]);
+    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
+
+
+    /** Industry Association apply for industryAssociation membership */
+    $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
 
 
     /** TODO: Properly Organize Trashed Routes through CustomRouter */
@@ -108,7 +112,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('human-resources-trashed-data', ['as' => 'human-resources.get-trashed-data', 'uses' => 'HumanResourceController@getTrashedData']);
     $router->patch('human-resources-restore/{id}', ['as' => 'human-resources.restore', 'uses' => 'HumanResourceController@restore']);
     $router->delete('human-resources-force-delete/{id}', ['as' => 'human-resources.force-delete', 'uses' => 'HumanResourceController@forceDelete']);
-
 
 
     /** Organization Title by Ids for Internal Api */

@@ -248,10 +248,10 @@ class IndustryAssociationService
     /**
      * industryAssociation validator
      * @param array $data
-     * @return mixed|null
+     * @return mixed
      * @throws RequestException
      */
-    public function createUser(array $data): array|null
+    public function createUser(array $data): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'admin-user-create';
         $userPostField = [
@@ -277,6 +277,7 @@ class IndustryAssociationService
                 return $e;
             })
             ->json();
+
     }
 
 

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
+use App\Models\IndustryAssociation;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -240,24 +241,66 @@ class OrganizationService
 
         $organization->fill($data);
         $organization->save();
-        $this->assignOrganizationInIndustryAssociation($organization);
+        $this->assignOrganizationInIndustryAssociation($organization, $data);
         return $organization;
     }
 
-    public function assignOrganizationInIndustryAssociation(Organization $organization)
+    /**
+     * Assign organization to the selected industry while industry creation
+     * @param Organization $organization
+     * @param array $data
+     */
+    public function assignOrganizationInIndustryAssociation(Organization $organization, array $data)
     {
-        $organization->industryAssociations()->attach($organization->industry_association_id, [
+        $organization->industryAssociations()->attach($data['industry_association_id'], [
             'row_status' => $organization->row_status ?: 2
         ]);
 
     }
 
     /**
+     * Industry application for the industryAssociation membership
      * @param array $data
-     * @return array|mixed
+     */
+    public function IndustryAssociationMembershipApplication(array $data)
+    {
+        $organization = Organization::findOrFail($data['organization_id']);
+        $organization->industryAssociations()->attach($data['industry_association_id'], [
+            'row_status' => 2
+        ]);
+    }
+
+    public function IndustryAssociationMembershipValidation(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'industry_association_id' => [
+                'required',
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
+            ],
+            'organization_id' => [
+                'nullable',
+                'integer',
+                'exists:organizations,id,deleted_at,NULL',
+                Rule::unique('industry_association_organization', 'organization_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
+                        return $query->where('industry_association_id', $request->input('industry_association_id'))
+                            ->where('row_status', "", 2);
+                    })
+            ],
+
+        ];
+
+        return Validator::make($request->all(), $rules);
+
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
      * @throws RequestException
      */
-    public function createUser(array $data)
+    public function createUser(array $data): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'admin-user-create';
         $userPostField = [
@@ -625,6 +668,11 @@ class OrganizationService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function registerOrganizationValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
