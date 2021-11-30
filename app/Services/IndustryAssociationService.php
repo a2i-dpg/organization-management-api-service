@@ -104,7 +104,7 @@ class IndustryAssociationService
         }
 
         if (is_numeric($industryAssociationTypeId)) {
-            $industryAssociationBuilder->where('industry_associations.organization_type_id', $industryAssociationTypeId);
+            $industryAssociationBuilder->where('industry_associations.industry_association_type_id', $industryAssociationTypeId);
         }
 
         if (!empty($titleEn)) {
