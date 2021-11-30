@@ -340,7 +340,7 @@ class OrganizationService
                 'exists:industry_associations,id,deleted_at,NULL'
             ],
             'organization_id' => [
-                'nullable',
+                'required',
                 'integer',
                 'exists:organizations,id,deleted_at,NULL',
                 Rule::unique('industry_association_organization', 'organization_id')

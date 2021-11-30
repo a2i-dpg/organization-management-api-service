@@ -364,13 +364,11 @@ class OrganizationController extends Controller
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
-
-        $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
-
-        if (empty($validatedData['organization_id'])) {
-            $user = Auth::user();
-            $validatedData['organization_id'] = $user['organization_id'];
+        $authUser = Auth::user();
+        if ($authUser && $authUser->industry_association_id) {
+            $request->offsetSet('organization_id', $authUser->industry_association_id);
         }
+        $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
 
 
@@ -378,7 +376,7 @@ class OrganizationController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "industryAssociation membership application successfully done",
+                "message" => "industryAssociation membership application successfully submitted",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

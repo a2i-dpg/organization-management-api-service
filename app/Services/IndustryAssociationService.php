@@ -258,12 +258,12 @@ class IndustryAssociationService
     }
 
     /**
+     * @param array $data
      * @param Organization $organization
-     * @param IndustryAssociation $industryAssociation
      */
-    public function industryAssociationMembershipRejection(Organization $organization, IndustryAssociation $industryAssociation)
+    public function industryAssociationMembershipRejection(array $data, Organization $organization)
     {
-        $industryAssociation->organizations()->updateExistingPivot($organization->id, [
+        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
             'row_status' => 4
         ]);
     }

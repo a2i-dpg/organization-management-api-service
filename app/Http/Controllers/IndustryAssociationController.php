@@ -303,7 +303,7 @@ class IndustryAssociationController extends Controller
     {
         $authUser = Auth::user();
         if ($authUser && $authUser->industry_association_id) {
-            $industryAssociationId = $request->input('industry_association_id') ?: $authUser->industry_association_id;
+            $request->offsetSet('industry_association_id', $authUser->industry_association_id);
         }
         $organization = Organization::findOrFail($organizationId);
 
@@ -325,15 +325,18 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
-        $industryAssociationId = $request->input('industry_association_id') ?: $authUser['industry_association_id'];
-        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        if ($authUser && $authUser->industry_association_id) {
+            $request->offsetSet('industry_association_id', $authUser->industry_association_id);
+        }
         $organization = Organization::findOrFail($organizationId);
+        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+        $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
 
-        $this->industryAssociationService->industryAssociationMembershipRejection($organization, $industryAssociation);
         $response = [
             '_response_status' => [
                 "success" => true,
