@@ -40,7 +40,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
     /** Industry Association open  Registration */
-    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
+    $router->post("industry-association-registration", ["as" => "register.industryAssociation", "uses" => "IndustryAssociationController@industryAssociationOpenRegistration"]);
 
 
     /** Organization Registration */
