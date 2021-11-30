@@ -3923,7 +3923,9 @@
                         }
                     }
                 },
-                "tags": ["Publications"]
+                "tags": [
+                    "Publications"
+                ]
             },
             "post": {
                 "summary": "Create a publication",
@@ -3965,7 +3967,9 @@
                         }
                     }
                 },
-                "tags": ["Publications"]
+                "tags": [
+                    "Publications"
+                ]
             }
         },
         "/publications/{publicationId}": {
@@ -4003,8 +4007,9 @@
                         }
                     }
                 },
-                "tags": ["Publications"]
-
+                "tags": [
+                    "Publications"
+                ]
             },
             "put": {
                 "summary": "Update a publication",
@@ -4028,7 +4033,7 @@
                         "description": "successfully",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "data": {
                                         "id": 1,
                                         "title": "aaaaaaaaaaa",
@@ -4056,7 +4061,9 @@
                         }
                     }
                 },
-                "tags": ["Publications"]
+                "tags": [
+                    "Publications"
+                ]
             },
             "delete": {
                 "summary": "Delete a publication",
@@ -4081,10 +4088,11 @@
                                 }
                             }
                         }
-
                     }
                 },
-                "tags": ["Publications"]
+                "tags": [
+                    "Publications"
+                ]
             },
             "patch": {
                 "summary": "Restore a deleted publication",
@@ -4143,8 +4151,9 @@
                         }
                     }
                 },
-                "tags": ["Publications"]
-
+                "tags": [
+                    "Publications"
+                ]
             }
         },
         "/industry-associations": {
@@ -4181,7 +4190,13 @@
                         "schema": {
                             "type": "integer",
                             "description": "0=> INACTIVE , 1=>ACTIVE  , 2=> PENDING , 3=> REJECTED",
-                            "enum": [0,1,2,3,4]
+                            "enum": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4
+                            ]
                         }
                     }
                 ],
@@ -4290,7 +4305,9 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             },
             "post": {
                 "summary": "Create a new industry association",
@@ -4340,9 +4357,10 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             }
-
         },
         "/industry-associations/{IndustryAssocId}": {
             "get": {
@@ -4412,7 +4430,9 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             },
             "put": {
                 "summary": "Update a specific industry association",
@@ -4486,7 +4506,9 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             },
             "delete": {
                 "summary": "Delete a industry Association",
@@ -4513,7 +4535,9 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             },
             "patch": {
                 "summary": "Restore a deleted Industry Association",
@@ -4540,11 +4564,11 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
-
+                "tags": [
+                    "Industry-Association"
+                ]
             }
         },
-
         "/industry-association-membership-application": {
             "post": {
                 "summary": "Create a new membership-application",
@@ -4579,10 +4603,8 @@
                     "organization"
                 ]
             }
-
         },
-
-        "/industry-association-membership-approval/{organizationId}":{
+        "/industry-association-membership-approval/{organizationId}": {
             "put": {
                 "summary": "Approve a new industry association membership approval",
                 "description": "API endpoint to Create a new industry association membership approval.A successful request response will show 201 HTTP status code",
@@ -4617,7 +4639,9 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             }
         },
         "/industry-association-membership-rejection/{organizationId}": {
@@ -4655,7 +4679,9 @@
                         }
                     }
                 },
-                "tags": ["Industry-Association"]
+                "tags": [
+                    "Industry-Association"
+                ]
             }
         }
     },
@@ -4692,8 +4718,12 @@
                 "properties": {
                     "industry_association_type_id": {
                         "type": "integer",
-                        "description": "INDUSTRY_ASSOCIATION_TYPE_GOVT = 1; INDUSTRY_ASSOCIATION_TYPE_NON_GOVT = 2; INDUSTRY_ASSOCIATION_TYPE_OTHERS = 3;",
-                        "enum": [1,2,3]
+                        "description": "GOVT = 1; NON_GOVT = 2; OTHERS = 3",
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ]
                     },
                     "title": {
                         "type": "string",
@@ -4775,7 +4805,9 @@
                     },
                     "row_status": {
                         "type": "integer",
-                        "enum": [2],
+                        "enum": [
+                            2
+                        ],
                         "description": "ROW_STATUS_PENDING = 2"
                     }
                 },
@@ -4804,7 +4836,11 @@
                     "industry_association_type_id": {
                         "type": "integer",
                         "description": "INDUSTRY_ASSOCIATION_TYPE_GOVT = 1; INDUSTRY_ASSOCIATION_TYPE_NON_GOVT = 2; INDUSTRY_ASSOCIATION_TYPE_OTHERS = 3;",
-                        "enum": [1,2,3]
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ]
                     },
                     "permission_sub_group_id": {
                         "type": "integer",
@@ -4911,7 +4947,12 @@
                     },
                     "row_status": {
                         "type": "integer",
-                        "enum": [0,1,2,3],
+                        "enum": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ],
                         "description": "0=> INACTIVE , 1=>ACTIVE  , 2=> PENDING , 3=> REJECTED"
                     }
                 },
@@ -4974,7 +5015,6 @@
                         ],
                         "example": 1
                     }
-
                 },
                 "required": [
                     "title",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
+use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
 use App\Services\IndustryAssociationService;
@@ -298,6 +299,7 @@ class IndustryAssociationController extends Controller
      * @param int $organizationId
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Throwable
      */
     public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
@@ -305,18 +307,32 @@ class IndustryAssociationController extends Controller
         if ($authUser && $authUser->industry_association_id) {
             $request->offsetSet('industry_association_id', $authUser->industry_association_id);
         }
+
         $organization = Organization::findOrFail($organizationId);
 
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
-        $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "IndustryAssociation membership approved successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+
+        DB::beginTransaction();
+        try {
+            $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
+            if ($organization && $organization->row_status==BaseModel::ROW_STATUS_PENDING) { //open registration approval
+                $this->industryAssociationService->organizationStatusChangeAfterApproval($organization);
+                $this->industryAssociationService->organizationUserApproval($organization);
+            }
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "IndustryAssociation membership approved successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 

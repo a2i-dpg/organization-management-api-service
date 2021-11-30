@@ -249,10 +249,11 @@ class IndustryAssociationService
     /**
      * @param array $data
      * @param Organization $organization
+     * @return int
      */
-    public function industryAssociationMembershipApproval(array $data, Organization $organization)
+    public function industryAssociationMembershipApproval(array $data, Organization $organization): int
     {
-        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
             'row_status' => 1
         ]);
     }
@@ -260,12 +261,45 @@ class IndustryAssociationService
     /**
      * @param array $data
      * @param Organization $organization
+     * @return int
      */
-    public function industryAssociationMembershipRejection(array $data, Organization $organization)
+    public function industryAssociationMembershipRejection(array $data, Organization $organization): int
     {
-        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
             'row_status' => 4
         ]);
+    }
+
+    public function organizationStatusChangeAfterApproval(Organization $organization): Organization
+    {
+        $organization->row_status = BaseModel::ROW_STATUS_ACTIVE;
+        $organization->save();
+        return $organization;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function organizationUserApproval(Organization $organization)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'organization_id' => $organization->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->put($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+
     }
 
     public function industryAssociationMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
