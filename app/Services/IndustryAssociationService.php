@@ -274,7 +274,6 @@ class IndustryAssociationService
             'industry_association_id' => [
                 'required',
                 'integer',
-                'exists:industry_associations,id',
                 Rule::exists('industry_association_organization', 'industry_association_id')
                     ->where(function ($query) use ($organizationId) {
                         $query->where('organization_id', $organizationId)
