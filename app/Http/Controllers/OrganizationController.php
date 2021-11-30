@@ -365,12 +365,11 @@ class OrganizationController extends Controller
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
         $authUser = Auth::user();
-        if ($authUser && $authUser->industry_association_id) {
-            $request->offsetSet('organization_id', $authUser->industry_association_id);
+        if ($authUser && $authUser->organization_id) {
+            $request->offsetSet('organization_id', $authUser->organization_id);
         }
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
-
 
         $response = [
             '_response_status' => [
