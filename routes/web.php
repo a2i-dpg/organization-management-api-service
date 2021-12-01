@@ -53,8 +53,15 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** Industry Association membership approval   */
     $router->put("industry-association-membership-approval/{organizationId}", ["as" => "IndustryAssociation.industry-associations-membership-approval", "uses" => "IndustryAssociationController@industryAssociationMembershipApproval"]);
 
+
     /** Industry Association membership rejection  */
     $router->put("industry-association-membership-rejection/{organizationId}", ["as" => "IndustryAssociation.industry-associations-membership-rejection", "uses" => "IndustryAssociationController@IndustryAssociationMembershipRejection"]);
+
+    /** IndustryAssociation Registration Approval */
+    $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
+
+    /** IndustryAssociation Registration Rejection */
+    $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationMembershipRejection"]);
 
 
     /** TODO: Properly Organize Trashed Routes through CustomRouter */

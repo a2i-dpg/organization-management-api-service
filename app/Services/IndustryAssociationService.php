@@ -247,45 +247,38 @@ class IndustryAssociationService
     }
 
     /**
-     * @param array $data
-     * @param Organization $organization
-     * @return int
+     * @param IndustryAssociation $industryAssociation
+     * @return IndustryAssociation
      */
-    public function industryAssociationMembershipApproval(array $data, Organization $organization): int
+    public function industryAssociationStatusChangeAfterApproval(IndustryAssociation $industryAssociation): IndustryAssociation
     {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => 1
-        ]);
+        $industryAssociation->row_status = Organization::ROW_STATUS_ACTIVE;
+        $industryAssociation->save();
+        return $industryAssociation;
     }
 
     /**
-     * @param array $data
-     * @param Organization $organization
-     * @return int
+     * @param IndustryAssociation $industryAssociation
+     * @return IndustryAssociation
      */
-    public function industryAssociationMembershipRejection(array $data, Organization $organization): int
+    public function industryAssociationStatusChangeAfterRejection(IndustryAssociation $industryAssociation): IndustryAssociation
     {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => 4
-        ]);
-    }
-
-    public function organizationStatusChangeAfterApproval(Organization $organization): Organization
-    {
-        $organization->row_status = BaseModel::ROW_STATUS_ACTIVE;
-        $organization->save();
-        return $organization;
+        $industryAssociation->row_status = Organization::ROW_STATUS_REJECTED;
+        $industryAssociation->save();
+        return $industryAssociation;
     }
 
     /**
+     * @param IndustryAssociation $industryAssociation
+     * @return array|mixed
      * @throws RequestException
      */
-    public function organizationUserApproval(Organization $organization)
+    public function industryAssociationUserApproval(IndustryAssociation $industryAssociation): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
         $userPostField = [
-            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
-            'organization_id' => $organization->id,
+            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
+            'industry_association_id' => $industryAssociation->id,
         ];
 
         return Http::withOptions(
@@ -299,9 +292,65 @@ class IndustryAssociationService
                 return $e;
             })
             ->json();
-
     }
 
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return mixed
+     * @throws RequestException
+     */
+
+    public function industryAssociationUserRejection(IndustryAssociation $industryAssociation): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-rejection';
+        $userPostField = [
+            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
+            'industry_association_id' => $industryAssociation->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->put($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+    }
+
+    /**
+     * @param array $data
+     * @param Organization $organization
+     * @return int
+     */
+    public function industryAssociationMembershipApproval(array $data, Organization $organization): int
+    {
+        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'row_status' => Organization::ROW_STATUS_ACTIVE
+        ]);
+    }
+
+    /**
+     * @param array $data
+     * @param Organization $organization
+     * @return int
+     */
+    public function industryAssociationMembershipRejection(array $data, Organization $organization): int
+    {
+        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'row_status' => Organization::ROW_STATUS_REJECTED
+        ]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @param int $organizationId
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function industryAssociationMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [

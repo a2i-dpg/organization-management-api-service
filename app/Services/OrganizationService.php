@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
-use App\Models\IndustryAssociation;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -143,6 +142,12 @@ class OrganizationService
         return $response;
     }
 
+    /**
+     * @param array $request
+     * @param int $industryAssociationId
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getOrganizationListFilterByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
     {
         $titleEn = $request['title_en'] ?? "";
@@ -544,6 +549,74 @@ class OrganizationService
     public function forceDelete(Organization $organization): bool
     {
         return $organization->forceDelete();
+    }
+
+    /**
+     * @param Organization $organization
+     * @return Organization
+     */
+    public function organizationStatusChangeAfterApproval(Organization $organization): Organization
+    {
+        $organization->row_status = Organization::ROW_STATUS_REJECTED;
+        $organization->save();
+        return $organization;
+    }
+
+    public function organizationStatusChangeAfterRejection(Organization $organization): Organization
+    {
+        $organization->row_status = Organization::ROW_STATUS_REJECTED;
+        $organization->save();
+        return $organization;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function organizationUserApproval(Organization $organization)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'organization_id' => $organization->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->put($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function organizationUserRejection(Organization $organization)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-rejection';
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'organization_id' => $organization->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->put($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+
     }
 
     /**

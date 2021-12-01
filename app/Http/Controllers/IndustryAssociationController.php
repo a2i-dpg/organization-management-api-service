@@ -7,6 +7,7 @@ use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
 use App\Services\IndustryAssociationService;
+use App\Services\OrganizationService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
@@ -19,16 +20,21 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
+/**
+ *
+ */
 class IndustryAssociationController extends Controller
 {
 
     protected IndustryAssociationService $industryAssociationService;
+    protected OrganizationService $organizationService;
     private Carbon $startTime;
 
 
-    public function __construct(IndustryAssociationService $industryAssociationService)
+    public function __construct(IndustryAssociationService $industryAssociationService, OrganizationService $organizationService)
     {
         $this->industryAssociationService = $industryAssociationService;
+        $this->organizationService = $organizationService;
         $this->startTime = Carbon::now();
     }
 
@@ -222,6 +228,95 @@ class IndustryAssociationController extends Controller
 
     }
 
+
+    /**
+     * Industry Open Registration Approval
+     * @param int $industryAssociationId
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function industryAssociationRegistrationApproval(int $industryAssociationId): JsonResponse
+    {
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+
+        DB::beginTransaction();
+        try {
+            if ($industryAssociation && $industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
+                $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
+                DB::commit();
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "IndustryAssociation Registration  approved successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => false,
+                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                        "message" => "No pending status found for this IndustryAssociation",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            }
+
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * Industry Open Registration Rejection
+     * @param int $industryAssociationId
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function industryAssociationRegistrationRejection(int $industryAssociationId): JsonResponse
+    {
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+
+        DB::beginTransaction();
+        try {
+            if ($industryAssociation && $industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
+                $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
+                DB::commit();
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "IndustryAssociation Registration  rejected successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => false,
+                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                        "message" => "No pending status found for this IndustryAssociation",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            }
+
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
     /**
      * Update the specified resource from storage.
      * @param Request $request
@@ -315,9 +410,9 @@ class IndustryAssociationController extends Controller
         DB::beginTransaction();
         try {
             $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-            if ($organization && $organization->row_status==BaseModel::ROW_STATUS_PENDING) { //open registration approval
-                $this->industryAssociationService->organizationStatusChangeAfterApproval($organization);
-                $this->industryAssociationService->organizationUserApproval($organization);
+            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $organization = $this->organizationService->organizationStatusChangeAfterApproval($organization);
+                $this->organizationService->organizationUserApproval($organization);
             }
             DB::commit();
             $response = [
@@ -341,6 +436,8 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
+     * @throws RequestException
+     * @throws Throwable
      * @throws ValidationException
      */
     public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
@@ -350,17 +447,30 @@ class IndustryAssociationController extends Controller
             $request->offsetSet('industry_association_id', $authUser->industry_association_id);
         }
         $organization = Organization::findOrFail($organizationId);
-        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
-        $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
 
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "IndustryAssociation membership rejected successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+
+        DB::beginTransaction();
+        try {
+            $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
+            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $organization = $this->organizationService->organizationStatusChangeAfterRejection($organization);
+                $this->organizationService->organizationUserRejection($organization);
+            }
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "IndustryAssociation membership rejected successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
