@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
+use App\Services\CommonServices\MailService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -316,6 +317,26 @@ class OrganizationService
                 throw $e;
             })
             ->json();
+    }
+
+    public function userInfoSendByMail(array $mailPayload)
+    {
+        $mailService = new MailService();
+        $mailService->setTo([
+            $mailPayload['contact_person_email']
+        ]);
+        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
+        $subject = $mailPayload['subject'] ?? "Institute Registration";
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+        $mailService->setMessageBody([
+            "user_name" => $mailPayload['contact_person_mobile'],
+            "password" => $mailPayload['password']
+        ]);
+        $instituteRegistrationTemplate = $mailPayload['template'] ?? 'mail.institute-create-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
     }
 
     /**

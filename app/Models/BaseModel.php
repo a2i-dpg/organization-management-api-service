@@ -47,4 +47,7 @@ abstract class BaseModel extends Model
     public const DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_TRUE = true;
     public const DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE = false;
 
+    public const NISE3_FROM_EMAIL = "info@nise3.com";
+    public const SELF_EXCHANGE = 'institute';
+
 }
