@@ -557,14 +557,14 @@ class OrganizationService
      */
     public function organizationStatusChangeAfterApproval(Organization $organization): Organization
     {
-        $organization->row_status = Organization::ROW_STATUS_REJECTED;
+        $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
         $organization->save();
         return $organization;
     }
 
     public function organizationStatusChangeAfterRejection(Organization $organization): Organization
     {
-        $organization->row_status = Organization::ROW_STATUS_REJECTED;
+        $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
         $organization->save();
         return $organization;
     }

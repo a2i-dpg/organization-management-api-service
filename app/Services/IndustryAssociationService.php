@@ -252,7 +252,7 @@ class IndustryAssociationService
      */
     public function industryAssociationStatusChangeAfterApproval(IndustryAssociation $industryAssociation): IndustryAssociation
     {
-        $industryAssociation->row_status = Organization::ROW_STATUS_ACTIVE;
+        $industryAssociation->row_status = BaseModel::ROW_STATUS_ACTIVE;
         $industryAssociation->save();
         return $industryAssociation;
     }
@@ -263,14 +263,14 @@ class IndustryAssociationService
      */
     public function industryAssociationStatusChangeAfterRejection(IndustryAssociation $industryAssociation): IndustryAssociation
     {
-        $industryAssociation->row_status = Organization::ROW_STATUS_REJECTED;
+        $industryAssociation->row_status = BaseModel::ROW_STATUS_REJECTED;
         $industryAssociation->save();
         return $industryAssociation;
     }
 
     /**
      * @param IndustryAssociation $industryAssociation
-     * @return array|mixed
+     * @return mixed
      * @throws RequestException
      */
     public function industryAssociationUserApproval(IndustryAssociation $industryAssociation): mixed

@@ -230,7 +230,7 @@ class IndustryAssociationController extends Controller
 
 
     /**
-     * Industry Open Registration Approval
+     * IndustryAssociation Open Registration Approval
      * @param int $industryAssociationId
      * @return JsonResponse
      * @throws Throwable
@@ -274,7 +274,7 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     * Industry Open Registration Rejection
+     * IndustryAssociation Open Registration Rejection
      * @param int $industryAssociationId
      * @return JsonResponse
      * @throws Throwable
@@ -286,6 +286,7 @@ class IndustryAssociationController extends Controller
         DB::beginTransaction();
         try {
             if ($industryAssociation && $industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
+
                 $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
                 $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
                 DB::commit();
