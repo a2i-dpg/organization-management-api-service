@@ -458,6 +458,32 @@ class OrganizationService
         return $organization->delete();
     }
 
+    /**
+     * @param Organization $organization
+     * @return bool
+     * @throws RequestException
+     */
+    public function userDestroy(Organization $organization)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-delete';
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'organization_id' => $organization->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->delete($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+    }
+
 
     /**
      * @param Request $request

@@ -293,15 +293,24 @@ class OrganizationController extends Controller
 
         $this->authorize('delete', $organization);
 
-        $this->organizationService->destroy($organization);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization deleted successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+        DB::beginTransaction();
+        try {
+            $this->organizationService->destroy($organization);
+            $this->organizationService->userDestroy($organization);
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 

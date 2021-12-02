@@ -354,7 +354,24 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociation = IndustryAssociation::findOrFail($id);
 
-        $this->industryAssociationService->destroy($industryAssociation);
+
+        DB::beginTransaction();
+        try {
+            $this->industryAssociationService->destroy($industryAssociation);
+            $this->industryAssociationService->userDestroy($industryAssociation);
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "industryAssociation deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         $response = [
             '_response_status' => [
