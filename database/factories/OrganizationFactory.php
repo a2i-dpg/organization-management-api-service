@@ -61,6 +61,7 @@ class OrganizationFactory extends Factory
             'name_of_the_office_head_designation_en' => 'CEO',
 
             'contact_person_name_en' => $contactPersonName,
+            'contact_person_name' => $contactPersonName,
             'contact_person_mobile' => $this->faker->numerify('017########'),
             'contact_person_email' => $this->faker->safeEmail(),
             'contact_person_designation' => $contactPersonJobTitle,
