@@ -29,6 +29,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
     $customRouter()->resourceRoute('services', 'ServiceController')->render();
     $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    $customRouter()->resourceRoute('publications', 'PublicationController')->render();
+    $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
 
 
     $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
@@ -37,8 +39,30 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** Assign Service to Organization Unit */
     $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
+    /** Industry Association open  Registration */
+    $router->post("industry-association-registration", ["as" => "register.industryAssociation", "uses" => "IndustryAssociationController@industryAssociationOpenRegistration"]);
+
+
     /** Organization Registration */
     $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
+
+
+    /** Industry Association apply for industryAssociation membership */
+    $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
+
+    /** Industry Association membership approval   */
+    $router->put("industry-association-membership-approval/{organizationId}", ["as" => "IndustryAssociation.industry-associations-membership-approval", "uses" => "IndustryAssociationController@industryAssociationMembershipApproval"]);
+
+
+    /** Industry Association membership rejection  */
+    $router->put("industry-association-membership-rejection/{organizationId}", ["as" => "IndustryAssociation.industry-associations-membership-rejection", "uses" => "IndustryAssociationController@IndustryAssociationMembershipRejection"]);
+
+    /** IndustryAssociation Registration Approval */
+    $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
+
+    /** IndustryAssociation Registration Rejection */
+    $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationRegistrationRejection"]);
+
 
     /** TODO: Properly Organize Trashed Routes through CustomRouter */
     /** OrganizationType Trash */
@@ -102,11 +126,12 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('human-resources-restore/{id}', ['as' => 'human-resources.restore', 'uses' => 'HumanResourceController@restore']);
     $router->delete('human-resources-force-delete/{id}', ['as' => 'human-resources.force-delete', 'uses' => 'HumanResourceController@forceDelete']);
 
+
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",
         [
-            "as"=>"organizations.get-organization-title-by-ids",
-            "uses"=>"OrganizationController@getOrganizationTitleByIds"
+            "as" => "organizations.get-organization-title-by-ids",
+            "uses" => "OrganizationController@getOrganizationTitleByIds"
         ]
     );
 

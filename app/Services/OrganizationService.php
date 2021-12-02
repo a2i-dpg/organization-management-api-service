@@ -144,6 +144,63 @@ class OrganizationService
     }
 
     /**
+     * @param array $request
+     * @param int $industryAssociationId
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getOrganizationListFilterByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    {
+        $titleEn = $request['title_en'] ?? "";
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
+            $q->where('industry_association_id', $industryAssociationId);
+        });
+
+        $organizationBuilder->orderBy('organizations.id', $order);
+
+        if (!empty($titleEn)) {
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (is_numeric($rowStatus)) {
+            $organizationBuilder->where('organizations.row_status', $rowStatus);
+        }
+
+        /** @var Collection $organizations */
+
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $organizations = $organizationBuilder->paginate($pageSize);
+            $paginateData = (object)$organizations->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizations = $organizationBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
      * @param int $id
      * @return Organization
      */
@@ -238,19 +295,81 @@ class OrganizationService
      */
     public function store(Organization $organization, array $data): Organization
     {
+
         $organization->fill($data);
         $organization->save();
+        $this->assignOrganizationInIndustryAssociation($organization, $data);
         return $organization;
     }
 
     /**
+     * Assign organization to the selected industry while industry creation
+     * @param Organization $organization
      * @param array $data
-     * @return array|mixed
+     */
+    public function assignOrganizationInIndustryAssociation(Organization $organization, array $data)
+    {
+        $organization->industryAssociations()->attach($data['industry_association_id'], [
+            'row_status' => $organization->row_status ?: 2
+        ]);
+
+    }
+
+    /**
+     *industryAssociation membership application from industry
+     * @param array $data
+     */
+    public function IndustryAssociationMembershipApplication(array $data)
+    {
+        $organization = Organization::findOrFail($data['organization_id']);
+        $dataUpdate = $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'row_status' => 2
+        ]);
+        if (!$dataUpdate) {
+            $organization->industryAssociations()->attach($data['industry_association_id'], [
+                'row_status' => 2
+            ]);
+        }
+
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function IndustryAssociationMembershipValidation(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'industry_association_id' => [
+                'required',
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
+            ],
+            'organization_id' => [
+                'required',
+                'integer',
+                'exists:organizations,id,deleted_at,NULL',
+                Rule::unique('industry_association_organization', 'organization_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
+                        return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
+                            ->whereIn('row_status', [1, 2]);
+                    })
+            ],
+
+        ];
+
+        return Validator::make($request->all(), $rules);
+
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
      * @throws RequestException
      */
-    public function createUser(array $data)
+    public function createUser(array $data): mixed
     {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'organization-or-institute-user-create';
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'admin-user-create';
         $userPostField = [
             'permission_sub_group_id' => $data['permission_sub_group_id'] ?? "",
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
@@ -456,6 +575,74 @@ class OrganizationService
     }
 
     /**
+     * @param Organization $organization
+     * @return Organization
+     */
+    public function organizationStatusChangeAfterApproval(Organization $organization): Organization
+    {
+        $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
+        $organization->save();
+        return $organization;
+    }
+
+    public function organizationStatusChangeAfterRejection(Organization $organization): Organization
+    {
+        $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
+        $organization->save();
+        return $organization;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function organizationUserApproval(Organization $organization)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'organization_id' => $organization->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->put($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function organizationUserRejection(Organization $organization)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-rejection';
+        $userPostField = [
+            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
+            'organization_id' => $organization->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->put($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+
+    }
+
+    /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
@@ -465,12 +652,19 @@ class OrganizationService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-
         $rules = [
             'organization_type_id' => [
                 'required',
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
+            ],
+            'industry_association_id' => [
+                Rule::requiredIf(function () use ($id) {
+                    return is_null($id);
+                }),
+                'nullable',
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
@@ -587,7 +781,6 @@ class OrganizationService
                         return $query->whereNull('deleted_at');
                     }),
                 BaseModel::MOBILE_REGEX,
-
             ],
             'contact_person_email' => [
                 'required',
@@ -635,6 +828,11 @@ class OrganizationService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function registerOrganizationValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
@@ -654,6 +852,11 @@ class OrganizationService
                 'required',
                 'integer',
                 'exists:organization_types,id,deleted_at,NULL'
+            ],
+            'industry_association_id' => [
+                'required',
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
             ],
             'email' => [
                 'required',

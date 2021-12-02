@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
 use App\Models\BaseModel;
+use App\Models\IndustryAssociation;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
@@ -12,6 +13,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -57,9 +59,16 @@ class OrganizationController extends Controller
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Organization::class);
-
         $filter = $this->organizationService->filterValidator($request)->validate();
-        $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
+        if (!empty(Auth::user())) {
+            $authUser = Auth::user();
+            $industryAssociationId = $authUser->industry_association_id;
+            $response = $this->organizationService->getOrganizationListFilterByIndustryAssociation($filter, $industryAssociationId, $this->startTime,);
+
+        } else {
+            $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
+
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -99,7 +108,7 @@ class OrganizationController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         /** @var Organization $organization */
         $organization = app(Organization::class);
@@ -119,6 +128,7 @@ class OrganizationController extends Controller
 
             $validated['organization_id'] = $organization->id;
             $createdRegisterUser = $this->organizationService->createUser($validated);
+
             Log::info('id_user_info:' . json_encode($createdRegisterUser));
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
@@ -344,7 +354,7 @@ class OrganizationController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $organization = Organization::onlyTrashed()->findOrFail($id);
         $this->organizationService->restore($organization);
@@ -359,22 +369,27 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
     /**
-     * @param int $id
-     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function forceDelete(int $id): JsonResponse
+    public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
-        $organization = Organization::onlyTrashed()->findOrFail($id);
-        $this->organizationService->forceDelete($organization);
+        $authUser = Auth::user();
+        if ($authUser && $authUser->organization_id) {
+            $request->offsetSet('organization_id', $authUser->organization_id);
+        }
+        $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
+        $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
+
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization permanently deleted successfully",
+                "message" => "industryAssociation membership application successfully submitted",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 }
