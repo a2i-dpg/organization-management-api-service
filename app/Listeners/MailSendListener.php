@@ -6,6 +6,7 @@ namespace App\Listeners;
 use App\Services\CommonServices\RabbitMQService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Connectors\RabbitMQConnector;
 
@@ -71,7 +72,7 @@ class MailSendListener implements ShouldQueue
 
         $config = config('queue.connections.rabbitmq');
         $queue = $this->connector->connect($config);
-
+        Log::info(json_encode($config));
         $exchangeArguments = [
             'alternate-exchange' => self::ALTER_EXCHANGE
         ];

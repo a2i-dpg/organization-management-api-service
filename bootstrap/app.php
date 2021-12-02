@@ -64,6 +64,8 @@ $app->configure('auth');
 $app->configure('services');
 $app->configure('nise3');
 $app->configure('httpclientendpoint');
+$app->configure('queue');
+$app->configure('nise3RabbitMq');
 
 /*
 |--------------------------------------------------------------------------
@@ -101,7 +103,8 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(Felixkiss\UniqueWithValidator\ServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
+$app->register(VladimirYuldashev\LaravelQueueRabbitMQ\LaravelQueueRabbitMQServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

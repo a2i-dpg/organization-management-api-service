@@ -36,7 +36,7 @@ return [
 
     'channels' => [
         'org_reg' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/org_reg.log'),
             'level' => 'info',
         ],

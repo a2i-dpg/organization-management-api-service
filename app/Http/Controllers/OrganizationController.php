@@ -60,7 +60,7 @@ class OrganizationController extends Controller
 
         $filter = $this->organizationService->filterValidator($request)->validate();
         $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -75,8 +75,8 @@ class OrganizationController extends Controller
         $organization = $this->organizationService->getOneOrganization($id);
 
         $requestHeaders = $request->header();
-        if(empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
-            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE){
+        if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
+            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
             $this->authorize('view', $organization);
         }
         $response = [
@@ -87,7 +87,7 @@ class OrganizationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -135,6 +135,10 @@ class OrganizationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+
+                /** Send User Information After Completing Organization Registration */
+                $this->organizationService->userInfoSendByMail($validated);
+
                 $response['data'] = $organization;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -193,8 +197,11 @@ class OrganizationController extends Controller
             Log::channel('org_reg')->info('organization_stored_data', $organization->toArray());
 
             $validated['organization_id'] = $organization->id;
+            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
             $createdRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
+
+            Log::info("userCreateInfo".json_encode($createdRegisterUser));
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Registration has been failed!', 500);
@@ -210,6 +217,10 @@ class OrganizationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+
+                /** Send User Information After Completing Organization Registration */
+                $this->organizationService->userInfoSendByMail($validated);
+
                 $response['data'] = $organization;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);

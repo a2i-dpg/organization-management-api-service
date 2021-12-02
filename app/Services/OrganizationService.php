@@ -321,6 +321,8 @@ class OrganizationService
 
     public function userInfoSendByMail(array $mailPayload)
     {
+        Log::info("MailPayload".json_encode($mailPayload));
+
         $mailService = new MailService();
         $mailService->setTo([
             $mailPayload['contact_person_email']
@@ -334,7 +336,7 @@ class OrganizationService
             "user_name" => $mailPayload['contact_person_mobile'],
             "password" => $mailPayload['password']
         ]);
-        $instituteRegistrationTemplate = $mailPayload['template'] ?? 'mail.institute-create-default-template';
+        $instituteRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
         $mailService->setTemplate($instituteRegistrationTemplate);
         $mailService->sendMail();
     }
