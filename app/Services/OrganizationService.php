@@ -570,6 +570,8 @@ class OrganizationService
     }
 
     /**
+     * @param Organization $organization
+     * @return array|mixed
      * @throws RequestException
      */
     public function organizationUserApproval(Organization $organization)
