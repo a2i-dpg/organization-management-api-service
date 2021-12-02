@@ -273,7 +273,7 @@ class IndustryAssociationService
      * @return mixed
      * @throws RequestException
      */
-    public function industryAssociationUserApproval(IndustryAssociation $industryAssociation): mixed
+    public function industryAssociationUserApproval(IndustryAssociation $industryAssociation): array|null
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
         $userPostField = [
@@ -416,7 +416,7 @@ class IndustryAssociationService
         $userPostField = [
             'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
             'username' => $data['contact_person_mobile'] ?? "",
-            'industry_association_id' => $data['organization_id'] ?? "",
+            'industry_association_id' => $data['industry_association_id'] ?? "",
             'name_en' => $data['contact_person_name_en'] ?? "",
             'name' => $data['contact_person_name'] ?? "",
             'email' => $data['contact_person_email'] ?? "",
