@@ -764,7 +764,11 @@ class OrganizationService
             'contact_person_email' => [
                 'required',
                 'email',
-                'max:191'
+                Rule::unique('organizations', 'contact_person_email')
+                    ->ignore($id)
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    })
             ],
             'contact_person_designation' => [
                 'required',
@@ -901,7 +905,12 @@ class OrganizationService
             ],
             'contact_person_email' => [
                 'required',
-                'email'
+                'email',
+                Rule::unique('organizations', 'contact_person_email')
+                    ->ignore($id)
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    })
             ],
             'loc_division_id' => [
                 'required',
