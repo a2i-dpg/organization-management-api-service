@@ -127,6 +127,8 @@ class OrganizationController extends Controller
             }
 
             $validated['organization_id'] = $organization->id;
+            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
+
             $createdRegisterUser = $this->organizationService->createUser($validated);
 
             Log::info('id_user_info:' . json_encode($createdRegisterUser));
@@ -211,7 +213,7 @@ class OrganizationController extends Controller
 
             $createdRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
 
-            Log::info("userCreateInfo".json_encode($createdRegisterUser));
+            Log::info("userCreateInfo" . json_encode($createdRegisterUser));
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Registration has been failed!', 500);
