@@ -21,7 +21,7 @@
         "flipbox/lumen-generator": "^8.2",
         "irazasyed/larasupport": "^1.7",
         "phabloraylan/lumen-middleware-trim-or-convert-strings": "^1.0",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "^11.3"
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "dev-feat/give-accessibility-to-access-rabbitmqjob-instance"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

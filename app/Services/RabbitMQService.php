@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\CommonServices;
+namespace App\Services;
 
 use App\Models\BaseModel;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
