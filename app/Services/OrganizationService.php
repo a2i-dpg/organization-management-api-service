@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\BaseModel;
 use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -440,7 +441,7 @@ class OrganizationService
 
     public function userInfoSendByMail(array $mailPayload)
     {
-        Log::info("MailPayload".json_encode($mailPayload));
+        Log::info("MailPayload" . json_encode($mailPayload));
 
         $mailService = new MailService();
         $mailService->setTo([
@@ -458,6 +459,12 @@ class OrganizationService
         $instituteRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
         $mailService->setTemplate($instituteRegistrationTemplate);
         $mailService->sendMail();
+    }
+
+    public function userInfoSendBySMS(string $recipient, string $message)
+    {
+        $sms = new SmsService($recipient, $message);
+        $sms->sendSms();
     }
 
     /**
