@@ -9,6 +9,7 @@ use App\Models\Organization;
 use App\Services\IndustryAssociationService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,9 +45,11 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', IndustryAssociation::class);
         $filter = $this->industryAssociationService->filterValidator($request)->validate();
         $returnedData = $this->industryAssociationService->getIndustryAssociationList($filter, $this->startTime);
 
@@ -75,10 +78,17 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(Request $request, int $id): JsonResponse
     {
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
+
+        $requestHeaders = $request->header();
+        if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
+            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
+            $this->authorize('view', $industryAssociation);
+        }
         $response = [
             "data" => $industryAssociation ?: null,
             "_response_status" => [
@@ -103,6 +113,8 @@ class IndustryAssociationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $industryAssociation = app(IndustryAssociation::class);
+        $this->authorize('create', $industryAssociation);
+
         $validated = $this->industryAssociationService->validator($request)->validate();
 
         DB::beginTransaction();
@@ -324,10 +336,13 @@ class IndustryAssociationController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $industryAssociation = IndustryAssociation::findOrFail($id);
+
+        $this->authorize('update', $industryAssociation);
 
         $validated = $this->industryAssociationService->validator($request, $id)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
@@ -353,8 +368,7 @@ class IndustryAssociationController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $industryAssociation = IndustryAssociation::findOrFail($id);
-
-
+        $this->authorize('delete', $industryAssociation);
         DB::beginTransaction();
         try {
             $this->industryAssociationService->destroy($industryAssociation);
