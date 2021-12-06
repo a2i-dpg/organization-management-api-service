@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use App\Models\User;
+use App\Services\CommonServices\MailService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Exception;
@@ -127,6 +129,8 @@ class OrganizationController extends Controller
             }
 
             $validated['organization_id'] = $organization->id;
+            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
+
             $createdRegisterUser = $this->organizationService->createUser($validated);
 
             Log::info('id_user_info:' . json_encode($createdRegisterUser));
@@ -145,6 +149,13 @@ class OrganizationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+
+                /** Send User Information After Completing Organization Registration */
+                $this->organizationService->userInfoSendByMail($validated);
+                $recipient = $validated['contact_person_mobile'];
+                $message = "Dear, " . $validated['contact_person_name'] . " your username: " . $validated['contact_person_mobile'] . " & password: " . $validated['password'];
+                $this->organizationService->userInfoSendBySMS($recipient, $message);
+
                 $response['data'] = $organization;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -203,8 +214,11 @@ class OrganizationController extends Controller
             Log::channel('org_reg')->info('organization_stored_data', $organization->toArray());
 
             $validated['organization_id'] = $organization->id;
+            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
             $createdRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
+
+            Log::info("userCreateInfo" . json_encode($createdRegisterUser));
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Registration has been failed!', 500);
@@ -220,6 +234,10 @@ class OrganizationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+
+                /** Send User Information After Completing Organization Registration */
+                $this->organizationService->userInfoSendByMail($validated);
+
                 $response['data'] = $organization;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -373,13 +391,14 @@ class OrganizationController extends Controller
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
         if ($authUser && $authUser->organization_id) {
             $request->offsetSet('organization_id', $authUser->organization_id);
         }
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
-
+        $this->sendMailToIndustryAssociationAfterMembershipApplication($validatedData);
         $response = [
             '_response_status' => [
                 "success" => true,
@@ -389,5 +408,32 @@ class OrganizationController extends Controller
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    private function sendMailToIndustryAssociationAfterMembershipApplication(array $industryAssociationInfo)
+    {
+        /** @var IndustryAssociation $industryAssociation */
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationInfo['industry_association_id']);
+
+        /** @var Organization $organization */
+        $organization = Organization::findOrFail($industryAssociationInfo['organization_id']);
+
+        $mailService = new MailService();
+        $mailService->setTo([
+            $industryAssociation->contact_person_email
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Industry Association Registration";
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization" => $organization->toArray(),
+            "industry_association_info"=>$industryAssociation->toArray()
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
     }
 }

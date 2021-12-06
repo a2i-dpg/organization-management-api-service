@@ -6,6 +6,8 @@ use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use App\Services\IndustryAssociationService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
@@ -15,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
@@ -209,6 +212,9 @@ class IndustryAssociationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+
+                $this->sendIndustryAssociationOpenRegistrationNotificationByMail($validated);
+
                 $response['data'] = $industryAssociation;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -249,6 +255,7 @@ class IndustryAssociationController extends Controller
      */
     public function industryAssociationRegistrationApproval(int $industryAssociationId): JsonResponse
     {
+        /** @var IndustryAssociation $industryAssociation */
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
 
         DB::beginTransaction();
@@ -256,6 +263,10 @@ class IndustryAssociationController extends Controller
             if ($industryAssociation && $industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
                 $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
                 $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
+
+                /** sendSms after Industry Association Registration Approval */
+                $this->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+
                 DB::commit();
                 $response = [
                     '_response_status' => [
@@ -445,6 +456,9 @@ class IndustryAssociationController extends Controller
             if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
                 $organization = $this->organizationService->organizationStatusChangeAfterApproval($organization);
                 $this->organizationService->organizationUserApproval($organization);
+                $organization = $organization->toArray();
+                $organization['industry_association_id'] = $validatedData['industry_association_id'];
+                $this->sendMailOrganizationUserApproval($organization);
             }
             DB::commit();
             $response = [
@@ -504,6 +518,66 @@ class IndustryAssociationController extends Controller
             throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    private function sendIndustryAssociationOpenRegistrationNotificationByMail(array $mailPayload)
+    {
+        $mailService = new MailService();
+        $mailService->setTo([
+            $mailPayload['contact_person_email']
+        ]);
+        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
+        $subject = $mailPayload['subject'] ?? "Institute Registration";
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+        $mailService->setMessageBody([
+            "user_name" => $mailPayload['contact_person_mobile'],
+            "password" => $mailPayload['password']
+        ]);
+        $instituteRegistrationTemplate = 'mail.industry-association-registration-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     */
+    private function sendSmsIndustryAssociationRegistrationApproval(IndustryAssociation $industryAssociation)
+    {
+        /** Sms send after institute approval */
+        $recipient = $industryAssociation->contact_person_mobile;
+        $message = "Congratulation, " . $industryAssociation->contact_person_name . " You are approved as industry association user";
+        $sendSms = new SmsService($recipient, $message);
+        $sendSms->sendSms();
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function sendMailOrganizationUserApproval(array $mailPayload)
+    {
+        /** @var IndustryAssociation $industryAssociationInfo */
+        $industryAssociationInfo=IndustryAssociation::findOrFail($mailPayload['industry_association_id']);
+
+        $mailService = new MailService();
+        $mailService->setTo([
+            $mailPayload['contact_person_email']
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Industry Association Approval";
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization_info" => $mailPayload,
+            "association"=>$industryAssociationInfo->toArray()
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.industry-approval-as-association-member-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
     }
 
 }
