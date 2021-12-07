@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
+use App\Models\IndustryAssociation;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Class OrganizationService
@@ -311,9 +313,9 @@ class OrganizationService
     public function assignOrganizationInIndustryAssociation(Organization $organization, array $data)
     {
         $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'row_status' => $organization->row_status ?: 2
+            'is_reg_approval' => Organization::IS_REG_APPROVAL_TRUE,
+            'row_status' => $organization->row_status ?: BaseModel::ROW_STATUS_PENDING
         ]);
-
     }
 
     /**
@@ -324,14 +326,47 @@ class OrganizationService
     {
         $organization = Organization::findOrFail($data['organization_id']);
         $dataUpdate = $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => 2
+            'row_status' => BaseModel::ROW_STATUS_PENDING
         ]);
         if (!$dataUpdate) {
             $organization->industryAssociations()->attach($data['industry_association_id'], [
-                'row_status' => 2
+                'row_status' => BaseModel::ROW_STATUS_PENDING
             ]);
         }
 
+    }
+
+    /**
+     * Send Mail To IndustryAssociation After MembershipApplication
+     * @param array $industryAssociationInfo
+     * @throws Throwable
+     */
+
+    public function sendMailToIndustryAssociationAfterMembershipApplication(array $industryAssociationInfo)
+    {
+        /** @var IndustryAssociation $industryAssociation */
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationInfo['industry_association_id']);
+
+        /** @var Organization $organization */
+        $organization = Organization::findOrFail($industryAssociationInfo['organization_id']);
+
+        $mailService = new MailService();
+        $mailService->setTo([
+            $industryAssociation->contact_person_email
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Industry Association Registration";
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization" => $organization->toArray(),
+            "industry_association_info" => $industryAssociation->toArray()
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
     }
 
     /**

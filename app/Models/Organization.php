@@ -43,6 +43,9 @@ class Organization extends BaseModel
         self::ROW_STATUS_REJECTED
     ];
 
+    public const IS_REG_APPROVAL_TRUE = 1;
+    public const IS_REG_APPROVAL_FALSE = 0;
+
     /**
      * @var string[]
      */
