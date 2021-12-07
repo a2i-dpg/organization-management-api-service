@@ -270,6 +270,104 @@ class OrganizationController extends Controller
     }
 
     /**
+     * @throws RequestException
+     * @throws Throwable
+     */
+    public function organizationRegistrationApproval(int $organizationId): JsonResponse
+    {
+        /** @var Organization $organizationId */
+        $organization = Organization::findOrFail($organizationId);
+
+        DB::beginTransaction();
+
+        try {
+            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->organizationService->organizationStatusChangeAfterApproval($organization);
+                $this->organizationService->organizationUserApproval($organization);
+
+                /** sendSms after Industry Association Registration Approval */
+//                $this->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+
+                DB::commit();
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "Organization Registration  approved successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => false,
+                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                        "message" => "No pending status found for this organization",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            }
+
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param int $organizationId
+     * @return JsonResponse
+     * @throws RequestException
+     * @throws Throwable
+     */
+    public function organizationRegistrationRejection(int $organizationId): JsonResponse
+    {
+        /** @var Organization $organizationId */
+        $organization = Organization::findOrFail($organizationId);
+
+        DB::beginTransaction();
+
+        try {
+            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->organizationService->organizationStatusChangeAfterRejection($organization);
+                $this->organizationService->organizationUserRejection($organization);
+
+                /** sendSms after Industry Association Registration Approval */
+//                $this->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+
+                DB::commit();
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "Organization Registration  rejected successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => false,
+                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                        "message" => "No pending status found for this organization",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            }
+
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
@@ -429,7 +527,7 @@ class OrganizationController extends Controller
 
         $mailService->setMessageBody([
             "organization" => $organization->toArray(),
-            "industry_association_info"=>$industryAssociation->toArray()
+            "industry_association_info" => $industryAssociation->toArray()
         ]);
 
         $instituteRegistrationTemplate = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';

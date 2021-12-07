@@ -613,7 +613,7 @@ class OrganizationService
      */
     public function organizationStatusChangeAfterApproval(Organization $organization): Organization
     {
-        $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
+        $organization->row_status = BaseModel::ROW_STATUS_ACTIVE;
         $organization->save();
         return $organization;
     }
@@ -627,10 +627,10 @@ class OrganizationService
 
     /**
      * @param Organization $organization
-     * @return array|mixed
+     * @return mixed
      * @throws RequestException
      */
-    public function organizationUserApproval(Organization $organization)
+    public function organizationUserApproval(Organization $organization): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
         $userPostField = [
