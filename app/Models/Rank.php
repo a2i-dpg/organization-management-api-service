@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\ScopeFilterByOrganization;
+use App\Traits\Scopes\ScopeAcl;
 use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Rank extends BaseModel
 {
-    use softDeletes, ScopeRowStatusTrait, ScopeFilterByOrganization;
+    use softDeletes, ScopeRowStatusTrait;
 
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;

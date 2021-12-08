@@ -83,6 +83,8 @@ class OrganizationController extends Controller
         $organization = $this->organizationService->getOneOrganization($id);
 
         $requestHeaders = $request->header();
+
+        /** Policy not checking when service to service call true*/
         if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
             $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
             $this->authorize('view', $organization);
@@ -185,6 +187,69 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $organization = Organization::findOrFail($id);
+
+        $this->authorize('update', $organization);
+
+        $validated = $this->organizationService->validator($request, $id)->validate();
+        $data = $this->organizationService->update($organization, $validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Organization updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $organization = Organization::findOrFail($id);
+
+        $this->authorize('delete', $organization);
+
+        DB::beginTransaction();
+        try {
+            $this->organizationService->destroy($organization);
+            $this->organizationService->userDestroy($organization);
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws CustomException
@@ -267,69 +332,8 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
      * @param Request $request
-     * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws Throwable
-     * @throws ValidationException
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $organization = Organization::findOrFail($id);
-
-        $this->authorize('update', $organization);
-
-        $validated = $this->organizationService->validator($request, $id)->validate();
-        $data = $this->organizationService->update($organization, $validated);
-        $response = [
-            'data' => $data ?: null,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization updated successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws Throwable
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $organization = Organization::findOrFail($id);
-
-        $this->authorize('delete', $organization);
-
-        DB::beginTransaction();
-        try {
-            $this->organizationService->destroy($organization);
-            $this->organizationService->userDestroy($organization);
-            DB::commit();
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Organization deleted successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            DB::rollBack();
-            throw $e;
-        }
-
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    /**
      * @throws Throwable
      */
     public function getOrganizationTitleByIds(Request $request): JsonResponse

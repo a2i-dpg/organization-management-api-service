@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Publication extends BaseModel
 {
-    use  SoftDeletes;
-    use HasFactory;
+    use SoftDeletes, HasFactory;
+
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 }
