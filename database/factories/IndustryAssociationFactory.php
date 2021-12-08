@@ -2,25 +2,17 @@
 
 namespace Database\Factories;
 
-
 use App\Models\BaseModel;
-use App\Models\Organization;
+use App\Models\IndustryAssociation;
 use App\Services\LocationManagementServices\LocationSeederHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * Class OrganizationFactory
- * @package Database\Factories
- */
-class OrganizationFactory extends Factory
+class IndustryAssociationFactory extends Factory
 {
-    /**
-     * @var string
-     */
-    protected $model = Organization::class;
+    protected $model = IndustryAssociation::class;
+
 
     /**
-     * @return array
      * @throws \Exception
      */
     public function definition(): array
@@ -35,11 +27,10 @@ class OrganizationFactory extends Factory
         $officeHeadName = ucfirst($this->faker->name());
         $contactPersonName = ucfirst($this->faker->name());
         $contactPersonJobTitle = ucfirst($this->faker->unique()->jobTitle);
-
         return [
             'title_en' => $title,
             'title' => $title,
-            'organization_type_id' => random_int(2, 3),
+            'industry_association_type_id' => random_int(1, 2),
             'loc_division_id' => $location['loc_division_id'],
             'loc_district_id' => $location['loc_district_id'],
             'loc_upazila_id' => $location['loc_upazila_id'],
@@ -47,11 +38,9 @@ class OrganizationFactory extends Factory
             'location_longitude' => $location['location_longitude'],
             'address' => $orgAddress,
             'address_en' => $orgAddress,
+            'trade_number' => $this->faker->word(),
             'mobile' => $this->faker->numerify('017########'),
             'email' => $this->faker->companyEmail(),
-            'fax_no' => $this->faker->phoneNumber(),
-            'description' => $orgDescription,
-            'description_en' => $orgDescription,
             'logo' => "logo.jpg",
             'domain' => 'https://www.' . $this->faker->unique()->domainName(),
 

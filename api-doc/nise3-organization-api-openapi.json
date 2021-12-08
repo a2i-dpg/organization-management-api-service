@@ -140,6 +140,69 @@
                 ]
             }
         },
+        "/industry-association-registration-approval/{IndustryAssocId}": {
+            "put": {
+                "summary": "Approve a industry association pending registration request",
+                "description": "API endpoint to approve a registration by an industry association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation Registration  approved successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Industry Association Registration"
+                ]
+            }
+        },
+        "/industry-association-registration-rejection/{IndustryAssocId}": {
+            "put": {
+                "summary": "Approve a industry association pending registration request",
+                "description": "API endpoint to reject a registration by an industry association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation Registration  rejected successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Industry Association Registration"
+                ]
+            }
+
+        },
         "/organization-registration": {
             "post": {
                 "summary": "Register Organization",
