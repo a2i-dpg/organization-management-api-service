@@ -2,20 +2,16 @@
 
 namespace App\Events;
 
-use Illuminate\Support\Facades\Log;
-
 class SmsSendEvent
 {
-    public array $smsPayload;
-
+    public array $data;
     /**
      * Create a new SMS event instance.
      *
      * @return void
      */
-    public function __construct(array $smsPayload)
+    public function __construct(array $data)
     {
-        $this->smsPayload = $smsPayload;
-        Log::info("set-in-sms-event".json_encode($this->smsPayload));
+        $this->data = $data;
     }
 }

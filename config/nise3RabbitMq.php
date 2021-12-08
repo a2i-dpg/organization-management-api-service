@@ -1,60 +1,122 @@
 <?php
 
-use \App\Models\BaseModel;
-
 return [
-    'exchangeType' => [
-        'direct' => 'direct',
-        'topic' => 'topic',
-        'fanout' => 'fanout',
-        'headers' => 'headers'
-    ],
     'exchanges' => [
-        BaseModel::SELF_EXCHANGE => [
-            'name' => BaseModel::SELF_EXCHANGE.'.x',
+        'core' => [
+            'name' => 'core.x',
             'type' => 'topic',
             'durable' => true,
             'autoDelete' => false,
             'alternateExchange' => [
-                'name' => BaseModel::SELF_EXCHANGE.'.alternate.x',
+                'name' => 'core.alternate.x',
                 'type' => 'fanout',
-                'queue' => BaseModel::SELF_EXCHANGE.'.alternate.q'
-            ],
-            'dlx' => [
-                'name' => BaseModel::SELF_EXCHANGE.'.dlx',
-                'type' => 'fanout',
-                'dlq' => BaseModel::SELF_EXCHANGE.'.dlq',
-                'x_message_ttl' => 120000
+                'queue' => 'core.alternate.q'
             ],
             'queue' => [
-                'courseEnrollment' => [
-                    'name' => BaseModel::SELF_EXCHANGE.'.course.enrollment.q',
-                    'binding' => BaseModel::SELF_EXCHANGE.'.course.enrollment',
+                'demo' => [
+                    'name' => 'core.demo.q',
+                    'binding' => 'core.demo',
                     'durable' => true,
                     'autoDelete' => false
                 ]
             ],
         ],
-        'mailSmsExchange' => [
-            'name' => 'organization.sms.x',
+        'institute' => [
+            'name' => 'institute.x',
             'type' => 'topic',
             'durable' => true,
             'autoDelete' => false,
             'alternateExchange' => [
-                'name' => 'organization.sms.alternate.x',
+                'name' => 'institute.alternate.x',
                 'type' => 'fanout',
-                'queue' => 'organization.sms.alternate.q'
+                'queue' => 'institute.alternate.q'
+            ],
+            'queue' => [
+                'courseEnrollment' => [
+                    'name' => 'institute.course.enrollment.q',
+                    'binding' => 'institute.course.enrollment',
+                    'durable' => true,
+                    'autoDelete' => false
+                ]
+            ],
+        ],
+        'organization' => [
+            'name' => 'organization.x',
+            'type' => 'topic',
+            'durable' => true,
+            'autoDelete' => false,
+            'alternateExchange' => [
+                'name' => 'organization.alternate.x',
+                'type' => 'fanout',
+                'queue' => 'organization.alternate.q'
+            ],
+            'queue' => [
+                'demo' => [
+                    'name' => 'organization.demo.q',
+                    'binding' => 'organization.demo',
+                    'durable' => true,
+                    'autoDelete' => false
+                ]
+            ],
+        ],
+        'youth' => [
+            'name' => 'youth.x',
+            'type' => 'topic',
+            'durable' => true,
+            'autoDelete' => false,
+            'alternateExchange' => [
+                'name' => 'youth.alternate.x',
+                'type' => 'fanout',
+                'queue' => 'youth.alternate.q'
+            ],
+            'queue' => [
+                'courseEnrollment' => [
+                    'name' => 'youth.course.enrollment.q',
+                    'binding' => 'youth.course.enrollment',
+                    'durable' => true,
+                    'autoDelete' => false
+                ]
+            ],
+        ],
+        'cms' => [
+            'name' => 'cms.x',
+            'type' => 'topic',
+            'durable' => true,
+            'autoDelete' => false,
+            'alternateExchange' => [
+                'name' => 'cms.alternate.x',
+                'type' => 'fanout',
+                'queue' => 'cms.alternate.q'
+            ],
+            'queue' => [
+                'demo' => [
+                    'name' => 'cms.demo.q',
+                    'binding' => 'cms.demo',
+                    'durable' => true,
+                    'autoDelete' => false
+                ]
+            ],
+        ],
+        'mailSms' => [
+            'name' => 'mail.sms.x',
+            'type' => 'topic',
+            'durable' => true,
+            'autoDelete' => false,
+            'alternateExchange' => [
+                'name' => 'mail.sms.alternate.x',
+                'type' => 'fanout',
+                'queue' => 'mail.sms.alternate.q'
             ],
             'dlx' => [
-                'name' => 'organization.sms.dlx',
+                'name' => 'mail.sms.dlx',
                 'type' => 'fanout',
-                'dlq' => 'organization.sms.dlq',
+                'dlq' => 'mail.sms.dlq',
                 'x_message_ttl' => 120000
             ],
             'queue' => [
-                'organization' => [
-                    'name' => 'organization.q',
-                    'binding' => 'organization',
+                'mail' => [
+                    'name' => 'mail.q',
+                    'binding' => 'mail',
                     'durable' => true,
                     'autoDelete' => false,
                 ],
@@ -67,5 +129,5 @@ return [
             ]
         ]
     ],
-    'consume' => 'organization.course.enrollment.q'
+    'consume' => 'demo.q'
 ];
