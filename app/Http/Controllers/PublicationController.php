@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Publication;
+use App\Models\User;
 use App\Services\PublicationService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Illuminate\Http\JsonResponse;

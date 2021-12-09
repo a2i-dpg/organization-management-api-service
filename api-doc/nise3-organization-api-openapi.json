@@ -3925,6 +3925,9 @@
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
+                        "$ref": "#/components/parameters/IndustryAssocId_Query"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3946,33 +3949,19 @@
                                     "order": "ASC",
                                     "data": [
                                         {
-                                            "id": 1,
-                                            "title": "aaaaaaaaaaa",
+                                            "id": 11,
+                                            "title": "TestPub",
                                             "title_en": null,
                                             "author": null,
                                             "author_en": null,
-                                            "description": "ccccccccccccc",
+                                            "description": "New Desc",
                                             "description_en": null,
+                                            "industry_association_id": 2,
                                             "image_path": null,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-11-28T10:33:27.000000Z",
-                                            "updated_at": "2021-11-28T10:35:31.000000Z",
-                                            "row_status": 1
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title": "Madagaskaar",
-                                            "title_en": null,
-                                            "author": null,
-                                            "author_en": null,
-                                            "description": "ShutUp",
-                                            "description_en": null,
-                                            "image_path": null,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-28T10:34:52.000000Z",
-                                            "updated_at": "2021-11-28T10:37:45.000000Z",
+                                            "created_at": "2021-12-09T11:20:01.000000Z",
+                                            "updated_at": "2021-12-09T11:20:01.000000Z",
                                             "row_status": 1
                                         }
                                     ],
@@ -4009,15 +3998,13 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "title_en": null,
-                                        "title": "NewTitle",
-                                        "description": "My Desription",
-                                        "description_en": null,
-                                        "image_path": null,
+                                        "title": "TestPub",
+                                        "description": "New Desc",
+                                        "industry_association_id": 2,
                                         "row_status": "1",
-                                        "updated_at": "2021-11-28T10:33:27.000000Z",
-                                        "created_at": "2021-11-28T10:33:27.000000Z",
-                                        "id": 1
+                                        "updated_at": "2021-12-09T11:20:01.000000Z",
+                                        "created_at": "2021-12-09T11:20:01.000000Z",
+                                        "id": 11
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5066,6 +5053,9 @@
                         "type": "string",
                         "maxLength": 1000
                     },
+                    "industry_association_id": {
+                        "type": "integer"
+                    },
                     "image_path": {
                         "type": "string"
                     },
@@ -5082,6 +5072,7 @@
                 "required": [
                     "title",
                     "description",
+                    "industry_association_id",
                     "author"
                 ]
             },
@@ -6164,6 +6155,14 @@
                 "name": "IndustryAssocId",
                 "in": "path",
                 "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "IndustryAssocId_Query": {
+                "name": "IndustryAssocId",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "integer"
                 }

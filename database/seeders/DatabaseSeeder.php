@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             OrganizationTypeSeeder::class,
             OrganizationSeeder::class,
             HumanResourceTemplateSeeder::class,
+            PublicationSeeder::class
         ]);
     }
 }
