@@ -389,11 +389,12 @@ class IndustryAssociationService
 
 
     /**
+     * Validator for industry registration/industryAssociation membership  approval/rejection
      * @param Request $request
      * @param int $organizationId
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function industryAssociationMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
+    public function registrationOrMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'industry_association_id' => [
