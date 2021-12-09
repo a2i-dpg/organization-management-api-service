@@ -4667,9 +4667,9 @@
                 ]
             }
         },
-        "/industry-association-membership-approval/{organizationId}": {
+        "/registration-or-membership-approval/{organizationId}": {
             "put": {
-                "summary": "Approve a new industry association membership approval",
+                "summary": "Approve a new industry registration or industry association membership approval",
                 "description": "API endpoint to Create a new industry association membership approval.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
@@ -4703,13 +4703,13 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Registration Or Membership Approval Rejection"
                 ]
             }
         },
-        "/industry-association-membership-rejection/{organizationId}": {
+        "/registration-or-membership-rejection/{organizationId}": {
             "put": {
-                "summary": "Reject an industry membership association",
+                "summary": "Reject a new industry registration or industry association membership",
                 "description": "API endpoint to Reject an industry membership association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
@@ -4743,7 +4743,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Registration Or Membership Approval Rejection"
                 ]
             }
         }

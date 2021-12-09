@@ -432,14 +432,14 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     *  IndustryAssociation membership approval
+     * Industry registration or IndustryAssociation membership approval
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
      * @throws ValidationException
      * @throws Throwable
      */
-    public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
+    public function registrationOrMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
         if ($authUser && $authUser->industry_association_id) {
@@ -448,7 +448,7 @@ class IndustryAssociationController extends Controller
 
         $organization = Organization::findOrFail($organizationId);
 
-        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+        $validatedData = $this->industryAssociationService->registrationOrMembershipValidator($request, $organizationId)->validate();
 
         DB::beginTransaction();
         try {
@@ -457,20 +457,28 @@ class IndustryAssociationController extends Controller
             if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING && $approveData->is_reg_approval) {
                 $organization = $this->organizationService->organizationStatusChangeAfterApproval($organization);
                 $this->organizationService->organizationUserApproval($organization);
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "organization registration approved successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "IndustryAssociation membership approved successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
             }
             $organization = $organization->toArray();
             $organization['industry_association_id'] = $validatedData['industry_association_id'];
             $this->industryAssociationService->sendMailOrganizationUserApproval($organization);
-
             DB::commit();
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "IndustryAssociation membership approved successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
 
         } catch (Throwable $e) {
             DB::rollBack();
@@ -480,7 +488,7 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     *  IndustryAssociation membership approval
+     * industry registration or industryAssociation membership rejection
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
@@ -488,15 +496,16 @@ class IndustryAssociationController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
+    public function registrationOrMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
+
         if ($authUser && $authUser->industry_association_id) {
             $request->offsetSet('industry_association_id', $authUser->industry_association_id);
         }
         $organization = Organization::findOrFail($organizationId);
 
-        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+        $validatedData = $this->industryAssociationService->registrationOrMembershipValidator($request, $organizationId)->validate();
 
         DB::beginTransaction();
         try {
@@ -504,16 +513,26 @@ class IndustryAssociationController extends Controller
             if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING && $rejectedData->is_reg_approval) {
                 $organization = $this->organizationService->organizationStatusChangeAfterRejection($organization);
                 $this->organizationService->organizationUserRejection($organization);
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "organization registration rejected successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "IndustryAssociation membership rejected successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
             }
             DB::commit();
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "IndustryAssociation membership rejected successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+
 
         } catch (Throwable $e) {
             DB::rollBack();
