@@ -16,46 +16,52 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
+    /** Api info  */
     $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
-    $customRouter()->resourceRoute('ranks', 'RankController')->render();
-    $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
-    $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();
-    $customRouter()->resourceRoute('skills', 'SkillController')->render();
-    $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
-    $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
-    $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
-    $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
-    $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
-    $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
-    $customRouter()->resourceRoute('services', 'ServiceController')->render();
-    $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
-    $customRouter()->resourceRoute('publications', 'PublicationController')->render();
-    $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
 
 
-    $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
-    $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
+    /** Auth routes */
+    $router->group(['middleware' => 'auth'], function () use ($customRouter, $router) {
+        $customRouter()->resourceRoute('ranks', 'RankController')->render();
+        $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
+        $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();
+        //$customRouter()->resourceRoute('skills', 'SkillController')->render(); //moved to youth service
+        $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
+        $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
+        $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
+        $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
+        $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
+        $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
+        $customRouter()->resourceRoute('services', 'ServiceController')->render();
+        $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+        $customRouter()->resourceRoute('publications', 'PublicationController')->render();
+        $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
 
-    /** Assign Service to Organization Unit */
-    $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
+        $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
+        $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
+
+        /** Assign Service to Organization Unit */
+        $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
+
+        /** IndustryAssociation Registration Approval */
+        $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
+
+        /** IndustryAssociation Registration Rejection */
+        $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationRegistrationRejection"]);
+    });
+
 
     /** Industry Association open  Registration */
     $router->post("industry-association-registration", ["as" => "register.industryAssociation", "uses" => "IndustryAssociationController@industryAssociationOpenRegistration"]);
 
-    /** IndustryAssociation Registration Approval */
-    $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
 
-    /** IndustryAssociation Registration Rejection */
-    $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationRegistrationRejection"]);
-
-
-    /** Organization Registration */
+    /** Organization open Registration */
     $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
 
     /** Industry Association apply for industryAssociation membership */
     $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
 
-    /** Industry Association membership approval   */
+    /** Industry Association membership approval */
     $router->put("industry-association-membership-approval/{organizationId}", ["as" => "IndustryAssociation.industry-associations-membership-approval", "uses" => "IndustryAssociationController@industryAssociationMembershipApproval"]);
 
 
