@@ -35,6 +35,12 @@ return [
     */
 
     'channels' => [
+        'saga_error' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/saga_error.log'),
+            'level' => 'info'
+        ],
+
         'org_reg' => [
             'driver' => 'daily',
             'path' => storage_path('logs/org_reg.log'),

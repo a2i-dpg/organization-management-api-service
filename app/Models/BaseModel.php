@@ -56,5 +56,11 @@ abstract class BaseModel extends Model
 
     public const ADMIN_CREATED_USER_DEFAULT_PASSWORD = "ABcd1234";
 
-
+    /** SAGA events Publisher & Consumer */
+    public const SAGA_CORE_SERVICE = 'core_service';
+    public const SAGA_INSTITUTE_SERVICE = 'institute_service';
+    public const SAGA_ORGANIZATION_SERVICE = 'organization_service';
+    public const SAGA_YOUTH_SERVICE = 'youth_service';
+    public const SAGA_CMS_SERVICE = 'cms_service';
+    public const SAGA_MAIL_SMS_SERVICE = 'mail_sms_service';
 }
