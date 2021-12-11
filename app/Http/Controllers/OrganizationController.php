@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
 use App\Models\BaseModel;
-use App\Models\IndustryAssociation;
 use App\Models\User;
-use App\Services\CommonServices\MailService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -86,6 +83,8 @@ class OrganizationController extends Controller
         $organization = $this->organizationService->getOneOrganization($id);
 
         $requestHeaders = $request->header();
+
+        /** Policy not checking when service to service call true*/
         if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
             $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
             $this->authorize('view', $organization);
@@ -188,6 +187,69 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $organization = Organization::findOrFail($id);
+
+        $this->authorize('update', $organization);
+
+        $validated = $this->organizationService->validator($request, $id)->validate();
+        $data = $this->organizationService->update($organization, $validated);
+        $response = [
+            'data' => $data ?: null,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Organization updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $organization = Organization::findOrFail($id);
+
+        $this->authorize('delete', $organization);
+
+        DB::beginTransaction();
+        try {
+            $this->organizationService->destroy($organization);
+            $this->organizationService->userDestroy($organization);
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Organization deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws CustomException
@@ -270,60 +332,8 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
      * @param Request $request
-     * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws Throwable
-     * @throws ValidationException
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $organization = Organization::findOrFail($id);
-
-        $this->authorize('update', $organization);
-
-        $validated = $this->organizationService->validator($request, $id)->validate();
-        $data = $this->organizationService->update($organization, $validated);
-        $response = [
-            'data' => $data ?: null,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization updated successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws Throwable
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $organization = Organization::findOrFail($id);
-
-        $this->authorize('delete', $organization);
-
-        $this->organizationService->destroy($organization);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization deleted successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    /**
      * @throws Throwable
      */
     public function getOrganizationTitleByIds(Request $request): JsonResponse
@@ -378,7 +388,9 @@ class OrganizationController extends Controller
 
 
     /**
+     * Industry association membership request from industry
      * @throws ValidationException
+     * @throws Throwable
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
@@ -389,7 +401,7 @@ class OrganizationController extends Controller
         }
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
-        $this->sendMailToIndustryAssociationAfterMembershipApplication($validatedData);
+        $this->organizationService->sendMailToIndustryAssociationAfterMembershipApplication($validatedData);
         $response = [
             '_response_status' => [
                 "success" => true,
@@ -401,30 +413,4 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
-    private function sendMailToIndustryAssociationAfterMembershipApplication(array $industryAssociationInfo)
-    {
-        /** @var IndustryAssociation $industryAssociation */
-        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationInfo['industry_association_id']);
-
-        /** @var Organization $organization */
-        $organization = Organization::findOrFail($industryAssociationInfo['organization_id']);
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $industryAssociation->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Registration";
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization" => $organization->toArray(),
-            "industry_association_info"=>$industryAssociation->toArray()
-        ]);
-
-        $instituteRegistrationTemplate = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
-        $mailService->sendMail();
-    }
 }

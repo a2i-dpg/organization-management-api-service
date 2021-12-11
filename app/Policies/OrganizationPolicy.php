@@ -46,7 +46,6 @@ class OrganizationPolicy extends BasePolicy
 
     /**
      * Determine whether the user can update the organization.
-     *
      * @param User $authUser
      * @param Organization $organization
      * @return bool

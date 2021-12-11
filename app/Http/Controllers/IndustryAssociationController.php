@@ -11,6 +11,7 @@ use App\Services\CommonServices\SmsService;
 use App\Services\IndustryAssociationService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,9 +48,11 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', IndustryAssociation::class);
         $filter = $this->industryAssociationService->filterValidator($request)->validate();
         $returnedData = $this->industryAssociationService->getIndustryAssociationList($filter, $this->startTime);
 
@@ -78,10 +81,17 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(Request $request, int $id): JsonResponse
     {
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
+
+        $requestHeaders = $request->header();
+        if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
+            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
+            $this->authorize('view', $industryAssociation);
+        }
         $response = [
             "data" => $industryAssociation ?: null,
             "_response_status" => [
@@ -106,6 +116,8 @@ class IndustryAssociationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $industryAssociation = app(IndustryAssociation::class);
+        $this->authorize('create', $industryAssociation);
+
         $validated = $this->industryAssociationService->validator($request)->validate();
 
         DB::beginTransaction();
@@ -201,7 +213,7 @@ class IndustryAssociationController extends Controller
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
-                $this->sendIndustryAssociationOpenRegistrationNotificationByMail($validated);
+                $this->industryAssociationService->sendIndustryAssociationOpenRegistrationNotificationByMail($validated);
 
                 $response['data'] = $industryAssociation;
                 DB::commit();
@@ -253,7 +265,7 @@ class IndustryAssociationController extends Controller
                 $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
 
                 /** sendSms after Industry Association Registration Approval */
-                $this->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+                $this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
 
                 DB::commit();
                 $response = [
@@ -335,10 +347,13 @@ class IndustryAssociationController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $industryAssociation = IndustryAssociation::findOrFail($id);
+
+        $this->authorize('update', $industryAssociation);
 
         $validated = $this->industryAssociationService->validator($request, $id)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
@@ -364,8 +379,24 @@ class IndustryAssociationController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $industryAssociation = IndustryAssociation::findOrFail($id);
-
-        $this->industryAssociationService->destroy($industryAssociation);
+        $this->authorize('delete', $industryAssociation);
+        DB::beginTransaction();
+        try {
+            $this->industryAssociationService->destroy($industryAssociation);
+            $this->industryAssociationService->userDestroy($industryAssociation);
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "industryAssociation deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         $response = [
             '_response_status' => [
@@ -401,14 +432,14 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     *  IndustryAssociation membership approval
+     * Industry registration or IndustryAssociation membership approval
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
      * @throws ValidationException
      * @throws Throwable
      */
-    public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
+    public function registrationOrMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
         if ($authUser && $authUser->industry_association_id) {
@@ -417,27 +448,37 @@ class IndustryAssociationController extends Controller
 
         $organization = Organization::findOrFail($organizationId);
 
-        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+        $validatedData = $this->industryAssociationService->registrationOrMembershipValidator($request, $organizationId)->validate();
 
         DB::beginTransaction();
         try {
-            $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+            $approveData = $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
+
+            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING && $approveData->is_reg_approval) {
                 $organization = $this->organizationService->organizationStatusChangeAfterApproval($organization);
                 $this->organizationService->organizationUserApproval($organization);
-                $organization = $organization->toArray();
-                $organization['industry_association_id'] = $validatedData['industry_association_id'];
-                $this->sendMailOrganizationUserApproval($organization);
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "organization registration approved successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "IndustryAssociation membership approved successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
             }
+            $organization = $organization->toArray();
+            $organization['industry_association_id'] = $validatedData['industry_association_id'];
+            $this->industryAssociationService->sendMailOrganizationUserApproval($organization);
             DB::commit();
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "IndustryAssociation membership approved successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
 
         } catch (Throwable $e) {
             DB::rollBack();
@@ -447,7 +488,7 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     *  IndustryAssociation membership approval
+     * industry registration or industryAssociation membership rejection
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
@@ -455,98 +496,49 @@ class IndustryAssociationController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
+    public function registrationOrMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
+
         if ($authUser && $authUser->industry_association_id) {
             $request->offsetSet('industry_association_id', $authUser->industry_association_id);
         }
         $organization = Organization::findOrFail($organizationId);
 
-        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
+        $validatedData = $this->industryAssociationService->registrationOrMembershipValidator($request, $organizationId)->validate();
 
         DB::beginTransaction();
         try {
-            $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
-            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+            $rejectedData = $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
+            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING && $rejectedData->is_reg_approval) {
                 $organization = $this->organizationService->organizationStatusChangeAfterRejection($organization);
                 $this->organizationService->organizationUserRejection($organization);
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "organization registration rejected successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "IndustryAssociation membership rejected successfully",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
             }
             DB::commit();
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "IndustryAssociation membership rejected successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+
 
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    private function sendIndustryAssociationOpenRegistrationNotificationByMail(array $mailPayload)
-    {
-        $mailService = new MailService();
-        $mailService->setTo([
-            $mailPayload['contact_person_email']
-        ]);
-        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "Institute Registration";
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-        $mailService->setMessageBody([
-            "user_name" => $mailPayload['contact_person_mobile'],
-            "password" => $mailPayload['password']
-        ]);
-        $instituteRegistrationTemplate = 'mail.industry-association-registration-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
-        $mailService->sendMail();
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     */
-    private function sendSmsIndustryAssociationRegistrationApproval(IndustryAssociation $industryAssociation)
-    {
-        /** Sms send after institute approval */
-        $recipient = $industryAssociation->contact_person_mobile;
-        $message = "Congratulation, " . $industryAssociation->contact_person_name . " You are approved as industry association user";
-        $sendSms = new SmsService($recipient, $message);
-        $sendSms->sendSms();
-    }
-
-    /**
-     * @throws Throwable
-     */
-    private function sendMailOrganizationUserApproval(array $mailPayload)
-    {
-        /** @var IndustryAssociation $industryAssociationInfo */
-        $industryAssociationInfo=IndustryAssociation::findOrFail($mailPayload['industry_association_id']);
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $mailPayload['contact_person_email']
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Approval";
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization_info" => $mailPayload,
-            "association"=>$industryAssociationInfo->toArray()
-        ]);
-
-        $instituteRegistrationTemplate = 'mail.industry-approval-as-association-member-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
-        $mailService->sendMail();
     }
 
 }

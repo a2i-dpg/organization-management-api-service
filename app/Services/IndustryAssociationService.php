@@ -5,17 +5,22 @@ namespace App\Services;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  *
@@ -239,6 +244,32 @@ class IndustryAssociationService
 
     /**
      * @param IndustryAssociation $industryAssociation
+     * @return mixed
+     * @throws RequestException
+     */
+    public function userDestroy(IndustryAssociation $industryAssociation)
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-delete';
+        $userPostField = [
+            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
+            'industry_association_id' => $industryAssociation->id,
+        ];
+
+        return Http::withOptions(
+            [
+                'verify' => config('nise3.should_ssl_verify'),
+                'debug' => config('nise3.http_debug'),
+                'timeout' => config('nise3.http_timeout'),
+            ])
+            ->delete($url, $userPostField)
+            ->throw(function ($response, $e) {
+                return $e;
+            })
+            ->json();
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
      * @return bool
      */
     public function restore(IndustryAssociation $industryAssociation): bool
@@ -324,34 +355,46 @@ class IndustryAssociationService
     /**
      * @param array $data
      * @param Organization $organization
-     * @return int
+     * @return mixed
      */
-    public function industryAssociationMembershipApproval(array $data, Organization $organization): int
+    public function industryAssociationMembershipApproval(array $data, Organization $organization): mixed
     {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => Organization::ROW_STATUS_ACTIVE
+        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'row_status' => BaseModel::ROW_STATUS_ACTIVE
         ]);
+        return DB::table('industry_association_organization')
+            ->where('industry_association_id', $data['industry_association_id'])
+            ->where('row_status', BaseModel::ROW_STATUS_ACTIVE)
+            ->where('organization_id', $organization->id)
+            ->first();
     }
 
     /**
      * @param array $data
      * @param Organization $organization
-     * @return int
+     * @return mixed
      */
-    public function industryAssociationMembershipRejection(array $data, Organization $organization): int
+    public function industryAssociationMembershipRejection(array $data, Organization $organization): mixed
     {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => Organization::ROW_STATUS_REJECTED
+        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'row_status' => BaseModel::ROW_STATUS_REJECTED
         ]);
+
+        return DB::table('industry_association_organization')
+            ->where('industry_association_id', $data['industry_association_id'])
+            ->where('row_status', BaseModel::ROW_STATUS_REJECTED)
+            ->where('organization_id', $organization->id)
+            ->first();
     }
 
 
     /**
+     * Validator for industry registration/industryAssociation membership  approval/rejection
      * @param Request $request
      * @param int $organizationId
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function industryAssociationMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
+    public function registrationOrMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'industry_association_id' => [
@@ -438,6 +481,71 @@ class IndustryAssociationService
                 throw $e;
             })
             ->json();
+    }
+
+
+    /**
+     * @param array $mailPayload
+     * @throws Throwable
+     */
+    public function sendIndustryAssociationOpenRegistrationNotificationByMail(array $mailPayload)
+    {
+        $mailService = new MailService();
+        $mailService->setTo([
+            $mailPayload['contact_person_email']
+        ]);
+        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
+        $subject = $mailPayload['subject'] ?? "Institute Registration";
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+        $mailService->setMessageBody([
+            "user_name" => $mailPayload['contact_person_mobile'],
+            "password" => $mailPayload['password']
+        ]);
+        $instituteRegistrationTemplate = 'mail.industry-association-registration-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     */
+    public function sendSmsIndustryAssociationRegistrationApproval(IndustryAssociation $industryAssociation)
+    {
+        /** Sms send after institute approval */
+        $recipient = $industryAssociation->contact_person_mobile;
+        $message = "Congratulation, " . $industryAssociation->contact_person_name . " You are approved as industry association user";
+        $sendSms = new SmsService($recipient, $message);
+        $sendSms->sendSms();
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function sendMailOrganizationUserApproval(array $mailPayload)
+    {
+        /** @var IndustryAssociation $industryAssociationInfo */
+        $industryAssociationInfo = IndustryAssociation::findOrFail($mailPayload['industry_association_id']);
+
+        $mailService = new MailService();
+        $mailService->setTo([
+            $mailPayload['contact_person_email']
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Industry Association Approval";
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization_info" => $mailPayload,
+            "association" => $industryAssociationInfo->toArray()
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.industry-approval-as-association-member-default-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
     }
 
     /**

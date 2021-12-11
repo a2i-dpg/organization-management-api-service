@@ -68,4 +68,24 @@ class User extends BaseModel implements
         return $this->permissions->contains($key);
     }
 
+    public function isSystemUser(): bool
+    {
+        return $this->user_type == BaseModel::SYSTEM_USER_TYPE;
+    }
+
+    public function isOrganizationUser(): bool
+    {
+        return $this->user_type == BaseModel::ORGANIZATION_USER_TYPE && $this->organization_id;
+    }
+
+    public function isIndustryAssociationUser(): bool
+    {
+        return $this->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE && $this->industry_association_id;
+    }
+
+    public function isInstituteUser(): bool
+    {
+        return $this->user_type == BaseModel::INSTITUTE_USER_TYPE && $this->institute_id;
+    }
+
 }

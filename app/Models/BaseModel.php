@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Traits\Scopes\ScopeAcl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class BaseModel extends Model
 {
-    use HasFactory;
+    use HasFactory, ScopeAcl;
 
     public const COMMON_GUARDED_FIELDS_ONLY_SOFT_DELETE = ['id', 'deleted_at'];
     public const COMMON_GUARDED_FIELDS_SIMPLE = ['id', 'created_at', 'updated_at'];
@@ -37,8 +38,13 @@ abstract class BaseModel extends Model
     public const PASSWORD_REGEX = 'regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
     public const PASSWORD_VALIDATION_MESSAGE = 'The password must contain at least one uppercase, lowercase letter and at least one number.[66000]';
 
+    /** User Type*/
+    public const SYSTEM_USER_TYPE = 1;
     public const ORGANIZATION_USER_TYPE = 2;
+    public const INSTITUTE_USER_TYPE = 3;
+    public const YOUTH_USER_TYPE = 4;
     public const INDUSTRY_ASSOCIATION_USER_TYPE = 5;
+
 
     /** Client Url End Point Type*/
     public const CORE_CLIENT_URL_TYPE = "CORE";

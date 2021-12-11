@@ -8,10 +8,10 @@ use App\Models\User;
 abstract class BasePolicy
 {
 
-    public function before($user, $ability)
+    public function before($authUser, $ability)
     {
-        /** @var User $user */
-        if ($user->row_status != User::ROW_STATUS_ACTIVE) {
+        /** @var User $authUser */
+        if ($authUser && $authUser->row_status != User::ROW_STATUS_ACTIVE) {
             return false;
         }
     }

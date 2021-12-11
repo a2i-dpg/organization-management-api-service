@@ -52,7 +52,6 @@ class AuthServiceProvider extends ServiceProvider
         }
 
         $this->app['auth']->viaRequest('token', function (Request $request) {
-
             $token = $request->bearerToken();
             Log::info('Bearer Token: ' . $token);
 
@@ -62,13 +61,13 @@ class AuthServiceProvider extends ServiceProvider
 
             $authUser = null;
             $idpServerUserId = AuthTokenUtility::getIdpServerIdFromToken($token);
+
             Log::info("Auth idp user id-->" . $idpServerUserId);
 
             if ($idpServerUserId) {
 
                 Cache::remember($idpServerUserId, config('nise3.user_cache_ttl'), function () use ($idpServerUserId, $authUser) {
                     $userWithRolePermission = ServiceToServiceCall::getAuthUserWithRolePermission($idpServerUserId);
-
                     if ($userWithRolePermission) {
                         $role = app(Role::class);
                         if (isset($userWithRolePermission['role'])) {
@@ -90,13 +89,11 @@ class AuthServiceProvider extends ServiceProvider
 
                     return $authUser;
                 });
-
                 /** Remove cache key when value is null. Null can be set through previous cache remember function */
                 if (Cache::get($idpServerUserId) == null) {
                     Cache::forget($idpServerUserId);
                 }
             }
-
             return Cache::get($idpServerUserId);
         });
     }
