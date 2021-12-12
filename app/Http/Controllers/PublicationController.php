@@ -166,5 +166,29 @@ class PublicationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+    public function getPublicPublicationList(Request $request): JsonResponse
+    {
+//        $this->authorize('viewAny', Publication::class);
+
+        $filter = $this->publicationService->filterValidator($request)->validate();
+        $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
 
 }

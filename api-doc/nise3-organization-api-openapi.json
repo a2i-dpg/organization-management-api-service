@@ -3913,6 +3913,7 @@
                 ]
             }
         },
+
         "/publications": {
             "get": {
                 "summary": "Get a publication",
@@ -4188,6 +4189,73 @@
                                             "updated_by": null,
                                             "created_at": "2021-11-28T10:34:52.000000Z",
                                             "updated_at": "2021-11-28T10:37:45.000000Z",
+                                            "row_status": 1
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Publications"
+                ]
+            }
+        },
+        "/public/publications": {
+            "get": {
+                "summary": "Get a publication",
+                "description": "API endpoint to create a Publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/IndustryAssocId_Query"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 11,
+                                            "title": "TestPub",
+                                            "title_en": null,
+                                            "author": null,
+                                            "author_en": null,
+                                            "description": "New Desc",
+                                            "description_en": null,
+                                            "industry_association_id": 2,
+                                            "image_path": null,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-12-09T11:20:01.000000Z",
+                                            "updated_at": "2021-12-09T11:20:01.000000Z",
                                             "row_status": 1
                                         }
                                     ],
