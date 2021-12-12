@@ -64,7 +64,7 @@ class OrganizationController extends Controller
         if (!empty($authUser) && $authUser->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE) {
 
             $industryAssociationId = $authUser->industry_association_id;
-            $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime,);
+            $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
 
         } else {
             $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
