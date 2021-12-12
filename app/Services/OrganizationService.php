@@ -84,6 +84,7 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
+
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
@@ -152,7 +153,7 @@ class OrganizationService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationListFilterByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
