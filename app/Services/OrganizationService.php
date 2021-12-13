@@ -204,6 +204,57 @@ class OrganizationService
         return $response;
     }
 
+
+    public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    {
+        $titleEn = $request['title_en'] ?? "";
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
+            $q->where('industry_association_id', $industryAssociationId);
+            $q->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+        });
+
+
+        $organizationBuilder->orderBy('organizations.id', $order);
+
+        if (!empty($titleEn)) {
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+
+
+        /** @var Collection $organizations */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $organizations = $organizationBuilder->paginate($pageSize);
+            $paginateData = (object)$organizations->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizations = $organizationBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
     /**
      * @param int $id
      * @return Organization
@@ -1069,6 +1120,36 @@ class OrganizationService
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "nullable",
+                "integer",
+                Rule::in(Organization::ROW_STATUSES),
+            ],
+        ], $customMessage);
+    }
+
+    public function filterPublicValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|max:600|min:2',
+            'title' => 'nullable|max:1200|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'organization_type_id' => 'nullable|integer|gt:0',
+            'industry_association_id' => 'required|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
