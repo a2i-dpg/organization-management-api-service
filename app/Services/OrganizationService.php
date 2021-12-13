@@ -897,7 +897,7 @@ class OrganizationService
             ],
             'row_status' => [
                 'nullable',
-                Rule::in(Organization::ROW_STATUSES),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);

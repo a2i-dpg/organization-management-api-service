@@ -719,7 +719,7 @@ class IndustryAssociationService
             ],
             'row_status' => [
                 'nullable',
-                Rule::in(IndustryAssociation::ROW_STATUSES),
+                Rule::in([BaseModel::ROW_STATUS_INACTIVE, BaseModel::ROW_STATUS_ACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
