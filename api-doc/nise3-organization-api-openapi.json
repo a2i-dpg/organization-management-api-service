@@ -1074,6 +1074,34 @@
                 ]
             }
         },
+
+        "/organization-admin-profile-update": {
+            "put": {
+                "summary": "Update an organization admin profile",
+                "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/organizationAdminProfile"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/x-www-form-urlencoded": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
         "/public/industry-association-memberlist": {
             "get": {
                 "tags": [
@@ -5582,6 +5610,119 @@
                     "contact_person_email",
                     "mobile",
                     "email",
+                    "address",
+                    "loc_division_id",
+                    "loc_district_id"
+                ]
+            },
+            "organizationAdminProfile": {
+                "type": "object",
+                "description": "provide organizations",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "location id of division"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "location id of district"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "location id of upazila"
+                    },
+                    "location_latitude": {
+                        "type": "string",
+                        "description": "Latitude of the location"
+                    },
+                    "location_longitude": {
+                        "type": "string",
+                        "description": "longitue of the location"
+                    },
+                    "google_map_src": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "contact_person_name": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 500,
+                        "minimum": 2
+                    },
+                    "contact_person_name_en": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 250,
+                        "minimum": 2
+                    },
+
+
+                    "contact_person_designation": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "description_en": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "title",
+                    "contact_person_name",
+                    "contact_person_designation",
                     "address",
                     "loc_division_id",
                     "loc_district_id"

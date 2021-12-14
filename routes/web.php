@@ -57,6 +57,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** industry registration/industryAssociation membership rejection  */
         $router->put("registration-or-membership-rejection/{organizationId}", ["as" => "IndustryAssociation.industry-associations-membership-rejection", "uses" => "IndustryAssociationController@registrationOrMembershipRejection"]);
+
+        $router->put('organization-admin-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationAdminProfile']);
+
     });
 
 
