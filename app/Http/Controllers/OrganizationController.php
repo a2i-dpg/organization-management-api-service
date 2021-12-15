@@ -103,7 +103,7 @@ class OrganizationController extends Controller
             $this->authorize('view', $organization);
         }
         $response = [
-            "data" => $organization ?: [],
+            "data" => $organization,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -217,7 +217,7 @@ class OrganizationController extends Controller
         $validated = $this->organizationService->validator($request, $id)->validate();
         $data = $this->organizationService->update($organization, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

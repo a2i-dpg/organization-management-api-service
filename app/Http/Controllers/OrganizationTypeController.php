@@ -68,7 +68,7 @@ class OrganizationTypeController extends Controller
         $organizationType = $this->organizationTypeService->getOneOrganizationType($id);
         $this->authorize('view', $organizationType);
         $response = [
-            "data" => $organizationType ?: [],
+            "data" => $organizationType,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -93,7 +93,7 @@ class OrganizationTypeController extends Controller
         $validated = $this->organizationTypeService->validator($request)->validate();
         $data = $this->organizationTypeService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -121,7 +121,7 @@ class OrganizationTypeController extends Controller
         $validated = $this->organizationTypeService->validator($request, $id)->validate();
         $data = $this->organizationTypeService->update($organizationType, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

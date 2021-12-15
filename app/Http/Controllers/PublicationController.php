@@ -88,7 +88,7 @@ class PublicationController extends Controller
         $validated = $this->publicationService->validator($request)->validate();
         $data = $this->publicationService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -114,7 +114,7 @@ class PublicationController extends Controller
 
         $data = $this->publicationService->update($Publication, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

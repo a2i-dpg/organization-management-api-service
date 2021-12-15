@@ -93,7 +93,7 @@ class IndustryAssociationController extends Controller
             $this->authorize('view', $industryAssociation);
         }
         $response = [
-            "data" => $industryAssociation ?: null,
+            "data" => $industryAssociation,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -358,7 +358,7 @@ class IndustryAssociationController extends Controller
         $validated = $this->industryAssociationService->validator($request, $id)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
