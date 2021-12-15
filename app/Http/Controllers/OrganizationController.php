@@ -426,7 +426,24 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
-
+    public function getOrganizationAdminProfile()
+    {
+        $authUser = Auth::user();
+        $organizationId = null;
+        if ($authUser && $authUser->organization_id) {
+            $organizationId = $authUser->organization_id;
+        }
+        $organization = $this->organizationService->getOneOrganization($organizationId);
+        $response = [
+            "data" => $organization,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
     public function updateOrganizationAdminProfile(Request $request): JsonResponse
     {
         $authUser = Auth::user();
