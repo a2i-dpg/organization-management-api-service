@@ -62,28 +62,24 @@ class OrganizationController extends Controller
         /** @var User $authUser */
         $authUser = Auth::user();
         if (!empty($authUser) && $authUser->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE) {
-
             $industryAssociationId = $authUser->industry_association_id;
             $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
-
         } else {
             $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
-
 
 
     public function getPublicIndustryAssociationMemberList(Request $request): JsonResponse
     {
         $filter = $this->organizationService->filterPublicValidator($request)->validate();
         $industryAssociationId = $filter['industry_association_id'];
-        $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter,$industryAssociationId, $this->startTime);
-
+        $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
     /**
      * Display a specified resource
      * @param Request $request

@@ -153,7 +153,7 @@ class OrganizationService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -350,7 +350,6 @@ class OrganizationService
      */
     public function store(Organization $organization, array $data): Organization
     {
-
         $organization->fill($data);
         $organization->save();
         $this->assignOrganizationInIndustryAssociation($organization, $data);
@@ -364,10 +363,15 @@ class OrganizationService
      */
     public function assignOrganizationInIndustryAssociation(Organization $organization, array $data)
     {
-        $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'is_reg_approval' => Organization::IS_REG_APPROVAL_TRUE,
-            'row_status' => $organization->row_status ?: BaseModel::ROW_STATUS_PENDING
-        ]);
+        $industryAssociations = $data['industry_associations'];
+        foreach ($industryAssociations as $industryAssociation) {
+            $organization->industryAssociations()->attach($industryAssociation['industry_association_id'], [
+                'membership_id' => $industryAssociation['membership_id'],
+                'is_reg_approval' => Organization::IS_REG_APPROVAL_TRUE,
+                'row_status' => BaseModel::ROW_STATUS_PENDING
+            ]);
+        }
+
     }
 
     /**
@@ -772,7 +776,7 @@ class OrganizationService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]',
         ];
         $rules = [
             'organization_type_id' => [
@@ -780,13 +784,24 @@ class OrganizationService
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
                 Rule::requiredIf(function () use ($id) {
                     return is_null($id);
                 }),
-                'nullable',
-                'integer',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
+                'int',
+                'required',
+            ],
+            'industry_associations.*.membership_id' => [
+                'string',
+                'required',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
@@ -979,10 +994,22 @@ class OrganizationService
                 'integer',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
                 'required',
-                'integer',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
+                'int',
+                'required',
+            ],
+            'industry_associations.*.membership_id' => [
+                'string',
+                'required',
             ],
             'email' => [
                 'required',
