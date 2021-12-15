@@ -725,6 +725,107 @@ class IndustryAssociationService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
+    public function industryAssociationAdminValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+        {
+            $customMessage = [
+                'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+            ];
+
+            $rules = [
+                'title_en' => [
+                    'nullable',
+                    'string',
+                    'max:600',
+                    'min:2',
+                ],
+                'title' => [
+                    'required',
+                    'string',
+                    'max:1200',
+                    'min:2'
+                ],
+                'loc_division_id' => [
+                    'required',
+                    'integer',
+                    'exists:loc_divisions,id,deleted_at,NULL'
+                ],
+                'loc_district_id' => [
+                    'required',
+                    'integer',
+                    'exists:loc_districts,id,deleted_at,NULL'
+                ],
+                'loc_upazila_id' => [
+                    'nullable',
+                    'integer',
+                    'exists:loc_upazilas,id,deleted_at,NULL'
+                ],
+                "location_latitude" => [
+                    'nullable',
+                    'string',
+                ],
+                "location_longitude" => [
+                    'nullable',
+                    'string',
+                ],
+                "google_map_src" => [
+                    'nullable',
+                    'integer',
+                ],
+                'address' => [
+                    'nullable',
+                    'max: 1200',
+                    'min:2'
+                ],
+                'address_en' => [
+                    'nullable',
+                    'max: 600',
+                    'min:2'
+                ],
+                "name_of_the_office_head" => [
+                    "required",
+                    "string",
+                    'max:600'
+                ],
+                "name_of_the_office_head_en" => [
+                    "nullable",
+                    "string",
+                    'max:600'
+                ],
+                "name_of_the_office_head_designation" => [
+                    "required",
+                    "string"
+                ],
+                "name_of_the_office_head_designation_en" => [
+                    "nullable",
+                    "string"
+                ],
+                'contact_person_name' => [
+                    'required',
+                    'max: 500',
+                    'min:2'
+                ],
+                'contact_person_name_en' => [
+                    'nullable',
+                    'max: 250',
+                    'min:2'
+                ],
+                'contact_person_designation' => [
+                    'required',
+                    'max: 600',
+                    "min:2"
+                ],
+                'contact_person_designation_en' => [
+                    'nullable',
+                    'max: 300',
+                    "min:2"
+                ],
+                'row_status' => [
+                    'nullable',
+                    Rule::in([BaseModel::ROW_STATUS_INACTIVE, BaseModel::ROW_STATUS_ACTIVE]),
+                ],
+            ];
+            return Validator::make($request->all(), $rules, $customMessage);
+        }
 
     /**
      * industryAssociation open registration validation
