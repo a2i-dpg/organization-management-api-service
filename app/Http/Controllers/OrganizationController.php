@@ -75,7 +75,7 @@ class OrganizationController extends Controller
 
 
 
-    public function getPublicOrganizationList(Request $request): JsonResponse
+    public function getPublicIndustryAssociationMemberList(Request $request): JsonResponse
     {
         $filter = $this->organizationService->filterPublicValidator($request)->validate();
         $industryAssociationId = $filter['industry_association_id'];
