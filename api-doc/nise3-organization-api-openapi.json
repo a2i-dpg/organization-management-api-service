@@ -4162,6 +4162,9 @@
                         "$ref": "#/components/parameters/IndustryAssocId_Query"
                     },
                     {
+                        "$ref": "#/components/parameters/author"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -4418,6 +4421,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/author"
                     },
                     {
                         "$ref": "#/components/parameters/IndustryAssocId_Query"
@@ -6724,6 +6730,14 @@
                 "in": "query",
                 "required": false,
                 "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "author": {
+                "name": "author",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "string"
                 }
