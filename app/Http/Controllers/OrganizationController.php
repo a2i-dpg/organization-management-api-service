@@ -445,7 +445,7 @@ class OrganizationController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization updated successfully.",
+                "message" => "Organization admin profile updated successfully.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ]
         ];

@@ -1077,6 +1077,9 @@
 
         "/organization-admin-profile-update": {
             "put": {
+                "tags": [
+                    "organization admin profile"
+                ],
                 "summary": "Update an organization admin profile",
                 "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
                 "requestBody": {
@@ -1093,7 +1096,53 @@
                         "description": "successfull",
                         "content": {
                             "application/x-www-form-urlencoded": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "organization_type_id": 3,
+                                        "title": "AlbertaMania",
+                                        "title_en": null,
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
+                                        "loc_upazila_id": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01728986259",
+                                        "email": "qwyman@kovacek.com",
+                                        "fax_no": "(937) 971-3877",
+                                        "name_of_the_office_head": "Hanneman",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "Dont cry",
+                                        "name_of_the_office_head_designation_en": "Dont cry",
+                                        "contact_person_name": "Chaircow",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01787197917",
+                                        "contact_person_email": "furman.leannon@example.net",
+                                        "contact_person_designation": "SHutUp",
+                                        "contact_person_designation_en": null,
+                                        "description": "Dolor amet et ut corrupti ut voluptatem.",
+                                        "description_en": "Dolor amet et ut corrupti ut voluptatem.",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.prohaska.com",
+                                        "row_status": "1",
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-09T07:17:32.000000Z",
+                                        "updated_at": "2021-12-15T04:08:26.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization admin profile updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -5721,11 +5770,12 @@
                 },
                 "required": [
                     "title",
-                    "contact_person_name",
-                    "contact_person_designation",
-                    "address",
                     "loc_division_id",
-                    "loc_district_id"
+                    "loc_district_id",
+                    "name_of_the_office_head",
+                    "name_of_the_office_head_designation",
+                    "contact_person_name",
+                    "contact_person_designation"
                 ]
             },
             "organization": {
