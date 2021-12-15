@@ -74,7 +74,11 @@ class OrganizationController extends Controller
     }
 
 
-
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
     public function getPublicIndustryAssociationMemberList(Request $request): JsonResponse
     {
         $filter = $this->organizationService->filterPublicValidator($request)->validate();
@@ -426,14 +430,20 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
-    public function getOrganizationAdminProfile()
+    /**
+     * @return JsonResponse
+     */
+    public function getOrganizationAdminProfile(): JsonResponse
     {
+        //$this->authorize('updateOrganizationProfile', Organization::class);
+
         $authUser = Auth::user();
         $organizationId = null;
         if ($authUser && $authUser->organization_id) {
             $organizationId = $authUser->organization_id;
         }
         $organization = $this->organizationService->getOneOrganization($organizationId);
+
         $response = [
             "data" => $organization,
             "_response_status" => [
@@ -444,16 +454,23 @@ class OrganizationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
     public function updateOrganizationAdminProfile(Request $request): JsonResponse
     {
+        //$this->authorize('updateOrganizationProfile', Organization::class);
+
         $authUser = Auth::user();
         $organizationId = null;
         if ($authUser && $authUser->organization_id) {
             $organizationId = $authUser->organization_id;
         }
         $organization = Organization::findOrFail($organizationId);
-
-        $this->authorize('update', $organization);
 
         $validated = $this->organizationService->organizationAdminProfileValidator($request, $organizationId)->validate();
         $data = $this->organizationService->update($organization, $validated);
