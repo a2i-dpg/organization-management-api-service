@@ -17,7 +17,7 @@ class CreateIndustryAssociationOrganizationTable extends Migration
             $table->id();
             $table->unsignedInteger('industry_association_id');
             $table->unsignedInteger('organization_id');
-            $table->string('membership_id', 200);
+            $table->string('member_id', 200);
 
             $table->unsignedTinyInteger('row_status')
                 ->default(2)

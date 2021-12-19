@@ -161,13 +161,52 @@ class OrganizationService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
+        $memberId = $request['member_id'] ?? "";
 
 
-        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
-            $q->where('industry_association_id', $industryAssociationId);
+        $organizationBuilder = Organization::select(
+            [
+                'organizations.id',
+                'organizations.title_en',
+                'organizations.title',
+                'industry_association_organization.member_id',
+                'organizations.id',
+                'organizations.name_of_the_office_head',
+                'organizations.name_of_the_office_head_en',
+                'organizations.name_of_the_office_head_designation',
+                'organizations.name_of_the_office_head_designation_en',
+                'organizations.domain',
+                'organizations.fax_no',
+                'organizations.mobile',
+                'organizations.email',
+                'organizations.contact_person_name',
+                'organizations.contact_person_name_en',
+                'organizations.contact_person_mobile',
+                'organizations.contact_person_email',
+                'organizations.contact_person_designation',
+                'organizations.contact_person_designation_en',
+                'organizations.description',
+                'organizations.description_en',
+                'organizations.logo',
+                'organizations.loc_division_id',
+                'organizations.loc_district_id',
+                'organizations.loc_upazila_id',
+                'organizations.address',
+                'organizations.address_en',
+                'industry_association_organization.row_status',
+                'organizations.created_by',
+                'organizations.updated_by',
+                'organizations.created_at',
+                'organizations.updated_at'
+            ]
+        );
+        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                ->where('industry_association_organization.industry_association_id', $industryAssociationId);
         });
 
-        $organizationBuilder->orderBy('organizations.id', $order);
+
+        $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
@@ -175,8 +214,12 @@ class OrganizationService
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
+        if (!empty($memberId)) {
+            $organizationBuilder->where('industry_association_organization.memberId', $memberId);
+        }
+
         if (is_numeric($rowStatus)) {
-            $organizationBuilder->where('organizations.row_status', $rowStatus);
+            $organizationBuilder->where('industry_association_organization.row_status', $rowStatus);
         }
 
         /** @var Collection $organizations */
@@ -214,9 +257,46 @@ class OrganizationService
         $order = $request['order'] ?? "ASC";
 
 
-        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
-            $q->where('industry_association_id', $industryAssociationId);
-            $q->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+        $organizationBuilder = Organization::select(
+            [
+                'organizations.id',
+                'organizations.title_en',
+                'organizations.title',
+                'industry_association_organization.member_id',
+                'organizations.id',
+                'organizations.name_of_the_office_head',
+                'organizations.name_of_the_office_head_en',
+                'organizations.name_of_the_office_head_designation',
+                'organizations.name_of_the_office_head_designation_en',
+                'organizations.domain',
+                'organizations.fax_no',
+                'organizations.mobile',
+                'organizations.email',
+                'organizations.contact_person_name',
+                'organizations.contact_person_name_en',
+                'organizations.contact_person_mobile',
+                'organizations.contact_person_email',
+                'organizations.contact_person_designation',
+                'organizations.contact_person_designation_en',
+                'organizations.description',
+                'organizations.description_en',
+                'organizations.logo',
+                'organizations.loc_division_id',
+                'organizations.loc_district_id',
+                'organizations.loc_upazila_id',
+                'organizations.address',
+                'organizations.address_en',
+                'organizations.row_status',
+                'organizations.created_by',
+                'organizations.updated_by',
+                'organizations.created_at',
+                'organizations.updated_at'
+            ]
+        );
+        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
         });
 
 
@@ -1143,6 +1223,7 @@ class OrganizationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
+            'member_id' => 'nullable',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',

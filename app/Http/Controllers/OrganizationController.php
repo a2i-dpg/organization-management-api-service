@@ -68,7 +68,6 @@ class OrganizationController extends Controller
 
         } else {
             $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
