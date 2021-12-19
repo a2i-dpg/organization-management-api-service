@@ -17,8 +17,7 @@ class CreateIndustryAssociationOrganizationTable extends Migration
             $table->id();
             $table->unsignedInteger('industry_association_id');
             $table->unsignedInteger('organization_id');
-            $table->string('member_id', 200);
-
+            $table->string('membership_id', 200);
             $table->unsignedTinyInteger('row_status')
                 ->default(2)
                 ->comment('0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected');
