@@ -4072,7 +4072,7 @@
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId_Query"
+                        "$ref": "#/components/parameters/industry_association_id_optional"
                     },
                     {
                         "$ref": "#/components/parameters/author"
@@ -4339,7 +4339,7 @@
                         "$ref": "#/components/parameters/author"
                     },
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId_Query"
+                        "$ref": "#/components/parameters/industry_association_id_optional"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -4865,10 +4865,7 @@
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/organization_type_id_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/IndustryAssocId_Query_required"
+                        "$ref": "#/components/parameters/industry_association_id"
                     }
                 ],
                 "responses": {
@@ -6550,15 +6547,15 @@
                     "type": "integer"
                 }
             },
-            "IndustryAssocId_Query": {
-                "name": "IndustryAssocId",
+            "industry_association_id_optional": {
+                "name": "industry_association_id",
                 "in": "query",
                 "required": false,
                 "schema": {
                     "type": "integer"
                 }
             },
-            "IndustryAssocId_Query_required": {
+            "industry_association_id": {
                 "name": "industry_association_id",
                 "in": "query",
                 "required": true,

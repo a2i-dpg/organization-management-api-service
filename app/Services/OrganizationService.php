@@ -161,7 +161,7 @@ class OrganizationService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $memberId = $request['member_id'] ?? "";
+        $membershipId = $request['membership_id'] ?? "";
 
 
         $organizationBuilder = Organization::select(
@@ -169,7 +169,7 @@ class OrganizationService
                 'organizations.id',
                 'organizations.title_en',
                 'organizations.title',
-                'industry_association_organization.member_id',
+                'industry_association_organization.membership_id',
                 'organizations.id',
                 'organizations.name_of_the_office_head',
                 'organizations.name_of_the_office_head_en',
@@ -194,8 +194,6 @@ class OrganizationService
                 'organizations.address',
                 'organizations.address_en',
                 'industry_association_organization.row_status',
-                'organizations.created_by',
-                'organizations.updated_by',
                 'organizations.created_at',
                 'organizations.updated_at'
             ]
@@ -214,8 +212,8 @@ class OrganizationService
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
-        if (!empty($memberId)) {
-            $organizationBuilder->where('industry_association_organization.memberId', $memberId);
+        if (!empty($membershipId)) {
+            $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
         }
 
         if (is_numeric($rowStatus)) {
@@ -262,7 +260,7 @@ class OrganizationService
                 'organizations.id',
                 'organizations.title_en',
                 'organizations.title',
-                'industry_association_organization.member_id',
+                'industry_association_organization.membership_id',
                 'organizations.id',
                 'organizations.name_of_the_office_head',
                 'organizations.name_of_the_office_head_en',
@@ -287,8 +285,6 @@ class OrganizationService
                 'organizations.address',
                 'organizations.address_en',
                 'organizations.row_status',
-                'organizations.created_by',
-                'organizations.updated_by',
                 'organizations.created_at',
                 'organizations.updated_at'
             ]
@@ -1223,7 +1219,7 @@ class OrganizationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
-            'member_id' => 'nullable',
+            'membership_id' => 'nullable',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
