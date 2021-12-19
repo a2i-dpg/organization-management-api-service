@@ -83,7 +83,6 @@ class IndustryAssociationController extends Controller
         $industryAssociationId = $filter['industry_association_id'];
         $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
 
-
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
