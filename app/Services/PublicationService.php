@@ -209,6 +209,12 @@ class PublicationService
                 'max: 400',
                 'min:2'
             ],
+            'author' => [
+                'nullable',
+                'string',
+                'max: 400',
+                'min:2'
+            ],
             'description' => [
                 'required',
                 'string',

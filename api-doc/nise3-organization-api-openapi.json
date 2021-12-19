@@ -1074,6 +1074,151 @@
                 ]
             }
         },
+        "/organization-admin-profile": {
+            "get": {
+                "tags": [
+                    "organization admin profile"
+                ],
+                "summary": "Get an organization profile",
+                "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 4,
+                                        "title_en": "Klein-Luettgen",
+                                        "title": "Klein-Luettgen",
+                                        "name_of_the_office_head": "Margarete Abshire",
+                                        "name_of_the_office_head_en": "Margarete Abshire",
+                                        "name_of_the_office_head_designation": "CEO",
+                                        "name_of_the_office_head_designation_en": "CEO",
+                                        "domain": "https://www.considine.com",
+                                        "fax_no": "(574) 542-6526",
+                                        "mobile": "01758080191",
+                                        "email": "mario.cronin@murphy.com",
+                                        "contact_person_name": "Ayana Weissnat",
+                                        "contact_person_name_en": "Ayana Weissnat",
+                                        "contact_person_mobile": "01786105922",
+                                        "contact_person_email": "conroy.winnifred@example.com",
+                                        "contact_person_designation": "Social Sciences Teacher",
+                                        "contact_person_designation_en": "Social Sciences Teacher",
+                                        "description": "Aut tempore est quas atque vero.",
+                                        "description_en": "Aut tempore est quas atque vero.",
+                                        "logo": "logo.jpg",
+                                        "loc_division_id": 2,
+                                        "loc_division_title_en": "Chittagong",
+                                        "loc_division_title": "চট্টগ্রাম",
+                                        "loc_district_id": 10,
+                                        "loc_district_title_en": "CHITTAGONG",
+                                        "loc_district_title": "চট্টগ্রাম",
+                                        "loc_upazila_id": null,
+                                        "loc_upazila_title_en": null,
+                                        "loc_upazila_title": null,
+                                        "location_latitude": "91.815526",
+                                        "location_longitude": "91.815526",
+                                        "google_map_src": null,
+                                        "organization_type_id": 2,
+                                        "organization_type_title_en": "Private Organization",
+                                        "organization_type_title": "Private Organization",
+                                        "address": "6460 King Extensions\nRomagueraview, MN 03114-5832",
+                                        "address_en": "6460 King Extensions\nRomagueraview, MN 03114-5832",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-09T07:17:32.000000Z",
+                                        "updated_at": "2021-12-09T07:17:32.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/organization-admin-profile-update": {
+            "put": {
+                "tags": [
+                    "organization admin profile"
+                ],
+                "summary": "Update an organization admin profile",
+                "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/organizationAdminProfile"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/x-www-form-urlencoded": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "organization_type_id": 3,
+                                        "title": "AlbertaMania",
+                                        "title_en": null,
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
+                                        "loc_upazila_id": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01728986259",
+                                        "email": "qwyman@kovacek.com",
+                                        "fax_no": "(937) 971-3877",
+                                        "name_of_the_office_head": "Hanneman",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "Dont cry",
+                                        "name_of_the_office_head_designation_en": "Dont cry",
+                                        "contact_person_name": "Chaircow",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01787197917",
+                                        "contact_person_email": "furman.leannon@example.net",
+                                        "contact_person_designation": "SHutUp",
+                                        "contact_person_designation_en": null,
+                                        "description": "Dolor amet et ut corrupti ut voluptatem.",
+                                        "description_en": "Dolor amet et ut corrupti ut voluptatem.",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.prohaska.com",
+                                        "row_status": "1",
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-09T07:17:32.000000Z",
+                                        "updated_at": "2021-12-15T04:08:26.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Organization admin profile updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
         "/public/industry-association-memberlist": {
             "get": {
                 "tags": [
@@ -4017,6 +4162,9 @@
                         "$ref": "#/components/parameters/IndustryAssocId_Query"
                     },
                     {
+                        "$ref": "#/components/parameters/author"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -4247,42 +4395,10 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "title": "aaaaaaaaaaa",
-                                            "title_en": null,
-                                            "author": null,
-                                            "author_en": null,
-                                            "description": "ccccccccccccc",
-                                            "description_en": null,
-                                            "image_path": null,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-28T10:33:27.000000Z",
-                                            "updated_at": "2021-11-28T10:35:31.000000Z",
-                                            "row_status": 1
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title": "Madagaskaar",
-                                            "title_en": null,
-                                            "author": null,
-                                            "author_en": null,
-                                            "description": "ShutUp",
-                                            "description_en": null,
-                                            "image_path": null,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-28T10:34:52.000000Z",
-                                            "updated_at": "2021-11-28T10:37:45.000000Z",
-                                            "row_status": 1
-                                        }
-                                    ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
+                                        "message": "publication restored successfully",
                                         "query_time": 0
                                     }
                                 }
@@ -4305,6 +4421,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/author"
                     },
                     {
                         "$ref": "#/components/parameters/IndustryAssocId_Query"
@@ -5587,6 +5706,120 @@
                     "loc_district_id"
                 ]
             },
+            "organizationAdminProfile": {
+                "type": "object",
+                "description": "provide organizations",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "location id of division"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "location id of district"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "location id of upazila"
+                    },
+                    "location_latitude": {
+                        "type": "string",
+                        "description": "Latitude of the location"
+                    },
+                    "location_longitude": {
+                        "type": "string",
+                        "description": "longitue of the location"
+                    },
+                    "google_map_src": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "contact_person_name": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 500,
+                        "minimum": 2
+                    },
+                    "contact_person_name_en": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 250,
+                        "minimum": 2
+                    },
+
+
+                    "contact_person_designation": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "description_en": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "title",
+                    "loc_division_id",
+                    "loc_district_id",
+                    "name_of_the_office_head",
+                    "name_of_the_office_head_designation",
+                    "contact_person_name",
+                    "contact_person_designation"
+                ]
+            },
             "organization": {
                 "type": "object",
                 "description": "provide organizations",
@@ -6497,6 +6730,14 @@
                 "in": "query",
                 "required": false,
                 "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "author": {
+                "name": "author",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "string"
                 }
