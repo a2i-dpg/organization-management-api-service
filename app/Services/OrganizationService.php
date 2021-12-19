@@ -198,6 +198,7 @@ class OrganizationService
                 'organizations.updated_at'
             ]
         );
+
         $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
             $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
                 ->where('industry_association_organization.industry_association_id', $industryAssociationId);
@@ -205,7 +206,6 @@ class OrganizationService
 
 
         $organizationBuilder->orderBy('industry_association_organization.id', $order);
-
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
@@ -219,7 +219,7 @@ class OrganizationService
         if (is_numeric($rowStatus)) {
             $organizationBuilder->where('industry_association_organization.row_status', $rowStatus);
         }
-
+//        dd($organizationBuilder->toSql());
         /** @var Collection $organizations */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -233,6 +233,8 @@ class OrganizationService
         } else {
             $organizations = $organizationBuilder->get();
         }
+
+
 
         $response['order'] = $order;
         $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();

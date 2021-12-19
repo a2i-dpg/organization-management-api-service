@@ -201,7 +201,6 @@
                     "Industry Association Registration"
                 ]
             }
-
         },
         "/organization-registration": {
             "post": {
@@ -589,8 +588,6 @@
                                             "address": "2206 Heath Brook Suite 883\nNorth Ward, MI 47613-5219",
                                             "address_en": "2206 Heath Brook Suite 883\nNorth Ward, MI 47613-5219",
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
                                             "created_at": "2021-11-29T06:23:53.000000Z",
                                             "updated_at": "2021-11-29T06:23:53.000000Z"
                                         },
@@ -630,8 +627,6 @@
                                             "address": "8560 Koepp Lake\nPort Alizaside, UT 55773",
                                             "address_en": "8560 Koepp Lake\nPort Alizaside, UT 55773",
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
                                             "created_at": "2021-11-29T06:23:53.000000Z",
                                             "updated_at": "2021-11-29T06:23:53.000000Z"
                                         },
@@ -671,8 +666,6 @@
                                             "address": "3367 Kayleigh Ramp\nSchroederbury, DE 96853-6720",
                                             "address_en": "3367 Kayleigh Ramp\nSchroederbury, DE 96853-6720",
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
                                             "created_at": "2021-11-29T06:23:53.000000Z",
                                             "updated_at": "2021-11-29T06:23:53.000000Z"
                                         },
@@ -712,8 +705,6 @@
                                             "address": "69361 Kiarra Plaza Apt. 978\nLake Marysemouth, MO 46953-9153",
                                             "address_en": "69361 Kiarra Plaza Apt. 978\nLake Marysemouth, MO 46953-9153",
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
                                             "created_at": "2021-11-29T06:23:53.000000Z",
                                             "updated_at": "2021-11-29T06:23:53.000000Z"
                                         },
@@ -753,8 +744,6 @@
                                             "address": "946 Rogahn Street\nAllisonview, MT 06883",
                                             "address_en": "946 Rogahn Street\nAllisonview, MT 06883",
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
                                             "created_at": "2021-11-29T06:23:53.000000Z",
                                             "updated_at": "2021-11-29T06:23:53.000000Z"
                                         },
@@ -794,8 +783,6 @@
                                             "address": "kkk",
                                             "address_en": null,
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
                                             "created_at": "2021-11-29T06:52:06.000000Z",
                                             "updated_at": "2021-11-29T06:52:06.000000Z"
                                         }
@@ -1217,9 +1204,6 @@
                 }
             }
         },
-
-
-
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -4059,7 +4043,6 @@
                 ]
             }
         },
-
         "/publications": {
             "get": {
                 "summary": "Get a publication",
@@ -4395,7 +4378,6 @@
             }
         },
         "/industry-associations": {
-
             "get": {
                 "summary": "Get all industry association",
                 "description": "API endpoint to get all industry association.A successful request response will show 201 HTTP status code",
@@ -4843,7 +4825,6 @@
                 ]
             }
         },
-
         "/public/industry-association-members": {
             "get": {
                 "tags": [
@@ -5366,8 +5347,9 @@
                         "minLength": 2,
                         "maxLength": 1000
                     },
-                    "industry_association_id": {
-                        "type": "integer"
+                    "industry_associations": {
+                        "type": "object",
+                        "example": " [ \n  [  industry_association_id=>1\n    membership_id =>\"ABC123\"\n\n ],\n [ \n    industry_association_id=>2\n    membership_id =>\"ABCD123\"\n ] \n]"
                     },
                     "organization_type_id": {
                         "type": "integer",
@@ -5721,7 +5703,6 @@
                         "minLength": 2,
                         "maxLength": 300
                     },
-
                     "loc_division_id": {
                         "type": "integer",
                         "description": "location id of division"
@@ -5781,8 +5762,6 @@
                         "maximum": 250,
                         "minimum": 2
                     },
-
-
                     "contact_person_designation": {
                         "type": "string",
                         "description": "Contact person's designation"
