@@ -219,7 +219,6 @@ class OrganizationService
         if (is_numeric($rowStatus)) {
             $organizationBuilder->where('industry_association_organization.row_status', $rowStatus);
         }
-//        dd($organizationBuilder->toSql());
         /** @var Collection $organizations */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
