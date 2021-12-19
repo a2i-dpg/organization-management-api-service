@@ -67,7 +67,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->group(['prefix' => 'public', 'as' => 'public'], function () use ($router) {
         /** Program lists  */
         $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
-        $router->get("industry-association-memberlist", ["as" => "public.organizations", "uses" => "OrganizationController@getPublicIndustryAssociationMemberList"]);
+        $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
     });
 
 

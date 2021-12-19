@@ -205,13 +205,12 @@ class OrganizationService
     }
 
 
-    public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
-        $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
 
@@ -221,7 +220,7 @@ class OrganizationService
         });
 
 
-        $organizationBuilder->orderBy('organizations.id', $order);
+        $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');

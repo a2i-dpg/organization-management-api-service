@@ -72,6 +72,20 @@ class IndustryAssociationController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getPublicIndustryAssociationMemberList(Request $request): JsonResponse
+    {
+        $filter = $this->organizationService->filterPublicValidator($request)->validate();
+        $industryAssociationId = $filter['industry_association_id'];
+        $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
+
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
 
     /**
      * Display a specified resource
