@@ -67,7 +67,7 @@ class RankTypeController extends Controller
         $rankType = $this->rankTypeService->getOneRankType($id);
         $this->authorize('view', $rankType);
         $response = [
-            "data" => $rankType ?: [],
+            "data" => $rankType,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -92,7 +92,7 @@ class RankTypeController extends Controller
         $validated = $this->rankTypeService->validator($request)->validate();
         $data = $this->rankTypeService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -122,7 +122,7 @@ class RankTypeController extends Controller
         $data = $this->rankTypeService->update($rankType, $validated);
 
         $response = [
-            'data' => $data ? $data : null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

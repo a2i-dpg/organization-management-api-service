@@ -66,7 +66,7 @@ class JobSectorController extends Controller
         $jobSector = $this->jobSectorService->getOneJobSector($id);
         $this->authorize('view', $jobSector);
         $response = [
-            "data" => $jobSector ?: [],
+            "data" => $jobSector,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -90,7 +90,7 @@ class JobSectorController extends Controller
         $validated = $this->jobSectorService->validator($request)->validate();
         $data = $this->jobSectorService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -119,7 +119,7 @@ class JobSectorController extends Controller
 
         $data = $this->jobSectorService->update($jobSector, $validated);
         $response = [
-            'data' => $data ? $data : null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

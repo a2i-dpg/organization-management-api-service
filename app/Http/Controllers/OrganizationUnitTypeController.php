@@ -67,7 +67,7 @@ class OrganizationUnitTypeController extends Controller
         $organizationUnitType = $this->organizationUnitTypeService->getOneOrganizationUnitType($id);
         $this->authorize('view', $organizationUnitType);
         $response = [
-            "data" => $organizationUnitType ?: [],
+            "data" => $organizationUnitType,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -93,7 +93,7 @@ class OrganizationUnitTypeController extends Controller
         $data = $this->organizationUnitTypeService->store($validated);
 
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -120,7 +120,7 @@ class OrganizationUnitTypeController extends Controller
         $validated = $this->organizationUnitTypeService->validator($request, $id)->validate();
         $data = $this->organizationUnitTypeService->update($organizationUnitType, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -165,7 +165,7 @@ class OrganizationUnitTypeController extends Controller
         $organizationUnitType = OrganizationUnitType::find($id);
         $data = optional($organizationUnitType->getHierarchy())->toArray();
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

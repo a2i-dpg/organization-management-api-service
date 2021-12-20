@@ -27,6 +27,7 @@ class OccupationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $author = $request['author'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -64,6 +65,9 @@ class OccupationService
         }
         if (!empty($title)) {
             $occupationBuilder->where('occupations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($author)) {
+            $occupationBuilder->where('occupations.author', 'like', '%' . $author . '%');
         }
 
         /** @var Collection $occupations */

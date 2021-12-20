@@ -31,6 +31,7 @@ class PublicationService
         $pageSize = $request['page_size'] ?? "";
         $author = $request['author'] ?? "";
         $authorEn = $request['author_en'] ?? "";
+        $IndustryAssociationId = $request['industry_association_id'] ?? "";
         $order = $request['order'] ?? "ASC";
         $rowStatus = $request['row_status'] ?? "";
 
@@ -47,6 +48,7 @@ class PublicationService
                 'publications.title_en',
                 'publications.description',
                 'publications.description_en',
+                'publications.industry_association_id',
                 'publications.image_path',
                 'publications.created_by',
                 'publications.updated_by',
@@ -66,6 +68,9 @@ class PublicationService
         }
         if (is_numeric($rowStatus)) {
             $publicationBuilder->where('publications.row_status', $rowStatus);
+        }
+        if (is_numeric($IndustryAssociationId)) {
+            $publicationBuilder->where('publications.industry_association_id', $IndustryAssociationId);
         }
         if (!empty($author)) {
             $publicationBuilder->where('publications.author', 'like', '%' . $author . '%');
@@ -112,6 +117,7 @@ class PublicationService
                 'publications.title_en',
                 'publications.description',
                 'publications.description_en',
+                'publications.industry_association_id',
                 'publications.image_path',
                 'publications.created_by',
                 'publications.updated_by',
@@ -203,6 +209,12 @@ class PublicationService
                 'max: 400',
                 'min:2'
             ],
+            'author' => [
+                'nullable',
+                'string',
+                'max: 400',
+                'min:2'
+            ],
             'description' => [
                 'required',
                 'string',
@@ -216,6 +228,10 @@ class PublicationService
                 'string',
                 'max: 1000',
                 'min:2'
+            ],
+            'industry_association_id' => [
+                'required',
+                'integer'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
@@ -245,6 +261,7 @@ class PublicationService
             'title' => 'nullable|max:600|min:2',
             'author' => 'nullable|max:600|min:2',
             'author_en' => 'nullable|max:600|min:2',
+            'industry_association_id'=>'nullable|integer',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [

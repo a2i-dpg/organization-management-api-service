@@ -59,10 +59,12 @@ class OrganizationController extends Controller
     {
         $this->authorize('viewAny', Organization::class);
         $filter = $this->organizationService->filterValidator($request)->validate();
-        if (!empty(Auth::user())) {
-            $authUser = Auth::user();
+        /** @var User $authUser */
+        $authUser = Auth::user();
+        if (!empty($authUser) && $authUser->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE) {
+
             $industryAssociationId = $authUser->industry_association_id;
-            $response = $this->organizationService->getOrganizationListFilterByIndustryAssociation($filter, $industryAssociationId, $this->startTime,);
+            $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
 
         } else {
             $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
@@ -71,6 +73,21 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getPublicIndustryAssociationMemberList(Request $request): JsonResponse
+    {
+        $filter = $this->organizationService->filterPublicValidator($request)->validate();
+        $industryAssociationId = $filter['industry_association_id'];
+        $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter,$industryAssociationId, $this->startTime);
+
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
     /**
      * Display a specified resource
      * @param Request $request
@@ -90,7 +107,7 @@ class OrganizationController extends Controller
             $this->authorize('view', $organization);
         }
         $response = [
-            "data" => $organization ?: [],
+            "data" => $organization,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -204,7 +221,7 @@ class OrganizationController extends Controller
         $validated = $this->organizationService->validator($request, $id)->validate();
         $data = $this->organizationService->update($organization, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -412,5 +429,62 @@ class OrganizationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getOrganizationAdminProfile(): JsonResponse
+    {
+        //$this->authorize('updateOrganizationProfile', Organization::class);
+
+        $authUser = Auth::user();
+        $organizationId = null;
+        if ($authUser && $authUser->organization_id) {
+            $organizationId = $authUser->organization_id;
+        }
+        $organization = $this->organizationService->getOneOrganization($organizationId);
+
+        $response = [
+            "data" => $organization,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function updateOrganizationAdminProfile(Request $request): JsonResponse
+    {
+        //$this->authorize('updateOrganizationProfile', Organization::class);
+
+        $authUser = Auth::user();
+        $organizationId = null;
+        if ($authUser && $authUser->organization_id) {
+            $organizationId = $authUser->organization_id;
+        }
+        $organization = Organization::findOrFail($organizationId);
+
+        $validated = $this->organizationService->organizationAdminProfileValidator($request, $organizationId)->validate();
+        $data = $this->organizationService->update($organization, $validated);
+        $response = [
+            'data' => $data ?: [],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Organization admin profile updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
 
 }

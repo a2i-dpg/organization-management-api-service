@@ -22,6 +22,7 @@ class CreatePublicationsTable extends Migration
             $table->string('image_path', 400)->nullable();
             $table->string('author', 300)->nullable();
             $table->string('author_en', 150)->nullable();
+            $table->integer('industry_association_id')->nullable();
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

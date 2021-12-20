@@ -84,6 +84,7 @@ class OrganizationService
             'organizations.created_at',
             'organizations.updated_at'
         ]);
+
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')
                 ->whereNull('organization_types.deleted_at');
@@ -152,7 +153,7 @@ class OrganizationService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationListFilterByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -180,6 +181,57 @@ class OrganizationService
 
         /** @var Collection $organizations */
 
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $organizations = $organizationBuilder->paginate($pageSize);
+            $paginateData = (object)$organizations->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $organizations = $organizationBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+
+    public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    {
+        $titleEn = $request['title_en'] ?? "";
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
+            $q->where('industry_association_id', $industryAssociationId);
+            $q->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+        });
+
+
+        $organizationBuilder->orderBy('organizations.id', $order);
+
+        if (!empty($titleEn)) {
+            $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+
+
+        /** @var Collection $organizations */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $organizations = $organizationBuilder->paginate($pageSize);
@@ -896,7 +948,7 @@ class OrganizationService
             ],
             'row_status' => [
                 'nullable',
-                Rule::in(Organization::ROW_STATUSES),
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
@@ -1068,6 +1120,144 @@ class OrganizationService
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
+            'order' => [
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                "nullable",
+                "integer",
+                Rule::in(Organization::ROW_STATUSES),
+            ],
+        ], $customMessage);
+    }
+
+    public function organizationAdminProfileValidator(Request $request, int $id = null)
+    {
+        $data = $request->all();
+
+        $customMessage = [
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        $rules = [
+            'title' => [
+                'required',
+                'string',
+                'max:1000',
+            ],
+            'title_en' => [
+                'nullable',
+                'string',
+                'max:500',
+                'min:2'
+            ],
+            'loc_division_id' => [
+                'required',
+                'integer',
+                'exists:loc_divisions,id,deleted_at,NULL'
+            ],
+            'loc_district_id' => [
+                'required',
+                'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
+            ],
+            'location_latitude' => [
+                'nullable',
+                'string',
+                'max:50'
+            ],
+            'location_longitude' => [
+                'nullable',
+                'string',
+                'max:50'
+            ],
+            'google_map_src' => [
+                'nullable',
+                'string'
+            ],
+            'address' => [
+                'nullable',
+                'string'
+            ],
+            'address_en' => [
+                'nullable',
+                'string'
+            ],
+            'name_of_the_office_head' => [
+                'required',
+                'string',
+                'max:500'
+            ],
+            'name_of_the_office_head_en' => [
+                'nullable',
+                'string'
+            ],
+            'name_of_the_office_head_designation' => [
+                "required",
+                "string",
+                "max:500"
+            ],
+            'name_of_the_office_head_designation_en' => [
+                "nullable",
+                "string",
+                "max:500"
+            ],
+            'contact_person_name' => [
+                'required',
+                'max: 500',
+                'min:2'
+            ],
+            'contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
+            'contact_person_designation' => [
+                'required',
+                'max: 500',
+                "min:2"
+            ],
+            'contact_person_designation_en' => [
+                'nullable',
+                'max: 300',
+                "min:2"
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'nullable',
+                Rule::in(Organization::ROW_STATUSES),
+            ],
+            'created_by' => ['nullable', 'int'],
+            'updated_by' => ['nullable', 'int'],
+        ];
+        return \Illuminate\Support\Facades\Validator::make($data, $rules, $customMessage);
+    }
+
+
+    public function filterPublicValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        return Validator::make($request->all(), [
+            'title_en' => 'nullable|max:600|min:2',
+            'title' => 'nullable|max:1200|min:2',
+            'page' => 'integer|gt:0',
+            'page_size' => 'integer|gt:0',
+            'organization_type_id' => 'nullable|integer|gt:0',
+            'industry_association_id' => 'required|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

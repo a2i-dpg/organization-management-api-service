@@ -67,7 +67,7 @@ class OccupationController extends Controller
         $occupation = $this->occupationService->getOneOccupation($id);
         $this->authorize('view', $occupation);
         $response = [
-            "data" => $occupation ?: [],
+            "data" => $occupation,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -92,7 +92,7 @@ class OccupationController extends Controller
         $validated = $this->occupationService->validator($request)->validate();
         $data = $this->occupationService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -120,7 +120,7 @@ class OccupationController extends Controller
         $validated = $this->occupationService->validator($request, $id)->validate();
         $data = $this->occupationService->update($occupation, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

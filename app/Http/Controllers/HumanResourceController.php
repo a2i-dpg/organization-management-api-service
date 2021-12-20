@@ -90,7 +90,7 @@ class HumanResourceController extends Controller
         $validatedData = $this->humanResourceService->validator($request)->validate();
         $data = $this->humanResourceService->store($validatedData);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -120,7 +120,7 @@ class HumanResourceController extends Controller
         $data = $this->humanResourceService->update($humanResource, $validated);
 
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

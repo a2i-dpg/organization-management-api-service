@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Publication;
+use App\Models\User;
 use App\Services\PublicationService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Illuminate\Http\JsonResponse;
@@ -86,7 +88,7 @@ class PublicationController extends Controller
         $validated = $this->publicationService->validator($request)->validate();
         $data = $this->publicationService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -112,7 +114,7 @@ class PublicationController extends Controller
 
         $data = $this->publicationService->update($Publication, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -162,6 +164,30 @@ class PublicationController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+    public function getPublicPublicationList(Request $request): JsonResponse
+    {
+//        $this->authorize('viewAny', Publication::class);
+
+        $filter = $this->publicationService->filterValidator($request)->validate();
+        $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
