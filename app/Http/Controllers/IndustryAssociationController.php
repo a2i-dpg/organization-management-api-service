@@ -570,7 +570,7 @@ class IndustryAssociationController extends Controller
     }
 
 
-    public function GetIndustryAssociationAdminProfile():JsonResponse
+    public function getIndustryAssociationAdminProfile():JsonResponse
     {
         //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);
 
