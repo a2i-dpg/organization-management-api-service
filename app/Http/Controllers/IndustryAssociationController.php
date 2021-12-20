@@ -27,7 +27,13 @@ use Throwable;
 class IndustryAssociationController extends Controller
 {
 
+    /**
+     * @var IndustryAssociationService
+     */
     protected IndustryAssociationService $industryAssociationService;
+    /**
+     * @var OrganizationService
+     */
     protected OrganizationService $organizationService;
     private Carbon $startTime;
 
@@ -73,6 +79,7 @@ class IndustryAssociationController extends Controller
     }
 
     /**
+     * public list for industry Association members
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -85,6 +92,7 @@ class IndustryAssociationController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
 
     /**
      * Display a specified resource
@@ -112,6 +120,26 @@ class IndustryAssociationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
+    }
+
+    /**
+     * public industry member details
+     * @param int $industryId
+     * @return JsonResponse
+     */
+    public function getPublicIndustryAssociationMemberDetails(int $industryId): JsonResponse
+    {
+        $industry = $this->organizationService->getOneOrganization($industryId);
+
+        $response = [
+            "data" => $industry,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
