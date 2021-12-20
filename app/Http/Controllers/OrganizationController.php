@@ -323,6 +323,78 @@ class OrganizationController extends Controller
     }
 
     /**
+     * @param int $organizationId
+     * @return JsonResponse
+     * @throws RequestException
+     * @throws Throwable
+     */
+    public function organizationRegistrationApproval(int $organizationId): JsonResponse
+    {
+        $organization = Organization::findOrFail($organizationId);
+        DB::beginTransaction();
+        try {
+            if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->organizationService->organizationStatusChangeAfterApproval($organization);
+                $this->organizationService->organizationUserApproval($organization);
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization approved successfully",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+                DB::commit();
+            } else {
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization can not be approved",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+            }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $organizationId
+     * @return JsonResponse
+     * @throws RequestException
+     * @throws Throwable
+     */
+    public function organizationRegistrationRejection(int $organizationId): JsonResponse
+    {
+        $organization = Organization::findOrFail($organizationId);
+        DB::beginTransaction();
+        try {
+            if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->organizationService->organizationStatusChangeAfterRejection($organization);
+                $this->organizationService->organizationUserRejection($organization);
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization rejected successfully",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+                DB::commit();
+            } else {
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization can not be rejected",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+            }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws Throwable

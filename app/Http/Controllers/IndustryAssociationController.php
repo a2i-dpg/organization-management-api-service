@@ -498,7 +498,7 @@ class IndustryAssociationController extends Controller
      * @throws ValidationException
      * @throws Throwable
      */
-    public function registrationOrMembershipApproval(Request $request, int $organizationId): JsonResponse
+    public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
         if ($authUser && $authUser->industry_association_id) {
@@ -507,20 +507,16 @@ class IndustryAssociationController extends Controller
 
         $organization = Organization::findOrFail($organizationId);
 
-        $validatedData = $this->industryAssociationService->registrationOrMembershipValidator($request, $organizationId)->validate();
-
+        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
         DB::beginTransaction();
         try {
-            $approveData = $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-
-            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING && $approveData->is_reg_approval) {
-                $organization = $this->organizationService->organizationStatusChangeAfterApproval($organization);
-                $this->organizationService->organizationUserApproval($organization);
+            if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
+                $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
                 $response = [
                     '_response_status' => [
                         "success" => true,
                         "code" => ResponseAlias::HTTP_OK,
-                        "message" => "organization registration approved successfully",
+                        "message" => "IndustryAssociation membership approved successfully",
                         "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                     ]
                 ];
@@ -529,7 +525,7 @@ class IndustryAssociationController extends Controller
                     '_response_status' => [
                         "success" => true,
                         "code" => ResponseAlias::HTTP_OK,
-                        "message" => "IndustryAssociation membership approved successfully",
+                        "message" => "organization is not active",
                         "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                     ]
                 ];
@@ -539,7 +535,8 @@ class IndustryAssociationController extends Controller
             $this->industryAssociationService->sendMailOrganizationUserApproval($organization);
             DB::commit();
 
-        } catch (Throwable $e) {
+        } catch
+        (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -564,19 +561,17 @@ class IndustryAssociationController extends Controller
         }
         $organization = Organization::findOrFail($organizationId);
 
-        $validatedData = $this->industryAssociationService->registrationOrMembershipValidator($request, $organizationId)->validate();
+        $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
 
         DB::beginTransaction();
         try {
-            $rejectedData = $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
-            if ($organization && $organization->row_status == BaseModel::ROW_STATUS_PENDING && $rejectedData->is_reg_approval) {
-                $organization = $this->organizationService->organizationStatusChangeAfterRejection($organization);
-                $this->organizationService->organizationUserRejection($organization);
+            if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
+                $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
                 $response = [
                     '_response_status' => [
                         "success" => true,
                         "code" => ResponseAlias::HTTP_OK,
-                        "message" => "organization registration rejected successfully",
+                        "message" => "IndustryAssociation membership rejection successfully",
                         "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                     ]
                 ];
@@ -585,15 +580,18 @@ class IndustryAssociationController extends Controller
                     '_response_status' => [
                         "success" => true,
                         "code" => ResponseAlias::HTTP_OK,
-                        "message" => "IndustryAssociation membership rejected successfully",
+                        "message" => "organization is not active",
                         "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                     ]
                 ];
             }
+            $organization = $organization->toArray();
+            $organization['industry_association_id'] = $validatedData['industry_association_id'];
+            $this->industryAssociationService->sendMailOrganizationUserApproval($organization);
             DB::commit();
 
-
-        } catch (Throwable $e) {
+        } catch
+        (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
