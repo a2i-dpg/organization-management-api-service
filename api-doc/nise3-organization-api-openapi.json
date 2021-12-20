@@ -140,6 +140,142 @@
                 ]
             }
         },
+        "/industry-association-admin-profile-update": {
+            "put": {
+                "tags": [
+                    "Industry Association Admin Profile"
+                ],
+                "summary": "Update an industry association admin profile ",
+                "description": "An API endpoint to update  an industry association admin profile ",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IndustryAssociationAdmin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "industry_association_type_id": 2,
+                                        "title": "HeyYooo",
+                                        "title_en": null,
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
+                                        "loc_upazila_id": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01756152983",
+                                        "email": "halie.sawayn@rosenbaum.com",
+                                        "fax_no": null,
+                                        "trade_number": "in",
+                                        "name_of_the_office_head": "dSD",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "sSas",
+                                        "name_of_the_office_head_designation_en": null,
+                                        "contact_person_name": "ASas",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01730472860",
+                                        "contact_person_email": "oral19@example.org",
+                                        "contact_person_designation": "asaS",
+                                        "contact_person_designation_en": null,
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.schuppe.net",
+                                        "row_status": "1",
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-09T07:17:32.000000Z",
+                                        "updated_at": "2021-12-15T11:49:21.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation admin updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/industry-association-admin-profile": {
+            "get": {
+                "tags": [
+                    "Industry Association Admin Profile"
+                ],
+                "summary": "Get industry association admin profile",
+                "description": "An API endpoint to get  an industry association admin profile ",
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "industry_association_type_id": 2,
+                                        "title": "HeyYooo",
+                                        "title_en": null,
+                                        "loc_division_id": 1,
+                                        "loc_district_id": 1,
+                                        "loc_upazila_id": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01756152983",
+                                        "email": "halie.sawayn@rosenbaum.com",
+                                        "fax_no": null,
+                                        "trade_number": "in",
+                                        "name_of_the_office_head": "dSD",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "sSas",
+                                        "name_of_the_office_head_designation_en": null,
+                                        "contact_person_name": "ASas",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01730472860",
+                                        "contact_person_email": "oral19@example.org",
+                                        "contact_person_designation": "asaS",
+                                        "contact_person_designation_en": null,
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.schuppe.net",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-09T07:17:32.000000Z",
+                                        "updated_at": "2021-12-15T11:49:21.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/industry-association-registration-approval/{IndustryAssocId}": {
             "put": {
                 "summary": "Approve a industry association pending registration request",
@@ -5757,6 +5893,120 @@
                         "maximum": 1000,
                         "minimum": 2,
                         "description": "organization address"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "contact_person_name": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 500,
+                        "minimum": 2
+                    },
+                    "contact_person_name_en": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 250,
+                        "minimum": 2
+                    },
+
+
+                    "contact_person_designation": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "description_en": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "title",
+                    "loc_division_id",
+                    "loc_district_id",
+                    "name_of_the_office_head",
+                    "name_of_the_office_head_designation",
+                    "contact_person_name",
+                    "contact_person_designation"
+                ]
+            },
+            "IndustryAssociationAdmin": {
+                "type": "object",
+                "description": "provide Industry Association Admin",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "location id of division"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "location id of district"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "location id of upazila"
+                    },
+                    "location_latitude": {
+                        "type": "string",
+                        "description": "Latitude of the location"
+                    },
+                    "location_longitude": {
+                        "type": "string",
+                        "description": "longitue of the location"
+                    },
+                    "google_map_src": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "IndustryAssociationAdmin address"
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "IndustryAssociationAdmin address"
                     },
                     "name_of_the_office_head": {
                         "type": "string"

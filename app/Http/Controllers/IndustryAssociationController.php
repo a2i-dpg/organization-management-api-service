@@ -541,4 +541,57 @@ class IndustryAssociationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
+    public function updateIndustryAssociationAdminProfile(Request $request) :JsonResponse
+    {
+        //$this->authorize('updateIndustryAssociatinProfile', Organization::class);
+        $authUser = Auth::user();
+        $industryAssociationId = null;
+        if ($authUser && $authUser->industry_association_id) {
+            $industryAssociationId = $authUser->industry_association_id;
+        }
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+
+//        $this->authorize('update', $industryAssociation);
+
+        $validated = $this->industryAssociationService->industryAssociationAdminValidator($request, $industryAssociationId)->validate();
+        $data = $this->industryAssociationService->update($industryAssociation, $validated);
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "IndustryAssociation admin updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+
+    }
+
+
+    public function getIndustryAssociationAdminProfile():JsonResponse
+    {
+        //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);
+
+        $authUser = Auth::user();
+        $industryAssociationId = null;
+        if ($authUser && $authUser->industry_association_id) {
+            $industryAssociationId = $authUser->industry_association_id;
+        }
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $response = [
+            "data" => $industryAssociation,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+
+
 }
