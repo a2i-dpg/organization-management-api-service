@@ -6,6 +6,7 @@ use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
+use App\Models\User;
 use App\Services\IndustryAssociationService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
@@ -89,6 +90,26 @@ class IndustryAssociationController extends Controller
         $filter = $this->organizationService->filterPublicValidator($request)->validate();
         $industryAssociationId = $filter['industry_association_id'];
         $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * List for industry Association members
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getIndustryAssociationMemberList(Request $request): JsonResponse
+    {
+        /** @var User $authUser */
+        $authUser = Auth::user();
+        $filter = $this->organizationService->filterPublicValidator($request)->validate();
+        if ($authUser && $authUser->industry_association_id) {
+            $industryAssociationId = $authUser->industry_association_id;
+        }
+        $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
+
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -580,7 +601,7 @@ class IndustryAssociationController extends Controller
     }
 
 
-    public function updateIndustryAssociationAdminProfile(Request $request) :JsonResponse
+    public function updateIndustryAssociationAdminProfile(Request $request): JsonResponse
     {
         //$this->authorize('updateIndustryAssociatinProfile', Organization::class);
         $authUser = Auth::user();
@@ -608,7 +629,7 @@ class IndustryAssociationController extends Controller
     }
 
 
-    public function getIndustryAssociationAdminProfile():JsonResponse
+    public function getIndustryAssociationAdminProfile(): JsonResponse
     {
         //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);
 
@@ -628,8 +649,6 @@ class IndustryAssociationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
-
-
 
 
 }
