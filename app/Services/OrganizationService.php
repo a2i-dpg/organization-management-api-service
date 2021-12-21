@@ -527,7 +527,7 @@ class OrganizationService
                 Rule::unique('industry_association_organization', 'organization_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
                         return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
-                            ->whereIn('row_status', [1, 2]);
+                            ->where('row_status', BaseModel::ROW_STATUS_ACTIVE);
                     })
             ],
 
@@ -888,7 +888,7 @@ class OrganizationService
                 'integer'
             ],
             'date_of_establishment' => [
-                'required',
+                'nullable',
                 'date_format:Y-m-d'
             ],
             'title_en' => [
@@ -1059,6 +1059,7 @@ class OrganizationService
                 'min:1'
             ];
             $rules['industry_associations.*.industry_association_id'] = [
+                'unique',
                 'required',
                 'int',
             ];
@@ -1091,7 +1092,7 @@ class OrganizationService
                 'min:2'
             ],
             'date_of_establishment' => [
-                'required',
+                'nullable',
                 'date_format:Y-m-d'
             ],
             'organization_type_id' => [
