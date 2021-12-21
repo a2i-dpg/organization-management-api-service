@@ -857,29 +857,7 @@ class OrganizationService
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-            'industry_associations' => [
-                Rule::requiredIf(function () use ($id) {
-                    return is_null($id);
-                }),
-                'nullable',
-                'array',
-                'min:1',
-            ],
-            'industry_associations.*' => [
-                Rule::requiredIf(!empty($data['industry_associations'])),
-                'nullable',
-                'array',
-            ],
-            'industry_associations.*.industry_association_id' => [
-                Rule::requiredIf(!empty($data['industry_associations'])),
-                'nullable',
-                'int',
-            ],
-            'industry_associations.*.membership_id' => [
-                Rule::requiredIf(!empty($data['industry_associations'])),
-                'nullable',
-                'string',
-            ],
+
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
                     return is_null($id);
@@ -1043,6 +1021,26 @@ class OrganizationService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
+        if ($id == null) {
+            $rules['industry_associations'] = [
+                'required',
+                'array',
+                'min:1',
+            ];
+            $rules['industry_associations.*'] = [
+                'required',
+                'array',
+                'min:1'
+            ];
+            $rules['industry_associations.*.industry_association_id'] = [
+                'required',
+                'int',
+            ];
+            $rules['industry_associations.*.membership_id'] = [
+                'required',
+                'string',
+            ];
+        }
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
