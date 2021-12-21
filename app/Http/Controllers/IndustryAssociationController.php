@@ -599,7 +599,7 @@ class IndustryAssociationController extends Controller
     }
 
 
-    public function updateIndustryAssociationAdminProfile(Request $request): JsonResponse
+    public function updateIndustryAssociationProfile(Request $request): JsonResponse
     {
         //$this->authorize('updateIndustryAssociationProfile', Organization::class);
         $authUser = Auth::user();
@@ -627,7 +627,7 @@ class IndustryAssociationController extends Controller
     }
 
 
-    public function getIndustryAssociationAdminProfile(): JsonResponse
+    public function getIndustryAssociationProfile(): JsonResponse
     {
         //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);
 

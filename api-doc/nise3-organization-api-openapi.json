@@ -140,10 +140,10 @@
                 ]
             }
         },
-        "/industry-association-admin-profile-update": {
+        "/industry-association-profile-update": {
             "put": {
                 "tags": [
-                    "Industry Association Admin Profile"
+                    "Industry Association Profile"
                 ],
                 "summary": "Update an industry association admin profile ",
                 "description": "An API endpoint to update  an industry association admin profile ",
@@ -163,12 +163,12 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "industry_association_type_id": 2,
-                                        "title": "HeyYooo",
+                                        "id": 1,
+                                        "industry_association_type_id": 1,
+                                        "title": "NewBuddy",
                                         "title_en": null,
-                                        "loc_division_id": "1",
-                                        "loc_district_id": "1",
+                                        "loc_division_id": "2",
+                                        "loc_district_id": "2",
                                         "loc_upazila_id": null,
                                         "location_latitude": null,
                                         "location_longitude": null,
@@ -177,27 +177,27 @@
                                         "address_en": null,
                                         "country": "BD",
                                         "phone_code": "880",
-                                        "mobile": "01756152983",
-                                        "email": "halie.sawayn@rosenbaum.com",
+                                        "mobile": "01787992785",
+                                        "email": "lrunte@jacobson.net",
                                         "fax_no": null,
-                                        "trade_number": "in",
-                                        "name_of_the_office_head": "dSD",
+                                        "trade_number": "eos",
+                                        "name_of_the_office_head": "AtHome",
                                         "name_of_the_office_head_en": null,
-                                        "name_of_the_office_head_designation": "sSas",
+                                        "name_of_the_office_head_designation": "Hanna",
                                         "name_of_the_office_head_designation_en": null,
-                                        "contact_person_name": "ASas",
+                                        "contact_person_name": "Boston",
                                         "contact_person_name_en": null,
-                                        "contact_person_mobile": "01730472860",
-                                        "contact_person_email": "oral19@example.org",
-                                        "contact_person_designation": "asaS",
+                                        "contact_person_mobile": "01776469819",
+                                        "contact_person_email": "colby.predovic@example.org",
+                                        "contact_person_designation": "LucoMatrix",
                                         "contact_person_designation_en": null,
-                                        "logo": "logo.jpg",
-                                        "domain": "https://www.schuppe.net",
-                                        "row_status": "1",
+                                        "logo": "ThereIsMyLogO",
+                                        "domain": "https://www.hammes.com",
+                                        "row_status": 1,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-12-09T07:17:32.000000Z",
-                                        "updated_at": "2021-12-15T11:49:21.000000Z",
+                                        "created_at": "2021-12-19T07:49:58.000000Z",
+                                        "updated_at": "2021-12-21T10:58:12.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -213,10 +213,10 @@
                 }
             }
         },
-        "/industry-association-admin-profile": {
+        "/industry-association-profile": {
             "get": {
                 "tags": [
-                    "Industry Association Admin Profile"
+                    "Industry Association Profile"
                 ],
                 "summary": "Get industry association admin profile",
                 "description": "An API endpoint to get  an industry association admin profile ",
@@ -227,41 +227,41 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "industry_association_type_id": 2,
-                                        "title": "HeyYooo",
-                                        "title_en": null,
-                                        "loc_division_id": 1,
-                                        "loc_district_id": 1,
+                                        "id": 1,
+                                        "industry_association_type_id": 1,
+                                        "title": "Medhurst, Bogan and Leuschke",
+                                        "title_en": "Medhurst, Bogan and Leuschke",
+                                        "loc_division_id": 3,
+                                        "loc_district_id": 18,
                                         "loc_upazila_id": null,
-                                        "location_latitude": null,
-                                        "location_longitude": null,
+                                        "location_latitude": "90.399482",
+                                        "location_longitude": "90.399482",
                                         "google_map_src": null,
-                                        "address": null,
-                                        "address_en": null,
+                                        "address": "9197 Carroll Ville\nPort Pamela, MS 27840-1808",
+                                        "address_en": "9197 Carroll Ville\nPort Pamela, MS 27840-1808",
                                         "country": "BD",
                                         "phone_code": "880",
-                                        "mobile": "01756152983",
-                                        "email": "halie.sawayn@rosenbaum.com",
+                                        "mobile": "01787992785",
+                                        "email": "lrunte@jacobson.net",
                                         "fax_no": null,
-                                        "trade_number": "in",
-                                        "name_of_the_office_head": "dSD",
-                                        "name_of_the_office_head_en": null,
-                                        "name_of_the_office_head_designation": "sSas",
-                                        "name_of_the_office_head_designation_en": null,
-                                        "contact_person_name": "ASas",
-                                        "contact_person_name_en": null,
-                                        "contact_person_mobile": "01730472860",
-                                        "contact_person_email": "oral19@example.org",
-                                        "contact_person_designation": "asaS",
-                                        "contact_person_designation_en": null,
+                                        "trade_number": "eos",
+                                        "name_of_the_office_head": "Shaina Volkman",
+                                        "name_of_the_office_head_en": "Shaina Volkman",
+                                        "name_of_the_office_head_designation": "CEO",
+                                        "name_of_the_office_head_designation_en": "CEO",
+                                        "contact_person_name": "Duncan Bode",
+                                        "contact_person_name_en": "Duncan Bode",
+                                        "contact_person_mobile": "01776469819",
+                                        "contact_person_email": "colby.predovic@example.org",
+                                        "contact_person_designation": "Fiber Product Cutting Machine Operator",
+                                        "contact_person_designation_en": "Fiber Product Cutting Machine Operator",
                                         "logo": "logo.jpg",
-                                        "domain": "https://www.schuppe.net",
+                                        "domain": "https://www.hammes.com",
                                         "row_status": 1,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-12-09T07:17:32.000000Z",
-                                        "updated_at": "2021-12-15T11:49:21.000000Z",
+                                        "created_at": "2021-12-19T07:49:58.000000Z",
+                                        "updated_at": "2021-12-19T07:49:58.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -6078,18 +6078,12 @@
                         "type": "string",
                         "description": "Details about the organization"
                     },
+                    "logo": {
+                        "type": "string"
+                    },
                     "description_en": {
                         "type": "string",
                         "description": "Details about the organization"
-                    },
-                    "row_status": {
-                        "type": "integer",
-                        "description": "Activation status .1 => active ,0=>inactive",
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
                     }
                 },
                 "required": [

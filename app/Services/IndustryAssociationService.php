@@ -799,6 +799,10 @@ class IndustryAssociationService
                 'max: 250',
                 'min:2'
             ],
+            'logo' => [
+                'nullable',
+                'string',
+            ],
             'contact_person_designation' => [
                 'required',
                 'max: 600',
@@ -808,11 +812,7 @@ class IndustryAssociationService
                 'nullable',
                 'max: 300',
                 "min:2"
-            ],
-            'row_status' => [
-                'nullable',
-                Rule::in([BaseModel::ROW_STATUS_INACTIVE, BaseModel::ROW_STATUS_ACTIVE]),
-            ],
+            ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }
