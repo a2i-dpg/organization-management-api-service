@@ -861,20 +861,24 @@ class OrganizationService
                 Rule::requiredIf(function () use ($id) {
                     return is_null($id);
                 }),
+                'nullable',
                 'array',
                 'min:1',
             ],
             'industry_associations.*' => [
+                Rule::requiredIf(!empty($data['industry_associations'])),
+                'nullable',
                 'array',
-                'required',
             ],
             'industry_associations.*.industry_association_id' => [
+                Rule::requiredIf(!empty($data['industry_associations'])),
+                'nullable',
                 'int',
-                'required',
             ],
             'industry_associations.*.membership_id' => [
+                Rule::requiredIf(!empty($data['industry_associations'])),
+                'nullable',
                 'string',
-                'required',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
