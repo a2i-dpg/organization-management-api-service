@@ -441,7 +441,6 @@ class OrganizationService
         foreach ($industryAssociations as $industryAssociation) {
             $organization->industryAssociations()->attach($industryAssociation['industry_association_id'], [
                 'membership_id' => $industryAssociation['membership_id'],
-                'is_reg_approval' => Organization::IS_REG_APPROVAL_TRUE,
                 'row_status' => BaseModel::ROW_STATUS_PENDING
             ]);
         }

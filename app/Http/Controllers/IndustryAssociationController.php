@@ -601,7 +601,7 @@ class IndustryAssociationController extends Controller
 
     public function updateIndustryAssociationAdminProfile(Request $request): JsonResponse
     {
-        //$this->authorize('updateIndustryAssociatinProfile', Organization::class);
+        //$this->authorize('updateIndustryAssociationProfile', Organization::class);
         $authUser = Auth::user();
         $industryAssociationId = null;
         if ($authUser && $authUser->industry_association_id) {
