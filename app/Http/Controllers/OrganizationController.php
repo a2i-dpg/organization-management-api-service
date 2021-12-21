@@ -479,7 +479,7 @@ class OrganizationController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getOrganizationAdminProfile(): JsonResponse
+    public function getOrganizationProfile(): JsonResponse
     {
         //$this->authorize('updateOrganizationProfile', Organization::class);
 
@@ -506,7 +506,7 @@ class OrganizationController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function updateOrganizationAdminProfile(Request $request): JsonResponse
+    public function updateOrganizationProfile(Request $request): JsonResponse
     {
         //$this->authorize('updateOrganizationProfile', Organization::class);
 

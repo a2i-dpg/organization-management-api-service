@@ -1361,16 +1361,16 @@ class OrganizationService
                 'max: 500',
                 "min:2"
             ],
+            'logo' => [
+                'nullable',
+                'string',
+            ],
             'contact_person_designation_en' => [
                 'nullable',
                 'max: 300',
                 "min:2"
             ],
-            'row_status' => [
-                'required_if:' . $id . ',!=,null',
-                'nullable',
-                Rule::in(Organization::ROW_STATUSES),
-            ],
+
             'created_by' => ['nullable', 'int'],
             'updated_by' => ['nullable', 'int'],
         ];

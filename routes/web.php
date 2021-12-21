@@ -66,11 +66,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
 
-        $router->get('organization-admin-profile', ['as' => 'organization.admin-profile', 'uses' => 'OrganizationController@getOrganizationAdminProfile']);
+        $router->get('organization-profile', ['as' => 'organization.admin-profile', 'uses' => 'OrganizationController@getOrganizationProfile']);
 
         $router->put("industry-association-admin-profile-update", ["as" => "public.organizations", "uses" => "IndustryAssociationController@updateIndustryAssociationAdminProfile"]);
         $router->get("industry-association-admin-profile", ["as" => "public.organizations", "uses" => "IndustryAssociationController@getIndustryAssociationAdminProfile"]);
-        $router->put('organization-admin-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationAdminProfile']);
+        $router->put('organization-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationProfile']);
         $router->get("industry-association-members", ["as" => "industry-association-members", "uses" => "IndustryAssociationController@getIndustryAssociationMemberList"]);
 
     });
