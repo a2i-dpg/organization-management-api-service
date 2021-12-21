@@ -5645,7 +5645,6 @@
                     "contact_person_email",
                     "address",
                     "password",
-                    "date_of_establishment",
                     "password_confirmation",
                     "loc_division_id",
                     "loc_district_id"
@@ -5874,7 +5873,6 @@
                     "contact_person_mobile",
                     "contact_person_designation",
                     "contact_person_email",
-                    "date_of_establishment",
                     "industry_associations",
                     "mobile",
                     "email",

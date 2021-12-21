@@ -888,7 +888,7 @@ class OrganizationService
                 'integer'
             ],
             'date_of_establishment' => [
-                'required',
+                'nullable',
                 'date_format:Y-m-d'
             ],
             'title_en' => [
@@ -1091,7 +1091,7 @@ class OrganizationService
                 'min:2'
             ],
             'date_of_establishment' => [
-                'required',
+                'nullable',
                 'date_format:Y-m-d'
             ],
             'organization_type_id' => [
