@@ -527,7 +527,7 @@ class OrganizationService
                 Rule::unique('industry_association_organization', 'organization_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
                         return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
-                            ->whereIn('row_status', [1, 2]);
+                            ->where('row_status', BaseModel::ROW_STATUS_ACTIVE);
                     })
             ],
 
@@ -870,6 +870,7 @@ class OrganizationService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $request->offsetSet('deleted_at', null);
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]',
         ];
@@ -1059,6 +1060,7 @@ class OrganizationService
                 'min:1'
             ];
             $rules['industry_associations.*.industry_association_id'] = [
+                'unique_with:industry_association_organization,organization_id,deleted_at',
                 'required',
                 'int',
             ];
