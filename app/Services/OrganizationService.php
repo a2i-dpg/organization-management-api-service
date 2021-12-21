@@ -47,6 +47,7 @@ class OrganizationService
             'organizations.id',
             'organizations.title_en',
             'organizations.title',
+            'organizations.date_of_establishment',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
@@ -169,6 +170,7 @@ class OrganizationService
                 'organizations.id',
                 'organizations.title_en',
                 'organizations.title',
+                'organizations.date_of_establishment',
                 'industry_association_organization.membership_id',
                 'organizations.id',
                 'organizations.name_of_the_office_head',
@@ -245,6 +247,12 @@ class OrganizationService
     }
 
 
+    /**
+     * @param array $request
+     * @param int $industryAssociationId
+     * @param Carbon $startTime
+     * @return array
+     */
     public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
@@ -259,6 +267,7 @@ class OrganizationService
                 'organizations.id',
                 'organizations.title_en',
                 'organizations.title',
+                'organizations.date_of_establishment',
                 'industry_association_organization.membership_id',
                 'organizations.id',
                 'organizations.name_of_the_office_head',
@@ -340,6 +349,7 @@ class OrganizationService
             'organizations.id',
             'organizations.title_en',
             'organizations.title',
+            'organizations.date_of_establishment',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
@@ -603,6 +613,10 @@ class OrganizationService
             ->json();
     }
 
+    /**
+     * @param array $mailPayload
+     * @throws Throwable
+     */
     public function userInfoSendByMail(array $mailPayload)
     {
         Log::info("MailPayload" . json_encode($mailPayload));
@@ -625,6 +639,10 @@ class OrganizationService
         $mailService->sendMail();
     }
 
+    /**
+     * @param string $recipient
+     * @param string $message
+     */
     public function userInfoSendBySMS(string $recipient, string $message)
     {
         $sms = new SmsService($recipient, $message);
@@ -782,6 +800,10 @@ class OrganizationService
         return $organization;
     }
 
+    /**
+     * @param Organization $organization
+     * @return Organization
+     */
     public function organizationStatusChangeAfterRejection(Organization $organization): Organization
     {
         $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
@@ -864,6 +886,10 @@ class OrganizationService
                 }),
                 'nullable',
                 'integer'
+            ],
+            'date_of_establishment' => [
+                'required',
+                'date_format:Y-m-d'
             ],
             'title_en' => [
                 'nullable',
@@ -1064,6 +1090,10 @@ class OrganizationService
                 'max:1200',
                 'min:2'
             ],
+            'date_of_establishment' => [
+                'required',
+                'date_format:Y-m-d'
+            ],
             'organization_type_id' => [
                 'required',
                 'integer',
@@ -1235,7 +1265,12 @@ class OrganizationService
         ], $customMessage);
     }
 
-    public function organizationAdminProfileValidator(Request $request, int $id = null)
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function organizationAdminProfileValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
 
@@ -1343,6 +1378,10 @@ class OrganizationService
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function filterPublicValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
