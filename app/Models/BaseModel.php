@@ -62,6 +62,13 @@ abstract class BaseModel extends Model
 
     public const ADMIN_CREATED_USER_DEFAULT_PASSWORD = "ABcd1234";
 
+    /** Saga Status */
+    public const SAGA_STATUS_CREATE_PENDING = 1;
+    public const SAGA_STATUS_UPDATE_PENDING = 2;
+    public const SAGA_STATUS_DESTROY_PENDING = 3;
+    public const SAGA_STATUS_COMMIT = 4;
+    public const SAGA_STATUS_ROLLBACK = 5;
+
     /** SAGA events Publisher & Consumer */
     public const SAGA_CORE_SERVICE = 'core_service';
     public const SAGA_INSTITUTE_SERVICE = 'institute_service';
