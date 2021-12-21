@@ -870,7 +870,6 @@ class OrganizationService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $request->offsetSet('deleted_at', null);
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]',
         ];
@@ -1060,9 +1059,9 @@ class OrganizationService
                 'min:1'
             ];
             $rules['industry_associations.*.industry_association_id'] = [
-                'unique_with:industry_association_organization,organization_id,deleted_at',
                 'required',
-                'int',
+                 'int',
+                'distinct',
             ];
             $rules['industry_associations.*.membership_id'] = [
                 'required',
@@ -1111,8 +1110,9 @@ class OrganizationService
                 'required',
             ],
             'industry_associations.*.industry_association_id' => [
-                'int',
                 'required',
+                'int',
+                'distinct',
             ],
             'industry_associations.*.membership_id' => [
                 'string',
