@@ -491,7 +491,7 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     * Industry registration or IndustryAssociation membership approval
+     * IndustryAssociation membership approval
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
@@ -544,7 +544,7 @@ class IndustryAssociationController extends Controller
     }
 
     /**
-     * industry registration or industryAssociation membership rejection
+     * industryAssociation membership rejection
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
@@ -552,7 +552,7 @@ class IndustryAssociationController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function registrationOrMembershipRejection(Request $request, int $organizationId): JsonResponse
+    public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
         $authUser = Auth::user();
 
