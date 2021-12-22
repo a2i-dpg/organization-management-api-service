@@ -457,11 +457,6 @@ class OrganizationController extends Controller
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
-        /** @var User $authUser */
-        $authUser = Auth::user();
-        if ($authUser && $authUser->organization_id) {
-            $request->offsetSet('organization_id', $authUser->organization_id);
-        }
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
         $this->organizationService->sendMailToIndustryAssociationAfterMembershipApplication($validatedData);
@@ -475,6 +470,7 @@ class OrganizationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
+
 
     /**
      * @return JsonResponse

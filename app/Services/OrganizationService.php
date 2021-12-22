@@ -154,7 +154,7 @@ class OrganizationService
      * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,): array
+    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -436,24 +436,21 @@ class OrganizationService
     {
         $organization->fill($data);
         $organization->save();
-        $this->assignOrganizationInIndustryAssociation($organization, $data);
+        $this->addOrganizationToIndustryAssociation($organization, $data);
         return $organization;
     }
 
     /**
-     * Assign organization to the selected industry while industry creation
+     * Add organization to a industryAssociation
      * @param Organization $organization
      * @param array $data
      */
-    public function assignOrganizationInIndustryAssociation(Organization $organization, array $data)
+    public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
     {
-        $industryAssociations = $data['industry_associations'];
-        foreach ($industryAssociations as $industryAssociation) {
-            $organization->industryAssociations()->attach($industryAssociation['industry_association_id'], [
-                'membership_id' => $industryAssociation['membership_id'],
-                'row_status' => BaseModel::ROW_STATUS_PENDING
-            ]);
-        }
+        $organization->industryAssociations()->attach($data['industry_association_id'], [
+            'membership_id' => $data['membership_id'],
+            'row_status' => BaseModel::ROW_STATUS_ACTIVE
+        ]);
 
     }
 
@@ -527,7 +524,7 @@ class OrganizationService
                 Rule::unique('industry_association_organization', 'organization_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
                         return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
-                            ->where('row_status', BaseModel::ROW_STATUS_ACTIVE);
+                            ->whereIn('row_status', [BaseModel::ROW_STATUS_ACTIVE,BaseModel::ROW_STATUS_PENDING]);
                     })
             ],
 
@@ -879,7 +876,15 @@ class OrganizationService
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-
+            'industry_association_id' => [
+                'required',
+                'int',
+                'exists:industry_associations,id,deleted_at,NULL'
+            ],
+            'membership_id' => [
+                'required',
+                'string',
+            ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
                     return is_null($id);
@@ -1047,27 +1052,6 @@ class OrganizationService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
-        if ($id == null) {
-            $rules['industry_associations'] = [
-                'required',
-                'array',
-                'min:1',
-            ];
-            $rules['industry_associations.*'] = [
-                'required',
-                'array',
-                'min:1'
-            ];
-            $rules['industry_associations.*.industry_association_id'] = [
-                'required',
-                 'int',
-                'distinct',
-            ];
-            $rules['industry_associations.*.membership_id'] = [
-                'required',
-                'string',
-            ];
-        }
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
@@ -1376,7 +1360,7 @@ class OrganizationService
             'created_by' => ['nullable', 'int'],
             'updated_by' => ['nullable', 'int'],
         ];
-        return \Illuminate\Support\Facades\Validator::make($data, $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
 
