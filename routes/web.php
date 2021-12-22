@@ -65,6 +65,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         $router->put('organization-admin-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationAdminProfile']);
 
+
+    });
+
+    $router->group(["prefix" => "job", "as" => "job"], function () use ($router) {
+        $router->get("job-id", ["as" => "job-id", "uses" => "JobManagementController@getJobId"]);
+        $router->get("job-location", ["as" => "job-location", "uses" => "JobManagementController@jobLocation"]);
+        $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "JobManagementController@storePrimaryJobInformation"]);
     });
 
 
