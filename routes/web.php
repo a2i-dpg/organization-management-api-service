@@ -39,7 +39,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('contact-us', 'ContactUsController')->render();
 
 
-        $router->patch('contact-us-restore/{id}', ['as' => 'contact-us.restore', 'uses' => 'ContactUsController@restore']);
 
 
         $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);

@@ -54,7 +54,7 @@ class ContactUsService
                 'contact_us.row_status'
 
             ]
-        );
+        )->acl();
         $contactInfoBuilder->orderBy('contact_us.id', $order);
 
         if (!empty($titleEn)) {
