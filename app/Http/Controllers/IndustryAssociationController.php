@@ -533,7 +533,6 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
-     * @throws RequestException
      * @throws Throwable
      * @throws ValidationException
      */
