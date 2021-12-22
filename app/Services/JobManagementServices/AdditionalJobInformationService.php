@@ -2,15 +2,25 @@
 
 namespace App\Services\JobManagementServices;
 
+use App\Models\AdditionalJobInformation;
 use App\Models\LocDistrict;
 use App\Models\LocDivision;
 use App\Models\LocUpazila;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
+/**
+ *
+ */
 class AdditionalJobInformationService
 {
+    /**
+     * @return array
+     */
     public function getJobLocation(): array
     {
         return Cache::rememberForever("JOB_LOCATION_FOR_JOB_POSTING", function () {
@@ -19,6 +29,22 @@ class AdditionalJobInformationService
 
     }
 
+
+    /**
+     * @param array $validatedData
+     * @return AdditionalJobInformation
+     */
+    public function store(array $validatedData): AdditionalJobInformation
+    {
+        $additionalJobInformation = new AdditionalJobInformation();
+        $additionalJobInformation->fill($validatedData);
+        $additionalJobInformation->save();
+        return $additionalJobInformation;
+    }
+
+    /**
+     * @return array
+     */
     private function getLocationData(): array
     {
         $jobLocation = [];
@@ -93,9 +119,155 @@ class AdditionalJobInformationService
         return $jobLocation;
     }
 
+    /**
+     * @param AdditionalJobInformation $additionalJobInformation
+     * @param array $jobLevel
+     */
+    public function syncWithJobLevel(AdditionalJobInformation $additionalJobInformation, array $jobLevel)
+    {
+        foreach ($jobLevel as $item) {
+            DB::table('additional_job_information_job_level')->updateOrCreate(
+                [
+                    'additional_job_information_id' => $additionalJobInformation->id,
+                    'job_level_id' => $item
+                ],
+                [
+                    'additional_job_information_id' => $additionalJobInformation->id,
+                    'job_level_id' => $item
 
-    public function validator(Request $request)
+                ]
+            );
+
+        }
+
+    }
+
+    /**
+     * @param AdditionalJobInformation $additionalJobInformation
+     * @param array $workPlace
+     */
+    public function syncWithWorkplace(AdditionalJobInformation $additionalJobInformation, array $workPlace)
+    {
+        foreach ($workPlace as $item) {
+            DB::table('additional_job_information_work_place')->updateOrCreate(
+                [
+                    'additional_job_information_id' => $additionalJobInformation->id,
+                    'work_place_id' => $item
+                ],
+                [
+                    'additional_job_information_id' => $additionalJobInformation->id,
+                    'work_place_id' => $item
+
+                ]
+            );
+
+        }
+
+    }
+
+    /**
+     * @param AdditionalJobInformation $additionalJobInformation
+     * @param array $jobLocation
+     */
+    public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
     {
 
     }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            "jod_id" => [
+                "required",
+                "exists:primary_job_information,job_id"
+            ],
+            "job_responsibilities" => [
+                "nullable"
+            ],
+            "job_content" => [
+                "required"
+            ],
+            "job_place_type" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::JOB_PLACE_TYPE))
+            ],
+            "salary_min" => [
+                "nullable",
+                "numeric"
+            ],
+            "salary_max" => [
+                "nullable",
+                "numeric"
+            ],
+            "is_salary_info_show" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::IS_SALARY_SHOW))
+            ],
+            "is_salary_compare_to_expected_salary" => [
+                "nullable",
+                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+            ],
+            "is_salary_alert_excessive_than_given_salary_range" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+            ],
+            "salary_review" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::SALARY_REVIEW))
+            ],
+            "festival_bonus" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
+            ],
+            "additional_salary_info" => [
+                "nullable"
+            ],
+            "is_other_benefits" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+            ],
+            "other_benefits" => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->is_other_benefits == AdditionalJobInformation::BOOLEN_FLAG[1];
+                }),
+                "nullable",
+                "array"
+            ],
+            "lunch_facilities" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::LUNCH_FACILITIES))
+            ],
+            "others" => [
+                "nullable"
+            ],
+            "job_level" => [
+                "required",
+                "array"
+            ],
+            "job_level.*" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::JOB_LEVEL))
+            ],
+            "work_place" => [
+                "required",
+                "array"
+            ],
+            "work_place.*" => [
+                "required",
+                Rule::in(array_keys(AdditionalJobInformation::WORK_PLACE))
+            ],
+            "job_location" => [
+                "required",
+                "array"
+            ]
+
+        ];
+        return Validator::make($request->all(), $rules);
+    }
+
 }

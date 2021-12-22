@@ -77,21 +77,27 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws ValidationException|Throwable
      */
-    public function storeMoreJobInformation(Request $request): JsonResponse
+    public function storeAdditionalJobInformation(Request $request): JsonResponse
     {
+        $validatedData = $this->additionalJobInformationService->validator($request)->validate();
 
-        $validatedData = $this->primaryJobInformationService->validator($request)->validate();
-        $employmentTypes = $validatedData['employment_type'];
+        $jobLevel = $validatedData['job_level'];
+        $workPlace = $validatedData['work_place'];
+        $jobLocation = $validatedData['job_location'];
+
         DB::beginTransaction();
         try {
-            $primaryJobInformation = $this->primaryJobInformationService->store($validatedData);
-            $this->primaryJobInformationService->syncWithEmploymentStatus($primaryJobInformation, $employmentTypes);
+            $additionalJobInformation = $this->additionalJobInformationService->store($validatedData);
+            $this->additionalJobInformationService->syncWithJobLevel($additionalJobInformation, $jobLevel);
+            $this->additionalJobInformationService->syncWithWorkplace($additionalJobInformation, $workPlace);
+            $this->additionalJobInformationService->syncWithJobLocation($additionalJobInformation, $jobLocation);
+
             $response = [
-                "data" => $primaryJobInformation,
+                "data" => $additionalJobInformation,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
-                    "message" => "PrimaryJobInformation successfully submitted",
+                    "message" => "AdditionalJobInformation successfully submitted",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];

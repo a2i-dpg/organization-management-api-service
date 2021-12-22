@@ -15,9 +15,9 @@ class CreateAdditionalJobInformationJobLocationTable extends Migration
     {
         Schema::create('additional_job_information_job_location', function (Blueprint $table) {
             $table->unsignedInteger('additional_job_information_id');
-            $table->unsignedTinyInteger('loc_division_id');
-            $table->unsignedTinyInteger('loc_district_id');
-            $table->unsignedTinyInteger('loc_loc_upazila_id');
+            $table->unsignedMediumInteger('loc_division_id');
+            $table->unsignedMediumInteger('loc_district_id');
+            $table->unsignedMediumInteger('loc_upazila_id');
 
             $table->foreign('additional_job_information_id',"additional_job_information_id_fk")
                 ->references('id')
