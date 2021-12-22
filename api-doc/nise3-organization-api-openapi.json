@@ -5166,6 +5166,115 @@
                     }
                 }
             }
+        },
+
+
+        "/contact-us": {
+            "get": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Get all contact info of a specific industry-association",
+                "description": "API endpoint to get all contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/industry_association_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "Alexane Nienow",
+                                            "title_en": "Kacie Goldner",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880219221835",
+                                            "mobile": "01979443556",
+                                            "email": "billie71@example.net",
+                                            "created_by": 1130,
+                                            "updated_by": 9863,
+                                            "created_at": "2002-07-31T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title": "Jacques Hermiston",
+                                            "title_en": "Jackson Feil",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880698597257",
+                                            "mobile": "01500819093",
+                                            "email": "julio17@example.net",
+                                            "created_by": 5724,
+                                            "updated_by": 4844,
+                                            "created_at": "2003-01-23T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "Mr. Michel Spencer MD",
+                                            "title_en": "Naomie Abernathy",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880140233947",
+                                            "mobile": "01473365875",
+                                            "email": "colin.waters@example.com",
+                                            "created_by": 7897,
+                                            "updated_by": 7169,
+                                            "created_at": "2002-12-07T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Store a contact info of an industry-association.",
+                "description": "API endpoint to store a contact info of an industry-association.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactUs"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -6804,6 +6913,63 @@
                 },
                 "required": [
                     "serviceIds"
+                ]
+            },
+            "ContactUs": {
+                "type": "object",
+                "description": "Contact Info of an industry association",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 600
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "industry_association_id": {
+                        "type": "integer"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "phone_code": {
+                        "type": "integer"
+                    },
+                    "phone": {
+                        "type": "integer"
+                    },
+                    "mobile": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "integer"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            1,
+                            0
+                        ],
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "title",
+                    "industry_association_id",
+                    "country",
+                    "mobile",
+                    "email"
                 ]
             }
         },
