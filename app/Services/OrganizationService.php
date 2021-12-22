@@ -344,6 +344,20 @@ class OrganizationService
     }
 
     /**
+     * @param Request $request
+     * @return array
+     */
+    public function getIndustryAssociationTitle(Request $request): array
+    {
+        return IndustryAssociation::select([
+            "id",
+            "title",
+            "title_en"
+        ])->whereIn("id", $request->get('industry_association_ids'))
+            ->get()->keyBy("id")->toArray();
+    }
+
+    /**
      * @param Organization $organization
      * @param array $data
      * @return Organization
