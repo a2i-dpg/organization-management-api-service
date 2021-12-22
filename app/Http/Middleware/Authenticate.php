@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\BaseModel;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -46,11 +47,13 @@ class Authenticate
                     "message" => "Unauthenticated action"
                 ]
             ], ResponseAlias::HTTP_UNAUTHORIZED);
+
         } else { // industry and industry association id set with check type
+            /** @var User $authUser */
             $authUser = Auth::user();
-            if ($authUser && $authUser->user_type == BaseModel::ORGANIZATION_USER_TYPE && $authUser->organization_id) {
+            if ($authUser && $authUser->isOrganizationUser()) {
                 $request->offsetSet('organization_id', $authUser->organization_id);
-            } elseif ($authUser && $authUser->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE && $authUser->industry_association_id) {
+            } elseif ($authUser && $authUser->isIndustryAssociationUser()) {
                 $request->offsetSet('industry_association_id', $authUser->industry_association_id);
             }
         }
