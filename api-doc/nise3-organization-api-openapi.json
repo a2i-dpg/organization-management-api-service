@@ -12,6 +12,9 @@
     },
     "servers": [
         {
+            "url": "http://localhost:8002/api/v1"
+        },
+        {
             "url": "https://org.bus-staging.softbdltd.com/api/v1"
         },
         {
@@ -19,9 +22,6 @@
         },
         {
             "url": "http://localhost:8000/api/v1"
-        },
-        {
-            "url": "http://localhost:8002/api/v1"
         },
         {
             "url": "http://localhost:8003/api/v1"
@@ -104,7 +104,7 @@
                                         "query_time": 1
                                     },
                                     "data": {
-                                        "industry_association_type_id": "1",
+                                        "industry_association_trade_id": "1",
                                         "title_en": null,
                                         "title": "NewTitle",
                                         "trade_number": "33",
@@ -164,7 +164,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "industry_association_type_id": 1,
+                                        "industry_association_trade_id": 1,
                                         "title": "NewBuddy",
                                         "title_en": null,
                                         "loc_division_id": "2",
@@ -228,7 +228,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "industry_association_type_id": 1,
+                                        "industry_association_trade_id": 1,
                                         "title": "Medhurst, Bogan and Leuschke",
                                         "title_en": "Medhurst, Bogan and Leuschke",
                                         "loc_division_id": 3,
@@ -4320,7 +4320,7 @@
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "name": "industry_association_type_id",
+                        "name": "industry_association_trade_id",
                         "in": "query",
                         "schema": {
                             "type": "integer"
@@ -4356,7 +4356,7 @@
                                     "data": [
                                         {
                                             "id": 8,
-                                            "industry_association_type_id": 1,
+                                            "industry_association_trade_id": 1,
                                             "title_en": null,
                                             "title": "ppp",
                                             "loc_division_id": 1,
@@ -4399,7 +4399,7 @@
                                         },
                                         {
                                             "id": 9,
-                                            "industry_association_type_id": 1,
+                                            "industry_association_trade_id": 1,
                                             "title_en": null,
                                             "title": "ppp",
                                             "loc_division_id": 1,
@@ -4480,7 +4480,7 @@
                                         "query_time": 1
                                     },
                                     "data": {
-                                        "industry_association_type_id": "1",
+                                        "industry_association_trade_id": "1",
                                         "title": "ppp",
                                         "loc_division_id": "1",
                                         "loc_district_id": "1",
@@ -4599,7 +4599,7 @@
                                 "example": {
                                     "data": {
                                         "id": 9,
-                                        "industry_association_type_id": 1,
+                                        "industry_association_trade_id": 1,
                                         "title_en": null,
                                         "title": "ppp",
                                         "loc_division_id": 1,
@@ -4679,7 +4679,7 @@
                                 "example": {
                                     "data": {
                                         "id": 10,
-                                        "industry_association_type_id": "1",
+                                        "industry_association_trade_id": "1",
                                         "title": "hhh",
                                         "title_en": null,
                                         "loc_division_id": "1",
@@ -4967,90 +4967,10 @@
                 }
             }
         },
-        "/registration-or-membership-approval/{organizationId}": {
-            "put": {
-                "summary": "Approve a new industry registration or industry association membership approval",
-                "description": "API endpoint to Create a new industry association membership approval.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationId"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/industryAssociationMembershipApprovalOrRejection"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successfull",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "IndustryAssociation membership approved successfully",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Registration Or Membership Approval Rejection"
-                ]
-            }
-        },
-        "/registration-or-membership-rejection/{organizationId}": {
-            "put": {
-                "summary": "Reject a new industry registration or industry association membership",
-                "description": "API endpoint to Reject an industry membership association.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/organizationId"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/industryAssociationMembershipApprovalOrRejection"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successfull",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "IndustryAssociation membership rejected successfully",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Registration Or Membership Approval Rejection"
-                ]
-            }
-        },
         "/industry-association-membership-approval/{organizationId}": {
             "put": {
                 "tags": [
-                    "Registration Or Membership Approval Rejection"
+                    "Industry Association Membership Approval Rejection"
                 ],
                 "summary": "Approve an industry association membership request for an industry",
                 "description": "API endpoint to Approve an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -5081,7 +5001,7 @@
         "/industry-association-membership-rejection/{organizationId}": {
             "put": {
                 "tags": [
-                    "Registration Or Membership Approval Rejection"
+                    "Industry Association Membership Approval Rejection"
                 ],
                 "summary": "Reject an industry association membership request for an industry",
                 "description": "API endpoint to reject an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -5166,6 +5086,136 @@
                     }
                 }
             }
+        },
+
+
+        "/contact-us": {
+            "get": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Get all contact info of a specific industry-association",
+                "description": "API endpoint to get all contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/industry_association_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "Alexane Nienow",
+                                            "title_en": "Kacie Goldner",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880219221835",
+                                            "mobile": "01979443556",
+                                            "email": "billie71@example.net",
+                                            "created_by": 1130,
+                                            "updated_by": 9863,
+                                            "created_at": "2002-07-31T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title": "Jacques Hermiston",
+                                            "title_en": "Jackson Feil",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880698597257",
+                                            "mobile": "01500819093",
+                                            "email": "julio17@example.net",
+                                            "created_by": 5724,
+                                            "updated_by": 4844,
+                                            "created_at": "2003-01-23T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "Mr. Michel Spencer MD",
+                                            "title_en": "Naomie Abernathy",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880140233947",
+                                            "mobile": "01473365875",
+                                            "email": "colin.waters@example.com",
+                                            "created_by": 7897,
+                                            "updated_by": 7169,
+                                            "created_at": "2002-12-07T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Store a contact info of an industry-association.",
+                "description": "API endpoint to store a contact info of an industry-association.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactUs"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "title_en": null,
+                                        "title": "NewSouthWales",
+                                        "industry_association_id": 1,
+                                        "country": "Aus",
+                                        "phone_code": "880",
+                                        "phone": null,
+                                        "mobile": "01990099009",
+                                        "email": "55@gmail.com",
+                                        "row_status": "1",
+                                        "updated_at": "2021-12-22T09:25:54.000000Z",
+                                        "created_at": "2021-12-22T09:25:54.000000Z",
+                                        "id": 11
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "contact info added successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -5187,26 +5237,21 @@
                     "industry_association_id": {
                         "type": "integer"
                     },
-                    "organization_id": {
-                        "type": "integer"
+                    "membership_id": {
+                        "type": "string"
                     }
                 },
                 "required": [
-                    "industry_association_id"
+                    "industry_association_id",
+                    "membership_id"
                 ]
             },
             "industryAssociationRegistration": {
                 "type": "object",
                 "description": "Industry Association registration",
                 "properties": {
-                    "industry_association_type_id": {
-                        "type": "integer",
-                        "description": "GOVT = 1; NON_GOVT = 2; OTHERS = 3",
-                        "enum": [
-                            1,
-                            2,
-                            3
-                        ]
+                    "industry_association_trade_id": {
+                        "type": "integer"
                     },
                     "title": {
                         "type": "string",
@@ -5295,7 +5340,7 @@
                     }
                 },
                 "required": [
-                    "industry_association_type_id",
+                    "industry_association_trade_id",
                     "title",
                     "trade_number",
                     "loc_division_id",
@@ -5316,14 +5361,8 @@
                 "type": "object",
                 "description": "Industry Association management",
                 "properties": {
-                    "industry_association_type_id": {
-                        "type": "integer",
-                        "description": "INDUSTRY_ASSOCIATION_TYPE_GOVT = 1; INDUSTRY_ASSOCIATION_TYPE_NON_GOVT = 2; INDUSTRY_ASSOCIATION_TYPE_OTHERS = 3;",
-                        "enum": [
-                            1,
-                            2,
-                            3
-                        ]
+                    "industry_association_trade_id": {
+                        "type": "integer"
                     },
                     "permission_sub_group_id": {
                         "type": "integer",
@@ -5440,7 +5479,7 @@
                     }
                 },
                 "required": [
-                    "industry_association_type_id",
+                    "industry_association_trade_id",
                     "title",
                     "loc_division_id",
                     "loc_district_id",
@@ -5731,12 +5770,8 @@
                         "minLength": 2,
                         "maxLength": 300
                     },
-                    "industry_associations": {
-                        "type": "object",
-                        "example": " [ \n  [  industry_association_id=>1\n    membership_id =>\"ABC123\"\n\n ],\n [ \n    industry_association_id=>2\n    membership_id =>\"ABCD123\"\n ] \n]"
-                    },
-                    "industry_association_id": {
-                        "type": "integer"
+                    "membership_id": {
+                        "type": "string"
                     },
                     "loc_division_id": {
                         "type": "integer",
@@ -5866,14 +5901,13 @@
                 },
                 "required": [
                     "title",
-                    "industry_association_id",
                     "permission_sub_group_id",
                     "organization_type_id",
                     "contact_person_name",
                     "contact_person_mobile",
                     "contact_person_designation",
                     "contact_person_email",
-                    "industry_associations",
+                    "membership_id",
                     "mobile",
                     "email",
                     "address",
@@ -6804,6 +6838,64 @@
                 },
                 "required": [
                     "serviceIds"
+                ]
+            },
+            "ContactUs": {
+                "type": "object",
+                "description": "Contact Info of an industry association",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 600
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "industry_association_id": {
+                        "type": "integer"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "phone_code": {
+                        "type": "integer"
+                    },
+                    "phone": {
+                        "type": "integer"
+                    },
+                    "mobile": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "integer"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            1,
+                            0
+                        ],
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "title",
+                    "industry_association_id",
+                    "country",
+                    "phone_code",
+                    "mobile",
+                    "email"
                 ]
             }
         },

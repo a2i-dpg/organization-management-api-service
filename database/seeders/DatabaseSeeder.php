@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             OrganizationTypeSeeder::class,
             OrganizationSeeder::class,
             HumanResourceTemplateSeeder::class,
-            PublicationSeeder::class
+            PublicationSeeder::class,
+            ContactUsSeeder::class
         ]);
     }
 }
