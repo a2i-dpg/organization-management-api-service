@@ -105,6 +105,7 @@ class IndustryAssociationController extends Controller
         /** @var User $authUser */
         $authUser = Auth::user();
         $filter = $this->organizationService->filterPublicValidator($request)->validate();
+        $industryAssociationId = null;
         if ($authUser && $authUser->industry_association_id) {
             $industryAssociationId = $authUser->industry_association_id;
         }
@@ -500,45 +501,29 @@ class IndustryAssociationController extends Controller
      */
     public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
-        $authUser = Auth::user();
-        if ($authUser && $authUser->industry_association_id) {
-            $request->offsetSet('industry_association_id', $authUser->industry_association_id);
-        }
-
         $organization = Organization::findOrFail($organizationId);
 
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
-        DB::beginTransaction();
-        try {
-            if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
-                $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-                $response = [
-                    '_response_status' => [
-                        "success" => true,
-                        "code" => ResponseAlias::HTTP_OK,
-                        "message" => "IndustryAssociation membership approved successfully",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            } else {
-                $response = [
-                    '_response_status' => [
-                        "success" => true,
-                        "code" => ResponseAlias::HTTP_OK,
-                        "message" => "organization is not active",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            }
-            $organization = $organization->toArray();
-            $organization['industry_association_id'] = $validatedData['industry_association_id'];
-            $this->industryAssociationService->sendMailOrganizationUserApproval($organization);
-            DB::commit();
 
-        } catch
-        (Throwable $e) {
-            DB::rollBack();
-            throw $e;
+        if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
+            $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "IndustryAssociation membership approved successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } else {
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization is not active",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -554,46 +539,29 @@ class IndustryAssociationController extends Controller
      */
     public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
-        $authUser = Auth::user();
-
-        if ($authUser && $authUser->industry_association_id) {
-            $request->offsetSet('industry_association_id', $authUser->industry_association_id);
-        }
         $organization = Organization::findOrFail($organizationId);
 
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
 
-        DB::beginTransaction();
-        try {
-            if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
-                $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
-                $response = [
-                    '_response_status' => [
-                        "success" => true,
-                        "code" => ResponseAlias::HTTP_OK,
-                        "message" => "IndustryAssociation membership rejection successfully",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            } else {
-                $response = [
-                    '_response_status' => [
-                        "success" => true,
-                        "code" => ResponseAlias::HTTP_OK,
-                        "message" => "organization is not active",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            }
-            $organization = $organization->toArray();
-            $organization['industry_association_id'] = $validatedData['industry_association_id'];
-            $this->industryAssociationService->sendMailOrganizationUserApproval($organization);
-            DB::commit();
-
-        } catch
-        (Throwable $e) {
-            DB::rollBack();
-            throw $e;
+        if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
+            $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "IndustryAssociation membership rejection successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } else {
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization is not active",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
