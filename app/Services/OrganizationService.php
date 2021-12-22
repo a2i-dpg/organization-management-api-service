@@ -466,6 +466,7 @@ class OrganizationService
         ]);
         if (!$dataUpdate) {
             $organization->industryAssociations()->attach($data['industry_association_id'], [
+                'membership_id' => $data['membership_id'],
                 'row_status' => BaseModel::ROW_STATUS_PENDING
             ]);
         }
@@ -512,6 +513,10 @@ class OrganizationService
     public function IndustryAssociationMembershipValidation(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
+            'membership_id' => [
+                'required',
+                'string',
+            ],
             'industry_association_id' => [
                 'required',
                 'integer',
@@ -524,7 +529,7 @@ class OrganizationService
                 Rule::unique('industry_association_organization', 'organization_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
                         return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
-                            ->whereIn('row_status', [BaseModel::ROW_STATUS_ACTIVE,BaseModel::ROW_STATUS_PENDING]);
+                            ->whereIn('row_status', [BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_PENDING]);
                     })
             ],
 
