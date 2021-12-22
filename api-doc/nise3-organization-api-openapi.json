@@ -276,13 +276,13 @@
                 }
             }
         },
-        "/industry-association-registration-approval/{IndustryAssocId}": {
+        "/industry-association-registration-approval/{industryAssociationId}": {
             "put": {
                 "summary": "Approve a industry association pending registration request",
                 "description": "API endpoint to approve a registration by an industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -307,13 +307,13 @@
                 ]
             }
         },
-        "/industry-association-registration-rejection/{IndustryAssocId}": {
+        "/industry-association-registration-rejection/{industryAssociationId}": {
             "put": {
                 "summary": "Approve a industry association pending registration request",
                 "description": "API endpoint to reject a registration by an industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -4582,13 +4582,13 @@
                 }
             }
         },
-        "/industry-associations/{IndustryAssocId}": {
+        "/industry-associations/{industryAssociationId}": {
             "get": {
                 "summary": "Get a single industry association",
                 "description": "API endpoint to get a single industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -4659,7 +4659,7 @@
                 "description": "API endpoint to update a new industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "requestBody": {
@@ -4735,7 +4735,7 @@
                 "description": "API endpoint to delete an industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -4764,7 +4764,7 @@
                 "description": "API endpoint to restore a deleted Industry Association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -5029,65 +5029,6 @@
                 }
             }
         },
-        "/industry-association-registration-approval/{industryAssociationId}": {
-            "put": {
-                "tags": ["industry association registration"],
-                "summary": "Approve an industry association registration approval request",
-                "description": "API endpoint to approve an industry association registration request.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/IndustryAssocId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "IndustryAssociation Registration  approved successfully",
-                                        "query_time": 2
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/industry-association-registration-rejection/{industryAssociationId}": {
-            "put": {
-                "tags": ["industry association registration"],
-                "summary": "Reject an industry association registration approval request",
-                "description": "API endpoint to approve an industry association registration request.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/IndustryAssocId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successfull",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "IndustryAssociation Registration  rejected successfully",
-                                        "query_time": 2
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
 
         "/contact-us": {
             "get": {
@@ -5211,6 +5152,83 @@
                                         "query_time": 0
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contact-us/{contactInfoId}": {
+            "get": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Get a contact info of a specific industry-association",
+                "description": "API endpoint to Get a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title": "Alexane Nienow",
+                                        "title_en": "Kacie Goldner",
+                                        "industry_association_id": 1,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "phone": "880219221835",
+                                        "mobile": "01979443556",
+                                        "email": "billie71@example.net",
+                                        "created_by": 1130,
+                                        "updated_by": 9863,
+                                        "created_at": "2002-07-31T00:00:00.000000Z",
+                                        "updated_at": "2021-12-22T08:03:10.000000Z",
+                                        "row_status": 0
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Update a contact info of a specific industry-association",
+                "description": "API endpoint to update a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactUs"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
                             }
                         }
                     }
@@ -6907,8 +6925,16 @@
             }
         },
         "parameters": {
-            "IndustryAssocId": {
-                "name": "IndustryAssocId",
+            "contactInfoId": {
+                "name": "contactInfoId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "industryAssociationId": {
+                "name": "industryAssociationId",
                 "in": "path",
                 "required": true,
                 "schema": {
