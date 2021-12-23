@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Publication;
-use App\Models\User;
 use App\Services\PublicationService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Illuminate\Http\JsonResponse;
@@ -74,6 +72,15 @@ class PublicationController extends Controller
     public function read(int $id): JsonResponse
     {
         $publication = $this->publicationService->getOnePublication($id, $this->startTime);
+
+        $response = [
+            "data" => $publication,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($publication, ResponseAlias::HTTP_OK);
     }
 
@@ -166,6 +173,7 @@ class PublicationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
     public function getPublicPublicationList(Request $request): JsonResponse
     {
 //        $this->authorize('viewAny', Publication::class);
