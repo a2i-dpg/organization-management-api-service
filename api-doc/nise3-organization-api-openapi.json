@@ -5039,9 +5039,25 @@
                 "description": "API endpoint to get all contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/industry_association_id"
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/industry_association_id_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
                     }
                 ],
+
                 "responses": {
                     "200": {
                         "description": "successfull",
@@ -5228,13 +5244,194 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title": "zzzzzzzzzzzzz",
+                                        "title_en": null,
+                                        "industry_association_id": 1,
+                                        "country": "Bangladesh",
+                                        "phone_code": "880",
+                                        "phone": null,
+                                        "mobile": "01990898989",
+                                        "email": "33@gmail.com",
+                                        "created_by": 1130,
+                                        "updated_by": 9863,
+                                        "row_status": "1",
+                                        "deleted_at": null,
+                                        "created_at": "2002-07-31T00:00:00.000000Z",
+                                        "updated_at": "2021-12-22T10:51:53.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Contact updated successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Delete a contact info of a specific industry-association",
+                "description": "API endpoint to Delete a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Contact info deleted successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Restore a contact info of a specific industry-association",
+                "description": "API endpoint to restore a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Contact info restored successfully",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
+        },
+        "/public/contact-us": {
+            "get": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Get  a public contact info of a specific industry-association",
+                "description": "API endpoint to Get  a public contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/industry_association_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 5,
+                                            "title": "Jacques Hermiston",
+                                            "title_en": "Jackson Feil",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880698597257",
+                                            "mobile": "01500819093",
+                                            "email": "julio17@example.net",
+                                            "created_by": 5724,
+                                            "updated_by": 4844,
+                                            "created_at": "2003-01-23T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "Mr. Michel Spencer MD",
+                                            "title_en": "Naomie Abernathy",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880140233947",
+                                            "mobile": "01473365875",
+                                            "email": "colin.waters@example.com",
+                                            "created_by": 7897,
+                                            "updated_by": 7169,
+                                            "created_at": "2002-12-07T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        },
+                                        {
+                                            "id": 11,
+                                            "title": "NewSouthWales",
+                                            "title_en": null,
+                                            "industry_association_id": 1,
+                                            "country": "Aus",
+                                            "phone_code": "880",
+                                            "phone": null,
+                                            "mobile": "01990099009",
+                                            "email": "55@gmail.com",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-12-22T09:25:54.000000Z",
+                                            "updated_at": "2021-12-22T09:25:54.000000Z",
+                                            "row_status": 1
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+
+
     },
     "components": {
         "schemas": {

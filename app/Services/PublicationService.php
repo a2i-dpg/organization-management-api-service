@@ -57,7 +57,7 @@ class PublicationService
                 'publications.row_status'
 
             ]
-        );
+        )->acl();
         $publicationBuilder->orderBy('publications.id', $order);
 
         if (!empty($titleEn)) {
