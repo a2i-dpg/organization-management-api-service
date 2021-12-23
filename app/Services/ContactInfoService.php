@@ -183,47 +183,47 @@ class ContactInfoService
             'title_en' => [
                 'nullable',
                 'string',
-                'max:400',
+                'max:300',
                 'min:2',
             ],
             'title' => [
                 'required',
                 'string',
-                'max: 400',
+                'max: 600',
                 'min:2'
             ],
             'industry_association_id' => [
                 'required',
-                'integer'
+                'integer',
+                'exists:industry_associations,id,deleted_at,NULL'
             ],
             'country' => [
                 'required',
                 'string',
-                'max: 1000',
-                'min:2'
+                'max: 3',
             ],
             'phone_code' => [
                 'nullable',
                 'string',
-                'max: 1000',
+                'max: 3',
                 'min:2'
             ],
             'phone' => [
                 'nullable',
                 'string',
-                'max: 1000',
+                'max: 20',
                 'min:2'
             ],
             'mobile' => [
                 'required',
                 'string',
-                'max: 1000',
+                'max: 20',
                 'min:2'
             ],
             'email' => [
                 'required',
                 'string',
-                'max: 1000',
+                'max: 200',
                 'min:2'
             ],
             'row_status' => [
