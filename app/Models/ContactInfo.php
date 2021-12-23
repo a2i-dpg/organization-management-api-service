@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
 /**
- * Class HumanResource
+ * Class ContactInfo
  * @package App\Models
  * @property int id
  * @property string title_en
