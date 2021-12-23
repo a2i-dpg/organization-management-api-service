@@ -33,6 +33,8 @@ class ContactInfoController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', ContactInfo::class);
+
         $filter = $this->contactInfoService->filterValidator($request)->validate();
         $returnedData = $this->contactInfoService->getContactInfoList($filter, $this->startTime);
 
@@ -64,6 +66,7 @@ class ContactInfoController extends Controller
     public function read(int $id): JsonResponse
     {
         $contactInfo = $this->contactInfoService->getOneContactInfo($id);
+        $this->authorize('view', $contactInfo);
         $response = [
             "data" => $contactInfo,
             "_response_status" => [
@@ -83,6 +86,8 @@ class ContactInfoController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', ContactInfo::class);
+
         $validated = $this->contactInfoService->validator($request)->validate();
         $data = $this->contactInfoService->store($validated);
 
@@ -108,6 +113,8 @@ class ContactInfoController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $contactInfo = ContactInfo::findOrFail($id);
+        $this->authorize('update', $contactInfo);
+
         $validated = $this->contactInfoService->validator($request, $id)->validate();
 
         $data = $this->contactInfoService->update($contactInfo, $validated);
@@ -132,6 +139,7 @@ class ContactInfoController extends Controller
     {
         $contactUs = ContactInfo::findOrFail($id);
 
+        $this->authorize('delete', $contactUs);
         $this->contactInfoService->destroy($contactUs);
         $response = [
             '_response_status' => [
