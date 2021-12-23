@@ -36,7 +36,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
         $customRouter()->resourceRoute('publications', 'PublicationController')->render();
         $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
-        $customRouter()->resourceRoute('contact-us', 'ContactUsController')->render();
+        $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
 
 
 
@@ -84,7 +84,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
         $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
         $router->get("industry-association-member-details/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
-        $router->get("contact-us", ["as" => "public.contact-us", "uses" => "ContactUsController@getPublicContactInfoList"]);
+        $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
     });
 
 

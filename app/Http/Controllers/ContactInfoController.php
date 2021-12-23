@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContactUs;
-use App\Services\ContactUsService;
+use App\Models\ContactInfo;
+use App\Services\ContactInfoService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,39 +11,30 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class ContactUsController extends Controller
+class ContactInfoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public ContactUsService $contactService;
-
-    /**
-     * @var Carbon
-     */
+    public ContactInfoService $contactInfoService;
     private Carbon $startTime;
 
     /**
-     * @param ContactUsService $contactService
+     * @param ContactInfoService $contactInfoService
      */
-
-    public function __construct(ContactUsService $contactService)
+    public function __construct(ContactInfoService $contactInfoService)
     {
         $this->startTime = Carbon::now();
-        $this->contactService = $contactService;
+        $this->contactInfoService = $contactInfoService;
     }
 
     /**
+     * Display a listing of the resource.
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function getList(Request $request):JsonResponse
+    public function getList(Request $request): JsonResponse
     {
-        $filter = $this->contactService->filterValidator($request)->validate();
-        $returnedData = $this->contactService->getContactInfoList($filter,$this->startTime);
+        $filter = $this->contactInfoService->filterValidator($request)->validate();
+        $returnedData = $this->contactInfoService->getContactInfoList($filter, $this->startTime);
 
 
         $response = [
@@ -64,6 +55,26 @@ class ContactUsController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
+    /**
+     * Display the specified resource.
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function read(int $id): JsonResponse
+    {
+        $contactInfo = $this->contactInfoService->getOneContactInfo($id);
+        $response = [
+            "data" => $contactInfo,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     /**
      * Store a newly created resource in storage.
      * @param Request $request
@@ -72,8 +83,8 @@ class ContactUsController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validated = $this->contactService->validator($request)->validate();
-        $data = $this->contactService->store($validated);
+        $validated = $this->contactInfoService->validator($request)->validate();
+        $data = $this->contactInfoService->store($validated);
 
         $response = [
             'data' => $data,
@@ -87,40 +98,25 @@ class ContactUsController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ContactUs  $contactUs
-     * @return \Illuminate\Http\Response
-     */
-    public function read(int $id): JsonResponse
-    {
-        $contactInfo = $this->contactService->getOneContactInfo($id, $this->startTime);
-        return Response::json($contactInfo, ResponseAlias::HTTP_OK);
-    }
-
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ContactUs  $contactUs
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $contact = ContactUs::findOrFail($id);
-        $validated = $this->contactService->validator($request, $id)->validate();
+        $contactInfo = ContactInfo::findOrFail($id);
+        $validated = $this->contactInfoService->validator($request, $id)->validate();
 
-        $data = $this->contactService->update($contact, $validated);
+        $data = $this->contactInfoService->update($contactInfo, $validated);
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Contact updated successfully",
+                "message" => "Contact info updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -129,15 +125,14 @@ class ContactUsController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ContactUs  $contactUs
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {
-        $contactUs = ContactUs::findOrFail($id);
+        $contactUs = ContactInfo::findOrFail($id);
 
-        $this->contactService->destroy($contactUs);
+        $this->contactInfoService->destroy($contactUs);
         $response = [
             '_response_status' => [
                 "success" => true,
@@ -156,8 +151,8 @@ class ContactUsController extends Controller
      */
     public function restore(int $id): JsonResponse
     {
-        $contactInfo = ContactUs::onlyTrashed()->findOrFail($id);
-        $this->contactService->restore($contactInfo);
+        $contactInfo = ContactInfo::onlyTrashed()->findOrFail($id);
+        $this->contactInfoService->restore($contactInfo);
         $response = [
             '_response_status' => [
                 "success" => true,
@@ -175,10 +170,10 @@ class ContactUsController extends Controller
      * @throws ValidationException
      */
 
-    public function getPublicContactInfoList(Request $request):JsonResponse
+    public function getPublicContactInfoList(Request $request): JsonResponse
     {
-        $filter = $this->contactService->filterValidator($request)->validate();
-        $returnedData = $this->contactService->getContactInfoList($filter,$this->startTime);
+        $filter = $this->contactInfoService->filterValidator($request)->validate();
+        $returnedData = $this->contactInfoService->getContactInfoList($filter, $this->startTime);
 
         $response = [
             'order' => $returnedData['order'],

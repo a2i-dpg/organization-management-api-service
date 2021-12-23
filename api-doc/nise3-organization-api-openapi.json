@@ -38,6 +38,7 @@
             "bearerAuth": []
         }
     ],
+
     "paths": {
         "/": {
             "get": {
@@ -3970,8 +3971,8 @@
         },
         "/publications": {
             "get": {
-                "summary": "Get a publication",
-                "description": "API endpoint to create a Publication.A successful request response will show 201 HTTP status code",
+                "summary": "Get all publication",
+                "description": "API endpoint to get all Publication.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/title_optional"
@@ -4091,7 +4092,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "succesfull",
+                        "description": "successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4183,7 +4184,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfull",
+                        "description": "Successful",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -4203,7 +4204,7 @@
                 ]
             },
             "patch": {
-                "summary": "Restore a deleted publication",
+                "summary": "Restore a soft deleted publication",
                 "description": "API endpoint to restore a Publication.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
@@ -4234,8 +4235,8 @@
         },
         "/public/publications": {
             "get": {
-                "summary": "Get a publication",
-                "description": "API endpoint to create a Publication.A successful request response will show 201 HTTP status code",
+                "summary": "Get all public publications",
+                "description": "API endpoint to get all Publication publicly .A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/title_optional"
@@ -5030,10 +5031,10 @@
             }
         },
 
-        "/contact-us": {
+        "/contact-info": {
             "get": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
                 "summary": "Get all contact info of a specific industry-association",
                 "description": "API endpoint to get all contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
@@ -5128,7 +5129,7 @@
             },
             "post": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
                 "summary": "Store a contact info of an industry-association.",
                 "description": "API endpoint to store a contact info of an industry-association.A successful request response will show 201 HTTP status code",
@@ -5136,14 +5137,14 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/ContactUs"
+                                "$ref": "#/components/schemas/ContactInfo"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "successfull",
+                        "description": "successful",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -5174,12 +5175,12 @@
                 }
             }
         },
-        "/contact-us/{contactInfoId}": {
+        "/contact-info/{contactInfoId}": {
             "get": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
-                "summary": "Get a contact info of a specific industry-association",
+                "summary": "Get all contact info of a specific industry-association",
                 "description": "API endpoint to Get a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
@@ -5221,7 +5222,7 @@
             },
             "put": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
                 "summary": "Update a contact info of a specific industry-association",
                 "description": "API endpoint to update a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
@@ -5234,7 +5235,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/ContactUs"
+                                "$ref": "#/components/schemas/ContactInfo"
                             }
                         }
                     }
@@ -5276,7 +5277,7 @@
             },
             "delete": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
                 "summary": "Delete a contact info of a specific industry-association",
                 "description": "API endpoint to Delete a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
@@ -5305,7 +5306,7 @@
             },
             "patch": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
                 "summary": "Restore a contact info of a specific industry-association",
                 "description": "API endpoint to restore a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
@@ -5333,10 +5334,10 @@
                 }
             }
         },
-        "/public/contact-us": {
+        "/public/contact-info": {
             "get": {
                 "tags": [
-                    "Contact Us"
+                    "Contact info"
                 ],
                 "summary": "Get  a public contact info of a specific industry-association",
                 "description": "API endpoint to Get  a public contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
@@ -7055,7 +7056,7 @@
                     "serviceIds"
                 ]
             },
-            "ContactUs": {
+            "ContactInfo": {
                 "type": "object",
                 "description": "Contact Info of an industry association",
                 "properties": {

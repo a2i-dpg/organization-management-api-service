@@ -3,20 +3,22 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
-use App\Models\ContactUs;
+use App\Models\ContactInfo;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PhpParser\Node\Expr\AssignOp\Mod;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ContactUsService
+ * Class ContactInfoService
  * @package App\Services
  */
-class ContactUsService
+class ContactInfoService
 {
     /**
      * @param array $request
@@ -34,40 +36,39 @@ class ContactUsService
         $rowStatus = $request['row_status'] ?? "";
 
 
-
         /** @var Builder $contactInfoBuilder */
-        $contactInfoBuilder = ContactUs::select(
+        $contactInfoBuilder = ContactInfo::select(
             [
-                'contact_us.id',
-                'contact_us.title',
-                'contact_us.title_en',
-                'contact_us.industry_association_id',
-                'contact_us.country',
-                'contact_us.phone_code',
-                'contact_us.phone',
-                'contact_us.mobile',
-                'contact_us.email',
-                'contact_us.created_by',
-                'contact_us.updated_by',
-                'contact_us.created_at',
-                'contact_us.updated_at',
-                'contact_us.row_status'
+                'contact_infos.id',
+                'contact_infos.title',
+                'contact_infos.title_en',
+                'contact_infos.industry_association_id',
+                'contact_infos.country',
+                'contact_infos.phone_code',
+                'contact_infos.phone',
+                'contact_infos.mobile',
+                'contact_infos.email',
+                'contact_infos.created_by',
+                'contact_infos.updated_by',
+                'contact_infos.created_at',
+                'contact_infos.updated_at',
+                'contact_infos.row_status'
 
             ]
         )->acl();
-        $contactInfoBuilder->orderBy('contact_us.id', $order);
+        $contactInfoBuilder->orderBy('contact_infos.id', $order);
 
         if (!empty($titleEn)) {
-            $contactInfoBuilder->where('contact_us.title_en', 'like', '%' . $titleEn . '%');
+            $contactInfoBuilder->where('contact_infos.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
-            $contactInfoBuilder->where('contact_us.title', 'like', '%' . $title . '%');
+            $contactInfoBuilder->where('contact_infos.title', 'like', '%' . $title . '%');
         }
         if (is_numeric($rowStatus)) {
-            $contactInfoBuilder->where('contact_us.row_status', $rowStatus);
+            $contactInfoBuilder->where('contact_infos.row_status', $rowStatus);
         }
         if (is_numeric($IndustryAssociationId)) {
-            $contactInfoBuilder->where('contact_us.industry_association_id', $IndustryAssociationId);
+            $contactInfoBuilder->where('contact_infos.industry_association_id', $IndustryAssociationId);
         }
 
         /** @var Collection $contactInfoBuilder */
@@ -92,66 +93,56 @@ class ContactUsService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
-     * @return array
+     * @return Builder|Model
      */
-    public function getOneContactInfo(int $id, Carbon $startTime): array
+    public function getOneContactInfo(int $id): Builder|Model
     {
-        /** @var Builder $contactInfoBuilder */
-        $contactInfoBuilder = ContactUs::select(
+        /** @var Model|Builder $contactInfoBuilder */
+        $contactInfoBuilder = ContactInfo::select(
             [
-                'contact_us.id',
-                'contact_us.title',
-                'contact_us.title_en',
-                'contact_us.industry_association_id',
-                'contact_us.country',
-                'contact_us.phone_code',
-                'contact_us.phone',
-                'contact_us.mobile',
-                'contact_us.email',
-                'contact_us.created_by',
-                'contact_us.updated_by',
-                'contact_us.created_at',
-                'contact_us.updated_at',
-                'contact_us.row_status'
+                'contact_infos.id',
+                'contact_infos.title',
+                'contact_infos.title_en',
+                'contact_infos.industry_association_id',
+                'contact_infos.country',
+                'contact_infos.phone_code',
+                'contact_infos.phone',
+                'contact_infos.mobile',
+                'contact_infos.email',
+                'contact_infos.created_by',
+                'contact_infos.updated_by',
+                'contact_infos.created_at',
+                'contact_infos.updated_at',
+                'contact_infos.row_status'
 
             ]
         );
 
+        $contactInfoBuilder->where('contact_infos.id', '=', $id);
 
-        $contactInfoBuilder->where('contact_us.id', '=', $id);
+        /** @var ContactInfo $contactInfoBuilder */
+        return $contactInfoBuilder->first();
 
-        /** @var ContactUs $contactInfoBuilder */
-        $contact = $contactInfoBuilder->first();
-
-        return [
-            "data" => $contact ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
     }
 
     /**
      * @param array $data
-     * @return ContactUs
+     * @return ContactInfo
      */
-    public function store(array $data): ContactUs
+    public function store(array $data): ContactInfo
     {
-        $contact = new ContactUs();
+        $contact = app(ContactInfo::class);
         $contact->fill($data);
         $contact->save();
         return $contact;
     }
 
     /**
-     * @param ContactUs $contactUs
+     * @param ContactInfo $contactUs
      * @param array $data
-     * @return ContactUs
+     * @return ContactInfo
      */
-    public function update(ContactUs $contactUs, array $data): ContactUs
+    public function update(ContactInfo $contactUs, array $data): ContactInfo
     {
         $contactUs->fill($data);
         $contactUs->save();
@@ -159,19 +150,19 @@ class ContactUsService
     }
 
     /**
-     * @param ContactUs $contactUs
+     * @param ContactInfo $contactUs
      * @return bool
      */
-    public function destroy(ContactUs $contactUs): bool
+    public function destroy(ContactInfo $contactUs): bool
     {
         return $contactUs->delete();
     }
 
     /**
-     * @param ContactUs $contactUs
+     * @param ContactInfo $contactUs
      * @return bool
      */
-    public function restore(ContactUs $contactUs): bool
+    public function restore(ContactInfo $contactUs): bool
     {
         return $contactUs->restore();
     }
@@ -261,7 +252,7 @@ class ContactUsService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'industry_association_id'=>'nullable|integer',
+            'industry_association_id' => 'nullable|integer',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
@@ -272,7 +263,7 @@ class ContactUsService
             'row_status' => [
                 "nullable",
                 "integer",
-                Rule::in(BaseModel::ROW_STATUS_ACTIVE,BaseModel::ROW_STATUS_INACTIVE),
+                Rule::in(BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE),
             ],
         ], $customMessage);
     }
