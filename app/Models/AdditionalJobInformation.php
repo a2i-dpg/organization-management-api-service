@@ -11,6 +11,10 @@ class AdditionalJobInformation extends Model
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
+    protected $casts = [
+        "other_benefits" => "array"
+    ];
+
     public const JOB_PLACE_TYPE = [
         1 => "Inside Bangladesh",
         2 => "Outside Bangladesh"
