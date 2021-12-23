@@ -980,7 +980,7 @@ class OrganizationService
             'email' => [
                 'required',
                 'email',
-                'max:191'
+                'max:320'
             ],
             'fax_no' => [
                 'nullable',

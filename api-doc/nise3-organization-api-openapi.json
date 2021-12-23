@@ -7080,12 +7080,6 @@
                     "industry_association_id": {
                         "type": "integer"
                     },
-                    "country": {
-                        "type": "string"
-                    },
-                    "phone_code": {
-                        "type": "integer"
-                    },
                     "phone": {
                         "type": "integer"
                     },
@@ -7108,8 +7102,6 @@
                 "required": [
                     "title",
                     "industry_association_id",
-                    "country",
-                    "phone_code",
                     "mobile",
                     "email"
                 ]

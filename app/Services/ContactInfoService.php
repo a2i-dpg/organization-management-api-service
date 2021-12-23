@@ -198,7 +198,7 @@ class ContactInfoService
                 'exists:industry_associations,id,deleted_at,NULL'
             ],
             'country' => [
-                'required',
+                'nullable',
                 'string',
                 'max: 3',
             ],
@@ -218,13 +218,12 @@ class ContactInfoService
                 'required',
                 'string',
                 'max: 20',
-                'min:2'
+                BaseModel::MOBILE_REGEX,
             ],
             'email' => [
                 'required',
-                'string',
-                'max: 200',
-                'min:2'
+                'email',
+                'max: 320'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
