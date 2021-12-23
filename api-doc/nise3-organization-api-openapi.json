@@ -4001,7 +4001,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
+                        "description": "Successful",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -4092,7 +4092,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successfully",
+                        "description": "successful",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4139,7 +4139,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successfully",
+                        "description": "successful",
                         "content": {
                             "application/json": {
                                 "example": {
