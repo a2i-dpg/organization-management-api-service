@@ -90,6 +90,14 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         ]
     );
 
+    /** Industry Association Title by Ids for Internal Api */
+    $router->post("get-industry-association-title-by-ids",
+        [
+            "as" => "organizations.get-industry-association-title-by-ids",
+            "uses" => "OrganizationController@getIndustryAssociationTitleByIds"
+        ]
+    );
+
 
     /** TODO: Properly Organize Trashed Routes through CustomRouter */
     /** OrganizationType Trash */

@@ -377,6 +377,30 @@ class OrganizationController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
+    public function getIndustryAssociationTitleByIds(Request $request): JsonResponse
+    {
+        throw_if(!is_array($request->get('industry_association_ids')), ValidationException::withMessages([
+            "The Industry Association ids must be array.[8000]"
+        ]));
+
+        $industryAssociationTitle = $this->organizationService->getIndustryAssociationTitle($request);
+        $response = [
+            "data" => $industryAssociationTitle,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Industry Association Title List.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Throwable
+     */
     public function getTrashedData(Request $request): JsonResponse
     {
         $response = $this->organizationService->getAllTrashedOrganization($request, $this->startTime);
