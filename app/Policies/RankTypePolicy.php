@@ -9,7 +9,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 /**
  *
  */
-class RankTypePolicy
+class RankTypePolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
