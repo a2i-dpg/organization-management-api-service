@@ -39,8 +39,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
 
 
-
-
         $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
         $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
 
@@ -69,7 +67,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->put("industry-association-membership-rejection/{organizationId}", ["as" => "industry-association-rejection", "uses" => "IndustryAssociationController@industryAssociationMembershipRejection"]);
 
 
-
         $router->get('organization-profile', ['as' => 'organization.admin-profile', 'uses' => 'OrganizationController@getOrganizationProfile']);
 
         $router->put("industry-association-profile-update", ["as" => "public.organizations", "uses" => "IndustryAssociationController@updateIndustryAssociationProfile"]);
@@ -86,6 +83,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("industry-association-member-details/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
         $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
     });
+
+    /** List of industryAssociation trades */
+    $router->get('industry-association-trades', ['as' => 'industry-associations.trades', 'uses' => "IndustryAssociationTradeController@getList"]);
 
 
     /** Industry Association open  Registration */

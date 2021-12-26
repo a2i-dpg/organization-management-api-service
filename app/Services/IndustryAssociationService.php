@@ -488,14 +488,14 @@ class IndustryAssociationService
      * @param array $mailPayload
      * @throws Throwable
      */
-    public function sendIndustryAssociationOpenRegistrationNotificationByMail(array $mailPayload)
+    public function sendIndustryAssociationRegistrationNotificationByMail(array $mailPayload)
     {
         $mailService = new MailService();
         $mailService->setTo([
             $mailPayload['contact_person_email']
         ]);
         $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "Institute Registration";
+        $subject = $mailPayload['subject'] ?? "IndustryAssociation Registration";
 
         $mailService->setForm($from);
         $mailService->setSubject($subject);
@@ -503,8 +503,8 @@ class IndustryAssociationService
             "user_name" => $mailPayload['contact_person_mobile'],
             "password" => $mailPayload['password']
         ]);
-        $instituteRegistrationTemplate = 'mail.industry-association-registration-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
+        $industryAssociationRegistrationTemplate = 'mail.industry-association-registration-default-template';
+        $mailService->setTemplate($industryAssociationRegistrationTemplate);
         $mailService->sendMail();
     }
 
