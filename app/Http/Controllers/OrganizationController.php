@@ -476,8 +476,10 @@ class OrganizationController extends Controller
 
     /**
      * Industry association membership request from industry
-     * @throws ValidationException
+     * @param Request $request
+     * @return JsonResponse
      * @throws Throwable
+     * @throws ValidationException
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
