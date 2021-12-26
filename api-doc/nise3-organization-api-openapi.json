@@ -5430,7 +5430,48 @@
                 }
             }
 
+        },
+        "/industry-association-trades": {
+            "get": {
+                "tags": ["Industry association trades"],
+                "summary": "Get industry association trades",
+                "description": "API endpoint to Get industry association trades.A successful request response will show 201 HTTP status code",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "Automotive industry in Bangladesh",
+                                            "title_en": "Automotive industry in Bangladesh"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "Bangladesh Hi-Tech Park Authority",
+                                            "title_en": "Bangladesh Hi-Tech Park Authority"
+                                        },
+                                        {
+                                            "id": 16,
+                                            "title": "Textile industry in Bangladesh",
+                                            "title_en": "Textile industry in Bangladesh"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
 
 
     },
