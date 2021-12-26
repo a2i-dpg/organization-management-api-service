@@ -17,11 +17,11 @@ class CreateIndustryAssociationOrganizationTable extends Migration
             $table->id();
             $table->unsignedInteger('industry_association_id');
             $table->unsignedInteger('organization_id');
-            $table->unsignedTinyInteger('is_reg_approval')->default(0)
-                ->comment('1=>registration_approval 0=>membership_approval');
+            $table->string('membership_id', 200);
             $table->unsignedTinyInteger('row_status')
                 ->default(2)
                 ->comment('0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected');
+
             $table->foreign('industry_association_id', 'industry_association_id')
                 ->references('id')
                 ->on('industry_associations')
@@ -32,6 +32,7 @@ class CreateIndustryAssociationOrganizationTable extends Migration
                 ->on('organizations')
                 ->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -36,7 +36,7 @@ class OrganizationSeeder extends Seeder
         $organizationService = app(OrganizationService::class);
 
         if (self::createOrganization) {
-            $organizations = Organization::factory()->count(5)->create();
+            $organizations = Organization::factory()->count(10)->create();
         } else {
             $organizations = Organization::all();
         }

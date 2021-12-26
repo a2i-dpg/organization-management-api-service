@@ -12,6 +12,9 @@
     },
     "servers": [
         {
+            "url": "http://localhost:8002/api/v1"
+        },
+        {
             "url": "https://org.bus-staging.softbdltd.com/api/v1"
         },
         {
@@ -19,9 +22,6 @@
         },
         {
             "url": "http://localhost:8000/api/v1"
-        },
-        {
-            "url": "http://localhost:8002/api/v1"
         },
         {
             "url": "http://localhost:8003/api/v1"
@@ -38,6 +38,7 @@
             "bearerAuth": []
         }
     ],
+
     "paths": {
         "/": {
             "get": {
@@ -104,7 +105,7 @@
                                         "query_time": 1
                                     },
                                     "data": {
-                                        "industry_association_type_id": "1",
+                                        "industry_association_trade_id": "1",
                                         "title_en": null,
                                         "title": "NewTitle",
                                         "trade_number": "33",
@@ -140,13 +141,149 @@
                 ]
             }
         },
-        "/industry-association-registration-approval/{IndustryAssocId}": {
+        "/industry-association-profile-update": {
+            "put": {
+                "tags": [
+                    "Industry Association Profile"
+                ],
+                "summary": "Update an industry association admin profile ",
+                "description": "An API endpoint to update  an industry association admin profile ",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IndustryAssociationAdmin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "industry_association_trade_id": 1,
+                                        "title": "NewBuddy",
+                                        "title_en": null,
+                                        "loc_division_id": "2",
+                                        "loc_district_id": "2",
+                                        "loc_upazila_id": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "address": null,
+                                        "address_en": null,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01787992785",
+                                        "email": "lrunte@jacobson.net",
+                                        "fax_no": null,
+                                        "trade_number": "eos",
+                                        "name_of_the_office_head": "AtHome",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": "Hanna",
+                                        "name_of_the_office_head_designation_en": null,
+                                        "contact_person_name": "Boston",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01776469819",
+                                        "contact_person_email": "colby.predovic@example.org",
+                                        "contact_person_designation": "LucoMatrix",
+                                        "contact_person_designation_en": null,
+                                        "logo": "ThereIsMyLogO",
+                                        "domain": "https://www.hammes.com",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-19T07:49:58.000000Z",
+                                        "updated_at": "2021-12-21T10:58:12.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "IndustryAssociation admin updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/industry-association-profile": {
+            "get": {
+                "tags": [
+                    "Industry Association Profile"
+                ],
+                "summary": "Get industry association admin profile",
+                "description": "An API endpoint to get  an industry association admin profile ",
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "industry_association_trade_id": 1,
+                                        "title": "Medhurst, Bogan and Leuschke",
+                                        "title_en": "Medhurst, Bogan and Leuschke",
+                                        "loc_division_id": 3,
+                                        "loc_district_id": 18,
+                                        "loc_upazila_id": null,
+                                        "location_latitude": "90.399482",
+                                        "location_longitude": "90.399482",
+                                        "google_map_src": null,
+                                        "address": "9197 Carroll Ville\nPort Pamela, MS 27840-1808",
+                                        "address_en": "9197 Carroll Ville\nPort Pamela, MS 27840-1808",
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01787992785",
+                                        "email": "lrunte@jacobson.net",
+                                        "fax_no": null,
+                                        "trade_number": "eos",
+                                        "name_of_the_office_head": "Shaina Volkman",
+                                        "name_of_the_office_head_en": "Shaina Volkman",
+                                        "name_of_the_office_head_designation": "CEO",
+                                        "name_of_the_office_head_designation_en": "CEO",
+                                        "contact_person_name": "Duncan Bode",
+                                        "contact_person_name_en": "Duncan Bode",
+                                        "contact_person_mobile": "01776469819",
+                                        "contact_person_email": "colby.predovic@example.org",
+                                        "contact_person_designation": "Fiber Product Cutting Machine Operator",
+                                        "contact_person_designation_en": "Fiber Product Cutting Machine Operator",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.hammes.com",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-19T07:49:58.000000Z",
+                                        "updated_at": "2021-12-19T07:49:58.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/industry-association-registration-approval/{industryAssociationId}": {
             "put": {
                 "summary": "Approve a industry association pending registration request",
                 "description": "API endpoint to approve a registration by an industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -171,13 +308,13 @@
                 ]
             }
         },
-        "/industry-association-registration-rejection/{IndustryAssocId}": {
+        "/industry-association-registration-rejection/{industryAssociationId}": {
             "put": {
                 "summary": "Approve a industry association pending registration request",
                 "description": "API endpoint to reject a registration by an industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -201,7 +338,6 @@
                     "Industry Association Registration"
                 ]
             }
-
         },
         "/organization-registration": {
             "post": {
@@ -228,32 +364,25 @@
                                         "success": true,
                                         "code": 201,
                                         "message": "Organization has been Created Successfully",
-                                        "query_time": 1
+                                        "query_time": 8
                                     },
                                     "data": {
-                                        "title_en": null,
-                                        "title": "HAHAHAHA",
+                                        "title": "Randy Blythe",
+                                        "date_of_establishment": "2021-09-09",
                                         "organization_type_id": "2",
-                                        "email": "AA@GMAIL.COM",
-                                        "mobile": "01334909090",
-                                        "contact_person_mobile": "01998909090",
-                                        "name_of_the_office_head": "JJIKLK",
-                                        "name_of_the_office_head_en": null,
-                                        "name_of_the_office_head_designation": null,
-                                        "name_of_the_office_head_designation_en": null,
-                                        "contact_person_name": "NOnAMWE",
-                                        "contact_person_name_en": null,
-                                        "contact_person_designation": "KKK",
-                                        "contact_person_designation_en": null,
-                                        "contact_person_email": "LL@GMAIL.COM",
+                                        "email": "avaaaaaaa@gmail.com",
+                                        "mobile": "01779900909",
+                                        "contact_person_mobile": "01779900907",
+                                        "name_of_the_office_head": "Karmanaraiyan",
+                                        "contact_person_name": "n0obiedobiedoo",
+                                        "contact_person_designation": "ddfdfdf",
+                                        "contact_person_email": "84@gmail.com",
                                         "loc_division_id": "1",
                                         "loc_district_id": "1",
-                                        "loc_upazila_id": null,
-                                        "address": "AADF",
-                                        "address_en": null,
-                                        "updated_at": "2021-11-29T07:02:03.000000Z",
-                                        "created_at": "2021-11-29T07:02:03.000000Z",
-                                        "id": 7
+                                        "address": "Dhaka",
+                                        "updated_at": "2021-12-21T10:27:58.000000Z",
+                                        "created_at": "2021-12-21T10:27:58.000000Z",
+                                        "id": 10
                                     }
                                 }
                             }
@@ -555,65 +684,25 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Cummerata-Fritsch",
-                                            "title": "Cummerata-Fritsch",
-                                            "name_of_the_office_head": "Buford Ziemann",
-                                            "name_of_the_office_head_en": "Buford Ziemann",
+                                            "title_en": "Collier-Jenkins",
+                                            "title": "Collier-Jenkins",
+                                            "date_of_establishment": "2020-09-09",
+                                            "name_of_the_office_head": "Buford Kub III",
+                                            "name_of_the_office_head_en": "Buford Kub III",
                                             "name_of_the_office_head_designation": "CEO",
                                             "name_of_the_office_head_designation_en": "CEO",
-                                            "domain": "https://www.harris.biz",
-                                            "fax_no": "1-607-600-0673",
-                                            "mobile": "01767509830",
-                                            "email": "katrina.smith@oconner.com",
-                                            "contact_person_name": null,
-                                            "contact_person_name_en": "Eva Jacobi",
-                                            "contact_person_mobile": "01702161210",
-                                            "contact_person_email": "ygutmann@example.com",
-                                            "contact_person_designation": "Model Maker",
-                                            "contact_person_designation_en": "Model Maker",
-                                            "description": "Quisquam voluptatem soluta error minima quia.",
-                                            "description_en": "Quisquam voluptatem soluta error minima quia.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 3,
-                                            "loc_division_title_en": "Dhaka",
-                                            "loc_division_title": "ঢাকা",
-                                            "loc_district_id": 18,
-                                            "loc_district_title_en": "DHAKA",
-                                            "loc_district_title": "ঢাকা ",
-                                            "loc_upazila_id": null,
-                                            "loc_upazila_title_en": null,
-                                            "loc_upazila_title": null,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private Organization",
-                                            "organization_type_title": "Private Organization",
-                                            "address": "2206 Heath Brook Suite 883\nNorth Ward, MI 47613-5219",
-                                            "address_en": "2206 Heath Brook Suite 883\nNorth Ward, MI 47613-5219",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-29T06:23:53.000000Z",
-                                            "updated_at": "2021-11-29T06:23:53.000000Z"
-                                        },
-                                        {
-                                            "id": 2,
-                                            "title_en": "Fadel-Lind",
-                                            "title": "Fadel-Lind",
-                                            "name_of_the_office_head": "Deon Kling",
-                                            "name_of_the_office_head_en": "Deon Kling",
-                                            "name_of_the_office_head_designation": "CEO",
-                                            "name_of_the_office_head_designation_en": "CEO",
-                                            "domain": "https://www.weimann.com",
-                                            "fax_no": "520-968-2952",
-                                            "mobile": "01709832157",
-                                            "email": "qkuphal@langworth.com",
-                                            "contact_person_name": null,
-                                            "contact_person_name_en": "Johann Keebler",
-                                            "contact_person_mobile": "01743694799",
-                                            "contact_person_email": "jarret.macejkovic@example.org",
-                                            "contact_person_designation": "Radio and Television Announcer",
-                                            "contact_person_designation_en": "Radio and Television Announcer",
-                                            "description": "Omnis necessitatibus sapiente praesentium ab temporibus.",
-                                            "description_en": "Omnis necessitatibus sapiente praesentium ab temporibus.",
+                                            "domain": "https://www.stokes.com",
+                                            "fax_no": "(361) 784-3386",
+                                            "mobile": "01750412487",
+                                            "email": "ondricka.weldon@yundt.com",
+                                            "contact_person_name": "Mr. Kristian Glover DDS",
+                                            "contact_person_name_en": "Mr. Kristian Glover DDS",
+                                            "contact_person_mobile": "01720148578",
+                                            "contact_person_email": "squigley@example.com",
+                                            "contact_person_designation": "Photoengraver",
+                                            "contact_person_designation_en": "Photoengraver",
+                                            "description": "Iure facilis aut suscipit officia.",
+                                            "description_en": "Iure facilis aut suscipit officia.",
                                             "logo": "logo.jpg",
                                             "loc_division_id": 3,
                                             "loc_division_title_en": "Dhaka",
@@ -627,177 +716,13 @@
                                             "organization_type_id": 3,
                                             "organization_type_title_en": "Public Corporation",
                                             "organization_type_title": "Public Corporation",
-                                            "address": "8560 Koepp Lake\nPort Alizaside, UT 55773",
-                                            "address_en": "8560 Koepp Lake\nPort Alizaside, UT 55773",
+                                            "address": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                            "address_en": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2021-11-29T06:23:53.000000Z",
-                                            "updated_at": "2021-11-29T06:23:53.000000Z"
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title_en": "Steuber, Leuschke and Ferry",
-                                            "title": "Steuber, Leuschke and Ferry",
-                                            "name_of_the_office_head": "Mr. Russ Schmitt PhD",
-                                            "name_of_the_office_head_en": "Mr. Russ Schmitt PhD",
-                                            "name_of_the_office_head_designation": "CEO",
-                                            "name_of_the_office_head_designation_en": "CEO",
-                                            "domain": "https://www.kling.com",
-                                            "fax_no": "1-707-265-4106",
-                                            "mobile": "01779441812",
-                                            "email": "deangelo.hills@bauch.com",
-                                            "contact_person_name": null,
-                                            "contact_person_name_en": "Ms. Noemie Deckow DVM",
-                                            "contact_person_mobile": "01736992306",
-                                            "contact_person_email": "alfonzo59@example.com",
-                                            "contact_person_designation": "Control Valve Installer",
-                                            "contact_person_designation_en": "Control Valve Installer",
-                                            "description": "Harum et numquam qui velit.",
-                                            "description_en": "Harum et numquam qui velit.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 3,
-                                            "loc_division_title_en": "Dhaka",
-                                            "loc_division_title": "ঢাকা",
-                                            "loc_district_id": 18,
-                                            "loc_district_title_en": "DHAKA",
-                                            "loc_district_title": "ঢাকা ",
-                                            "loc_upazila_id": null,
-                                            "loc_upazila_title_en": null,
-                                            "loc_upazila_title": null,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private Organization",
-                                            "organization_type_title": "Private Organization",
-                                            "address": "3367 Kayleigh Ramp\nSchroederbury, DE 96853-6720",
-                                            "address_en": "3367 Kayleigh Ramp\nSchroederbury, DE 96853-6720",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-29T06:23:53.000000Z",
-                                            "updated_at": "2021-11-29T06:23:53.000000Z"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "title_en": "O'Kon, Little and Cormier",
-                                            "title": "O'Kon, Little and Cormier",
-                                            "name_of_the_office_head": "Anabel Jacobs",
-                                            "name_of_the_office_head_en": "Anabel Jacobs",
-                                            "name_of_the_office_head_designation": "CEO",
-                                            "name_of_the_office_head_designation_en": "CEO",
-                                            "domain": "https://www.flatley.biz",
-                                            "fax_no": "443-379-7943",
-                                            "mobile": "01786715286",
-                                            "email": "rhoda.maggio@terry.org",
-                                            "contact_person_name": null,
-                                            "contact_person_name_en": "Rosetta Emmerich DVM",
-                                            "contact_person_mobile": "01796974036",
-                                            "contact_person_email": "purdy.dillan@example.com",
-                                            "contact_person_designation": "Pesticide Sprayer",
-                                            "contact_person_designation_en": "Pesticide Sprayer",
-                                            "description": "Dolorum sed eligendi nostrum possimus natus itaque nobis velit.",
-                                            "description_en": "Dolorum sed eligendi nostrum possimus natus itaque nobis velit.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 2,
-                                            "loc_division_title_en": "Chittagong",
-                                            "loc_division_title": "চট্টগ্রাম",
-                                            "loc_district_id": 10,
-                                            "loc_district_title_en": "CHITTAGONG",
-                                            "loc_district_title": "চট্টগ্রাম",
-                                            "loc_upazila_id": null,
-                                            "loc_upazila_title_en": null,
-                                            "loc_upazila_title": null,
-                                            "organization_type_id": 3,
-                                            "organization_type_title_en": "Public Corporation",
-                                            "organization_type_title": "Public Corporation",
-                                            "address": "69361 Kiarra Plaza Apt. 978\nLake Marysemouth, MO 46953-9153",
-                                            "address_en": "69361 Kiarra Plaza Apt. 978\nLake Marysemouth, MO 46953-9153",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-29T06:23:53.000000Z",
-                                            "updated_at": "2021-11-29T06:23:53.000000Z"
-                                        },
-                                        {
-                                            "id": 5,
-                                            "title_en": "Pollich-Robel",
-                                            "title": "Pollich-Robel",
-                                            "name_of_the_office_head": "Maribel Klein Jr.",
-                                            "name_of_the_office_head_en": "Maribel Klein Jr.",
-                                            "name_of_the_office_head_designation": "CEO",
-                                            "name_of_the_office_head_designation_en": "CEO",
-                                            "domain": "https://www.jast.biz",
-                                            "fax_no": "+1.281.287.3909",
-                                            "mobile": "01722624084",
-                                            "email": "patience.larkin@eichmann.com",
-                                            "contact_person_name": null,
-                                            "contact_person_name_en": "Adolfo Schaden",
-                                            "contact_person_mobile": "01777475160",
-                                            "contact_person_email": "schowalter.maya@example.org",
-                                            "contact_person_designation": "Residential Advisor",
-                                            "contact_person_designation_en": "Residential Advisor",
-                                            "description": "Ab ut rerum mollitia omnis ut omnis quia quisquam.",
-                                            "description_en": "Ab ut rerum mollitia omnis ut omnis quia quisquam.",
-                                            "logo": "logo.jpg",
-                                            "loc_division_id": 2,
-                                            "loc_division_title_en": "Chittagong",
-                                            "loc_division_title": "চট্টগ্রাম",
-                                            "loc_district_id": 10,
-                                            "loc_district_title_en": "CHITTAGONG",
-                                            "loc_district_title": "চট্টগ্রাম",
-                                            "loc_upazila_id": null,
-                                            "loc_upazila_title_en": null,
-                                            "loc_upazila_title": null,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private Organization",
-                                            "organization_type_title": "Private Organization",
-                                            "address": "946 Rogahn Street\nAllisonview, MT 06883",
-                                            "address_en": "946 Rogahn Street\nAllisonview, MT 06883",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-29T06:23:53.000000Z",
-                                            "updated_at": "2021-11-29T06:23:53.000000Z"
-                                        },
-                                        {
-                                            "id": 6,
-                                            "title_en": null,
-                                            "title": "ShutUp",
-                                            "name_of_the_office_head": null,
-                                            "name_of_the_office_head_en": null,
-                                            "name_of_the_office_head_designation": null,
-                                            "name_of_the_office_head_designation_en": null,
-                                            "domain": null,
-                                            "fax_no": null,
-                                            "mobile": "01345677667",
-                                            "email": "jj@gmail.com",
-                                            "contact_person_name": "AAA",
-                                            "contact_person_name_en": null,
-                                            "contact_person_mobile": "01334566555",
-                                            "contact_person_email": "ff@gmail.com",
-                                            "contact_person_designation": "fff",
-                                            "contact_person_designation_en": null,
-                                            "description": null,
-                                            "description_en": null,
-                                            "logo": null,
-                                            "loc_division_id": 1,
-                                            "loc_division_title_en": "Barisal",
-                                            "loc_division_title": "বরিশাল",
-                                            "loc_district_id": 1,
-                                            "loc_district_title_en": "BARGUNA",
-                                            "loc_district_title": "বরগুনা",
-                                            "loc_upazila_id": null,
-                                            "loc_upazila_title_en": null,
-                                            "loc_upazila_title": null,
-                                            "organization_type_id": 2,
-                                            "organization_type_title_en": "Private Organization",
-                                            "organization_type_title": "Private Organization",
-                                            "address": "kkk",
-                                            "address_en": null,
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-11-29T06:52:06.000000Z",
-                                            "updated_at": "2021-11-29T06:52:06.000000Z"
+                                            "created_at": "2021-12-19T07:49:59.000000Z",
+                                            "updated_at": "2021-12-19T07:49:59.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -834,46 +759,30 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/organization"
                                 },
-                                "example": {
+                                "example":{
                                     "_response_status": {
                                         "success": true,
                                         "code": 201,
                                         "message": "Organization has been Created Successfully",
-                                        "query_time": 1
+                                        "query_time": 10
                                     },
                                     "data": {
                                         "organization_type_id": "2",
-                                        "title_en": null,
-                                        "title": "ShutUp",
+                                        "date_of_establishment": "2020-09-09",
+                                        "title": "Randy Blythe",
                                         "loc_division_id": "1",
                                         "loc_district_id": "1",
-                                        "loc_upazila_id": null,
-                                        "location_latitude": null,
-                                        "location_longitude": null,
-                                        "google_map_src": null,
-                                        "address": "kkk",
-                                        "address_en": null,
-                                        "mobile": "01345677667",
-                                        "email": "jj@gmail.com",
-                                        "fax_no": null,
-                                        "name_of_the_office_head": null,
-                                        "name_of_the_office_head_en": null,
-                                        "name_of_the_office_head_designation": null,
-                                        "name_of_the_office_head_designation_en": null,
-                                        "contact_person_name": "AAA",
-                                        "contact_person_name_en": null,
-                                        "contact_person_mobile": "01334566555",
-                                        "contact_person_email": "ff@gmail.com",
-                                        "contact_person_designation": "fff",
-                                        "contact_person_designation_en": null,
-                                        "description": null,
-                                        "description_en": null,
-                                        "domain": null,
-                                        "logo": null,
-                                        "row_status": "1",
-                                        "updated_at": "2021-11-29T06:52:06.000000Z",
-                                        "created_at": "2021-11-29T06:52:06.000000Z",
-                                        "id": 6
+                                        "address": "Dhaka",
+                                        "mobile": "01779900909",
+                                        "email": "aa@gmail.com",
+                                        "name_of_the_office_head": "Karmanaraiyan",
+                                        "contact_person_name": "n0obiedobiedoo",
+                                        "contact_person_mobile": "01779900909",
+                                        "contact_person_email": "44@gmail.com",
+                                        "contact_person_designation": "ddfdfdf",
+                                        "updated_at": "2021-12-21T10:22:14.000000Z",
+                                        "created_at": "2021-12-21T10:22:14.000000Z",
+                                        "id": 9
                                     }
                                 }
                             }
@@ -904,48 +813,49 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "title_en": "Cummerata-Fritsch",
-                                        "title": "Cummerata-Fritsch",
-                                        "name_of_the_office_head": "Buford Ziemann",
-                                        "name_of_the_office_head_en": "Buford Ziemann",
-                                        "name_of_the_office_head_designation": "CEO",
-                                        "name_of_the_office_head_designation_en": "CEO",
-                                        "domain": "https://www.harris.biz",
-                                        "fax_no": "1-607-600-0673",
-                                        "mobile": "01767509830",
-                                        "email": "katrina.smith@oconner.com",
-                                        "contact_person_name": null,
-                                        "contact_person_name_en": "Eva Jacobi",
-                                        "contact_person_mobile": "01702161210",
-                                        "contact_person_email": "ygutmann@example.com",
-                                        "contact_person_designation": "Model Maker",
-                                        "contact_person_designation_en": "Model Maker",
-                                        "description": "Quisquam voluptatem soluta error minima quia.",
-                                        "description_en": "Quisquam voluptatem soluta error minima quia.",
-                                        "logo": "logo.jpg",
-                                        "loc_division_id": 3,
-                                        "loc_division_title_en": "Dhaka",
-                                        "loc_division_title": "ঢাকা",
-                                        "loc_district_id": 18,
-                                        "loc_district_title_en": "DHAKA",
-                                        "loc_district_title": "ঢাকা ",
+                                        "id": 10,
+                                        "title_en": null,
+                                        "title": "Randy Blythe",
+                                        "date_of_establishment": "2021-09-09",
+                                        "name_of_the_office_head": "Karmanaraiyan",
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": null,
+                                        "name_of_the_office_head_designation_en": null,
+                                        "domain": null,
+                                        "fax_no": null,
+                                        "mobile": "01779900909",
+                                        "email": "avaaaaaaa@gmail.com",
+                                        "contact_person_name": "n0obiedobiedoo",
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": "01779900907",
+                                        "contact_person_email": "84@gmail.com",
+                                        "contact_person_designation": "ddfdfdf",
+                                        "contact_person_designation_en": null,
+                                        "description": null,
+                                        "description_en": null,
+                                        "logo": null,
+                                        "loc_division_id": 1,
+                                        "loc_division_title_en": "Barisal",
+                                        "loc_division_title": "বরিশাল",
+                                        "loc_district_id": 1,
+                                        "loc_district_title_en": "BARGUNA",
+                                        "loc_district_title": "বরগুনা",
                                         "loc_upazila_id": null,
                                         "loc_upazila_title_en": null,
                                         "loc_upazila_title": null,
-                                        "location_latitude": "90.399452",
-                                        "location_longitude": "90.399452",
+                                        "location_latitude": null,
+                                        "location_longitude": null,
                                         "google_map_src": null,
                                         "organization_type_id": 2,
                                         "organization_type_title_en": "Private Organization",
                                         "organization_type_title": "Private Organization",
-                                        "address": "2206 Heath Brook Suite 883\nNorth Ward, MI 47613-5219",
-                                        "address_en": "2206 Heath Brook Suite 883\nNorth Ward, MI 47613-5219",
-                                        "row_status": 1,
+                                        "address": "Dhaka",
+                                        "address_en": null,
+                                        "row_status": 2,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-11-29T06:23:53.000000Z",
-                                        "updated_at": "2021-11-29T06:23:53.000000Z"
+                                        "created_at": "2021-12-21T10:27:58.000000Z",
+                                        "updated_at": "2021-12-21T10:27:58.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -988,42 +898,43 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 1,
+                                        "id": 10,
                                         "organization_type_id": "2",
-                                        "title": "ChupBeyadob",
+                                        "title": "Randy Blythe",
                                         "title_en": null,
+                                        "date_of_establishment": "2021-09-09",
                                         "loc_division_id": "1",
                                         "loc_district_id": "1",
                                         "loc_upazila_id": null,
                                         "location_latitude": null,
                                         "location_longitude": null,
                                         "google_map_src": null,
-                                        "address": "sds",
+                                        "address": "Dhaka",
                                         "address_en": null,
                                         "country": "BD",
                                         "phone_code": "880",
-                                        "mobile": "01334566666",
-                                        "email": "hh@gmail.com",
+                                        "mobile": "01779900909",
+                                        "email": "avaaaaaaa@gmail.com",
                                         "fax_no": null,
-                                        "name_of_the_office_head": null,
+                                        "name_of_the_office_head": "Karmanaraiyan",
                                         "name_of_the_office_head_en": null,
                                         "name_of_the_office_head_designation": null,
                                         "name_of_the_office_head_designation_en": null,
-                                        "contact_person_name": "kkk",
+                                        "contact_person_name": "n0obiedobiedoo",
                                         "contact_person_name_en": null,
-                                        "contact_person_mobile": "01399099000",
-                                        "contact_person_email": "kk@gmail.com",
-                                        "contact_person_designation": "kkk",
+                                        "contact_person_mobile": "01779900907",
+                                        "contact_person_email": "84@gmail.com",
+                                        "contact_person_designation": "ddfdfdf",
                                         "contact_person_designation_en": null,
                                         "description": null,
                                         "description_en": null,
                                         "logo": null,
                                         "domain": null,
-                                        "row_status": "2",
+                                        "row_status": 2,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-11-29T06:23:53.000000Z",
-                                        "updated_at": "2021-11-29T06:59:19.000000Z",
+                                        "created_at": "2021-12-21T10:27:58.000000Z",
+                                        "updated_at": "2021-12-21T10:27:58.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -1074,10 +985,10 @@
                 ]
             }
         },
-        "/organization-admin-profile": {
+        "/organization-profile": {
             "get": {
                 "tags": [
-                    "organization admin profile"
+                    "organization profile"
                 ],
                 "summary": "Get an organization profile",
                 "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
@@ -1086,27 +997,28 @@
                         "description": "successfull",
                         "content": {
                             "application/json": {
-                                "example": {
+                                "example":{
                                     "data": {
-                                        "id": 4,
-                                        "title_en": "Klein-Luettgen",
-                                        "title": "Klein-Luettgen",
-                                        "name_of_the_office_head": "Margarete Abshire",
-                                        "name_of_the_office_head_en": "Margarete Abshire",
+                                        "id": 2,
+                                        "title_en": "Grady Group",
+                                        "title": "Grady Group",
+                                        "date_of_establishment": null,
+                                        "name_of_the_office_head": "John Macejkovic DVM",
+                                        "name_of_the_office_head_en": "John Macejkovic DVM",
                                         "name_of_the_office_head_designation": "CEO",
                                         "name_of_the_office_head_designation_en": "CEO",
-                                        "domain": "https://www.considine.com",
-                                        "fax_no": "(574) 542-6526",
-                                        "mobile": "01758080191",
-                                        "email": "mario.cronin@murphy.com",
-                                        "contact_person_name": "Ayana Weissnat",
-                                        "contact_person_name_en": "Ayana Weissnat",
-                                        "contact_person_mobile": "01786105922",
-                                        "contact_person_email": "conroy.winnifred@example.com",
-                                        "contact_person_designation": "Social Sciences Teacher",
-                                        "contact_person_designation_en": "Social Sciences Teacher",
-                                        "description": "Aut tempore est quas atque vero.",
-                                        "description_en": "Aut tempore est quas atque vero.",
+                                        "domain": "https://www.moen.com",
+                                        "fax_no": "(801) 360-9436",
+                                        "mobile": "01762244320",
+                                        "email": "kaleb.predovic@bogisich.com",
+                                        "contact_person_name": "Lew Kulas",
+                                        "contact_person_name_en": "Lew Kulas",
+                                        "contact_person_mobile": "01701064262",
+                                        "contact_person_email": "kunde.geraldine@example.com",
+                                        "contact_person_designation": "Biological Scientist",
+                                        "contact_person_designation_en": "Biological Scientist",
+                                        "description": "Officia impedit ea eveniet deleniti consectetur illum doloremque.",
+                                        "description_en": "Officia impedit ea eveniet deleniti consectetur illum doloremque.",
                                         "logo": "logo.jpg",
                                         "loc_division_id": 2,
                                         "loc_division_title_en": "Chittagong",
@@ -1123,13 +1035,13 @@
                                         "organization_type_id": 2,
                                         "organization_type_title_en": "Private Organization",
                                         "organization_type_title": "Private Organization",
-                                        "address": "6460 King Extensions\nRomagueraview, MN 03114-5832",
-                                        "address_en": "6460 King Extensions\nRomagueraview, MN 03114-5832",
+                                        "address": "136 Idella Gardens Apt. 118\nNorth Deangelo, MI 36756",
+                                        "address_en": "136 Idella Gardens Apt. 118\nNorth Deangelo, MI 36756",
                                         "row_status": 1,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-12-09T07:17:32.000000Z",
-                                        "updated_at": "2021-12-09T07:17:32.000000Z"
+                                        "created_at": "2021-12-19T07:49:59.000000Z",
+                                        "updated_at": "2021-12-19T07:49:59.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1143,10 +1055,10 @@
                 }
             }
         },
-        "/organization-admin-profile-update": {
+        "/organization-profile-update": {
             "put": {
                 "tags": [
-                    "organization admin profile"
+                    "organization profile"
                 ],
                 "summary": "Update an organization admin profile",
                 "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
@@ -1166,12 +1078,13 @@
                             "application/x-www-form-urlencoded": {
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "organization_type_id": 3,
-                                        "title": "AlbertaMania",
+                                        "id": 2,
+                                        "organization_type_id": 2,
+                                        "title": "NewOldie",
                                         "title_en": null,
-                                        "loc_division_id": "1",
-                                        "loc_district_id": "1",
+                                        "date_of_establishment": null,
+                                        "loc_division_id": "2",
+                                        "loc_district_id": "2",
                                         "loc_upazila_id": null,
                                         "location_latitude": null,
                                         "location_longitude": null,
@@ -1180,28 +1093,28 @@
                                         "address_en": null,
                                         "country": "BD",
                                         "phone_code": "880",
-                                        "mobile": "01728986259",
-                                        "email": "qwyman@kovacek.com",
-                                        "fax_no": "(937) 971-3877",
-                                        "name_of_the_office_head": "Hanneman",
+                                        "mobile": "01762244320",
+                                        "email": "kaleb.predovic@bogisich.com",
+                                        "fax_no": "(801) 360-9436",
+                                        "name_of_the_office_head": "Head",
                                         "name_of_the_office_head_en": null,
-                                        "name_of_the_office_head_designation": "Dont cry",
-                                        "name_of_the_office_head_designation_en": "Dont cry",
-                                        "contact_person_name": "Chaircow",
+                                        "name_of_the_office_head_designation": "sDASD",
+                                        "name_of_the_office_head_designation_en": null,
+                                        "contact_person_name": "ERWERWER",
                                         "contact_person_name_en": null,
-                                        "contact_person_mobile": "01787197917",
-                                        "contact_person_email": "furman.leannon@example.net",
-                                        "contact_person_designation": "SHutUp",
+                                        "contact_person_mobile": "01701064262",
+                                        "contact_person_email": "kunde.geraldine@example.com",
+                                        "contact_person_designation": "adSDsd",
                                         "contact_person_designation_en": null,
-                                        "description": "Dolor amet et ut corrupti ut voluptatem.",
-                                        "description_en": "Dolor amet et ut corrupti ut voluptatem.",
-                                        "logo": "logo.jpg",
-                                        "domain": "https://www.prohaska.com",
-                                        "row_status": "1",
+                                        "description": "Officia impedit ea eveniet deleniti consectetur illum doloremque.",
+                                        "description_en": "Officia impedit ea eveniet deleniti consectetur illum doloremque.",
+                                        "logo": "notNulllll",
+                                        "domain": "https://www.moen.com",
+                                        "row_status": 1,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-12-09T07:17:32.000000Z",
-                                        "updated_at": "2021-12-15T04:08:26.000000Z",
+                                        "created_at": "2021-12-19T07:49:59.000000Z",
+                                        "updated_at": "2021-12-21T10:45:14.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -1217,96 +1130,6 @@
                 }
             }
         },
-
-
-        "/public/industry-association-memberlist": {
-            "get": {
-                "tags": [
-                    "organization"
-                ],
-                "summary": "Get industry association members",
-                "description": "An Api endpoint to get industry association members for a specific industry association",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/title_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title_en_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/page_size"
-                    },
-                    {
-                        "$ref": "#/components/parameters/organization_type_id_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/IndustryAssocId_Query_required"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 4,
-                                            "organization_type_id": 2,
-                                            "title": "Klein-Luettgen",
-                                            "title_en": "Klein-Luettgen",
-                                            "loc_division_id": 2,
-                                            "loc_district_id": 10,
-                                            "loc_upazila_id": null,
-                                            "location_latitude": "91.815526",
-                                            "location_longitude": "91.815526",
-                                            "google_map_src": null,
-                                            "address": "6460 King Extensions\nRomagueraview, MN 03114-5832",
-                                            "address_en": "6460 King Extensions\nRomagueraview, MN 03114-5832",
-                                            "country": "BD",
-                                            "phone_code": "880",
-                                            "mobile": "01758080191",
-                                            "email": "mario.cronin@murphy.com",
-                                            "fax_no": "(574) 542-6526",
-                                            "name_of_the_office_head": "Margarete Abshire",
-                                            "name_of_the_office_head_en": "Margarete Abshire",
-                                            "name_of_the_office_head_designation": "CEO",
-                                            "name_of_the_office_head_designation_en": "CEO",
-                                            "contact_person_name": "Ayana Weissnat",
-                                            "contact_person_name_en": "Ayana Weissnat",
-                                            "contact_person_mobile": "01786105922",
-                                            "contact_person_email": "conroy.winnifred@example.com",
-                                            "contact_person_designation": "Social Sciences Teacher",
-                                            "contact_person_designation_en": "Social Sciences Teacher",
-                                            "description": "Aut tempore est quas atque vero.",
-                                            "description_en": "Aut tempore est quas atque vero.",
-                                            "logo": "logo.jpg",
-                                            "domain": "https://www.considine.com",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-12-09T07:17:32.000000Z",
-                                            "updated_at": "2021-12-09T07:17:32.000000Z",
-                                            "deleted_at": null
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -4146,11 +3969,10 @@
                 ]
             }
         },
-
         "/publications": {
             "get": {
-                "summary": "Get a publication",
-                "description": "API endpoint to create a Publication.A successful request response will show 201 HTTP status code",
+                "summary": "Get all publication",
+                "description": "API endpoint to get all Publication.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/title_optional"
@@ -4159,7 +3981,7 @@
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId_Query"
+                        "$ref": "#/components/parameters/industry_association_id_optional"
                     },
                     {
                         "$ref": "#/components/parameters/author"
@@ -4179,7 +4001,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
+                        "description": "Successful",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -4270,7 +4092,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "succesfull",
+                        "description": "successful",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4317,7 +4139,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successfully",
+                        "description": "successful",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -4362,7 +4184,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfull",
+                        "description": "Successful",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -4382,7 +4204,7 @@
                 ]
             },
             "patch": {
-                "summary": "Restore a deleted publication",
+                "summary": "Restore a soft deleted publication",
                 "description": "API endpoint to restore a Publication.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
@@ -4413,8 +4235,8 @@
         },
         "/public/publications": {
             "get": {
-                "summary": "Get a publication",
-                "description": "API endpoint to create a Publication.A successful request response will show 201 HTTP status code",
+                "summary": "Get all public publications",
+                "description": "API endpoint to get all Publication publicly .A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/title_optional"
@@ -4426,7 +4248,7 @@
                         "$ref": "#/components/parameters/author"
                     },
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId_Query"
+                        "$ref": "#/components/parameters/industry_association_id_optional"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -4499,7 +4321,7 @@
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "name": "industry_association_type_id",
+                        "name": "industry_association_trade_id",
                         "in": "query",
                         "schema": {
                             "type": "integer"
@@ -4535,7 +4357,7 @@
                                     "data": [
                                         {
                                             "id": 8,
-                                            "industry_association_type_id": 1,
+                                            "industry_association_trade_id": 1,
                                             "title_en": null,
                                             "title": "ppp",
                                             "loc_division_id": 1,
@@ -4578,7 +4400,7 @@
                                         },
                                         {
                                             "id": 9,
-                                            "industry_association_type_id": 1,
+                                            "industry_association_trade_id": 1,
                                             "title_en": null,
                                             "title": "ppp",
                                             "loc_division_id": 1,
@@ -4659,7 +4481,7 @@
                                         "query_time": 1
                                     },
                                     "data": {
-                                        "industry_association_type_id": "1",
+                                        "industry_association_trade_id": "1",
                                         "title": "ppp",
                                         "loc_division_id": "1",
                                         "loc_district_id": "1",
@@ -4687,13 +4509,87 @@
                 ]
             }
         },
-        "/industry-associations/{IndustryAssocId}": {
+        "/public/industry-association-member-details/{industryId}": {
+            "get": {
+                "tags": [
+                    "Industry-Association"
+                ],
+                "summary": "Get an industry association membership details",
+                "description": "API endpoint to get an industry association member details.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/industryId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "Collier-Jenkins",
+                                        "title": "Collier-Jenkins",
+                                        "name_of_the_office_head": "Buford Kub III",
+                                        "name_of_the_office_head_en": "Buford Kub III",
+                                        "name_of_the_office_head_designation": "CEO",
+                                        "name_of_the_office_head_designation_en": "CEO",
+                                        "domain": "https://www.stokes.com",
+                                        "fax_no": "(361) 784-3386",
+                                        "mobile": "01750412487",
+                                        "email": "ondricka.weldon@yundt.com",
+                                        "contact_person_name": "Mr. Kristian Glover DDS",
+                                        "contact_person_name_en": "Mr. Kristian Glover DDS",
+                                        "contact_person_mobile": "01720148578",
+                                        "contact_person_email": "squigley@example.com",
+                                        "contact_person_designation": "Photoengraver",
+                                        "contact_person_designation_en": "Photoengraver",
+                                        "description": "Iure facilis aut suscipit officia.",
+                                        "description_en": "Iure facilis aut suscipit officia.",
+                                        "logo": "logo.jpg",
+                                        "loc_division_id": 3,
+                                        "loc_division_title_en": "Dhaka",
+                                        "loc_division_title": "ঢাকা",
+                                        "loc_district_id": 18,
+                                        "loc_district_title_en": "DHAKA",
+                                        "loc_district_title": "ঢাকা ",
+                                        "loc_upazila_id": null,
+                                        "loc_upazila_title_en": null,
+                                        "loc_upazila_title": null,
+                                        "location_latitude": "90.399452",
+                                        "location_longitude": "90.399452",
+                                        "google_map_src": null,
+                                        "organization_type_id": 3,
+                                        "organization_type_title_en": "Public Corporation",
+                                        "organization_type_title": "Public Corporation",
+                                        "address": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                        "address_en": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-19T07:49:59.000000Z",
+                                        "updated_at": "2021-12-19T07:49:59.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/industry-associations/{industryAssociationId}": {
             "get": {
                 "summary": "Get a single industry association",
                 "description": "API endpoint to get a single industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -4704,7 +4600,7 @@
                                 "example": {
                                     "data": {
                                         "id": 9,
-                                        "industry_association_type_id": 1,
+                                        "industry_association_trade_id": 1,
                                         "title_en": null,
                                         "title": "ppp",
                                         "loc_division_id": 1,
@@ -4764,7 +4660,7 @@
                 "description": "API endpoint to update a new industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "requestBody": {
@@ -4784,7 +4680,7 @@
                                 "example": {
                                     "data": {
                                         "id": 10,
-                                        "industry_association_type_id": "1",
+                                        "industry_association_trade_id": "1",
                                         "title": "hhh",
                                         "title_en": null,
                                         "loc_division_id": "1",
@@ -4840,7 +4736,7 @@
                 "description": "API endpoint to delete an industry association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -4869,7 +4765,7 @@
                 "description": "API endpoint to restore a deleted Industry Association.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/IndustryAssocId"
+                        "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
                 "responses": {
@@ -4929,24 +4825,161 @@
                 ]
             }
         },
-        "/registration-or-membership-approval/{organizationId}": {
+        "/industry-association-members": {
+            "get": {
+                "tags": [
+                    "Industry-Association"
+                ],
+                "summary": "Get industry association members",
+                "description": "An Api endpoint to get industry association members for a specific industry association",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "Collier-Jenkins",
+                                            "title": "Collier-Jenkins",
+                                            "membership_id": "11334-saddf-poel",
+                                            "name_of_the_office_head": "Buford Kub III",
+                                            "name_of_the_office_head_en": "Buford Kub III",
+                                            "name_of_the_office_head_designation": "CEO",
+                                            "name_of_the_office_head_designation_en": "CEO",
+                                            "domain": "https://www.stokes.com",
+                                            "fax_no": "(361) 784-3386",
+                                            "mobile": "01750412487",
+                                            "email": "ondricka.weldon@yundt.com",
+                                            "contact_person_name": "Mr. Kristian Glover DDS",
+                                            "contact_person_name_en": "Mr. Kristian Glover DDS",
+                                            "contact_person_mobile": "01720148578",
+                                            "contact_person_email": "squigley@example.com",
+                                            "contact_person_designation": "Photoengraver",
+                                            "contact_person_designation_en": "Photoengraver",
+                                            "description": "Iure facilis aut suscipit officia.",
+                                            "description_en": "Iure facilis aut suscipit officia.",
+                                            "logo": "logo.jpg",
+                                            "loc_division_id": 3,
+                                            "loc_district_id": 18,
+                                            "loc_upazila_id": null,
+                                            "address": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                            "address_en": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                            "row_status": 2,
+                                            "created_at": "2021-12-19T07:49:59.000000Z",
+                                            "updated_at": "2021-12-19T07:49:59.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/industry-association-members": {
+            "get": {
+                "tags": [
+                    "Industry-Association"
+                ],
+                "summary": "Get industry association members",
+                "description": "An Api endpoint to get industry association members for a specific industry association",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/industry_association_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 4,
+                                            "organization_type_id": 2,
+                                            "title": "Klein-Luettgen",
+                                            "title_en": "Klein-Luettgen",
+                                            "loc_division_id": 2,
+                                            "loc_district_id": 10,
+                                            "loc_upazila_id": null,
+                                            "location_latitude": "91.815526",
+                                            "location_longitude": "91.815526",
+                                            "google_map_src": null,
+                                            "address": "6460 King Extensions\nRomagueraview, MN 03114-5832",
+                                            "address_en": "6460 King Extensions\nRomagueraview, MN 03114-5832",
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "mobile": "01758080191",
+                                            "email": "mario.cronin@murphy.com",
+                                            "fax_no": "(574) 542-6526",
+                                            "name_of_the_office_head": "Margarete Abshire",
+                                            "name_of_the_office_head_en": "Margarete Abshire",
+                                            "name_of_the_office_head_designation": "CEO",
+                                            "name_of_the_office_head_designation_en": "CEO",
+                                            "contact_person_name": "Ayana Weissnat",
+                                            "contact_person_name_en": "Ayana Weissnat",
+                                            "contact_person_mobile": "01786105922",
+                                            "contact_person_email": "conroy.winnifred@example.com",
+                                            "contact_person_designation": "Social Sciences Teacher",
+                                            "contact_person_designation_en": "Social Sciences Teacher",
+                                            "description": "Aut tempore est quas atque vero.",
+                                            "description_en": "Aut tempore est quas atque vero.",
+                                            "logo": "logo.jpg",
+                                            "domain": "https://www.considine.com",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-12-09T07:17:32.000000Z",
+                                            "updated_at": "2021-12-09T07:17:32.000000Z",
+                                            "deleted_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/industry-association-membership-approval/{organizationId}": {
             "put": {
-                "summary": "Approve a new industry registration or industry association membership approval",
-                "description": "API endpoint to Create a new industry association membership approval.A successful request response will show 201 HTTP status code",
+                "tags": [
+                    "Industry Association Membership Approval Rejection"
+                ],
+                "summary": "Approve an industry association membership request for an industry",
+                "description": "API endpoint to Approve an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationId"
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/industryAssociationMembershipApprovalOrRejection"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "successfull",
@@ -4963,30 +4996,21 @@
                             }
                         }
                     }
-                },
-                "tags": [
-                    "Registration Or Membership Approval Rejection"
-                ]
+                }
             }
         },
-        "/registration-or-membership-rejection/{organizationId}": {
+        "/industry-association-membership-rejection/{organizationId}": {
             "put": {
-                "summary": "Reject a new industry registration or industry association membership",
-                "description": "API endpoint to Reject an industry membership association.A successful request response will show 201 HTTP status code",
+                "tags": [
+                    "Industry Association Membership Approval Rejection"
+                ],
+                "summary": "Reject an industry association membership request for an industry",
+                "description": "API endpoint to reject an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/organizationId"
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/industryAssociationMembershipApprovalOrRejection"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "successfull",
@@ -4996,19 +5020,419 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "IndustryAssociation membership rejected successfully",
+                                        "message": "IndustryAssociation membership rejection successfully",
                                         "query_time": 0
                                     }
                                 }
                             }
                         }
                     }
-                },
-                "tags": [
-                    "Registration Or Membership Approval Rejection"
-                ]
+                }
             }
+        },
+
+        "/contact-info": {
+            "get": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Get all contact info of a specific industry-association",
+                "description": "API endpoint to get all contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/industry_association_id_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "Alexane Nienow",
+                                            "title_en": "Kacie Goldner",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880219221835",
+                                            "mobile": "01979443556",
+                                            "email": "billie71@example.net",
+                                            "created_by": 1130,
+                                            "updated_by": 9863,
+                                            "created_at": "2002-07-31T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title": "Jacques Hermiston",
+                                            "title_en": "Jackson Feil",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880698597257",
+                                            "mobile": "01500819093",
+                                            "email": "julio17@example.net",
+                                            "created_by": 5724,
+                                            "updated_by": 4844,
+                                            "created_at": "2003-01-23T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "Mr. Michel Spencer MD",
+                                            "title_en": "Naomie Abernathy",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880140233947",
+                                            "mobile": "01473365875",
+                                            "email": "colin.waters@example.com",
+                                            "created_by": 7897,
+                                            "updated_by": 7169,
+                                            "created_at": "2002-12-07T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Store a contact info of an industry-association.",
+                "description": "API endpoint to store a contact info of an industry-association.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInfo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "title_en": null,
+                                        "title": "NewSouthWales",
+                                        "industry_association_id": 1,
+                                        "country": "Aus",
+                                        "phone_code": "880",
+                                        "phone": null,
+                                        "mobile": "01990099009",
+                                        "email": "55@gmail.com",
+                                        "row_status": "1",
+                                        "updated_at": "2021-12-22T09:25:54.000000Z",
+                                        "created_at": "2021-12-22T09:25:54.000000Z",
+                                        "id": 11
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "contact info added successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contact-info/{contactInfoId}": {
+            "get": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Get all contact info of a specific industry-association",
+                "description": "API endpoint to Get a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title": "Alexane Nienow",
+                                        "title_en": "Kacie Goldner",
+                                        "industry_association_id": 1,
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "phone": "880219221835",
+                                        "mobile": "01979443556",
+                                        "email": "billie71@example.net",
+                                        "created_by": 1130,
+                                        "updated_by": 9863,
+                                        "created_at": "2002-07-31T00:00:00.000000Z",
+                                        "updated_at": "2021-12-22T08:03:10.000000Z",
+                                        "row_status": 0
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Update a contact info of a specific industry-association",
+                "description": "API endpoint to update a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInfo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title": "zzzzzzzzzzzzz",
+                                        "title_en": null,
+                                        "industry_association_id": 1,
+                                        "country": "Bangladesh",
+                                        "phone_code": "880",
+                                        "phone": null,
+                                        "mobile": "01990898989",
+                                        "email": "33@gmail.com",
+                                        "created_by": 1130,
+                                        "updated_by": 9863,
+                                        "row_status": "1",
+                                        "deleted_at": null,
+                                        "created_at": "2002-07-31T00:00:00.000000Z",
+                                        "updated_at": "2021-12-22T10:51:53.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Contact updated successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Delete a contact info of a specific industry-association",
+                "description": "API endpoint to Delete a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Contact info deleted successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Restore a contact info of a specific industry-association",
+                "description": "API endpoint to restore a contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/contactInfoId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Contact info restored successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/contact-info": {
+            "get": {
+                "tags": [
+                    "Contact info"
+                ],
+                "summary": "Get  a public contact info of a specific industry-association",
+                "description": "API endpoint to Get  a public contact info of a specific industry-association.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/industry_association_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 5,
+                                            "title": "Jacques Hermiston",
+                                            "title_en": "Jackson Feil",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880698597257",
+                                            "mobile": "01500819093",
+                                            "email": "julio17@example.net",
+                                            "created_by": 5724,
+                                            "updated_by": 4844,
+                                            "created_at": "2003-01-23T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "Mr. Michel Spencer MD",
+                                            "title_en": "Naomie Abernathy",
+                                            "industry_association_id": 1,
+                                            "country": "BD",
+                                            "phone_code": "880",
+                                            "phone": "880140233947",
+                                            "mobile": "01473365875",
+                                            "email": "colin.waters@example.com",
+                                            "created_by": 7897,
+                                            "updated_by": 7169,
+                                            "created_at": "2002-12-07T00:00:00.000000Z",
+                                            "updated_at": "2021-12-22T08:03:10.000000Z",
+                                            "row_status": 0
+                                        },
+                                        {
+                                            "id": 11,
+                                            "title": "NewSouthWales",
+                                            "title_en": null,
+                                            "industry_association_id": 1,
+                                            "country": "Aus",
+                                            "phone_code": "880",
+                                            "phone": null,
+                                            "mobile": "01990099009",
+                                            "email": "55@gmail.com",
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-12-22T09:25:54.000000Z",
+                                            "updated_at": "2021-12-22T09:25:54.000000Z",
+                                            "row_status": 1
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+
+
     },
     "components": {
         "schemas": {
@@ -5029,26 +5453,21 @@
                     "industry_association_id": {
                         "type": "integer"
                     },
-                    "organization_id": {
-                        "type": "integer"
+                    "membership_id": {
+                        "type": "string"
                     }
                 },
                 "required": [
-                    "industry_association_id"
+                    "industry_association_id",
+                    "membership_id"
                 ]
             },
             "industryAssociationRegistration": {
                 "type": "object",
                 "description": "Industry Association registration",
                 "properties": {
-                    "industry_association_type_id": {
-                        "type": "integer",
-                        "description": "GOVT = 1; NON_GOVT = 2; OTHERS = 3",
-                        "enum": [
-                            1,
-                            2,
-                            3
-                        ]
+                    "industry_association_trade_id": {
+                        "type": "integer"
                     },
                     "title": {
                         "type": "string",
@@ -5137,7 +5556,7 @@
                     }
                 },
                 "required": [
-                    "industry_association_type_id",
+                    "industry_association_trade_id",
                     "title",
                     "trade_number",
                     "loc_division_id",
@@ -5158,14 +5577,8 @@
                 "type": "object",
                 "description": "Industry Association management",
                 "properties": {
-                    "industry_association_type_id": {
-                        "type": "integer",
-                        "description": "INDUSTRY_ASSOCIATION_TYPE_GOVT = 1; INDUSTRY_ASSOCIATION_TYPE_NON_GOVT = 2; INDUSTRY_ASSOCIATION_TYPE_OTHERS = 3;",
-                        "enum": [
-                            1,
-                            2,
-                            3
-                        ]
+                    "industry_association_trade_id": {
+                        "type": "integer"
                     },
                     "permission_sub_group_id": {
                         "type": "integer",
@@ -5282,7 +5695,7 @@
                     }
                 },
                 "required": [
-                    "industry_association_type_id",
+                    "industry_association_trade_id",
                     "title",
                     "loc_division_id",
                     "loc_district_id",
@@ -5367,8 +5780,9 @@
                         "minLength": 2,
                         "maxLength": 1000
                     },
-                    "industry_association_id": {
-                        "type": "integer"
+                    "industry_associations": {
+                        "type": "object",
+                        "example": " [ \n  [  industry_association_id=>1\n    membership_id =>\"ABC123\"\n\n ],\n [ \n    industry_association_id=>2\n    membership_id =>\"ABCD123\"\n ] \n]"
                     },
                     "organization_type_id": {
                         "type": "integer",
@@ -5380,6 +5794,9 @@
                             4
                         ],
                         "example": 2
+                    },
+                    "permission_sub_group_id": {
+                        "type": "integer"
                     },
                     "email": {
                         "type": "string",
@@ -5440,6 +5857,10 @@
                     "loc_upazila_id": {
                         "type": "integer",
                         "description": "location id of upazila"
+                    },
+                    "date_of_establishment": {
+                        "type": "string",
+                        "format": "y-m-d"
                     },
                     "address": {
                         "type": "string",
@@ -5565,8 +5986,8 @@
                         "minLength": 2,
                         "maxLength": 300
                     },
-                    "industry_association_id": {
-                        "type": "integer"
+                    "membership_id": {
+                        "type": "string"
                     },
                     "loc_division_id": {
                         "type": "integer",
@@ -5680,6 +6101,10 @@
                         "type": "string",
                         "description": "Unique Website domain of the organization"
                     },
+                    "date_of_establishment": {
+                        "type": "string",
+                        "format": "y-m-d"
+                    },
                     "row_status": {
                         "type": "integer",
                         "description": "Activation status .1 => active ,0=>inactive",
@@ -5692,13 +6117,13 @@
                 },
                 "required": [
                     "title",
-                    "industry_association_id",
                     "permission_sub_group_id",
                     "organization_type_id",
                     "contact_person_name",
                     "contact_person_mobile",
                     "contact_person_designation",
                     "contact_person_email",
+                    "membership_id",
                     "mobile",
                     "email",
                     "address",
@@ -5709,6 +6134,111 @@
             "organizationAdminProfile": {
                 "type": "object",
                 "description": "provide organizations",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 1000
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "location id of division"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "location id of district"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "location id of upazila"
+                    },
+                    "location_latitude": {
+                        "type": "string",
+                        "description": "Latitude of the location"
+                    },
+                    "location_longitude": {
+                        "type": "string",
+                        "description": "longitue of the location"
+                    },
+                    "google_map_src": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "address_en": {
+                        "type": "string",
+                        "maximum": 1000,
+                        "minimum": 2,
+                        "description": "organization address"
+                    },
+                    "logo": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_en": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation": {
+                        "type": "string"
+                    },
+                    "name_of_the_office_head_designation_en": {
+                        "type": "string"
+                    },
+                    "contact_person_name": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 500,
+                        "minimum": 2
+                    },
+                    "contact_person_name_en": {
+                        "type": "string",
+                        "description": "Contact person name",
+                        "maximum": 250,
+                        "minimum": 2
+                    },
+                    "contact_person_designation": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "contact_person_designation_en": {
+                        "type": "string",
+                        "description": "Contact person's designation"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    },
+                    "description_en": {
+                        "type": "string",
+                        "description": "Details about the organization"
+                    }
+                },
+                "required": [
+                    "title",
+                    "loc_division_id",
+                    "loc_district_id",
+                    "name_of_the_office_head",
+                    "name_of_the_office_head_designation",
+                    "contact_person_name",
+                    "contact_person_designation"
+                ]
+            },
+            "IndustryAssociationAdmin": {
+                "type": "object",
+                "description": "provide Industry Association Admin",
                 "properties": {
                     "title": {
                         "type": "string",
@@ -5750,13 +6280,13 @@
                         "type": "string",
                         "maximum": 1000,
                         "minimum": 2,
-                        "description": "organization address"
+                        "description": "IndustryAssociationAdmin address"
                     },
                     "address_en": {
                         "type": "string",
                         "maximum": 1000,
                         "minimum": 2,
-                        "description": "organization address"
+                        "description": "IndustryAssociationAdmin address"
                     },
                     "name_of_the_office_head": {
                         "type": "string"
@@ -5796,18 +6326,12 @@
                         "type": "string",
                         "description": "Details about the organization"
                     },
+                    "logo": {
+                        "type": "string"
+                    },
                     "description_en": {
                         "type": "string",
                         "description": "Details about the organization"
-                    },
-                    "row_status": {
-                        "type": "integer",
-                        "description": "Activation status .1 => active ,0=>inactive",
-                        "enum": [
-                            0,
-                            1
-                        ],
-                        "example": 1
                     }
                 },
                 "required": [
@@ -5956,6 +6480,7 @@
                         "type": "string",
                         "description": "Details about the organization"
                     },
+
                     "logo": {
                         "type": "string",
                         "description": "Logo of the organization"
@@ -6530,6 +7055,56 @@
                 "required": [
                     "serviceIds"
                 ]
+            },
+            "ContactInfo": {
+                "type": "object",
+                "description": "Contact Info of an industry association",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Primary Key",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": " title in Native",
+                        "minLength": 2,
+                        "maxLength": 600
+                    },
+                    "title_en": {
+                        "type": "string",
+                        "description": "title in English",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "industry_association_id": {
+                        "type": "integer"
+                    },
+                    "phone": {
+                        "type": "integer"
+                    },
+                    "mobile": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "integer"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "description": "Activation status .1 => active ,0=>inactive",
+                        "enum": [
+                            1,
+                            0
+                        ],
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "title",
+                    "industry_association_id",
+                    "mobile",
+                    "email"
+                ]
             }
         },
         "securitySchemes": {
@@ -6540,25 +7115,41 @@
             }
         },
         "parameters": {
-            "IndustryAssocId": {
-                "name": "IndustryAssocId",
+            "contactInfoId": {
+                "name": "contactInfoId",
                 "in": "path",
                 "required": true,
                 "schema": {
                     "type": "integer"
                 }
             },
-            "IndustryAssocId_Query": {
-                "name": "IndustryAssocId",
+            "industryAssociationId": {
+                "name": "industryAssociationId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "industry_association_id_optional": {
+                "name": "industry_association_id",
                 "in": "query",
                 "required": false,
                 "schema": {
                     "type": "integer"
                 }
             },
-            "IndustryAssocId_Query_required": {
+            "industry_association_id": {
                 "name": "industry_association_id",
                 "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "industryId": {
+                "name": "industryId",
+                "in": "path",
                 "required": true,
                 "schema": {
                     "type": "integer"
