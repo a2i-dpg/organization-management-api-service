@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
+use App\Services\JobManagementServices\CandidateRequirementsService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class JobManagementController extends Controller
 {
     public PrimaryJobInformationService $primaryJobInformationService;
     public AdditionalJobInformationService $additionalJobInformationService;
+    public CandidateRequirementsService $candidateRequirementsService;
     public Carbon $startTime;
 
     /**
@@ -78,6 +80,44 @@ class JobManagementController extends Controller
      * @throws ValidationException|Throwable
      */
     public function storeAdditionalJobInformation(Request $request): JsonResponse
+    {
+        $validatedData = $this->additionalJobInformationService->validator($request)->validate();
+
+        $jobLevel = $validatedData['job_level'];
+        $workPlace = $validatedData['work_place'];
+        $jobLocation = $validatedData['job_location'];
+
+        DB::beginTransaction();
+        try {
+            $additionalJobInformation = $this->additionalJobInformationService->store($validatedData);
+            $this->additionalJobInformationService->syncWithJobLevel($additionalJobInformation, $jobLevel);
+            $this->additionalJobInformationService->syncWithWorkplace($additionalJobInformation, $workPlace);
+            $this->additionalJobInformationService->syncWithJobLocation($additionalJobInformation, $jobLocation);
+
+            $response = [
+                "data" => $additionalJobInformation,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "AdditionalJobInformation successfully submitted",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+            DB::commit();
+        } catch (Throwable $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function storeCandidateRequirements(Request $request): JsonResponse
     {
         $validatedData = $this->additionalJobInformationService->validator($request)->validate();
 
