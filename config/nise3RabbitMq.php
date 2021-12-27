@@ -176,11 +176,18 @@ return [
             'alternateExchange' => [
                 'name' => 'mail.sms.alternate.x',
                 'type' => 'fanout',
-                'queue' => 'mail.sms.alternate.q'
+                'durable' => true,
+                'autoDelete' => false,
+                'queue' => 'mail.sms.alternate.q',
+                'queueDurable' => true,
+                'queueAutoDelete' => false,
+                'queueMode' => 'lazy',
             ],
             'dlx' => [
                 'name' => 'mail.sms.dlx',
-                'type' => 'fanout'
+                'type' => 'topic',
+                'durable' => true,
+                'autoDelete' => false
             ],
             'queue' => [
                 'mail' => [
@@ -188,9 +195,13 @@ return [
                     'binding' => 'mail',
                     'durable' => true,
                     'autoDelete' => false,
+                    'queueMode' => 'lazy',
                     'dlq' => [
-                        'name' => 'mail.sms.dlq',
-                        'x_message_ttl' => 50000
+                        'name' => 'mail.dlq',
+                        'x_message_ttl' => 50000,
+                        'durable' => true,
+                        'autoDelete' => false,
+                        'queueMode' => 'lazy'
                     ],
                 ],
                 'sms' => [
@@ -198,13 +209,17 @@ return [
                     'binding' => 'sms',
                     'durable' => true,
                     'autoDelete' => false,
+                    'queueMode' => 'lazy',
                     'dlq' => [
-                        'name' => 'mail.sms.dlq',
-                        'x_message_ttl' => 50000
+                        'name' => 'sms.dlq',
+                        'x_message_ttl' => 50000,
+                        'durable' => true,
+                        'autoDelete' => false,
+                        'queueMode' => 'lazy'
                     ],
                 ]
-            ]
-        ]
+            ],
+        ],
     ],
     'consume' => ''
 ];
