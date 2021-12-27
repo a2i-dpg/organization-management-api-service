@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\CompanyInfoVisibility;
+use App\Models\AdditionalJobInformation;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
@@ -53,7 +54,6 @@ class JobManagementController extends Controller
      */
     public function storePrimaryJobInformation(Request $request): JsonResponse
     {
-
         $validatedData = $this->primaryJobInformationService->validator($request)->validate();
         $employmentTypes = $validatedData['employment_type'];
         DB::beginTransaction();
