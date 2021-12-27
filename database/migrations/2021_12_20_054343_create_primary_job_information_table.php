@@ -15,7 +15,7 @@ class CreatePrimaryJobInformationTable extends Migration
     {
         Schema::create('primary_job_information', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('job_id')->unique();
+            $table->string('job_id');//->unique();
             $table->unsignedTinyInteger('service_type')->comment("1=>Basic Listing, 2=>Stand-out-listing,3=>Stand Out Premium");
             $table->string("job_title");
             $table->unsignedMediumInteger("no_of_vacancies")->nullable();
