@@ -5349,7 +5349,8 @@
                         "description": "1=>Home 2=>Office"
                     },
                     "job_location": {
-                        "type": "array"
+                        "type": "array",
+                        "description": "divisionId_DistrictId_UpazilaId"
                     }
                 },
                 "required": [
