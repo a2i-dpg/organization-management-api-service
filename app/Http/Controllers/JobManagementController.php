@@ -32,11 +32,13 @@ class JobManagementController extends Controller
     /**
      * @param PrimaryJobInformationService $primaryJobInformationService
      * @param AdditionalJobInformationService $additionalJobInformationService
+     * @param CompanyInfoVisibilityService $companyInfoVisibilityService
      */
-    public function __construct(PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService)
+    public function __construct(PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService,CompanyInfoVisibilityService $companyInfoVisibilityService)
     {
         $this->primaryJobInformationService = $primaryJobInformationService;
         $this->additionalJobInformationService = $additionalJobInformationService;
+        $this->companyInfoVisibilityService = $companyInfoVisibilityService;
         $this->startTime = Carbon::now();
 
     }
@@ -175,14 +177,33 @@ class JobManagementController extends Controller
      */
     public function storeCompanyInfoVisibility(Request $request): JsonResponse
     {
-        $validatedData = $this->companyInfoVisibilityService->validator($request)->validate();
-        $companyInfoVisibility = $this->companyInfoVisibilityService->store($validatedData);
+        $validatedData = $this->companyInfoVisibilityService->companyInfoVisibilityValidator($request)->validate();
+        $companyInfoVisibility = $this->companyInfoVisibilityService->storeOrUpdate($validatedData);
         $response = [
             "data" => $companyInfoVisibility,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "Company Info Visibility successfully submitted",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param int $jobId
+     * @return JsonResponse
+     */
+    public function getCompanyInfoVisibility(int $jobId): JsonResponse
+    {
+        $companyInfoVisibility = $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId);
+        $response = [
+            "data" => $companyInfoVisibility,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
