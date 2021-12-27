@@ -5751,11 +5751,9 @@
                         "type": "integer",
                         "enum": [
                             0,
-                            1,
-                            2,
-                            3
+                            1
                         ],
-                        "description": "0=> INACTIVE , 1=>ACTIVE  , 2=> PENDING , 3=> REJECTED"
+                        "description": "0=> INACTIVE , 1=>ACTIVE"
                     }
                 },
                 "required": [
