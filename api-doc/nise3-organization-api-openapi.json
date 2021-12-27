@@ -4846,10 +4846,13 @@
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
-                        "$ref": "#/components/parameters/row_status_optional"
+                        "$ref": "#/components/parameters/row_status"
                     },
                     {
                         "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/membership_id"
                     }
                 ],
                 "responses": {
@@ -7176,6 +7179,24 @@
             }
         },
         "parameters": {
+            "row_status": {
+                "name": "row_status",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "enum": [1,2,3,4],
+                    "description": "0=>Inactive 1=>Active 2=>Pending 3=>Rejected"
+                }
+            },
+            "membership_id": {
+                "name": "membership_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
             "contactInfoId": {
                 "name": "contactInfoId",
                 "in": "path",

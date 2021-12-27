@@ -260,6 +260,8 @@ class OrganizationService
         $pageSize = $request['page_size'] ?? "";
         $order = $request['order'] ?? "ASC";
         $industryAssociationId = $request['industry_association_id'];
+        $membershipId = $request['membership_id'] ?? "";
+
 
         $organizationBuilder = Organization::select(
             [
@@ -310,6 +312,9 @@ class OrganizationService
         }
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($membershipId)) {
+            $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
         }
 
 
@@ -1426,6 +1431,7 @@ class OrganizationService
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
             'page' => 'integer|gt:0',
+            'membership_id' => 'nullable',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
             'industry_association_id' => 'required|integer|gt:0',
