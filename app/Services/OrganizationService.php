@@ -150,11 +150,10 @@ class OrganizationService
 
     /**
      * @param array $request
-     * @param int $industryAssociationId
      * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime): array
+    public function getOrganizationListByIndustryAssociation(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -163,6 +162,7 @@ class OrganizationService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $membershipId = $request['membership_id'] ?? "";
+        $industryAssociationId = $request['industry_association_id'];  /** No need to add this filter in api doc,will come with request  */
 
 
         $organizationBuilder = Organization::select(
@@ -249,18 +249,17 @@ class OrganizationService
 
     /**
      * @param array $request
-     * @param int $industryAssociationId
      * @param Carbon $startTime
      * @return array
      */
-    public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime): array
+    public function getPublicOrganizationListByIndustryAssociation(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $order = $request['order'] ?? "ASC";
-
+        $industryAssociationId = $request['industry_association_id'];
 
         $organizationBuilder = Organization::select(
             [
@@ -1412,7 +1411,7 @@ class OrganizationService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function filterPublicValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function IndustryAssociationMemberFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'order.in' => 'Order must be within ASC or DESC.[30000]',
