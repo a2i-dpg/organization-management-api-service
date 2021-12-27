@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 /**
- *
+ * WARNING: NOT COMPLETED
  */
-class AdditionalJobInformationService
+class CandidateRequirementsService
 {
     /**
      * @return array
