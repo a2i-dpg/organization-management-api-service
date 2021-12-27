@@ -56,7 +56,8 @@ class PrimaryJobInformationService
                 "string"
             ],
             "is_not_vacancy_needed" => [
-                "required"
+                "required",
+                Rule::in(array_keys(PrimaryJobInformation::BOOLEAN_FLAG))
             ],
             "no_of_vacancies" => [
                 Rule::requiredIf(function () use ($request) {

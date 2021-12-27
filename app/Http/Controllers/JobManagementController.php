@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\CompanyInfoVisibility;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
+use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use Carbon\Carbon;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
+use function Symfony\Component\Translation\t;
 
 
 class JobManagementController extends Controller
@@ -22,6 +25,7 @@ class JobManagementController extends Controller
     public PrimaryJobInformationService $primaryJobInformationService;
     public AdditionalJobInformationService $additionalJobInformationService;
     public CandidateRequirementsService $candidateRequirementsService;
+    public CompanyInfoVisibilityService $companyInfoVisibilityService;
     public Carbon $startTime;
 
     /**
@@ -161,6 +165,29 @@ class JobManagementController extends Controller
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function storeCompanyInfoVisibility(Request $request): JsonResponse
+    {
+        $validatedData = $this->companyInfoVisibilityService->validator($request)->validate();
+        $companyInfoVisibility = $this->companyInfoVisibilityService->store($validatedData);
+        $response = [
+            "data" => $companyInfoVisibility,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Company Info Visibility successfully submitted",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
     }
 
 }

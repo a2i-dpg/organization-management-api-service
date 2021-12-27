@@ -15,9 +15,10 @@ class CreateCompanyInfoVisibilitiesTable extends Migration
     {
         Schema::create('company_info_visibilities', function (Blueprint $table) {
             $table->id();
+            $table->string('job_id');
             $table->unsignedTinyInteger('is_company_name_visible')->default(0)->comment("0=> False, 1=> True");
-            $table->string('company_name')->nullable();
-            $table->string('company_name_en')->nullable();
+            $table->string('company_name', 600)->nullable();
+            $table->string('company_name_en', 300)->nullable();
             $table->unsignedTinyInteger('is_company_address_visible')->default(0)->comment("0=> False, 1=> True");
             $table->unsignedInteger('company_industry_type');
             $table->unsignedTinyInteger('is_company_business_visible')->default(0)->comment("0=> False, 1=> True");
@@ -33,6 +34,7 @@ class CreateCompanyInfoVisibilitiesTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('company_info_visibilities');
     }
 }
