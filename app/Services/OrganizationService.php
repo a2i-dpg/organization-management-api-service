@@ -488,7 +488,7 @@ class OrganizationService
     }
 
     /**
-     * Send Mail To IndustryAssociation After MembershipApplication
+     * Send Mail To IndustryAssociation After Membership Application
      * @param array $industryAssociationInfo
      * @throws Throwable
      */
@@ -506,7 +506,7 @@ class OrganizationService
             $industryAssociation->contact_person_email
         ]);
         $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Registration";
+        $subject = "Industry Association Membership Application";
         $mailService->setForm($from);
         $mailService->setSubject($subject);
 
@@ -515,8 +515,8 @@ class OrganizationService
             "industry_association_info" => $industryAssociation->toArray()
         ]);
 
-        $instituteRegistrationTemplate = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
+        $industryAssociationMembership = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
+        $mailService->setTemplate($industryAssociationMembership);
         $mailService->sendMail();
     }
 
@@ -642,7 +642,7 @@ class OrganizationService
             $mailPayload['contact_person_email']
         ]);
         $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "Institute Registration";
+        $subject = $mailPayload['subject'] ?? "Organization Registration";
 
         $mailService->setForm($from);
         $mailService->setSubject($subject);
@@ -650,8 +650,8 @@ class OrganizationService
             "user_name" => $mailPayload['contact_person_mobile'],
             "password" => $mailPayload['password']
         ]);
-        $instituteRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
+        $organizationRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
+        $mailService->setTemplate($organizationRegistrationTemplate);
         $mailService->sendMail();
     }
 
@@ -877,6 +877,31 @@ class OrganizationService
             })
             ->json();
 
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function sendMailToOrganizationAfterRegistrationApprovalOrRejection(array $mailPayload)
+    {
+        $organization = Organization::findOrFail($mailPayload['organization_id']);
+        $mailService = new MailService();
+        $mailService->setTo([
+            $organization->contact_person_email
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = $mailPayload['subject'];
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization_info" => $organization->toArray(),
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.organization-registration-approval-or-rejection-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
     }
 
     /**

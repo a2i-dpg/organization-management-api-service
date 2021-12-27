@@ -43,6 +43,7 @@ class PublicationController extends Controller
 
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Publication::class);
         $filter = $this->publicationService->filterValidator($request)->validate();
         $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);
 
@@ -71,7 +72,9 @@ class PublicationController extends Controller
      */
     public function read(int $id): JsonResponse
     {
+
         $publication = $this->publicationService->getOnePublication($id, $this->startTime);
+        $this->authorize('view', $publication);
 
         $response = [
             "data" => $publication,
@@ -92,6 +95,8 @@ class PublicationController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Publication::class);
+
         $validated = $this->publicationService->validator($request)->validate();
         $data = $this->publicationService->store($validated);
         $response = [
@@ -116,10 +121,12 @@ class PublicationController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $Publication = Publication::findOrFail($id);
+        $publication = Publication::findOrFail($id);
+        $this->authorize('update', $publication);
+
         $validated = $this->publicationService->validator($request, $id)->validate();
 
-        $data = $this->publicationService->update($Publication, $validated);
+        $data = $this->publicationService->update($publication, $validated);
         $response = [
             'data' => $data,
             '_response_status' => [
@@ -141,6 +148,8 @@ class PublicationController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $publication = Publication::findOrFail($id);
+        $this->authorize('delete', $publication);
+
 
         $this->publicationService->destroy($publication);
         $response = [

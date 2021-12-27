@@ -27,20 +27,11 @@ use Throwable;
  */
 class OrganizationController extends Controller
 {
-    /**
-     * @var OrganizationService
-     */
-    protected OrganizationService $organizationService;
 
-    /**
-     * @var Carbon
-     */
+    protected OrganizationService $organizationService;
     private Carbon $startTime;
 
-    /**
-     * OrganizationController constructor.
-     * @param OrganizationService $organizationService
-     */
+
     public function __construct(OrganizationService $organizationService)
     {
         $this->organizationService = $organizationService;
@@ -335,7 +326,13 @@ class OrganizationController extends Controller
         try {
             if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
                 $this->organizationService->organizationStatusChangeAfterApproval($organization);
-                $this->organizationService->organizationUserApproval($organization);
+                $userApproval = $this->organizationService->organizationUserApproval($organization);
+                if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
+
+                    $mailPayload['organization_id'] = $organizationId;
+                    $mailPayload['subject'] = "Organization Registration Approval";
+                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                }
                 $response['_response_status'] = [
                     "success" => false,
                     "code" => ResponseAlias::HTTP_OK,
@@ -371,7 +368,14 @@ class OrganizationController extends Controller
         try {
             if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
                 $this->organizationService->organizationStatusChangeAfterRejection($organization);
-                $this->organizationService->organizationUserRejection($organization);
+                $userRejection = $this->organizationService->organizationUserRejection($organization);
+
+                if (isset($userRejection['_response_status']['success']) && $userRejection['_response_status']['success']) {
+                    $mailPayload['organization_id'] = $organizationId;
+                    $mailPayload['subject'] = "Organization Registration Rejection";
+
+                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                }
                 $response['_response_status'] = [
                     "success" => false,
                     "code" => ResponseAlias::HTTP_OK,

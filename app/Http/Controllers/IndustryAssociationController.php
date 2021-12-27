@@ -203,6 +203,7 @@ class IndustryAssociationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+                $this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
                 $response['data'] = $industryAssociation;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -273,7 +274,7 @@ class IndustryAssociationController extends Controller
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
-                $this->industryAssociationService->sendIndustryAssociationOpenRegistrationNotificationByMail($validated);
+                $this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
 
                 $response['data'] = $industryAssociation;
                 DB::commit();
@@ -324,8 +325,16 @@ class IndustryAssociationController extends Controller
                 $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
                 $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
 
-                /** sendSms after Industry Association Registration Approval */
+                /** send Sms after Industry Association Registration Approval */
                 $this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+
+
+                $mailPayload['industry_association_id'] = $industryAssociationId;
+                $mailPayload['subject'] = "Industry Association Registration Approval";
+                $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
+
+                /** send Email after Industry Association Registration Approval */
+                $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
 
                 DB::commit();
                 $response = [
@@ -372,6 +381,15 @@ class IndustryAssociationController extends Controller
 
                 $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
                 $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
+                /** sendSms after Industry Association Registration Rejection */
+                $this->industryAssociationService->sendSmsIndustryAssociationRegistrationRejection($industryAssociation);
+
+                $mailPayload['industry_association_id'] = $industryAssociationId;
+                $mailPayload['subject'] = "Industry Association Registration Rejection";
+                $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
+
+                /** send Email after Industry Association Registration Approval */
+                $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
                 DB::commit();
                 $response = [
                     '_response_status' => [
@@ -507,6 +525,10 @@ class IndustryAssociationController extends Controller
 
         if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
             $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
+            $validatedData['subject'] = "Industry Association Membership Application Approval";
+            $validatedData['organization_id'] = $organizationId;
+            $this->industryAssociationService->sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection($validatedData);
+
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -544,6 +566,11 @@ class IndustryAssociationController extends Controller
 
         if ($organization->row_status == BaseModel::ROW_STATUS_ACTIVE) {
             $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
+
+            $validatedData['subject'] = "Industry Association Membership Application Rejection";
+            $validatedData['organization_id'] = $organizationId;
+            $this->industryAssociationService->sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection($validatedData);
+
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -566,6 +593,11 @@ class IndustryAssociationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
     public function updateIndustryAssociationProfile(Request $request): JsonResponse
     {
         //$this->authorize('updateIndustryAssociationProfile', Organization::class);
@@ -594,6 +626,9 @@ class IndustryAssociationController extends Controller
     }
 
 
+    /**
+     * @return JsonResponse
+     */
     public function getIndustryAssociationProfile(): JsonResponse
     {
         //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);

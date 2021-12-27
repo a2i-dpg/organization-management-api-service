@@ -6,7 +6,7 @@ use App\Models\ContactInfo;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ContactInfoPolicy
+class ContactInfoPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
