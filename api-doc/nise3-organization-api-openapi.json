@@ -12,6 +12,9 @@
     },
     "servers": [
         {
+            "url": "http://localhost:8002/api/v1"
+        },
+        {
             "url": "https://org.bus-staging.softbdltd.com/api/v1"
         },
         {
@@ -19,9 +22,6 @@
         },
         {
             "url": "http://localhost:8000/api/v1"
-        },
-        {
-            "url": "http://localhost:8002/api/v1"
         },
         {
             "url": "http://localhost:8003/api/v1"
@@ -5214,6 +5214,32 @@
                     }
                 }
             }
+        },
+        "/job/store-additional-job-information": {
+            "post": {
+                "tags": ["Additional Job Information"],
+                "summary": "Store additional job info",
+                "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdditionalJobInformation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -5269,6 +5295,9 @@
                     "is_other_benefits": {
                         "type": "boolean"
                     },
+                    "other_benefits": {
+                        "type": "array"
+                    },
                     "lunch_facilities": {
                         "type": "integer",
                         "enum": [1,2],
@@ -5278,11 +5307,12 @@
                         "type": "string"
                     },
                     "job_level": {
-                        "type": "array",
+                        "type": "integer",
+                        "enum": [1,2,3],
                         "description": "1 => Entry,2 => Mid,3 => Top"
                     },
                     "work_place": {
-                        "type": "array",
+                        "type": "integer",
                         "description": "1=>Home 2=>Office"
                     },
                     "job_location": {
