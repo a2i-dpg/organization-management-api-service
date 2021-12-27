@@ -4832,6 +4832,29 @@
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/membership_id"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "successful",
@@ -5470,6 +5493,76 @@
                     }
                 }
             }
+        },
+        "/job/store-primary-job-information": {
+            "post": {
+                "tags": ["Primary Job Information"],
+                "summary": "Store a primary job information",
+                "description": "API endpoint to Store a primary job information.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PrimaryJobInfo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "service_type": "1",
+                                        "job_title": "NewBarbie",
+                                        "no_of_vacancies": "3",
+                                        "job_category_id": "1",
+                                        "application_deadline": "2021-12-12",
+                                        "resume_receiving_option": "2",
+                                        "email": null,
+                                        "is_use_nise3_mail_system": 0,
+                                        "special_instruction_for_job_seekers": null,
+                                        "instruction_for_hard_copy": null,
+                                        "instruction_for_walk_in_interview": null,
+                                        "is_photograph_enclose_with_resume": "1",
+                                        "is_prefer_video_resume": 0,
+                                        "created_at": "2021-12-26T06:33:03.000000Z",
+                                        "updated_at": "2021-12-26T06:38:04.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "PrimaryJobInformation successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/job-id": {
+            "get": {
+                "tags": ["Primary Job Information"],
+                "summary": "Get Job id",
+                "description": "API endpoint to Get Job id.A successful request response will show 201 HTTP status code",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":"IDSA-2fe8e68e-4456-43be-9d9d-481974a41890"
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -5477,6 +5570,173 @@
     },
     "components": {
         "schemas": {
+            "AdditionalJobInformation": {
+                "type": "object",
+                "description": "Store AdditionalJobInformation",
+                "properties": {
+                    "job_id": {
+                        "type": "integer"
+                    },
+                    "job_responsibilities": {
+                        "type": "string"
+                    },
+                    "job_content": {
+                        "type": "string"
+                    },
+                    "job_place_type": {
+                        "type": "integer",
+                        "enum": [1,2],
+                        "description": "1=>Inside Banladesh 2=>Outside Bangladesh"
+                    },
+                    "salary_min": {
+                        "type": "integer"
+                    },
+                    "salary_max": {
+                        "type": "integer"
+                    },
+                    "is_salary_info_show": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>Show Salary 2=>Show Nothing 3=> Show Negotiable instead of given salary range"
+                    },
+                    "is_salary_compare_to_expected_salary": {
+                        "type": "boolean"
+                    },
+                    "is_salary_alert_excessive_than_given_salary_range": {
+                        "type": "boolean"
+                    },
+                    "salary_review": {
+                        "type": "integer",
+                        "enum": [1,2],
+                        "description": "1=>Half yearly 2=>Yearly"
+                    },
+                    "festival_bonus": {
+                        "type": "integer",
+                        "enum": [1,2,3,4],
+                        "description": "1=>01 2=>02 3=>03 4=>04"
+                    },
+                    "additional_salary_info": {
+                        "type": "string"
+                    },
+                    "is_other_benefits": {
+                        "type": "boolean"
+                    },
+                    "lunch_facilities": {
+                        "type": "integer",
+                        "enum": [1,2],
+                        "description": "1=>Partially Subsidized 2=>Fully Subsidized"
+                    },
+                    "others": {
+                        "type": "string"
+                    },
+                    "job_level": {
+                        "type": "array",
+                        "description": "1 => Entry,2 => Mid,3 => Top"
+                    },
+                    "work_place": {
+                        "type": "array",
+                        "description": "1=>Home 2=>Office"
+                    },
+                    "job_location": {
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "job_content",
+                    "job_place_type",
+                    "is_salary_info_show",
+                    "is_salary_alert_excessive_than_given_salary_range",
+                    "salary_review",
+                    "festival_bonus",
+                    "is_other_benefits",
+                    "lunch_facilities",
+                    "job_level",
+                    "work_place",
+                    "job_location"
+                ]
+            },
+            "PrimaryJobInfo": {
+                "type": "object",
+                "description": "Store primary job information",
+                "properties": {
+                    "job_id": {
+                        "type": "integer"
+                    },
+                    "service_type": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>Basic Listing, 2=> Stand out Listing , 3=>Stand out premium"
+                    },
+                    "job_title": {
+                        "type": "string"
+                    },
+                    "is_not_vacancy_needed": {
+                        "type": "integer"
+                    },
+                    "no_of_vacancies": {
+                        "type": "integer",
+                        "description": "Required when is_not_vacancy_needed != 1"
+                    },
+                    "job_category_id": {
+                        "type": "integer"
+                    },
+                    "employment_type": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "application_deadline": {
+                        "type": "string",
+                        "format": "y-m-d"
+                    },
+                    "resume_receiving_option": {
+                        "type": "integer",
+                        "enum": [
+                            1,2,3,4
+                        ],
+                        "description": "1=>Apply Online , 2=> Email, 2=> Hard Copy, 4=> Walk in interview"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Required when resume receiving option is => Email"
+                    },
+                    "is_use_nise3_mail_system": {
+                        "type": "integer"
+                    },
+                    "special_instruction_for_job_seekers": {
+                        "type": "string"
+                    },
+                    "instruction_for_hard_copy": {
+                        "type": "string",
+                        "description": "Required when resume receiving option is => Hard Copy"
+                    },
+                    "instruction_for_walk_in_interview": {
+                        "type": "string",
+                        "description": "Required when resume receiving option is => Walk in interview"
+                    },
+                    "is_photograph_enclose_with_resume": {
+                        "type": "integer"
+                    },
+                    "is_prefer_video_resume": {
+                        "type": "integer",
+                        "description": "Required when resume receiving option is => Online Apply"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "service_type",
+                    "job_title",
+                    "is_not_vacancy_needed",
+                    "no_of_vacancies",
+                    "job_category_id",
+                    "employment_type",
+                    "application_deadline",
+                    "resume_receiving_option",
+                    "is_photograph_enclose_with_resume"
+                ]
+            },
             "industryAssociationMembershipApprovalOrRejection": {
                 "type": "object",
                 "description": "industryAssociationMembershipApprovalOrRejection",
@@ -5728,11 +5988,9 @@
                         "type": "integer",
                         "enum": [
                             0,
-                            1,
-                            2,
-                            3
+                            1
                         ],
-                        "description": "0=> INACTIVE , 1=>ACTIVE  , 2=> PENDING , 3=> REJECTED"
+                        "description": "0=> INACTIVE , 1=>ACTIVE"
                     }
                 },
                 "required": [
@@ -7156,6 +7414,24 @@
             }
         },
         "parameters": {
+            "row_status": {
+                "name": "row_status",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "enum": [1,2,3,4],
+                    "description": "0=>Inactive 1=>Active 2=>Pending 3=>Rejected"
+                }
+            },
+            "membership_id": {
+                "name": "membership_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
             "contactInfoId": {
                 "name": "contactInfoId",
                 "in": "path",
