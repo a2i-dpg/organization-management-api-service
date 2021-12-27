@@ -5234,7 +5234,37 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "job_id": "1",
+                                        "job_responsibilities": null,
+                                        "job_content": "newbiewww",
+                                        "job_place_type": "2",
+                                        "salary_min": null,
+                                        "salary_max": null,
+                                        "is_salary_info_show": "2",
+                                        "is_salary_compare_to_expected_salary": "0",
+                                        "is_salary_alert_excessive_than_given_salary_range": "1",
+                                        "salary_review": "1",
+                                        "festival_bonus": "1",
+                                        "additional_salary_info": null,
+                                        "is_other_benefits": "0",
+                                        "other_benefits": [
+                                            ""
+                                        ],
+                                        "lunch_facilities": "1",
+                                        "others": null,
+                                        "updated_at": "2021-12-27T12:10:05.000000Z",
+                                        "created_at": "2021-12-27T12:10:05.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "AdditionalJobInformation successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
