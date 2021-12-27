@@ -2,36 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Publication;
-use App\Services\PublicationService;
+use App\Models\ContactInfo;
+use App\Services\ContactInfoService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-
-class PublicationController extends Controller
+class ContactInfoController extends Controller
 {
-    /**
-     * @var PublicationService
-     */
-    public PublicationService $publicationService;
-
-    /**
-     * @var Carbon
-     */
+    public ContactInfoService $contactInfoService;
     private Carbon $startTime;
 
     /**
-     * PublicationController constructor.
-     * @param PublicationService $publicationService
+     * @param ContactInfoService $contactInfoService
      */
-    public function __construct(PublicationService $publicationService)
+    public function __construct(ContactInfoService $contactInfoService)
     {
         $this->startTime = Carbon::now();
-        $this->publicationService = $publicationService;
+        $this->contactInfoService = $contactInfoService;
     }
 
     /**
@@ -40,12 +31,13 @@ class PublicationController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAny', Publication::class);
-        $filter = $this->publicationService->filterValidator($request)->validate();
-        $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);
+        $this->authorize('viewAny', ContactInfo::class);
+
+        $filter = $this->contactInfoService->filterValidator($request)->validate();
+        $returnedData = $this->contactInfoService->getContactInfoList($filter, $this->startTime);
+
 
         $response = [
             'order' => $returnedData['order'],
@@ -63,21 +55,20 @@ class PublicationController extends Controller
             $response['page_size'] = $returnedData['page_size'];
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
-
     }
 
+
     /**
+     * Display the specified resource.
      * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
     {
-
-        $publication = $this->publicationService->getOnePublication($id, $this->startTime);
-        $this->authorize('view', $publication);
-
+        $contactInfo = $this->contactInfoService->getOneContactInfo($id);
+        $this->authorize('view', $contactInfo);
         $response = [
-            "data" => $publication,
+            "data" => $contactInfo,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -93,27 +84,27 @@ class PublicationController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    function store(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        $this->authorize('create', Publication::class);
+        $this->authorize('create', ContactInfo::class);
 
-        $validated = $this->publicationService->validator($request)->validate();
-        $data = $this->publicationService->store($validated);
+        $validated = $this->contactInfoService->validator($request)->validate();
+        $data = $this->contactInfoService->store($validated);
+
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "publication added successfully",
+                "message" => "contact info added successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
-
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -121,42 +112,60 @@ class PublicationController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $publication = Publication::findOrFail($id);
-        $this->authorize('update', $publication);
+        $contactInfo = ContactInfo::findOrFail($id);
+        $this->authorize('update', $contactInfo);
 
-        $validated = $this->publicationService->validator($request, $id)->validate();
+        $validated = $this->contactInfoService->validator($request, $id)->validate();
 
-        $data = $this->publicationService->update($publication, $validated);
+        $data = $this->contactInfoService->update($contactInfo, $validated);
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Publication updated successfully",
+                "message" => "Contact info updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
-
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      * @param int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {
-        $publication = Publication::findOrFail($id);
-        $this->authorize('delete', $publication);
+        $contactUs = ContactInfo::findOrFail($id);
 
-
-        $this->publicationService->destroy($publication);
+        $this->authorize('delete', $contactUs);
+        $this->contactInfoService->destroy($contactUs);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "publication deleted successfully",
+                "message" => "Contact info deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function restore(int $id): JsonResponse
+    {
+        $contactInfo = ContactInfo::onlyTrashed()->findOrFail($id);
+        $this->contactInfoService->restore($contactInfo);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "contact info restored successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -164,31 +173,15 @@ class PublicationController extends Controller
     }
 
     /**
-     * Restore the specified  soft deleted resource
-     * @param int $id
+     * @param Request $request
      * @return JsonResponse
+     * @throws ValidationException
      */
-    public function restore(int $id): JsonResponse
-    {
-        $publication = Publication::onlyTrashed()->findOrFail($id);
-        $this->publicationService->restore($publication);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "publication restored successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
 
-    public function getPublicPublicationList(Request $request): JsonResponse
+    public function getPublicContactInfoList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', Publication::class);
-
-        $filter = $this->publicationService->filterValidator($request)->validate();
-        $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);
+        $filter = $this->contactInfoService->filterValidator($request)->validate();
+        $returnedData = $this->contactInfoService->getContactInfoList($filter, $this->startTime);
 
         $response = [
             'order' => $returnedData['order'],
@@ -206,6 +199,6 @@ class PublicationController extends Controller
             $response['page_size'] = $returnedData['page_size'];
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
-    }
 
+    }
 }

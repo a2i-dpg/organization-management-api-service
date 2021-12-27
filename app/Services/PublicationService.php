@@ -7,6 +7,7 @@ use App\Models\Publication;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -57,7 +58,7 @@ class PublicationService
                 'publications.row_status'
 
             ]
-        );
+        )->acl();
         $publicationBuilder->orderBy('publications.id', $order);
 
         if (!empty($titleEn)) {
@@ -102,9 +103,9 @@ class PublicationService
     /**
      * @param int $id
      * @param Carbon $startTime
-     * @return array
+     * @return Builder|Model
      */
-    public function getOnePublication(int $id, Carbon $startTime): array
+    public function getOnePublication(int $id, Carbon $startTime): Builder|Model
     {
         /** @var Builder $publicationBuilder */
         $publicationBuilder = Publication::select(
@@ -130,16 +131,9 @@ class PublicationService
         $publicationBuilder->where('publications.id', '=', $id);
 
         /** @var Publication $publication */
-        $publication = $publicationBuilder->first();
+        return $publication = $publicationBuilder->first();
 
-        return [
-            "data" => $publication ?: [],
-            "_response_status" => [
-                "success" => true,
-                "code" => Response::HTTP_OK,
-                "query_time" => $startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+
     }
 
     /**

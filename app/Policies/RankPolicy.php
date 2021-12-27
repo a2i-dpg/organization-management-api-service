@@ -6,7 +6,7 @@ use App\Models\Rank;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RankPolicy
+class RankPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
