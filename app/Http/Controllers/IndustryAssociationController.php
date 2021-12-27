@@ -178,6 +178,7 @@ class IndustryAssociationController extends Controller
                 throw new CustomException('IndustryAssociation has not been properly saved to db.');
             }
             $validated['industry_association_id'] = $industryAssociation->id;
+            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
             $createdRegisterUser = $this->industryAssociationService->createUser($validated);
 
 
