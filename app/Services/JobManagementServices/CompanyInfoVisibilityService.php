@@ -28,6 +28,16 @@ class CompanyInfoVisibilityService
     {
         $requestData = $request->all();
         $rules = [
+            "job_id" => [
+                "required",
+                'int',
+                //TODO check exist in previous step',
+                Rule::unique('company_info_visibilities', 'job_id')
+                    ->ignore($request->input('job_id'),'job_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    }),
+            ],
             'is_company_name_visible' => [
                 'required',
                 'integer',
