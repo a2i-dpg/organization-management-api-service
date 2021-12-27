@@ -47,6 +47,7 @@ class OrganizationService
             'organizations.id',
             'organizations.title_en',
             'organizations.title',
+            'organizations.date_of_establishment',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
@@ -149,11 +150,10 @@ class OrganizationService
 
     /**
      * @param array $request
-     * @param int $industryAssociationId
      * @param Carbon $startTime
      * @return array
      */
-    public function getOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    public function getOrganizationListByIndustryAssociation(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -161,13 +161,52 @@ class OrganizationService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
+        $membershipId = $request['membership_id'] ?? "";
+        $industryAssociationId = $request['industry_association_id'];  /** No need to add this filter in api doc,will come with request  */
 
 
-        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
-            $q->where('industry_association_id', $industryAssociationId);
+        $organizationBuilder = Organization::select(
+            [
+                'organizations.id',
+                'organizations.title_en',
+                'organizations.title',
+                'organizations.date_of_establishment',
+                'industry_association_organization.membership_id',
+                'organizations.id',
+                'organizations.name_of_the_office_head',
+                'organizations.name_of_the_office_head_en',
+                'organizations.name_of_the_office_head_designation',
+                'organizations.name_of_the_office_head_designation_en',
+                'organizations.domain',
+                'organizations.fax_no',
+                'organizations.mobile',
+                'organizations.email',
+                'organizations.contact_person_name',
+                'organizations.contact_person_name_en',
+                'organizations.contact_person_mobile',
+                'organizations.contact_person_email',
+                'organizations.contact_person_designation',
+                'organizations.contact_person_designation_en',
+                'organizations.description',
+                'organizations.description_en',
+                'organizations.logo',
+                'organizations.loc_division_id',
+                'organizations.loc_district_id',
+                'organizations.loc_upazila_id',
+                'organizations.address',
+                'organizations.address_en',
+                'industry_association_organization.row_status',
+                'organizations.created_at',
+                'organizations.updated_at'
+            ]
+        );
+
+        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                ->where('industry_association_organization.industry_association_id', $industryAssociationId);
         });
-
-        $organizationBuilder->orderBy('organizations.id', $order);
+        $organizationBuilder->where('organizations.row_status', BaseModel::ROW_STATUS_ACTIVE);
+        $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
@@ -175,10 +214,12 @@ class OrganizationService
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
-        if (is_numeric($rowStatus)) {
-            $organizationBuilder->where('organizations.row_status', $rowStatus);
+        if (!empty($membershipId)) {
+            $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
         }
-
+        if (is_numeric($rowStatus)) {
+            $organizationBuilder->where('industry_association_organization.row_status', $rowStatus);
+        }
         /** @var Collection $organizations */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -193,6 +234,7 @@ class OrganizationService
             $organizations = $organizationBuilder->get();
         }
 
+
         $response['order'] = $order;
         $response['data'] = $organizations->toArray()['data'] ?? $organizations->toArray();
         $response['_response_status'] = [
@@ -205,29 +247,74 @@ class OrganizationService
     }
 
 
-    public function getPublicOrganizationListByIndustryAssociation(array $request, int $industryAssociationId, Carbon $startTime,)
+    /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getPublicOrganizationListByIndustryAssociation(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
-        $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
+        $industryAssociationId = $request['industry_association_id'];
+        $membershipId = $request['membership_id'] ?? "";
 
 
-        $organizationBuilder = Organization::whereHas('industryAssociations', function ($q) use ($industryAssociationId) {
-            $q->where('industry_association_id', $industryAssociationId);
-            $q->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+        $organizationBuilder = Organization::select(
+            [
+                'organizations.id',
+                'organizations.title_en',
+                'organizations.title',
+                'organizations.date_of_establishment',
+                'industry_association_organization.membership_id',
+                'organizations.id',
+                'organizations.name_of_the_office_head',
+                'organizations.name_of_the_office_head_en',
+                'organizations.name_of_the_office_head_designation',
+                'organizations.name_of_the_office_head_designation_en',
+                'organizations.domain',
+                'organizations.fax_no',
+                'organizations.mobile',
+                'organizations.email',
+                'organizations.contact_person_name',
+                'organizations.contact_person_name_en',
+                'organizations.contact_person_mobile',
+                'organizations.contact_person_email',
+                'organizations.contact_person_designation',
+                'organizations.contact_person_designation_en',
+                'organizations.description',
+                'organizations.description_en',
+                'organizations.logo',
+                'organizations.loc_division_id',
+                'organizations.loc_district_id',
+                'organizations.loc_upazila_id',
+                'organizations.address',
+                'organizations.address_en',
+                'organizations.row_status',
+                'organizations.created_at',
+                'organizations.updated_at'
+            ]
+        );
+        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
         });
 
 
-        $organizationBuilder->orderBy('organizations.id', $order);
+        $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($membershipId)) {
+            $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
         }
 
 
@@ -266,6 +353,7 @@ class OrganizationService
             'organizations.id',
             'organizations.title_en',
             'organizations.title',
+            'organizations.date_of_establishment',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
@@ -344,30 +432,44 @@ class OrganizationService
     }
 
     /**
+     * @param Request $request
+     * @return array
+     */
+    public function getIndustryAssociationTitle(Request $request): array
+    {
+        return IndustryAssociation::select([
+            "id",
+            "title",
+            "title_en"
+        ])->whereIn("id", $request->get('industry_association_ids'))
+            ->get()->keyBy("id")->toArray();
+    }
+
+    /**
      * @param Organization $organization
      * @param array $data
      * @return Organization
      */
     public function store(Organization $organization, array $data): Organization
     {
-
         $organization->fill($data);
         $organization->save();
-        $this->assignOrganizationInIndustryAssociation($organization, $data);
+        $this->addOrganizationToIndustryAssociation($organization, $data);
         return $organization;
     }
 
     /**
-     * Assign organization to the selected industry while industry creation
+     * Add organization to a industryAssociation
      * @param Organization $organization
      * @param array $data
      */
-    public function assignOrganizationInIndustryAssociation(Organization $organization, array $data)
+    public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
     {
         $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'is_reg_approval' => Organization::IS_REG_APPROVAL_TRUE,
-            'row_status' => $organization->row_status ?: BaseModel::ROW_STATUS_PENDING
+            'membership_id' => $data['membership_id'],
+            'row_status' => BaseModel::ROW_STATUS_ACTIVE
         ]);
+
     }
 
     /**
@@ -382,6 +484,7 @@ class OrganizationService
         ]);
         if (!$dataUpdate) {
             $organization->industryAssociations()->attach($data['industry_association_id'], [
+                'membership_id' => $data['membership_id'],
                 'row_status' => BaseModel::ROW_STATUS_PENDING
             ]);
         }
@@ -389,7 +492,7 @@ class OrganizationService
     }
 
     /**
-     * Send Mail To IndustryAssociation After MembershipApplication
+     * Send Mail To IndustryAssociation After Membership Application
      * @param array $industryAssociationInfo
      * @throws Throwable
      */
@@ -407,7 +510,7 @@ class OrganizationService
             $industryAssociation->contact_person_email
         ]);
         $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Registration";
+        $subject = "Industry Association Membership Application";
         $mailService->setForm($from);
         $mailService->setSubject($subject);
 
@@ -416,8 +519,8 @@ class OrganizationService
             "industry_association_info" => $industryAssociation->toArray()
         ]);
 
-        $instituteRegistrationTemplate = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
+        $industryAssociationMembership = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
+        $mailService->setTemplate($industryAssociationMembership);
         $mailService->sendMail();
     }
 
@@ -428,6 +531,10 @@ class OrganizationService
     public function IndustryAssociationMembershipValidation(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
+            'membership_id' => [
+                'required',
+                'string',
+            ],
             'industry_association_id' => [
                 'required',
                 'integer',
@@ -440,7 +547,7 @@ class OrganizationService
                 Rule::unique('industry_association_organization', 'organization_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
                         return $query->where('industry_association_id', '=', $request->input('industry_association_id'))
-                            ->whereIn('row_status', [1, 2]);
+                            ->whereIn('row_status', [BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_PENDING]);
                     })
             ],
 
@@ -526,6 +633,10 @@ class OrganizationService
             ->json();
     }
 
+    /**
+     * @param array $mailPayload
+     * @throws Throwable
+     */
     public function userInfoSendByMail(array $mailPayload)
     {
         Log::info("MailPayload" . json_encode($mailPayload));
@@ -535,7 +646,7 @@ class OrganizationService
             $mailPayload['contact_person_email']
         ]);
         $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "Institute Registration";
+        $subject = $mailPayload['subject'] ?? "Organization Registration";
 
         $mailService->setForm($from);
         $mailService->setSubject($subject);
@@ -543,11 +654,15 @@ class OrganizationService
             "user_name" => $mailPayload['contact_person_mobile'],
             "password" => $mailPayload['password']
         ]);
-        $instituteRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
+        $organizationRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
+        $mailService->setTemplate($organizationRegistrationTemplate);
         $mailService->sendMail();
     }
 
+    /**
+     * @param string $recipient
+     * @param string $message
+     */
     public function userInfoSendBySMS(string $recipient, string $message)
     {
         $sms = new SmsService($recipient, $message);
@@ -705,6 +820,10 @@ class OrganizationService
         return $organization;
     }
 
+    /**
+     * @param Organization $organization
+     * @return Organization
+     */
     public function organizationStatusChangeAfterRejection(Organization $organization): Organization
     {
         $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
@@ -765,6 +884,31 @@ class OrganizationService
     }
 
     /**
+     * @throws Throwable
+     */
+    public function sendMailToOrganizationAfterRegistrationApprovalOrRejection(array $mailPayload)
+    {
+        $organization = Organization::findOrFail($mailPayload['organization_id']);
+        $mailService = new MailService();
+        $mailService->setTo([
+            $organization->contact_person_email
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = $mailPayload['subject'];
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization_info" => $organization->toArray(),
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.organization-registration-approval-or-rejection-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
+    }
+
+    /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
@@ -772,7 +916,7 @@ class OrganizationService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]',
         ];
         $rules = [
             'organization_type_id' => [
@@ -781,12 +925,13 @@ class OrganizationService
                 'exists:organization_types,id,deleted_at,NULL'
             ],
             'industry_association_id' => [
-                Rule::requiredIf(function () use ($id) {
-                    return is_null($id);
-                }),
-                'nullable',
-                'integer',
+                'required',
+                'int',
                 'exists:industry_associations,id,deleted_at,NULL'
+            ],
+            'membership_id' => [
+                'required',
+                'string',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
@@ -794,6 +939,10 @@ class OrganizationService
                 }),
                 'nullable',
                 'integer'
+            ],
+            'date_of_establishment' => [
+                'nullable',
+                'date_format:Y-m-d'
             ],
             'title_en' => [
                 'nullable',
@@ -860,7 +1009,7 @@ class OrganizationService
             'email' => [
                 'required',
                 'email',
-                'max:191'
+                'max:320'
             ],
             'fax_no' => [
                 'nullable',
@@ -974,15 +1123,32 @@ class OrganizationService
                 'max:1200',
                 'min:2'
             ],
+            'date_of_establishment' => [
+                'nullable',
+                'date_format:Y-m-d'
+            ],
             'organization_type_id' => [
                 'required',
                 'integer',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
                 'required',
-                'integer',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
+                'required',
+                'int',
+                'distinct',
+            ],
+            'industry_associations.*.membership_id' => [
+                'string',
+                'required',
             ],
             'email' => [
                 'required',
@@ -1117,6 +1283,7 @@ class OrganizationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
+            'membership_id' => 'nullable',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
@@ -1132,7 +1299,12 @@ class OrganizationService
         ], $customMessage);
     }
 
-    public function organizationAdminProfileValidator(Request $request, int $id = null)
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function organizationAdminProfileValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
 
@@ -1223,24 +1395,28 @@ class OrganizationService
                 'max: 500',
                 "min:2"
             ],
+            'logo' => [
+                'nullable',
+                'string',
+            ],
             'contact_person_designation_en' => [
                 'nullable',
                 'max: 300',
                 "min:2"
             ],
-            'row_status' => [
-                'required_if:' . $id . ',!=,null',
-                'nullable',
-                Rule::in(Organization::ROW_STATUSES),
-            ],
+
             'created_by' => ['nullable', 'int'],
             'updated_by' => ['nullable', 'int'],
         ];
-        return \Illuminate\Support\Facades\Validator::make($data, $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
 
-    public function filterPublicValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function IndustryAssociationMemberFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'order.in' => 'Order must be within ASC or DESC.[30000]',
@@ -1255,6 +1431,7 @@ class OrganizationService
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
             'page' => 'integer|gt:0',
+            'membership_id' => 'nullable',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
             'industry_association_id' => 'required|integer|gt:0',

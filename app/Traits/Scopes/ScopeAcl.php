@@ -25,6 +25,11 @@ trait ScopeAcl
                 $query = $query->where($tableName . '.organization_id', $authUser->organization_id);
             }
         }
+        else if ($authUser && $authUser->isIndustryAssociationUser()) {  //IndustryAssociation User
+            if (Schema::hasColumn($tableName, 'industry_association_id')) {
+                $query = $query->where($tableName . '.industry_association_id', $authUser->industry_association_id);
+            }
+        }
         return $query;
     }
 

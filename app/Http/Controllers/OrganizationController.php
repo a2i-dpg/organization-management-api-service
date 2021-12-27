@@ -27,20 +27,11 @@ use Throwable;
  */
 class OrganizationController extends Controller
 {
-    /**
-     * @var OrganizationService
-     */
-    protected OrganizationService $organizationService;
 
-    /**
-     * @var Carbon
-     */
+    protected OrganizationService $organizationService;
     private Carbon $startTime;
 
-    /**
-     * OrganizationController constructor.
-     * @param OrganizationService $organizationService
-     */
+
     public function __construct(OrganizationService $organizationService)
     {
         $this->organizationService = $organizationService;
@@ -59,35 +50,11 @@ class OrganizationController extends Controller
     {
         $this->authorize('viewAny', Organization::class);
         $filter = $this->organizationService->filterValidator($request)->validate();
-        /** @var User $authUser */
-        $authUser = Auth::user();
-        if (!empty($authUser) && $authUser->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE) {
-
-            $industryAssociationId = $authUser->industry_association_id;
-            $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $industryAssociationId, $this->startTime);
-
-        } else {
-            $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
-
-        }
+        $response = $this->organizationService->getAllOrganization($filter, $this->startTime);
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function getPublicIndustryAssociationMemberList(Request $request): JsonResponse
-    {
-        $filter = $this->organizationService->filterPublicValidator($request)->validate();
-        $industryAssociationId = $filter['industry_association_id'];
-        $response = $this->organizationService->getPublicOrganizationListByIndustryAssociation($filter,$industryAssociationId, $this->startTime);
-
-
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
     /**
      * Display a specified resource
      * @param Request $request
@@ -98,9 +65,7 @@ class OrganizationController extends Controller
     public function read(Request $request, int $id): JsonResponse
     {
         $organization = $this->organizationService->getOneOrganization($id);
-
         $requestHeaders = $request->header();
-
         /** Policy not checking when service to service call true*/
         if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
             $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
@@ -349,6 +314,91 @@ class OrganizationController extends Controller
     }
 
     /**
+     * @param int $organizationId
+     * @return JsonResponse
+     * @throws RequestException
+     * @throws Throwable
+     */
+    public function organizationRegistrationApproval(int $organizationId): JsonResponse
+    {
+        $organization = Organization::findOrFail($organizationId);
+        DB::beginTransaction();
+        try {
+            if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->organizationService->organizationStatusChangeAfterApproval($organization);
+                $userApproval = $this->organizationService->organizationUserApproval($organization);
+                if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
+
+                    $mailPayload['organization_id'] = $organizationId;
+                    $mailPayload['subject'] = "Organization Registration Approval";
+                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                }
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization approved successfully",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+                DB::commit();
+            } else {
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization can not be approved",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+            }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $organizationId
+     * @return JsonResponse
+     * @throws RequestException
+     * @throws Throwable
+     */
+    public function organizationRegistrationRejection(int $organizationId): JsonResponse
+    {
+        $organization = Organization::findOrFail($organizationId);
+        DB::beginTransaction();
+        try {
+            if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $this->organizationService->organizationStatusChangeAfterRejection($organization);
+                $userRejection = $this->organizationService->organizationUserRejection($organization);
+
+                if (isset($userRejection['_response_status']['success']) && $userRejection['_response_status']['success']) {
+                    $mailPayload['organization_id'] = $organizationId;
+                    $mailPayload['subject'] = "Organization Registration Rejection";
+
+                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                }
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization rejected successfully",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+                DB::commit();
+            } else {
+                $response['_response_status'] = [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "organization can not be rejected",
+                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+                ];
+            }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws Throwable
@@ -366,6 +416,30 @@ class OrganizationController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "Organization Title List.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function getIndustryAssociationTitleByIds(Request $request): JsonResponse
+    {
+        throw_if(!is_array($request->get('industry_association_ids')), ValidationException::withMessages([
+            "The Industry Association ids must be array.[8000]"
+        ]));
+
+        $industryAssociationTitle = $this->organizationService->getIndustryAssociationTitle($request);
+        $response = [
+            "data" => $industryAssociationTitle,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Industry Association Title List.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -406,16 +480,13 @@ class OrganizationController extends Controller
 
     /**
      * Industry association membership request from industry
-     * @throws ValidationException
+     * @param Request $request
+     * @return JsonResponse
      * @throws Throwable
+     * @throws ValidationException
      */
     public function IndustryAssociationMembershipApplication(Request $request): JsonResponse
     {
-        /** @var User $authUser */
-        $authUser = Auth::user();
-        if ($authUser && $authUser->organization_id) {
-            $request->offsetSet('organization_id', $authUser->organization_id);
-        }
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
         $this->organizationService->sendMailToIndustryAssociationAfterMembershipApplication($validatedData);
@@ -430,10 +501,11 @@ class OrganizationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
+
     /**
      * @return JsonResponse
      */
-    public function getOrganizationAdminProfile(): JsonResponse
+    public function getOrganizationProfile(): JsonResponse
     {
         //$this->authorize('updateOrganizationProfile', Organization::class);
 
@@ -458,10 +530,9 @@ class OrganizationController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ValidationException
      */
-    public function updateOrganizationAdminProfile(Request $request): JsonResponse
+    public function updateOrganizationProfile(Request $request): JsonResponse
     {
         //$this->authorize('updateOrganizationProfile', Organization::class);
 
@@ -485,7 +556,6 @@ class OrganizationController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
-
 
 
 }
