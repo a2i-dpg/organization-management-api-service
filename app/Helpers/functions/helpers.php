@@ -70,7 +70,7 @@ if (!function_exists("idpUserErrorMessage")) {
     function idUserErrorMessage($exception): array
     {
         $statusCode = $exception->getCode();
-        Log::info("status.code".$statusCode);
+        Log::info("status.code" . $statusCode);
         $errors = [
             '_response_status' => [
                 'success' => false,
@@ -112,3 +112,15 @@ if (!function_exists("idpUserErrorMessage")) {
         }
     }
 }
+
+if (!function_exists("getLocationIdByKeyString")) {
+    /**
+     * @param string $keyString
+     * @return array
+     */
+    function getLocationIdByKeyString(string $keyString): array
+    {
+        return explode("_", $keyString);
+    }
+}
+
