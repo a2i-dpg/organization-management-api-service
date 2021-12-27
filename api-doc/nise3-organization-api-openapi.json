@@ -4832,6 +4832,26 @@
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "successful",
