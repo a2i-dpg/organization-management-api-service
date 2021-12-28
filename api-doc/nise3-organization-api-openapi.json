@@ -5767,6 +5767,28 @@
                     }
                 }
             }
+        },
+        "/job/additional-job-information/{jobId}": {
+            "get": {
+                "tags": ["Additional Job Information"],
+                "summary": "Get a specific additional job info",
+                "description": "API endpoint to Get a specific additional job info.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
