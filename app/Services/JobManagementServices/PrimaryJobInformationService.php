@@ -99,13 +99,17 @@ class PrimaryJobInformationService
                 "required",
                 "string"
             ],
-            "is_not_vacancy_needed" => [
+            "job_title_en" => [
+                "nullable",
+                "string"
+            ],
+            "is_number_of_vacancy_na" => [
                 "required",
-                Rule::in(array_keys(PrimaryJobInformation::BOOLEAN_FLAG))
+                Rule::in(PrimaryJobInformation::BOOLEAN_FLAG)
             ],
             "no_of_vacancies" => [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->is_not_vacancy_needed != PrimaryJobInformation::VACANCY_NOT_NEEDED;
+                    return $request->is_number_of_vacancy_na == PrimaryJobInformation::BOOLEAN_FLAG_FALSE;
                 }),
                 "nullable",
                 "integer"
@@ -138,14 +142,14 @@ class PrimaryJobInformationService
             ],
             "is_photograph_enclose_with_resume" => [
                 "required",
-                Rule::in(array_keys(PrimaryJobInformation::BOOLEAN_FLAG))
+                Rule::in(PrimaryJobInformation::BOOLEAN_FLAG)
             ],
             "is_prefer_video_resume" => [        // TODO :will work this field in future
 //                Rule::requiredIf(function () use ($request) {
 //                    return $request->resume_receiving_option == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1];
 //                }),
                 "nullable",
-                Rule::in(array_keys(PrimaryJobInformation::BOOLEAN_FLAG))
+                Rule::in(PrimaryJobInformation::BOOLEAN_FLAG)
             ]
         ];
 
