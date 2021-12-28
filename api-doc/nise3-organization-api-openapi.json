@@ -7264,14 +7264,17 @@
                     "job_title": {
                         "type": "string"
                     },
-                    "is_not_vacancy_needed": {
+                    "job_title_en": {
+                        "type": "string"
+                    },
+                    "is_number_of_vacancy_na": {
                         "type": "integer",
                         "enum": [1,0],
-                        "description": "1=>No. of vacancy not needed 0=>needed"
+                        "description": "1=>TRUE 0=>FALSE"
                     },
                     "no_of_vacancies": {
                         "type": "integer",
-                        "description": "Required when is_not_vacancy_needed != 1"
+                        "description": "Required when is_number_of_vacancy_na FALSE"
                     },
                     "job_category_id": {
                         "type": "integer"
@@ -7297,34 +7300,47 @@
                         "type": "string",
                         "description": "Required when resume receiving option is => Email"
                     },
-                    "is_use_nise3_mail_system": {
-                        "type": "integer"
-                    },
                     "special_instruction_for_job_seekers": {
+                        "type": "string"
+                    },
+                    "special_instruction_for_job_seekers_en": {
                         "type": "string"
                     },
                     "instruction_for_hard_copy": {
                         "type": "string",
                         "description": "Required when resume receiving option is => Hard Copy"
                     },
+                    "instruction_for_hard_copy_en": {
+                        "type": "string"
+                    },
                     "instruction_for_walk_in_interview": {
                         "type": "string",
                         "description": "Required when resume receiving option is => Walk in interview"
                     },
+                    "instruction_for_walk_in_interview_en": {
+                        "type": "string"
+                    },
                     "is_photograph_enclose_with_resume": {
-                        "type": "integer"
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_prefer_video_resume": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "Required when resume receiving option is => Online Apply"
+                    },
+                    "is_use_nise3_mail_system": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FASLE"
                     }
                 },
                 "required": [
                     "job_id",
                     "service_type",
                     "job_title",
-                    "is_not_vacancy_needed",
-                    "no_of_vacancies",
+                    "is_number_of_vacancy_na",
                     "job_category_id",
                     "employment_type",
                     "application_deadline",
