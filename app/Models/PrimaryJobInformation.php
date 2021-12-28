@@ -33,10 +33,14 @@ class PrimaryJobInformation extends BaseModel
         4 => "Walk in interview"
     ];
 
+    public const BOOLEAN_FLAG_TRUE = 1;
+    public const BOOLEAN_FLAG_FALSE = 0;
+
     public const BOOLEAN_FLAG = [
-        0 => "True",
-        1 => "False"
+        self::BOOLEAN_FLAG_TRUE,
+        self::BOOLEAN_FLAG_FALSE
     ];
+
 
     public static function jobCategoryId(int $job_category_type): array
     {
