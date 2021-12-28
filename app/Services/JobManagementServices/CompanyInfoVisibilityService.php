@@ -56,7 +56,7 @@ class CompanyInfoVisibilityService
         $rules = [
             "job_id" => [
                 "required",
-                'int',
+                'string',
                 'exists:candidate_requirements,id,deleted_at,NULL',
             ],
             'is_company_name_visible' => [
