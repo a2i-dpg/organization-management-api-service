@@ -5,12 +5,45 @@ namespace App\Services\JobManagementServices;
 
 use App\Models\EmploymentType;
 use App\Models\PrimaryJobInformation;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class PrimaryJobInformationService
 {
+
+
+    public function getPrimaryJobInformationDetails(int $jobId): Model|Builder
+    {
+        /** @var Builder $primaryJobInformationBuilder */
+        $primaryJobInformationBuilder = PrimaryJobInformation::select([
+            'primary_job_information.id',
+            'primary_job_information.job_id',
+            'primary_job_information.service_type',
+            'primary_job_information.job_title',
+            'primary_job_information.no_of_vacancies',
+            'primary_job_information.job_category_id',
+            'primary_job_information.application_deadline',
+            'primary_job_information.resume_receiving_option',
+            'primary_job_information.email',
+            'primary_job_information.is_use_nise3_mail_system',
+            'primary_job_information.special_instruction_for_job_seekers',
+            'primary_job_information.instruction_for_hard_copy',
+            'primary_job_information.instruction_for_walk_in_interview',
+            'primary_job_information.is_photograph_enclose_with_resume',
+            'primary_job_information.is_prefer_video_resume',
+            'primary_job_information.created_at',
+            'primary_job_information.updated_at',
+        ]);
+
+        $primaryJobInformationBuilder->where('primary_job_information.id', $jobId);
+
+        $primaryJobInformationBuilder->with('employmentTypes');
+
+        return $primaryJobInformationBuilder->firstOrFail();
+    }
 
     /**
      * @param array $data

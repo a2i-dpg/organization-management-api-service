@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +18,10 @@ use Illuminate\Validation\Rule;
  */
 class AdditionalJobInformationService
 {
+
+    public function getAdditionalJobInformationDetails(string $jobId){
+
+    }
     /**
      * @return array
      */

@@ -13,10 +13,10 @@ use Illuminate\Validation\Rule;
 class CompanyInfoVisibilityService
 {
     /**
-     * @param int $jobId
+     * @param string $jobId
      * @return Model|Builder
      */
-    public function getCompanyInfoVisibility(int $jobId): Model|Builder
+    public function getCompanyInfoVisibility(string $jobId): Model|Builder
     {
         /** @var Builder $companyInfoVisibilityBuilder */
         $companyInfoVisibilityBuilder = CompanyInfoVisibility::select([
