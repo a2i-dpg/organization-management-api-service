@@ -5735,7 +5735,33 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example":{
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "aaa-bbb",
+                                        "service_type": 1,
+                                        "job_title": "NoTommorrow",
+                                        "no_of_vacancies": 2,
+                                        "job_category_id": 2,
+                                        "application_deadline": "0000-00-00",
+                                        "resume_receiving_option": 0,
+                                        "email": null,
+                                        "is_use_nise3_mail_system": 0,
+                                        "special_instruction_for_job_seekers": null,
+                                        "instruction_for_hard_copy": null,
+                                        "instruction_for_walk_in_interview": null,
+                                        "is_photograph_enclose_with_resume": 0,
+                                        "is_prefer_video_resume": 0,
+                                        "created_at": null,
+                                        "updated_at": null,
+                                        "employment_types": []
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
