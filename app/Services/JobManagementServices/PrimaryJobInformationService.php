@@ -86,9 +86,7 @@ class PrimaryJobInformationService
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $requestData = $request->all();
-
-        $requestData["employment_type "] = is_array($requestData['employment_type ']) ? $requestData['employment_type '] : explode(',', $requestData['employment_type ']);
-
+        $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
         $rules = [
             "job_id" => [
                 "required",
