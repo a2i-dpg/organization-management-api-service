@@ -5720,6 +5720,27 @@
                     }
                 }
             }
+        },
+        "/job/primary-job-information/{jobId}": {
+            "get": {
+                "tags": ["Primary Job Information"],
+                "summary": "Get a primary job information",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
