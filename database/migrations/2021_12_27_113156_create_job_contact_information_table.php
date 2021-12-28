@@ -15,7 +15,7 @@ class CreateJobContactInformationTable extends Migration
     {
         Schema::create('job_contact_information', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('jod_id');
+            $table->string('job_id');
             $table->unsignedInteger('contact_person_id');
             $table->timestamps();
             $table->softDeletes();

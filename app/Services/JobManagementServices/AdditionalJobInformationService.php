@@ -37,10 +37,10 @@ class AdditionalJobInformationService
      */
     public function store(array $validatedData): AdditionalJobInformation
     {
-        $additionalJobInformation = new AdditionalJobInformation();
-        $additionalJobInformation->fill($validatedData);
-        $additionalJobInformation->save();
-        return $additionalJobInformation;
+        return AdditionalJobInformation::updateOrCreate(
+            ['job_id' => $validatedData['job_id']],
+            $validatedData
+        );
     }
 
     /**
@@ -173,7 +173,7 @@ class AdditionalJobInformationService
     public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
     {
         foreach ($jobLocation as $item) {
-            $locIds = explode('_',$item);
+            $locIds = explode('_', $item);
             $locDivisionId = $locIds[0];
             $locDistrictId = $locIds[1];
             $locUpazilaId = $locIds[2];

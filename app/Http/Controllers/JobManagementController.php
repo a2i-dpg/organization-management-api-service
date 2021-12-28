@@ -8,6 +8,7 @@ use App\Models\AdditionalJobInformation;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
+use App\Services\JobManagementServices\JobContactInformationService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use Carbon\Carbon;
@@ -27,6 +28,7 @@ class JobManagementController extends Controller
     public AdditionalJobInformationService $additionalJobInformationService;
     public CandidateRequirementsService $candidateRequirementsService;
     public CompanyInfoVisibilityService $companyInfoVisibilityService;
+    public JobContactInformationService $jobContactInformationService;
     public Carbon $startTime;
 
     /**
@@ -34,11 +36,12 @@ class JobManagementController extends Controller
      * @param AdditionalJobInformationService $additionalJobInformationService
      * @param CompanyInfoVisibilityService $companyInfoVisibilityService
      */
-    public function __construct(PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService,CompanyInfoVisibilityService $companyInfoVisibilityService)
+    public function __construct(PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService, CompanyInfoVisibilityService $companyInfoVisibilityService, JobContactInformationService $jobContactInformationService)
     {
         $this->primaryJobInformationService = $primaryJobInformationService;
         $this->additionalJobInformationService = $additionalJobInformationService;
         $this->companyInfoVisibilityService = $companyInfoVisibilityService;
+        $this->jobContactInformationService = $jobContactInformationService;
         $this->startTime = Carbon::now();
 
     }
@@ -209,6 +212,46 @@ class JobManagementController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
+    }
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getContactInformation(string $jobId): JsonResponse
+    {
+        $jobInformation = $this->jobContactInformationService->getContactInformation($jobId);
+        $response = [
+            "data" => $jobInformation,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function storeContactInformation(Request $request): JsonResponse
+    {
+        $validatedData = $this->jobContactInformationService->validate($request)->validate();
+        $jobInformation = $this->jobContactInformationService->store($validatedData);
+        $response = [
+            "data" => $jobInformation,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
 }

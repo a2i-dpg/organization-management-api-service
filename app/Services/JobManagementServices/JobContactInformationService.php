@@ -22,12 +22,15 @@ class JobContactInformationService
 
     /**
      * @param array $data
+     * @return JobContactInformation
      */
-    public function store(array $data)
+    public function store(array $data): JobContactInformation
     {
-        $jobInformation = new JobContactInformation();
-        $jobInformation->fill($data);
-        $jobInformation->save();
+        return JobContactInformation::updateOrCreate(
+            ['job_id' => $data['job_id']],
+            $data
+        );
+
     }
 
     /**
