@@ -60,6 +60,11 @@ class AdditionalJobInformation extends Model
     ];
     public const DIVISION_ID_KEY = 0;
     public const DISTRICT_ID_KEY = 1;
-    public const UPAZILA_ID_KEY = 2;
+    public const UPAZILA_OR_CITY_CORPORATION_ID_KEY = 2;
+    public const UNION_OR_CITY_CORPORATION_WARD_ID_KEY = 3;
+
+    public const CITY_CORPORATION_IDENTITY_SYMBOL = "@";
+    public const CITY_CORPORATION_IDENTITY_KEY = self::CITY_CORPORATION_IDENTITY_SYMBOL . "CC";
+    public const CITY_CORPORATION_WARD_IDENTITY_KEY = self::CITY_CORPORATION_IDENTITY_SYMBOL . "CCW";
 
 }

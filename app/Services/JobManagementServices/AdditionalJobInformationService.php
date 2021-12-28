@@ -3,8 +3,11 @@
 namespace App\Services\JobManagementServices;
 
 use App\Models\AdditionalJobInformation;
+use App\Models\LocCityCorporation;
+use App\Models\LocCityCorporationWard;
 use App\Models\LocDistrict;
 use App\Models\LocDivision;
+use App\Models\LocUnion;
 use App\Models\LocUpazila;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -94,11 +97,115 @@ class AdditionalJobInformationService
 
         $upazilas = $upazilasBuilder->get();
 
+        /** @var LocCityCorporation|Builder $cityCorporationBuilder */
+        $cityCorporationBuilder = LocCityCorporation::select([
+            'loc_city_corporations.id',
+            'loc_city_corporations.title',
+            'loc_city_corporations.title_en',
+
+            'loc_city_corporations.loc_district_id',
+            'loc_districts.title as district_title',
+            'loc_districts.title_en as district_title_en',
+
+            'loc_city_corporations.loc_division_id',
+            'loc_divisions.title as division_title',
+            'loc_divisions.title_en as division_title_en'
+        ]);
+
+        $cityCorporationBuilder->leftJoin('loc_divisions', function ($join) {
+            $join->on('loc_divisions.id', '=', 'loc_city_corporations.loc_division_id')
+                ->whereNull('loc_divisions.deleted_at');
+        });
+
+        $cityCorporationBuilder->leftJoin('loc_districts', function ($join) {
+            $join->on('loc_city_corporations.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+
+        $cityCorporations = $cityCorporationBuilder->get();
+
+        /** @var LocUnion|Builder $unionBuilder */
+        $unionBuilder = LocUnion::select([
+            'loc_unions.id',
+            'loc_unions.title',
+            'loc_unions.title_en',
+
+            'loc_unions.loc_division_id',
+            'loc_divisions.title as division_title',
+            'loc_divisions.title_en as division_title_en',
+
+            'loc_unions.loc_district_id',
+            'loc_districts.title as district_title',
+            'loc_districts.title_en as district_title_en',
+
+            'loc_unions.loc_upazila_id',
+            'loc_upazilas.title as upazila_title',
+            'loc_upazilas.title_en as upazila_title_en',
+        ]);
+
+        $unionBuilder->leftJoin('loc_divisions', function ($join) {
+            $join->on('loc_divisions.id', '=', 'loc_unions.loc_division_id')
+                ->whereNull('loc_divisions.deleted_at');
+        });
+
+        $unionBuilder->leftJoin('loc_districts', function ($join) {
+            $join->on('loc_unions.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+
+        $unionBuilder->leftJoin('loc_upazilas', function ($join) {
+            $join->on('loc_unions.loc_upazila_id', '=', 'loc_upazilas.id')
+                ->whereNull('loc_upazilas.deleted_at');
+        });
+
+
+        $unions = $unionBuilder->get();
+
+
+        /** @var LocCityCorporationWard|Builder $cityCorporationWardBuilder */
+        $cityCorporationWardBuilder = LocCityCorporationWard::select([
+            'loc_city_corporation_wards.id',
+            'loc_city_corporation_wards.title',
+            'loc_city_corporation_wards.title_en',
+
+            'loc_city_corporation_wards.loc_division_id',
+            'loc_divisions.title as division_title',
+            'loc_divisions.title_en as division_title_en',
+
+            'loc_city_corporation_wards.loc_district_id',
+            'loc_districts.title as district_title',
+            'loc_districts.title_en as district_title_en',
+
+            'loc_city_corporation_wards.loc_city_corporation_id',
+            'loc_city_corporations.title as city_corporation_title',
+            'loc_city_corporations.title_en as city_corporation_title_en',
+        ]);
+
+        $cityCorporationWardBuilder->leftJoin('loc_divisions', function ($join) {
+            $join->on('loc_divisions.id', '=', 'loc_city_corporation_wards.loc_division_id')
+                ->whereNull('loc_divisions.deleted_at');
+        });
+
+        $cityCorporationWardBuilder->leftJoin('loc_districts', function ($join) {
+            $join->on('loc_city_corporation_wards.loc_district_id', '=', 'loc_districts.id')
+                ->whereNull('loc_districts.deleted_at');
+        });
+
+        $cityCorporationWardBuilder->leftJoin('loc_city_corporations', function ($join) {
+            $join->on('loc_city_corporation_wards.loc_city_corporation_id', '=', 'loc_city_corporations.id')
+                ->whereNull('loc_city_corporations.deleted_at');
+        });
+
+
+        $cityCorporationWards = $cityCorporationWardBuilder->get();
+
+        /** LocDivision */
         foreach ($divisions as $division) {
             $key = $division->id;
             $jobLocation[$key] = strtoupper($division->title_en . "(" . $division->title . ")");
         }
 
+        /** LocDistrict */
         foreach ($districts as $district) {
             $key = $district->loc_division_id . "_" . $district->id;
             $titleEn = $district->division_title_en . " => " . $district->title_en;
@@ -109,11 +216,35 @@ class AdditionalJobInformationService
             }
             $jobLocation[$key] = strtoupper($titleEn . $titleBn);
         }
-
+        /** LocUpazila */
         foreach ($upazilas as $upazila) {
             $key = $upazila->loc_division_id . "_" . $upazila->loc_district_id . "_" . $upazila->id;
             $titleEn = $upazila->division_title_en . " => " . $upazila->district_title_en . " => " . $upazila->title_en;
             $titleBn = " (" . $upazila->division_title . " => " . $upazila->district_title . " => " . $upazila->title . ")";
+            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+        }
+
+        /** City Corporations */
+        foreach ($cityCorporations as $cityCorporation) {
+            $key = $cityCorporation->loc_division_id . "_" . $cityCorporation->loc_district_id . "_" . $cityCorporation->id . AdditionalJobInformation::CITY_CORPORATION_IDENTITY_KEY;
+            $titleEn = $cityCorporation->division_title_en . " => " . $cityCorporation->district_title_en . " => " . $cityCorporation->title_en;
+            $titleBn = " (" . $cityCorporation->division_title . " => " . $cityCorporation->district_title . " => " . $cityCorporation->title . ")";
+            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+        }
+
+        /** LocUnion */
+        foreach ($unions as $union) {
+            $key = $union->loc_division_id . "_" . $union->loc_district_id . "_" . $union->loc_upazila_id . "_" . $union->id;
+            $titleEn = $union->division_title_en . " => " . $union->district_title_en . " => " . $union->upazila_title_en . " => " . $union->title_en;
+            $titleBn = " (" . $union->division_title . " => " . $union->district_title . " => " . $union->upazila_title . " => " . $union->title . ")";
+            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+        }
+
+        /** CityCorporation wards */
+        foreach ($cityCorporationWards as $cityCorporationWard) {
+            $key = $cityCorporationWard->loc_division_id . "_" . $cityCorporationWard->loc_district_id . "_" . $cityCorporationWard->loc_city_corporation_id . AdditionalJobInformation::CITY_CORPORATION_IDENTITY_KEY . "_" . $cityCorporationWard->id . AdditionalJobInformation::CITY_CORPORATION_WARD_IDENTITY_KEY;
+            $titleEn = $cityCorporationWard->division_title_en . " => " . $cityCorporationWard->district_title_en . " => " . $cityCorporationWard->city_corporation_title_en . " => " . $cityCorporationWard->title_en;
+            $titleBn = " (" . $cityCorporationWard->division_title . " => " . $cityCorporationWard->district_title . " => " . $cityCorporationWard->city_corporation_title . " => " . $cityCorporationWard->title . ")";
             $jobLocation[$key] = strtoupper($titleEn . $titleBn);
         }
 
@@ -173,28 +304,69 @@ class AdditionalJobInformationService
     public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
     {
         foreach ($jobLocation as $item) {
-            $locIds = explode('_', $item);
-            $locDivisionId = $locIds[0];
-            $locDistrictId = $locIds[1];
-            $locUpazilaId = $locIds[2];
-            DB::table('additional_job_information_job_location')->updateOrInsert(
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'loc_division_id' => $locDivisionId,
-                    'loc_district_id' => $locDistrictId,
-                    'loc_upazila_id' => $locUpazilaId
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'loc_division_id' => $locDivisionId,
-                    'loc_district_id' => $locDistrictId,
-                    'loc_upazila_id' => $locUpazilaId
+            $locIds = getLocationIdByKeyString($item);
+            $jobLocationInfo = $this->getJobLocationFormat($locIds);
+            $jobLocationInfo['additional_job_information_id'] = $additionalJobInformation->id;
 
-                ]
+            DB::table('additional_job_information_job_location')->updateOrInsert(
+                $jobLocationInfo,
+                $jobLocationInfo
             );
         }
     }
 
+    private function getJobLocationFormat(array $locIds): array
+    {
+        $locIdSize = sizeof($locIds);
+        $locInfo = [];
+        if ($locIdSize == 1) {
+            $locInfo = [
+                'loc_division_id' => $locIds[AdditionalJobInformation::DIVISION_ID_KEY]
+            ];
+        } elseif ($locIdSize == 2) {
+            $locInfo = [
+                'loc_division_id' => $locIds[AdditionalJobInformation::DIVISION_ID_KEY],
+                'loc_district_id' => $locIds[AdditionalJobInformation::DISTRICT_ID_KEY]
+            ];
+        } elseif ($locIdSize == 3) {
+            $locInfo = [
+                'loc_division_id' => $locIds[AdditionalJobInformation::DIVISION_ID_KEY],
+                'loc_district_id' => $locIds[AdditionalJobInformation::DISTRICT_ID_KEY]
+            ];
+            $this->getUpazilaOrCityCorporationId($locIds[AdditionalJobInformation::UPAZILA_OR_CITY_CORPORATION_ID_KEY], $locInfo);
+
+        } elseif ($locIdSize == 4) {
+            $locInfo = [
+                'loc_division_id' => $locIds[AdditionalJobInformation::DIVISION_ID_KEY],
+                'loc_district_id' => $locIds[AdditionalJobInformation::DISTRICT_ID_KEY]
+            ];
+            $this->getUpazilaOrCityCorporationId($locIds[AdditionalJobInformation::UPAZILA_OR_CITY_CORPORATION_ID_KEY], $locInfo);
+            $this->getUnionOrCityCorporationWardId($locIds[AdditionalJobInformation::UNION_OR_CITY_CORPORATION_WARD_ID_KEY], $locInfo);
+        }
+        return $locInfo;
+    }
+
+    private function getUpazilaOrCityCorporationId(string $locUpazilaLevelInfoId, array &$locInfo)
+    {
+        $upazilaOrCityCorporationId = explode(AdditionalJobInformation::CITY_CORPORATION_IDENTITY_SYMBOL, $locUpazilaLevelInfoId);
+
+        if (sizeof($upazilaOrCityCorporationId) == 2) {
+            $locInfo['loc_city_corporation_id'] = $upazilaOrCityCorporationId[0];
+        } else if (sizeof($upazilaOrCityCorporationId) == 1) {
+            $locInfo['loc_upazila_id'] = $upazilaOrCityCorporationId[0];
+        }
+    }
+
+    private function getUnionOrCityCorporationWardId(string $locUpazilaLevelInfoId, array &$locInfo)
+    {
+        $upazilaOrCityCorporationId = explode(AdditionalJobInformation::CITY_CORPORATION_IDENTITY_SYMBOL, $locUpazilaLevelInfoId);
+
+        if (sizeof($upazilaOrCityCorporationId) == 2) {
+            $locInfo['loc_city_corporation_ward_id'] = $upazilaOrCityCorporationId[0];
+        } else if (sizeof($upazilaOrCityCorporationId) == 1) {
+            $locInfo['loc_union_id'] = $upazilaOrCityCorporationId[0];
+        }
+    }
 
     /**
      * @param Request $request
@@ -297,5 +469,6 @@ class AdditionalJobInformationService
         ];
         return Validator::make($data, $rules);
     }
+
 
 }
