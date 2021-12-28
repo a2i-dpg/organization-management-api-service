@@ -25,6 +25,8 @@ class PrimaryJobInformationService
             'primary_job_information.job_title',
             'primary_job_information.no_of_vacancies',
             'primary_job_information.job_category_id',
+            'occupation.title as job_category_title',
+            'occupation.title_en as job_category_title_en',
             'primary_job_information.application_deadline',
             'primary_job_information.resume_receiving_option',
             'primary_job_information.email',
@@ -39,6 +41,10 @@ class PrimaryJobInformationService
         ]);
 
         $primaryJobInformationBuilder->where('primary_job_information.job_id', $jobId);
+        $primaryJobInformationBuilder->join('occupations', function ($join) {
+            $join->on('primary_job_information.job_category_id', '=', 'occupations.id')
+                ->whereNull('occupations.deleted_at');
+        });
 
         $primaryJobInformationBuilder->with('employmentTypes');
 
