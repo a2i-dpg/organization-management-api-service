@@ -445,7 +445,7 @@ class IndustryAssociationService
 
 
     /**
-     * industryAssociation validator
+     * industryAssociation comapnyInfoVisibilityvalidator
      * @param array $data
      * @return mixed
      * @throws RequestException
