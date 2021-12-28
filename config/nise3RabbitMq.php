@@ -10,14 +10,33 @@ return [
             'alternateExchange' => [
                 'name' => 'core.alternate.x',
                 'type' => 'fanout',
-                'queue' => 'core.alternate.q'
+                'durable' => true,
+                'autoDelete' => false,
+                'queue' => 'core.alternate.q',
+                'queueDurable' => true,
+                'queueAutoDelete' => false,
+                'queueMode' => 'lazy',
+            ],
+            'dlx' => [
+                'name' => 'core.dlx',
+                'type' => 'topic',
+                'durable' => true,
+                'autoDelete' => false
             ],
             'queue' => [
                 'demo' => [
                     'name' => 'core.demo.q',
                     'binding' => 'core.demo',
                     'durable' => true,
-                    'autoDelete' => false
+                    'autoDelete' => false,
+                    'queueMode' => 'lazy',
+                    'dlq' => [
+                        'name' => 'core.demo.dlq',
+                        'x_message_ttl' => 50000,
+                        'durable' => true,
+                        'autoDelete' => false,
+                        'queueMode' => 'lazy'
+                    ],
                 ]
             ],
         ],
@@ -81,14 +100,33 @@ return [
             'alternateExchange' => [
                 'name' => 'organization.alternate.x',
                 'type' => 'fanout',
-                'queue' => 'organization.alternate.q'
+                'durable' => true,
+                'autoDelete' => false,
+                'queue' => 'organization.alternate.q',
+                'queueDurable' => true,
+                'queueAutoDelete' => false,
+                'queueMode' => 'lazy',
+            ],
+            'dlx' => [
+                'name' => 'organization.dlx',
+                'type' => 'topic',
+                'durable' => true,
+                'autoDelete' => false
             ],
             'queue' => [
                 'demo' => [
                     'name' => 'organization.demo.q',
                     'binding' => 'organization.demo',
                     'durable' => true,
-                    'autoDelete' => false
+                    'autoDelete' => false,
+                    'queueMode' => 'lazy',
+                    'dlq' => [
+                        'name' => 'organization.demo.dlq',
+                        'x_message_ttl' => 50000,
+                        'durable' => true,
+                        'autoDelete' => false,
+                        'queueMode' => 'lazy'
+                    ],
                 ]
             ],
         ],
