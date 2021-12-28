@@ -5805,29 +5805,1226 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":
-                                {
+                                "example":{
                                     "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title_en": "Mixing and Blending Machine Operator",
-                                            "title": "Mixing and Blending Machine Operator",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-12-28T07:03:19.000000Z",
-                                            "updated_at": "2021-12-28T07:03:19.000000Z"
+                                            "title": "Banks",
+                                            "created_at": null,
+                                            "updated_at": null
                                         },
                                         {
                                             "id": 2,
-                                            "title_en": "Bench Jeweler",
-                                            "title": "Bench Jeweler",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-12-28T07:03:19.000000Z",
-                                            "updated_at": "2021-12-28T07:03:19.000000Z"
+                                            "title": "Insurance",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title": "Leasing",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title": "Investment/Merchant Banking",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title": "Telecommunication",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title": "Manufacturing (FMCG)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title": "Manufacturing (Light Engineering & Heavy Industry)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title": "Wholesale",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title": "Retail Store",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "University",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 11,
+                                            "title": "College",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 12,
+                                            "title": "Training Institutes",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 13,
+                                            "title": "Advertising Agency",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 14,
+                                            "title": "Design/Printing/Publishing",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 15,
+                                            "title": "Event Management",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 16,
+                                            "title": "Software Company",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 17,
+                                            "title": "IT Enabled Service",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 18,
+                                            "title": "BPO/ Data Entry Firm",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 19,
+                                            "title": "ISP",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 20,
+                                            "title": "Computer Hardware/Network Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 21,
+                                            "title": "Govt./ Semi Govt./ Autonomous body",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 22,
+                                            "title": "NGO",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 23,
+                                            "title": "Development Agency",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 24,
+                                            "title": "Trading or Export/Import",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 25,
+                                            "title": "Shipping",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 26,
+                                            "title": "Logistic/Courier/Air Express Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 27,
+                                            "title": "Clearing & Forwarding (C&F) Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 28,
+                                            "title": "Multinational Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 29,
+                                            "title": "Newspaper/Magazine",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 30,
+                                            "title": "Public Relation Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 31,
+                                            "title": "Embassies/Foreign Consulate",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 32,
+                                            "title": "Engineering Firms",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 33,
+                                            "title": "Market Research Firms",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 34,
+                                            "title": "Consulting Firms",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 35,
+                                            "title": "Garments",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 36,
+                                            "title": "Textile",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 37,
+                                            "title": "Buying House",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 38,
+                                            "title": "Audit Firms /Tax Consultant",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 39,
+                                            "title": "Hospital",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 40,
+                                            "title": "Pharmaceutical/Medicine Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 41,
+                                            "title": "Hotel",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 42,
+                                            "title": "Restaurant",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 43,
+                                            "title": "Airline",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 44,
+                                            "title": "Travel Agent",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 45,
+                                            "title": "Tannery/Footwear",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 46,
+                                            "title": "Shrimp",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 47,
+                                            "title": "Food (Packaged)/Beverage",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 48,
+                                            "title": "Agro based firms (incl. Agro Processing/Seed/GM)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 49,
+                                            "title": "CNG",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 50,
+                                            "title": "Tea Garden",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 51,
+                                            "title": "Immigration & Education Consultancy Service",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 52,
+                                            "title": "Architecture Firm",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 53,
+                                            "title": "Manpower Recruitment",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 54,
+                                            "title": "Direct Selling/Marketing Service Company",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 55,
+                                            "title": "Indenting Firm",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 56,
+                                            "title": "Security Service",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 57,
+                                            "title": "Law Firm",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 59,
+                                            "title": "Cosmetics/Toiletries/Personal Care",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 60,
+                                            "title": "Poultry",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 61,
+                                            "title": "Electronic Equipment/Home Appliances",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 62,
+                                            "title": "Medical Equipment",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 63,
+                                            "title": "Real Estate",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 64,
+                                            "title": "Freight forwarding",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 65,
+                                            "title": "Overseas Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 66,
+                                            "title": "Group of Companies",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 67,
+                                            "title": "Chemical Industries",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 68,
+                                            "title": "Call Center",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 69,
+                                            "title": "Tobacco",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 70,
+                                            "title": "Automobile",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 71,
+                                            "title": "Share Brokerage/ Securities House",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 72,
+                                            "title": "Research Organization",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 73,
+                                            "title": "Plastic/ Polymer Industry",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 74,
+                                            "title": "Packaging Industry",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 75,
+                                            "title": "Cement Industry",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 76,
+                                            "title": "Furniture Manufacturer",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 77,
+                                            "title": "Jute Goods/ Jute Yarn",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 78,
+                                            "title": "Garments Accessories",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 79,
+                                            "title": "Sweater Industry",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 80,
+                                            "title": "Mobile Accessories",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 81,
+                                            "title": "Fisheries",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 82,
+                                            "title": "Herbal Medicine",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 83,
+                                            "title": "Physiotherapy center",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 84,
+                                            "title": "Paper",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 85,
+                                            "title": "Sanitary ware",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 86,
+                                            "title": "Tiles/Ceramic",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 87,
+                                            "title": "Brick",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 88,
+                                            "title": "Paint",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 89,
+                                            "title": "Satellite TV",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 90,
+                                            "title": "Diagnostic Centre",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 91,
+                                            "title": "Clinic",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 92,
+                                            "title": "Resort",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 93,
+                                            "title": "Motel",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 94,
+                                            "title": "Coffee Shop",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 95,
+                                            "title": "Catering",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 96,
+                                            "title": "Fast Food Shop",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 97,
+                                            "title": "Bar/Pub",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 98,
+                                            "title": "GSA",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 99,
+                                            "title": "Tour Operator",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 100,
+                                            "title": "Immigration/Visa Processing",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 101,
+                                            "title": "Transport Service",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 102,
+                                            "title": "Transportation",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 103,
+                                            "title": "Port Service",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 104,
+                                            "title": "Inventory/Warehouse",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 105,
+                                            "title": "Supply Chain",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 106,
+                                            "title": "Cement",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 107,
+                                            "title": "Steel",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 108,
+                                            "title": "Shipyard",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 109,
+                                            "title": "Toiletries",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 110,
+                                            "title": "Electric Wire/Cable",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 111,
+                                            "title": "Battery, Storage cell",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 112,
+                                            "title": "Tyre manufacturer",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 113,
+                                            "title": "Lamps",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 114,
+                                            "title": "Dry cell (Battery)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 115,
+                                            "title": "Furniture",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 116,
+                                            "title": "Bicycle",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 117,
+                                            "title": "Handicraft",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 118,
+                                            "title": "Medical Equipment",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 119,
+                                            "title": "Boutique/ Fashion",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 120,
+                                            "title": "Pottery",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 121,
+                                            "title": "Crockeries",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1090,
+                                            "title": "Credit Rating Agency",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1091,
+                                            "title": "Financial Consultants",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1092,
+                                            "title": "Venture Capital Firm",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1093,
+                                            "title": "Spinning",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1094,
+                                            "title": "Dyeing Factory",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1095,
+                                            "title": "Washing Factory",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1096,
+                                            "title": "Third Party Auditor (Quality, Health, Environment, Compliance",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1097,
+                                            "title": "Reptile Firms",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1098,
+                                            "title": "Farming",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1099,
+                                            "title": "Livestock",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1100,
+                                            "title": "Animal/Plant Breeding",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1101,
+                                            "title": "Science Laboratory",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1102,
+                                            "title": "Interior Design",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1103,
+                                            "title": "Escalator/Elevator/Lift",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1104,
+                                            "title": "HVAC System",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1105,
+                                            "title": "Developer",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1106,
+                                            "title": "Chain shop",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1107,
+                                            "title": "Super store",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1108,
+                                            "title": "Departmental store",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1109,
+                                            "title": "Importer",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1110,
+                                            "title": "Jewelry/Gem",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1111,
+                                            "title": "Tailor shop",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1112,
+                                            "title": "Grocery shop",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1113,
+                                            "title": "Watch",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1114,
+                                            "title": "Toy",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1115,
+                                            "title": "Online Newspaper/ News Portal",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1116,
+                                            "title": "Web Media/Blog",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1117,
+                                            "title": "Film Production",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1118,
+                                            "title": "Professional Photographers",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1119,
+                                            "title": "DTP House",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1120,
+                                            "title": "Call Center",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1121,
+                                            "title": "Cellular Phone Operator",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1122,
+                                            "title": "Technical Infrastructure",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1123,
+                                            "title": "Industrial Machineries (Generator, Diesel Engine etc.)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1124,
+                                            "title": "Motor Vehicle body manufacturer",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1125,
+                                            "title": "Motor Workshop",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1126,
+                                            "title": "Indenting",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1127,
+                                            "title": "Mining",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1128,
+                                            "title": "Gas",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1129,
+                                            "title": "Coal",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1130,
+                                            "title": "Filling Station",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1131,
+                                            "title": "Power",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1132,
+                                            "title": "Micro-Credit",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1133,
+                                            "title": "School",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1134,
+                                            "title": "Kindergarten",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1135,
+                                            "title": "Madrasa",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 1136,
+                                            "title": "Coaching Center",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2090,
+                                            "title": "Amusement Park",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2091,
+                                            "title": "Cinema Hall/Theater",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2092,
+                                            "title": "Cultural Centre",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2093,
+                                            "title": "Convention center",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2094,
+                                            "title": "Shopping mall",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2095,
+                                            "title": "Party/ Community Center",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2096,
+                                            "title": "Museum",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2097,
+                                            "title": "Gallery",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2098,
+                                            "title": "Club",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2099,
+                                            "title": "Golf Club",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2100,
+                                            "title": "Sports Complex",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2101,
+                                            "title": "Swimming Pool",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2102,
+                                            "title": "Religious Place",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2103,
+                                            "title": "Park",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2104,
+                                            "title": "Food (Packaged)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2105,
+                                            "title": "Beverage",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2106,
+                                            "title": "Ice Cream",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2107,
+                                            "title": "Bakery (Cake, Biscuit, Bread)",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2108,
+                                            "title": "Mineral Water",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2109,
+                                            "title": "Fire Fighting and Safety",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2110,
+                                            "title": "Pest Control",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2111,
+                                            "title": "Hatchery",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2112,
+                                            "title": "Salt",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2113,
+                                            "title": "Dairy",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2114,
+                                            "title": "Healthcare/Lifestyle product",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2115,
+                                            "title": "Corrugated Tin",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2116,
+                                            "title": "Radio",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2117,
+                                            "title": "E-commerce",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2118,
+                                            "title": "PSTN",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2119,
+                                            "title": "Land Phone",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2120,
+                                            "title": "CNG Conversion",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2122,
+                                            "title": "LPG Gas/Cylinder Gas",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2123,
+                                            "title": "Fuel/Petroleum",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2124,
+                                            "title": "Chamber",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2125,
+                                            "title": "Individual/Personal Recruitment",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2126,
+                                            "title": "Beauty Parlor/Saloon/Spa",
+                                            "created_at": null,
+                                            "updated_at": null
                                         }
                                     ],
                                     "_response_status": {
@@ -5836,6 +7033,62 @@
                                         "query_time": 0
                                     }
                                 }
+
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/educational_institutions": {
+            "get": {
+                "tags": ["Educational Institions"],
+                "summary": "Get all areas of business",
+                "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":
+                                {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "University of Dhaka",
+                                            "type": "Public",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "University of Rajshahi",
+                                            "type": "Public",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+
                             }
                         }
                     }

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\AreaOfBusiness;
 use App\Models\BaseModel;
+use App\Models\EducationalInstitution;
 use App\Models\JobSector;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -93,7 +94,6 @@ class JobSectorService
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
-        $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
 
@@ -107,28 +107,59 @@ class JobSectorService
         );
 
         $areaOfBusinessBuilder->orderBy('area_of_business.id', $order);
-        $areaOfBusinessBuilder->where('area_of_business.row_status', $rowStatus);
 
         if (!empty($title)) {
             $areaOfBusinessBuilder->where('area_of_business.title', 'like', '%' . $title . '%');
         }
+        /** @var Collection $areaOfBusiness */
+        $areaOfBusiness = $areaOfBusinessBuilder->get();
 
-        /** @var Collection $jobSectors */
-
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
-            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $areaOfBusiness = $areaOfBusinessBuilder->paginate($pageSize);
-            $paginateData = (object)$areaOfBusiness->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
-        } else {
-            $areaOfBusiness = $areaOfBusinessBuilder->get();
-        }
 
         $response['order'] = $order;
         $response['data'] = $areaOfBusiness->toArray()['data'] ?? $areaOfBusiness->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+
+    public function getEducationalInstitutionList(array $request, Carbon $startTime): array
+    {
+        $title = $request['title'] ?? "";
+        $type = $request['type'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $educationalInstitutionBuilder = EducationalInstitution::select(
+            [
+                'educational_institutions.id',
+                'educational_institutions.name',
+                'educational_institutions.type',
+                'educational_institutions.created_at',
+                'educational_institutions.updated_at'
+            ]
+        );
+
+        $educationalInstitutionBuilder->orderBy('educational_institutions.id', $order);
+
+        if (!empty($name)) {
+            $educationalInstitutionBuilder->where('educational_institutions.name', 'like', '%' . $name . '%');
+        }
+        if (!empty($type)) {
+            $educationalInstitutionBuilder->where('educational_institutions.type', 'like', '%' . $type . '%');
+        }
+        /** @var Collection $areaOfBusiness */
+        $educationalInstitution = $educationalInstitutionBuilder->get();
+
+
+        $response['order'] = $order;
+        $response['data'] = $educationalInstitution->toArray()['data'] ?? $educationalInstitution->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
