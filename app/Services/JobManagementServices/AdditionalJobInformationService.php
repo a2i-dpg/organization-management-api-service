@@ -203,15 +203,16 @@ class AdditionalJobInformationService
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+
         $data["other_benefits"] = is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
         $data["job_level"] = is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
         $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
         $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
-        Log::info("---->",$data["other_benefits"]);
+
         $rules = [
             "job_id" => [
                 "required",
-                "exists:primary_job_information,job_id"
+                "exists:primary_job_information,job_id,deleted_at,NULL",
             ],
             "job_responsibilities" => [
                 "nullable"
