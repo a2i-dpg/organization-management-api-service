@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\AreaOfBusiness;
 use App\Models\BaseModel;
 use App\Models\JobSector;
 use Carbon\Carbon;
@@ -83,6 +84,60 @@ class JobSectorService
 
         return $response;
     }
+
+
+
+
+    public function getAreaOfBusinessList(array $request, Carbon $startTime): array
+    {
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $areaOfBusinessBuilder = AreaOfBusiness::select(
+           [
+               'area_of_business.id',
+               'area_of_business.title',
+               'area_of_business.created_at',
+               'area_of_business.updated_at'
+           ]
+        );
+
+        $areaOfBusinessBuilder->orderBy('area_of_business.id', $order);
+        $areaOfBusinessBuilder->where('area_of_business.row_status', $rowStatus);
+
+        if (!empty($title)) {
+            $areaOfBusinessBuilder->where('area_of_business.title', 'like', '%' . $title . '%');
+        }
+
+        /** @var Collection $jobSectors */
+
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $areaOfBusiness = $areaOfBusinessBuilder->paginate($pageSize);
+            $paginateData = (object)$areaOfBusiness->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $areaOfBusiness = $areaOfBusinessBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $areaOfBusiness->toArray()['data'] ?? $areaOfBusiness->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
 
     /**
      * @param int $id
@@ -249,6 +304,22 @@ class JobSectorService
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+
+    public function filterAreaOfBusinessValidator(Request $request) :\Illuminate\Contracts\Validation\Validator
+    {
+        return Validator::make($request->all(), [
+            'title' => 'nullable|max:500|min:2'
+        ]);
+
+    }
+
+    public function filterEducationInstitutionValidator(Request $request) :\Illuminate\Contracts\Validation\Validator
+    {
+        return Validator::make($request->all(), [
+            'name' => 'nullable|max:500|min:2'
+        ]);
     }
 
     /**

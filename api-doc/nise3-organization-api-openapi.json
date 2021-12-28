@@ -5789,6 +5789,58 @@
                     }
                 }
             }
+        },
+        "/area_of_business": {
+            "get": {
+                "tags": ["Area of Business"],
+                "summary": "Get all areas of business",
+                "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":
+                                {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "Mixing and Blending Machine Operator",
+                                            "title": "Mixing and Blending Machine Operator",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-12-28T07:03:19.000000Z",
+                                            "updated_at": "2021-12-28T07:03:19.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Bench Jeweler",
+                                            "title": "Bench Jeweler",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-12-28T07:03:19.000000Z",
+                                            "updated_at": "2021-12-28T07:03:19.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -5888,10 +5940,16 @@
                     },
                     "is_other_benefits": {
                         "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "0=>False 1=>True"
                     },
                     "other_benefits": {
-                        "type": "array"
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     },
                     "lunch_facilities": {
                         "type": "integer",
@@ -5903,14 +5961,23 @@
                     },
                     "job_level": {
                         "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "1 => Entry,2 => Mid,3 => Top"
                     },
                     "work_place": {
                         "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "1=>Home 2=>Office"
                     },
                     "job_location": {
                         "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
                         "description": "divisionId_DistrictId_UpazilaId"
                     }
                 },

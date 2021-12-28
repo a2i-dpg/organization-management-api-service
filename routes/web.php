@@ -68,6 +68,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
         $router->get('organization-profile', ['as' => 'organization.admin-profile', 'uses' => 'OrganizationController@getOrganizationProfile']);
+        $router->get('area_of_business', ['as' => 'JobSector.AreaOfBusiness', 'uses' => 'JobSectorController@getAreaOfBusiness']);
 
         $router->put("industry-association-profile-update", ["as" => "public.organizations", "uses" => "IndustryAssociationController@updateIndustryAssociationProfile"]);
         $router->get("industry-association-profile", ["as" => "public.organizations", "uses" => "IndustryAssociationController@getIndustryAssociationProfile"]);

@@ -204,4 +204,22 @@ class JobSectorController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
+    /**
+     * @throws ValidationException
+     */
+    public function getAreaOfBusiness(Request $request): JsonResponse
+    {
+        $filter = $this->jobSectorService->filterAreaOfBusinessValidator($request)->validate();
+        $response = $this->jobSectorService->getJobSectorList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+    public function getEducationalInstitutions(Request $request): JsonResponse
+    {
+        $filter = $this->jobSectorService->filterEducationInstitutionValidator($request)->validate();
+        $response = $this->jobSectorService->getJobSectorList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+
+    }
 }
