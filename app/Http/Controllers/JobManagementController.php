@@ -199,11 +199,48 @@ class JobManagementController extends Controller
      * @param int $jobId
      * @return JsonResponse
      */
-    public function getCompanyInfoVisibility(int $jobId): JsonResponse
+    public function getCompanyInfoVisibility(string $jobId): JsonResponse
     {
         $companyInfoVisibility = $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId);
         $response = [
             "data" => $companyInfoVisibility,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+    /**
+     * @param int $jobId
+     * @return JsonResponse
+     */
+    public function getPrimaryJobInformation(string $jobId): JsonResponse
+    {
+        $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+        $response = [
+            "data" => $primaryJobInformation,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getAdditionalJobInformation(string $jobId): JsonResponse
+    {
+        $additionalJobInformation = $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId);
+        $response = [
+            "data" => $additionalJobInformation,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

@@ -86,6 +86,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("company-info-visibility/{jobId}", ["as" => "get-company-info-visibility", "uses" => "JobManagementController@getCompanyInfoVisibility"]);
         $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobManagementController@getContactInformation"]);
         $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobManagementController@storeContactInformation"]);
+        $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "JobManagementController@getPrimaryJobInformation"]);
+        $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "JobManagementController@getAdditionalJobInformation"]);
     });
 
 
