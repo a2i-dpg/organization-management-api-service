@@ -193,7 +193,7 @@ class JobManagementController extends Controller
     }
 
     /**
-     * @param int $jobId
+     * @param string $jobId
      * @return JsonResponse
      */
     public function getCompanyInfoVisibility(string $jobId): JsonResponse
@@ -210,8 +210,9 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+
     /**
-     * @param int $jobId
+     * @param string $jobId
      * @return JsonResponse
      */
     public function getPrimaryJobInformation(string $jobId): JsonResponse
