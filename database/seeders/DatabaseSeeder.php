@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             OrganizationSeeder::class,
             HumanResourceTemplateSeeder::class,
             PublicationSeeder::class,
-            ContactInfoSeeder::class
+            ContactInfoSeeder::class,
+            EducationalInstitutionSeeder::class
         ]);
     }
 }
