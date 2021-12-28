@@ -5563,6 +5563,62 @@
                     }
                 }
             }
+        },
+        "/job/store-additional-job-information": {
+            "post": {
+                "tags": ["Additional Job Information"],
+                "summary": "Store additional job info",
+                "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdditionalJobInformation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "1",
+                                        "job_responsibilities": null,
+                                        "job_content": "newbiewww",
+                                        "job_place_type": "2",
+                                        "salary_min": null,
+                                        "salary_max": null,
+                                        "is_salary_info_show": "2",
+                                        "is_salary_compare_to_expected_salary": "0",
+                                        "is_salary_alert_excessive_than_given_salary_range": "1",
+                                        "salary_review": "1",
+                                        "festival_bonus": "1",
+                                        "additional_salary_info": null,
+                                        "is_other_benefits": "0",
+                                        "other_benefits": [
+                                            ""
+                                        ],
+                                        "lunch_facilities": "1",
+                                        "others": null,
+                                        "updated_at": "2021-12-27T12:10:05.000000Z",
+                                        "created_at": "2021-12-27T12:10:05.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "AdditionalJobInformation successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -5600,10 +5656,13 @@
                         "description": "1=>Show Salary 2=>Show Nothing 3=> Show Negotiable instead of given salary range"
                     },
                     "is_salary_compare_to_expected_salary": {
-                        "type": "boolean"
+                        "type": "integer",
+                        "description": "0=>False 1=>True"
+
                     },
                     "is_salary_alert_excessive_than_given_salary_range": {
-                        "type": "boolean"
+                        "type": "integer",
+                        "description": "0=>False 1=>True"
                     },
                     "salary_review": {
                         "type": "integer",
@@ -5619,7 +5678,11 @@
                         "type": "string"
                     },
                     "is_other_benefits": {
-                        "type": "boolean"
+                        "type": "array",
+                        "description": "0=>False 1=>True"
+                    },
+                    "other_benefits": {
+                        "type": "array"
                     },
                     "lunch_facilities": {
                         "type": "integer",
@@ -5638,7 +5701,8 @@
                         "description": "1=>Home 2=>Office"
                     },
                     "job_location": {
-                        "type": "array"
+                        "type": "array",
+                        "description": "divisionId_DistrictId_UpazilaId"
                     }
                 },
                 "required": [
