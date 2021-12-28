@@ -15,7 +15,7 @@ class PrimaryJobInformationService
 {
 
 
-    public function getPrimaryJobInformationDetails(int $jobId): Model|Builder
+    public function getPrimaryJobInformationDetails(string $jobId): Model|Builder
     {
         /** @var Builder $primaryJobInformationBuilder */
         $primaryJobInformationBuilder = PrimaryJobInformation::select([
@@ -38,7 +38,7 @@ class PrimaryJobInformationService
             'primary_job_information.updated_at',
         ]);
 
-        $primaryJobInformationBuilder->where('primary_job_information.id', $jobId);
+        $primaryJobInformationBuilder->where('primary_job_information.job_id', $jobId);
 
         $primaryJobInformationBuilder->with('employmentTypes');
 
