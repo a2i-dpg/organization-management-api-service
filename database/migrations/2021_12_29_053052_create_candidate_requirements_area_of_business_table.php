@@ -15,8 +15,8 @@ class CreateCandidateRequirementsAreaOfBusinessTable extends Migration
     {
         Schema::create('candidate_requirements_area_of_business', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("candidate_requirements_id")->index();
-            $table->integer("area_of_business_id")->index();
+            $table->integer("candidate_requirements_id")->index('index_area_busi_can_req_id');
+            $table->integer("area_of_business_id")->index('index_can_area_busi_area_busi_id');
             $table->timestamps();
         });
     }
