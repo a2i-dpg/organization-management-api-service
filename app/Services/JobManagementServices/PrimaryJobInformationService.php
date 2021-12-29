@@ -25,8 +25,8 @@ class PrimaryJobInformationService
             'primary_job_information.job_title_en',
             'primary_job_information.no_of_vacancies',
             'primary_job_information.job_category_id',
-            'occupation.title as job_category_title',
-            'occupation.title_en as job_category_title_en',
+            'occupations.title as job_category_title',
+            'occupations.title_en as job_category_title_en',
             'primary_job_information.application_deadline',
             'primary_job_information.resume_receiving_option',
             'primary_job_information.email',
@@ -86,6 +86,9 @@ class PrimaryJobInformationService
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $requestData = $request->all();
+
+        $requestData["employment_type "] = is_array($requestData['employment_type ']) ? $requestData['employment_type '] : explode(',', $requestData['employment_type ']);
+
         $rules = [
             "job_id" => [
                 "required",

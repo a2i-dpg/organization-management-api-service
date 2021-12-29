@@ -5494,6 +5494,58 @@
                 }
             }
         },
+
+
+        "/job/job-location": {
+            "get": {
+                "tags": ["Job Management"],
+                "summary": "Get job location info",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "1": "BARISAL(বরিশাল)",
+                                        "2": "CHITTAGONG(চট্টগ্রাম)",
+                                        "3": "DHAKA(ঢাকা)",
+                                        "4": "KHULNA(খুলনা)",
+                                        "5": "RAJSHAHI(রাজশাহী)",
+                                        "6": "RANGPUR(রংপুর)",
+                                        "7": "SYLHET(সিলেট)",
+                                        "8": "MYMENSINGH(ময়মনসিংহ)"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Job Location list",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/job-id": {
+            "get": {
+                "tags": ["Job Management"],
+                "summary": "Get Job id",
+                "description": "API endpoint to Get Job id.A successful request response will show 201 HTTP status code",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":"IDSA-2fe8e68e-4456-43be-9d9d-481974a41890"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/job/store-primary-job-information": {
             "post": {
                 "tags": ["Primary Job Information"],
@@ -5547,23 +5599,7 @@
                 }
             }
         },
-        "/job/job-id": {
-            "get": {
-                "tags": ["Primary Job Information"],
-                "summary": "Get Job id",
-                "description": "API endpoint to Get Job id.A successful request response will show 201 HTTP status code",
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example":"IDSA-2fe8e68e-4456-43be-9d9d-481974a41890"
-                            }
-                        }
-                    }
-                }
-            }
-        },
+
         "/job/store-additional-job-information": {
             "post": {
                 "tags": ["Additional Job Information"],
@@ -5619,19 +5655,170 @@
                     }
                 }
             }
+        },
+        "/job/store-company-info-visibility": {
+            "post": {
+                "tags": ["Company info visibility"],
+                "summary": "Store company info visibility",
+                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompanyInfoVisibility"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/company-info-visibility/{jobId}": {
+            "get": {
+                "tags": ["Company info visibility"],
+                "summary": "Get a specific company info visibility",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": 1,
+                                        "company_name": "Piistech",
+                                        "company_name_en": "Piistech",
+                                        "is_company_address_visible": 1,
+                                        "company_industry_type": 0,
+                                        "is_company_business_visible": 0,
+                                        "created_at": null,
+                                        "updated_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/primary-job-information/{jobId}": {
+            "get": {
+                "tags": ["Primary Job Information"],
+                "summary": "Get a primary job information",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":{
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "aaa-bbb",
+                                        "service_type": 1,
+                                        "job_title": "NoTommorrow",
+                                        "no_of_vacancies": 2,
+                                        "job_category_id": 2,
+                                        "application_deadline": "0000-00-00",
+                                        "resume_receiving_option": 0,
+                                        "email": null,
+                                        "is_use_nise3_mail_system": 0,
+                                        "special_instruction_for_job_seekers": null,
+                                        "instruction_for_hard_copy": null,
+                                        "instruction_for_walk_in_interview": null,
+                                        "is_photograph_enclose_with_resume": 0,
+                                        "is_prefer_video_resume": 0,
+                                        "created_at": null,
+                                        "updated_at": null,
+                                        "employment_types": []
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-
-
-
     },
     "components": {
         "schemas": {
+            "CompanyInfoVisibility": {
+                "type": "object",
+                "description": "CompanyInfoVisibility",
+                "properties": {
+                    "job_id": {
+                        "type": "string"
+                    },
+                    "is_company_name_visible": {
+                        "type": "integer",
+                        "description": "1=>Company name visible 0=>Not visible",
+                        "enum": [1,0]
+                    },
+                    "is_company_address_visible": {
+                        "type": "integer",
+                        "description": "1=>Company address visible 0=>Not visible",
+                        "enum": [1,0]
+                    },
+                    "company_industry_type": {
+                        "type": "integer",
+                        "description": "Must exist in industry_association_trades"
+                    },
+                    "is_company_business_visible": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>Visible 0=>Not visible"
+                    },
+                    "company_name": {
+                        "type": "string",
+                        "description": "Required when Company name is not visible"
+                    },
+                    "company_name_en": {
+                        "type": "string"
+                    }
+
+                },
+                "required": [
+                    "job_id",
+                    "is_company_name_visible",
+                    "is_company_address_visible",
+                    "company_industry_type"
+                ]
+            },
             "AdditionalJobInformation": {
                 "type": "object",
                 "description": "Store AdditionalJobInformation",
                 "properties": {
                     "job_id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "job_responsibilities": {
                         "type": "string"
@@ -5725,7 +5912,7 @@
                 "description": "Store primary job information",
                 "properties": {
                     "job_id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "service_type": {
                         "type": "integer",
@@ -5736,7 +5923,9 @@
                         "type": "string"
                     },
                     "is_not_vacancy_needed": {
-                        "type": "integer"
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>No. of vacancy not needed 0=>needed"
                     },
                     "no_of_vacancies": {
                         "type": "integer",
@@ -7478,6 +7667,14 @@
             }
         },
         "parameters": {
+            "jobId": {
+                "name": "jobId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
             "row_status": {
                 "name": "row_status",
                 "in": "query",

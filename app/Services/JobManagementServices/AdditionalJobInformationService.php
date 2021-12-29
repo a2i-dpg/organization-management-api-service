@@ -7,6 +7,7 @@ use App\Models\LocDistrict;
 use App\Models\LocDivision;
 use App\Models\LocUpazila;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,42 @@ use Illuminate\Validation\Rule;
 class AdditionalJobInformationService
 {
 
-    public function getAdditionalJobInformationDetails(string $jobId){
+    public function getAdditionalJobInformationDetails(string $jobId): Model|Builder
+    {
+        /** @var Builder $additionalJobInfoBuilder */
+        $additionalJobInfoBuilder = AdditionalJobInformation::select([
+            'additional_job_information.id',
+            'additional_job_information.job_id',
+            'additional_job_information.job_responsibilities',
+            'additional_job_information.job_content',
+            'additional_job_information.job_place_type',
+            'additional_job_information.salary_min',
+            'additional_job_information.salary_max',
+            'additional_job_information.is_salary_info_show',
+            'additional_job_information.is_salary_compare_to_expected_salary',
+            'additional_job_information.is_salary_alert_excessive_than_given_salary_range',
+            'additional_job_information.salary_review',
+            'additional_job_information.festival_bonus',
+            'additional_job_information.additional_salary_info',
+            'additional_job_information.is_other_benefits',
+            'additional_job_information.other_benefits',
+            'additional_job_information.lunch_facilities',
+            'additional_job_information.others',
+            'additional_job_information.created_at',
+            'additional_job_information.updated_at',
+        ]);
+
+        $additionalJobInfoBuilder->where('additional_job_information.job_id', $jobId);
+
+
+        $additionalJobInfo = $additionalJobInfoBuilder->firstOrFail();
+
+        $additionalJobInfo['job_location']= $this->getJobLocation();
+
+        return  $additionalJobInfo;
 
     }
+
     /**
      * @return array
      */
@@ -176,7 +210,7 @@ class AdditionalJobInformationService
     public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
     {
         foreach ($jobLocation as $item) {
-            $locIds = explode('_',$item);
+            $locIds = explode('_', $item);
             $locDivisionId = $locIds[0];
             $locDistrictId = $locIds[1];
             $locUpazilaId = $locIds[2];
