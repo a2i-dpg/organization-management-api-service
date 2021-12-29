@@ -3,7 +3,9 @@
 
 namespace App\Services;
 
+use App\Models\AreaOfBusiness;
 use App\Models\BaseModel;
+use App\Models\EducationalInstitution;
 use App\Models\JobSector;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,6 +85,90 @@ class JobSectorService
 
         return $response;
     }
+
+
+
+
+    public function getAreaOfBusinessList(array $request, Carbon $startTime): array
+    {
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $areaOfBusinessBuilder = AreaOfBusiness::select(
+           [
+               'area_of_business.id',
+               'area_of_business.title',
+               'area_of_business.created_at',
+               'area_of_business.updated_at'
+           ]
+        );
+
+        $areaOfBusinessBuilder->orderBy('area_of_business.id', $order);
+
+        if (!empty($title)) {
+            $areaOfBusinessBuilder->where('area_of_business.title', 'like', '%' . $title . '%');
+        }
+        /** @var Collection $areaOfBusiness */
+        $areaOfBusiness = $areaOfBusinessBuilder->get();
+
+
+        $response['order'] = $order;
+        $response['data'] = $areaOfBusiness->toArray()['data'] ?? $areaOfBusiness->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+
+    public function getEducationalInstitutionList(array $request, Carbon $startTime): array
+    {
+        $title = $request['title'] ?? "";
+        $type = $request['type'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+
+        $educationalInstitutionBuilder = EducationalInstitution::select(
+            [
+                'educational_institutions.id',
+                'educational_institutions.name',
+                'educational_institutions.type',
+                'educational_institutions.created_at',
+                'educational_institutions.updated_at'
+            ]
+        );
+
+        $educationalInstitutionBuilder->orderBy('educational_institutions.id', $order);
+
+        if (!empty($name)) {
+            $educationalInstitutionBuilder->where('educational_institutions.name', 'like', '%' . $name . '%');
+        }
+        if (!empty($type)) {
+            $educationalInstitutionBuilder->where('educational_institutions.type', 'like', '%' . $type . '%');
+        }
+        /** @var Collection $areaOfBusiness */
+        $educationalInstitution = $educationalInstitutionBuilder->get();
+
+
+        $response['order'] = $order;
+        $response['data'] = $educationalInstitution->toArray()['data'] ?? $educationalInstitution->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
 
     /**
      * @param int $id
@@ -249,6 +335,22 @@ class JobSectorService
             ],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+
+    public function filterAreaOfBusinessValidator(Request $request) :\Illuminate\Contracts\Validation\Validator
+    {
+        return Validator::make($request->all(), [
+            'title' => 'nullable|max:500|min:2'
+        ]);
+
+    }
+
+    public function filterEducationInstitutionValidator(Request $request) :\Illuminate\Contracts\Validation\Validator
+    {
+        return Validator::make($request->all(), [
+            'name' => 'nullable|max:500|min:2'
+        ]);
     }
 
     /**
