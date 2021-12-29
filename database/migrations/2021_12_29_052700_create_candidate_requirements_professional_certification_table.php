@@ -15,7 +15,7 @@ class CreateCandidateRequirementsProfessionalCertificationTable extends Migratio
     {
         Schema::create('candidate_requirements_professional_certification', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("candidate_requirements_id")->index();
+            $table->integer("candidate_requirements_id")->index('index_prof_cert_can_req_id');
             $table->text("professional_certification");
             $table->timestamps();
         });
