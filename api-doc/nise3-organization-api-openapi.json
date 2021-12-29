@@ -5690,7 +5690,24 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": "1",
+                                        "is_company_address_visible": "1",
+                                        "company_industry_type": "3",
+                                        "is_company_business_visible": "1",
+                                        "updated_at": "2021-12-29T11:50:14.000000Z",
+                                        "created_at": "2021-12-29T11:50:14.000000Z",
+                                        "id": 2
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Company Info Visibility successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
