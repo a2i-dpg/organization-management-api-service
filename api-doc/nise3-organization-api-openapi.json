@@ -15,6 +15,9 @@
             "url": "http://localhost:8002/api/v1"
         },
         {
+            "url": "https://nise-industry.softbd/api/v1"
+        },
+        {
             "url": "https://org.bus-staging.softbdltd.com/api/v1"
         },
         {
