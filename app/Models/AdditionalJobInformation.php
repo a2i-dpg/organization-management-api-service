@@ -75,9 +75,26 @@ class AdditionalJobInformation extends Model
         return $this->hasMany(AdditionalJobInformationJobLevel::class);
     }
 
-    public function jobLocations(): BelongsToMany
+    public function jobLocations(): HasMany
     {
-        return $this->belongsToMany(AdditionalJobInformationJobLocation::class, 'additional_job_information_job_locations');
+
+        return $this->hasMany(AdditionalJobInformationJobLocation::class, 'additional_job_information_id', 'id')
+            ->leftJoin('loc_divisions', "loc_divisions.id", '=', 'additional_job_information_job_locations.loc_division_id')
+            ->leftJoin('loc_districts', "loc_districts.id", '=', 'additional_job_information_job_locations.loc_district_id')
+            ->leftJoin('loc_upazilas', "loc_upazilas.id", "=", "additional_job_information_job_locations.loc_upazila_id")
+            ->select([
+                'additional_job_information_job_locations.*',
+                "loc_divisions.id as loc_district_id",
+                "loc_districts.id as loc_district_id",
+                "loc_upazilas.id as loc_area_id",
+                "loc_divisions.title as loc_division_title",
+                "loc_divisions.title_en as loc_division_title_en",
+                "loc_districts.title as loc_district_title",
+                "loc_districts.title_en as loc_district_title_en",
+                "loc_upazilas.title as loc_area_title",
+                "loc_upazilas.title_en as loc_area_title_en",
+            ]);
+
     }
 
     public function workPlaces(): HasMany

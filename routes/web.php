@@ -97,8 +97,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
         $router->get("test", function () {
-            return \App\Models\PrimaryJobInformation::with('additionalJobInformation')->get();
-            //return \App\Models\AdditionalJobInformation::with(['jobLevels', 'jobLocations', 'workPlaces'])->get();
+//            return \App\Models\PrimaryJobInformation::with('additionalJobInformation')->get();
+            return \App\Models\AdditionalJobInformation::with(['jobLevels', 'jobLocations', 'workPlaces'])->get();
         });
 
 
