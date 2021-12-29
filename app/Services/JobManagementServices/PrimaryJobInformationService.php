@@ -110,7 +110,7 @@ class PrimaryJobInformationService
             ],
             "no_of_vacancies" => [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->is_number_of_vacancy_na == PrimaryJobInformation::BOOLEAN_FLAG_FALSE;
+                    return $request->offsetGet('is_number_of_vacancy_na') == PrimaryJobInformation::BOOLEAN_FLAG_FALSE;
                 }),
                 "nullable",
                 "integer"
@@ -131,8 +131,15 @@ class PrimaryJobInformationService
                 "required",
                 "date"
             ],
+            "is_apply_online" => [
+                "nullable",
+                Rule::in(PrimaryJobInformation::BOOLEAN_FLAG)
+            ],
             "resume_receiving_option" => [
-                "required",
+                Rule::requiredIf(function () use ($request) {
+                    return !$request->has('is_apply_online');
+                }),
+                "nullable",
                 Rule::in(array_keys(PrimaryJobInformation::RESUME_RECEIVING_OPTION))
             ],
             "special_instruction_for_job_seekers" => [
@@ -154,11 +161,11 @@ class PrimaryJobInformationService
             ]
         ];
 
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2]) {
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1]) {
             {
                 $rules["email"] = [
                     Rule::requiredIf(function () use ($request) {
-                        return $request->resume_receiving_option == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2];
+                        return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1];
                     }),
                     "nullable",
                     "email"
@@ -168,10 +175,10 @@ class PrimaryJobInformationService
                 ];
             }
         }
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3]) {
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2]) {
             $rules["instruction_for_hard_copy"] = [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->resume_receiving_option == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3];
+                    return $request->offsetGet('resume_receiving_option')  == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2];
                 }),
                 "nullable"
             ];
@@ -179,11 +186,11 @@ class PrimaryJobInformationService
                 "nullable"
             ];
         }
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[4]) {
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3]) {
             {
                 $rules["instruction_for_walk_in_interview"] = [
                     Rule::requiredIf(function () use ($request) {
-                        return $request->resume_receiving_option == PrimaryJobInformation::RESUME_RECEIVING_OPTION[4];
+                        return $request->offsetGet('resume_receiving_option')  == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3];
                     }),
                     "nullable"
                 ];

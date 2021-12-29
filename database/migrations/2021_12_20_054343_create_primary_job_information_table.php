@@ -22,8 +22,9 @@ class CreatePrimaryJobInformationTable extends Migration
             $table->unsignedMediumInteger("no_of_vacancies")->nullable();
             $table->unsignedInteger("job_category_id");
             $table->date("application_deadline")->comment('Y-m-d');
-            $table->unsignedTinyInteger("resume_receiving_option")->comment('1=>Apply Online, 2=>Email, 3=> Hard Copy, 4=>Walk in interview');
-            $table->string("email",320)->nullable()->comment('if select Email then required');
+            $table->unsignedTinyInteger('is_apply_online')->default(0)->comment("0=> False, 1=> True");
+            $table->unsignedTinyInteger("resume_receiving_option")->comment('1=>Email, 2=> Hard Copy, 3=>Walk in interview');
+            $table->string("email")->nullable()->comment('if select Email then required');
             $table->unsignedTinyInteger("is_use_nise3_mail_system")->default(0);
 
             $table->text('special_instruction_for_job_seekers')->nullable()->comment("Special Instruction for Job Seekers");

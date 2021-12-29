@@ -27,10 +27,9 @@ class PrimaryJobInformation extends BaseModel
     ];
 
     public const RESUME_RECEIVING_OPTION = [
-        1 => "Apply Online",
-        2 => "Email",
-        3 => "Hard Copy",
-        4 => "Walk in interview"
+        1 => "Email",
+        2 => "Hard Copy",
+        3 => "Walk in interview"
     ];
 
     public const BOOLEAN_FLAG_TRUE = 1;
@@ -63,9 +62,9 @@ class PrimaryJobInformation extends BaseModel
         return self::jobId();
     }
 
-    public function employmentTypes():BelongsToMany
+    public function employmentTypes(): BelongsToMany
     {
-        return $this->belongsToMany(EmploymentType::class,"primary_job_information_employment_status");
+        return $this->belongsToMany(EmploymentType::class, "primary_job_information_employment_status");
     }
 
 }
