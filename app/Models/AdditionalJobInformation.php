@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AdditionalJobInformation extends Model
@@ -61,5 +62,13 @@ class AdditionalJobInformation extends Model
     public const DIVISION_ID_KEY = 0;
     public const DISTRICT_ID_KEY = 1;
     public const UPAZILA_ID_KEY = 2;
+
+    /**
+     * @return string
+     */
+    public function jobLevels(): string
+    {
+        return $this->hasMany();
+    }
 
 }
