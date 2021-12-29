@@ -78,4 +78,19 @@ abstract class BaseModel extends Model
     public const SAGA_MAIL_SMS_SERVICE = 'mail_sms_service';
 
     public const DATABASE_CONNECTION_ERROR_CODE = 2002;
+
+    /** Gender Statuses */
+    public const MALE = 1;
+    public const FEMALE = 2;
+    public const OTHERS = 3;
+    public const GENDERS = [
+        self::MALE,
+        self::FEMALE,
+        self::OTHERS
+    ];
+
+    public const BOOLEAN_FLAG = [
+        0 => "False",
+        1 => "True"
+    ];
 }

@@ -2,13 +2,9 @@
 
 namespace App\Services\JobManagementServices;
 
-use App\Models\AdditionalJobInformation;
-use App\Models\LocDistrict;
-use App\Models\LocDivision;
-use App\Models\LocUpazila;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\BaseModel;
+use App\Models\CandidateRequirement;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,121 +15,54 @@ use Illuminate\Validation\Rule;
 class CandidateRequirementsService
 {
     /**
-     * @return array
-     */
-    public function getJobLocation(): array
-    {
-        return Cache::rememberForever("JOB_LOCATION_FOR_JOB_POSTING", function () {
-            return $this->getLocationData();
-        });
-
-    }
-
-
-    /**
      * @param array $validatedData
-     * @return AdditionalJobInformation
+     * @return CandidateRequirement
      */
-    public function store(array $validatedData): AdditionalJobInformation
+    public function store(array $validatedData): CandidateRequirement
     {
-        $additionalJobInformation = new AdditionalJobInformation();
-        $additionalJobInformation->fill($validatedData);
-        $additionalJobInformation->save();
-        return $additionalJobInformation;
+        return CandidateRequirement::updateOrCreate(
+            ['job_id' => $validatedData['job_id']],
+            $validatedData
+        );
     }
 
     /**
-     * @return array
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $degrees
      */
-    private function getLocationData(): array
+    public function syncWithDegrees(CandidateRequirement $candidateRequirements, array $degrees)
     {
-        $jobLocation = [];
-        $divisions = LocDivision::all();
-
-        /** @var Builder $districtsBuilder */
-        $districtsBuilder = LocDistrict::select([
-            'loc_districts.id',
-            'loc_districts.loc_division_id',
-            'loc_districts.title',
-            'loc_districts.title_en',
-            'loc_districts.is_sadar_district',
-            'loc_divisions.title as division_title',
-            'loc_divisions.title_en as division_title_en',
-        ]);
-
-        $districtsBuilder->leftJoin('loc_divisions', function ($join) {
-            $join->on('loc_divisions.id', '=', 'loc_districts.loc_division_id')
-                ->whereNull('loc_divisions.deleted_at');
-        });
-        $districts = $districtsBuilder->get();
-
-
-        /** @var LocUpazila|Builder $upazilasBuilder */
-        $upazilasBuilder = LocUpazila::select([
-            'loc_upazilas.id',
-            'loc_upazilas.title',
-            'loc_upazilas.title_en',
-            'loc_upazilas.loc_district_id',
-            'loc_districts.title as district_title',
-            'loc_districts.title_en as district_title_en',
-            'loc_upazilas.loc_division_id',
-            'loc_divisions.title as division_title',
-            'loc_divisions.title_en as division_title_en'
-        ]);
-
-        $upazilasBuilder->leftJoin('loc_divisions', function ($join) {
-            $join->on('loc_divisions.id', '=', 'loc_upazilas.loc_division_id')
-                ->whereNull('loc_divisions.deleted_at');
-        });
-
-        $upazilasBuilder->leftJoin('loc_districts', function ($join) {
-            $join->on('loc_upazilas.loc_district_id', '=', 'loc_districts.id')
-                ->whereNull('loc_districts.deleted_at');
-        });
-
-        $upazilas = $upazilasBuilder->get();
-
-        foreach ($divisions as $division) {
-            $key = $division->id;
-            $jobLocation[$key] = strtoupper($division->title_en . "(" . $division->title . ")");
-        }
-
-        foreach ($districts as $district) {
-            $key = $district->loc_division_id . "_" . $district->id;
-            $titleEn = $district->division_title_en . " => " . $district->title_en;
-            $titleBn = " (" . $district->division_title . " => " . $district->title . ")";
-            if ($district->is_sadar_district) {
-                $titleEn = $district->division_title_en . " => " . $district->title_en . "(Zilla Sadar)";
-                $titleBn = " (" . $district->division_title . " => " . $district->title . "(জেলা সদর))";
-            }
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
-        }
-
-        foreach ($upazilas as $upazila) {
-            $key = $upazila->loc_division_id . "_" . $upazila->loc_district_id . "_" . $upazila->id;
-            $titleEn = $upazila->division_title_en . " => " . $upazila->district_title_en . " => " . $upazila->title_en;
-            $titleBn = " (" . $upazila->division_title . " => " . $upazila->district_title . " => " . $upazila->title . ")";
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
-        }
-
-        return $jobLocation;
-    }
-
-    /**
-     * @param AdditionalJobInformation $additionalJobInformation
-     * @param array $jobLevel
-     */
-    public function syncWithJobLevel(AdditionalJobInformation $additionalJobInformation, array $jobLevel)
-    {
-        foreach ($jobLevel as $item) {
-            DB::table('additional_job_information_job_level')->updateOrInsert(
+        DB::table('candidate_requirements_degrees')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($degrees as $item) {
+            $educationLevel = !empty($item["education_level"]) ? $item["education_level"] : null;
+            $eduGroup = !empty($item["edu_group"]) ? $item["edu_group"] : null;
+            $eduMajor = !empty($item["edu_major"]) ? $item["edu_major"] : null;
+            DB::table('candidate_requirements_training')->insert(
                 [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'job_level_id' => $item
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'education_level_id' => $educationLevel,
+                    'edu_group_id' => $eduGroup,
+                    'edu_major_id' => $eduMajor
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $preferredEducationalInstitution
+     */
+    public function syncWithPreferredEducationalInstitution(CandidateRequirement $candidateRequirements, array $preferredEducationalInstitution)
+    {
+        foreach ($preferredEducationalInstitution as $item) {
+            DB::table('candidate_requirements_preferred_educational_institution')->updateOrInsert(
+                [
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'preferred_educational_institution_id' => $item
                 ],
                 [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'job_level_id' => $item
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'preferred_educational_institution_id' => $item
 
                 ]
             );
@@ -143,52 +72,102 @@ class CandidateRequirementsService
     }
 
     /**
-     * @param AdditionalJobInformation $additionalJobInformation
-     * @param array $workPlace
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $training
      */
-    public function syncWithWorkplace(AdditionalJobInformation $additionalJobInformation, array $workPlace)
+    public function syncWithTraining(CandidateRequirement $candidateRequirements, array $training)
     {
-        foreach ($workPlace as $item) {
-            DB::table('additional_job_information_work_place')->updateOrInsert(
+        DB::table('candidate_requirements_training')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($training as $item) {
+            DB::table('candidate_requirements_training')->insert(
                 [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'work_place_id' => $item
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'work_place_id' => $item
-
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'training' => $item
                 ]
             );
-
         }
-
     }
 
     /**
-     * @param AdditionalJobInformation $additionalJobInformation
-     * @param array $jobLocation
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $professionalCertification
      */
-    public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
+    public function syncWithProfessionalCertification(CandidateRequirement $candidateRequirements, array $professionalCertification)
     {
-        foreach ($jobLocation as $item) {
-            $locIds = explode('_',$item);
-            $locDivisionId = $locIds[0];
-            $locDistrictId = $locIds[1];
-            $locUpazilaId = $locIds[2];
-            DB::table('additional_job_information_job_location')->updateOrInsert(
+        DB::table('candidate_requirements_professional_certification')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($professionalCertification as $item) {
+            DB::table('candidate_requirements_professional_certification')->insert(
                 [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'loc_division_id' => $locDivisionId,
-                    'loc_district_id' => $locDistrictId,
-                    'loc_upazila_id' => $locUpazilaId
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'loc_division_id' => $locDivisionId,
-                    'loc_district_id' => $locDistrictId,
-                    'loc_upazila_id' => $locUpazilaId
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'professional_certification' => $item
+                ]
+            );
+        }
+    }
 
+    /**
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $areaOfExperience
+     */
+    public function syncWithAreaOfExperience(CandidateRequirement $candidateRequirements, array $areaOfExperience)
+    {
+        DB::table('candidate_requirements_area_of_experience')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($areaOfExperience as $item) {
+            DB::table('candidate_requirements_area_of_experience')->insert(
+                [
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'area_of_experience_id' => $item
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $areaOfBusiness
+     */
+    public function syncWithAreaOfBusiness(CandidateRequirement $candidateRequirements, array $areaOfBusiness)
+    {
+        DB::table('candidate_requirements_area_of_business')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($areaOfBusiness as $item) {
+            DB::table('candidate_requirements_area_of_business')->insert(
+                [
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'area_of_business_id' => $item
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $skills
+     */
+    public function syncWithSkills(CandidateRequirement $candidateRequirements, array $skills)
+    {
+        DB::table('candidate_requirements_skills')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($skills as $item) {
+            DB::table('candidate_requirements_skills')->insert(
+                [
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'skills_id' => $item
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param CandidateRequirement $candidateRequirements
+     * @param array $gender
+     */
+    public function syncWithGender(CandidateRequirement $candidateRequirements, array $gender)
+    {
+        DB::table('candidate_requirements_gender')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        foreach ($gender as $item) {
+            DB::table('candidate_requirements_gender')->insert(
+                [
+                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'gender_id' => $item
                 ]
             );
         }
@@ -204,88 +183,125 @@ class CandidateRequirementsService
         $rules = [
             "job_id" => [
                 "required",
-                "exists:primary_job_information,job_id"
+                "exists:additional_job_information,job_id,deleted_at,NULL",
             ],
-            "job_responsibilities" => [
-                "nullable"
-            ],
-            "job_content" => [
-                "required"
-            ],
-            "job_place_type" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::JOB_PLACE_TYPE))
-            ],
-            "salary_min" => [
+            "degrees" => [
                 "nullable",
-                "numeric"
+                "array",
+                "max:24"
             ],
-            "salary_max" => [
+            "degrees.*.education_level" => [
                 "nullable",
-                "numeric"
+                "exists:education_levels,education_level_id,deleted_at,NULL",
             ],
-            "is_salary_info_show" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::IS_SALARY_SHOW))
-            ],
-            "is_salary_compare_to_expected_salary" => [
+            "degrees.*.edu_group" => [
                 "nullable",
-                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+                "exists:edu_groups,id,deleted_at,NULL",
             ],
-            "is_salary_alert_excessive_than_given_salary_range" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+            "degrees.*.edu_major" => [
+                "nullable",
+                "string"
             ],
-            "salary_review" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::SALARY_REVIEW))
-            ],
-            "festival_bonus" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
-            ],
-            "additional_salary_info" => [
-                "nullable"
-            ],
-            "is_other_benefits" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
-            ],
-            "other_benefits" => [
-                Rule::requiredIf(function () use ($request) {
-                    return $request->is_other_benefits == AdditionalJobInformation::BOOLEN_FLAG[1];
-                }),
+            "preferred_educational_institution" => [
                 "nullable",
                 "array"
             ],
-            "lunch_facilities" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::LUNCH_FACILITIES))
+            "preferred_educational_institution.*" => [
+                "exists:edu_institutions,id,deleted_at,NULL",
+                "numeric",
             ],
-            "others" => [
-                "nullable"
+            "other_educational_qualification" => [
+                "nullable",
+                "string",
             ],
-            "job_level" => [
-                "required",
+            "training" => [
+                "nullable",
                 "array"
             ],
-            "job_level.*" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::JOB_LEVEL))
+            "training.*" => [
+                "string",
             ],
-            "work_place" => [
-                "required",
+            "professional_certification" => [
+                "nullable",
                 "array"
             ],
-            "work_place.*" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::WORK_PLACE))
+            "professional_certification.*" => [
+                "string",
             ],
-            "job_location" => [
-                "required",
+            "experience" => [
+                "nullable",
                 "array"
-            ]
-
+            ],
+            "experience.minimum_year_of_experience" => [
+                "nullable",
+                "numeric",
+                "min:0",
+                "max:50"
+            ],
+            "experience.maximum_year_of_experience" => [
+                "nullable",
+                "numeric",
+                "min:1",
+                "max:50"
+            ],
+            "experience.freshers" => [
+                "nullable",
+                "numeric",
+                Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
+            ],
+            "experience.area_of_experience" => [
+                "nullable",
+                "array",
+            ],
+            "experience.area_of_experience.*" => [
+                "exists:skills,id,deleted_at,NULL",
+            ],
+            "experience.area_of_business" => [
+                "nullable",
+                "array",
+            ],
+            "experience.area_of_business.*" => [
+                "exists:area_of_business,id,deleted_at,NULL",
+            ],
+            "skills" => [
+                "nullable",
+                "array",
+            ],
+            "skills.*" => [
+                "exists:skills,id,deleted_at,NULL",
+            ],
+            "additional_requirements" => [
+                "nullable",
+                "string"
+            ],
+            "gender" => [
+                "nullable",
+                "array"
+            ],
+            "gender.*" => [
+                Rule::in(array_keys(BaseModel::GENDERS))
+            ],
+            "age_minimum" => [
+                "nullable",
+                "numeric",
+                "min:14",
+                "max:90"
+            ],
+            "age_maximum" => [
+                "numeric",
+                "min:14",
+                "max:90"
+            ],
+            "person_with_disability" => [
+                "nullable",
+                "numeric",
+                Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
+            ],
+            "preferred_retired_army_officer" => [
+                "nullable",
+                "numeric",
+                Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
+            ],
         ];
         return Validator::make($request->all(), $rules);
     }

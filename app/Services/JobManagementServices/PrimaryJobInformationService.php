@@ -46,11 +46,6 @@ class PrimaryJobInformationService
         $rules = [
             "job_id" => [
                 "required",
-                Rule::unique('primary_job_information', 'job_id')
-                    ->ignore($request->input('job_id'),'job_id')
-                    ->where(function (\Illuminate\Database\Query\Builder $query) {
-                        return $query->whereNull('deleted_at');
-                    })
             ],
             "service_type" => [
                 "required",
