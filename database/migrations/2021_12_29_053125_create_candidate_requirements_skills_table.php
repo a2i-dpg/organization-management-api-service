@@ -15,8 +15,8 @@ class CreateCandidateRequirementsSkillsTable extends Migration
     {
         Schema::create('candidate_requirements_skills', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("candidate_requirements_id")->index();
-            $table->integer("skills_id")->index();
+            $table->integer("candidate_requirements_id")->index('index_can_skill_can_req_id');
+            $table->integer("skills_id")->index('index_can_skill_skill_id');
             $table->timestamps();
         });
     }

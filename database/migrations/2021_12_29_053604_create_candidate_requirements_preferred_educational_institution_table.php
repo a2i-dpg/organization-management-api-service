@@ -15,8 +15,8 @@ class CreateCandidateRequirementsPreferredEducationalInstitutionTable extends Mi
     {
         Schema::create('candidate_requirements_preferred_educational_institution', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("candidate_requirements_id")->index();
-            $table->integer("preferred_educational_institution_id")->index();
+            $table->integer("candidate_requirements_id")->index('index_edu_ins_can_req_id');
+            $table->integer("preferred_educational_institution_id")->index('index_can_edu_ins_edu_ins_id');
             $table->timestamps();
         });
     }
