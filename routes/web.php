@@ -80,16 +80,20 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     });
 
     $router->group(["prefix" => "job", "as" => "job"], function () use ($router) {
-        $router->get("job-id", ["as" => "job-id", "uses" => "JobManagementController@getJobId"]);
-        $router->get("job-location", ["as" => "job-location", "uses" => "JobManagementController@jobLocation"]);
-        $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "JobManagementController@storePrimaryJobInformation"]);
-        $router->post("store-additional-job-information", ["as" => "store-primary-job-information", "uses" => "JobManagementController@storeAdditionalJobInformation"]);
-        $router->post("store-company-info-visibility", ["as" => "store-company-info-visibility", "uses" => "JobManagementController@storeCompanyInfoVisibility"]);
-        $router->get("company-info-visibility/{jobId}", ["as" => "get-company-info-visibility", "uses" => "JobManagementController@getCompanyInfoVisibility"]);
-        $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobManagementController@getContactInformation"]);
-        $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobManagementController@storeContactInformation"]);
-        $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "JobManagementController@getPrimaryJobInformation"]);
-        $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "JobManagementController@getAdditionalJobInformation"]);
+        $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
+        $router->get("job-location", ["as" => "job-location", "uses" => "AdditionalJobInfoController@jobLocation"]);
+
+        $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
+        $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
+
+        $router->post("store-additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
+        $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "AdditionalJobInfoController@getAdditionalJobInformation"]);
+
+        $router->post("store-company-info-visibility", ["as" => "store-company-info-visibility", "uses" => "CompanyInfoVisibilityController@storeCompanyInfoVisibility"]);
+        $router->get("company-info-visibility/{jobId}", ["as" => "get-company-info-visibility", "uses" => "CompanyInfoVisibilityController@getCompanyInfoVisibility"]);
+
+        $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
+        $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
     });
 
 
