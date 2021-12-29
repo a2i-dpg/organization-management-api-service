@@ -34,12 +34,20 @@ class JobManagementController extends Controller
     /**
      * @param PrimaryJobInformationService $primaryJobInformationService
      * @param AdditionalJobInformationService $additionalJobInformationService
+     * @param CandidateRequirementsService $candidateRequirementsService
      * @param CompanyInfoVisibilityService $companyInfoVisibilityService
      */
-    public function __construct(PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService, CompanyInfoVisibilityService $companyInfoVisibilityService, JobContactInformationService $jobContactInformationService)
+    public function __construct(
+        PrimaryJobInformationService $primaryJobInformationService,
+        AdditionalJobInformationService $additionalJobInformationService,
+        CandidateRequirementsService $candidateRequirementsService,
+        CompanyInfoVisibilityService $companyInfoVisibilityService,
+        JobContactInformationService $jobContactInformationService
+    )
     {
         $this->primaryJobInformationService = $primaryJobInformationService;
         $this->additionalJobInformationService = $additionalJobInformationService;
+        $this->candidateRequirementsService = $candidateRequirementsService;
         $this->companyInfoVisibilityService = $companyInfoVisibilityService;
         $this->jobContactInformationService = $jobContactInformationService;
         $this->startTime = Carbon::now();
@@ -128,25 +136,35 @@ class JobManagementController extends Controller
      */
     public function storeCandidateRequirements(Request $request): JsonResponse
     {
-        $validatedData = $this->additionalJobInformationService->validator($request)->validate();
+        $validatedData = $this->candidateRequirementsService->validator($request)->validate();
 
-        $jobLevel = $validatedData['job_level'];
-        $workPlace = $validatedData['work_place'];
-        $jobLocation = $validatedData['job_location'];
+        $degrees = $validatedData['degrees'];
+        $preferredEducationalInstitution = $validatedData['preferred_educational_institution'];
+        $training = $validatedData['training'];
+        $professionalCertification = $validatedData['professional_certification'];
+        $areaOfExperience = $validatedData['area_of_experience'];
+        $areaOfBusiness = $validatedData['area_of_business'];
+        $skills = $validatedData['skills'];
+        $gender = $validatedData['gender'];
 
         DB::beginTransaction();
         try {
-            $additionalJobInformation = $this->additionalJobInformationService->store($validatedData);
-            $this->additionalJobInformationService->syncWithJobLevel($additionalJobInformation, $jobLevel);
-            $this->additionalJobInformationService->syncWithWorkplace($additionalJobInformation, $workPlace);
-            $this->additionalJobInformationService->syncWithJobLocation($additionalJobInformation, $jobLocation);
+            $candidateRequirements = $this->candidateRequirementsService->store($validatedData);
+            $this->candidateRequirementsService->syncWithDegrees($candidateRequirements, $degrees);
+            $this->candidateRequirementsService->syncWithPreferredEducationalInstitution($candidateRequirements, $preferredEducationalInstitution);
+            $this->candidateRequirementsService->syncWithTraining($candidateRequirements, $training);
+            $this->candidateRequirementsService->syncWithProfessionalCertification($candidateRequirements, $professionalCertification);
+            $this->candidateRequirementsService->syncWithAreaOfExperience($candidateRequirements, $areaOfExperience);
+            $this->candidateRequirementsService->syncWithAreaOfBusiness($candidateRequirements, $areaOfBusiness);
+            $this->candidateRequirementsService->syncWithSkills($candidateRequirements, $skills);
+            $this->candidateRequirementsService->syncWithGender($candidateRequirements, $gender);
 
             $response = [
-                "data" => $additionalJobInformation,
+                "data" => $candidateRequirements,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
-                    "message" => "AdditionalJobInformation successfully submitted",
+                    "message" => "CandidateRequirements successfully submitted",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
