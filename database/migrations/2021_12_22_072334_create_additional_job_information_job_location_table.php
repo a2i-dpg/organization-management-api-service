@@ -13,9 +13,9 @@ class CreateAdditionalJobInformationJobLocationTable extends Migration
      */
     public function up()
     {
-        Schema::create('additional_job_information_job_location', function (Blueprint $table) {
+        Schema::create('additional_job_information_job_locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('additional_job_information_id');
+            $table->unsignedInteger('additional_job_information_id')->index('job_locations_additional_job_information_id');
             $table->unsignedMediumInteger('loc_division_id')->nullable();
             $table->unsignedMediumInteger('loc_district_id')->nullable();
             $table->unsignedMediumInteger('loc_upazila_id')->nullable();

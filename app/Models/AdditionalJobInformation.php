@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AdditionalJobInformation extends Model
@@ -27,7 +28,7 @@ class AdditionalJobInformation extends Model
         3 => "Show Negotiable instead of given salary range"
     ];
 
-    public const BOOLEN_FLAG = [
+    public const BOOLEAN_FLAG = [
         0 => "False",
         1 => "True"
     ];
@@ -59,6 +60,7 @@ class AdditionalJobInformation extends Model
         1 => "Home",
         2 => "Office"
     ];
+
     public const DIVISION_ID_KEY = 0;
     public const DISTRICT_ID_KEY = 1;
     public const UPAZILA_OR_CITY_CORPORATION_ID_KEY = 2;
@@ -68,12 +70,20 @@ class AdditionalJobInformation extends Model
     public const CITY_CORPORATION_IDENTITY_KEY = self::CITY_CORPORATION_IDENTITY_SYMBOL . "CC";
     public const CITY_CORPORATION_WARD_IDENTITY_KEY = self::CITY_CORPORATION_IDENTITY_SYMBOL . "CCW";
 
-    /**
-     * @return string
-     */
-    public function jobLevels(): string
+    public function jobLevels(): HasMany
     {
-        return $this->hasMany();
+        return $this->hasMany(AdditionalJobInformationJobLevel::class);
     }
+
+    public function jobLocations(): BelongsToMany
+    {
+        return $this->belongsToMany(AdditionalJobInformationJobLocation::class, 'additional_job_information_job_locations');
+    }
+
+    public function workPlaces(): HasMany
+    {
+        return $this->hasMany(AdditionalJobInformationWorkPlace::class);
+    }
+
 
 }

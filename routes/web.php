@@ -14,6 +14,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
     /** Api info  */
@@ -94,6 +95,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
         $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
+
+        $router->get("test", function () {
+            return \App\Models\PrimaryJobInformation::with('additionalJobInformation')->get();
+            //return \App\Models\AdditionalJobInformation::with(['jobLevels', 'jobLocations', 'workPlaces'])->get();
+        });
+
+
     });
 
 

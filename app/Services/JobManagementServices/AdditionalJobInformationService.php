@@ -3,6 +3,9 @@
 namespace App\Services\JobManagementServices;
 
 use App\Models\AdditionalJobInformation;
+use App\Models\AdditionalJobInformationJobLevel;
+use App\Models\AdditionalJobInformationJobLocation;
+use App\Models\AdditionalJobInformationWorkPlace;
 use App\Models\LocCityCorporation;
 use App\Models\LocCityCorporationWard;
 use App\Models\LocDistrict;
@@ -13,7 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -53,9 +55,9 @@ class AdditionalJobInformationService
 
         $additionalJobInfo = $additionalJobInfoBuilder->firstOrFail();
 
-        $additionalJobInfo['job_location']= $this->getJobLocation();
+        $additionalJobInfo['job_location'] = $this->getJobLocation();
 
-        return  $additionalJobInfo;
+        return $additionalJobInfo;
 
     }
 
@@ -233,59 +235,84 @@ class AdditionalJobInformationService
                 ->whereNull('loc_city_corporations.deleted_at');
         });
 
-
         $cityCorporationWards = $cityCorporationWardBuilder->get();
 
         /** LocDivision */
         foreach ($divisions as $division) {
             $key = $division->id;
-            $jobLocation[$key] = strtoupper($division->title_en . "(" . $division->title . ")");
+            $jobLocation[] = [
+                "id" => $key,
+                "title" => $division->title,
+                "title_en" => $division->title_en
+            ];
         }
 
         /** LocDistrict */
         foreach ($districts as $district) {
             $key = $district->loc_division_id . "_" . $district->id;
             $titleEn = $district->division_title_en . " => " . $district->title_en;
-            $titleBn = " (" . $district->division_title . " => " . $district->title . ")";
+            $titleBn = $district->division_title . " => " . $district->title;
             if ($district->is_sadar_district) {
                 $titleEn = $district->division_title_en . " => " . $district->title_en . "(Zilla Sadar)";
-                $titleBn = " (" . $district->division_title . " => " . $district->title . "(জেলা সদর))";
+                $titleBn = $district->division_title . " => " . $district->title . "(জেলা সদর)";
             }
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+            $jobLocation[] = [
+                "id" => $key,
+                "title" => $titleBn,
+                "title_en" => $titleEn
+            ];
+
         }
         /** LocUpazila */
         foreach ($upazilas as $upazila) {
             $key = $upazila->loc_division_id . "_" . $upazila->loc_district_id . "_" . $upazila->id;
             $titleEn = $upazila->division_title_en . " => " . $upazila->district_title_en . " => " . $upazila->title_en;
-            $titleBn = " (" . $upazila->division_title . " => " . $upazila->district_title . " => " . $upazila->title . ")";
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+            $titleBn = $upazila->division_title . " => " . $upazila->district_title . " => " . $upazila->title;
+            $jobLocation[] = [
+                "id" => $key,
+                "title" => $titleBn,
+                "title_en" => $titleEn
+            ];
         }
 
         /** City Corporations */
         foreach ($cityCorporations as $cityCorporation) {
             $key = $cityCorporation->loc_division_id . "_" . $cityCorporation->loc_district_id . "_" . $cityCorporation->id . AdditionalJobInformation::CITY_CORPORATION_IDENTITY_KEY;
             $titleEn = $cityCorporation->division_title_en . " => " . $cityCorporation->district_title_en . " => " . $cityCorporation->title_en;
-            $titleBn = " (" . $cityCorporation->division_title . " => " . $cityCorporation->district_title . " => " . $cityCorporation->title . ")";
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+            $titleBn = $cityCorporation->division_title . " => " . $cityCorporation->district_title . " => " . $cityCorporation->title;
+            $jobLocation[] = [
+                "id" => $key,
+                "title" => $titleBn,
+                "title_en" => $titleEn
+            ];
         }
 
         /** LocUnion */
         foreach ($unions as $union) {
             $key = $union->loc_division_id . "_" . $union->loc_district_id . "_" . $union->loc_upazila_id . "_" . $union->id;
             $titleEn = $union->division_title_en . " => " . $union->district_title_en . " => " . $union->upazila_title_en . " => " . $union->title_en;
-            $titleBn = " (" . $union->division_title . " => " . $union->district_title . " => " . $union->upazila_title . " => " . $union->title . ")";
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+            $titleBn = $union->division_title . " => " . $union->district_title . " => " . $union->upazila_title . " => " . $union->title;
+            $jobLocation[] = [
+                "id" => $key,
+                "title" => $titleBn,
+                "title_en" => $titleEn
+            ];
         }
 
         /** CityCorporation wards */
         foreach ($cityCorporationWards as $cityCorporationWard) {
             $key = $cityCorporationWard->loc_division_id . "_" . $cityCorporationWard->loc_district_id . "_" . $cityCorporationWard->loc_city_corporation_id . AdditionalJobInformation::CITY_CORPORATION_IDENTITY_KEY . "_" . $cityCorporationWard->id . AdditionalJobInformation::CITY_CORPORATION_WARD_IDENTITY_KEY;
             $titleEn = $cityCorporationWard->division_title_en . " => " . $cityCorporationWard->district_title_en . " => " . $cityCorporationWard->city_corporation_title_en . " => " . $cityCorporationWard->title_en;
-            $titleBn = " (" . $cityCorporationWard->division_title . " => " . $cityCorporationWard->district_title . " => " . $cityCorporationWard->city_corporation_title . " => " . $cityCorporationWard->title . ")";
-            $jobLocation[$key] = strtoupper($titleEn . $titleBn);
+            $titleBn = $cityCorporationWard->division_title . " => " . $cityCorporationWard->district_title . " => " . $cityCorporationWard->city_corporation_title . " => " . $cityCorporationWard->title;
+
+            $jobLocation[] = [
+                "id" => $key,
+                "title" => $titleBn,
+                "title_en" => $titleEn
+            ];
         }
 
-        return $jobLocation;
+        return array_values($jobLocation);
     }
 
     /**
@@ -295,7 +322,7 @@ class AdditionalJobInformationService
     public function syncWithJobLevel(AdditionalJobInformation $additionalJobInformation, array $jobLevel)
     {
         foreach ($jobLevel as $item) {
-            DB::table('additional_job_information_job_level')->updateOrInsert(
+            AdditionalJobInformationJobLevel::updateOrCreate(
                 [
                     'additional_job_information_id' => $additionalJobInformation->id,
                     'job_level_id' => $item
@@ -318,7 +345,7 @@ class AdditionalJobInformationService
     public function syncWithWorkplace(AdditionalJobInformation $additionalJobInformation, array $workPlace)
     {
         foreach ($workPlace as $item) {
-            DB::table('additional_job_information_work_place')->updateOrInsert(
+            AdditionalJobInformationWorkPlace::updateOrCreate(
                 [
                     'additional_job_information_id' => $additionalJobInformation->id,
                     'work_place_id' => $item
@@ -344,11 +371,7 @@ class AdditionalJobInformationService
             $locIds = getLocationIdByKeyString($item);
             $jobLocationInfo = $this->getJobLocationFormat($locIds);
             $jobLocationInfo['additional_job_information_id'] = $additionalJobInformation->id;
-
-            DB::table('additional_job_information_job_location')->updateOrInsert(
-                $jobLocationInfo,
-                $jobLocationInfo
-            );
+            AdditionalJobInformationJobLocation::updateOrCreate($jobLocationInfo, $jobLocationInfo);
         }
     }
 
@@ -447,11 +470,11 @@ class AdditionalJobInformationService
             ],
             "is_salary_compare_to_expected_salary" => [
                 "nullable",
-                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+                Rule::in(array_keys(AdditionalJobInformation::BOOLEAN_FLAG))
             ],
             "is_salary_alert_excessive_than_given_salary_range" => [
                 "required",
-                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+                Rule::in(array_keys(AdditionalJobInformation::BOOLEAN_FLAG))
             ],
             "salary_review" => [
                 "required",
@@ -466,11 +489,11 @@ class AdditionalJobInformationService
             ],
             "is_other_benefits" => [
                 "required",
-                Rule::in(array_keys(AdditionalJobInformation::BOOLEN_FLAG))
+                Rule::in(array_keys(AdditionalJobInformation::BOOLEAN_FLAG))
             ],
             "other_benefits" => [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->is_other_benefits == AdditionalJobInformation::BOOLEN_FLAG[1];
+                    return $request->is_other_benefits == AdditionalJobInformation::BOOLEAN_FLAG[1];
                 }),
                 "nullable",
                 "array"

@@ -28,9 +28,17 @@ class PrimaryJobInfoController extends Controller
 
     }
 
-    public function getJobId(): string
+    public function getJobId(): JsonResponse
     {
-        return PrimaryJobInformation::jobId();
+        $response = [
+            "data" => PrimaryJobInformation::jobId(),
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
 

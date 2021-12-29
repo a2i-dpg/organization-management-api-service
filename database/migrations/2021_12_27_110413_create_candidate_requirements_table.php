@@ -13,9 +13,9 @@ class CreateCandidateRequirementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('additional_job_information', function (Blueprint $table) {
+        Schema::create('candidate_requirements', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("job_id");//->unique();
+            $table->string("job_id")->index();
             $table->unsignedTinyInteger("minimum_year_of_experience")->comment("")->nullable();
             $table->unsignedTinyInteger("maximum_year_of_experience")->comment("")->nullable();
             $table->unsignedTinyInteger("freshers")->comment("0=>No, 1=>Yes")->nullable();

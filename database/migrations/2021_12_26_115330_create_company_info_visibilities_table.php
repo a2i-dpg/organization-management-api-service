@@ -15,7 +15,7 @@ class CreateCompanyInfoVisibilitiesTable extends Migration
     {
         Schema::create('company_info_visibilities', function (Blueprint $table) {
             $table->id();
-            $table->string('job_id');
+            $table->string('job_id')->index();
             $table->unsignedTinyInteger('is_company_name_visible')->default(0)->comment("0=> False, 1=> True");
             $table->string('company_name', 600)->nullable();
             $table->string('company_name_en', 300)->nullable();
