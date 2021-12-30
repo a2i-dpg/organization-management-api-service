@@ -5578,28 +5578,21 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "job_id": "12-pp-09",
+                                        "job_id": "aaa-ccc",
                                         "service_type": "2",
-                                        "job_title": "HurrayMania",
+                                        "job_title": "NewSpice",
                                         "job_title_en": null,
-                                        "no_of_vacancies": null,
+                                        "no_of_vacancies": "33",
                                         "job_category_id": "1",
                                         "application_deadline": "2021-09-09",
-                                        "resume_receiving_option": "1",
-                                        "email": null,
-                                        "is_use_nise3_mail_system": 0,
+                                        "is_apply_online": "1",
+                                        "resume_receiving_option": "2",
                                         "special_instruction_for_job_seekers": null,
                                         "special_instruction_for_job_seekers_en": null,
-                                        "instruction_for_hard_copy": null,
-                                        "instruction_for_hard_copy_en": null,
-                                        "instruction_for_walk_in_interview": null,
-                                        "instruction_for_walk_in_interview_en": null,
-                                        "is_photograph_enclose_with_resume": "1",
-                                        "is_prefer_video_resume": 0,
-                                        "created_at": "2021-12-28T10:55:38.000000Z",
-                                        "updated_at": "2021-12-28T10:57:01.000000Z",
-                                        "deleted_at": null
+                                        "is_photograph_enclose_with_resume": "0",
+                                        "updated_at": "2021-12-30T05:31:24.000000Z",
+                                        "created_at": "2021-12-30T05:31:24.000000Z",
+                                        "id": 2
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -7315,11 +7308,17 @@
                         "type": "array",
                         "items": {
                             "type": "integer"
-                        }
+                        },
+                        "description": "Must exist in employment_types table"
                     },
                     "application_deadline": {
                         "type": "string",
                         "format": "y-m-d"
+                    },
+                    "is_apply_online":{
+                        "type":"string",
+                        "format":"y-m-d",
+                        "description":"1=>True 0=>False"
                     },
                     "resume_receiving_option": {
                         "type": "integer",
@@ -7371,7 +7370,6 @@
                     "job_category_id",
                     "employment_type",
                     "application_deadline",
-                    "resume_receiving_option",
                     "is_photograph_enclose_with_resume"
                 ]
             },
