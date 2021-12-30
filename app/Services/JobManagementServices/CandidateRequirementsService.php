@@ -4,6 +4,8 @@ namespace App\Services\JobManagementServices;
 
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +16,37 @@ use Illuminate\Validation\Rule;
  */
 class CandidateRequirementsService
 {
+    public function getCandidateRequirements(string $jobId): Model|Builder
+    {
+
+
+        /** @var Builder $candidateRequirementBuilder */
+        $candidateRequirementBuilder = CandidateRequirement::select([
+            'candidate_requirements.id',
+            'candidate_requirements.job_id',
+            'candidate_requirements.other_educational_qualification',
+            'candidate_requirements.other_educational_qualification_en',
+            'candidate_requirements.is_experience_needed',
+            'candidate_requirements.is_freshers_encouraged',
+            'candidate_requirements.minimum_year_of_experience',
+            'candidate_requirements.maximum_year_of_experience',
+            'candidate_requirements.additional_requirements',
+            'candidate_requirements.additional_requirements_en',
+            'candidate_requirements.age_minimum',
+            'candidate_requirements.age_maximum',
+            'candidate_requirements.person_with_disability',
+            'candidate_requirements.preferred_retired_army_officer',
+            'candidate_requirements.created_at',
+            'candidate_requirements.updated_at',
+        ]);
+
+        $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
+        $candidateRequirementBuilder->with('candidateRequirementDegrees');
+        $candidateRequirementBuilder->with('educationalInstitutes');
+
+        return $candidateRequirementBuilder->firstOrFail();
+    }
+
     /**
      * @param array $validatedData
      * @return CandidateRequirement

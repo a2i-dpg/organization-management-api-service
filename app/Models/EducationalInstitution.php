@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class EducationalInstitution extends Model
 {
     protected $table = 'educational_institutions';
+
+
 }

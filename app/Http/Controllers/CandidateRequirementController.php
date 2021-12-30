@@ -74,4 +74,24 @@ class CandidateRequirementController extends Controller
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getCandidateRequirements(string $jobId): JsonResponse
+    {
+        $candidateRequirements = $this->candidateRequirementsService->getCandidateRequirements($jobId);
+        $response = [
+            "data" => $candidateRequirements,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
 }
