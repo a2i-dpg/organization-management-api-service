@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -174,6 +175,15 @@ class CandidateRequirementsService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
+        $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
+        $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
+        $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
+        $data["professional_certification"] = is_array($data['professional_certification']) ? $data['professional_certification'] : explode(',', $data['professional_certification']);
+        $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
+        $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
+        $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
+
         $rules = [
             "job_id" => [
                 "required",
@@ -186,7 +196,7 @@ class CandidateRequirementsService
             ],
             "degrees.*.education_level" => [
                 "nullable",
-                "exists:education_levels,education_level_id,deleted_at,NULL",
+                "exists:education_levels,id,deleted_at,NULL",
             ],
             "degrees.*.edu_group" => [
                 "nullable",
@@ -201,7 +211,7 @@ class CandidateRequirementsService
                 "array"
             ],
             "preferred_educational_institution.*" => [
-                "exists:educational_institutions,id",
+                "exists:educational_institutions,id,deleted_at,NULL",
                 "numeric",
             ],
             "other_educational_qualification" => [

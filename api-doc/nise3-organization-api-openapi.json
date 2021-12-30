@@ -6003,6 +6003,32 @@
                 }
             }
         },
+        "/job/store-candidate-requirements": {
+            "post": {
+                "tags": ["Candidate Requirements"],
+                "summary": "Store Candidate Requirements",
+                "description": "API endpoint to Store Candidate Requirements.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CandidateRequirements"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/area_of_business": {
             "get": {
                 "tags": ["Area of Business"],
@@ -7311,6 +7337,117 @@
     },
     "components": {
         "schemas": {
+            "CandidateRequirements": {
+                "type": "object",
+                "description": "Candidate Requirements",
+                "properties": {
+                    "job_id": {
+                        "type": "string",
+                        "description": "Must exist in additional_job_information table"
+                    },
+                    "degrees": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "preferred_educational_institution": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Id exists in educational_institutions table"
+                    },
+                    "other_educational_qualification": {
+                        "type": "string"
+                    },
+                    "other_educational_qualification_en": {
+                        "type": "string"
+                    },
+                    "training": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "professional_certification": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "is_experience_needed": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True , 0=>False"
+                    },
+                    "minimum_year_of_experience": {
+                        "type": "integer"
+                    },
+                    "maximum_year_of_experience": {
+                        "type": "integer"
+                    },
+                    "is_freshers_encouraged": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=> False"
+                    },
+                    "area_of_experience": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Id must exist in skills table"
+                    },
+                    "area_of_business": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Must exist in area_of_business"
+                    },
+                    "skills": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "additional_requirements": {
+                        "type": "string"
+                    },
+                    "additional_requirements_en": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "enum": [1,2,3]
+                        },
+                        "description": "1=>Male 2=>Female 3=>Others"
+                    },
+                    "age_minimum": {
+                        "type": "integer"
+                    },
+                    "age_maximum": {
+                        "type": "integer"
+                    },
+                    "person_with_disability": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "preferred_retired_army_officer": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    }
+
+                },
+                "required": [
+                    "job_id"
+                ]
+            },
             "ContactInformation": {
                 "type": "object",
                 "description": "Contact Information",
