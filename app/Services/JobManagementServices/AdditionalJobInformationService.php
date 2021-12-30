@@ -32,7 +32,7 @@ class AdditionalJobInformationService
             'additional_job_information.id',
             'additional_job_information.job_id',
             'additional_job_information.job_responsibilities',
-            'additional_job_information.job_content',
+            'additional_job_information.job_context',
             'additional_job_information.job_place_type',
             'additional_job_information.salary_min',
             'additional_job_information.salary_max',
@@ -52,12 +52,10 @@ class AdditionalJobInformationService
 
         $additionalJobInfoBuilder->where('additional_job_information.job_id', $jobId);
 
+        $additionalJobInfoBuilder->with(['jobLevels','jobLocations','workPlaces']);
 
-        $additionalJobInfo = $additionalJobInfoBuilder->firstOrFail();
 
-        $additionalJobInfo['job_location'] = $this->getJobLocation();
-
-        return $additionalJobInfo;
+        return $additionalJobInfoBuilder->firstOrFail();
 
     }
 
