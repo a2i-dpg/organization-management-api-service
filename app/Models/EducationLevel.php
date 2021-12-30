@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EducationLevel extends BaseModel
 {
+    use SoftDeletes;
     /** Education Level Status Code */
     public const EDUCATION_LEVEL_PSC_5_PASS = "PSC_5_PASS";
     public const EDUCATION_LEVEL_JSC_JDC_8_PASS = "JSC_JDC_8_PASS";
