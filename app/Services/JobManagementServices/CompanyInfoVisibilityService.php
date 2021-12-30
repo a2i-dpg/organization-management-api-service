@@ -57,7 +57,7 @@ class CompanyInfoVisibilityService
             "job_id" => [
                 "required",
                 'string',
-                'exists:candidate_requirements,id,deleted_at,NULL',
+                'exists:candidate_requirements,job_id,deleted_at,NULL',
             ],
             'is_company_name_visible' => [
                 'required',

@@ -1897,6 +1897,14 @@
                         "$ref": "#/components/parameters/row_status_optional"
                     },
                     {
+                        "name": "job_sector_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -5682,7 +5690,24 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": "1",
+                                        "is_company_address_visible": "1",
+                                        "company_industry_type": "3",
+                                        "is_company_business_visible": "1",
+                                        "updated_at": "2021-12-29T11:50:14.000000Z",
+                                        "created_at": "2021-12-29T11:50:14.000000Z",
+                                        "id": 2
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Company Info Visibility successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -7157,7 +7182,7 @@
                     "job_responsibilities": {
                         "type": "string"
                     },
-                    "job_content": {
+                    "job_context": {
                         "type": "string"
                     },
                     "job_place_type": {
@@ -7243,7 +7268,7 @@
                 },
                 "required": [
                     "job_id",
-                    "job_content",
+                    "job_context",
                     "job_place_type",
                     "is_salary_info_show",
                     "is_salary_alert_excessive_than_given_salary_range",
