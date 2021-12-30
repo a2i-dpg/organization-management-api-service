@@ -21,7 +21,7 @@ class CandidateRequirementController extends Controller
     /**
      * @param CandidateRequirementsService $candidateRequirementsService
      */
-    public function __construct(CandidateRequirementsService $candidateRequirementsService,)
+    public function __construct(CandidateRequirementsService $candidateRequirementsService)
     {
         $this->candidateRequirementsService = $candidateRequirementsService;
         $this->startTime = Carbon::now();

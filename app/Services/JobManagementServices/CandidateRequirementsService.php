@@ -201,7 +201,7 @@ class CandidateRequirementsService
                 "array"
             ],
             "preferred_educational_institution.*" => [
-                "exists:educational_institutions,id,deleted_at,NULL",
+                "exists:educational_institutions,id",
                 "numeric",
             ],
             "other_educational_qualification" => [
