@@ -17,7 +17,7 @@ class AdditionalJobInformationJobLocation extends BaseModel
     public function toArray(): array
     {
         $data = parent::toArray();
-        return self::getJobLocationId($data);
+        return array_merge($data, self::getJobLocationId($data));
     }
 
     #[ArrayShape(["location_id" => "mixed|string", "title" => "mixed|string", "title_en" => "mixed|string"])]
