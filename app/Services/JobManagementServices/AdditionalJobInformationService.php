@@ -6,11 +6,8 @@ use App\Models\AdditionalJobInformation;
 use App\Models\AdditionalJobInformationJobLevel;
 use App\Models\AdditionalJobInformationJobLocation;
 use App\Models\AdditionalJobInformationWorkPlace;
-use App\Models\LocCityCorporation;
-use App\Models\LocCityCorporationWard;
 use App\Models\LocDistrict;
 use App\Models\LocDivision;
-use App\Models\LocUnion;
 use App\Models\LocUpazila;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -52,7 +49,14 @@ class AdditionalJobInformationService
 
         $additionalJobInfoBuilder->where('additional_job_information.job_id', $jobId);
 
-        $additionalJobInfoBuilder->with(['jobLevels','jobLocations','workPlaces']);
+        $additionalJobInfoBuilder->with(['jobLevels' => function ($query) {
+            $query->select('id', 'title');
+        }]);
+        $additionalJobInfoBuilder->with('jobLocations');
+
+        $additionalJobInfoBuilder->with(['workPlaces' => function ($query) {
+            $query->select('id', 'title');
+        }]);
 
 
         return $additionalJobInfoBuilder->firstOrFail();

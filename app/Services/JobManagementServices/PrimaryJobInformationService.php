@@ -28,6 +28,7 @@ class PrimaryJobInformationService
             'occupations.title as job_category_title',
             'occupations.title_en as job_category_title_en',
             'primary_job_information.application_deadline',
+            'primary_job_information.is_apply_online',
             'primary_job_information.resume_receiving_option',
             'primary_job_information.email',
             'primary_job_information.is_use_nise3_mail_system',
@@ -39,6 +40,8 @@ class PrimaryJobInformationService
             'primary_job_information.instruction_for_walk_in_interview_en',
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
+            'primary_job_information.published_at',
+            'primary_job_information.published_at',
             'primary_job_information.created_at',
             'primary_job_information.updated_at',
         ]);
@@ -49,7 +52,9 @@ class PrimaryJobInformationService
                 ->whereNull('occupations.deleted_at');
         });
 
-        $primaryJobInformationBuilder->with('employmentTypes');
+        $primaryJobInformationBuilder->with(['employmentTypes'=>function($query){
+            $query->select('id','title');
+        }]);
 
         return $primaryJobInformationBuilder->firstOrFail();
     }
