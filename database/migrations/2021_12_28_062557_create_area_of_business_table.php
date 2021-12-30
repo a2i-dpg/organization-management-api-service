@@ -16,6 +16,7 @@ class CreateAreaOfBusinessTable extends Migration
         Schema::create('area_of_business', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
