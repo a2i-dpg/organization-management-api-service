@@ -5578,20 +5578,20 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "aaa-ccc",
-                                        "service_type": "2",
-                                        "job_title": "NewSpice",
+                                        "job_id": "qqq-222",
+                                        "service_type": "1",
+                                        "job_title": "HurrayMania",
                                         "job_title_en": null,
-                                        "no_of_vacancies": "33",
+                                        "no_of_vacancies": "5",
                                         "job_category_id": "1",
                                         "application_deadline": "2021-09-09",
                                         "is_apply_online": "1",
-                                        "resume_receiving_option": "2",
+                                        "resume_receiving_option": "1",
                                         "special_instruction_for_job_seekers": null,
                                         "special_instruction_for_job_seekers_en": null,
-                                        "is_photograph_enclose_with_resume": "0",
-                                        "updated_at": "2021-12-30T05:31:24.000000Z",
-                                        "created_at": "2021-12-30T05:31:24.000000Z",
+                                        "is_photograph_enclose_with_resume": "1",
+                                        "updated_at": "2021-12-30T08:24:03.000000Z",
+                                        "created_at": "2021-12-30T08:24:03.000000Z",
                                         "id": 2
                                     },
                                     "_response_status": {
@@ -5629,27 +5629,29 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "1",
+                                        "id": 2,
+                                        "job_id": "1112",
                                         "job_responsibilities": null,
-                                        "job_content": "newbiewww",
-                                        "job_place_type": "2",
-                                        "salary_min": null,
-                                        "salary_max": null,
+                                        "job_context": "hettfield",
+                                        "job_place_type": "1",
+                                        "salary_min": "10000",
+                                        "salary_max": "20000",
                                         "is_salary_info_show": "2",
-                                        "is_salary_compare_to_expected_salary": "0",
+                                        "is_salary_compare_to_expected_salary": "1",
                                         "is_salary_alert_excessive_than_given_salary_range": "1",
                                         "salary_review": "1",
                                         "festival_bonus": "1",
                                         "additional_salary_info": null,
-                                        "is_other_benefits": "0",
+                                        "is_other_benefits": "1",
                                         "other_benefits": [
-                                            ""
+                                            "ffa",
+                                            "rrr4"
                                         ],
                                         "lunch_facilities": "1",
                                         "others": null,
-                                        "updated_at": "2021-12-27T12:10:05.000000Z",
-                                        "created_at": "2021-12-27T12:10:05.000000Z",
-                                        "id": 5
+                                        "created_at": "2021-12-30T08:10:04.000000Z",
+                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5762,24 +5764,61 @@
                             "application/json": {
                                 "example":{
                                     "data": {
-                                        "id": 1,
-                                        "job_id": "aaa-bbb",
+                                        "id": 2,
+                                        "job_id": "qqq-222",
                                         "service_type": 1,
-                                        "job_title": "NoTommorrow",
-                                        "no_of_vacancies": 2,
-                                        "job_category_id": 2,
-                                        "application_deadline": "0000-00-00",
-                                        "resume_receiving_option": 0,
+                                        "job_title": "HurrayMania",
+                                        "job_title_en": null,
+                                        "no_of_vacancies": 5,
+                                        "job_category_id": 1,
+                                        "job_category_title": "Stock Clerk",
+                                        "job_category_title_en": "Stock Clerk",
+                                        "application_deadline": "2021-09-09",
+                                        "resume_receiving_option": 1,
                                         "email": null,
                                         "is_use_nise3_mail_system": 0,
                                         "special_instruction_for_job_seekers": null,
+                                        "special_instruction_for_job_seekers_en": null,
                                         "instruction_for_hard_copy": null,
+                                        "instruction_for_hard_copy_en": null,
                                         "instruction_for_walk_in_interview": null,
-                                        "is_photograph_enclose_with_resume": 0,
+                                        "instruction_for_walk_in_interview_en": null,
+                                        "is_photograph_enclose_with_resume": 1,
                                         "is_prefer_video_resume": 0,
-                                        "created_at": null,
-                                        "updated_at": null,
-                                        "employment_types": []
+                                        "publish_at": null,
+                                        "archive_at": null,
+                                        "created_at": "2021-12-30T08:24:03.000000Z",
+                                        "updated_at": "2021-12-30T08:24:03.000000Z",
+                                        "employment_types": [
+                                            {
+                                                "id": 1,
+                                                "code": "FULL",
+                                                "title_en": "Full-Time",
+                                                "title": "ফুল টাইম",
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "deleted_at": null,
+                                                "pivot": {
+                                                    "primary_job_information_id": 2,
+                                                    "employment_type_id": 1
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "code": "PART",
+                                                "title_en": "Part-Time",
+                                                "title": "খন্ডকালীন",
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "deleted_at": null,
+                                                "pivot": {
+                                                    "primary_job_information_id": 2,
+                                                    "employment_type_id": 2
+                                                }
+                                            }
+                                        ]
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5808,7 +5847,156 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "1112",
+                                        "job_responsibilities": null,
+                                        "job_context": "hettfield",
+                                        "job_place_type": 1,
+                                        "salary_min": 10000,
+                                        "salary_max": 20000,
+                                        "is_salary_info_show": 2,
+                                        "is_salary_compare_to_expected_salary": 1,
+                                        "is_salary_alert_excessive_than_given_salary_range": 1,
+                                        "salary_review": 1,
+                                        "festival_bonus": 1,
+                                        "additional_salary_info": null,
+                                        "is_other_benefits": 1,
+                                        "other_benefits": [
+                                            "ffa",
+                                            "rrr4"
+                                        ],
+                                        "lunch_facilities": 1,
+                                        "others": null,
+                                        "created_at": "2021-12-30T08:10:04.000000Z",
+                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "job_levels": [
+                                            {
+                                                "id": 3,
+                                                "additional_job_information_id": 2,
+                                                "job_level_id": 1,
+                                                "created_at": "2021-12-30T08:10:04.000000Z",
+                                                "updated_at": "2021-12-30T08:10:04.000000Z",
+                                                "deleted_at": null,
+                                                "job_level_title": "Inside Bangladesh"
+                                            },
+                                            {
+                                                "id": 4,
+                                                "additional_job_information_id": 2,
+                                                "job_level_id": 2,
+                                                "created_at": "2021-12-30T08:10:04.000000Z",
+                                                "updated_at": "2021-12-30T08:10:04.000000Z",
+                                                "deleted_at": null,
+                                                "job_level_title": "Outside Bangladesh"
+                                            }
+                                        ],
+                                        "job_locations": [
+                                            {
+                                                "location_id": "",
+                                                "title": "",
+                                                "title_en": ""
+                                            },
+                                            {
+                                                "location_id": "1_2_3",
+                                                "title": "বরিশাল => বরিশাল => ফকিরহাট",
+                                                "title_en": "BARISAL => BARISAL => FAKIRHAT"
+                                            }
+                                        ],
+                                        "work_places": [
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "work_place_id": 1,
+                                                "created_at": "2021-12-30T08:10:04.000000Z",
+                                                "updated_at": "2021-12-30T08:10:04.000000Z",
+                                                "deleted_at": null,
+                                                "work_place_title": "Home"
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/job/contact-information": {
+            "post": {
+                "tags": ["Contact Information"],
+                "summary": "Store contact information",
+                "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInformation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "11122",
+                                        "contact_person_id": "1",
+                                        "updated_at": "2021-12-30T08:47:56.000000Z",
+                                        "created_at": "2021-12-30T08:47:56.000000Z",
+                                        "id": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/contact-information/{jobId}": {
+            "get": {
+                "tags": ["Contact Information"],
+                "summary": "Store contact information",
+                "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "11122",
+                                        "contact_person_id": 1,
+                                        "created_at": "2021-12-30T08:47:56.000000Z",
+                                        "updated_at": "2021-12-30T08:47:56.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -7123,6 +7311,22 @@
     },
     "components": {
         "schemas": {
+            "ContactInformation": {
+                "type": "object",
+                "description": "Contact Information",
+                "properties": {
+                    "job_id": {
+                        "type": "string"
+                    },
+                    "contact_person_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "contact_person_id"
+                ]
+            },
             "CompanyInfoVisibility": {
                 "type": "object",
                 "description": "CompanyInfoVisibility",
