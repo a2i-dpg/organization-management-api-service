@@ -15,9 +15,9 @@ class CreateAdditionalJobInformationTable extends Migration
     {
         Schema::create('additional_job_information', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('job_id');//->unique();
+            $table->string('job_id')->index();
             $table->text("job_responsibilities")->nullable();
-            $table->text("job_content");
+            $table->text("job_context");
             $table->unsignedTinyInteger("job_place_type")->comment("1=> Inside Bangladesh,2=> Outside Bangladesh");
             $table->unsignedDouble('salary_min')->nullable();
             $table->unsignedDouble('salary_max')->nullable();

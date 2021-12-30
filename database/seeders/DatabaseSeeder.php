@@ -26,7 +26,10 @@ class DatabaseSeeder extends Seeder
             PublicationSeeder::class,
             ContactInfoSeeder::class,
             EducationalInstitutionSeeder::class,
-            AreaOfBusinessSeeder::class
+            AreaOfBusinessSeeder::class,
+            EmploymentTypeSeeder::class,
+            EduGroupSeeder::class,
+            EduBoardSeeder::class
         ]);
     }
 }

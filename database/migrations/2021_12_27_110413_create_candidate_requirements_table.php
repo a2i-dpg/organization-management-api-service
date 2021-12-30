@@ -15,7 +15,7 @@ class CreateCandidateRequirementsTable extends Migration
     {
         Schema::create('candidate_requirements', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("job_id");//->unique();
+            $table->string("job_id")->index('candidate_requirements_job_id_index');
             $table->text("other_educational_qualification")->nullable();
             $table->text("other_educational_qualification_en")->nullable();
             $table->unsignedTinyInteger("is_experience_needed")->comment("0=>No, 1=>Yes")->nullable();

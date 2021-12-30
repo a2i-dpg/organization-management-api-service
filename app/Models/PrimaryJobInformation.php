@@ -3,7 +3,9 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use phpDocumentor\Reflection\Types\This;
 use Ramsey\Uuid\Uuid;
@@ -41,17 +43,6 @@ class PrimaryJobInformation extends BaseModel
     ];
 
 
-    public static function jobCategoryId(int $job_category_type): array
-    {
-        $categoryId = [];
-        if ($job_category_type == self::JOB_CATEGORY_TYPE[1]) {
-            $categoryId = JobSector::all('id')->toArray();
-        } elseif ($job_category_type == self::JOB_CATEGORY_TYPE[2]) {
-            $categoryId = Occupation::all('id')->toArray();
-        }
-        return $categoryId;
-    }
-
     public static function jobId(): string
     {
         $id = self::JOB_ID_PREFIX . Uuid::uuid4();
@@ -65,6 +56,11 @@ class PrimaryJobInformation extends BaseModel
     public function employmentTypes(): BelongsToMany
     {
         return $this->belongsToMany(EmploymentType::class, "primary_job_information_employment_status");
+    }
+
+    public function additionalJobInformation(): BelongsTo
+    {
+        return $this->belongsTo(AdditionalJobInformation::class, 'job_id', "job_id");
     }
 
 }

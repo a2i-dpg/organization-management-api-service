@@ -15,10 +15,10 @@ class CreatePrimaryJobInformationTable extends Migration
     {
         Schema::create('primary_job_information', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('job_id');
+            $table->string('job_id')->index();
             $table->unsignedTinyInteger('service_type')->comment("1=>Basic Listing, 2=>Stand-out-listing,3=>Stand Out Premium");
-            $table->string("job_title",500);
-            $table->string("job_title_en",300)->nullable();
+            $table->string("job_title", 500);
+            $table->string("job_title_en", 300)->nullable();
             $table->unsignedMediumInteger("no_of_vacancies")->nullable();
             $table->unsignedInteger("job_category_id");
             $table->date("application_deadline")->comment('Y-m-d');
@@ -38,6 +38,8 @@ class CreatePrimaryJobInformationTable extends Migration
 
             $table->unsignedTinyInteger('is_photograph_enclose_with_resume')->default(0)->comment("0=> False, 1=> True");
             $table->unsignedTinyInteger('is_prefer_video_resume')->default(0)->comment("0=> False, 1=> True");
+            $table->dateTime('publish_at')->nullable();
+            $table->dateTime('archive_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
