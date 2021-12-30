@@ -49,15 +49,7 @@ class AdditionalJobInformationService
 
         $additionalJobInfoBuilder->where('additional_job_information.job_id', $jobId);
 
-        $additionalJobInfoBuilder->with(['jobLevels' => function ($query) {
-            $query->select('id', 'title');
-        }]);
-        $additionalJobInfoBuilder->with('jobLocations');
-
-        $additionalJobInfoBuilder->with(['workPlaces' => function ($query) {
-            $query->select('id', 'title');
-        }]);
-
+        $additionalJobInfoBuilder->with(['jobLevels', 'jobLocations', 'workPlaces']);
 
         return $additionalJobInfoBuilder->firstOrFail();
 
