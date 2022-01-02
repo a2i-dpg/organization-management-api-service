@@ -38,8 +38,8 @@ class CreatePrimaryJobInformationTable extends Migration
 
             $table->unsignedTinyInteger('is_photograph_enclose_with_resume')->default(0)->comment("0=> False, 1=> True");
             $table->unsignedTinyInteger('is_prefer_video_resume')->default(0)->comment("0=> False, 1=> True");
-            $table->dateTime('publish_at')->nullable();
-            $table->dateTime('archive_at')->nullable();
+            $table->dateTime('published_at')->nullable();
+            $table->dateTime('archived_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
