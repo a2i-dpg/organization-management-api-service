@@ -366,8 +366,12 @@ class AdditionalJobInformationService
             "job_location" => [
                 "required",
                 "array"
+            ],
+            "job_location.*" => [
+                'required',
+                'string',
+                Rule::in(array_keys($this->getJobLocation()))
             ]
-
         ];
         return Validator::make($data, $rules);
     }
