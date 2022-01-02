@@ -37,12 +37,12 @@ class CandidateRequirementsService
             $educationLevel = !empty($item["education_level"]) ? $item["education_level"] : null;
             $eduGroup = !empty($item["edu_group"]) ? $item["edu_group"] : null;
             $eduMajor = !empty($item["edu_major"]) ? $item["edu_major"] : null;
-            DB::table('candidate_requirements_training')->insert(
+            DB::table('candidate_requirements_degrees')->insert(
                 [
                     'candidate_requirements_id' => $candidateRequirements->id,
                     'education_level_id' => $educationLevel,
                     'edu_group_id' => $eduGroup,
-                    'edu_major_id' => $eduMajor
+                    'edu_major' => $eduMajor
                 ]
             );
         }
@@ -54,21 +54,15 @@ class CandidateRequirementsService
      */
     public function syncWithPreferredEducationalInstitution(CandidateRequirement $candidateRequirements, array $preferredEducationalInstitution)
     {
+        DB::table('candidate_requirements_preferred_educational_institution')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
         foreach ($preferredEducationalInstitution as $item) {
-            DB::table('candidate_requirements_preferred_educational_institution')->updateOrInsert(
+            DB::table('candidate_requirements_preferred_educational_institution')->insert(
                 [
                     'candidate_requirements_id' => $candidateRequirements->id,
                     'preferred_educational_institution_id' => $item
-                ],
-                [
-                    'candidate_requirements_id' => $candidateRequirements->id,
-                    'preferred_educational_institution_id' => $item
-
                 ]
             );
-
         }
-
     }
 
     /**
@@ -207,10 +201,14 @@ class CandidateRequirementsService
                 "array"
             ],
             "preferred_educational_institution.*" => [
-                "exists:edu_institutions,id,deleted_at,NULL",
+                "exists:educational_institutions,id",
                 "numeric",
             ],
             "other_educational_qualification" => [
+                "nullable",
+                "string",
+            ],
+            "other_educational_qualification_en" => [
                 "nullable",
                 "string",
             ],
@@ -228,39 +226,40 @@ class CandidateRequirementsService
             "professional_certification.*" => [
                 "string",
             ],
-            "experience" => [
+            "is_experience_needed" => [
                 "nullable",
-                "array"
+                "numeric",
+                Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
-            "experience.minimum_year_of_experience" => [
+            "minimum_year_of_experience" => [
                 "nullable",
                 "numeric",
                 "min:0",
                 "max:50"
             ],
-            "experience.maximum_year_of_experience" => [
+            "maximum_year_of_experience" => [
                 "nullable",
                 "numeric",
                 "min:1",
                 "max:50"
             ],
-            "experience.freshers" => [
+            "is_freshers_encouraged" => [
                 "nullable",
                 "numeric",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
-            "experience.area_of_experience" => [
+            "area_of_experience" => [
                 "nullable",
                 "array",
             ],
-            "experience.area_of_experience.*" => [
+            "area_of_experience.*" => [
                 "exists:skills,id,deleted_at,NULL",
             ],
-            "experience.area_of_business" => [
+            "area_of_business" => [
                 "nullable",
                 "array",
             ],
-            "experience.area_of_business.*" => [
+            "area_of_business.*" => [
                 "exists:area_of_business,id,deleted_at,NULL",
             ],
             "skills" => [
@@ -271,6 +270,10 @@ class CandidateRequirementsService
                 "exists:skills,id,deleted_at,NULL",
             ],
             "additional_requirements" => [
+                "nullable",
+                "string"
+            ],
+            "additional_requirements_en" => [
                 "nullable",
                 "string"
             ],

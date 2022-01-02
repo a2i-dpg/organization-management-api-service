@@ -1,4 +1,4 @@
-# NISE3 Organization Management API Service
+# NISE3 Industry And Industry Association API Service
 
 
 ## Official Documentation
