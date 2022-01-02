@@ -5771,24 +5771,24 @@
                                         "id": 2,
                                         "job_id": "555",
                                         "job_responsibilities": null,
-                                        "job_context": "nocontext",
-                                        "job_place_type": 2,
+                                        "job_context": "lll",
+                                        "job_place_type": 1,
                                         "salary_min": null,
                                         "salary_max": null,
                                         "is_salary_info_show": 1,
                                         "is_salary_compare_to_expected_salary": 1,
                                         "is_salary_alert_excessive_than_given_salary_range": 1,
-                                        "salary_review": 2,
-                                        "festival_bonus": 2,
+                                        "salary_review": 1,
+                                        "festival_bonus": 1,
                                         "additional_salary_info": null,
                                         "is_other_benefits": 1,
                                         "other_benefits": [
-                                            ""
+                                            "c++"
                                         ],
                                         "lunch_facilities": 1,
                                         "others": null,
                                         "created_at": "2022-01-02T04:58:29.000000Z",
-                                        "updated_at": "2022-01-02T04:58:29.000000Z",
+                                        "updated_at": "2022-01-02T07:38:09.000000Z",
                                         "job_levels": [
                                             {
                                                 "id": 1,
@@ -5798,6 +5798,15 @@
                                                 "updated_at": "2022-01-02T04:58:30.000000Z",
                                                 "deleted_at": null,
                                                 "job_level_title": "Inside Bangladesh"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "job_level_id": 2,
+                                                "created_at": "2022-01-02T05:03:40.000000Z",
+                                                "updated_at": "2022-01-02T05:03:40.000000Z",
+                                                "deleted_at": null,
+                                                "job_level_title": "Outside Bangladesh"
                                             }
                                         ],
                                         "job_locations": [
@@ -5823,6 +5832,29 @@
                                                 "location_id": "1_4_6",
                                                 "title": "বরিশাল => ঝালকাঠি => মোংলা",
                                                 "title_en": "BARISAL => JHALOKATI => MONGLA"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "loc_division_id": 0,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": 0,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "created_at": "2022-01-02T05:03:40.000000Z",
+                                                "updated_at": "2022-01-02T05:03:40.000000Z",
+                                                "deleted_at": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": null,
+                                                "loc_division_title_en": null,
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": "",
+                                                "title": "",
+                                                "title_en": ""
                                             }
                                         ],
                                         "work_places": [
