@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CandidateRequirement extends Model
@@ -12,46 +15,47 @@ class CandidateRequirement extends Model
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
-    public function candidateRequirementDegrees()
+
+    public function candidateRequirementDegrees(): HasMany
     {
-        $this->hasMany(CandidateRequirementDegree::class);
+        return $this->hasMany(CandidateRequirementDegree::class, 'candidate_requirements_id', 'id');
     }
 
-    public function educationalInstitutions()
+    public function educationalInstitutions(): BelongsToMany
     {
-        $this->belongsToMany(EducationalInstitution::class, 'candidate_requirements_preferred_educational_institution');
+        return $this->belongsToMany(EducationalInstitution::class, 'candidate_requirements_preferred_educational_institution', 'candidate_requirements_id', 'id');
+
     }
 
-    public function trainings()
+    public function trainings(): HasMany
     {
-        $this->hasMany(CandidateRequirementTraining::class);
+        return $this->hasMany(CandidateRequirementTraining::class,'candidate_requirements_id','id');
     }
 
-    public function professionalCertifications()
+    public function professionalCertifications(): HasMany
     {
-        $this->hasMany(CandidateRequirementProfessionalCertification::class);
+        return $this->hasMany(CandidateRequirementProfessionalCertification::class,'candidate_requirements_id','id');
     }
 
 
-    public function areaOfExperiences()
+    public function areaOfExperiences(): BelongsToMany
     {
-        $this->belongsToMany(Skill::class, 'candidate_requirements_area_of_experience');
+        return $this->belongsToMany(Skill::class, 'candidate_requirements_area_of_experience','candidate_requirements_id','id');
     }
 
-    public function areaOfBusiness()
+    public function areaOfBusiness(): BelongsToMany
     {
-        $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirements_area_of_business');
+        return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirements_area_of_business','candidate_requirements_id','id');
     }
 
-    public function skills()
+    public function skills(): BelongsToMany
     {
-        $this->belongsToMany(Skill::class, 'candidate_requirements_skills');
+        return $this->belongsToMany(Skill::class, 'candidate_requirements_skills','candidate_requirements_id','id');
     }
 
-    public function genders()
+    public function genders(): HasMany
     {
-        $this->hasMany(CandidateRequirementGender::class);
+        return $this->hasMany(CandidateRequirementGender::class);
     }
-
 
 }

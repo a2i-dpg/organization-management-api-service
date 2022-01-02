@@ -42,13 +42,15 @@ class CandidateRequirementsService
         ]);
 
         $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
+        $candidateRequirementBuilder->with('candidateRequirementDegrees.educationLevel:id,title,title_en');
+        $candidateRequirementBuilder->with('candidateRequirementDegrees.eduGroup:id,title,title_en');
 
-        $candidateRequirementBuilder->with('candidateRequirementDegrees');
-        $candidateRequirementBuilder->with('educationalInstitutions');
-        $candidateRequirementBuilder->with('trainings');
-        $candidateRequirementBuilder->with('professionalCertifications');
-        $candidateRequirementBuilder->with('areaOfExperiences');
-        $candidateRequirementBuilder->with('areaOfBusiness');
+        $candidateRequirementBuilder->with('educationalInstitutions:id,name');
+        $candidateRequirementBuilder->with('trainings:id,candidate_requirements_id,training');
+        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirements_id');
+        $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
+        $candidateRequirementBuilder->with('areaOfBusiness:id,title');
+        $candidateRequirementBuilder->with('skills:id,title,title_en');
 
         return $candidateRequirementBuilder->firstOrFail();
     }
@@ -214,6 +216,8 @@ class CandidateRequirementsService
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+
+
         $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
         $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
         $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
@@ -223,6 +227,7 @@ class CandidateRequirementsService
         $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
         $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
 
+//        dd($data);
         $rules = [
             "job_id" => [
                 "required",
@@ -250,8 +255,8 @@ class CandidateRequirementsService
                 "array"
             ],
             "preferred_educational_institution.*" => [
+                "integer",
                 "exists:educational_institutions,id,deleted_at,NULL",
-                "numeric",
             ],
             "other_educational_qualification" => [
                 "nullable",
@@ -355,7 +360,7 @@ class CandidateRequirementsService
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
         ];
-        return Validator::make($request->all(), $rules);
+        return Validator::make($data, $rules);
     }
 
 }
