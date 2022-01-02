@@ -66,8 +66,9 @@ class AdditionalJobInfoController extends Controller
 
     public function jobLocation(): JsonResponse
     {
+        $jobLocations = array_values($this->additionalJobInformationService->getJobLocation());
         $response = [
-            "data" => $this->additionalJobInformationService->getJobLocation(),
+            "data" => $jobLocations,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

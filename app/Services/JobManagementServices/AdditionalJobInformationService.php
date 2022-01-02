@@ -142,19 +142,25 @@ class AdditionalJobInformationService
                 "loc_division_title" => $division->title,
                 "loc_division_title_en" => $division->title_en
             ];
-            $jobLocation[] = AdditionalJobInformationJobLocation::getJobLocationId($locInfoFormat);
+            $tempData = AdditionalJobInformationJobLocation::getJobLocationId($locInfoFormat);
+            $key = $tempData['location_id'];
+            $jobLocation[$key] = $tempData;
         }
 
         /** LocDistrict */
         foreach ($districts as $district) {
-            $jobLocation[] = AdditionalJobInformationJobLocation::getJobLocationId($district->toArray());
+            $tempData = AdditionalJobInformationJobLocation::getJobLocationId($district->toArray());
+            $key = $tempData['location_id'];
+            $jobLocation[$key] = $tempData;
         }
         /** LocUpazila */
         foreach ($upazilas as $upazila) {
-            $jobLocation[] = AdditionalJobInformationJobLocation::getJobLocationId($upazila->toArray());
+            $tempData = AdditionalJobInformationJobLocation::getJobLocationId($upazila->toArray());
+            $key = $tempData['location_id'];
+            $jobLocation[$key] = $tempData;
         }
 
-        return array_values($jobLocation);
+        return $jobLocation;
     }
 
     /**
