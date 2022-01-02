@@ -46,7 +46,10 @@ class CandidateRequirementsService
         $candidateRequirementBuilder->with('candidateRequirementDegrees.eduGroup:id,title,title_en');
 
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
+
+        //TODO:check select method return [] if candidate_requirements_id not selected
         $candidateRequirementBuilder->with('trainings:id,candidate_requirements_id,training');
+
         $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirements_id');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title');
