@@ -5607,147 +5607,6 @@
                 }
             }
         },
-
-        "/job/store-additional-job-information": {
-            "post": {
-                "tags": ["Additional Job Information"],
-                "summary": "Store additional job info",
-                "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AdditionalJobInformation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 2,
-                                        "job_id": "1112",
-                                        "job_responsibilities": null,
-                                        "job_context": "hettfield",
-                                        "job_place_type": "1",
-                                        "salary_min": "10000",
-                                        "salary_max": "20000",
-                                        "is_salary_info_show": "2",
-                                        "is_salary_compare_to_expected_salary": "1",
-                                        "is_salary_alert_excessive_than_given_salary_range": "1",
-                                        "salary_review": "1",
-                                        "festival_bonus": "1",
-                                        "additional_salary_info": null,
-                                        "is_other_benefits": "1",
-                                        "other_benefits": [
-                                            "ffa",
-                                            "rrr4"
-                                        ],
-                                        "lunch_facilities": "1",
-                                        "others": null,
-                                        "created_at": "2021-12-30T08:10:04.000000Z",
-                                        "updated_at": "2021-12-30T08:10:04.000000Z",
-                                        "deleted_at": null
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "AdditionalJobInformation successfully submitted",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/job/store-company-info-visibility": {
-            "post": {
-                "tags": ["Company info visibility"],
-                "summary": "Store company info visibility",
-                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CompanyInfoVisibility"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "job_id": "aaa-bbb",
-                                        "is_company_name_visible": "1",
-                                        "is_company_address_visible": "1",
-                                        "company_industry_type": "3",
-                                        "is_company_business_visible": "1",
-                                        "updated_at": "2021-12-29T11:50:14.000000Z",
-                                        "created_at": "2021-12-29T11:50:14.000000Z",
-                                        "id": 2
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Company Info Visibility successfully submitted",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/job/company-info-visibility/{jobId}": {
-            "get": {
-                "tags": ["Company info visibility"],
-                "summary": "Get a specific company info visibility",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "job_id": "aaa-bbb",
-                                        "is_company_name_visible": 1,
-                                        "company_name": "Piistech",
-                                        "company_name_en": "Piistech",
-                                        "is_company_address_visible": 1,
-                                        "company_industry_type": 0,
-                                        "is_company_business_visible": 0,
-                                        "created_at": null,
-                                        "updated_at": null
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/job/primary-job-information/{jobId}": {
             "get": {
                 "tags": ["Primary Job Information"],
@@ -5832,6 +5691,66 @@
                 }
             }
         },
+
+
+        "/job/store-additional-job-information": {
+            "post": {
+                "tags": ["Additional Job Information"],
+                "summary": "Store additional job info",
+                "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdditionalJobInformation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "1112",
+                                        "job_responsibilities": null,
+                                        "job_context": "hettfield",
+                                        "job_place_type": "1",
+                                        "salary_min": "10000",
+                                        "salary_max": "20000",
+                                        "is_salary_info_show": "2",
+                                        "is_salary_compare_to_expected_salary": "1",
+                                        "is_salary_alert_excessive_than_given_salary_range": "1",
+                                        "salary_review": "1",
+                                        "festival_bonus": "1",
+                                        "additional_salary_info": null,
+                                        "is_other_benefits": "1",
+                                        "other_benefits": [
+                                            "ffa",
+                                            "rrr4"
+                                        ],
+                                        "lunch_facilities": "1",
+                                        "others": null,
+                                        "created_at": "2021-12-30T08:10:04.000000Z",
+                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "AdditionalJobInformation successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/job/additional-job-information/{jobId}": {
             "get": {
                 "tags": ["Additional Job Information"],
@@ -5850,70 +5769,165 @@
                                 "example": {
                                     "data": {
                                         "id": 2,
-                                        "job_id": "1112",
+                                        "job_id": "555",
                                         "job_responsibilities": null,
-                                        "job_context": "hettfield",
-                                        "job_place_type": 1,
-                                        "salary_min": 10000,
-                                        "salary_max": 20000,
-                                        "is_salary_info_show": 2,
+                                        "job_context": "nocontext",
+                                        "job_place_type": 2,
+                                        "salary_min": null,
+                                        "salary_max": null,
+                                        "is_salary_info_show": 1,
                                         "is_salary_compare_to_expected_salary": 1,
                                         "is_salary_alert_excessive_than_given_salary_range": 1,
-                                        "salary_review": 1,
-                                        "festival_bonus": 1,
+                                        "salary_review": 2,
+                                        "festival_bonus": 2,
                                         "additional_salary_info": null,
                                         "is_other_benefits": 1,
                                         "other_benefits": [
-                                            "ffa",
-                                            "rrr4"
+                                            ""
                                         ],
                                         "lunch_facilities": 1,
                                         "others": null,
-                                        "created_at": "2021-12-30T08:10:04.000000Z",
-                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "created_at": "2022-01-02T04:58:29.000000Z",
+                                        "updated_at": "2022-01-02T04:58:29.000000Z",
                                         "job_levels": [
                                             {
-                                                "id": 3,
+                                                "id": 1,
                                                 "additional_job_information_id": 2,
                                                 "job_level_id": 1,
-                                                "created_at": "2021-12-30T08:10:04.000000Z",
-                                                "updated_at": "2021-12-30T08:10:04.000000Z",
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
                                                 "deleted_at": null,
                                                 "job_level_title": "Inside Bangladesh"
-                                            },
-                                            {
-                                                "id": 4,
-                                                "additional_job_information_id": 2,
-                                                "job_level_id": 2,
-                                                "created_at": "2021-12-30T08:10:04.000000Z",
-                                                "updated_at": "2021-12-30T08:10:04.000000Z",
-                                                "deleted_at": null,
-                                                "job_level_title": "Outside Bangladesh"
                                             }
                                         ],
                                         "job_locations": [
                                             {
-                                                "location_id": "",
-                                                "title": "",
-                                                "title_en": ""
-                                            },
-                                            {
-                                                "location_id": "1_2_3",
-                                                "title": "বরিশাল => বরিশাল => ফকিরহাট",
-                                                "title_en": "BARISAL => BARISAL => FAKIRHAT"
+                                                "id": 1,
+                                                "additional_job_information_id": 2,
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 4,
+                                                "loc_upazila_id": 6,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "deleted_at": null,
+                                                "loc_area_id": 6,
+                                                "loc_division_title": "বরিশাল",
+                                                "loc_division_title_en": "Barisal",
+                                                "loc_district_title": "ঝালকাঠি",
+                                                "loc_district_title_en": "JHALOKATI",
+                                                "loc_area_title": "মোংলা",
+                                                "loc_area_title_en": "MONGLA",
+                                                "location_id": "1_4_6",
+                                                "title": "বরিশাল => ঝালকাঠি => মোংলা",
+                                                "title_en": "BARISAL => JHALOKATI => MONGLA"
                                             }
                                         ],
                                         "work_places": [
                                             {
+                                                "id": 1,
+                                                "additional_job_information_id": 2,
+                                                "work_place_id": 2,
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "deleted_at": null,
+                                                "work_place_title": "Office"
+                                            },
+                                            {
                                                 "id": 2,
                                                 "additional_job_information_id": 2,
                                                 "work_place_id": 1,
-                                                "created_at": "2021-12-30T08:10:04.000000Z",
-                                                "updated_at": "2021-12-30T08:10:04.000000Z",
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
                                                 "deleted_at": null,
                                                 "work_place_title": "Home"
                                             }
                                         ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/job/store-company-info-visibility": {
+            "post": {
+                "tags": ["Company info visibility"],
+                "summary": "Store company info visibility",
+                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompanyInfoVisibility"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": "1",
+                                        "is_company_address_visible": "1",
+                                        "company_industry_type": "3",
+                                        "is_company_business_visible": "1",
+                                        "updated_at": "2021-12-29T11:50:14.000000Z",
+                                        "created_at": "2021-12-29T11:50:14.000000Z",
+                                        "id": 2
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Company Info Visibility successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/company-info-visibility/{jobId}": {
+            "get": {
+                "tags": ["Company info visibility"],
+                "summary": "Get a specific company info visibility",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": 1,
+                                        "company_name": "Piistech",
+                                        "company_name_en": "Piistech",
+                                        "is_company_address_visible": 1,
+                                        "company_industry_type": 0,
+                                        "is_company_business_visible": 0,
+                                        "created_at": null,
+                                        "updated_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -6003,6 +6017,8 @@
                 }
             }
         },
+
+
         "/job/store-candidate-requirements": {
             "post": {
                 "tags": ["Candidate Requirements"],
@@ -6020,6 +6036,28 @@
                 "responses": {
                     "200": {
                         "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/candidate-requirements/{jobId}": {
+            "get": {
+                "tags": ["Candidate Requirements"],
+                "summary": "Get a candidate requirement by Id",
+                "description": "API endpoint to Get a candidate requirement by Id.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
                         "content": {
                             "application/json": {
                                 "example": {}
@@ -7421,8 +7459,7 @@
                     "gender": {
                         "type": "array",
                         "items": {
-                            "type": "integer",
-                            "enum": [1,2,3]
+                            "type": "integer"
                         },
                         "description": "1=>Male 2=>Female 3=>Others"
                     },

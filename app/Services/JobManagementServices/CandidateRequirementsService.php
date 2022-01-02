@@ -221,6 +221,7 @@ class CandidateRequirementsService
         $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
         $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
         $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
+        $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
 
         $rules = [
             "job_id" => [

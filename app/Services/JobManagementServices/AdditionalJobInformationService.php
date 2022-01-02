@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -159,7 +160,7 @@ class AdditionalJobInformationService
             $key = $tempData['location_id'];
             $jobLocation[$key] = $tempData;
         }
-
+        Log::info("===>",$jobLocation);
         return $jobLocation;
     }
 
@@ -282,13 +283,23 @@ class AdditionalJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        Log::info("jjjjjjjjjjjjjjjjj");
+
         $data = $request->all();
+        if(!empty($data["other_benefits"])){
+            $data["other_benefits"] =  is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
+        }
+        if(!empty($data["job_level"])){
+            $data["job_level"] =  is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
+        }
+        if(!empty($data["work_place"])){
+            $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
+        }
+        if (!empty($data["job_location"])){
+         $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
+        }
 
-        $data["other_benefits"] = is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
-        $data["job_level"] = is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
-        $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
-        $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
-
+        Log::info("-------------", $data["job_location"]);
         $rules = [
             "job_id" => [
                 "required",
@@ -375,7 +386,6 @@ class AdditionalJobInformationService
             ],
             "job_location.*" => [
                 'required',
-                'string',
                 Rule::in(array_keys($this->getJobLocation()))
             ]
         ];
