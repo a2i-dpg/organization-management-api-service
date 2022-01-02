@@ -6070,7 +6070,32 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "job_id": "555",
+                                        "other_educational_qualification": null,
+                                        "other_educational_qualification_en": null,
+                                        "is_experience_needed": "1",
+                                        "minimum_year_of_experience": "3",
+                                        "maximum_year_of_experience": "5",
+                                        "is_freshers_encouraged": "1",
+                                        "additional_requirements": null,
+                                        "additional_requirements_en": null,
+                                        "age_minimum": "90",
+                                        "age_maximum": "90",
+                                        "person_with_disability": "1",
+                                        "preferred_retired_army_officer": "0",
+                                        "updated_at": "2022-01-02T11:27:50.000000Z",
+                                        "created_at": "2022-01-02T11:27:50.000000Z",
+                                        "id": 18
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "CandidateRequirements successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -6092,7 +6117,154 @@
                         "description": "success",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example":{
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "jobId_1",
+                                        "other_educational_qualification": "Abcdef",
+                                        "other_educational_qualification_en": "aaaaaaaaaaaa",
+                                        "is_experience_needed": 0,
+                                        "is_freshers_encouraged": null,
+                                        "minimum_year_of_experience": null,
+                                        "maximum_year_of_experience": null,
+                                        "additional_requirements": null,
+                                        "additional_requirements_en": null,
+                                        "age_minimum": null,
+                                        "age_maximum": null,
+                                        "person_with_disability": 0,
+                                        "preferred_retired_army_officer": 0,
+                                        "created_at": "2022-01-02T10:08:36.000000Z",
+                                        "updated_at": "2022-01-02T10:08:36.000000Z",
+                                        "candidate_requirement_degrees": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "Bangla",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "English",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            },
+                                            {
+                                                "id": 3,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "Math",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            }
+                                        ],
+                                        "educational_institutions": [
+                                            {
+                                                "id": 1,
+                                                "name": "University of Dhaka"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "University of Rajshahi"
+                                            }
+                                        ],
+                                        "trainings": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2,
+                                                "training": "Php"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2,
+                                                "training": "Java"
+                                            }
+                                        ],
+                                        "professional_certifications": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2
+                                            }
+                                        ],
+                                        "area_of_experiences": [
+                                            {
+                                                "id": 1,
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title_en": "Project Management"
+                                            }
+                                        ],
+                                        "area_of_business": [
+                                            {
+                                                "id": 1,
+                                                "title": "Banks"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Insurance"
+                                            }
+                                        ],
+                                        "skills": [
+                                            {
+                                                "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                "title_en": "Project Management"
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -7416,10 +7588,8 @@
                         "description": "Must exist in additional_job_information table"
                     },
                     "degrees": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                        "type": "object",
+                        "example": " [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n]"
                     },
                     "preferred_educational_institution": {
                         "type": "array",

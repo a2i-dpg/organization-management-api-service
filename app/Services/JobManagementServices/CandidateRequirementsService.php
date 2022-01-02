@@ -19,8 +19,6 @@ class CandidateRequirementsService
 {
     public function getCandidateRequirements(string $jobId): Model|Builder
     {
-
-
         /** @var Builder $candidateRequirementBuilder */
         $candidateRequirementBuilder = CandidateRequirement::select([
             'candidate_requirements.id',
@@ -218,16 +216,32 @@ class CandidateRequirementsService
         $data = $request->all();
 
 
-        $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
-        $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
-        $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
-        $data["professional_certification"] = is_array($data['professional_certification']) ? $data['professional_certification'] : explode(',', $data['professional_certification']);
-        $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
-        $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
-        $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
-        $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
+        if(!empty($data["degrees"])){
+            $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
+        }
+        if(!empty($data["preferred_educational_institution"])){
+            $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
+        }
+        if(!empty($data["training"])){
+            $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
+        }
+        if(!empty($data["professional_certification"])){
+            $data["professional_certification"] = is_array($data['professional_certification']) ? $data['professional_certification'] : explode(',', $data['professional_certification']);
+        }
+        if(!empty($data["area_of_experience"])){
+            $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
+        }
+        if(!empty($data["area_of_business"])){
+            $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
+        }
+        if(!empty($data["skills"])){
+            $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
+        }
+        if(!empty($data["gender"])){
+            $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
+        }
 
-//        dd($data);
+
         $rules = [
             "job_id" => [
                 "required",
