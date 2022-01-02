@@ -2,24 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CandidateRequirementDegree extends BaseModel
 {
     protected $table = 'candidate_requirements_degrees';
 
-    public function candidateRequirement()
+    public function candidateRequirement(): BelongsTo
     {
-        $this->belongsTo(CandidateRequirement::class, 'candidate_requirements_id');
+        return $this->belongsTo(CandidateRequirement::class, 'candidate_requirements_id');
     }
 
-    public function educationLevel()
+    public function educationLevel(): HasOne
     {
-        $this->hasOne(EducationLevel::class,'education_level_id');
+        return $this->hasOne(EducationLevel::class, 'id','education_level_id');
     }
 
-    public function eduGroup()
+    public function eduGroup(): HasOne
     {
-        $this->hasOne(EduGroup::class,'edu_group_id');
+        return $this->hasOne(EduGroup::class,'id', 'edu_group_id');
     }
 }
