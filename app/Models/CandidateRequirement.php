@@ -17,9 +17,40 @@ class CandidateRequirement extends Model
         $this->hasMany(CandidateRequirementDegree::class);
     }
 
-    public function educationalInstitutes()
+    public function educationalInstitutions()
     {
-        $this->belongsToMany(CandidateRequirement::class, 'candidate_requirements_preferred_educational_institution');
+        $this->belongsToMany(EducationalInstitution::class, 'candidate_requirements_preferred_educational_institution');
+    }
+
+    public function trainings()
+    {
+        $this->hasMany(CandidateRequirementTraining::class);
+    }
+
+    public function professionalCertifications()
+    {
+        $this->hasMany(CandidateRequirementProfessionalCertification::class);
+    }
+
+
+    public function areaOfExperiences()
+    {
+        $this->belongsToMany(Skill::class, 'candidate_requirements_area_of_experience');
+    }
+
+    public function areaOfBusiness()
+    {
+        $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirements_area_of_business');
+    }
+
+    public function skills()
+    {
+        $this->belongsToMany(Skill::class, 'candidate_requirements_skills');
+    }
+
+    public function genders()
+    {
+        $this->hasMany(CandidateRequirementGender::class);
     }
 
 

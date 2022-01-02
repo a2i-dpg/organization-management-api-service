@@ -42,8 +42,13 @@ class CandidateRequirementsService
         ]);
 
         $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
+
         $candidateRequirementBuilder->with('candidateRequirementDegrees');
-        $candidateRequirementBuilder->with('educationalInstitutes');
+        $candidateRequirementBuilder->with('educationalInstitutions');
+        $candidateRequirementBuilder->with('trainings');
+        $candidateRequirementBuilder->with('professionalCertifications');
+        $candidateRequirementBuilder->with('areaOfExperiences');
+        $candidateRequirementBuilder->with('areaOfBusiness');
 
         return $candidateRequirementBuilder->firstOrFail();
     }
