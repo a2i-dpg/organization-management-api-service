@@ -9,4 +9,6 @@ class EducationalInstitution extends Model
 {
     use SoftDeletes;
     protected $table = 'educational_institutions';
+
+
 }
