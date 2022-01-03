@@ -5771,24 +5771,24 @@
                                         "id": 2,
                                         "job_id": "555",
                                         "job_responsibilities": null,
-                                        "job_context": "nocontext",
-                                        "job_place_type": 2,
+                                        "job_context": "lll",
+                                        "job_place_type": 1,
                                         "salary_min": null,
                                         "salary_max": null,
                                         "is_salary_info_show": 1,
                                         "is_salary_compare_to_expected_salary": 1,
                                         "is_salary_alert_excessive_than_given_salary_range": 1,
-                                        "salary_review": 2,
-                                        "festival_bonus": 2,
+                                        "salary_review": 1,
+                                        "festival_bonus": 1,
                                         "additional_salary_info": null,
                                         "is_other_benefits": 1,
                                         "other_benefits": [
-                                            ""
+                                            "c++"
                                         ],
                                         "lunch_facilities": 1,
                                         "others": null,
                                         "created_at": "2022-01-02T04:58:29.000000Z",
-                                        "updated_at": "2022-01-02T04:58:29.000000Z",
+                                        "updated_at": "2022-01-02T07:38:09.000000Z",
                                         "job_levels": [
                                             {
                                                 "id": 1,
@@ -5798,6 +5798,15 @@
                                                 "updated_at": "2022-01-02T04:58:30.000000Z",
                                                 "deleted_at": null,
                                                 "job_level_title": "Inside Bangladesh"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "job_level_id": 2,
+                                                "created_at": "2022-01-02T05:03:40.000000Z",
+                                                "updated_at": "2022-01-02T05:03:40.000000Z",
+                                                "deleted_at": null,
+                                                "job_level_title": "Outside Bangladesh"
                                             }
                                         ],
                                         "job_locations": [
@@ -5823,6 +5832,29 @@
                                                 "location_id": "1_4_6",
                                                 "title": "বরিশাল => ঝালকাঠি => মোংলা",
                                                 "title_en": "BARISAL => JHALOKATI => MONGLA"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "loc_division_id": 0,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": 0,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "created_at": "2022-01-02T05:03:40.000000Z",
+                                                "updated_at": "2022-01-02T05:03:40.000000Z",
+                                                "deleted_at": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": null,
+                                                "loc_division_title_en": null,
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": "",
+                                                "title": "",
+                                                "title_en": ""
                                             }
                                         ],
                                         "work_places": [
@@ -6038,7 +6070,32 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "job_id": "555",
+                                        "other_educational_qualification": null,
+                                        "other_educational_qualification_en": null,
+                                        "is_experience_needed": "1",
+                                        "minimum_year_of_experience": "3",
+                                        "maximum_year_of_experience": "5",
+                                        "is_freshers_encouraged": "1",
+                                        "additional_requirements": null,
+                                        "additional_requirements_en": null,
+                                        "age_minimum": "90",
+                                        "age_maximum": "90",
+                                        "person_with_disability": "1",
+                                        "preferred_retired_army_officer": "0",
+                                        "updated_at": "2022-01-02T11:27:50.000000Z",
+                                        "created_at": "2022-01-02T11:27:50.000000Z",
+                                        "id": 18
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "CandidateRequirements successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -6060,7 +6117,154 @@
                         "description": "success",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example":{
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "jobId_1",
+                                        "other_educational_qualification": "Abcdef",
+                                        "other_educational_qualification_en": "aaaaaaaaaaaa",
+                                        "is_experience_needed": 0,
+                                        "is_freshers_encouraged": null,
+                                        "minimum_year_of_experience": null,
+                                        "maximum_year_of_experience": null,
+                                        "additional_requirements": null,
+                                        "additional_requirements_en": null,
+                                        "age_minimum": null,
+                                        "age_maximum": null,
+                                        "person_with_disability": 0,
+                                        "preferred_retired_army_officer": 0,
+                                        "created_at": "2022-01-02T10:08:36.000000Z",
+                                        "updated_at": "2022-01-02T10:08:36.000000Z",
+                                        "candidate_requirement_degrees": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "Bangla",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "English",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            },
+                                            {
+                                                "id": 3,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "Math",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            }
+                                        ],
+                                        "educational_institutions": [
+                                            {
+                                                "id": 1,
+                                                "name": "University of Dhaka"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "University of Rajshahi"
+                                            }
+                                        ],
+                                        "trainings": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2,
+                                                "training": "Php"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2,
+                                                "training": "Java"
+                                            }
+                                        ],
+                                        "professional_certifications": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2
+                                            }
+                                        ],
+                                        "area_of_experiences": [
+                                            {
+                                                "id": 1,
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title_en": "Project Management"
+                                            }
+                                        ],
+                                        "area_of_business": [
+                                            {
+                                                "id": 1,
+                                                "title": "Banks"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Insurance"
+                                            }
+                                        ],
+                                        "skills": [
+                                            {
+                                                "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                "title_en": "Project Management"
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -7384,10 +7588,8 @@
                         "description": "Must exist in additional_job_information table"
                     },
                     "degrees": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                        "type": "object",
+                        "example": " [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n]"
                     },
                     "preferred_educational_institution": {
                         "type": "array",
