@@ -16,7 +16,7 @@ class CreateHrDemandsTable extends Migration
         Schema::create('hr_demands', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger("industry_association_id");
-            $table->unsignedInteger("industry_id");
+            $table->unsignedInteger("organization_id");
             $table->date('end_date')->comment('Date format = Y-m-d');
             $table->unsignedMediumInteger("skill_id");
             $table->text("requirement");

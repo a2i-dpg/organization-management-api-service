@@ -24,5 +24,8 @@ class HrDemand extends BaseModel
 {
     use SoftDeletes;
 
-    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
+
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
 }
