@@ -6247,6 +6247,60 @@
                 }
             }
         },
+
+
+        "/job/store-matching-criteria": {
+            "post": {
+                "tags": ["Matching Criteria"],
+                "summary": "Create a matching crieria",
+                "description": "API endpoint to Create a matching crieria.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MatchingCriteria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "222",
+                                        "is_age_enabled": "1",
+                                        "is_total_year_of_experience_enabled": "1",
+                                        "is_gender_enabled": "1",
+                                        "is_area_of_experience_enabled": "1",
+                                        "is_skills_enabled": "1",
+                                        "is_job_location_enabled": "1",
+                                        "is_salary_enabled": "1",
+                                        "is_area_of_business_enabled": "1",
+                                        "is_job_level_enabled": "0",
+                                        "is_age_mandatory": "1",
+                                        "is_total_year_of_experience_mandatory": "1",
+                                        "is_gender_mandatory": "1",
+                                        "is_job_location_mandatory": "0",
+                                        "updated_at": "2022-01-03T07:21:46.000000Z",
+                                        "created_at": "2022-01-03T07:21:46.000000Z",
+                                        "id": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "PrimaryJobInformation successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/area_of_business": {
             "get": {
                 "tags": ["Area of Business"],
@@ -7555,6 +7609,84 @@
     },
     "components": {
         "schemas": {
+            "MatchingCriteria": {
+                "type": "object",
+                "description": "Matching criteria",
+                "properties": {
+                    "job_id": {
+                        "type": "string",
+                        "description": "Must exist in company_info_visibilities table"
+                    },
+                    "is_age_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_total_year_of_experience_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_gender_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_area_of_experience_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_skills_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_job_location_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_salary_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_area_of_business_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_job_level_enabled": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_age_mandatory": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_total_year_of_experience_mandatory": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_gender_mandatory": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    },
+                    "is_job_location_mandatory": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>TRUE 0=>FALSE"
+                    }
+                },
+                "required": [
+                    "job_id"
+                ]
+            },
             "CandidateRequirements": {
                 "type": "object",
                 "description": "Candidate Requirements",

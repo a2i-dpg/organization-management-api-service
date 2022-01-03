@@ -69,67 +69,67 @@ class MatchingCriteriaService
             ],
             "is_age_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_total_year_of_experience_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_gender_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_area_of_experience_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_skills_enabled" => [
-                "nullable",
+                "integer",
                 "numeric",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_job_location_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_salary_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_area_of_business_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_job_level_enabled" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_age_mandatory" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_total_year_of_experience_mandatory" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_gender_mandatory" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
             "is_job_location_mandatory" => [
                 "nullable",
-                "numeric",
+                "integer",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
         ];
