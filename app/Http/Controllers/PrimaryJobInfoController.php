@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
+use App\Models\GalleryImageVideo;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -90,4 +93,53 @@ class PrimaryJobInfoController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function jobPublishOrArchive(Request $request, string $jobId): JsonResponse
+    {
+        $response = [];
+        $statusCode = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
+
+        if ($this->primaryJobInformationService->isJobPublishOrArchiveApplicable($jobId)) {
+            $galleryImageVideo = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+            $validatedData = $this->primaryJobInformationService->publishOrArchiveValidator($request)->validate();
+            $primaryJobInformationModificationFlag = $this->primaryJobInformationService->publishOrArchiveJob($validatedData, $galleryImageVideo);
+            $message = "";
+            if ($request->input('status') == PrimaryJobInformation::STATUS_PUBLISH) {
+                $message = $primaryJobInformationModificationFlag ? "Job published successfully done" : "Job published is not done";
+            }
+            if ($request->input('status') == PrimaryJobInformation::STATUS_ARCHIVE) {
+                $message = $primaryJobInformationModificationFlag ? "Job archived successfully done" : "Job archived is not done";
+            }
+
+            $statusCode = $primaryJobInformationModificationFlag ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
+            $response = [
+                '_response_status' => [
+                    "success" => $primaryJobInformationModificationFlag,
+                    "code" => $statusCode,
+                    'message' => $message,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } else {
+            $response = [
+                '_response_status' => [
+                    "success" => false,
+                    "code" => $statusCode,
+                    'message' => 'All steps of job posting is not completed.',
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
+
+        return Response::json($response, $statusCode);
+
+    }
+
+
 }
