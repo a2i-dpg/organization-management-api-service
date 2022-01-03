@@ -5578,28 +5578,21 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "job_id": "12-pp-09",
-                                        "service_type": "2",
+                                        "job_id": "qqq-222",
+                                        "service_type": "1",
                                         "job_title": "HurrayMania",
                                         "job_title_en": null,
-                                        "no_of_vacancies": null,
+                                        "no_of_vacancies": "5",
                                         "job_category_id": "1",
                                         "application_deadline": "2021-09-09",
+                                        "is_apply_online": "1",
                                         "resume_receiving_option": "1",
-                                        "email": null,
-                                        "is_use_nise3_mail_system": 0,
                                         "special_instruction_for_job_seekers": null,
                                         "special_instruction_for_job_seekers_en": null,
-                                        "instruction_for_hard_copy": null,
-                                        "instruction_for_hard_copy_en": null,
-                                        "instruction_for_walk_in_interview": null,
-                                        "instruction_for_walk_in_interview_en": null,
                                         "is_photograph_enclose_with_resume": "1",
-                                        "is_prefer_video_resume": 0,
-                                        "created_at": "2021-12-28T10:55:38.000000Z",
-                                        "updated_at": "2021-12-28T10:57:01.000000Z",
-                                        "deleted_at": null
+                                        "updated_at": "2021-12-30T08:24:03.000000Z",
+                                        "created_at": "2021-12-30T08:24:03.000000Z",
+                                        "id": 2
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5614,6 +5607,91 @@
                 }
             }
         },
+        "/job/primary-job-information/{jobId}": {
+            "get": {
+                "tags": ["Primary Job Information"],
+                "summary": "Get a primary job information",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":{
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "qqq-222",
+                                        "service_type": 1,
+                                        "job_title": "HurrayMania",
+                                        "job_title_en": null,
+                                        "no_of_vacancies": 5,
+                                        "job_category_id": 1,
+                                        "job_category_title": "Stock Clerk",
+                                        "job_category_title_en": "Stock Clerk",
+                                        "application_deadline": "2021-09-09",
+                                        "resume_receiving_option": 1,
+                                        "email": null,
+                                        "is_use_nise3_mail_system": 0,
+                                        "special_instruction_for_job_seekers": null,
+                                        "special_instruction_for_job_seekers_en": null,
+                                        "instruction_for_hard_copy": null,
+                                        "instruction_for_hard_copy_en": null,
+                                        "instruction_for_walk_in_interview": null,
+                                        "instruction_for_walk_in_interview_en": null,
+                                        "is_photograph_enclose_with_resume": 1,
+                                        "is_prefer_video_resume": 0,
+                                        "publish_at": null,
+                                        "archive_at": null,
+                                        "created_at": "2021-12-30T08:24:03.000000Z",
+                                        "updated_at": "2021-12-30T08:24:03.000000Z",
+                                        "employment_types": [
+                                            {
+                                                "id": 1,
+                                                "code": "FULL",
+                                                "title_en": "Full-Time",
+                                                "title": "ফুল টাইম",
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "deleted_at": null,
+                                                "pivot": {
+                                                    "primary_job_information_id": 2,
+                                                    "employment_type_id": 1
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "code": "PART",
+                                                "title_en": "Part-Time",
+                                                "title": "খন্ডকালীন",
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "deleted_at": null,
+                                                "pivot": {
+                                                    "primary_job_information_id": 2,
+                                                    "employment_type_id": 2
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
 
         "/job/store-additional-job-information": {
             "post": {
@@ -5636,27 +5714,29 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "1",
+                                        "id": 2,
+                                        "job_id": "1112",
                                         "job_responsibilities": null,
-                                        "job_content": "newbiewww",
-                                        "job_place_type": "2",
-                                        "salary_min": null,
-                                        "salary_max": null,
+                                        "job_context": "hettfield",
+                                        "job_place_type": "1",
+                                        "salary_min": "10000",
+                                        "salary_max": "20000",
                                         "is_salary_info_show": "2",
-                                        "is_salary_compare_to_expected_salary": "0",
+                                        "is_salary_compare_to_expected_salary": "1",
                                         "is_salary_alert_excessive_than_given_salary_range": "1",
                                         "salary_review": "1",
                                         "festival_bonus": "1",
                                         "additional_salary_info": null,
-                                        "is_other_benefits": "0",
+                                        "is_other_benefits": "1",
                                         "other_benefits": [
-                                            ""
+                                            "ffa",
+                                            "rrr4"
                                         ],
                                         "lunch_facilities": "1",
                                         "others": null,
-                                        "updated_at": "2021-12-27T12:10:05.000000Z",
-                                        "created_at": "2021-12-27T12:10:05.000000Z",
-                                        "id": 5
+                                        "created_at": "2021-12-30T08:10:04.000000Z",
+                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5671,6 +5751,146 @@
                 }
             }
         },
+        "/job/additional-job-information/{jobId}": {
+            "get": {
+                "tags": ["Additional Job Information"],
+                "summary": "Get a specific additional job info",
+                "description": "API endpoint to Get a specific additional job info.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "555",
+                                        "job_responsibilities": null,
+                                        "job_context": "lll",
+                                        "job_place_type": 1,
+                                        "salary_min": null,
+                                        "salary_max": null,
+                                        "is_salary_info_show": 1,
+                                        "is_salary_compare_to_expected_salary": 1,
+                                        "is_salary_alert_excessive_than_given_salary_range": 1,
+                                        "salary_review": 1,
+                                        "festival_bonus": 1,
+                                        "additional_salary_info": null,
+                                        "is_other_benefits": 1,
+                                        "other_benefits": [
+                                            "c++"
+                                        ],
+                                        "lunch_facilities": 1,
+                                        "others": null,
+                                        "created_at": "2022-01-02T04:58:29.000000Z",
+                                        "updated_at": "2022-01-02T07:38:09.000000Z",
+                                        "job_levels": [
+                                            {
+                                                "id": 1,
+                                                "additional_job_information_id": 2,
+                                                "job_level_id": 1,
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "deleted_at": null,
+                                                "job_level_title": "Inside Bangladesh"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "job_level_id": 2,
+                                                "created_at": "2022-01-02T05:03:40.000000Z",
+                                                "updated_at": "2022-01-02T05:03:40.000000Z",
+                                                "deleted_at": null,
+                                                "job_level_title": "Outside Bangladesh"
+                                            }
+                                        ],
+                                        "job_locations": [
+                                            {
+                                                "id": 1,
+                                                "additional_job_information_id": 2,
+                                                "loc_division_id": 1,
+                                                "loc_district_id": 4,
+                                                "loc_upazila_id": 6,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "deleted_at": null,
+                                                "loc_area_id": 6,
+                                                "loc_division_title": "বরিশাল",
+                                                "loc_division_title_en": "Barisal",
+                                                "loc_district_title": "ঝালকাঠি",
+                                                "loc_district_title_en": "JHALOKATI",
+                                                "loc_area_title": "মোংলা",
+                                                "loc_area_title_en": "MONGLA",
+                                                "location_id": "1_4_6",
+                                                "title": "বরিশাল => ঝালকাঠি => মোংলা",
+                                                "title_en": "BARISAL => JHALOKATI => MONGLA"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "loc_division_id": 0,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": 0,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "created_at": "2022-01-02T05:03:40.000000Z",
+                                                "updated_at": "2022-01-02T05:03:40.000000Z",
+                                                "deleted_at": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": null,
+                                                "loc_division_title_en": null,
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": "",
+                                                "title": "",
+                                                "title_en": ""
+                                            }
+                                        ],
+                                        "work_places": [
+                                            {
+                                                "id": 1,
+                                                "additional_job_information_id": 2,
+                                                "work_place_id": 2,
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "deleted_at": null,
+                                                "work_place_title": "Office"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "additional_job_information_id": 2,
+                                                "work_place_id": 1,
+                                                "created_at": "2022-01-02T04:58:30.000000Z",
+                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "deleted_at": null,
+                                                "work_place_title": "Home"
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
         "/job/store-company-info-visibility": {
             "post": {
                 "tags": ["Company info visibility"],
@@ -5753,40 +5973,33 @@
                 }
             }
         },
-        "/job/primary-job-information/{jobId}": {
-            "get": {
-                "tags": ["Primary Job Information"],
-                "summary": "Get a primary job information",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
+
+        "/job/contact-information": {
+            "post": {
+                "tags": ["Contact Information"],
+                "summary": "Store contact information",
+                "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInformation"
+                            }
+                        }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "data": {
-                                        "id": 1,
-                                        "job_id": "aaa-bbb",
-                                        "service_type": 1,
-                                        "job_title": "NoTommorrow",
-                                        "no_of_vacancies": 2,
-                                        "job_category_id": 2,
-                                        "application_deadline": "0000-00-00",
-                                        "resume_receiving_option": 0,
-                                        "email": null,
-                                        "is_use_nise3_mail_system": 0,
-                                        "special_instruction_for_job_seekers": null,
-                                        "instruction_for_hard_copy": null,
-                                        "instruction_for_walk_in_interview": null,
-                                        "is_photograph_enclose_with_resume": 0,
-                                        "is_prefer_video_resume": 0,
-                                        "created_at": null,
-                                        "updated_at": null,
-                                        "employment_types": []
+                                        "job_id": "11122",
+                                        "contact_person_id": "1",
+                                        "updated_at": "2021-12-30T08:47:56.000000Z",
+                                        "created_at": "2021-12-30T08:47:56.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5800,11 +6013,11 @@
                 }
             }
         },
-        "/job/additional-job-information/{jobId}": {
+        "/job/contact-information/{jobId}": {
             "get": {
-                "tags": ["Additional Job Information"],
-                "summary": "Get a specific additional job info",
-                "description": "API endpoint to Get a specific additional job info.A successful request response will show 201 HTTP status code",
+                "tags": ["Contact Information"],
+                "summary": "Store contact information",
+                "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/jobId"
@@ -5815,7 +6028,243 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "11122",
+                                        "contact_person_id": 1,
+                                        "created_at": "2021-12-30T08:47:56.000000Z",
+                                        "updated_at": "2021-12-30T08:47:56.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
+        "/job/store-candidate-requirements": {
+            "post": {
+                "tags": ["Candidate Requirements"],
+                "summary": "Store Candidate Requirements",
+                "description": "API endpoint to Store Candidate Requirements.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CandidateRequirements"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "555",
+                                        "other_educational_qualification": null,
+                                        "other_educational_qualification_en": null,
+                                        "is_experience_needed": "1",
+                                        "minimum_year_of_experience": "3",
+                                        "maximum_year_of_experience": "5",
+                                        "is_freshers_encouraged": "1",
+                                        "additional_requirements": null,
+                                        "additional_requirements_en": null,
+                                        "age_minimum": "90",
+                                        "age_maximum": "90",
+                                        "person_with_disability": "1",
+                                        "preferred_retired_army_officer": "0",
+                                        "updated_at": "2022-01-02T11:27:50.000000Z",
+                                        "created_at": "2022-01-02T11:27:50.000000Z",
+                                        "id": 18
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "CandidateRequirements successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/candidate-requirements/{jobId}": {
+            "get": {
+                "tags": ["Candidate Requirements"],
+                "summary": "Get a candidate requirement by Id",
+                "description": "API endpoint to Get a candidate requirement by Id.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "example":{
+                                    "data": {
+                                        "id": 2,
+                                        "job_id": "jobId_1",
+                                        "other_educational_qualification": "Abcdef",
+                                        "other_educational_qualification_en": "aaaaaaaaaaaa",
+                                        "is_experience_needed": 0,
+                                        "is_freshers_encouraged": null,
+                                        "minimum_year_of_experience": null,
+                                        "maximum_year_of_experience": null,
+                                        "additional_requirements": null,
+                                        "additional_requirements_en": null,
+                                        "age_minimum": null,
+                                        "age_maximum": null,
+                                        "person_with_disability": 0,
+                                        "preferred_retired_army_officer": 0,
+                                        "created_at": "2022-01-02T10:08:36.000000Z",
+                                        "updated_at": "2022-01-02T10:08:36.000000Z",
+                                        "candidate_requirement_degrees": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "Bangla",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "English",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            },
+                                            {
+                                                "id": 3,
+                                                "candidate_requirements_id": 2,
+                                                "education_level_id": 1,
+                                                "edu_group_id": 1,
+                                                "edu_major": "Math",
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "education_level": {
+                                                    "id": 1,
+                                                    "title": "PSC",
+                                                    "title_en": "PSC"
+                                                },
+                                                "edu_group": {
+                                                    "id": 1,
+                                                    "title": "বিজ্ঞান",
+                                                    "title_en": "Science"
+                                                }
+                                            }
+                                        ],
+                                        "educational_institutions": [
+                                            {
+                                                "id": 1,
+                                                "name": "University of Dhaka"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "University of Rajshahi"
+                                            }
+                                        ],
+                                        "trainings": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2,
+                                                "training": "Php"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2,
+                                                "training": "Java"
+                                            }
+                                        ],
+                                        "professional_certifications": [
+                                            {
+                                                "id": 1,
+                                                "candidate_requirements_id": 2
+                                            },
+                                            {
+                                                "id": 2,
+                                                "candidate_requirements_id": 2
+                                            }
+                                        ],
+                                        "area_of_experiences": [
+                                            {
+                                                "id": 1,
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title_en": "Project Management"
+                                            }
+                                        ],
+                                        "area_of_business": [
+                                            {
+                                                "id": 1,
+                                                "title": "Banks"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Insurance"
+                                            }
+                                        ],
+                                        "skills": [
+                                            {
+                                                "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                "title_en": "Project Management"
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -7130,6 +7579,130 @@
     },
     "components": {
         "schemas": {
+            "CandidateRequirements": {
+                "type": "object",
+                "description": "Candidate Requirements",
+                "properties": {
+                    "job_id": {
+                        "type": "string",
+                        "description": "Must exist in additional_job_information table"
+                    },
+                    "degrees": {
+                        "type": "object",
+                        "example": " [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n]"
+                    },
+                    "preferred_educational_institution": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Id exists in educational_institutions table"
+                    },
+                    "other_educational_qualification": {
+                        "type": "string"
+                    },
+                    "other_educational_qualification_en": {
+                        "type": "string"
+                    },
+                    "training": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "professional_certification": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "is_experience_needed": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True , 0=>False"
+                    },
+                    "minimum_year_of_experience": {
+                        "type": "integer"
+                    },
+                    "maximum_year_of_experience": {
+                        "type": "integer"
+                    },
+                    "is_freshers_encouraged": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=> False"
+                    },
+                    "area_of_experience": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Id must exist in skills table"
+                    },
+                    "area_of_business": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Must exist in area_of_business"
+                    },
+                    "skills": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "additional_requirements": {
+                        "type": "string"
+                    },
+                    "additional_requirements_en": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "1=>Male 2=>Female 3=>Others"
+                    },
+                    "age_minimum": {
+                        "type": "integer"
+                    },
+                    "age_maximum": {
+                        "type": "integer"
+                    },
+                    "person_with_disability": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "preferred_retired_army_officer": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    }
+
+                },
+                "required": [
+                    "job_id"
+                ]
+            },
+            "ContactInformation": {
+                "type": "object",
+                "description": "Contact Information",
+                "properties": {
+                    "job_id": {
+                        "type": "string"
+                    },
+                    "contact_person_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "contact_person_id"
+                ]
+            },
             "CompanyInfoVisibility": {
                 "type": "object",
                 "description": "CompanyInfoVisibility",
@@ -7315,11 +7888,17 @@
                         "type": "array",
                         "items": {
                             "type": "integer"
-                        }
+                        },
+                        "description": "Must exist in employment_types table"
                     },
                     "application_deadline": {
                         "type": "string",
                         "format": "y-m-d"
+                    },
+                    "is_apply_online":{
+                        "type":"string",
+                        "format":"y-m-d",
+                        "description":"1=>True 0=>False"
                     },
                     "resume_receiving_option": {
                         "type": "integer",
@@ -7371,7 +7950,6 @@
                     "job_category_id",
                     "employment_type",
                     "application_deadline",
-                    "resume_receiving_option",
                     "is_photograph_enclose_with_resume"
                 ]
             },

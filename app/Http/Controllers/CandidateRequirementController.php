@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -37,14 +38,15 @@ class CandidateRequirementController extends Controller
     {
         $validatedData = $this->candidateRequirementsService->validator($request)->validate();
 
-        $degrees = $validatedData['degrees'];
-        $preferredEducationalInstitution = $validatedData['preferred_educational_institution'];
-        $training = $validatedData['training'];
-        $professionalCertification = $validatedData['professional_certification'];
-        $areaOfExperience = $validatedData['area_of_experience'];
-        $areaOfBusiness = $validatedData['area_of_business'];
-        $skills = $validatedData['skills'];
-        $gender = $validatedData['gender'];
+        $degrees = $validatedData['degrees'] ?? [];
+        $preferredEducationalInstitution = $validatedData['preferred_educational_institution'] ?? [];
+        Log::info("kkkkkkkkkkkkkk");
+        $training = $validatedData['training'] ?? [];
+        $professionalCertification = $validatedData['professional_certification'] ?? [];
+        $areaOfExperience = $validatedData['area_of_experience'] ?? [];
+        $areaOfBusiness = $validatedData['area_of_business'] ?? [];
+        $skills = $validatedData['skills'] ?? [];
+        $gender = $validatedData['gender'] ?? [];
 
         DB::beginTransaction();
         try {
@@ -73,5 +75,25 @@ class CandidateRequirementController extends Controller
             throw $exception;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getCandidateRequirements(string $jobId): JsonResponse
+    {
+        $candidateRequirements = $this->candidateRequirementsService->getCandidateRequirements($jobId);
+        $response = [
+            "data" => $candidateRequirements,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
     }
 }

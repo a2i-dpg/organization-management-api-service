@@ -3,13 +3,22 @@
 namespace App\Services\JobManagementServices;
 
 
+use App\Models\AdditionalJobInformation;
+use App\Models\AdditionalJobInformationJobLocation;
+use App\Models\BaseModel;
+use App\Models\CandidateRequirement;
+use App\Models\CompanyInfoVisibility;
 use App\Models\EmploymentType;
+use App\Models\GalleryImageVideo;
+use App\Models\JobContactInformation;
 use App\Models\PrimaryJobInformation;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class PrimaryJobInformationService
 {
@@ -28,6 +37,7 @@ class PrimaryJobInformationService
             'occupations.title as job_category_title',
             'occupations.title_en as job_category_title_en',
             'primary_job_information.application_deadline',
+            'primary_job_information.is_apply_online',
             'primary_job_information.resume_receiving_option',
             'primary_job_information.email',
             'primary_job_information.is_use_nise3_mail_system',
@@ -39,6 +49,8 @@ class PrimaryJobInformationService
             'primary_job_information.instruction_for_walk_in_interview_en',
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
+            'primary_job_information.published_at',
+            'primary_job_information.published_at',
             'primary_job_information.created_at',
             'primary_job_information.updated_at',
         ]);
@@ -49,7 +61,9 @@ class PrimaryJobInformationService
                 ->whereNull('occupations.deleted_at');
         });
 
-        $primaryJobInformationBuilder->with('employmentTypes');
+        $primaryJobInformationBuilder->with(['employmentTypes'=>function($query){
+            $query->select('id','title');
+        }]);
 
         return $primaryJobInformationBuilder->firstOrFail();
     }
@@ -178,7 +192,7 @@ class PrimaryJobInformationService
         if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2]) {
             $rules["instruction_for_hard_copy"] = [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->offsetGet('resume_receiving_option')  == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2];
+                    return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2];
                 }),
                 "nullable"
             ];
@@ -190,7 +204,7 @@ class PrimaryJobInformationService
             {
                 $rules["instruction_for_walk_in_interview"] = [
                     Rule::requiredIf(function () use ($request) {
-                        return $request->offsetGet('resume_receiving_option')  == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3];
+                        return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3];
                     }),
                     "nullable"
                 ];
@@ -202,6 +216,52 @@ class PrimaryJobInformationService
         }
 
         return Validator::make($requestData, $rules);
+    }
+
+
+    /**
+     * @param array $data
+     * @param PrimaryJobInformation $primaryJobInformation
+     * @return bool
+     * @throws Throwable
+     */
+    public function publishOrArchiveJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
+    {
+        if ($data['status'] == PrimaryJobInformation::STATUS_PUBLISH) {
+            $primaryJobInformation->published_at = Carbon::now()->format('Y-m-d H:i:s');
+            $primaryJobInformation->archived_at = null;
+        }
+        if ($data['status'] == PrimaryJobInformation::STATUS_ARCHIVE) {
+            $primaryJobInformation->archived_at = Carbon::now()->format('Y-m-d H:i:s');
+        }
+        return $primaryJobInformation->saveOrFail();
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function publishOrArchiveValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'status' => [
+                'integer',
+                Rule::in(PrimaryJobInformation::PUBLISH_OR_ARCHIVE_STATUSES)
+            ]
+
+        ];
+        return Validator::make($request->all(), $rules);
+    }
+
+    public function isJobPublishOrArchiveApplicable(string $jobId): bool
+    {
+        $isPrimaryJobInformationComplete = (bool)PrimaryJobInformation::where('job_id', $jobId)->count('id');
+        $isAdditionalJobInformationComplete = (bool)AdditionalJobInformation::where('job_id', $jobId)->count('id');
+        $isCandidateRequirementComplete = (bool)CandidateRequirement::where('job_id', $jobId)->count('id');
+        $isCompanyInfoVisibilityComplete = (bool)CompanyInfoVisibility::where('job_id', $jobId)->count('id');
+        $isJobContactInformationComplete = (bool)JobContactInformation::where('job_id', $jobId)->count('id');
+        return $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isCompanyInfoVisibilityComplete && $isJobContactInformationComplete;
     }
 
 

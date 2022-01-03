@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -40,6 +41,8 @@ class AdditionalJobInfoController extends Controller
         $workPlace = $validatedData['work_place'];
         $jobLocation = $validatedData['job_location'];
 
+        Log::info("000000000",$jobLocation);
+
         DB::beginTransaction();
         try {
             $additionalJobInformation = $this->additionalJobInformationService->store($validatedData);
@@ -66,8 +69,9 @@ class AdditionalJobInfoController extends Controller
 
     public function jobLocation(): JsonResponse
     {
+        $jobLocations = array_values($this->additionalJobInformationService->getJobLocation());
         $response = [
-            "data" => $this->additionalJobInformationService->getJobLocation(),
+            "data" => $jobLocations,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
