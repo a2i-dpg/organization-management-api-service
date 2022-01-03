@@ -38,6 +38,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('publications', 'PublicationController')->render();
         $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
         $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
+        $customRouter()->resourceRoute('hr-demand', 'HrDemandController')->render();
 
 
         $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
