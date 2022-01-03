@@ -6,9 +6,11 @@ use App\Models\HrDemand;
 use App\Services\HrDemandService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class HrDemandController extends Controller
 {
@@ -74,11 +76,26 @@ class HrDemandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\HrDemand  $hrDemand
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function destroy(HrDemand $hrDemand)
+    public function destroy(int $id) : JsonResponse
     {
-        //
+        $hrDemand = HrDemand::findOrFail($id);
+
+        //$this->authorize('delete', $course);
+
+        $this->hrDemandService->destroy($hrDemand);
+
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "HR Demand Deleted Successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

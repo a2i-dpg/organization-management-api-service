@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -28,4 +29,12 @@ class HrDemand extends BaseModel
 
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
+
+
+    public function hrDemandInstitutes(): HasMany
+    {
+        return $this->hasMany(HrDemandInstitute::class,'hr_demand_id','id');
+    }
+
+
 }
