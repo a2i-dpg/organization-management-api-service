@@ -5578,21 +5578,22 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "qqq-222",
-                                        "service_type": "1",
-                                        "job_title": "HurrayMania",
+                                        "job_id": "qqq-888",
+                                        "service_type": "2",
+                                        "job_title": "Wlking Cat",
                                         "job_title_en": null,
-                                        "no_of_vacancies": "5",
-                                        "job_category_id": "1",
-                                        "application_deadline": "2021-09-09",
+                                        "no_of_vacancies": null,
+                                        "occupation_id": "1",
+                                        "job_sector_id": "1",
+                                        "application_deadline": "2020-09-09",
                                         "is_apply_online": "1",
                                         "resume_receiving_option": "1",
                                         "special_instruction_for_job_seekers": null,
                                         "special_instruction_for_job_seekers_en": null,
                                         "is_photograph_enclose_with_resume": "1",
-                                        "updated_at": "2021-12-30T08:24:03.000000Z",
-                                        "created_at": "2021-12-30T08:24:03.000000Z",
-                                        "id": 2
+                                        "updated_at": "2022-01-03T11:37:57.000000Z",
+                                        "created_at": "2022-01-03T11:37:57.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5623,16 +5624,20 @@
                             "application/json": {
                                 "example":{
                                     "data": {
-                                        "id": 2,
-                                        "job_id": "qqq-222",
-                                        "service_type": 1,
-                                        "job_title": "HurrayMania",
+                                        "id": 1,
+                                        "job_id": "qqq-888",
+                                        "service_type": 2,
+                                        "job_title": "Wlking Cat",
                                         "job_title_en": null,
-                                        "no_of_vacancies": 5,
-                                        "job_category_id": 1,
-                                        "job_category_title": "Stock Clerk",
-                                        "job_category_title_en": "Stock Clerk",
-                                        "application_deadline": "2021-09-09",
+                                        "no_of_vacancies": null,
+                                        "occupation_id": 1,
+                                        "occupation_title": "New Accounts Clerk",
+                                        "occupation_title_en": "New Accounts Clerk",
+                                        "job_sector_id": 1,
+                                        "job_sector_title": "Automotive Specialty Technician",
+                                        "job_sector_title_en": "Automotive Specialty Technician",
+                                        "application_deadline": "2020-09-09",
+                                        "is_apply_online": 1,
                                         "resume_receiving_option": 1,
                                         "email": null,
                                         "is_use_nise3_mail_system": 0,
@@ -5644,38 +5649,17 @@
                                         "instruction_for_walk_in_interview_en": null,
                                         "is_photograph_enclose_with_resume": 1,
                                         "is_prefer_video_resume": 0,
-                                        "publish_at": null,
-                                        "archive_at": null,
-                                        "created_at": "2021-12-30T08:24:03.000000Z",
-                                        "updated_at": "2021-12-30T08:24:03.000000Z",
+                                        "published_at": null,
+                                        "created_at": "2022-01-03T11:37:57.000000Z",
+                                        "updated_at": "2022-01-03T11:37:57.000000Z",
                                         "employment_types": [
                                             {
                                                 "id": 1,
-                                                "code": "FULL",
-                                                "title_en": "Full-Time",
-                                                "title": "ফুল টাইম",
-                                                "row_status": 1,
-                                                "created_at": null,
-                                                "updated_at": null,
-                                                "deleted_at": null,
-                                                "pivot": {
-                                                    "primary_job_information_id": 2,
-                                                    "employment_type_id": 1
-                                                }
+                                                "title": "ফুল টাইম"
                                             },
                                             {
                                                 "id": 2,
-                                                "code": "PART",
-                                                "title_en": "Part-Time",
-                                                "title": "খন্ডকালীন",
-                                                "row_status": 1,
-                                                "created_at": null,
-                                                "updated_at": null,
-                                                "deleted_at": null,
-                                                "pivot": {
-                                                    "primary_job_information_id": 2,
-                                                    "employment_type_id": 2
-                                                }
+                                                "title": "খন্ডকালীন"
                                             }
                                         ]
                                     },
@@ -7980,6 +7964,9 @@
                     "job_title_en": {
                         "type": "string"
                     },
+                    "job_sector_id": {
+                        "type": "integer"
+                    },
                     "is_number_of_vacancy_na": {
                         "type": "integer",
                         "enum": [1,0],
@@ -7989,7 +7976,7 @@
                         "type": "integer",
                         "description": "Required when is_number_of_vacancy_na FALSE"
                     },
-                    "job_category_id": {
+                    "occupation_id": {
                         "type": "integer"
                     },
                     "employment_type": {
@@ -8054,8 +8041,9 @@
                     "job_id",
                     "service_type",
                     "job_title",
+                    "job_sector_id",
+                    "occupation_id",
                     "is_number_of_vacancy_na",
-                    "job_category_id",
                     "employment_type",
                     "application_deadline",
                     "is_photograph_enclose_with_resume"
