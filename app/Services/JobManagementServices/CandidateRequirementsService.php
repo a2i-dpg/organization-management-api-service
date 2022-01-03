@@ -45,10 +45,10 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
 
-        //TODO:check select method return [] if candidate_requirements_id not selected
-        $candidateRequirementBuilder->with('trainings:id,candidate_requirements_id,training');
+        //TODO:check select method return [] if candidate_requirement_id not selected
+        $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,training');
 
-        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirements_id');
+        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
@@ -74,14 +74,14 @@ class CandidateRequirementsService
      */
     public function syncWithDegrees(CandidateRequirement $candidateRequirements, array $degrees)
     {
-        DB::table('candidate_requirements_degrees')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_degrees')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($degrees as $item) {
             $educationLevel = !empty($item["education_level"]) ? $item["education_level"] : null;
             $eduGroup = !empty($item["edu_group"]) ? $item["edu_group"] : null;
             $eduMajor = !empty($item["edu_major"]) ? $item["edu_major"] : null;
-            DB::table('candidate_requirements_degrees')->insert(
+            DB::table('candidate_requirement_degrees')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'education_level_id' => $educationLevel,
                     'edu_group_id' => $eduGroup,
                     'edu_major' => $eduMajor
@@ -96,11 +96,11 @@ class CandidateRequirementsService
      */
     public function syncWithPreferredEducationalInstitution(CandidateRequirement $candidateRequirements, array $preferredEducationalInstitution)
     {
-        DB::table('candidate_requirements_preferred_educational_institution')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_preferred_educational_institution')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($preferredEducationalInstitution as $item) {
-            DB::table('candidate_requirements_preferred_educational_institution')->insert(
+            DB::table('candidate_requirement_preferred_educational_institution')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'preferred_educational_institution_id' => $item
                 ]
             );
@@ -113,11 +113,11 @@ class CandidateRequirementsService
      */
     public function syncWithTraining(CandidateRequirement $candidateRequirements, array $training)
     {
-        DB::table('candidate_requirements_training')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_trainings')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($training as $item) {
-            DB::table('candidate_requirements_training')->insert(
+            DB::table('candidate_requirement_trainings')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'training' => $item
                 ]
             );
@@ -130,11 +130,11 @@ class CandidateRequirementsService
      */
     public function syncWithProfessionalCertification(CandidateRequirement $candidateRequirements, array $professionalCertification)
     {
-        DB::table('candidate_requirements_professional_certification')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_professional_certifications')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($professionalCertification as $item) {
-            DB::table('candidate_requirements_professional_certification')->insert(
+            DB::table('candidate_requirement_professional_certifications')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'professional_certification' => $item
                 ]
             );
@@ -147,11 +147,11 @@ class CandidateRequirementsService
      */
     public function syncWithAreaOfExperience(CandidateRequirement $candidateRequirements, array $areaOfExperience)
     {
-        DB::table('candidate_requirements_area_of_experience')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_area_of_experience')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($areaOfExperience as $item) {
-            DB::table('candidate_requirements_area_of_experience')->insert(
+            DB::table('candidate_requirement_area_of_experience')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'area_of_experience_id' => $item
                 ]
             );
@@ -164,11 +164,11 @@ class CandidateRequirementsService
      */
     public function syncWithAreaOfBusiness(CandidateRequirement $candidateRequirements, array $areaOfBusiness)
     {
-        DB::table('candidate_requirements_area_of_business')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_area_of_business')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($areaOfBusiness as $item) {
-            DB::table('candidate_requirements_area_of_business')->insert(
+            DB::table('candidate_requirement_area_of_business')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'area_of_business_id' => $item
                 ]
             );
@@ -181,12 +181,12 @@ class CandidateRequirementsService
      */
     public function syncWithSkills(CandidateRequirement $candidateRequirements, array $skills)
     {
-        DB::table('candidate_requirements_skills')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_skill')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($skills as $item) {
-            DB::table('candidate_requirements_skills')->insert(
+            DB::table('candidate_requirement_skill')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
-                    'skills_id' => $item
+                    'candidate_requirement_id' => $candidateRequirements->id,
+                    'candidate_requirement_skill' => $item
                 ]
             );
         }
@@ -198,11 +198,11 @@ class CandidateRequirementsService
      */
     public function syncWithGender(CandidateRequirement $candidateRequirements, array $gender)
     {
-        DB::table('candidate_requirements_gender')->where('candidate_requirements_id', $candidateRequirements->id)->delete();
+        DB::table('candidate_requirement_gender')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($gender as $item) {
-            DB::table('candidate_requirements_gender')->insert(
+            DB::table('candidate_requirement_gender')->insert(
                 [
-                    'candidate_requirements_id' => $candidateRequirements->id,
+                    'candidate_requirement_id' => $candidateRequirements->id,
                     'gender_id' => $item
                 ]
             );

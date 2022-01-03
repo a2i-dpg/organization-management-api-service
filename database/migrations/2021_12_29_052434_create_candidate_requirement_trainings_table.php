@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCandidateRequirementsTrainingTable extends Migration
+class CreateCandidateRequirementTrainingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateCandidateRequirementsTrainingTable extends Migration
      */
     public function up()
     {
-        Schema::create('candidate_requirements_training', function (Blueprint $table) {
+        Schema::create('candidate_requirement_trainings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("candidate_requirements_id")->index();
+            $table->integer("candidate_requirement_id")->index();
             $table->text("training");
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateCandidateRequirementsTrainingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('candidate_requirements_training');
+        Schema::dropIfExists('candidate_requirement_trainings');
     }
 }

@@ -6138,7 +6138,7 @@
                                         "candidate_requirement_degrees": [
                                             {
                                                 "id": 1,
-                                                "candidate_requirements_id": 2,
+                                                "candidate_requirement_id": 2,
                                                 "education_level_id": 1,
                                                 "edu_group_id": 1,
                                                 "edu_major": "Bangla",
@@ -6157,7 +6157,7 @@
                                             },
                                             {
                                                 "id": 2,
-                                                "candidate_requirements_id": 2,
+                                                "candidate_requirement_id": 2,
                                                 "education_level_id": 1,
                                                 "edu_group_id": 1,
                                                 "edu_major": "English",
@@ -6176,7 +6176,7 @@
                                             },
                                             {
                                                 "id": 3,
-                                                "candidate_requirements_id": 2,
+                                                "candidate_requirement_id": 2,
                                                 "education_level_id": 1,
                                                 "edu_group_id": 1,
                                                 "edu_major": "Math",
@@ -6207,23 +6207,23 @@
                                         "trainings": [
                                             {
                                                 "id": 1,
-                                                "candidate_requirements_id": 2,
+                                                "candidate_requirement_id": 2,
                                                 "training": "Php"
                                             },
                                             {
                                                 "id": 2,
-                                                "candidate_requirements_id": 2,
+                                                "candidate_requirement_id": 2,
                                                 "training": "Java"
                                             }
                                         ],
                                         "professional_certifications": [
                                             {
                                                 "id": 1,
-                                                "candidate_requirements_id": 2
+                                                "candidate_requirement_id": 2
                                             },
                                             {
                                                 "id": 2,
-                                                "candidate_requirements_id": 2
+                                                "candidate_requirement_id": 2
                                             }
                                         ],
                                         "area_of_experiences": [
