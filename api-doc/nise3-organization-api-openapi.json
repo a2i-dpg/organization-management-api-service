@@ -6119,79 +6119,52 @@
                             "application/json": {
                                 "example":{
                                     "data": {
-                                        "id": 2,
-                                        "job_id": "jobId_1",
-                                        "other_educational_qualification": "Abcdef",
-                                        "other_educational_qualification_en": "aaaaaaaaaaaa",
-                                        "is_experience_needed": 0,
-                                        "is_freshers_encouraged": null,
-                                        "minimum_year_of_experience": null,
-                                        "maximum_year_of_experience": null,
-                                        "additional_requirements": null,
+                                        "id": 1,
+                                        "job_id": "555",
+                                        "other_educational_qualification": "psychology",
+                                        "other_educational_qualification_en": "",
+                                        "is_experience_needed": 1,
+                                        "is_freshers_encouraged": 1,
+                                        "minimum_year_of_experience": 1,
+                                        "maximum_year_of_experience": 4,
+                                        "additional_requirements": "Major in Eng",
                                         "additional_requirements_en": null,
-                                        "age_minimum": null,
-                                        "age_maximum": null,
+                                        "age_minimum": 20,
+                                        "age_maximum": 55,
                                         "person_with_disability": 0,
                                         "preferred_retired_army_officer": 0,
-                                        "created_at": "2022-01-02T10:08:36.000000Z",
-                                        "updated_at": "2022-01-02T10:08:36.000000Z",
+                                        "created_at": null,
+                                        "updated_at": "2022-01-03T06:09:35.000000Z",
                                         "candidate_requirement_degrees": [
                                             {
                                                 "id": 1,
-                                                "candidate_requirement_id": 2,
+                                                "candidate_requirement_id": 1,
                                                 "education_level_id": 1,
-                                                "edu_group_id": 1,
-                                                "edu_major": "Bangla",
+                                                "edu_group_id": 2,
+                                                "edu_major": "CSE",
                                                 "created_at": null,
                                                 "updated_at": null,
                                                 "education_level": {
                                                     "id": 1,
-                                                    "title": "PSC",
-                                                    "title_en": "PSC"
+                                                    "title": "PSC/5 Pass",
+                                                    "title_en": "PSC/5 Pass"
                                                 },
                                                 "edu_group": {
-                                                    "id": 1,
-                                                    "title": "বিজ্ঞান",
-                                                    "title_en": "Science"
+                                                    "id": 2,
+                                                    "title": "মানবিক",
+                                                    "title_en": "Arts and Humanities"
                                                 }
                                             },
                                             {
                                                 "id": 2,
-                                                "candidate_requirement_id": 2,
-                                                "education_level_id": 1,
-                                                "edu_group_id": 1,
-                                                "edu_major": "English",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "edu_group_id": null,
+                                                "edu_major": "EEE",
                                                 "created_at": null,
                                                 "updated_at": null,
-                                                "education_level": {
-                                                    "id": 1,
-                                                    "title": "PSC",
-                                                    "title_en": "PSC"
-                                                },
-                                                "edu_group": {
-                                                    "id": 1,
-                                                    "title": "বিজ্ঞান",
-                                                    "title_en": "Science"
-                                                }
-                                            },
-                                            {
-                                                "id": 3,
-                                                "candidate_requirement_id": 2,
-                                                "education_level_id": 1,
-                                                "edu_group_id": 1,
-                                                "edu_major": "Math",
-                                                "created_at": null,
-                                                "updated_at": null,
-                                                "education_level": {
-                                                    "id": 1,
-                                                    "title": "PSC",
-                                                    "title_en": "PSC"
-                                                },
-                                                "edu_group": {
-                                                    "id": 1,
-                                                    "title": "বিজ্ঞান",
-                                                    "title_en": "Science"
-                                                }
+                                                "education_level": null,
+                                                "edu_group": null
                                             }
                                         ],
                                         "educational_institutions": [
@@ -6202,28 +6175,27 @@
                                             {
                                                 "id": 2,
                                                 "name": "University of Rajshahi"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Bangladesh Agricultural University"
                                             }
                                         ],
                                         "trainings": [
                                             {
                                                 "id": 1,
-                                                "candidate_requirement_id": 2,
-                                                "training": "Php"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "candidate_requirement_id": 2,
-                                                "training": "Java"
+                                                "candidate_requirement_id": 1,
+                                                "training": "Computer typing"
                                             }
                                         ],
                                         "professional_certifications": [
                                             {
                                                 "id": 1,
-                                                "candidate_requirement_id": 2
+                                                "candidate_requirement_id": 1
                                             },
                                             {
                                                 "id": 2,
-                                                "candidate_requirement_id": 2
+                                                "candidate_requirement_id": 1
                                             }
                                         ],
                                         "area_of_experiences": [
@@ -6234,6 +6206,10 @@
                                             {
                                                 "id": 2,
                                                 "title_en": "Project Management"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "title_en": "Computer Programming"
                                             }
                                         ],
                                         "area_of_business": [
