@@ -4,8 +4,11 @@ namespace App\Services\JobManagementServices;
 
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -14,6 +17,47 @@ use Illuminate\Validation\Rule;
  */
 class CandidateRequirementsService
 {
+    public function getCandidateRequirements(string $jobId): Model|Builder
+    {
+
+
+        /** @var Builder $candidateRequirementBuilder */
+        $candidateRequirementBuilder = CandidateRequirement::select([
+            'candidate_requirements.id',
+            'candidate_requirements.job_id',
+            'candidate_requirements.other_educational_qualification',
+            'candidate_requirements.other_educational_qualification_en',
+            'candidate_requirements.is_experience_needed',
+            'candidate_requirements.is_freshers_encouraged',
+            'candidate_requirements.minimum_year_of_experience',
+            'candidate_requirements.maximum_year_of_experience',
+            'candidate_requirements.additional_requirements',
+            'candidate_requirements.additional_requirements_en',
+            'candidate_requirements.age_minimum',
+            'candidate_requirements.age_maximum',
+            'candidate_requirements.person_with_disability',
+            'candidate_requirements.preferred_retired_army_officer',
+            'candidate_requirements.created_at',
+            'candidate_requirements.updated_at',
+        ]);
+
+        $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
+        $candidateRequirementBuilder->with('candidateRequirementDegrees.educationLevel:id,title,title_en');
+        $candidateRequirementBuilder->with('candidateRequirementDegrees.eduGroup:id,title,title_en');
+
+        $candidateRequirementBuilder->with('educationalInstitutions:id,name');
+
+        //TODO:check select method return [] if candidate_requirements_id not selected
+        $candidateRequirementBuilder->with('trainings:id,candidate_requirements_id,training');
+
+        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirements_id');
+        $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
+        $candidateRequirementBuilder->with('areaOfBusiness:id,title');
+        $candidateRequirementBuilder->with('skills:id,title,title_en');
+
+        return $candidateRequirementBuilder->firstOrFail();
+    }
+
     /**
      * @param array $validatedData
      * @return CandidateRequirement
@@ -174,6 +218,19 @@ class CandidateRequirementsService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
+
+
+        $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
+        $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
+        $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
+        $data["professional_certification"] = is_array($data['professional_certification']) ? $data['professional_certification'] : explode(',', $data['professional_certification']);
+        $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
+        $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
+        $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
+        $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
+
+//        dd($data);
         $rules = [
             "job_id" => [
                 "required",
@@ -186,7 +243,7 @@ class CandidateRequirementsService
             ],
             "degrees.*.education_level" => [
                 "nullable",
-                "exists:education_levels,education_level_id,deleted_at,NULL",
+                "exists:education_levels,id,deleted_at,NULL",
             ],
             "degrees.*.edu_group" => [
                 "nullable",
@@ -201,8 +258,8 @@ class CandidateRequirementsService
                 "array"
             ],
             "preferred_educational_institution.*" => [
-                "exists:educational_institutions,id",
-                "numeric",
+                "integer",
+                "exists:educational_institutions,id,deleted_at,NULL",
             ],
             "other_educational_qualification" => [
                 "nullable",
@@ -306,7 +363,7 @@ class CandidateRequirementsService
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
         ];
-        return Validator::make($request->all(), $rules);
+        return Validator::make($data, $rules);
     }
 
 }

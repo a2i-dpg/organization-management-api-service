@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -57,5 +58,10 @@ class EducationLevel extends BaseModel
     public function examDegrees(): HasMany
     {
         return $this->hasMany(ExamDegree::class, "education_level_id");
+    }
+
+    public function candidateRequirementDegree(): BelongsTo
+    {
+        return $this->belongsTo(CandidateRequirementDegree::class);
     }
 }
