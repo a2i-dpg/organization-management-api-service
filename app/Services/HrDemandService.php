@@ -13,6 +13,19 @@ use Illuminate\Validation\Rule;
  */
 class HrDemandService
 {
+
+
+    /**
+     * @param HrDemand $hrDemand
+     * @return bool
+     */
+    public function destroy(HrDemand $hrDemand): bool
+    {
+        $hrDemand->hrDemandInstitutes()->delete();
+
+        return $hrDemand->delete();
+    }
+
     /**
      * @param Request $request
      * @param int|null $id
