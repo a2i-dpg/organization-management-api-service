@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -170,19 +171,15 @@ class AdditionalJobInformationService
      */
     public function syncWithJobLevel(AdditionalJobInformation $additionalJobInformation, array $jobLevel)
     {
+        DB::table('additional_job_information_job_levels')->where('additional_job_information_id', $additionalJobInformation->id)->delete();
         foreach ($jobLevel as $item) {
-            AdditionalJobInformationJobLevel::updateOrCreate(
+            DB::table('additional_job_information_job_levels')->insert(
                 [
                     'additional_job_information_id' => $additionalJobInformation->id,
+                    'job_id' => $additionalJobInformation->job_id,
                     'job_level_id' => $item
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'job_level_id' => $item
-
                 ]
             );
-
         }
 
     }
@@ -193,21 +190,16 @@ class AdditionalJobInformationService
      */
     public function syncWithWorkplace(AdditionalJobInformation $additionalJobInformation, array $workPlace)
     {
+        DB::table('additional_job_information_work_places')->where('additional_job_information_id', $additionalJobInformation->id)->delete();
         foreach ($workPlace as $item) {
-            AdditionalJobInformationWorkPlace::updateOrCreate(
+            DB::table('additional_job_information_work_places')->insert(
                 [
                     'additional_job_information_id' => $additionalJobInformation->id,
+                    'job_id' => $additionalJobInformation->job_id,
                     'work_place_id' => $item
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'work_place_id' => $item
-
                 ]
             );
-
         }
-
     }
 
     /**
@@ -216,11 +208,13 @@ class AdditionalJobInformationService
      */
     public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
     {
+        DB::table('additional_job_information_job_locations')->where('additional_job_information_id', $additionalJobInformation->id)->delete();
         foreach ($jobLocation as $item) {
             $locIds = getLocationIdByKeyString($item);
             $jobLocationInfo = $this->getJobLocationFormat($locIds);
             $jobLocationInfo['additional_job_information_id'] = $additionalJobInformation->id;
-            AdditionalJobInformationJobLocation::updateOrCreate($jobLocationInfo, $jobLocationInfo);
+            $jobLocationInfo['job_id'] = $additionalJobInformation->job_id;
+            DB::table('additional_job_information_job_locations')->insert($jobLocationInfo);
         }
     }
 

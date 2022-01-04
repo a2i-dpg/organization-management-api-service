@@ -16,8 +16,10 @@ class CreateAdditionalJobInformationTable extends Migration
         Schema::create('additional_job_information', function (Blueprint $table) {
             $table->increments('id');
             $table->string('job_id')->index();
-            $table->text("job_responsibilities")->nullable();
-            $table->text("job_context");
+            $table->text("job_responsibilities");
+            $table->text("job_responsibilities_en")->nullable();
+            $table->text("job_context")->nullable();
+            $table->text("job_context_en")->nullable();
             $table->unsignedTinyInteger("job_place_type")->comment("1=> Inside Bangladesh,2=> Outside Bangladesh");
             $table->unsignedDouble('salary_min')->nullable();
             $table->unsignedDouble('salary_max')->nullable();
@@ -28,6 +30,7 @@ class CreateAdditionalJobInformationTable extends Migration
             $table->unsignedTinyInteger('salary_review')->comment('1=>Half Yearly, 2=>Yearly');
             $table->unsignedTinyInteger('festival_bonus')->comment('01,02,03,04........');
             $table->text("additional_salary_info")->nullable();
+            $table->text("additional_salary_info_en")->nullable();
             $table->unsignedTinyInteger("is_other_benefits")->comment("0=>No, 1=>Yes");
             $table->json("other_benefits")->comment("[mobile bill,profit share,.....]")->nullable();
             $table->unsignedTinyInteger('lunch_facilities')->comment('1=>Partially Subsidize, 2=>Full Subsidize');

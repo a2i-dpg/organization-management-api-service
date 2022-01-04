@@ -9,7 +9,6 @@ use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
 use App\Models\EmploymentType;
-use App\Models\GalleryImageVideo;
 use App\Models\JobContactInformation;
 use App\Models\PrimaryJobInformation;
 use Carbon\Carbon;
@@ -23,9 +22,9 @@ use Throwable;
 class PrimaryJobInformationService
 {
 
-    public function getPrimaryJobInformationDetails(string $jobId): Model|Builder
+    public function getPrimaryJobInformationDetails(string $jobId): PrimaryJobInformation
     {
-        /** @var Builder $primaryJobInformationBuilder */
+        /** @var PrimaryJobInformation|Builder $primaryJobInformationBuilder */
         $primaryJobInformationBuilder = PrimaryJobInformation::select([
             'primary_job_information.id',
             'primary_job_information.job_id',

@@ -15,6 +15,7 @@ class CreatePrimaryJobInformationEmploymentStatusTable extends Migration
     {
         Schema::create('primary_job_information_employment_status', function (Blueprint $table) {
             $table->unsignedInteger('primary_job_information_id');
+            $table->string("job_id")->index();
             $table->unsignedTinyInteger('employment_type_id');
 
             $table->foreign('primary_job_information_id',"primary_job_information_employment_status_pe_job_id_fk")

@@ -15,9 +15,9 @@ class CreateCandidateRequirementTrainingsTable extends Migration
     {
         Schema::create('candidate_requirement_trainings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("job_id")->index('index_train_job_id');
             $table->integer("candidate_requirement_id")->index();
-            $table->text("training");
-            $table->timestamps();
+            $table->text("title");
         });
     }
 

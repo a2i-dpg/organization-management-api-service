@@ -52,6 +52,7 @@ class CandidateRequirementsService
         $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
+        $candidateRequirementBuilder->with('genders:id,gender_id');
 
         return $candidateRequirementBuilder->firstOrFail();
     }
@@ -82,6 +83,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_degrees')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'education_level_id' => $educationLevel,
                     'edu_group_id' => $eduGroup,
                     'edu_major' => $eduMajor
@@ -101,6 +103,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_preferred_educational_institution')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'preferred_educational_institution_id' => $item
                 ]
             );
@@ -118,6 +121,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_trainings')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'training' => $item
                 ]
             );
@@ -135,6 +139,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_professional_certifications')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'professional_certification' => $item
                 ]
             );
@@ -152,6 +157,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_area_of_experience')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'area_of_experience_id' => $item
                 ]
             );
@@ -169,6 +175,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_area_of_business')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'area_of_business_id' => $item
                 ]
             );
@@ -186,6 +193,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_skill')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'candidate_requirement_skill' => $item
                 ]
             );
@@ -203,6 +211,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_gender')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'gender_id' => $item
                 ]
             );
