@@ -12,7 +12,7 @@ class CreateAreaOfExperiencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('area_of_experience', function (Blueprint $table) {
+        Schema::create('area_of_experiences', function (Blueprint $table) {
             $table->mediumIncrements('id');
             $table->string('title', 400);
             $table->string('title_en', 200)->nullable();

@@ -32,6 +32,7 @@ class PrimaryJobInformationService
             'primary_job_information.job_id',
             'primary_job_information.industry_association_id',
             'primary_job_information.organization_id',
+            'primary_job_information.institute_id',
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
@@ -56,7 +57,7 @@ class PrimaryJobInformationService
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
             'primary_job_information.published_at',
-            'primary_job_information.published_at',
+            'primary_job_information.archived_at',
             'primary_job_information.created_at',
             'primary_job_information.updated_at',
         ]);

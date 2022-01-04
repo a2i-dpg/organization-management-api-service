@@ -10,5 +10,4 @@ class AreaOfExperience extends BaseModel
     protected $hidden = ['pivot'];
 
     use SoftDeletes;
-    protected $table = 'area_of_experience';
 }

@@ -53,7 +53,6 @@ class PrimaryJobInfoController extends Controller
      */
     public function storePrimaryJobInformation(Request $request): JsonResponse
     {
-        Log::info("====>", $request->all());
         $validatedData = $this->primaryJobInformationService->validator($request)->validate();
         $employmentTypes = $validatedData['employment_type'];
         DB::beginTransaction();
