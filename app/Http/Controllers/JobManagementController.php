@@ -46,6 +46,13 @@ class JobManagementController extends Controller
         $this->startTime = Carbon::now();
     }
 
+    public function getJobList(Request $request): JsonResponse
+    {
+        $filter = $this->primaryJobInformationService->filterValidatJobList($request)->validate();
+        $response = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -78,7 +85,7 @@ class JobManagementController extends Controller
             'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
             'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
             'candidate_requirement' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
-            'company_info_Visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
+            'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
         ]);
 
         $response = [
@@ -92,4 +99,6 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+
+
 }

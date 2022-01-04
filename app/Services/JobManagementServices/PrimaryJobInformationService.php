@@ -22,6 +22,7 @@ use Throwable;
 class PrimaryJobInformationService
 {
 
+
     public function getPrimaryJobInformationDetails(string $jobId): Model|Builder
     {
         /** @var Builder $primaryJobInformationBuilder */
@@ -81,7 +82,8 @@ class PrimaryJobInformationService
      * @param array $data
      * @return PrimaryJobInformation
      */
-    public function store(array $data): PrimaryJobInformation
+    public
+    function store(array $data): PrimaryJobInformation
     {
         return PrimaryJobInformation::updateOrCreate(
             ['job_id' => $data['job_id']],
@@ -93,7 +95,8 @@ class PrimaryJobInformationService
      * @param PrimaryJobInformation $primaryJobInformation
      * @param array $employmentTypes
      */
-    public function syncWithEmploymentStatus(PrimaryJobInformation $primaryJobInformation, array $employmentTypes)
+    public
+    function syncWithEmploymentStatus(PrimaryJobInformation $primaryJobInformation, array $employmentTypes)
     {
         $employmentTypeId = EmploymentType::whereIn('id', $employmentTypes)->pluck('id')->toArray();
         if (!empty($employmentTypeId)) {
@@ -106,7 +109,8 @@ class PrimaryJobInformationService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public
+    function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $authUser = Auth::user();
         $requestData = $request->all();
@@ -253,7 +257,8 @@ class PrimaryJobInformationService
      * @return bool
      * @throws Throwable
      */
-    public function publishOrArchiveJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
+    public
+    function publishOrArchiveJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
     {
         if ($data['status'] == PrimaryJobInformation::STATUS_PUBLISH) {
             $primaryJobInformation->published_at = Carbon::now()->format('Y-m-d H:i:s');
@@ -270,7 +275,8 @@ class PrimaryJobInformationService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function publishOrArchiveValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public
+    function publishOrArchiveValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'status' => [
@@ -282,7 +288,8 @@ class PrimaryJobInformationService
         return Validator::make($request->all(), $rules);
     }
 
-    public function isJobPublishOrArchiveApplicable(string $jobId): bool
+    public
+    function isJobPublishOrArchiveApplicable(string $jobId): bool
     {
         $isPrimaryJobInformationComplete = (bool)PrimaryJobInformation::where('job_id', $jobId)->count('id');
         $isAdditionalJobInformationComplete = (bool)AdditionalJobInformation::where('job_id', $jobId)->count('id');
