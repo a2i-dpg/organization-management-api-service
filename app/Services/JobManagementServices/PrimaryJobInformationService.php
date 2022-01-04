@@ -4,6 +4,7 @@ namespace App\Services\JobManagementServices;
 
 
 use App\Models\AdditionalJobInformation;
+use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
 use App\Models\EmploymentType;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Throwable;
@@ -26,6 +28,9 @@ class PrimaryJobInformationService
         $primaryJobInformationBuilder = PrimaryJobInformation::select([
             'primary_job_information.id',
             'primary_job_information.job_id',
+            'primary_job_information.job_id',
+            'primary_job_information.industry_association_id',
+            'primary_job_information.organization_id',
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
@@ -100,6 +105,7 @@ class PrimaryJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $authUser = Auth::user();
         $requestData = $request->all();
         $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
         $rules = [
@@ -137,6 +143,17 @@ class PrimaryJobInformationService
             "job_sector_id" => [
                 "required",
                 "exists:job_sectors,id,deleted_at,NULL"
+            ],
+            "organization_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isOrganizationUser();
+                }),
+                "nullable",
+                "exists:organizations,id,deleted_at,NULL"
+            ],
+            "industry_association_id" => [
+                "nullable",
+                "exists:industry_association_id,id,deleted_at,NULL"
             ],
             "employment_type" => [
                 "required",

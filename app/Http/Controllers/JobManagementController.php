@@ -14,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
-use stdClass;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
