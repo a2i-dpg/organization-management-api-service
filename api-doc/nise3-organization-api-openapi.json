@@ -5578,24 +5578,23 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "qqq-888",
+                                        "job_id": "www-www",
                                         "service_type": "2",
-                                        "job_title": "Walking Cat",
+                                        "job_title": "NewTitle",
                                         "job_title_en": null,
-                                        "no_of_vacancies": null,
+                                        "no_of_vacancies": "20",
                                         "occupation_id": "1",
                                         "job_sector_id": "1",
-                                        "industry_association_id": 1,
-                                        "organization_id": null,
+                                        "organization_id": 1,
                                         "application_deadline": "2020-09-09",
                                         "is_apply_online": "1",
-                                        "resume_receiving_option": "1",
+                                        "resume_receiving_option": "2",
                                         "special_instruction_for_job_seekers": null,
                                         "special_instruction_for_job_seekers_en": null,
                                         "is_photograph_enclose_with_resume": "1",
-                                        "updated_at": "2022-01-03T11:37:57.000000Z",
-                                        "created_at": "2022-01-03T11:37:57.000000Z",
-                                        "id": 1
+                                        "updated_at": "2022-01-04T06:39:48.000000Z",
+                                        "created_at": "2022-01-04T06:39:48.000000Z",
+                                        "id": 2
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5706,6 +5705,7 @@
                                         "job_id": "1112",
                                         "job_responsibilities": null,
                                         "job_context": "hettfield",
+                                        "job_context_en": "hettfield",
                                         "job_place_type": "1",
                                         "salary_min": "10000",
                                         "salary_max": "20000",
@@ -6334,10 +6334,10 @@
                 }
             }
         },
-        "/job/preview/{jobId}": {
+        "/job/job-preview/{jobId}": {
             "get": {
                 "tags": [
-                    "Preview"
+                    "Job Preview"
                 ],
                 "summary": "Get a job preview ",
                 "description": "API endpoint to Get a job preview.A successful request response will show 201 HTTP status code",
@@ -6536,7 +6536,7 @@
                                                 }
                                             ]
                                         },
-                                        "company_info_Visibility": {
+                                        "company_info_visibility": {
                                             "id": 1,
                                             "job_id": "555",
                                             "is_company_name_visible": 1,
@@ -8123,7 +8123,13 @@
                     "job_responsibilities": {
                         "type": "string"
                     },
+                    "job_responsibilities_en": {
+                        "type": "string"
+                    },
                     "job_context": {
+                        "type": "string"
+                    },
+                    "job_context_en": {
                         "type": "string"
                     },
                     "job_place_type": {
@@ -8162,6 +8168,9 @@
                         "description": "1=>01 2=>02 3=>03 4=>04"
                     },
                     "additional_salary_info": {
+                        "type": "string"
+                    },
+                    "additional_salary_info_en": {
                         "type": "string"
                     },
                     "is_other_benefits": {

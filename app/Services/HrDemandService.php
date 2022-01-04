@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\HrDemand;
+use App\Models\HrDemandInstitute;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,7 +15,29 @@ use Illuminate\Validation\Rule;
  */
 class HrDemandService
 {
+    /**
+     * @param array $data
+     * @return HrDemand
+     */
+    public function store(array $data): HrDemand
+    {
+        $hrDemand = new HrDemand();
+        $hrDemand->fill($data);
+        $hrDemand->save();
 
+        if(!empty($data['institute_id'])){
+            foreach ($data['institute_id'] as $datum){
+                $payload = [
+                    'hr_demand_id' => $hrDemand->id,
+                    'institute_id' => $datum
+                ];
+                $hrDemandInstitute = new HrDemandInstitute();
+                $hrDemandInstitute->fill($payload);
+                $hrDemandInstitute->save();
+            }
+        }
+        return $hrDemand;
+    }
 
     /**
      * @param HrDemand $hrDemand
@@ -34,6 +58,9 @@ class HrDemandService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+        if (!empty($data['institute_id'])) {
+            $data["institute_id"] = isset($data['institute_id']) && is_array($data['institute_id']) ? $data['institute_id'] : explode(',', $data['institute_id']);
+        }
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -48,9 +75,19 @@ class HrDemandService
                 'int',
                 'exists:organizations,id,deleted_at,NULL',
             ],
+            'institute_id' => [
+                'required',
+                'array'
+            ],
+            'institute_id.*' => [
+                'nullable',
+                'int'
+            ],
             'end_date' => [
                 'required',
                 'date',
+                'date_format:Y-m-d',
+                'after:'.Carbon::now(),
             ],
             'skill_id' => [
                 'required',

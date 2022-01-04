@@ -158,7 +158,7 @@ class PrimaryJobInformationService
                     return $authUser->isIndustryAssociationUser();
                 }),
                 "nullable",
-                "exists:industry_association_id,id,deleted_at,NULL"
+                "exists:industry_associations,id,deleted_at,NULL"
             ],
             "employment_type" => [
                 "required",
