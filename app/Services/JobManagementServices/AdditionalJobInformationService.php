@@ -277,7 +277,6 @@ class AdditionalJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
-        Log::info("jjjjjjjjjjjjjjjjj");
 
         $data = $request->all();
         if(!empty($data["other_benefits"])){

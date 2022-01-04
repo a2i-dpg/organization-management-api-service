@@ -20,5 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class EmploymentType extends BaseModel
 {
     use SoftDeletes, HasFactory;
+
+    protected $hidden = ['pivot'];
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 }

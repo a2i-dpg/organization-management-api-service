@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -40,7 +39,7 @@ class CandidateRequirementController extends Controller
 
         $degrees = $validatedData['degrees'] ?? [];
         $preferredEducationalInstitution = $validatedData['preferred_educational_institution'] ?? [];
-        Log::info("kkkkkkkkkkkkkk");
+
         $training = $validatedData['training'] ?? [];
         $professionalCertification = $validatedData['professional_certification'] ?? [];
         $areaOfExperience = $validatedData['area_of_experience'] ?? [];

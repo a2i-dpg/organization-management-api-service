@@ -49,7 +49,7 @@ class OrganizationTypeController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', OrganizationType::class);
+        $this->authorize('viewAny', OrganizationType::class);
 
         $filter = $this->organizationTypeService->filterValidator($request)->validate();
         $response = $this->organizationTypeService->getAllOrganizationType($filter, $this->startTime);

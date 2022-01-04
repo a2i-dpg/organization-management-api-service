@@ -41,7 +41,7 @@ class AdditionalJobInfoController extends Controller
         $workPlace = $validatedData['work_place'];
         $jobLocation = $validatedData['job_location'];
 
-        Log::info("000000000",$jobLocation);
+        Log::info("----------------------",$jobLocation);
 
         DB::beginTransaction();
         try {

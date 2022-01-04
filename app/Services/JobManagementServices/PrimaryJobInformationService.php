@@ -4,7 +4,6 @@ namespace App\Services\JobManagementServices;
 
 
 use App\Models\AdditionalJobInformation;
-use App\Models\AdditionalJobInformationJobLocation;
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
@@ -28,13 +27,19 @@ class PrimaryJobInformationService
         $primaryJobInformationBuilder = PrimaryJobInformation::select([
             'primary_job_information.id',
             'primary_job_information.job_id',
+            'primary_job_information.job_id',
+            'primary_job_information.industry_association_id',
+            'primary_job_information.organization_id',
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
             'primary_job_information.no_of_vacancies',
-            'primary_job_information.job_category_id',
-            'occupations.title as job_category_title',
-            'occupations.title_en as job_category_title_en',
+            'primary_job_information.occupation_id',
+            'occupations.title as occupation_title',
+            'occupations.title_en as occupation_title_en',
+            'primary_job_information.job_sector_id',
+            'job_sectors.title as job_sector_title',
+            'job_sectors.title_en as job_sector_title_en',
             'primary_job_information.application_deadline',
             'primary_job_information.is_apply_online',
             'primary_job_information.resume_receiving_option',
@@ -56,12 +61,16 @@ class PrimaryJobInformationService
 
         $primaryJobInformationBuilder->where('primary_job_information.job_id', $jobId);
         $primaryJobInformationBuilder->join('occupations', function ($join) {
-            $join->on('primary_job_information.job_category_id', '=', 'occupations.id')
+            $join->on('primary_job_information.occupation_id', '=', 'occupations.id')
                 ->whereNull('occupations.deleted_at');
         });
+        $primaryJobInformationBuilder->join('job_sectors', function ($join) {
+            $join->on('primary_job_information.job_sector_id', '=', 'job_sectors.id')
+                ->whereNull('job_sectors.deleted_at');
+        });
 
-        $primaryJobInformationBuilder->with(['employmentTypes'=>function($query){
-            $query->select('id','title');
+        $primaryJobInformationBuilder->with(['employmentTypes' => function ($query) {
+            $query->select('id', 'title');
         }]);
 
         return $primaryJobInformationBuilder->firstOrFail();
@@ -98,6 +107,7 @@ class PrimaryJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $authUser = Auth::user();
         $requestData = $request->all();
         $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
         $rules = [
@@ -128,9 +138,27 @@ class PrimaryJobInformationService
                 "nullable",
                 "integer"
             ],
-            "job_category_id" => [
+            "occupation_id" => [
                 "required",
-                "exists:occupations,id"
+                "exists:occupations,id,deleted_at,NULL"
+            ],
+            "job_sector_id" => [
+                "required",
+                "exists:job_sectors,id,deleted_at,NULL"
+            ],
+            "organization_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isOrganizationUser();
+                }),
+                "nullable",
+                "exists:organizations,id,deleted_at,NULL"
+            ],
+            "industry_association_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isIndustryAssociationUser();
+                }),
+                "nullable",
+                "exists:industry_association_id,id,deleted_at,NULL"
             ],
             "employment_type" => [
                 "required",
