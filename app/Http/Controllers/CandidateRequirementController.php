@@ -37,14 +37,15 @@ class CandidateRequirementController extends Controller
     {
         $validatedData = $this->candidateRequirementsService->validator($request)->validate();
 
-        $degrees = $validatedData['degrees'];
-        $preferredEducationalInstitution = $validatedData['preferred_educational_institution'];
-        $training = $validatedData['training'];
-        $professionalCertification = $validatedData['professional_certification'];
-        $areaOfExperience = $validatedData['area_of_experience'];
-        $areaOfBusiness = $validatedData['area_of_business'];
-        $skills = $validatedData['skills'];
-        $gender = $validatedData['gender'];
+        $degrees = $validatedData['degrees'] ?? [];
+        $preferredEducationalInstitution = $validatedData['preferred_educational_institution'] ?? [];
+
+        $training = $validatedData['training'] ?? [];
+        $professionalCertification = $validatedData['professional_certification'] ?? [];
+        $areaOfExperience = $validatedData['area_of_experience'] ?? [];
+        $areaOfBusiness = $validatedData['area_of_business'] ?? [];
+        $skills = $validatedData['skills'] ?? [];
+        $gender = $validatedData['gender'] ?? [];
 
         DB::beginTransaction();
         try {
@@ -73,5 +74,25 @@ class CandidateRequirementController extends Controller
             throw $exception;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getCandidateRequirements(string $jobId): JsonResponse
+    {
+        $candidateRequirements = $this->candidateRequirementsService->getCandidateRequirements($jobId);
+        $response = [
+            "data" => $candidateRequirements,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
     }
 }

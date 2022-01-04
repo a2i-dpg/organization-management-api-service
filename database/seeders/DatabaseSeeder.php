@@ -29,7 +29,8 @@ class DatabaseSeeder extends Seeder
             AreaOfBusinessSeeder::class,
             EmploymentTypeSeeder::class,
             EduGroupSeeder::class,
-            EduBoardSeeder::class
+            EduBoardSeeder::class,
+            EducationLevelSeeder::class
         ]);
     }
 }

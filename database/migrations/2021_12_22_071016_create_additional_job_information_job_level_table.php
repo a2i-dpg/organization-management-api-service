@@ -15,10 +15,9 @@ class CreateAdditionalJobInformationJobLevelTable extends Migration
     {
         Schema::create('additional_job_information_job_levels', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("job_id")->index();
             $table->unsignedInteger('additional_job_information_id')->index('job_level_additional_job_information_id');
             $table->unsignedTinyInteger('job_level_id')->index();
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 

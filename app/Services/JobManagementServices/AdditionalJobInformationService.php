@@ -6,16 +6,15 @@ use App\Models\AdditionalJobInformation;
 use App\Models\AdditionalJobInformationJobLevel;
 use App\Models\AdditionalJobInformationJobLocation;
 use App\Models\AdditionalJobInformationWorkPlace;
-use App\Models\LocCityCorporation;
-use App\Models\LocCityCorporationWard;
 use App\Models\LocDistrict;
 use App\Models\LocDivision;
-use App\Models\LocUnion;
 use App\Models\LocUpazila;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -32,7 +31,7 @@ class AdditionalJobInformationService
             'additional_job_information.id',
             'additional_job_information.job_id',
             'additional_job_information.job_responsibilities',
-            'additional_job_information.job_content',
+            'additional_job_information.job_context',
             'additional_job_information.job_place_type',
             'additional_job_information.salary_min',
             'additional_job_information.salary_max',
@@ -52,12 +51,9 @@ class AdditionalJobInformationService
 
         $additionalJobInfoBuilder->where('additional_job_information.job_id', $jobId);
 
+        $additionalJobInfoBuilder->with(['jobLevels', 'jobLocations', 'workPlaces']);
 
-        $additionalJobInfo = $additionalJobInfoBuilder->firstOrFail();
-
-        $additionalJobInfo['job_location'] = $this->getJobLocation();
-
-        return $additionalJobInfo;
+        return $additionalJobInfoBuilder->firstOrFail();
 
     }
 
@@ -148,19 +144,25 @@ class AdditionalJobInformationService
                 "loc_division_title" => $division->title,
                 "loc_division_title_en" => $division->title_en
             ];
-            $jobLocation[] = AdditionalJobInformationJobLocation::getJobLocationId($locInfoFormat);
+            $tempData = AdditionalJobInformationJobLocation::getJobLocationId($locInfoFormat);
+            $key = $tempData['location_id'];
+            $jobLocation[$key] = $tempData;
         }
 
         /** LocDistrict */
         foreach ($districts as $district) {
-            $jobLocation[] = AdditionalJobInformationJobLocation::getJobLocationId($district->toArray());
+            $tempData = AdditionalJobInformationJobLocation::getJobLocationId($district->toArray());
+            $key = $tempData['location_id'];
+            $jobLocation[$key] = $tempData;
         }
         /** LocUpazila */
         foreach ($upazilas as $upazila) {
-            $jobLocation[] = AdditionalJobInformationJobLocation::getJobLocationId($upazila->toArray());
+            $tempData = AdditionalJobInformationJobLocation::getJobLocationId($upazila->toArray());
+            $key = $tempData['location_id'];
+            $jobLocation[$key] = $tempData;
         }
-
-        return array_values($jobLocation);
+        Log::info("===>",$jobLocation);
+        return $jobLocation;
     }
 
     /**
@@ -169,19 +171,15 @@ class AdditionalJobInformationService
      */
     public function syncWithJobLevel(AdditionalJobInformation $additionalJobInformation, array $jobLevel)
     {
+        DB::table('additional_job_information_job_levels')->where('additional_job_information_id', $additionalJobInformation->id)->delete();
         foreach ($jobLevel as $item) {
-            AdditionalJobInformationJobLevel::updateOrCreate(
+            DB::table('additional_job_information_job_levels')->insert(
                 [
                     'additional_job_information_id' => $additionalJobInformation->id,
+                    'job_id' => $additionalJobInformation->job_id,
                     'job_level_id' => $item
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'job_level_id' => $item
-
                 ]
             );
-
         }
 
     }
@@ -192,21 +190,16 @@ class AdditionalJobInformationService
      */
     public function syncWithWorkplace(AdditionalJobInformation $additionalJobInformation, array $workPlace)
     {
+        DB::table('additional_job_information_work_places')->where('additional_job_information_id', $additionalJobInformation->id)->delete();
         foreach ($workPlace as $item) {
-            AdditionalJobInformationWorkPlace::updateOrCreate(
+            DB::table('additional_job_information_work_places')->insert(
                 [
                     'additional_job_information_id' => $additionalJobInformation->id,
+                    'job_id' => $additionalJobInformation->job_id,
                     'work_place_id' => $item
-                ],
-                [
-                    'additional_job_information_id' => $additionalJobInformation->id,
-                    'work_place_id' => $item
-
                 ]
             );
-
         }
-
     }
 
     /**
@@ -215,11 +208,13 @@ class AdditionalJobInformationService
      */
     public function syncWithJobLocation(AdditionalJobInformation $additionalJobInformation, array $jobLocation)
     {
+        DB::table('additional_job_information_job_locations')->where('additional_job_information_id', $additionalJobInformation->id)->delete();
         foreach ($jobLocation as $item) {
             $locIds = getLocationIdByKeyString($item);
             $jobLocationInfo = $this->getJobLocationFormat($locIds);
             $jobLocationInfo['additional_job_information_id'] = $additionalJobInformation->id;
-            AdditionalJobInformationJobLocation::updateOrCreate($jobLocationInfo, $jobLocationInfo);
+            $jobLocationInfo['job_id'] = $additionalJobInformation->job_id;
+            DB::table('additional_job_information_job_locations')->insert($jobLocationInfo);
         }
     }
 
@@ -282,13 +277,22 @@ class AdditionalJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+
         $data = $request->all();
+        if(!empty($data["other_benefits"])){
+            $data["other_benefits"] =  is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
+        }
+        if(!empty($data["job_level"])){
+            $data["job_level"] =  is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
+        }
+        if(!empty($data["work_place"])){
+            $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
+        }
+        if (!empty($data["job_location"])){
+         $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
+        }
 
-        $data["other_benefits"] = is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
-        $data["job_level"] = is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
-        $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
-        $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
-
+        Log::info("-------------", $data["job_location"]);
         $rules = [
             "job_id" => [
                 "required",
@@ -372,8 +376,11 @@ class AdditionalJobInformationService
             "job_location" => [
                 "required",
                 "array"
+            ],
+            "job_location.*" => [
+                'required',
+                Rule::in(array_keys($this->getJobLocation()))
             ]
-
         ];
         return Validator::make($data, $rules);
     }
