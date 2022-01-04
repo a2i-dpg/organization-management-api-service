@@ -44,10 +44,9 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
 
-        $candidateRequirementBuilder->with(['trainings:id,candidate_requirement_id,training']);
-        $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,training');
+        $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,title');
 
-        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,professional_certification');
+        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,title');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
@@ -121,7 +120,7 @@ class CandidateRequirementsService
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'training' => $item
+                    'title' => $item
                 ]
             );
         }
@@ -139,7 +138,7 @@ class CandidateRequirementsService
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'professional_certification' => $item
+                    'title' => $item
                 ]
             );
         }
