@@ -155,6 +155,9 @@ class PrimaryJobInformationService
                 "exists:organizations,id,deleted_at,NULL"
             ],
             "industry_association_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isIndustryAssociationUser();
+                }),
                 "nullable",
                 "exists:industry_association_id,id,deleted_at,NULL"
             ],
