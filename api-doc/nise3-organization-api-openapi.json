@@ -6337,7 +6337,7 @@
         "/job/preview/{jobId}": {
             "get": {
                 "tags": [
-                    "Preview"
+                    "Job Preview"
                 ],
                 "summary": "Get a job preview ",
                 "description": "API endpoint to Get a job preview.A successful request response will show 201 HTTP status code",
