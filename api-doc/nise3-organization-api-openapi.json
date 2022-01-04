@@ -6334,7 +6334,7 @@
                 }
             }
         },
-        "/job/preview/{jobId}": {
+        "/job/job-preview/{jobId}": {
             "get": {
                 "tags": [
                     "Job Preview"
