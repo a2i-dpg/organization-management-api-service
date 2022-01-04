@@ -96,9 +96,10 @@ class PrimaryJobInfoController extends Controller
 
     /**
      * @param Request $request
-     * @param int $id
+     * @param string $jobId
      * @return JsonResponse
      * @throws Throwable
+     * @throws ValidationException
      */
     public function jobPublishOrArchive(Request $request, string $jobId): JsonResponse
     {
