@@ -22,6 +22,8 @@ class CreatePrimaryJobInformationTable extends Migration
             $table->unsignedMediumInteger("no_of_vacancies")->nullable();
             $table->unsignedInteger("occupation_id");
             $table->unsignedInteger("job_sector_id");
+            $table->unsignedInteger("industry_association_id")->nullable();
+            $table->unsignedInteger("organization_id")->nullable();
             $table->date("application_deadline")->comment('Y-m-d');
             $table->unsignedTinyInteger('is_apply_online')->default(0)->comment("0=> False, 1=> True");
             $table->unsignedTinyInteger("resume_receiving_option")->comment('1=>Email, 2=> Hard Copy, 3=>Walk in interview');
