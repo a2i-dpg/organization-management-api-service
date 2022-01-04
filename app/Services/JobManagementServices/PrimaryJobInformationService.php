@@ -220,7 +220,7 @@ class PrimaryJobInformationService
      * @return bool
      * @throws Throwable
      */
-    public function publishOrArchiveJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
+    public function publishOrArchiveOrDraftJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
     {
         if ($data['status'] == PrimaryJobInformation::STATUS_PUBLISH) {
             $primaryJobInformation->published_at = Carbon::now()->format('Y-m-d H:i:s');
@@ -228,6 +228,10 @@ class PrimaryJobInformationService
         }
         if ($data['status'] == PrimaryJobInformation::STATUS_ARCHIVE) {
             $primaryJobInformation->archived_at = Carbon::now()->format('Y-m-d H:i:s');
+        }
+        if ($data['status'] == PrimaryJobInformation::STATUS_DRAFT) {
+            $primaryJobInformation->archived_at = null;
+            $primaryJobInformation->published_at = null;
         }
         return $primaryJobInformation->saveOrFail();
     }
