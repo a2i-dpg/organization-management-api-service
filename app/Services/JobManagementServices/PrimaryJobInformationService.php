@@ -13,15 +13,67 @@ use App\Models\PrimaryJobInformation;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class PrimaryJobInformationService
 {
+
+    public function getJobList(array $request, Carbon $startTime): array
+    {
+        $titleEn = $request['title_en'] ?? "";
+        $title = $request['title'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+        /** @var Builder $jobInformationBuilder */
+        $jobInformationBuilder = PrimaryJobInformation::select([
+            'primary_job_information.id',
+            'primary_job_information.job_id',
+            'primary_job_information.service_type',
+            'primary_job_information.job_title',
+            'primary_job_information.job_title_en',
+            'primary_job_information.published_at',
+            'primary_job_information.archived_at',
+            'primary_job_information.application_deadline',
+            'primary_job_information.id',
+        ])->acl();
+
+        $jobInformationBuilder->orderBy('primary_job_information.id', $order);
+
+        if (is_numeric($rowStatus)) {
+            $jobInformationBuilder->where('primary_job_information.row_status', $rowStatus);
+        }
+        if (!empty($titleEn)) {
+            $jobInformationBuilder->where('primary_job_information.title_en', 'like', '%' . $titleEn . '%');
+        }
+        if (!empty($title)) {
+            $jobInformationBuilder->where('primary_job_information.title', 'like', '%' . $title . '%');
+        }
+
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $jobInformation = $jobInformationBuilder->paginate($pageSize);
+            $paginateData = (object)$jobInformation->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $jobInformation = $jobInformationBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $jobInformation->toArray()['data'] ?? $jobInformation->toArray();
+        $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
+        return $response;
+    }
 
     public function getPrimaryJobInformationDetails(string $jobId): PrimaryJobInformation
     {
@@ -102,6 +154,36 @@ class PrimaryJobInformationService
         }
     }
 
+    public function JobListFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+
+        return Validator::make($request->all(), [
+            'job_title_en' => 'nullable|max:300|min:2',
+            'job_title' => 'nullable|max:500|min:2',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'order' => [
+                'nullable',
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
+
+    }
 
     /**
      * @param Request $request

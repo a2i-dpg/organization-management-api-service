@@ -46,10 +46,29 @@ class JobManagementController extends Controller
         $this->startTime = Carbon::now();
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function getJobList(Request $request): JsonResponse
     {
-        $filter = $this->primaryJobInformationService->filterValidatJobList($request)->validate();
-        $response = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+        $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
+        $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 

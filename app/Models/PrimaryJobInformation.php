@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Traits\Scopes\ScopeAcl;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -39,7 +40,7 @@ use Ramsey\Uuid\Uuid;
  */
 class PrimaryJobInformation extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, ScopeAcl;
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
