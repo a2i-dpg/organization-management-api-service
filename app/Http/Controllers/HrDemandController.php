@@ -51,15 +51,25 @@ class HrDemandController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return void
-     * @throws AuthorizationException
-     * @throws ValidationException
+     * @return JsonResponse
+     * @throws ValidationException|AuthorizationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('create', HrDemand::class);
         $validatedData = $this->hrDemandService->validator($request)->validate();
+        $data = $this->hrDemandService->store($validatedData);
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Hr demand added successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
 
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -82,8 +92,7 @@ class HrDemandController extends Controller
     public function destroy(int $id) : JsonResponse
     {
         $hrDemand = HrDemand::findOrFail($id);
-
-        //$this->authorize('delete', $course);
+        $this->authorize('delete', $hrDemand);
 
         $this->hrDemandService->destroy($hrDemand);
 
