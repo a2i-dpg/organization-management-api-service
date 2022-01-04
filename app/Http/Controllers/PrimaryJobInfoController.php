@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -52,6 +53,7 @@ class PrimaryJobInfoController extends Controller
      */
     public function storePrimaryJobInformation(Request $request): JsonResponse
     {
+        Log::info("====>", $request->all());
         $validatedData = $this->primaryJobInformationService->validator($request)->validate();
         $employmentTypes = $validatedData['employment_type'];
         DB::beginTransaction();
