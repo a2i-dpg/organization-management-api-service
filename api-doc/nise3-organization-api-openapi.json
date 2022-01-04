@@ -2,8 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Organization API Service",
-        "description": " 'It is a organization management api service that manages services related to organization'",
+        "title": "Industry & Industry Association API Service",
+        "description": " 'It is a Industry & Industry Association api service' ",
         "termsOfService": "",
         "contact": {},
         "license": {
@@ -12,10 +12,10 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8002/api/v1"
+            "url": "http://nise-industry.softbd/api/v1"
         },
         {
-            "url": "https://nise-industry.softbd/api/v1"
+            "url": "http://localhost:8002/api/v1"
         },
         {
             "url": "https://org.bus-staging.softbdltd.com/api/v1"
@@ -41,11 +41,10 @@
             "bearerAuth": []
         }
     ],
-
     "paths": {
         "/": {
             "get": {
-                "summary": "Organization Service Information",
+                "summary": "Industry & Industry Association Service Information",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -762,7 +761,7 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/organization"
                                 },
-                                "example":{
+                                "example": {
                                     "_response_status": {
                                         "success": true,
                                         "code": 201,
@@ -1000,7 +999,7 @@
                         "description": "successfull",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "data": {
                                         "id": 2,
                                         "title_en": "Grady Group",
@@ -5064,7 +5063,6 @@
                 }
             }
         },
-
         "/contact-info": {
             "get": {
                 "tags": [
@@ -5092,7 +5090,6 @@
                         "$ref": "#/components/parameters/row_status_optional"
                     }
                 ],
-
                 "responses": {
                     "200": {
                         "description": "successfull",
@@ -5463,11 +5460,12 @@
                     }
                 }
             }
-
         },
         "/industry-association-trades": {
             "get": {
-                "tags": ["Industry association trades"],
+                "tags": [
+                    "Industry association trades"
+                ],
                 "summary": "Get industry association trades",
                 "description": "API endpoint to Get industry association trades.A successful request response will show 201 HTTP status code",
                 "responses": {
@@ -5505,11 +5503,11 @@
                 }
             }
         },
-
-
         "/job/job-location": {
             "get": {
-                "tags": ["Job Management"],
+                "tags": [
+                    "Job Management"
+                ],
                 "summary": "Get job location info",
                 "responses": {
                     "200": {
@@ -5542,7 +5540,9 @@
         },
         "/job/job-id": {
             "get": {
-                "tags": ["Job Management"],
+                "tags": [
+                    "Job Management"
+                ],
                 "summary": "Get Job id",
                 "description": "API endpoint to Get Job id.A successful request response will show 201 HTTP status code",
                 "responses": {
@@ -5550,7 +5550,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":"IDSA-2fe8e68e-4456-43be-9d9d-481974a41890"
+                                "example": "IDSA-2fe8e68e-4456-43be-9d9d-481974a41890"
                             }
                         }
                     }
@@ -5559,7 +5559,9 @@
         },
         "/job/store-primary-job-information": {
             "post": {
-                "tags": ["Primary Job Information"],
+                "tags": [
+                    "Primary Job Information"
+                ],
                 "summary": "Store a primary job information",
                 "description": "API endpoint to Store a primary job information.A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -5611,7 +5613,9 @@
         },
         "/job/primary-job-information/{jobId}": {
             "get": {
-                "tags": ["Primary Job Information"],
+                "tags": [
+                    "Primary Job Information"
+                ],
                 "summary": "Get a primary job information",
                 "parameters": [
                     {
@@ -5623,7 +5627,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "data": {
                                         "id": 1,
                                         "job_id": "qq-qq",
@@ -5680,11 +5684,11 @@
                 }
             }
         },
-
-
         "/job/store-additional-job-information": {
             "post": {
-                "tags": ["Additional Job Information"],
+                "tags": [
+                    "Additional Job Information"
+                ],
                 "summary": "Store additional job info",
                 "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -5743,7 +5747,9 @@
         },
         "/job/additional-job-information/{jobId}": {
             "get": {
-                "tags": ["Additional Job Information"],
+                "tags": [
+                    "Additional Job Information"
+                ],
                 "summary": "Get a specific additional job info",
                 "description": "API endpoint to Get a specific additional job info.A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -5880,10 +5886,11 @@
                 }
             }
         },
-
         "/job/store-company-info-visibility": {
             "post": {
-                "tags": ["Company info visibility"],
+                "tags": [
+                    "Company info visibility"
+                ],
                 "summary": "Store company info visibility",
                 "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -5926,7 +5933,9 @@
         },
         "/job/company-info-visibility/{jobId}": {
             "get": {
-                "tags": ["Company info visibility"],
+                "tags": [
+                    "Company info visibility"
+                ],
                 "summary": "Get a specific company info visibility",
                 "parameters": [
                     {
@@ -5963,10 +5972,11 @@
                 }
             }
         },
-
         "/job/contact-information": {
             "post": {
-                "tags": ["Contact Information"],
+                "tags": [
+                    "Contact Information"
+                ],
                 "summary": "Store contact information",
                 "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -6005,7 +6015,9 @@
         },
         "/job/contact-information/{jobId}": {
             "get": {
-                "tags": ["Contact Information"],
+                "tags": [
+                    "Contact Information"
+                ],
                 "summary": "Store contact information",
                 "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -6039,11 +6051,11 @@
                 }
             }
         },
-
-
         "/job/store-candidate-requirements": {
             "post": {
-                "tags": ["Candidate Requirements"],
+                "tags": [
+                    "Candidate Requirements"
+                ],
                 "summary": "Store Candidate Requirements",
                 "description": "API endpoint to Store Candidate Requirements.A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -6094,7 +6106,9 @@
         },
         "/job/candidate-requirements/{jobId}": {
             "get": {
-                "tags": ["Candidate Requirements"],
+                "tags": [
+                    "Candidate Requirements"
+                ],
                 "summary": "Get a candidate requirement by Id",
                 "description": "API endpoint to Get a candidate requirement by Id.A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -6107,7 +6121,7 @@
                         "description": "success",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "data": {
                                         "id": 1,
                                         "job_id": "555",
@@ -6237,11 +6251,11 @@
                 }
             }
         },
-
-
         "/job/store-matching-criteria": {
             "post": {
-                "tags": ["Matching Criteria"],
+                "tags": [
+                    "Matching Criteria"
+                ],
                 "summary": "Create a matching crieria",
                 "description": "API endpoint to Create a matching crieria.A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -6293,7 +6307,9 @@
         },
         "/job/matching-criteria/{jobId}": {
             "get": {
-                "tags": ["Matching Criteria"],
+                "tags": [
+                    "Matching Criteria"
+                ],
                 "summary": "Create a matching crieria",
                 "description": "API endpoint to get a matching crieria.A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -6565,7 +6581,9 @@
         },
         "/area_of_business": {
             "get": {
-                "tags": ["Area of Business"],
+                "tags": [
+                    "Area of Business"
+                ],
                 "summary": "Get all areas of business",
                 "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -6578,7 +6596,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "order": "ASC",
                                     "data": [
                                         {
@@ -7806,7 +7824,6 @@
                                         "query_time": 0
                                     }
                                 }
-
                             }
                         }
                     }
@@ -7815,7 +7832,9 @@
         },
         "/educational_institutions": {
             "get": {
-                "tags": ["Educational Institions"],
+                "tags": [
+                    "Educational Institions"
+                ],
                 "summary": "Get all areas of business",
                 "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -7836,8 +7855,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":
-                                {
+                                "example": {
                                     "order": "ASC",
                                     "data": [
                                         {
@@ -7861,7 +7879,6 @@
                                         "query_time": 0
                                     }
                                 }
-
                             }
                         }
                     }
@@ -7881,67 +7898,106 @@
                     },
                     "is_age_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_total_year_of_experience_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_gender_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_area_of_experience_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_skills_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_job_location_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_salary_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_area_of_business_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_job_level_enabled": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_age_mandatory": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_total_year_of_experience_mandatory": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_gender_mandatory": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_job_location_mandatory": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     }
                 },
@@ -7988,7 +8044,10 @@
                     },
                     "is_experience_needed": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True , 0=>False"
                     },
                     "minimum_year_of_experience": {
@@ -7999,7 +8058,10 @@
                     },
                     "is_freshers_encouraged": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=> False"
                     },
                     "area_of_experience": {
@@ -8043,15 +8105,20 @@
                     },
                     "person_with_disability": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "preferred_retired_army_officer": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     }
-
                 },
                 "required": [
                     "job_id"
@@ -8083,12 +8150,18 @@
                     "is_company_name_visible": {
                         "type": "integer",
                         "description": "1=>Company name visible 0=>Not visible",
-                        "enum": [1,0]
+                        "enum": [
+                            1,
+                            0
+                        ]
                     },
                     "is_company_address_visible": {
                         "type": "integer",
                         "description": "1=>Company address visible 0=>Not visible",
-                        "enum": [1,0]
+                        "enum": [
+                            1,
+                            0
+                        ]
                     },
                     "company_industry_type": {
                         "type": "integer",
@@ -8096,7 +8169,10 @@
                     },
                     "is_company_business_visible": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>Visible 0=>Not visible"
                     },
                     "company_name": {
@@ -8106,7 +8182,6 @@
                     "company_name_en": {
                         "type": "string"
                     }
-
                 },
                 "required": [
                     "job_id",
@@ -8136,7 +8211,10 @@
                     },
                     "job_place_type": {
                         "type": "integer",
-                        "enum": [1,2],
+                        "enum": [
+                            1,
+                            2
+                        ],
                         "description": "1=>Inside Banladesh 2=>Outside Bangladesh"
                     },
                     "salary_min": {
@@ -8147,13 +8225,16 @@
                     },
                     "is_salary_info_show": {
                         "type": "integer",
-                        "enum": [1,2,3],
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
                         "description": "1=>Show Salary 2=>Show Nothing 3=> Show Negotiable instead of given salary range"
                     },
                     "is_salary_compare_to_expected_salary": {
                         "type": "integer",
                         "description": "0=>False 1=>True"
-
                     },
                     "is_salary_alert_excessive_than_given_salary_range": {
                         "type": "integer",
@@ -8161,12 +8242,20 @@
                     },
                     "salary_review": {
                         "type": "integer",
-                        "enum": [1,2],
+                        "enum": [
+                            1,
+                            2
+                        ],
                         "description": "1=>Half yearly 2=>Yearly"
                     },
                     "festival_bonus": {
                         "type": "integer",
-                        "enum": [1,2,3,4],
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
                         "description": "1=>01 2=>02 3=>03 4=>04"
                     },
                     "additional_salary_info": {
@@ -8190,7 +8279,10 @@
                     },
                     "lunch_facilities": {
                         "type": "integer",
-                        "enum": [1,2],
+                        "enum": [
+                            1,
+                            2
+                        ],
                         "description": "1=>Partially Subsidized 2=>Fully Subsidized"
                     },
                     "others": {
@@ -8242,7 +8334,11 @@
                     },
                     "service_type": {
                         "type": "integer",
-                        "enum": [1,2,3],
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
                         "description": "1=>Basic Listing, 2=> Stand out Listing , 3=>Stand out premium"
                     },
                     "job_title": {
@@ -8256,7 +8352,10 @@
                     },
                     "is_number_of_vacancy_na": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "no_of_vacancies": {
@@ -8277,15 +8376,18 @@
                         "type": "string",
                         "format": "y-m-d"
                     },
-                    "is_apply_online":{
-                        "type":"string",
-                        "format":"y-m-d",
-                        "description":"1=>True 0=>False"
+                    "is_apply_online": {
+                        "type": "string",
+                        "format": "y-m-d",
+                        "description": "1=>True 0=>False"
                     },
                     "resume_receiving_option": {
                         "type": "integer",
                         "enum": [
-                            1,2,3,4
+                            1,
+                            2,
+                            3,
+                            4
                         ],
                         "description": "1=>Apply Online , 2=> Email, 2=> Hard Copy, 4=> Walk in interview"
                     },
@@ -8315,12 +8417,18 @@
                     },
                     "is_photograph_enclose_with_resume": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FALSE"
                     },
                     "is_use_nise3_mail_system": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>TRUE 0=>FASLE"
                     }
                 },
@@ -9150,7 +9258,6 @@
                         "minLength": 2,
                         "maxLength": 300
                     },
-
                     "loc_division_id": {
                         "type": "integer",
                         "description": "location id of division"
@@ -9210,8 +9317,6 @@
                         "maximum": 250,
                         "minimum": 2
                     },
-
-
                     "contact_person_designation": {
                         "type": "string",
                         "description": "Contact person's designation"
@@ -9378,7 +9483,6 @@
                         "type": "string",
                         "description": "Details about the organization"
                     },
-
                     "logo": {
                         "type": "string",
                         "description": "Logo of the organization"
@@ -10027,7 +10131,12 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "enum": [1,2,3,4],
+                    "enum": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ],
                     "description": "0=>Inactive 1=>Active 2=>Pending 3=>Rejected"
                 }
             },
