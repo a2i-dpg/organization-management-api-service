@@ -10,10 +10,12 @@ use App\Models\CompanyInfoVisibility;
 use App\Models\EmploymentType;
 use App\Models\JobContactInformation;
 use App\Models\PrimaryJobInformation;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Throwable;
@@ -107,6 +109,7 @@ class PrimaryJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
         $requestData = $request->all();
         $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
