@@ -92,7 +92,7 @@ class PrimaryJobInformationService
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING && is_array($skillIds) && count($skillIds) > 0) {
 
-            $skillMatchingJobIds = DB::table('candidate_requirement_skill')->pluck('job_id')->whereIn('skill_id', $skillIds);
+            $skillMatchingJobIds = DB::table('candidate_requirement_skill')->whereIn('skill_id', $skillIds)->pluck('job_id');
 
             $jobInformationBuilder->whereIn('job_id', $skillMatchingJobIds);
 
