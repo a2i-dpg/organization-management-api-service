@@ -15,9 +15,9 @@ class CreateCandidateRequirementAreaOfExperienceTable extends Migration
     {
         Schema::create('candidate_requirement_area_of_experience', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("job_id")->index('index_area_exp_job_id');
             $table->integer("candidate_requirement_id")->index('index_area_experience_can_req_id');
             $table->integer("area_of_experience_id")->index('index_can_area_exp_area_exp_id');
-            $table->timestamps();
         });
     }
 

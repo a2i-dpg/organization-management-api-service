@@ -4,18 +4,18 @@ namespace App\Services\JobManagementServices;
 
 
 use App\Models\AdditionalJobInformation;
-use App\Models\AdditionalJobInformationJobLocation;
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
 use App\Models\EmploymentType;
-use App\Models\GalleryImageVideo;
 use App\Models\JobContactInformation;
 use App\Models\PrimaryJobInformation;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Throwable;
@@ -23,19 +23,26 @@ use Throwable;
 class PrimaryJobInformationService
 {
 
-    public function getPrimaryJobInformationDetails(string $jobId): Model|Builder
+    public function getPrimaryJobInformationDetails(string $jobId): PrimaryJobInformation
     {
-        /** @var Builder $primaryJobInformationBuilder */
+        /** @var PrimaryJobInformation|Builder $primaryJobInformationBuilder */
         $primaryJobInformationBuilder = PrimaryJobInformation::select([
             'primary_job_information.id',
             'primary_job_information.job_id',
+            'primary_job_information.job_id',
+            'primary_job_information.industry_association_id',
+            'primary_job_information.organization_id',
+            'primary_job_information.institute_id',
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
             'primary_job_information.no_of_vacancies',
-            'primary_job_information.job_category_id',
-            'occupations.title as job_category_title',
-            'occupations.title_en as job_category_title_en',
+            'primary_job_information.occupation_id',
+            'occupations.title as occupation_title',
+            'occupations.title_en as occupation_title_en',
+            'primary_job_information.job_sector_id',
+            'job_sectors.title as job_sector_title',
+            'job_sectors.title_en as job_sector_title_en',
             'primary_job_information.application_deadline',
             'primary_job_information.is_apply_online',
             'primary_job_information.resume_receiving_option',
@@ -50,19 +57,23 @@ class PrimaryJobInformationService
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
             'primary_job_information.published_at',
-            'primary_job_information.published_at',
+            'primary_job_information.archived_at',
             'primary_job_information.created_at',
             'primary_job_information.updated_at',
         ]);
 
         $primaryJobInformationBuilder->where('primary_job_information.job_id', $jobId);
         $primaryJobInformationBuilder->join('occupations', function ($join) {
-            $join->on('primary_job_information.job_category_id', '=', 'occupations.id')
+            $join->on('primary_job_information.occupation_id', '=', 'occupations.id')
                 ->whereNull('occupations.deleted_at');
         });
+        $primaryJobInformationBuilder->join('job_sectors', function ($join) {
+            $join->on('primary_job_information.job_sector_id', '=', 'job_sectors.id')
+                ->whereNull('job_sectors.deleted_at');
+        });
 
-        $primaryJobInformationBuilder->with(['employmentTypes'=>function($query){
-            $query->select('id','title');
+        $primaryJobInformationBuilder->with(['employmentTypes' => function ($query) {
+            $query->select('id', 'title');
         }]);
 
         return $primaryJobInformationBuilder->firstOrFail();
@@ -99,6 +110,8 @@ class PrimaryJobInformationService
      */
     public function validator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        /** @var User $authUser */
+        $authUser = Auth::user();
         $requestData = $request->all();
         $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
         $rules = [
@@ -129,9 +142,33 @@ class PrimaryJobInformationService
                 "nullable",
                 "integer"
             ],
-            "job_category_id" => [
+            "occupation_id" => [
                 "required",
-                "exists:occupations,id"
+                "exists:occupations,id,deleted_at,NULL"
+            ],
+            "job_sector_id" => [
+                "required",
+                "exists:job_sectors,id,deleted_at,NULL"
+            ],
+            "organization_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isOrganizationUser();
+                }),
+                "nullable",
+                "exists:organizations,id,deleted_at,NULL"
+            ],
+            "institute_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isInstituteUser();
+                }),
+                "nullable",
+            ],
+            "industry_association_id" => [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isIndustryAssociationUser();
+                }),
+                "nullable",
+                "exists:industry_associations,id,deleted_at,NULL"
             ],
             "employment_type" => [
                 "required",
@@ -225,7 +262,7 @@ class PrimaryJobInformationService
      * @return bool
      * @throws Throwable
      */
-    public function publishOrArchiveJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
+    public function publishOrArchiveOrDraftJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
     {
         if ($data['status'] == PrimaryJobInformation::STATUS_PUBLISH) {
             $primaryJobInformation->published_at = Carbon::now()->format('Y-m-d H:i:s');
@@ -233,6 +270,10 @@ class PrimaryJobInformationService
         }
         if ($data['status'] == PrimaryJobInformation::STATUS_ARCHIVE) {
             $primaryJobInformation->archived_at = Carbon::now()->format('Y-m-d H:i:s');
+        }
+        if ($data['status'] == PrimaryJobInformation::STATUS_DRAFT) {
+            $primaryJobInformation->archived_at = null;
+            $primaryJobInformation->published_at = null;
         }
         return $primaryJobInformation->saveOrFail();
     }

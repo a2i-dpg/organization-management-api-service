@@ -15,9 +15,9 @@ class CreateCandidateRequirementGenderTable extends Migration
     {
         Schema::create('candidate_requirement_gender', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("job_id")->index('index_gender_job_id');
             $table->integer("candidate_requirement_id")->index('index_gen_can_req_id');
             $table->integer("gender_id")->index('index_can_gen_gen_id');
-            $table->timestamps();
         });
     }
 

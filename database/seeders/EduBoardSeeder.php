@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\EduBoard;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class EduBoardSeeder extends Seeder
 {
@@ -14,6 +15,9 @@ class EduBoardSeeder extends Seeder
      */
     public function run()
     {
+        Schema::disableForeignKeyConstraints();
+        EduBoard::query()->truncate();
+
         $boardName = [
             [
                 "title_en" => "Barisal",
@@ -58,5 +62,7 @@ class EduBoardSeeder extends Seeder
         ];
 
         EduBoard::insert($boardName);
+
+        Schema::enableForeignKeyConstraints();
     }
 }

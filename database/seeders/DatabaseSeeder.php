@@ -15,22 +15,22 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             IndustryAssociationTradeSeeder::class,
-            IndustryAssociationSeeder::class,
             ServiceSeeder::class,
             SkillSeeder::class,
             JobSectorSeeder::class,
             GeoLocationDatabaseSeeder::class,
             OrganizationTypeSeeder::class,
-            OrganizationSeeder::class,
-            HumanResourceTemplateSeeder::class,
-            PublicationSeeder::class,
-            ContactInfoSeeder::class,
             EducationalInstitutionSeeder::class,
             AreaOfBusinessSeeder::class,
             EmploymentTypeSeeder::class,
             EduGroupSeeder::class,
             EduBoardSeeder::class,
-            EducationLevelSeeder::class
+            EducationLevelSeeder::class,
+//            IndustryAssociationSeeder::class,
+//            OrganizationSeeder::class,
+//            HumanResourceTemplateSeeder::class,
+//            PublicationSeeder::class,
+//            ContactInfoSeeder::class,
         ]);
     }
 }

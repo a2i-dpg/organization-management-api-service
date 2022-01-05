@@ -18,6 +18,7 @@ class ServiceSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
 
         Service::query()->truncate();
+
         Service::factory()->count(20)->create();
 
         Schema::enableForeignKeyConstraints();

@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -96,9 +97,10 @@ class PrimaryJobInfoController extends Controller
 
     /**
      * @param Request $request
-     * @param int $id
+     * @param string $jobId
      * @return JsonResponse
      * @throws Throwable
+     * @throws ValidationException
      */
     public function jobPublishOrArchive(Request $request, string $jobId): JsonResponse
     {
@@ -108,13 +110,16 @@ class PrimaryJobInfoController extends Controller
         if ($this->primaryJobInformationService->isJobPublishOrArchiveApplicable($jobId)) {
             $galleryImageVideo = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
             $validatedData = $this->primaryJobInformationService->publishOrArchiveValidator($request)->validate();
-            $primaryJobInformationModificationFlag = $this->primaryJobInformationService->publishOrArchiveJob($validatedData, $galleryImageVideo);
+            $primaryJobInformationModificationFlag = $this->primaryJobInformationService->publishOrArchiveOrDraftJob($validatedData, $galleryImageVideo);
             $message = "";
             if ($request->input('status') == PrimaryJobInformation::STATUS_PUBLISH) {
                 $message = $primaryJobInformationModificationFlag ? "Job published successfully done" : "Job published is not done";
             }
             if ($request->input('status') == PrimaryJobInformation::STATUS_ARCHIVE) {
                 $message = $primaryJobInformationModificationFlag ? "Job archived successfully done" : "Job archived is not done";
+            }
+            if ($request->input('status') == PrimaryJobInformation::STATUS_DRAFT) {
+                $message = $primaryJobInformationModificationFlag ? "The draft of Jop posting is successfully done" : "The draft of Jop posting is not done";
             }
 
             $statusCode = $primaryJobInformationModificationFlag ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;

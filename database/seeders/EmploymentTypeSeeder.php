@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\EmploymentType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class EmploymentTypeSeeder extends Seeder
 {
@@ -14,6 +16,9 @@ class EmploymentTypeSeeder extends Seeder
      */
     public function run()
     {
+        Schema::disableForeignKeyConstraints();
+        EmploymentType::query()->truncate();
+
         $employmentTypes = [
             [
                 "code" => 'FULL',
@@ -48,5 +53,8 @@ class EmploymentTypeSeeder extends Seeder
         ];
 
         EmploymentType::insert($employmentTypes);
+
+        Schema::enableForeignKeyConstraints();
+
     }
 }

@@ -55,6 +55,8 @@ class Authenticate
                 $request->offsetSet('organization_id', $authUser->organization_id);
             } elseif ($authUser && $authUser->isIndustryAssociationUser()) {
                 $request->offsetSet('industry_association_id', $authUser->industry_association_id);
+            } elseif ($authUser && $authUser->isInstituteUser()) {
+                $request->offsetSet('institute_id', $authUser->industry_association_id);
             }
         }
 

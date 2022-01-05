@@ -15,10 +15,9 @@ class CreateAdditionalJobInformationWorkPlaceTable extends Migration
     {
         Schema::create('additional_job_information_work_places', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("job_id")->index();
             $table->unsignedInteger('additional_job_information_id')->index('work_places_additional_job_information_id');
             $table->unsignedTinyInteger('work_place_id')->index();
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 

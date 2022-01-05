@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Seeders\AreaOfExperienceSeeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -39,7 +40,7 @@ class CandidateRequirement extends Model
 
     public function areaOfExperiences(): BelongsToMany
     {
-        return $this->belongsToMany(Skill::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','id');
+        return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','id');
     }
 
     public function areaOfBusiness(): BelongsToMany
@@ -54,7 +55,7 @@ class CandidateRequirement extends Model
 
     public function genders(): HasMany
     {
-        return $this->hasMany(CandidateRequirementGender::class);
+        return $this->hasMany(CandidateRequirementGender::class, 'candidate_requirement_id','id');
     }
 
 }

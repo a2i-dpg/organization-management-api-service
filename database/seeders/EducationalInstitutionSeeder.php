@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class EducationalInstitutionSeeder extends Seeder
 {
@@ -14,6 +15,9 @@ class EducationalInstitutionSeeder extends Seeder
      */
     public function run()
     {
+        Schema::disableForeignKeyConstraints();
+        DB::table('educational_institutions')->truncate();
+
         $universities = [
             ['name' => 'University of Dhaka', 'type' => 'Public'],
             ['name' => 'University of Rajshahi', 'type' => 'Public'],
@@ -140,5 +144,7 @@ class EducationalInstitutionSeeder extends Seeder
         ];
 
         DB::table('educational_institutions')->insert($universities);
+
+        Schema::enableForeignKeyConstraints();
     }
 }

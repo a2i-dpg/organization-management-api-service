@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -45,13 +44,14 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
 
-        //TODO:check select method return [] if candidate_requirement_id not selected
+        $candidateRequirementBuilder->with(['trainings:id,candidate_requirement_id,training']);
         $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,training');
 
-        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id');
+        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,professional_certification');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
+        $candidateRequirementBuilder->with('genders:id,gender_id');
 
         return $candidateRequirementBuilder->firstOrFail();
     }
@@ -82,6 +82,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_degrees')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'education_level_id' => $educationLevel,
                     'edu_group_id' => $eduGroup,
                     'edu_major' => $eduMajor
@@ -101,6 +102,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_preferred_educational_institution')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'preferred_educational_institution_id' => $item
                 ]
             );
@@ -118,6 +120,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_trainings')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'training' => $item
                 ]
             );
@@ -135,6 +138,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_professional_certifications')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'professional_certification' => $item
                 ]
             );
@@ -152,6 +156,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_area_of_experience')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'area_of_experience_id' => $item
                 ]
             );
@@ -169,6 +174,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_area_of_business')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'area_of_business_id' => $item
                 ]
             );
@@ -186,6 +192,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_skill')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'candidate_requirement_skill' => $item
                 ]
             );
@@ -203,6 +210,7 @@ class CandidateRequirementsService
             DB::table('candidate_requirement_gender')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
+                    'job_id' => $candidateRequirements->job_id,
                     'gender_id' => $item
                 ]
             );
@@ -219,28 +227,28 @@ class CandidateRequirementsService
         $data = $request->all();
 
 
-        if(!empty($data["degrees"])){
+        if (!empty($data["degrees"])) {
             $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
         }
-        if(!empty($data["preferred_educational_institution"])){
+        if (!empty($data["preferred_educational_institution"])) {
             $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
         }
-        if(!empty($data["training"])){
+        if (!empty($data["training"])) {
             $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
         }
-        if(!empty($data["professional_certification"])){
+        if (!empty($data["professional_certification"])) {
             $data["professional_certification"] = is_array($data['professional_certification']) ? $data['professional_certification'] : explode(',', $data['professional_certification']);
         }
-        if(!empty($data["area_of_experience"])){
+        if (!empty($data["area_of_experience"])) {
             $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
         }
-        if(!empty($data["area_of_business"])){
+        if (!empty($data["area_of_business"])) {
             $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
         }
-        if(!empty($data["skills"])){
+        if (!empty($data["skills"])) {
             $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
         }
-        if(!empty($data["gender"])){
+        if (!empty($data["gender"])) {
             $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
         }
 
