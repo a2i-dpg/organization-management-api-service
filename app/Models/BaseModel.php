@@ -47,7 +47,14 @@ abstract class BaseModel extends Model
 
 
     /** Client Url End Point Type*/
+    public const ORGANIZATION_CLIENT_URL_TYPE = "ORGANIZATION";
+    public const INSTITUTE_URL_CLIENT_TYPE = "INSTITUTE";
     public const CORE_CLIENT_URL_TYPE = "CORE";
+    public const YOUTH_CLIENT_URL_TYPE = "YOUTH";
+    public const CMS_CLIENT_URL_TYPE = "CMS";
+    public const IDP_SERVER_CLIENT_PROFILE_URL_TYPE = "IDP_SERVER_USER";
+    public const IDP_SERVER_CLIENT_BASE_URL_TYPE = "IDP_SERVER";
+
 
     /** pagination default size */
     public const DEFAULT_PAGE_SIZE = 10;
