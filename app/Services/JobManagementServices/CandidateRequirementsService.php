@@ -194,7 +194,7 @@ class CandidateRequirementsService
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'candidate_requirement_skill' => $item
+                    'skill_id' => $item
                 ]
             );
         }

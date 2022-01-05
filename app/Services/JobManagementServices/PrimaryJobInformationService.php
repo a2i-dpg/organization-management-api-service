@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Throwable;
@@ -89,13 +90,9 @@ class PrimaryJobInformationService
         }
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
-            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
-            $jobInformationBuilder->where(function ($builder) use ($startTime) {
-                $builder->whereNull('primary_job_information.archived_at');
-                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
-            });
-            $jobInformationBuilder->active();
+
+            DB::table('candidate_requirement_skill')->pluck('job_id')->whereIn()
+
 
         }
 
