@@ -44,7 +44,7 @@ class CandidateRequirement extends Model
 
     public function areaOfBusiness(): BelongsToMany
     {
-        return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirement_area_of_business','candidate_requirement_id','area_of_experience_id');
+        return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirement_area_of_business','candidate_requirement_id','area_of_business_id');
     }
 
     public function skills(): BelongsToMany
