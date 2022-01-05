@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AreaOfBusinessSeeder extends Seeder
 {
@@ -14,6 +15,10 @@ class AreaOfBusinessSeeder extends Seeder
      */
     public function run()
     {
+        Schema::disableForeignKeyConstraints();
+
+        DB::table('area_of_business')->truncate();
+
         $areaOfBusiness = array(
             0 =>
                 array(
@@ -1033,5 +1038,8 @@ class AreaOfBusinessSeeder extends Seeder
         );
 
         DB::table('area_of_business')->insert($areaOfBusiness);
+
+        Schema::enableForeignKeyConstraints();
+
     }
 }
