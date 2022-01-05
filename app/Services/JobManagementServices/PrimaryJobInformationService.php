@@ -31,6 +31,7 @@ class PrimaryJobInformationService
         $pageSize = $request['page_size'] ?? "";
         $occupationId = $request['occupation_id'] ?? "";
         $jobSectorId = $request['job_sector_id'] ?? "";
+        $skillIds = $request['skill_ids'] ?? [];
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -89,12 +90,13 @@ class PrimaryJobInformationService
 
         }
 
-//        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING) {
-//
-//            DB::table('candidate_requirement_skill')->pluck('job_id')->whereIn()
-//
-//
-//        }
+        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING && is_array($skillIds) && count($skillIds) > 0) {
+
+            $skillMatchingJobIds = DB::table('candidate_requirement_skill')->pluck('job_id')->whereIn('skill_id', $skillIds);
+
+            $jobInformationBuilder->whereIn('job_id', $skillMatchingJobIds);
+
+        }
 
         /** TODO:Change popular job search logic when job application process starts */
 
@@ -254,7 +256,20 @@ class PrimaryJobInformationService
                 "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
+            'skill_ids' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->offsetGet('type') == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING;
+                }),
+                'nullable',
+                'array'
+            ],
+            'skill_ids.*' => [
+                'required',
+                'integer',
+                'distinct',
+            ]
         ], $customMessage);
+
 
     }
 
