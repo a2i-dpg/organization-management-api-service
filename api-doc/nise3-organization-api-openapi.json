@@ -6494,10 +6494,10 @@
                                             "person_with_disability": 0,
                                             "preferred_retired_army_officer": 0,
                                             "created_at": "2022-01-04T11:44:17.000000Z",
-                                            "updated_at": "2022-01-04T11:44:17.000000Z",
+                                            "updated_at": "2022-01-04T12:13:17.000000Z",
                                             "candidate_requirement_degrees": [
                                                 {
-                                                    "id": 11,
+                                                    "id": 35,
                                                     "job_id": "qq-qq",
                                                     "candidate_requirement_id": 6,
                                                     "education_level_id": 1,
@@ -6515,7 +6515,7 @@
                                                     }
                                                 },
                                                 {
-                                                    "id": 12,
+                                                    "id": 36,
                                                     "job_id": "qq-qq",
                                                     "candidate_requirement_id": 6,
                                                     "education_level_id": null,
@@ -6527,61 +6527,93 @@
                                             ],
                                             "educational_institutions": [
                                                 {
-                                                    "id": 16,
-                                                    "name": "Dhaka University of Engineering & Technology"
+                                                    "id": 52,
+                                                    "name": "Bangladesh Army International University of Science & Technology"
                                                 },
                                                 {
-                                                    "id": 17,
-                                                    "name": "Rajshahi University of Engineering & Technology"
+                                                    "id": 53,
+                                                    "name": "Britannia University"
                                                 },
                                                 {
-                                                    "id": 18,
-                                                    "name": "Chittagong University of Engineering & Technology"
+                                                    "id": 54,
+                                                    "name": "Feni University"
                                                 }
                                             ],
                                             "trainings": [
                                                 {
-                                                    "id": 3,
+                                                    "id": 15,
                                                     "candidate_requirement_id": 6,
                                                     "title": "Computer typing"
                                                 }
                                             ],
                                             "professional_certifications": [
                                                 {
-                                                    "id": 1,
+                                                    "id": 25,
                                                     "candidate_requirement_id": 6,
                                                     "title": "Skilling c++"
                                                 },
                                                 {
-                                                    "id": 2,
+                                                    "id": 26,
                                                     "candidate_requirement_id": 6,
                                                     "title": "Skilling java"
                                                 }
                                             ],
-                                            "area_of_experiences": [],
-                                            "area_of_business": [
+                                            "area_of_experience": [
                                                 {
                                                     "id": 1,
-                                                    "title": "Banks"
+                                                    "title": "Php",
+                                                    "title_en": null,
+                                                    "deleted_at": null
                                                 },
                                                 {
                                                     "id": 2,
-                                                    "title": "Insurance"
+                                                    "title": "Java",
+                                                    "title_en": null,
+                                                    "deleted_at": null
+                                                },
+                                                {
+                                                    "id": 3,
+                                                    "title": "Python",
+                                                    "title_en": null,
+                                                    "deleted_at": null
+                                                }
+                                            ],
+                                            "area_of_business": [
+                                                {
+                                                    "id": 25,
+                                                    "title": "Shipping"
+                                                },
+                                                {
+                                                    "id": 26,
+                                                    "title": "Logistic/Courier/Air Express Companies"
                                                 }
                                             ],
                                             "skills": [
                                                 {
-                                                    "id": 1,
-                                                    "title": "টেকনিকাল রাইটিং",
-                                                    "title_en": "Technical Writing"
+                                                    "id": 25,
+                                                    "title": "পোল্ট্রি ফার্মিং",
+                                                    "title_en": "Poultry Farming"
                                                 },
                                                 {
-                                                    "id": 2,
-                                                    "title": "প্রজেক্ট ম্যানেজমেন্ট",
-                                                    "title_en": "Project Management"
+                                                    "id": 26,
+                                                    "title": "মাছ চাষ",
+                                                    "title_en": "Fish Farming"
                                                 }
                                             ],
-                                            "genders": []
+                                            "genders": [
+                                                {
+                                                    "id": 21,
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 6,
+                                                    "gender_id": 1
+                                                },
+                                                {
+                                                    "id": 22,
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 6,
+                                                    "gender_id": 2
+                                                }
+                                            ]
                                         },
                                         "company_info_visibility": {
                                             "id": 1,
