@@ -75,12 +75,31 @@ class HrDemandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\HrDemand  $hrDemand
-     * @return Response
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
      */
-    public function update(HrDemand $hrDemand)
+    public function update(Request $request, int $id): JsonResponse
     {
-        //
+        $hrDemand = HrDemand::findOrFail($id);
+        $this->authorize('update', $hrDemand);
+
+        $validated = $this->hrDemandService->validator($request, $id)->validate();
+        $data = $this->hrDemandService->update($hrDemand, $validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Hr Demand updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
