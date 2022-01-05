@@ -8094,6 +8094,28 @@
                         }
                     }
                 }
+            },
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get a single hr-demand",
+                "description": "API endpoint to Get a single hr-demand.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
             }
         }
     },
