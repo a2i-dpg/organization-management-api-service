@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class PrimaryJobInformationService
@@ -29,8 +28,12 @@ class PrimaryJobInformationService
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
+        $occupationId = $request['occupation_id'] ?? "";
+        $jobSectorId = $request['job_sector_id'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
+        $type = $request['type'] ?? "";
+        $isRequestFromClientSide = !empty($request[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY]);
 
         /** @var Builder $jobInformationBuilder */
         $jobInformationBuilder = PrimaryJobInformation::select([
@@ -39,22 +42,87 @@ class PrimaryJobInformationService
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
+            'primary_job_information.occupation_id',
+            'primary_job_information.job_sector_id',
+            'primary_job_information.industry_association_id',
+            'primary_job_information.organization_id',
+            'primary_job_information.institute_id',
+            'primary_job_information.application_deadline',
             'primary_job_information.published_at',
             'primary_job_information.archived_at',
             'primary_job_information.application_deadline',
             'primary_job_information.id',
-        ])->acl();
+        ]);
+
+
+        if (empty($isRequestFromClientSide)) {
+            $jobInformationBuilder->acl();
+        }
 
         $jobInformationBuilder->orderBy('primary_job_information.id', $order);
 
         if (is_numeric($rowStatus)) {
             $jobInformationBuilder->where('primary_job_information.row_status', $rowStatus);
         }
+        if (is_numeric($occupationId)) {
+            $jobInformationBuilder->where('primary_job_information.occupation_id', $occupationId);
+        }
+        if (is_numeric($jobSectorId)) {
+            $jobInformationBuilder->where('primary_job_information.job_sector_id', $jobSectorId);
+        }
         if (!empty($titleEn)) {
             $jobInformationBuilder->where('primary_job_information.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
             $jobInformationBuilder->where('primary_job_information.title', 'like', '%' . $title . '%');
+        }
+
+        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
+            $jobInformationBuilder->where(function ($builder) use ($startTime) {
+                $builder->whereNull('primary_job_information.archived_at');
+                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
+            });
+            $jobInformationBuilder->active();
+
+        }
+
+        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING) {
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
+            $jobInformationBuilder->where(function ($builder) use ($startTime) {
+                $builder->whereNull('primary_job_information.archived_at');
+                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
+            });
+            $jobInformationBuilder->active();
+
+        }
+
+        /** TODO:Change popular job search logic when job application process starts */
+
+        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
+            $jobInformationBuilder->where(function ($builder) use ($startTime) {
+                $builder->whereNull('primary_job_information.archived_at');
+                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
+            });
+            $jobInformationBuilder->active();
+
+        }
+
+        /** If request from client side */
+
+        if ($isRequestFromClientSide) {
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
+            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>=', $startTime);
+            $jobInformationBuilder->where(function ($builder) use ($startTime) {
+                $builder->whereNull('primary_job_information.archived_at');
+                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
+            });
+
+            $jobInformationBuilder->active();
         }
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -170,7 +238,14 @@ class PrimaryJobInformationService
         return Validator::make($request->all(), [
             'job_title_en' => 'nullable|max:300|min:2',
             'job_title' => 'nullable|max:500|min:2',
+            'occupation_id' => 'nullable|integer',
+            'job_sector_id' => 'nullable|integer',
             'page' => 'nullable|integer|gt:0',
+            'type' => [
+                'nullable',
+                'integer',
+                Rule::in(PrimaryJobInformation::JOB_FILTER_TYPES)
+            ],
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'nullable',

@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-/**
- * WARNING: NOT COMPLETED
- */
+
 class CandidateRequirementsService
 {
+    /**
+     * @param string $jobId
+     * @return Model|Builder
+     */
     public function getCandidateRequirements(string $jobId): Model|Builder
     {
         /** @var Builder $candidateRequirementBuilder */
