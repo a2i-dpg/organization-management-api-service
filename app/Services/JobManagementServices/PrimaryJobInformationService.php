@@ -89,12 +89,12 @@ class PrimaryJobInformationService
 
         }
 
-        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING) {
-
-            DB::table('candidate_requirement_skill')->pluck('job_id')->whereIn()
-
-
-        }
+//        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING) {
+//
+//            DB::table('candidate_requirement_skill')->pluck('job_id')->whereIn()
+//
+//
+//        }
 
         /** TODO:Change popular job search logic when job application process starts */
 
