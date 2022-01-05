@@ -5538,6 +5538,61 @@
                 }
             }
         },
+        "/job/job-list": {
+            "get": {
+                "tags": [
+                    "Job Management"
+                ],
+                "summary": "Get job list",
+                "description": "API endpoint to Get job list.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/job_title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/job_title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "job_id": "qq-qq",
+                                            "service_type": 2,
+                                            "job_title": "Asansole",
+                                            "job_title_en": null,
+                                            "published_at": null,
+                                            "archived_at": null,
+                                            "application_deadline": "2020-09-09"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/job/job-id": {
             "get": {
                 "tags": [
@@ -10426,8 +10481,26 @@
                     "type": "string"
                 }
             },
+            "job_title_optional": {
+                "name": "job_title",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
             "title_en_optional": {
                 "name": "title_en",
+                "in": "query",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "job_title_en_optional": {
+                "name": "job_title",
                 "in": "query",
                 "required": false,
                 "style": "form",
