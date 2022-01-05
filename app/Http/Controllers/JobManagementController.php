@@ -84,7 +84,7 @@ class JobManagementController extends Controller
         $data = collect([
             'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
             'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
-            'candidate_requirement' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
+            'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
             'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
         ]);
 

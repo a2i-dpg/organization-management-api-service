@@ -6478,7 +6478,7 @@
                                                 }
                                             ]
                                         },
-                                        "candidate_requirement": {
+                                        "candidate_requirements": {
                                             "id": 6,
                                             "job_id": "qq-qq",
                                             "other_educational_qualification": "psychology",
