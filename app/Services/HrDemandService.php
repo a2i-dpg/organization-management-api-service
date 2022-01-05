@@ -126,6 +126,45 @@ class HrDemandService
     }
 
     /**
+     * @param HrDemandInstitute $hrDemandInstitute
+     * @param array $data
+     * @return HrDemandInstitute
+     */
+    public function hrDemandApprovedByInstitute(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
+    {
+//        $hrDemandInstitute->vacancy_provided_by_institute = $data['vacancy_provided_by_institute'];
+//        $hrDemandInstitute->save();
+//
+//        $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemandInstitute->id)->pluck('id');
+//        foreach ($hrDemandInstituteIds as $id){
+//            $hrDemandInstitute = HrDemandInstitute::find($id);
+//            $hrDemandInstitute->delete();
+//        }
+//
+//        $this->insertHrDemandInstitutes($data, $hrDemand);
+//        return $hrDemand;
+    }
+
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function hrDemandApproveByInstituteValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+
+        $rules = [
+            'vacancy_provided_by_institute' => [
+                'required',
+                'int',
+                'min:1',
+            ]
+        ];
+        return Validator::make($data, $rules);
+    }
+
+    /**
      * @param array $data
      * @param HrDemand $hrDemand
      * @return void
