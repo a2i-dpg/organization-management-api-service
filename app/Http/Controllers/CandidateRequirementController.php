@@ -62,7 +62,7 @@ class CandidateRequirementController extends Controller
             $this->candidateRequirementsService->syncWithGender($candidateRequirements, $gender);
 
             $response = [
-                "data" => $this->candidateRequirementsService->getCandidateRequirements($candidateRequirements->job_id),
+                "data" => $candidateRequirements,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
