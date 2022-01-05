@@ -94,11 +94,13 @@ class PrimaryJobInformation extends BaseModel
     /**publish or archive status */
 
     public const STATUS_PUBLISH = 1;
-    public const STATUS_ARCHIVE = 0;
+    public const STATUS_ARCHIVE = 2;
+    public const STATUS_DRAFT = 3;
 
     public const PUBLISH_OR_ARCHIVE_STATUSES = [
         self::STATUS_PUBLISH,
-        self::STATUS_ARCHIVE
+        self::STATUS_ARCHIVE,
+        self::STATUS_DRAFT
     ];
 
 }

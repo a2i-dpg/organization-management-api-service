@@ -292,7 +292,6 @@ class AdditionalJobInformationService
          $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
         }
 
-        Log::info("-------------", $data["job_location"]);
         $rules = [
             "job_id" => [
                 "required",

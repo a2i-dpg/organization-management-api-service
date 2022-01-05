@@ -89,7 +89,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
             $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
             $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
-            $router->post("primary-job-information/{jobId}/publish-or-archive", ["as" => "primary-job-information-publish-or-archive", "uses" => "PrimaryJobInfoController@jobPublishOrArchive"]);
+            $router->post("primary-job-information/{jobId}/job-status-change", ["as" => "primary-job-information-publish-or-archive", "uses" => "PrimaryJobInfoController@jobPublishOrArchive"]);
 
             $router->post("store-additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
             $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "AdditionalJobInfoController@getAdditionalJobInformation"]);

@@ -84,6 +84,7 @@ class PrimaryJobInformationService
             'primary_job_information.job_id',
             'primary_job_information.industry_association_id',
             'primary_job_information.organization_id',
+            'primary_job_information.institute_id',
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
@@ -108,7 +109,7 @@ class PrimaryJobInformationService
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
             'primary_job_information.published_at',
-            'primary_job_information.published_at',
+            'primary_job_information.archived_at',
             'primary_job_information.created_at',
             'primary_job_information.updated_at',
         ]);
@@ -343,7 +344,7 @@ class PrimaryJobInformationService
      * @return bool
      * @throws Throwable
      */
-    public function publishOrArchiveJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
+    public function publishOrArchiveOrDraftJob(array $data, PrimaryJobInformation $primaryJobInformation): bool
     {
         if ($data['status'] == PrimaryJobInformation::STATUS_PUBLISH) {
             $primaryJobInformation->published_at = Carbon::now()->format('Y-m-d H:i:s');
@@ -351,6 +352,10 @@ class PrimaryJobInformationService
         }
         if ($data['status'] == PrimaryJobInformation::STATUS_ARCHIVE) {
             $primaryJobInformation->archived_at = Carbon::now()->format('Y-m-d H:i:s');
+        }
+        if ($data['status'] == PrimaryJobInformation::STATUS_DRAFT) {
+            $primaryJobInformation->archived_at = null;
+            $primaryJobInformation->published_at = null;
         }
         return $primaryJobInformation->saveOrFail();
     }

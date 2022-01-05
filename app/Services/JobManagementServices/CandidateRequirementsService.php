@@ -44,14 +44,13 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
 
-        $candidateRequirementBuilder->with(['trainings:id,candidate_requirement_id,training']);
-        $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,training');
+        $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,title');
 
-        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,professional_certification');
-        $candidateRequirementBuilder->with('areaOfExperiences:id,title_en');
+        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,title');
+        $candidateRequirementBuilder->with('areaOfExperience');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
-        $candidateRequirementBuilder->with('genders:id,gender_id');
+        $candidateRequirementBuilder->with('genders');
 
         return $candidateRequirementBuilder->firstOrFail();
     }
@@ -121,7 +120,7 @@ class CandidateRequirementsService
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'training' => $item
+                    'title' => $item
                 ]
             );
         }
@@ -139,7 +138,7 @@ class CandidateRequirementsService
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'professional_certification' => $item
+                    'title' => $item
                 ]
             );
         }
@@ -205,6 +204,7 @@ class CandidateRequirementsService
      */
     public function syncWithGender(CandidateRequirement $candidateRequirements, array $gender)
     {
+//        dd($candidateRequirements ,"<--->" , $gender);
         DB::table('candidate_requirement_gender')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($gender as $item) {
             DB::table('candidate_requirement_gender')->insert(
@@ -332,7 +332,7 @@ class CandidateRequirementsService
                 "array",
             ],
             "area_of_experience.*" => [
-                "exists:skills,id,deleted_at,NULL",
+                "exists:area_of_experiences,id,deleted_at,NULL",
             ],
             "area_of_business" => [
                 "nullable",

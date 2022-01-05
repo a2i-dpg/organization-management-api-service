@@ -5626,22 +5626,23 @@
                                 "example":{
                                     "data": {
                                         "id": 1,
-                                        "job_id": "qqq-888",
-                                        "service_type": 2,
-                                        "job_title": "Wlking Cat",
-                                        "job_title_en": null,
-                                        "no_of_vacancies": null,
-                                        "occupation_id": 1,
-                                        "occupation_title": "New Accounts Clerk",
-                                        "occupation_title_en": "New Accounts Clerk",
-                                        "job_sector_id": 1,
+                                        "job_id": "qq-qq",
                                         "industry_association_id": 1,
                                         "organization_id": null,
-                                        "job_sector_title": "Automotive Specialty Technician",
-                                        "job_sector_title_en": "Automotive Specialty Technician",
+                                        "institute_id": 1,
+                                        "service_type": 2,
+                                        "job_title": "Asansole",
+                                        "job_title_en": null,
+                                        "no_of_vacancies": 20,
+                                        "occupation_id": 1,
+                                        "occupation_title": "Scientific Photographer",
+                                        "occupation_title_en": "Scientific Photographer",
+                                        "job_sector_id": 1,
+                                        "job_sector_title": "Police Detective",
+                                        "job_sector_title_en": "Police Detective",
                                         "application_deadline": "2020-09-09",
                                         "is_apply_online": 1,
-                                        "resume_receiving_option": 1,
+                                        "resume_receiving_option": 2,
                                         "email": null,
                                         "is_use_nise3_mail_system": 0,
                                         "special_instruction_for_job_seekers": null,
@@ -5653,16 +5654,17 @@
                                         "is_photograph_enclose_with_resume": 1,
                                         "is_prefer_video_resume": 0,
                                         "published_at": null,
-                                        "created_at": "2022-01-03T11:37:57.000000Z",
-                                        "updated_at": "2022-01-03T11:37:57.000000Z",
+                                        "archived_at": null,
+                                        "created_at": "2022-01-04T09:49:30.000000Z",
+                                        "updated_at": "2022-01-04T09:50:31.000000Z",
                                         "employment_types": [
-                                            {
-                                                "id": 1,
-                                                "title": "ফুল টাইম"
-                                            },
                                             {
                                                 "id": 2,
                                                 "title": "খন্ডকালীন"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "title": "শিক্ষানবিশ এবং প্রশিক্ষণার্থী"
                                             }
                                         ]
                                     },
@@ -6355,20 +6357,23 @@
                                     "data": {
                                         "primary_job_information": {
                                             "id": 1,
-                                            "job_id": "555",
+                                            "job_id": "qq-qq",
+                                            "industry_association_id": 1,
+                                            "organization_id": null,
+                                            "institute_id": 1,
                                             "service_type": 2,
-                                            "job_title": "Wlking Cat",
+                                            "job_title": "Asansole",
                                             "job_title_en": null,
-                                            "no_of_vacancies": null,
+                                            "no_of_vacancies": 20,
                                             "occupation_id": 1,
-                                            "occupation_title": "New Accounts Clerk",
-                                            "occupation_title_en": "New Accounts Clerk",
+                                            "occupation_title": "Scientific Photographer",
+                                            "occupation_title_en": "Scientific Photographer",
                                             "job_sector_id": 1,
-                                            "job_sector_title": "Automotive Specialty Technician",
-                                            "job_sector_title_en": "Automotive Specialty Technician",
+                                            "job_sector_title": "Police Detective",
+                                            "job_sector_title_en": "Police Detective",
                                             "application_deadline": "2020-09-09",
                                             "is_apply_online": 1,
-                                            "resume_receiving_option": 1,
+                                            "resume_receiving_option": 2,
                                             "email": null,
                                             "is_use_nise3_mail_system": 0,
                                             "special_instruction_for_job_seekers": null,
@@ -6380,48 +6385,104 @@
                                             "is_photograph_enclose_with_resume": 1,
                                             "is_prefer_video_resume": 0,
                                             "published_at": null,
-                                            "created_at": "2022-01-03T11:37:57.000000Z",
-                                            "updated_at": "2022-01-03T11:37:57.000000Z",
+                                            "archived_at": null,
+                                            "created_at": "2022-01-04T09:49:30.000000Z",
+                                            "updated_at": "2022-01-04T09:50:31.000000Z",
                                             "employment_types": [
-                                                {
-                                                    "id": 1,
-                                                    "title": "ফুল টাইম"
-                                                },
                                                 {
                                                     "id": 2,
                                                     "title": "খন্ডকালীন"
+                                                },
+                                                {
+                                                    "id": 3,
+                                                    "title": "শিক্ষানবিশ এবং প্রশিক্ষণার্থী"
                                                 }
                                             ]
                                         },
                                         "additional_job_information": {
                                             "id": 1,
-                                            "job_id": "555",
-                                            "job_responsibilities": "Catwalking",
-                                            "job_context": "StageModelling",
-                                            "job_place_type": 3,
+                                            "job_id": "qq-qq",
+                                            "job_responsibilities": "aaaa",
+                                            "job_context": "vvvv",
+                                            "job_place_type": 1,
                                             "salary_min": 10000,
-                                            "salary_max": 100000,
-                                            "is_salary_info_show": 1,
+                                            "salary_max": 20000,
+                                            "is_salary_info_show": 2,
                                             "is_salary_compare_to_expected_salary": 1,
                                             "is_salary_alert_excessive_than_given_salary_range": 1,
-                                            "salary_review": 0,
-                                            "festival_bonus": 0,
-                                            "additional_salary_info": "5000",
+                                            "salary_review": 1,
+                                            "festival_bonus": 2,
+                                            "additional_salary_info": null,
                                             "is_other_benefits": 1,
-                                            "other_benefits": null,
-                                            "lunch_facilities": 0,
+                                            "other_benefits": [
+                                                "C#",
+                                                "Python"
+                                            ],
+                                            "lunch_facilities": 2,
                                             "others": null,
-                                            "created_at": null,
-                                            "updated_at": null,
-                                            "job_levels": [],
-                                            "job_locations": [],
-                                            "work_places": []
+                                            "created_at": "2022-01-04T10:30:41.000000Z",
+                                            "updated_at": "2022-01-04T10:30:41.000000Z",
+                                            "job_levels": [
+                                                {
+                                                    "id": 1,
+                                                    "job_id": "qq-qq",
+                                                    "additional_job_information_id": 1,
+                                                    "job_level_id": 1,
+                                                    "job_level_title": "Inside Bangladesh"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "job_id": "qq-qq",
+                                                    "additional_job_information_id": 1,
+                                                    "job_level_id": 2,
+                                                    "job_level_title": "Outside Bangladesh"
+                                                }
+                                            ],
+                                            "job_locations": [
+                                                {
+                                                    "id": 1,
+                                                    "job_id": "qq-qq",
+                                                    "additional_job_information_id": 1,
+                                                    "loc_division_id": 2,
+                                                    "loc_district_id": 7,
+                                                    "loc_upazila_id": 15,
+                                                    "loc_union_id": null,
+                                                    "loc_city_corporation_id": null,
+                                                    "loc_city_corporation_ward_id": null,
+                                                    "loc_area_id": 15,
+                                                    "loc_division_title": "চট্টগ্রাম",
+                                                    "loc_division_title_en": "Chittagong",
+                                                    "loc_district_title": "বান্দরবান",
+                                                    "loc_district_title_en": "BANDARBAN",
+                                                    "loc_area_title": "রুমা",
+                                                    "loc_area_title_en": "RUMA",
+                                                    "location_id": "2_7_15",
+                                                    "title": "চট্টগ্রাম => বান্দরবান => রুমা",
+                                                    "title_en": "CHITTAGONG => BANDARBAN => RUMA"
+                                                }
+                                            ],
+                                            "work_places": [
+                                                {
+                                                    "id": 1,
+                                                    "job_id": "qq-qq",
+                                                    "additional_job_information_id": 1,
+                                                    "work_place_id": 1,
+                                                    "work_place_title": "Home"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "job_id": "qq-qq",
+                                                    "additional_job_information_id": 1,
+                                                    "work_place_id": 2,
+                                                    "work_place_title": "Office"
+                                                }
+                                            ]
                                         },
-                                        "candidate_requirement": {
-                                            "id": 1,
-                                            "job_id": "555",
+                                        "candidate_requirements": {
+                                            "id": 6,
+                                            "job_id": "qq-qq",
                                             "other_educational_qualification": "psychology",
-                                            "other_educational_qualification_en": "",
+                                            "other_educational_qualification_en": null,
                                             "is_experience_needed": 1,
                                             "is_freshers_encouraged": 1,
                                             "minimum_year_of_experience": 1,
@@ -6432,17 +6493,16 @@
                                             "age_maximum": 55,
                                             "person_with_disability": 0,
                                             "preferred_retired_army_officer": 0,
-                                            "created_at": null,
-                                            "updated_at": "2022-01-03T06:09:35.000000Z",
+                                            "created_at": "2022-01-04T11:44:17.000000Z",
+                                            "updated_at": "2022-01-04T12:13:17.000000Z",
                                             "candidate_requirement_degrees": [
                                                 {
-                                                    "id": 1,
-                                                    "candidate_requirement_id": 1,
+                                                    "id": 35,
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 6,
                                                     "education_level_id": 1,
                                                     "edu_group_id": 2,
                                                     "edu_major": "CSE",
-                                                    "created_at": null,
-                                                    "updated_at": null,
                                                     "education_level": {
                                                         "id": 1,
                                                         "title": "PSC/5 Pass",
@@ -6455,98 +6515,117 @@
                                                     }
                                                 },
                                                 {
-                                                    "id": 2,
-                                                    "candidate_requirement_id": 1,
+                                                    "id": 36,
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 6,
                                                     "education_level_id": null,
                                                     "edu_group_id": null,
                                                     "edu_major": "EEE",
-                                                    "created_at": null,
-                                                    "updated_at": null,
                                                     "education_level": null,
                                                     "edu_group": null
                                                 }
                                             ],
                                             "educational_institutions": [
                                                 {
-                                                    "id": 1,
-                                                    "name": "University of Dhaka"
+                                                    "id": 52,
+                                                    "name": "Bangladesh Army International University of Science & Technology"
                                                 },
                                                 {
-                                                    "id": 2,
-                                                    "name": "University of Rajshahi"
+                                                    "id": 53,
+                                                    "name": "Britannia University"
                                                 },
                                                 {
-                                                    "id": 3,
-                                                    "name": "Bangladesh Agricultural University"
+                                                    "id": 54,
+                                                    "name": "Feni University"
                                                 }
                                             ],
                                             "trainings": [
                                                 {
-                                                    "id": 1,
-                                                    "candidate_requirement_id": 1,
-                                                    "training": "Computer typing"
+                                                    "id": 15,
+                                                    "candidate_requirement_id": 6,
+                                                    "title": "Computer typing"
                                                 }
                                             ],
                                             "professional_certifications": [
                                                 {
-                                                    "id": 1,
-                                                    "candidate_requirement_id": 1,
-                                                    "professional_certification": "Skilling c++"
+                                                    "id": 25,
+                                                    "candidate_requirement_id": 6,
+                                                    "title": "Skilling c++"
                                                 },
                                                 {
-                                                    "id": 2,
-                                                    "candidate_requirement_id": 1,
-                                                    "professional_certification": "Skilling java"
+                                                    "id": 26,
+                                                    "candidate_requirement_id": 6,
+                                                    "title": "Skilling java"
                                                 }
                                             ],
-                                            "area_of_experiences": [
+                                            "area_of_experience": [
                                                 {
                                                     "id": 1,
-                                                    "title_en": "Technical Writing"
+                                                    "title": "Php",
+                                                    "title_en": null,
+                                                    "deleted_at": null
                                                 },
                                                 {
                                                     "id": 2,
-                                                    "title_en": "Project Management"
+                                                    "title": "Java",
+                                                    "title_en": null,
+                                                    "deleted_at": null
                                                 },
                                                 {
                                                     "id": 3,
-                                                    "title_en": "Computer Programming"
+                                                    "title": "Python",
+                                                    "title_en": null,
+                                                    "deleted_at": null
                                                 }
                                             ],
                                             "area_of_business": [
                                                 {
-                                                    "id": 1,
-                                                    "title": "Banks"
+                                                    "id": 25,
+                                                    "title": "Shipping"
                                                 },
                                                 {
-                                                    "id": 2,
-                                                    "title": "Insurance"
+                                                    "id": 26,
+                                                    "title": "Logistic/Courier/Air Express Companies"
                                                 }
                                             ],
                                             "skills": [
                                                 {
-                                                    "id": 1,
-                                                    "title": "টেকনিকাল রাইটিং",
-                                                    "title_en": "Technical Writing"
+                                                    "id": 25,
+                                                    "title": "পোল্ট্রি ফার্মিং",
+                                                    "title_en": "Poultry Farming"
                                                 },
                                                 {
-                                                    "id": 2,
-                                                    "title": "প্রজেক্ট ম্যানেজমেন্ট",
-                                                    "title_en": "Project Management"
+                                                    "id": 26,
+                                                    "title": "মাছ চাষ",
+                                                    "title_en": "Fish Farming"
+                                                }
+                                            ],
+                                            "genders": [
+                                                {
+                                                    "id": 21,
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 6,
+                                                    "gender_id": 1
+                                                },
+                                                {
+                                                    "id": 22,
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 6,
+                                                    "gender_id": 2
                                                 }
                                             ]
                                         },
                                         "company_info_visibility": {
                                             "id": 1,
-                                            "job_id": "555",
+                                            "job_id": "qq-qq",
                                             "is_company_name_visible": 1,
-                                            "company_name": "Piistech",
-                                            "company_name_en": "Piistech",
+                                            "company_name": null,
+                                            "company_name_en": null,
                                             "is_company_address_visible": 1,
-                                            "company_industry_type": 3,
+                                            "company_industry_type": 1,
                                             "is_company_business_visible": 1,
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "created_at": "2022-01-04T12:02:53.000000Z",
+                                            "updated_at": "2022-01-04T12:02:53.000000Z"
                                         }
                                     },
                                     "_response_status": {

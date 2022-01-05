@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -50,6 +51,7 @@ class CandidateRequirementController extends Controller
         DB::beginTransaction();
         try {
             $candidateRequirements = $this->candidateRequirementsService->store($validatedData);
+            Log::info("------>",$candidateRequirements->toArray());
             $this->candidateRequirementsService->syncWithDegrees($candidateRequirements, $degrees);
             $this->candidateRequirementsService->syncWithPreferredEducationalInstitution($candidateRequirements, $preferredEducationalInstitution);
             $this->candidateRequirementsService->syncWithTraining($candidateRequirements, $training);
@@ -60,7 +62,7 @@ class CandidateRequirementController extends Controller
             $this->candidateRequirementsService->syncWithGender($candidateRequirements, $gender);
 
             $response = [
-                "data" => $candidateRequirements,
+                "data" => $this->candidateRequirementsService->getCandidateRequirements($candidateRequirements->job_id),
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
