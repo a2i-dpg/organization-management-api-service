@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Database\Eloquent\Builder;
+use Ramsey\Collection\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HrDemandService
@@ -15,6 +19,66 @@ use Illuminate\Validation\Rule;
  */
 class HrDemandService
 {
+    /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getHrDemandList(array $request, Carbon $startTime): array
+    {
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+        $skillIds = $request['skill_ids'] ?? [];
+
+        /** @var Builder $hrDemandBuilder */
+        $hrDemandBuilder = HrDemand::select([
+            'hr_demands.id',
+            'hr_demands.industry_association_id',
+            'hr_demands.organization_id',
+            'hr_demands.end_date',
+            'hr_demands.skill_id',
+            'hr_demands.vacancy',
+            'hr_demands.row_status',
+            'hr_demands.created_by',
+            'hr_demands.updated_by',
+            'hr_demands.created_at',
+            'hr_demands.updated_at'
+        ])->acl();
+
+        if(!empty($skillIds)){
+            $hrDemandBuilder->whereIn('skill_id', $skillIds);
+        }
+        $hrDemandBuilder->orderBy('hr_demands.id', $order);
+        if (is_numeric($rowStatus)) {
+            $hrDemandBuilder->where('hr_demands.row_status', $rowStatus);
+        }
+
+        /** @var Collection $hrDemands */
+
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $hrDemands = $hrDemandBuilder->paginate($pageSize);
+            $paginateData = (object)$hrDemands->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $hrDemands = $hrDemandBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $hrDemands->toArray()['data'] ?? $hrDemands->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return $response;
+    }
     /**
      * @param array $data
      * @return HrDemand
@@ -25,7 +89,8 @@ class HrDemandService
         $hrDemand->fill($data);
         $hrDemand->save();
 
-        $this->insertHrDemandInstitutes($data, $hrDemand);
+
+        $this->storeHrDemandInstitutes($data, $hrDemand);
         return $hrDemand;
     }
 
@@ -45,7 +110,7 @@ class HrDemandService
             $hrDemandInstitute->delete();
         }
 
-        $this->insertHrDemandInstitutes($data, $hrDemand);
+        $this->storeHrDemandInstitutes($data, $hrDemand);
         return $hrDemand;
     }
 
@@ -68,8 +133,8 @@ class HrDemandService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
-        if (!empty($data['institute_id'])) {
-            $data["institute_id"] = isset($data['institute_id']) && is_array($data['institute_id']) ? $data['institute_id'] : explode(',', $data['institute_id']);
+        if (!empty($data['institute_ids'])) {
+            $data["institute_ids"] = isset($data['institute_ids']) && is_array($data['institute_ids']) ? $data['institute_ids'] : explode(',', $data['institute_ids']);
         }
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
@@ -78,20 +143,21 @@ class HrDemandService
             'industry_association_id' => [
                 'required',
                 'int',
-                'exists:industry_associations,id,deleted_at,NULL',
+                'exists:industry_associations,id,deleted_at,NULL'
             ],
             'organization_id' => [
                 'required',
                 'int',
                 'exists:organizations,id,deleted_at,NULL',
             ],
-            'institute_id' => [
+            'institute_ids' => [
                 'required',
                 'array'
             ],
-            'institute_id.*' => [
+            'institute_ids.*' => [
                 'nullable',
-                'int'
+                'int',
+                'distinct'
             ],
             'end_date' => [
                 'required',
@@ -126,13 +192,60 @@ class HrDemandService
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        $requestData = $request->all();
+        if (!empty($requestData['skill_ids'])) {
+            $requestData['skill_ids'] = is_array($requestData['skill_ids']) ? $requestData['skill_ids'] : explode(',', $requestData['skill_ids']);
+        }
+
+        return Validator::make($requestData, [
+            'skill_ids' => [
+                'nullable',
+                'array',
+                'min:1',
+                'max:10'
+            ],
+            'skill_ids.*' => [
+                'required',
+                'integer',
+                'distinct',
+                'min:1'
+            ],
+            'page_size' => 'nullable|integer|gt:0',
+            'order' => [
+                'string',
+                'nullable',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
+    }
+
+    /**
      * @param array $data
      * @param HrDemand $hrDemand
      * @return void
      */
-    private function insertHrDemandInstitutes(array $data, HrDemand $hrDemand){
-        if(!empty($data['institute_id']) && is_array($data['institute_id'])){
-            foreach ($data['institute_id'] as $id){
+    private function storeHrDemandInstitutes(array $data, HrDemand $hrDemand){
+        if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
+            foreach ($data['institute_ids'] as $id){
                 $payload = [
                     'hr_demand_id' => $hrDemand->id,
                     'institute_id' => $id
