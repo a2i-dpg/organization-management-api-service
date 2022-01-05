@@ -25,17 +25,27 @@ class HrDemandService
         $hrDemand->fill($data);
         $hrDemand->save();
 
-        if(!empty($data['institute_id'])){
-            foreach ($data['institute_id'] as $datum){
-                $payload = [
-                    'hr_demand_id' => $hrDemand->id,
-                    'institute_id' => $datum
-                ];
-                $hrDemandInstitute = new HrDemandInstitute();
-                $hrDemandInstitute->fill($payload);
-                $hrDemandInstitute->save();
-            }
+        $this->insertHrDemandInstitutes($data, $hrDemand);
+        return $hrDemand;
+    }
+
+    /**
+     * @param HrDemand $hrDemand
+     * @param array $data
+     * @return HrDemand
+     */
+    public function update(HrDemand $hrDemand, array $data): HrDemand
+    {
+        $hrDemand->fill($data);
+        $hrDemand->save();
+
+        $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)->pluck('id');
+        foreach ($hrDemandInstituteIds as $id){
+            $hrDemandInstitute = HrDemandInstitute::find($id);
+            $hrDemandInstitute->delete();
         }
+
+        $this->insertHrDemandInstitutes($data, $hrDemand);
         return $hrDemand;
     }
 
@@ -113,5 +123,24 @@ class HrDemandService
             ]
         ];
         return Validator::make($data, $rules, $customMessage);
+    }
+
+    /**
+     * @param array $data
+     * @param HrDemand $hrDemand
+     * @return void
+     */
+    private function insertHrDemandInstitutes(array $data, HrDemand $hrDemand){
+        if(!empty($data['institute_id']) && is_array($data['institute_id'])){
+            foreach ($data['institute_id'] as $id){
+                $payload = [
+                    'hr_demand_id' => $hrDemand->id,
+                    'institute_id' => $id
+                ];
+                $hrDemandInstitute = new HrDemandInstitute();
+                $hrDemandInstitute->fill($payload);
+                $hrDemandInstitute->save();
+            }
+        }
     }
 }
