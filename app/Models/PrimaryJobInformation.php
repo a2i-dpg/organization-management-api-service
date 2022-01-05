@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Traits\Scopes\ScopeAcl;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -40,7 +41,7 @@ use Ramsey\Uuid\Uuid;
  */
 class PrimaryJobInformation extends BaseModel
 {
-    use SoftDeletes, ScopeAcl;
+    use SoftDeletes, ScopeAcl,ScopeRowStatusTrait;
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
