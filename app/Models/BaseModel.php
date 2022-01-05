@@ -24,6 +24,9 @@ abstract class BaseModel extends Model
     public const ROW_ORDER_ASC = 'ASC';
     public const ROW_ORDER_DESC = 'DESC';
 
+    public const IS_CLIENT_SITE_RESPONSE_KEY = 'IS_CLIENT_SITE_RESPONSE_KEY';
+    public const IS_CLIENT_SITE_RESPONSE_FLAG = true;
+
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
 
