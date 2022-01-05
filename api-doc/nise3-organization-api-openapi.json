@@ -10480,7 +10480,7 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "enum": [1,0,3]
+                    "enum": [1,2,3]
                 },
                 "description": "JOB_FILTER_TYPE_POPULAR = 1  JOB_FILTER_TYPE_RECENT = 2  JOB_FILTER_TYPE_SKILL_MATCHING = 3"
             },
