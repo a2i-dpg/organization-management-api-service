@@ -327,14 +327,6 @@ class AdditionalJobInformationService
                 "required",
                 Rule::in(array_keys(AdditionalJobInformation::BOOLEAN_FLAG))
             ],
-            "salary_review" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::SALARY_REVIEW))
-            ],
-            "festival_bonus" => [
-                "required",
-                Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
-            ],
             "additional_salary_info" => [
                 "nullable"
             ],
@@ -350,8 +342,13 @@ class AdditionalJobInformationService
                 "array"
             ],
             "lunch_facilities" => [
-                "required",
                 Rule::in(array_keys(AdditionalJobInformation::LUNCH_FACILITIES))
+            ],
+            "salary_review" => [
+                Rule::in(array_keys(AdditionalJobInformation::SALARY_REVIEW))
+            ],
+            "festival_bonus" => [
+                Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
             ],
             "others" => [
                 "nullable"
