@@ -31,11 +31,19 @@ class HrDemandController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
      */
-    public function getList()
+    public function getList(Request $request): JsonResponse
     {
-        //
+        $this->authorize('viewAny', HrDemand::class);
+
+        $filter = $this->hrDemandService->filterValidator($request)->validate();
+        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -142,7 +150,7 @@ class HrDemandController extends Controller
             $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
             //$this->authorize('update', $hrDemand);
 
-            $validated = $this->hrDemandService->hrDemandApproveByInstituteValidator($request)->validate();
+            $validated = $this->hrDemandService->hrDemandApproveByInstituteValidator($request,$hrDemandInstitute->hr_demand_id)->validate();
             $data = $this->hrDemandService->hrDemandApprovedByInstitute($hrDemandInstitute, $validated);
 
             $response = [
