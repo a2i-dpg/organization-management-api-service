@@ -40,4 +40,9 @@ class Skill extends BaseModel
     {
         return $this->belongsToMany(HumanResourceTemplate::class, 'human_resource_template_skills');
     }
+
+    public function candidateRequirements(): BelongsToMany
+    {
+        return $this->belongsToMany(CandidateRequirement::class, 'candidate_requirement_skill', 'skill_id', 'candidate_requirement_id');
+    }
 }

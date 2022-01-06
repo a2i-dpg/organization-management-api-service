@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\BaseModel;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
@@ -46,10 +47,54 @@ class JobManagementController extends Controller
         $this->startTime = Carbon::now();
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function getJobList(Request $request): JsonResponse
     {
-        $filter = $this->primaryJobInformationService->filterValidatJobList($request)->validate();
-        $response = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+        $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
+        $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    public function getPublicJobList(Request $request): JsonResponse
+    {
+        $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
+        $filter[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY] = BaseModel::IS_CLIENT_SITE_RESPONSE_FLAG;
+        $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -84,7 +129,7 @@ class JobManagementController extends Controller
         $data = collect([
             'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
             'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
-            'candidate_requirement' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
+            'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
             'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
         ]);
 

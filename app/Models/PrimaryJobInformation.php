@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use App\Traits\Scopes\ScopeAcl;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -39,9 +41,20 @@ use Ramsey\Uuid\Uuid;
  */
 class PrimaryJobInformation extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, ScopeAcl,ScopeRowStatusTrait;
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
+
+    public const JOB_FILTER_TYPE_POPULAR = 1;
+    public const JOB_FILTER_TYPE_RECENT = 2;
+    public const JOB_FILTER_TYPE_SKILL_MATCHING = 3;
+
+
+    public const JOB_FILTER_TYPES = [
+        self::JOB_FILTER_TYPE_POPULAR,
+        self::JOB_FILTER_TYPE_RECENT,
+        self::JOB_FILTER_TYPE_SKILL_MATCHING
+    ];
 
     public const JOB_ID_PREFIX = "IDSA-";
     public const JOB_SERVICE_TYPE = [

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Seeders\AreaOfExperienceSeeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,19 +37,19 @@ class CandidateRequirement extends Model
     }
 
 
-    public function areaOfExperiences(): BelongsToMany
+    public function areaOfExperience(): BelongsToMany
     {
-        return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','id');
+        return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','area_of_experience_id');
     }
 
     public function areaOfBusiness(): BelongsToMany
     {
-        return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirement_area_of_business','candidate_requirement_id','id');
+        return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirement_area_of_business','candidate_requirement_id','area_of_business_id');
     }
 
     public function skills(): BelongsToMany
     {
-        return $this->belongsToMany(Skill::class, 'candidate_requirement_skill','candidate_requirement_id','id');
+        return $this->belongsToMany(Skill::class, 'candidate_requirement_skill','candidate_requirement_id','skill_id');
     }
 
     public function genders(): HasMany

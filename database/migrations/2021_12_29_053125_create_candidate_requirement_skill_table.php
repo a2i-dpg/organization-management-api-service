@@ -17,7 +17,7 @@ class CreateCandidateRequirementSkillTable extends Migration
             $table->increments('id');
             $table->string("job_id")->index('index_skills_job_id');
             $table->integer("candidate_requirement_id")->index('index_can_skill_can_req_id');
-            $table->integer("candidate_requirement_skill")->index('index_can_skill_skill_id');
+            $table->integer("skill_id")->index('index_can_skill_skill_id');
         });
     }
 
