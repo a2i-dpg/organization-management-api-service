@@ -66,6 +66,26 @@ class HrDemandService
         return $hrDemand->delete();
     }
 
+
+    /**
+     * @param array $data
+     * @param HrDemand $hrDemand
+     * @return void
+     */
+    private function storeHrDemandInstitutes(array $data, HrDemand $hrDemand){
+        if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
+            foreach ($data['institute_ids'] as $id){
+                $payload = [
+                    'hr_demand_id' => $hrDemand->id,
+                    'institute_id' => $id
+                ];
+                $hrDemandInstitute = new HrDemandInstitute();
+                $hrDemandInstitute->fill($payload);
+                $hrDemandInstitute->save();
+            }
+        }
+    }
+
     /**
      * @param Request $request
      * @param int|null $id
@@ -154,7 +174,7 @@ class HrDemandService
 
     /**
      * @param Request $request
-     * @param int|null $id
+     * @param int $hrDemandId
      * @return \Illuminate\Contracts\Validation\Validator
      */
     public function hrDemandApproveByInstituteValidator(Request $request, int $hrDemandId): \Illuminate\Contracts\Validation\Validator
@@ -222,24 +242,5 @@ class HrDemandService
                 Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
-    }
-
-    /**
-     * @param array $data
-     * @param HrDemand $hrDemand
-     * @return void
-     */
-    private function storeHrDemandInstitutes(array $data, HrDemand $hrDemand){
-        if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
-            foreach ($data['institute_ids'] as $id){
-                $payload = [
-                    'hr_demand_id' => $hrDemand->id,
-                    'institute_id' => $id
-                ];
-                $hrDemandInstitute = new HrDemandInstitute();
-                $hrDemandInstitute->fill($payload);
-                $hrDemandInstitute->save();
-            }
-        }
     }
 }
