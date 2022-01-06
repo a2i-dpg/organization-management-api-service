@@ -21,6 +21,78 @@ use Symfony\Component\HttpFoundation\Response;
 class HrDemandService
 {
     /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getHrDemandList(array $request, Carbon $startTime): array
+    {
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+        $skillIds = $request['skill_ids'] ?? [];
+
+        /** @var Builder $hrDemandBuilder */
+        $hrDemandBuilder = HrDemand::select([
+            'hr_demands.id',
+            'hr_demands.industry_association_id',
+            'hr_demands.organization_id',
+            'organizations.title',
+            'organizations.title_en',
+            'hr_demand_institutes.institute_id',
+            'hr_demands.end_date',
+            'hr_demands.skill_id',
+            'hr_demands.vacancy',
+        ])->acl();
+
+        $hrDemandBuilder->join('hr_demand_institutes', function ($join) use ($rowStatus) {
+            $join->on('hr_demand_institutes.hr_demand_id', '=', 'hr_demands.id')
+                ->whereNull('hr_demand_institutes.deleted_at');
+        });
+        $hrDemandBuilder->join('organizations', function ($join) use ($rowStatus) {
+            $join->on('organizations.id', '=', 'hr_demands.organization_id')
+                ->whereNull('organizations.deleted_at');
+        });
+
+        if(!empty($skillIds)){
+            $hrDemandBuilder->whereIn('skill_id', $skillIds);
+        }
+        $hrDemandBuilder->orderBy('hr_demands.id', $order);
+        if (is_numeric($rowStatus)) {
+            $hrDemandBuilder->where('hr_demands.row_status', $rowStatus);
+        }
+
+        /** @var Collection $hrDemands */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $hrDemands = $hrDemandBuilder->paginate($pageSize);
+            $paginateData = (object)$hrDemands->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $hrDemands = $hrDemandBuilder->get();
+        }
+
+        $instituteIds = $hrDemands->pluck('institute_id')->unique();
+        $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
+        foreach ($hrDemands as $hrDemand){
+            $hrDemand['institute_title'] = $titleByInstituteIds[''];
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $hrDemands->toArray()['data'] ?? $hrDemands->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return $response;
+    }
+    /**
      * @param array $data
      * @return HrDemand
      */
