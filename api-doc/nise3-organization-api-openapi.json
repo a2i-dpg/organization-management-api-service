@@ -5671,7 +5671,6 @@
                     }
                 }
             }
-
         },
         "/job/job-id": {
             "get": {
@@ -8162,7 +8161,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -8237,7 +8236,10 @@
                     },
                     "row_status": {
                         "type": "integer",
-                        "enum": [1 , 0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>Active 0=> Inactive.  Required in edit mode"
                     }
                 },
@@ -10486,7 +10488,10 @@
                 "required": false,
                 "schema": {
                     "type": "string",
-                    "enum": ["popular" , "recent"]
+                    "enum": [
+                        "popular",
+                        "recent"
+                    ]
                 }
             },
             "hr_demand_id": {
@@ -10650,10 +10655,10 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string",
-                    "example": "1,2,3"
+                    "type": "string"
+
                 },
-                "description": "Send skillIds as comma seperated string"
+                "description": "Send skillIds as comma seperated string. example: 1,2,3"
             },
             "occupationId": {
                 "name": "occupationId",
@@ -10670,7 +10675,7 @@
                 "schema": {
                     "type": "string"
                 },
-                "example": "1,2,3"
+                "description": "Send occupation_ids as comma seperated string.example 1,2,3 "
             },
             "rankId": {
                 "name": "rankId",
@@ -10856,14 +10861,13 @@
                 }
             },
             "job_sector_ids": {
-                "name": "job_sector_id",
+                "name": "job_sector_ids",
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string",
-                    "example": "1,2,3"
+                    "type": "string"
                 },
-                "description": "Send job_sector_ids as comma seperated string"
+                "description": "Send job_sector_ids as comma seperated string.example:1,2,3"
             }
         }
     }

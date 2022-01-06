@@ -20,9 +20,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** Api info  */
     $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
 
-    //TODO: add middleware before merge with phase two
     /** Auth routes */
-    $router->group([''], function () use ($customRouter, $router) {
+    $router->group(['middleware' => 'auth'], function () use ($customRouter, $router) {
         $customRouter()->resourceRoute('ranks', 'RankController')->render();
         $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
         $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();

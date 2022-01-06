@@ -237,6 +237,10 @@ class PrimaryJobInformationService
             $requestData['job_sector_ids'] = is_array($requestData['job_sector_ids']) ? $requestData['job_sector_ids'] : explode(',', $requestData['job_sector_ids']);
         }
 
+        if (!empty($requestData['occupation_ids'])) {
+            $requestData['occupation_ids'] = is_array($requestData['occupation_ids']) ? $requestData['occupation_ids'] : explode(',', $requestData['occupation_ids']);
+        }
+
 
         $rules = [
             'job_title_en' => 'nullable|max:300|min:2',
@@ -255,7 +259,7 @@ class PrimaryJobInformationService
             ],
             'type' => [
                 'nullable',
-                'integer',
+                'string',
                 Rule::in(PrimaryJobInformation::JOB_FILTER_TYPES)
             ],
             'skill_ids' => [
