@@ -159,17 +159,10 @@ class HrDemandService
      */
     public function hrDemandApprovedByInstitute(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
     {
-//        $hrDemandInstitute->vacancy_provided_by_institute = $data['vacancy_provided_by_institute'];
-//        $hrDemandInstitute->save();
-//
-//        $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemandInstitute->id)->pluck('id');
-//        foreach ($hrDemandInstituteIds as $id){
-//            $hrDemandInstitute = HrDemandInstitute::find($id);
-//            $hrDemandInstitute->delete();
-//        }
-//
-//        $this->insertHrDemandInstitutes($data, $hrDemand);
-//        return $hrDemand;
+        $hrDemandInstitute->vacancy_provided_by_institute = $data['vacancy_provided_by_institute'];
+        $hrDemandInstitute->save();
+
+        return $hrDemandInstitute;
     }
 
     /**

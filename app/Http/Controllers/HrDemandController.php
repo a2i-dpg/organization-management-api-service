@@ -148,6 +148,7 @@ class HrDemandController extends Controller
     public function hrDemandApprovedByInstitute(Request $request, int $id) : JsonResponse{
 
             $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+
             //$this->authorize('update', $hrDemand);
 
             $validated = $this->hrDemandService->hrDemandApproveByInstituteValidator($request,$hrDemandInstitute->hr_demand_id)->validate();
