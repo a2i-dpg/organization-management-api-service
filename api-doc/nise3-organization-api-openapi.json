@@ -5538,7 +5538,7 @@
                 }
             }
         },
-        "/job/job-list": {
+        "/job/jobs": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -5548,9 +5548,6 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/job_title_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/job_sector_id"
                     },
                     {
                         "$ref": "#/components/parameters/occupation_id"
@@ -5608,7 +5605,7 @@
                 }
             }
         },
-        "/public/job-list": {
+        "/public/jobs": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -5618,9 +5615,6 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/job_title_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/job_sector_id"
                     },
                     {
                         "$ref": "#/components/parameters/job_sector_ids"
@@ -10491,10 +10485,9 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "enum": [1,2,3]
-                },
-                "description": "POPULAR = 1  RECENT = 2  SKILL_MATCHING = 3 MATCHING = 4"
+                    "type": "string",
+                    "enum": ["popular" , "recent"]
+                }
             },
             "hr_demand_id": {
                 "name": "hr_demand_id",
@@ -10653,7 +10646,7 @@
                 }
             },
             "skillIds": {
-                "name": "skillIds",
+                "name": "skill_ids",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -10859,14 +10852,6 @@
                 "schema": {
                     "type": "integer",
                     "example": 1
-                }
-            },
-            "job_sector_id": {
-                "name": "job_sector_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
                 }
             },
             "job_sector_ids": {
