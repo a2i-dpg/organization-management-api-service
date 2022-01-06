@@ -23,7 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon updated_at
  * @property Carbon deleted_at
  */
-class HrDemandInstitute extends Model
+class HrDemandInstitute extends BaseModel
 {
     use SoftDeletes;
 
