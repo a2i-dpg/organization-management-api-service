@@ -5550,7 +5550,7 @@
                         "$ref": "#/components/parameters/job_title_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/occupation_id"
+                        "$ref": "#/components/parameters/occupation_ids"
                     },
                     {
                         "$ref": "#/components/parameters/job_sector_ids"
@@ -5623,7 +5623,7 @@
                         "$ref": "#/components/parameters/skillIds"
                     },
                     {
-                        "$ref": "#/components/parameters/occupation_id"
+                        "$ref": "#/components/parameters/occupation_ids"
                     },
                     {
                         "$ref": "#/components/parameters/type"
@@ -10663,13 +10663,14 @@
                     "type": "integer"
                 }
             },
-            "occupation_id": {
-                "name": "occupation_id",
+            "occupation_ids": {
+                "name": "occupation_ids",
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
-                }
+                    "type": "string"
+                },
+                "example": "1,2,3"
             },
             "rankId": {
                 "name": "rankId",
