@@ -40,7 +40,7 @@ class ServiceToServiceCallHandler
     }
 
     /**
-     * @param string $idpUserId
+     * @param array $instituteIds
      * @return mixed
      * @throws RequestException
      */

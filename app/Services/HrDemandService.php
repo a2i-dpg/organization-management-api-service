@@ -21,6 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 class HrDemandService
 {
     /**
+     * This API can serve 3 requests.
+     * a) Show all Hr Demands created by Industry Association to Industry Association admin
+     * b) Show all Hr Demands for a particular TSP to TSP admin
+     * c) Show all Hr Demands that were approved by Institute to Industry Association admin
+     *
      * @param array $request
      * @param Carbon $startTime
      * @return array
@@ -32,23 +37,25 @@ class HrDemandService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $skillIds = $request['skill_ids'] ?? [];
+        $showOnlyHrDemandsApprovedByInstitute = $request['approved_by_institutes'] ?? false;
 
         /** @var Builder $hrDemandBuilder */
-        $hrDemandBuilder = HrDemand::select([
-            'hr_demands.id',
+        $hrDemandBuilder = HrDemandInstitute::select([
+            'hr_demand_institutes.id',
+            'hr_demand_institutes.institute_id',
+            'hr_demands.id as hr_demand_id',
             'hr_demands.industry_association_id',
             'hr_demands.organization_id',
             'organizations.title',
             'organizations.title_en',
-            'hr_demand_institutes.institute_id',
             'hr_demands.end_date',
             'hr_demands.skill_id',
-            'hr_demands.vacancy',
+            'hr_demands.vacancy'
         ])->acl();
 
-        $hrDemandBuilder->join('hr_demand_institutes', function ($join) use ($rowStatus) {
-            $join->on('hr_demand_institutes.hr_demand_id', '=', 'hr_demands.id')
-                ->whereNull('hr_demand_institutes.deleted_at');
+        $hrDemandBuilder->join('hr_demands', function ($join) use ($rowStatus) {
+            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id')
+                ->whereNull('hr_demands.deleted_at');
         });
         $hrDemandBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organizations.id', '=', 'hr_demands.organization_id')
@@ -56,9 +63,14 @@ class HrDemandService
         });
 
         if(!empty($skillIds)){
-            $hrDemandBuilder->whereIn('skill_id', $skillIds);
+            $hrDemandBuilder->whereIn('hr_demands.skill_id', $skillIds);
         }
-        $hrDemandBuilder->orderBy('hr_demands.id', $order);
+
+        if($showOnlyHrDemandsApprovedByInstitute){
+            $hrDemandBuilder->where('hr_demand_institutes.vacancy_provided_by_institute', '!=', 0);
+        }
+
+        $hrDemandBuilder->orderBy('hr_demand_institutes.id', $order);
         if (is_numeric($rowStatus)) {
             $hrDemandBuilder->where('hr_demands.row_status', $rowStatus);
         }
@@ -76,10 +88,13 @@ class HrDemandService
             $hrDemands = $hrDemandBuilder->get();
         }
 
-        $instituteIds = $hrDemands->pluck('institute_id')->unique();
+        $instituteIds = $hrDemands->pluck('institute_id')->unique()->toArray();
         $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
         foreach ($hrDemands as $hrDemand){
-            $hrDemand['institute_title'] = $titleByInstituteIds[''];
+            if(!empty($titleByInstituteIds[$hrDemand['institute_id']])){
+                $hrDemand['institute_title'] = $titleByInstituteIds[$hrDemand['institute_id']]['title'];
+                $hrDemand['institute_title_en'] = $titleByInstituteIds[$hrDemand['institute_id']]['title_en'];
+            }
         }
 
         $response['order'] = $order;
