@@ -10659,7 +10659,8 @@
                 "schema": {
                     "type": "string",
                     "example": "1,2,3"
-                }
+                },
+                "description": "Send skillIds as comma seperated string"
             },
             "occupationId": {
                 "name": "occupationId",
@@ -10875,7 +10876,8 @@
                 "schema": {
                     "type": "string",
                     "example": "1,2,3"
-                }
+                },
+                "description": "Send job_sector_ids as comma seperated string"
             }
         }
     }
