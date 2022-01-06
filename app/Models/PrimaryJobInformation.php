@@ -41,21 +41,17 @@ use Ramsey\Uuid\Uuid;
  */
 class PrimaryJobInformation extends BaseModel
 {
-    use SoftDeletes, ScopeAcl,ScopeRowStatusTrait;
+    use SoftDeletes, ScopeAcl, ScopeRowStatusTrait;
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
-    public const JOB_FILTER_TYPE_POPULAR = 1;
-    public const JOB_FILTER_TYPE_RECENT = 2;
-    public const JOB_FILTER_TYPE_SKILL_MATCHING = 3;
-    public const JOB_FILTER_TYPE_JOB_SECTOR_MATCHING = 4;
+    public const JOB_FILTER_TYPE_POPULAR = 'popular';
+    public const JOB_FILTER_TYPE_RECENT = 'recent';
 
 
     public const JOB_FILTER_TYPES = [
         self::JOB_FILTER_TYPE_POPULAR,
         self::JOB_FILTER_TYPE_RECENT,
-        self::JOB_FILTER_TYPE_SKILL_MATCHING,
-        self::JOB_FILTER_TYPE_JOB_SECTOR_MATCHING
     ];
 
     public const JOB_ID_PREFIX = "IDSA-";

@@ -29,10 +29,9 @@ class PrimaryJobInformationService
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
-        $occupationId = $request['occupation_id'] ?? "";
-        $jobSectorId = $request['job_sector_id'] ?? "";
         $skillIds = $request['skill_ids'] ?? [];
         $jobSectorIds = $request['job_sector_ids'] ?? [];
+        $occupationIds = $request['occupation_ids'] ?? [];
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -62,12 +61,6 @@ class PrimaryJobInformationService
         if (is_numeric($rowStatus)) {
             $jobInformationBuilder->where('primary_job_information.row_status', $rowStatus);
         }
-        if (is_numeric($occupationId)) {
-            $jobInformationBuilder->where('primary_job_information.occupation_id', $occupationId);
-        }
-        if (is_numeric($jobSectorId)) {
-            $jobInformationBuilder->where('primary_job_information.job_sector_id', $jobSectorId);
-        }
         if (!empty($titleEn)) {
             $jobInformationBuilder->where('primary_job_information.title_en', 'like', '%' . $titleEn . '%');
         }
@@ -86,16 +79,17 @@ class PrimaryJobInformationService
 
         }
 
-        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING && is_array($skillIds) && count($skillIds) > 0) {
-
+        if (is_array($skillIds) && count($skillIds) > 0) {
             $skillMatchingJobIds = DB::table('candidate_requirement_skill')->whereIn('skill_id', $skillIds)->pluck('job_id');
-
             $jobInformationBuilder->whereIn('job_id', $skillMatchingJobIds);
-
         }
-        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_JOB_SECTOR_MATCHING && is_array($jobSectorIds) && count($jobSectorIds) > 0) {
 
+        if (is_array($jobSectorIds) && count($jobSectorIds) > 0) {
             $jobInformationBuilder->whereIn('job_sector_id', $jobSectorIds);
+        }
+
+        if (is_array($occupationIds) && count($occupationIds) > 0) {
+            $jobInformationBuilder->whereIn('occupation_id', $occupationIds);
         }
 
         /** TODO:Change popular job search logic when job application process starts */
@@ -247,8 +241,6 @@ class PrimaryJobInformationService
         $rules = [
             'job_title_en' => 'nullable|max:300|min:2',
             'job_title' => 'nullable|max:500|min:2',
-            'occupation_id' => 'nullable|integer',
-            'job_sector_id' => 'nullable|integer',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
@@ -267,9 +259,6 @@ class PrimaryJobInformationService
                 Rule::in(PrimaryJobInformation::JOB_FILTER_TYPES)
             ],
             'skill_ids' => [
-                Rule::requiredIf(function () use ($request) {
-                    return $request->offsetGet('type') == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING;
-                }),
                 'nullable',
                 'array',
                 'min:1'
@@ -280,13 +269,21 @@ class PrimaryJobInformationService
                 'distinct',
             ],
             'job_sector_ids' => [
-                Rule::requiredIf(function () use ($request) {
-                    return $request->offsetGet('type') == PrimaryJobInformation::JOB_FILTER_TYPE_JOB_SECTOR_MATCHING;
-                }),
                 'nullable',
-                'array'
+                'array',
+                'min:1'
             ],
             'job_sector_ids.*' => [
+                'nullable',
+                'integer',
+                'distinct',
+            ],
+            'occupation_ids' => [
+                'nullable',
+                'array',
+                'min:1'
+            ],
+            'occupation_ids.*' => [
                 'nullable',
                 'integer',
                 'distinct',
