@@ -250,11 +250,6 @@ class PrimaryJobInformationService
             'occupation_id' => 'nullable|integer',
             'job_sector_id' => 'nullable|integer',
             'page' => 'nullable|integer|gt:0',
-            'type' => [
-                'nullable',
-                'integer',
-                Rule::in(PrimaryJobInformation::JOB_FILTER_TYPES)
-            ],
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'nullable',
@@ -265,6 +260,11 @@ class PrimaryJobInformationService
                 'nullable',
                 "integer",
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+            'type' => [
+                'nullable',
+                'integer',
+                Rule::in(PrimaryJobInformation::JOB_FILTER_TYPES)
             ],
             'skill_ids' => [
                 Rule::requiredIf(function () use ($request) {
