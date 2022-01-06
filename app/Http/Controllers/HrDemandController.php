@@ -142,7 +142,7 @@ class HrDemandController extends Controller
             $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
             //$this->authorize('update', $hrDemand);
 
-            $validated = $this->hrDemandService->hrDemandApproveByInstituteValidator($request)->validate();
+            $validated = $this->hrDemandService->hrDemandApproveByInstituteValidator($request,$hrDemandInstitute->hr_demand_id)->validate();
             $data = $this->hrDemandService->hrDemandApprovedByInstitute($hrDemandInstitute, $validated);
 
             $response = [
