@@ -32,6 +32,7 @@ class PrimaryJobInformationService
         $occupationId = $request['occupation_id'] ?? "";
         $jobSectorId = $request['job_sector_id'] ?? "";
         $skillIds = $request['skill_ids'] ?? [];
+        $jobSectorIds = $request['job_sector_ids'] ?? [];
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -54,12 +55,7 @@ class PrimaryJobInformationService
             'primary_job_information.archived_at',
             'primary_job_information.application_deadline',
             'primary_job_information.id',
-        ]);
-
-
-        if (empty($isRequestFromClientSide)) {
-            $jobInformationBuilder->acl();
-        }
+        ])->acl();
 
         $jobInformationBuilder->orderBy('primary_job_information.id', $order);
 
@@ -96,6 +92,10 @@ class PrimaryJobInformationService
 
             $jobInformationBuilder->whereIn('job_id', $skillMatchingJobIds);
 
+        }
+        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_JOB_SECTOR_MATCHING && is_array($jobSectorIds) && count($jobSectorIds) > 0) {
+
+            $jobInformationBuilder->whereIn('job_sector_id', $jobSectorIds);
         }
 
         /** TODO:Change popular job search logic when job application process starts */
@@ -233,8 +233,18 @@ class PrimaryJobInformationService
             $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
+        $requestData = $request->all();
 
-        return Validator::make($request->all(), [
+        if (!empty($requestData['skill_ids'])) {
+            $requestData['skill_ids'] = is_array($requestData['skill_ids']) ? $requestData['skill_ids'] : explode(',', $requestData['skill_ids']);
+        }
+
+        if (!empty($requestData['job_sector_ids'])) {
+            $requestData['job_sector_ids'] = is_array($requestData['job_sector_ids']) ? $requestData['job_sector_ids'] : explode(',', $requestData['job_sector_ids']);
+        }
+
+
+        $rules = [
             'job_title_en' => 'nullable|max:300|min:2',
             'job_title' => 'nullable|max:500|min:2',
             'occupation_id' => 'nullable|integer',
@@ -261,15 +271,30 @@ class PrimaryJobInformationService
                     return $request->offsetGet('type') == PrimaryJobInformation::JOB_FILTER_TYPE_SKILL_MATCHING;
                 }),
                 'nullable',
-                'array'
+                'array',
+                'min:1'
             ],
             'skill_ids.*' => [
-                'required',
+                'nullable',
                 'integer',
                 'distinct',
-            ]
-        ], $customMessage);
+            ],
+            'job_sector_ids' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->offsetGet('type') == PrimaryJobInformation::JOB_FILTER_TYPE_JOB_SECTOR_MATCHING;
+                }),
+                'nullable',
+                'array'
+            ],
+            'job_sector_ids.*' => [
+                'nullable',
+                'integer',
+                'distinct',
+            ],
+        ];
 
+
+        return Validator::make($requestData, $rules, $customMessage);
 
     }
 
