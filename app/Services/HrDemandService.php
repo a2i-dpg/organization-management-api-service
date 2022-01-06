@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
@@ -40,12 +41,26 @@ class HrDemandService
             'hr_demands.end_date',
             'hr_demands.skill_id',
             'hr_demands.vacancy',
+
+            '',
+
             'hr_demands.row_status',
             'hr_demands.created_by',
             'hr_demands.updated_by',
             'hr_demands.created_at',
             'hr_demands.updated_at'
         ])->acl();
+
+        $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds();
+
+        $hrDemandBuilder->join('hr_demand_institutes', function ($join) use ($rowStatus) {
+            $join->on('hr_demand_institutes.hr_demand_id', '=', 'hr_demands.id')
+                ->whereNull('hr_demand_institutes.deleted_at');
+        });
+        $hrDemandBuilder->join('hr_demand_institutes', function ($join) use ($rowStatus) {
+            $join->on('hr_demand_institutes.hr_demand_id', '=', 'hr_demands.id')
+                ->whereNull('hr_demand_institutes.deleted_at');
+        });
 
         if(!empty($skillIds)){
             $hrDemandBuilder->whereIn('skill_id', $skillIds);
