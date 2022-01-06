@@ -58,4 +58,36 @@ class HrDemandInstituteController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
 
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function hrDemandRejectedByInstitute(Request $request, int $id) : JsonResponse
+    {
+
+        $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+
+        //$this->authorize('update', $hrDemand);
+
+        $data = $this->hrDemandInstituteService->hrDemandRejectedByInstitute($hrDemandInstitute);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Hr demand rejected successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+
+    }
 }

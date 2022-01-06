@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Illuminate\Http\Request;
@@ -19,6 +20,18 @@ class HrDemandInstituteService
     public function hrDemandApprovedByInstitute(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
     {
         $hrDemandInstitute->vacancy_provided_by_institute = $data['vacancy_provided_by_institute'];
+        $hrDemandInstitute->save();
+
+        return $hrDemandInstitute;
+    }
+
+    /**
+     * @param HrDemandInstitute $hrDemandInstitute
+     * @return HrDemandInstitute
+     */
+    public function hrDemandRejectedByInstitute(HrDemandInstitute $hrDemandInstitute): HrDemandInstitute
+    {
+        $hrDemandInstitute->rejected_by_institute = BaseModel::BOOLEAN_TRUE;
         $hrDemandInstitute->save();
 
         return $hrDemandInstitute;

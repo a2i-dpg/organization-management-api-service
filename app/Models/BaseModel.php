@@ -99,6 +99,9 @@ abstract class BaseModel extends Model
         self::OTHERS
     ];
 
+    public const BOOLEAN_TRUE = 1;
+    public const BOOLEAN_FALSE = 0;
+
     public const BOOLEAN_FLAG = [
         0 => "False",
         1 => "True"
