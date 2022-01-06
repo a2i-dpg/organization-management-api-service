@@ -10657,7 +10657,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1,2,3"
                 }
             },
             "occupationId": {
@@ -10872,7 +10873,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1,2,3"
                 }
             }
         }
