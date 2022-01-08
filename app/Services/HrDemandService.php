@@ -7,6 +7,8 @@ use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -21,10 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 class HrDemandService
 {
     /**
-     * This API can serve 3 requests.
-     * a) Show all Hr Demands created by Industry Association to Industry Association admin
-     * b) Show all Hr Demands for a particular TSP to TSP admin
-     * c) Show all Hr Demands that were approved by Institute to Industry Association admin
      *
      * @param array $request
      * @param Carbon $startTime
@@ -107,19 +105,74 @@ class HrDemandService
 
         return $response;
     }
+
+    /**
+     * @param int $id
+     * @return HrDemandInstitute
+     */
+    public function getOneHrDemand(int $id): HrDemandInstitute
+    {
+        /** @var HrDemandInstitute|Builder $hrDemandBuilder */
+        $hrDemandBuilder = HrDemandInstitute::select([
+            'hr_demand_institutes.id',
+            'hr_demand_institutes.institute_id',
+            'hr_demand_institutes.rejected_by_institute',
+            'hr_demand_institutes.vacancy_provided_by_institute',
+            'hr_demand_institutes.rejected_by_industry_association',
+            'hr_demand_institutes.vacancy_approved_by_industry_association',
+            'hr_demands.id as hr_demand_id',
+            'hr_demands.industry_association_id',
+            'hr_demands.organization_id',
+            'organizations.title',
+            'organizations.title_en',
+            'hr_demands.end_date',
+            'hr_demands.skill_id',
+            'hr_demands.vacancy'
+        ]);
+
+        $hrDemandBuilder->join('hr_demands', function ($join) {
+            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id')
+                ->whereNull('hr_demands.deleted_at');
+        });
+        $hrDemandBuilder->join('organizations', function ($join) {
+            $join->on('organizations.id', '=', 'hr_demands.organization_id')
+                ->whereNull('organizations.deleted_at');
+        });
+
+        $hrDemandBuilder->where('hr_demand_institutes.id', $id);
+
+        return $hrDemandBuilder->firstOrFail();
+    }
+
     /**
      * @param array $data
-     * @return HrDemand
+     * @return array
      */
-    public function store(array $data): HrDemand
+    public function store(array $data): array
     {
-        $hrDemand = new HrDemand();
-        $hrDemand->fill($data);
-        $hrDemand->save();
+        $createdHrDemands = [];
+        foreach ($data['hr_demands'] as $hrDemand){
+            $payload = [
+                'industry_association_id' => $data['industry_association_id'],
+                'organization_id' => $data['organization_id'],
+                'end_date' => $data['end_date'],
+                'skill_id' => $hrDemand['skill_id'],
+                'requirement' => $hrDemand['requirement'],
+                'requirement_en' => $hrDemand['requirement_en'],
+                'vacancy' => $hrDemand['vacancy'],
+                'remaining_vacancy' => $hrDemand['remaining_vacancy'],
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+            ];
+            $hrDemandInstance = new HrDemand();
+            $hrDemandInstance->fill($payload);
+            $hrDemandInstance->save();
 
+            $createdHrDemands[] = $hrDemandInstance;
 
-        $this->storeHrDemandInstitutes($data, $hrDemand);
-        return $hrDemand;
+            $this->storeHrDemandInstitutes($hrDemand, $hrDemandInstance);
+        }
+        return $createdHrDemands;
     }
 
     /**
@@ -198,14 +251,69 @@ class HrDemandService
                 'int',
                 'exists:organizations,id,deleted_at,NULL',
             ],
-            'institute_ids' => [
+            'end_date' => [
+                'required',
+                'date',
+                'date_format:Y-m-d',
+                'after:'.Carbon::now(),
+            ],
+            'hr_demands' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+            'hr_demands.skill_id' => [
+                'required',
+                'int',
+                'exists:skills,id,deleted_at,NULL',
+            ],
+            'hr_demands.requirement' => [
+                'required',
+                'string'
+            ],
+            'hr_demands.requirement_en' => [
+                'nullable',
+                'string'
+            ],
+            'hr_demands.vacancy' => [
+                'required',
+                'int'
+            ],
+            'hr_demands.institute_ids' => [
                 'required',
                 'array'
             ],
-            'institute_ids.*' => [
+            'hr_demands.institute_ids.*' => [
                 'nullable',
                 'int',
                 'distinct'
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'nullable',
+                Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
+            ]
+        ];
+        return Validator::make($data, $rules, $customMessage);
+    }
+
+
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function updateValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+        $customMessage = [
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+        $rules = [
+            'organization_id' => [
+                'required',
+                'int',
+                'exists:organizations,id,deleted_at,NULL',
             ],
             'end_date' => [
                 'required',
@@ -230,6 +338,10 @@ class HrDemandService
                 'required',
                 'int'
             ],
+            'institute_id' => [
+                'required',
+                'int'
+            ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'nullable',
@@ -238,7 +350,6 @@ class HrDemandService
         ];
         return Validator::make($data, $rules, $customMessage);
     }
-
 
 
     /**
