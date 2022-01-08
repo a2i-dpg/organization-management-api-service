@@ -40,9 +40,19 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
         $customRouter()->resourceRoute('hr-demand', 'HrDemandController')->render();
 
+        /** Hr-Demand Routes */
+        $router->get('hr-demand-list-approved-by-institute', ['as' => 'hr-demand-list-approved-by-institute', 'uses' => 'HrDemandController@getListApprovedByInstitute']);
+        $router->get('hr-demand-list-for-institute', ['as' => 'hr-demand-list-for-institute', 'uses' => 'HrDemandController@getListForInstitute']);
+        $router->get('hr-demand-for-institute', ['as' => 'hr-demand-for-institute', 'uses' => 'HrDemandController@readOnlyByInstitute']);
+
         /** Hr demand approve by institute */
         $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
         $router->put("hr-demand-rejected-by-institute/{id}", ["as" => "institute.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByInstitute"]);
+
+        /** Hr demand approve by industry association */
+        $router->put("hr-demand-approved-by-industry-association/{id}", ["as" => "industry-association.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByIndustryAssociation"]);
+        $router->put("hr-demand-rejected-by-industry-association/{id}", ["as" => "industry-association.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByIndustryAssociation"]);
+
 
         $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
         $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
