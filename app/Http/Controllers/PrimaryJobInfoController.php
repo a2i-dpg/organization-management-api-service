@@ -104,6 +104,7 @@ class PrimaryJobInfoController extends Controller
      */
     public function jobPublishOrArchive(Request $request, string $jobId): JsonResponse
     {
+
         $response = [];
         $statusCode = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
 

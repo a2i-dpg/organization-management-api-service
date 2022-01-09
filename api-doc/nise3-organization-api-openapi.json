@@ -38,7 +38,7 @@
     ],
     "security": [
         {
-            "bearerAuth": []
+            "User-Token": []
         }
     ],
     "paths": {
@@ -5818,6 +5818,39 @@
                 }
             }
         },
+        "/primary-job-information/{jobId}/job-status-change": {
+            "post": {
+                "tags": [
+                    "Primary Job Information"
+                ],
+                "summary": "Change primary job information status",
+                "description": "API endpoint to change primary job information status.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Job-Status-Change"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/job/store-additional-job-information": {
             "post": {
                 "tags": [
@@ -8142,6 +8175,37 @@
                         }
                     }
                 }
+            },
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get all hr demand",
+                "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
             }
         },
         "/hr-demand/{hr_demand_id}": {
@@ -8190,7 +8254,14 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Job published successfully done",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -8200,6 +8271,17 @@
     },
     "components": {
         "schemas": {
+            "Job-Status-Change": {
+                "type": "object",
+                "description": "Job status change",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>Publish 2=>Archive 3=>Draft"
+                    }
+                }
+            },
             "hr-demand": {
                 "type": "object",
                 "description": "Hr Demand",
@@ -10475,10 +10557,10 @@
             }
         },
         "securitySchemes": {
-            "bearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
+            "User-Token": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "User-Token"
             }
         },
         "parameters": {
