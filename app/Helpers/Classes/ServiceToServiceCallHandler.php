@@ -40,11 +40,11 @@ class ServiceToServiceCallHandler
     }
 
     /**
-     * @param string $idpUserId
+     * @param array $instituteIds
      * @return mixed
      * @throws RequestException
      */
-    public function getInstituteTitleByIds(string $instituteIds): mixed
+    public function getInstituteTitleByIds(array $instituteIds): mixed
     {
         $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'get-institute-title-by-ids';
         $postField = [
@@ -55,15 +55,15 @@ class ServiceToServiceCallHandler
             'verify' => config("nise3.should_ssl_verify"),
             'debug' => config('nise3.http_debug'),
             'timeout' => config("nise3.http_timeout")
-        ])->post($url, $postField)->throw(function ($response, $e) use ($instituteClientUrl) {
-            Log::debug("Http/Curl call error. Destination:: " . $instituteClientUrl . ' and Response:: ' . json_encode($response));
+        ])->post($url, $postField)->throw(function ($response, $e) use ($url) {
+            Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
             return $e;
         })
             ->json('data');
 
-        Log::info("userInfo:" . json_encode($responseData));
+        Log::info("Institute Data:" . json_encode($instituteData));
 
-        return $responseData;
+        return $instituteData;
     }
 
 }
