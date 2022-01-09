@@ -2,13 +2,45 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Ramsey\Collection\Collection;
 
-class AdditionalJobInformation extends Model
+
+/**
+ * class PrimaryJobInformation
+ * @property int id
+ * @property string job_id
+ * @property string job_responsibilities
+ * @property string | null job_responsibilities_en
+ * @property string job_context
+ * @property string job_context_en
+ * @property int job_place_type
+ * @property int | null salary_min
+ * @property int | null salary_max
+ * @property int  is_salary_info_show
+ * @property int  is_salary_compare_to_expected_salary
+ * @property int  is_salary_alert_excessive_than_given_salary_range
+ * @property int  salary_review
+ * @property int  festival_bonus
+ * @property string | null additional_salary_info
+ * @property string | null additional_salary_info_en
+ * @property int is_other_benefits
+ * @property string | null other_benefits
+ * @property int  lunch_facilities
+ * @property string | null  others
+ * @property Carbon |null created_at
+ * @property Carbon |null updated_at
+ * @property Carbon |null deleted_at
+ * @property Collection jobLevels
+ * @property Collection jobLocations
+ * @property Collection workPlaces
+ */
+class AdditionalJobInformation extends BaseModel
 {
     use SoftDeletes;
 
