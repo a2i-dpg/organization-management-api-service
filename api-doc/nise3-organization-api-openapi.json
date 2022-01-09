@@ -5818,7 +5818,7 @@
                 }
             }
         },
-        "/primary-job-information/{jobId}/job-status-change": {
+        "/job/primary-job-information/{jobId}/job-status-change": {
             "post": {
                 "tags": [
                     "Primary Job Information"
@@ -8207,6 +8207,7 @@
                     }
                 }
             }
+
         },
         "/hr-demand/{hr_demand_id}": {
             "delete": {
