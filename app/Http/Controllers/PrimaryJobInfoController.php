@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
-use App\Models\GalleryImageVideo;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use Carbon\Carbon;
@@ -82,15 +81,28 @@ class PrimaryJobInfoController extends Controller
      */
     public function getPrimaryJobInformation(string $jobId): JsonResponse
     {
-        $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $primaryJobInformation,
+            "data" => [
+                "step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['PrimaryJobInformation']) {
+            $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+            $response = [
+                "data" => $primaryJobInformation,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }

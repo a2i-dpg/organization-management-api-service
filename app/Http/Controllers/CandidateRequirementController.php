@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -85,15 +86,28 @@ class CandidateRequirementController extends Controller
      */
     public function getCandidateRequirements(string $jobId): JsonResponse
     {
-        $candidateRequirements = $this->candidateRequirementsService->getCandidateRequirements($jobId);
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $candidateRequirements,
+            "data" => [
+                "step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['CandidateRequirement']) {
+            $candidateRequirements = $this->candidateRequirementsService->getCandidateRequirements($jobId);
+            $response = [
+                "data" => $candidateRequirements,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
