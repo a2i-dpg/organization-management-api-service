@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * Class AuthUser
  * @package App\Facade
  * @method static array|mixed getAuthUserWithRolePermission(string $idpUserId)
+ * @method static array|mixed getInstituteTitleByIds(array $idpUserId)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler

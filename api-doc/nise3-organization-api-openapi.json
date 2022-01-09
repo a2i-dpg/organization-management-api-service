@@ -5538,7 +5538,7 @@
                 }
             }
         },
-        "/job/job-list": {
+        "/job/jobs": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -5550,10 +5550,13 @@
                         "$ref": "#/components/parameters/job_title_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/job_sector_id"
+                        "$ref": "#/components/parameters/occupation_ids"
                     },
                     {
-                        "$ref": "#/components/parameters/occupation_id"
+                        "$ref": "#/components/parameters/job_sector_ids"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skillIds"
                     },
                     {
                         "$ref": "#/components/parameters/type"
@@ -5602,7 +5605,7 @@
                 }
             }
         },
-        "/public/job-list": {
+        "/public/jobs": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -5614,10 +5617,13 @@
                         "$ref": "#/components/parameters/job_title_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/job_sector_id"
+                        "$ref": "#/components/parameters/job_sector_ids"
                     },
                     {
-                        "$ref": "#/components/parameters/occupation_id"
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/occupation_ids"
                     },
                     {
                         "$ref": "#/components/parameters/type"
@@ -5665,7 +5671,6 @@
                     }
                 }
             }
-
         },
         "/job/job-id": {
             "get": {
@@ -8156,7 +8161,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -8231,7 +8236,10 @@
                     },
                     "row_status": {
                         "type": "integer",
-                        "enum": [1 , 0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>Active 0=> Inactive.  Required in edit mode"
                     }
                 },
@@ -10479,10 +10487,12 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "enum": [1,2,3]
-                },
-                "description": "JOB_FILTER_TYPE_POPULAR = 1  JOB_FILTER_TYPE_RECENT = 2  JOB_FILTER_TYPE_SKILL_MATCHING = 3"
+                    "type": "string",
+                    "enum": [
+                        "popular",
+                        "recent"
+                    ]
+                }
             },
             "hr_demand_id": {
                 "name": "hr_demand_id",
@@ -10640,6 +10650,16 @@
                     "example": 5
                 }
             },
+            "skillIds": {
+                "name": "skill_ids",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+
+                },
+                "description": "Send skillIds as comma seperated string. example: 1,2,3"
+            },
             "occupationId": {
                 "name": "occupationId",
                 "in": "path",
@@ -10648,13 +10668,14 @@
                     "type": "integer"
                 }
             },
-            "occupation_id": {
-                "name": "occupation_id",
-                "in": "path",
+            "occupation_ids": {
+                "name": "occupation_ids",
+                "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
-                }
+                    "type": "string"
+                },
+                "description": "Send occupation_ids as comma seperated string.example 1,2,3 "
             },
             "rankId": {
                 "name": "rankId",
@@ -10839,13 +10860,14 @@
                     "example": 1
                 }
             },
-            "job_sector_id": {
-                "name": "jobSectorId",
+            "job_sector_ids": {
+                "name": "job_sector_ids",
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
-                }
+                    "type": "string"
+                },
+                "description": "Send job_sector_ids as comma seperated string.example:1,2,3"
             }
         }
     }

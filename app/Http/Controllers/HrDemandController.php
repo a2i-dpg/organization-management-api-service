@@ -20,6 +20,7 @@ class HrDemandController extends Controller
 
     /**
      * HrDemandController constructor.
+     *
      * @param HrDemandService $hrDemandService
      */
     public function __construct(HrDemandService $hrDemandService)
@@ -29,7 +30,7 @@ class HrDemandController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Hr Demand Institutes to Industry Association User.
      *
      * @param Request $request
      * @return JsonResponse
@@ -47,13 +48,86 @@ class HrDemandController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the Hr Demand Institutes (Approved by Institute) to Industry Association User.
      *
-     * @return Response
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
      */
-    public function read()
+    public function getListApprovedByInstitute(Request $request): JsonResponse
     {
-        //
+        $this->authorize('viewAny', HrDemand::class);
+
+        $filter = $this->hrDemandService->filterValidator($request)->validate();
+        $filter[HrDemand::SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY] = true;
+        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Display a listing of the Hr Demand Institutes to Institute Admin.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getListForInstitute(Request $request): JsonResponse
+    {
+        $this->authorize('viewAnyByInstitute', HrDemand::class);
+
+        $filter = $this->hrDemandService->filterValidator($request)->validate();
+        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Show the form for creating a new resource to Industry Association User.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function read(int $id): JsonResponse
+    {
+        $humanResource = $this->hrDemandService->getOneHrDemand($id);
+        $this->authorize('view', $humanResource);
+        $response = [
+            "data" => $humanResource,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Show the form for creating a new resource to Industry Association User.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function readOnlyByInstitute(int $id): JsonResponse
+    {
+        $humanResource = $this->hrDemandService->getOneHrDemand($id);
+        $this->authorize('viewByInstitute', $humanResource);
+        $response = [
+            "data" => $humanResource,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -82,7 +156,7 @@ class HrDemandController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Update the specified resource.
      *
      * @param Request $request
      * @param int $id
@@ -92,10 +166,10 @@ class HrDemandController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $hrDemand = HrDemand::findOrFail($id);
-        $this->authorize('update', $hrDemand);
+        $hrDemand = HrDemandInstitute::findOrFail($id);
+        $this->authorize('update', HrDemand::class);
 
-        $validated = $this->hrDemandService->validator($request, $id)->validate();
+        $validated = $this->hrDemandService->updateValidator($request, $id)->validate();
         $data = $this->hrDemandService->update($hrDemand, $validated);
 
         $response = [
@@ -116,6 +190,7 @@ class HrDemandController extends Controller
      *
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function destroy(int $id) : JsonResponse
     {

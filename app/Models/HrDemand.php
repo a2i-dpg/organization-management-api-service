@@ -30,6 +30,12 @@ class HrDemand extends BaseModel
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
 
+    public const BOOLEAN_FLAG = [
+        0 => "False",
+        1 => "True"
+    ];
+
+    public const SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY = 'approved_by_institutes';
 
     public function hrDemandInstitutes(): HasMany
     {

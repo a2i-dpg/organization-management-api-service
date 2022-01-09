@@ -102,7 +102,7 @@ class PrimaryJobInfoController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function jobPublishOrArchive(Request $request, string $jobId): JsonResponse
+    public function jobStatusChange(Request $request, string $jobId): JsonResponse
     {
         $response = [];
         $statusCode = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use App\Services\HrDemandInstituteService;
 use Carbon\Carbon;
@@ -33,16 +34,15 @@ class HrDemandInstituteController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
-    public function hrDemandApprovedByInstitute(Request $request, int $id) : JsonResponse{
-
+    public function hrDemandApprovedByInstitute(Request $request, int $id): JsonResponse
+    {
         $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
 
-        //$this->authorize('update', $hrDemand);
+        $this->authorize('updateByInstitute', $hrDemandInstitute);
 
-        $validated = $this->hrDemandInstituteService->hrDemandApprovedByInstituteValidator($request,$hrDemandInstitute->hr_demand_id)->validate();
+        $validated = $this->hrDemandInstituteService->hrDemandApprovedByInstituteValidator($request, $hrDemandInstitute->hr_demand_id)->validate();
         $data = $this->hrDemandInstituteService->hrDemandApprovedByInstitute($hrDemandInstitute, $validated);
 
         $response = [
@@ -66,14 +66,12 @@ class HrDemandInstituteController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
-     * @throws ValidationException
      */
-    public function hrDemandRejectedByInstitute(Request $request, int $id) : JsonResponse
+    public function hrDemandRejectedByInstitute(Request $request, int $id): JsonResponse
     {
-
         $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
 
-        //$this->authorize('update', $hrDemand);
+        $this->authorize('updateByInstitute', $hrDemandInstitute);
 
         $data = $this->hrDemandInstituteService->hrDemandRejectedByInstitute($hrDemandInstitute);
 
@@ -88,6 +86,65 @@ class HrDemandInstituteController extends Controller
         ];
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws ValidationException|AuthorizationException
+     */
+    public function hrDemandApprovedByIndustryAssociation(Request $request, int $id): JsonResponse
+    {
+        $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+
+        $this->authorize('update', HrDemand::class);
+
+        $validated = $this->hrDemandInstituteService->hrDemandApprovedByIndustryAssociationValidator($request, $hrDemandInstitute)->validate();
+        $data = $this->hrDemandInstituteService->hrDemandApprovedByIndustryAssociation($hrDemandInstitute, $validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Hr demand approved successfully by Industry Association User",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function hrDemandRejectedByIndustryAssociation(Request $request, int $id): JsonResponse
+    {
+        $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+
+        $this->authorize('update', HrDemand::class);
+
+        $data = $this->hrDemandInstituteService->hrDemandRejectedByIndustryAssociation($hrDemandInstitute);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Hr demand rejected successfully by Industry Association User",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 }
