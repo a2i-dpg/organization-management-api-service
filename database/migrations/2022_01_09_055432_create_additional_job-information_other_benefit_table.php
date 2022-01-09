@@ -27,6 +27,6 @@ class CreateAdditionalJobInformationOtherBenefitTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('additional_job_information_other_benefit');
     }
 }
