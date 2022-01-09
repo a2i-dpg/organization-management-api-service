@@ -9,6 +9,7 @@ use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use App\Services\JobManagementServices\EducationInstitutionsService;
+use App\Services\JobManagementServices\OtherBenefitService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -33,10 +34,13 @@ class JobManagementController extends Controller
 
     public AdditionalJobInformationService $additionalJobInformationService;
 
+    public OtherBenefitService $otherBenefitService;
+
+
     private Carbon $startTime;
 
 
-    public function __construct(AreaOfBusinessService $areaOfBusinessService, EducationInstitutionsService $educationInstitutionsService, CandidateRequirementsService $candidateRequirementsService, CompanyInfoVisibilityService $companyInfoVisibilityService, PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService)
+    public function __construct(AreaOfBusinessService $areaOfBusinessService, EducationInstitutionsService $educationInstitutionsService, CandidateRequirementsService $candidateRequirementsService, CompanyInfoVisibilityService $companyInfoVisibilityService, PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService, OtherBenefitService $otherBenefitService)
     {
         $this->areaOfBusinessService = $areaOfBusinessService;
         $this->educationInstitutionsService = $educationInstitutionsService;
@@ -44,6 +48,7 @@ class JobManagementController extends Controller
         $this->companyInfoVisibilityService = $companyInfoVisibilityService;
         $this->primaryJobInformationService = $primaryJobInformationService;
         $this->additionalJobInformationService = $additionalJobInformationService;
+        $this->otherBenefitService = $otherBenefitService;
         $this->startTime = Carbon::now();
     }
 
@@ -122,6 +127,17 @@ class JobManagementController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_OK);
 
+    }
+
+    /* @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getOtherBenefits(Request $request): JsonResponse
+    {
+        $filter = $this->otherBenefitService->filterValidator($request)->validate();
+        $response = $this->otherBenefitService->getOtherBenefitList($filter, $this->startTime);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     public function jobPreview(string $jobId): JsonResponse
