@@ -375,7 +375,8 @@ class PrimaryJobInformationService
             ],
             "application_deadline" => [
                 "required",
-                "date"
+                "date",
+                'after:today'
             ],
             "is_apply_online" => [
                 "nullable",
