@@ -40,7 +40,6 @@ class AdditionalJobInformationService
             'additional_job_information.festival_bonus',
             'additional_job_information.additional_salary_info',
             'additional_job_information.is_other_benefits',
-            'additional_job_information.other_benefits',
             'additional_job_information.lunch_facilities',
             'additional_job_information.others',
             'additional_job_information.created_at',

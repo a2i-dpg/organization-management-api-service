@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\OtherBenefit;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class OtherBenefitSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class OtherBenefitSeeder extends Seeder
      */
     public function run()
     {
+        OtherBenefit::query()->truncate();
+
         $otherBenefits = [
             [
                 "title" => "T/A",
@@ -69,7 +72,7 @@ class OtherBenefitSeeder extends Seeder
             ],
         ];
 
-        OtherBenefit::create($otherBenefits);
+        OtherBenefit::insert($otherBenefits);
 
     }
 }

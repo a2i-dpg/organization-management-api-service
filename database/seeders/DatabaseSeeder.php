@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\OtherBenefit;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
             GeoLocationDatabaseSeeder::class,
             OrganizationTypeSeeder::class,
             EducationalInstitutionSeeder::class,
+            OtherBenefitSeeder::class,
             AreaOfBusinessSeeder::class,
             EmploymentTypeSeeder::class,
             EduGroupSeeder::class,
