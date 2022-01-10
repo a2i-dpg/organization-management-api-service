@@ -84,7 +84,7 @@ class PrimaryJobInfoController extends Controller
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
-                "step" => $step
+                "latest_step" => $step
             ],
             '_response_status' => [
                 "success" => true,
@@ -94,6 +94,7 @@ class PrimaryJobInfoController extends Controller
         ];
         if ($step >= BaseModel::FORM_STEPS['PrimaryJobInformation']) {
             $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+            $primaryJobInformation["latest_step"] = $step;
             $response = [
                 "data" => $primaryJobInformation,
                 '_response_status' => [

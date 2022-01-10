@@ -57,7 +57,7 @@ class CompanyInfoVisibilityController extends Controller
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
-                "step" => $step
+                "latest_step" => $step
             ],
             '_response_status' => [
                 "success" => true,
@@ -67,6 +67,7 @@ class CompanyInfoVisibilityController extends Controller
         ];
         if ($step >= BaseModel::FORM_STEPS['CompanyInfoVisibility']) {
             $companyInfoVisibility = $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId);
+            $companyInfoVisibility["latest_step"] = $step;
             $response = [
                 "data" => $companyInfoVisibility,
                 '_response_status' => [

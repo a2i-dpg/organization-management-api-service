@@ -66,7 +66,7 @@ class MatchingCriteriaController extends Controller
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
-                "step" => $step
+                "latest_step" => $step
             ],
             '_response_status' => [
                 "success" => true,
@@ -76,6 +76,7 @@ class MatchingCriteriaController extends Controller
         ];
         if ($step >= BaseModel::FORM_STEPS['MatchingCriteria']) {
             $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId);
+            $matchingCriteria["latest_step"] = $step;
             $response = [
                 "data" => $matchingCriteria,
                 '_response_status' => [
