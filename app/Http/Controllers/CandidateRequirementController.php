@@ -89,7 +89,7 @@ class CandidateRequirementController extends Controller
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
-                "step" => $step
+                "latest_step" => $step
             ],
             '_response_status' => [
                 "success" => true,
@@ -99,6 +99,7 @@ class CandidateRequirementController extends Controller
         ];
         if ($step >= BaseModel::FORM_STEPS['CandidateRequirement']) {
             $candidateRequirements = $this->candidateRequirementsService->getCandidateRequirements($jobId);
+            $candidateRequirements["latest_step"] = $step;
             $response = [
                 "data" => $candidateRequirements,
                 '_response_status' => [

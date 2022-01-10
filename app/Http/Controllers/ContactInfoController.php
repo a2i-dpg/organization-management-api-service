@@ -69,7 +69,7 @@ class ContactInfoController extends Controller
         $step = JobManagementController::lastAvailableStep($id);
         $response = [
             "data" => [
-                "step" => $step
+                "latest_step" => $step
             ],
             '_response_status' => [
                 "success" => true,
@@ -79,6 +79,7 @@ class ContactInfoController extends Controller
         ];
         if ($step >= BaseModel::FORM_STEPS['JobContactInformation']) {
             $contactInfo = $this->contactInfoService->getOneContactInfo($id);
+            $contactInfo["latest_step"] = $step;
             $this->authorize('view', $contactInfo);
             $response = [
                 "data" => $contactInfo,
