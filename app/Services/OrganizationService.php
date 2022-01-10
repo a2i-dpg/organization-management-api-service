@@ -162,7 +162,8 @@ class OrganizationService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $membershipId = $request['membership_id'] ?? "";
-        $industryAssociationId = $request['industry_association_id'];  /** No need to add this filter in api doc,will come with request  */
+        $industryAssociationId = $request['industry_association_id'];
+        /** No need to add this filter in api doc,will come with request  */
 
 
         $organizationBuilder = Organization::select(
@@ -413,6 +414,8 @@ class OrganizationService
 
         });
         $organizationBuilder->where('organizations.id', '=', $id);
+
+        $organizationBuilder->with('industrySubTrades.industryAssociationTrade');
 
         return $organizationBuilder->firstOrFail();
     }

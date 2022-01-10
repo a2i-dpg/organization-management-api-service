@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class IndustryAssociationTradeController
+ * Class IndustryAssociationTrade
  * @package App\Models
  * @property int id
  * @property string title

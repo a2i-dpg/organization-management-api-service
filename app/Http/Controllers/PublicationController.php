@@ -185,7 +185,6 @@ class PublicationController extends Controller
 
     public function getPublicPublicationList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', Publication::class);
 
         $filter = $this->publicationService->filterValidator($request)->validate();
         $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);

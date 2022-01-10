@@ -132,8 +132,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     });
 
 
-
-
     $router->group(['prefix' => 'public', 'as' => 'public'], function () use ($router) {
         $router->get('jobs', ["as" => "public.job-list", "uses" => "JobManagementController@getPublicJobList"]);
         $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
@@ -144,6 +142,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     /** List of industryAssociation trades */
     $router->get('industry-association-trades', ['as' => 'industry-associations.trades', 'uses' => "IndustryAssociationTradeController@getList"]);
+
+    /** List of industryAssociation trades */
+    $router->get('industry-sub-trades', ['as' => 'industry-sub-trades', 'uses' => "IndustrySubTradeController@getList"]);
 
 
     /** Industry Association open  Registration */
