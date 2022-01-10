@@ -461,11 +461,6 @@ class OrganizationService
         return $organization;
     }
 
-    /**
-     * Add organization to a industryAssociation
-     * @param Organization $organization
-     * @param array $data
-     */
     public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
     {
         $organization->industryAssociations()->attach($data['industry_association_id'], [
@@ -473,6 +468,16 @@ class OrganizationService
             'row_status' => BaseModel::ROW_STATUS_ACTIVE
         ]);
 
+    }
+
+    /**
+     * Add organization to a industryAssociation
+     * @param Organization $organization
+     * @param array $industrySubTrades
+     */
+    public function syncWithIndustrySubTrades(Organization $organization, array $industrySubTrades)
+    {
+        $organization->industrySubTrades()->sync($industrySubTrades);
     }
 
     /**
@@ -926,6 +931,16 @@ class OrganizationService
                 'required',
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
+            ],
+            'industry_sub_trades' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+            'industry_sub_trades.*' => [
+                'nullable',
+                'integer',
+                'exists:industry_sub_trades,id,deleted_at,NULL'
             ],
             'industry_association_id' => [
                 'required',
