@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\AdditionalJobInformation;
 use App\Models\BaseModel;
+use App\Models\CandidateRequirement;
+use App\Models\CompanyInfoVisibility;
+use App\Models\JobContactInformation;
+use App\Models\MatchingCriteria;
+use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
@@ -159,6 +165,11 @@ class JobManagementController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
+    }
+
+    public static function lastAvailableStep(string $jobId): int
+    {
+        return PrimaryJobInformationService::lastAvailableStep($jobId);
     }
 
 

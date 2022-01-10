@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -88,15 +89,28 @@ class AdditionalJobInfoController extends Controller
      */
     public function getAdditionalJobInformation(string $jobId): JsonResponse
     {
-        $additionalJobInformation = $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId);
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $additionalJobInformation,
+            "data" => [
+                "step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['AdditionalJobInformation']) {
+            $additionalJobInformation = $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId);
+            $response = [
+                "data" => $additionalJobInformation,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }

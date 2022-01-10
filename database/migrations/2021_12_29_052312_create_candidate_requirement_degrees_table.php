@@ -14,7 +14,6 @@ class CreateCandidateRequirementDegreesTable extends Migration
     public function up()
     {
         Schema::create('candidate_requirement_degrees', function (Blueprint $table) {
-            $table->increments('id');
             $table->string("job_id")->index();
             $table->integer("candidate_requirement_id")->index();
             $table->integer("education_level_id")->nullable();
