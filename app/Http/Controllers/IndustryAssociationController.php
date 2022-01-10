@@ -67,6 +67,7 @@ class IndustryAssociationController extends Controller
                 "code" => ResponseAlias::HTTP_OK,
                 'query_time' => $returnedData['query_time']
             ]
+
         ];
         if (isset($returnedData['total_page'])) {
             $response['total'] = $returnedData['total'];
@@ -266,7 +267,7 @@ class IndustryAssociationController extends Controller
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
-                $this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
+                //$this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
 
                 $response['data'] = $industryAssociation;
                 DB::commit();
