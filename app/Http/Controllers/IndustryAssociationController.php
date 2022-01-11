@@ -118,11 +118,30 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
 
-        $requestHeaders = $request->header();
-        if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
-            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
-            $this->authorize('view', $industryAssociation);
-        }
+        $this->authorize('view', $industryAssociation);
+
+        $response = [
+            "data" => $industryAssociation,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * Display a specified resource
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function industryAssociationDetails(Request $request, int $id): JsonResponse
+    {
+        $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
+
         $response = [
             "data" => $industryAssociation,
             "_response_status" => [
