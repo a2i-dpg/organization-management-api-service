@@ -75,7 +75,7 @@ class PublicationController extends Controller
     public function read(int $id): JsonResponse
     {
 
-        $publication = $this->publicationService->getOnePublication($id, $this->startTime);
+        $publication = $this->publicationService->getOnePublication($id);
         $this->authorize('view', $publication);
 
         $response = [
@@ -96,7 +96,7 @@ class PublicationController extends Controller
     public function clientSideRead(int $id): JsonResponse
     {
 
-        $publication = $this->publicationService->getOnePublication($id, $this->startTime);
+        $publication = $this->publicationService->getOnePublication($id);
         $response = [
             "data" => $publication,
             "_response_status" => [

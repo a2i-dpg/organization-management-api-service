@@ -102,10 +102,9 @@ class PublicationService
 
     /**
      * @param int $id
-     * @param Carbon $startTime
      * @return Builder|Model
      */
-    public function getOnePublication(int $id, Carbon $startTime): Builder|Model
+    public function getOnePublication(int $id): Builder|Model
     {
         /** @var Builder $publicationBuilder */
         $publicationBuilder = Publication::select(
@@ -130,8 +129,7 @@ class PublicationService
 
         $publicationBuilder->where('publications.id', '=', $id);
 
-        /** @var Publication $publication */
-        return $publication = $publicationBuilder->first();
+        return $publicationBuilder->firstOrFail();
 
 
     }
