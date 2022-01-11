@@ -671,6 +671,10 @@ class IndustryAssociationService
                 "string",
                 "min:2"
             ],
+            "phone_code" => [
+                "nullable",
+                "string"
+            ],
             'mobile' => [
                 'required',
                 BaseModel::MOBILE_REGEX,
