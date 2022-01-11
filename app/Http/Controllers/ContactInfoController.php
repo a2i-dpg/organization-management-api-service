@@ -66,30 +66,17 @@ class ContactInfoController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $step = JobManagementController::lastAvailableStep($id);
+        $contactInfo = $this->contactInfoService->getOneContactInfo($id);
+
+        $this->authorize('view', $contactInfo);
         $response = [
-            "data" => [
-                "latest_step" => $step
-            ],
+            'data' => $contactInfo,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                'query_time' => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        if ($step >= BaseModel::FORM_STEPS['JobContactInformation']) {
-            $contactInfo = $this->contactInfoService->getOneContactInfo($id);
-            $contactInfo["latest_step"] = $step;
-            $this->authorize('view', $contactInfo);
-            $response = [
-                "data" => $contactInfo,
-                "_response_status" => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 

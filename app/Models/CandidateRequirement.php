@@ -17,25 +17,23 @@ class CandidateRequirement extends BaseModel
 
     public function candidateRequirementDegrees(): HasMany
     {
-        return $this->hasMany(CandidateRequirementDegree::class, 'candidate_requirement_id', 'id');
+        return $this->hasMany(CandidateRequirementDegree::class, 'job_id', 'job_id');
     }
 
     public function educationalInstitutions(): BelongsToMany
     {
         return $this->belongsToMany(EducationalInstitution::class, 'candidate_requirement_preferred_educational_institution', 'candidate_requirement_id', 'preferred_educational_institution_id');
-
     }
 
     public function trainings(): HasMany
     {
-        return $this->hasMany(CandidateRequirementTraining::class,'candidate_requirement_id','id');
+        return $this->hasMany(CandidateRequirementTraining::class,'job_id','job_id');
     }
 
     public function professionalCertifications(): HasMany
     {
-        return $this->hasMany(CandidateRequirementProfessionalCertification::class,'candidate_requirement_id','id');
+        return $this->hasMany(CandidateRequirementProfessionalCertification::class,'job_id','job_id');
     }
-
 
     public function areaOfExperiences(): BelongsToMany
     {
@@ -54,7 +52,7 @@ class CandidateRequirement extends BaseModel
 
     public function genders(): HasMany
     {
-        return $this->hasMany(CandidateRequirementGender::class, 'candidate_requirement_id','id');
+        return $this->hasMany(CandidateRequirementGender::class, 'job_id','job_id');
     }
 
 }

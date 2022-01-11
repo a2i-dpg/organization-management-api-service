@@ -111,8 +111,8 @@ abstract class BaseModel extends Model
         "PrimaryJobInformation" => 1,
         "AdditionalJobInformation" => 2,
         "CandidateRequirement" => 3,
-        "MatchingCriteria" => 4,
-        "CompanyInfoVisibility" => 5,
+        "CompanyInfoVisibility" => 4,
+        "MatchingCriteria" => 5,
         "JobContactInformation" => 6,
     ];
 

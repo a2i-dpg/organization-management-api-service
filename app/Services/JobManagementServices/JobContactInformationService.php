@@ -42,7 +42,7 @@ class JobContactInformationService
         $rules = [
             "job_id" => [
                 "required",
-//                "exists:primary_job_information,job_id"
+                "exists:matching_criteria,job_id"
             ],
             "contact_person_id" => [
                 "required"
