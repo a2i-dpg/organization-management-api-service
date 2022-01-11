@@ -7,7 +7,6 @@ use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -158,9 +157,9 @@ class HrDemandService
                 'end_date' => $data['end_date'],
                 'skill_id' => $hrDemand['skill_id'],
                 'requirement' => $hrDemand['requirement'],
-                'requirement_en' => $hrDemand['requirement_en'],
+                'requirement_en' => $hrDemand['requirement_en'] ?? "",
                 'vacancy' => $hrDemand['vacancy'],
-                'remaining_vacancy' => $hrDemand['remaining_vacancy'],
+                'remaining_vacancy' => $hrDemand['vacancy'],
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
             ];
@@ -234,9 +233,12 @@ class HrDemandService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
-        if (!empty($data['hr_demands.institute_ids'])) {
-            $data["hr_demands.institute_ids"] = isset($data['hr_demands.institute_ids']) && is_array($data['hr_demands.institute_ids']) ? $data['hr_demands.institute_ids'] : explode(',', $data['hr_demands.institute_ids']);
+        if(!empty($data['hr_demands']) && is_array($data['hr_demands'])){
+            foreach ($data['hr_demands'] as &$hrDemand){
+                $hrDemand['institute_ids'] = isset($hrDemand['institute_ids']) && is_array($hrDemand['institute_ids']) ? $hrDemand['institute_ids'] : explode(',', $hrDemand['institute_ids']);
+            }
         }
+
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -262,31 +264,30 @@ class HrDemandService
                 'array',
                 'min:1'
             ],
-            'hr_demands.skill_id' => [
+            'hr_demands.*.skill_id' => [
                 'required',
                 'int',
                 'exists:skills,id,deleted_at,NULL',
             ],
-            'hr_demands.requirement' => [
+            'hr_demands.*.requirement' => [
                 'required',
                 'string'
             ],
-            'hr_demands.requirement_en' => [
+            'hr_demands.*.requirement_en' => [
                 'nullable',
                 'string'
             ],
-            'hr_demands.vacancy' => [
+            'hr_demands.*.vacancy' => [
                 'required',
                 'int'
             ],
-            'hr_demands.institute_ids' => [
+            'hr_demands.*.institute_ids' => [
                 'required',
                 'array'
             ],
-            'hr_demands.institute_ids.*' => [
+            'hr_demands.*.institute_ids.*' => [
                 'nullable',
-                'int',
-                'distinct'
+                'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
