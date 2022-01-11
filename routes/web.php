@@ -42,7 +42,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Hr-Demand Routes */
         $router->get('hr-demand-list-approved-by-institute', ['as' => 'hr-demand-list-approved-by-institute', 'uses' => 'HrDemandController@getListApprovedByInstitute']);
         $router->get('hr-demand-list-for-institute', ['as' => 'hr-demand-list-for-institute', 'uses' => 'HrDemandController@getListForInstitute']);
-        $router->get('hr-demand-for-institute', ['as' => 'hr-demand-for-institute', 'uses' => 'HrDemandController@readOnlyByInstitute']);
+        $router->get('hr-demand-for-institute/{id}', ['as' => 'hr-demand-for-institute', 'uses' => 'HrDemandController@readOnlyByInstitute']);
 
         /** Hr demand approve by institute */
         $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
