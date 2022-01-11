@@ -338,7 +338,7 @@ class IndustryAssociationController extends Controller
                 $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
 
                 /** send Sms after Industry Association Registration Approval */
-                $this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+                //$this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
 
 
                 $mailPayload['industry_association_id'] = $industryAssociationId;
@@ -346,7 +346,7 @@ class IndustryAssociationController extends Controller
                 $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
 
                 /** send Email after Industry Association Registration Approval */
-                $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
+                //$this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
 
                 DB::commit();
                 $response = [
