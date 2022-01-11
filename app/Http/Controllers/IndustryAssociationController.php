@@ -333,41 +333,29 @@ class IndustryAssociationController extends Controller
 
         DB::beginTransaction();
         try {
-            if ($industryAssociation && $industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
-                $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
-                $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
+            $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
+            $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
 
-                /** send Sms after Industry Association Registration Approval */
-                //$this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
+            /** send Sms after Industry Association Registration Approval */
+            //$this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
 
 
-                $mailPayload['industry_association_id'] = $industryAssociationId;
-                $mailPayload['subject'] = "Industry Association Registration Approval";
-                $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
+            $mailPayload['industry_association_id'] = $industryAssociationId;
+            $mailPayload['subject'] = "Industry Association Registration Approval";
+            $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
 
-                /** send Email after Industry Association Registration Approval */
-                //$this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
+            /** send Email after Industry Association Registration Approval */
+            //$this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
 
-                DB::commit();
-                $response = [
-                    '_response_status' => [
-                        "success" => true,
-                        "code" => ResponseAlias::HTTP_OK,
-                        "message" => "IndustryAssociation Registration  approved successfully",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            } else {
-                $response = [
-                    '_response_status' => [
-                        "success" => false,
-                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                        "message" => "No pending status found for this IndustryAssociation",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            }
-
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "IndustryAssociation Registration  approved successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
 
         } catch (Throwable $e) {
             DB::rollBack();
@@ -389,40 +377,26 @@ class IndustryAssociationController extends Controller
 
         DB::beginTransaction();
         try {
-            if ($industryAssociation && $industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
+            $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
+            $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
+            /** sendSms after Industry Association Registration Rejection */
+            $this->industryAssociationService->sendSmsIndustryAssociationRegistrationRejection($industryAssociation);
 
-                $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
-                $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
-                /** sendSms after Industry Association Registration Rejection */
-                $this->industryAssociationService->sendSmsIndustryAssociationRegistrationRejection($industryAssociation);
+            $mailPayload['industry_association_id'] = $industryAssociationId;
+            $mailPayload['subject'] = "Industry Association Registration Rejection";
+            $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
 
-                $mailPayload['industry_association_id'] = $industryAssociationId;
-                $mailPayload['subject'] = "Industry Association Registration Rejection";
-                $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
-
-                /** send Email after Industry Association Registration Approval */
-                $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
-                DB::commit();
-                $response = [
-                    '_response_status' => [
-                        "success" => true,
-                        "code" => ResponseAlias::HTTP_OK,
-                        "message" => "IndustryAssociation Registration  rejected successfully",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            } else {
-                $response = [
-                    '_response_status' => [
-                        "success" => false,
-                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                        "message" => "No pending status found for this IndustryAssociation",
-                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                    ]
-                ];
-            }
-
-
+            /** send Email after Industry Association Registration Approval */
+            $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "IndustryAssociation Registration  rejected successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
