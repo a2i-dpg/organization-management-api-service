@@ -8293,6 +8293,18 @@
     },
     "components": {
         "schemas": {
+            "vacancy_provided_by_institute": {
+                "type": "object",
+                "description": "vacancy_provided_by_institute",
+                "properties": {
+                    "vacancy_provided_by_institute": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "vacancy_provided_by_institute"
+                ]
+            },
             "Job-Status-Change": {
                 "type": "object",
                 "description": "Job status change",
