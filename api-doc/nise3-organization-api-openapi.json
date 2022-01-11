@@ -8289,6 +8289,90 @@
                     }
                 }
             }
+        },
+        "/hr-demand-list-approved-by-institute": {
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get Hr demand approved by institute",
+                "description": "API endpoint to get Hr demand approved by institute. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demand-list-for-institute": {
+            "get": {
+                "summary": "Get hr demand list for institute",
+                "description": "API endpoint to Get hr demand list for institute. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demand-for-institute/{hr_demand_id}": {
+            "get": {
+                "summary": "Get hr demand for institute",
+                "description": "API endpoint to Get hr demand for institute. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -8310,33 +8394,21 @@
                 "properties": {
                     "industry_association_id": {
                         "type": "integer",
-                        "description": "Must exist in industry_associationstable"
+                        "description": "Must exist in industry_associations table"
                     },
                     "organization_id": {
                         "type": "integer",
                         "description": "Must exist in organizations table"
                     },
-                    "institute_id": {
+                    "end_date": {
+                        "type": "string",
+                        "description": "Date must be greater than current date"
+                    },
+                    "hr_demands": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         }
-                    },
-                    "end_date": {
-                        "type": "string"
-                    },
-                    "skill_id": {
-                        "type": "integer",
-                        "description": "Must exist in skills table"
-                    },
-                    "requirement": {
-                        "type": "string"
-                    },
-                    "requirement_en": {
-                        "type": "string"
-                    },
-                    "vacancy": {
-                        "type": "integer"
                     },
                     "row_status": {
                         "type": "integer",
@@ -8350,11 +8422,8 @@
                 "required": [
                     "industry_association_id",
                     "organization_id",
-                    "institute_id",
                     "end_date",
-                    "skill_id",
-                    "requirement",
-                    "vacancy"
+                    "hr_demands"
                 ]
             },
             "MatchingCriteria": {
@@ -10776,7 +10845,6 @@
                 "required": false,
                 "schema": {
                     "type": "string"
-
                 },
                 "description": "Send skillIds as comma seperated string. example: 1,2,3"
             },
