@@ -234,8 +234,8 @@ class HrDemandService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
-        if (!empty($data['institute_ids'])) {
-            $data["institute_ids"] = isset($data['institute_ids']) && is_array($data['institute_ids']) ? $data['institute_ids'] : explode(',', $data['institute_ids']);
+        if (!empty($data['hr_demands.institute_ids'])) {
+            $data["hr_demands.institute_ids"] = isset($data['hr_demands.institute_ids']) && is_array($data['hr_demands.institute_ids']) ? $data['hr_demands.institute_ids'] : explode(',', $data['hr_demands.institute_ids']);
         }
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
