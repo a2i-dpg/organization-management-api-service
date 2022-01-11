@@ -121,6 +121,7 @@ abstract class BaseModel extends Model
         "CompanyInfoVisibility" => 4,
         "MatchingCriteria" => 5,
         "JobContactInformation" => 6,
+        "JobPreview" => 7,
     ];
 
 }
