@@ -215,7 +215,7 @@ class IndustryAssociationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
-                $this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
+                //$this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
                 $response['data'] = $industryAssociation;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
