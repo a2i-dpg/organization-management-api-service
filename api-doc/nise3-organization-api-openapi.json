@@ -4313,6 +4313,46 @@
                 ]
             }
         },
+        "/public/publications/{publicationId}": {
+            "get": {
+                "summary": "Get a public Publication by Id",
+                "description": "API endpoint to get a publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/publicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "data": {
+                                            "id": 4,
+                                            "title": "Cry My Name44444",
+                                            "title_en": "aaaa",
+                                            "description": "Ammon Ammarth",
+                                            "description_en": "Feel the black birds cry",
+                                            "image_path": null
+                                        },
+                                        "_response_status": {
+                                            "success": true,
+                                            "code": 200,
+                                            "query_time": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Publications"
+                ]
+            }
+        },
         "/industry-associations": {
             "get": {
                 "summary": "Get all industry association",
@@ -4351,8 +4391,7 @@
                                 0,
                                 1,
                                 2,
-                                3,
-                                4
+                                3
                             ]
                         }
                     }
@@ -9219,6 +9258,7 @@
                         "type": "object",
                         "example": " [ \n  [  industry_association_id=>1\n    membership_id =>\"ABC123\"\n\n ],\n [ \n    industry_association_id=>2\n    membership_id =>\"ABCD123\"\n ] \n]"
                     },
+
                     "organization_type_id": {
                         "type": "integer",
                         "description": "'1 => Government, 2 => Private,3=>NGO,4=>International",
@@ -9229,6 +9269,13 @@
                             4
                         ],
                         "example": 2
+                    },
+                    "industry_sub_trades": {
+                        "type": "array",
+                        "description": "Must exist in industry sub trade",
+                        "items": {
+                            "type": "integer"
+                        }
                     },
                     "permission_sub_group_id": {
                         "type": "integer"
@@ -9337,7 +9384,8 @@
                     "password",
                     "password_confirmation",
                     "loc_division_id",
-                    "loc_district_id"
+                    "loc_district_id",
+                    "industry_sub_trades"
                 ]
             },
             "organizationType": {
@@ -9420,6 +9468,13 @@
                         "description": "title in English",
                         "minLength": 2,
                         "maxLength": 300
+                    },
+                    "industry_sub_trades": {
+                        "type": "array",
+                        "description": "Must exist in industry sub trade",
+                        "items": {
+                            "type": "integer"
+                        }
                     },
                     "membership_id": {
                         "type": "string"
@@ -9563,7 +9618,8 @@
                     "email",
                     "address",
                     "loc_division_id",
-                    "loc_district_id"
+                    "loc_district_id",
+                    "industry_sub_trades"
                 ]
             },
             "organizationAdminProfile": {
@@ -10835,7 +10891,7 @@
                 }
             },
             "job_title_en_optional": {
-                "name": "job_title",
+                "name": "job_title_en",
                 "in": "query",
                 "required": false,
                 "style": "form",

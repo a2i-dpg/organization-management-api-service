@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Publication;
 use App\Services\PublicationService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,7 @@ class PublicationController extends Controller
      * Display a listing of the resource.
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
 
     public function getList(Request $request): JsonResponse
@@ -69,13 +70,33 @@ class PublicationController extends Controller
     /**
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
 
-        $publication = $this->publicationService->getOnePublication($id, $this->startTime);
+        $publication = $this->publicationService->getOnePublication($id);
         $this->authorize('view', $publication);
 
+        $response = [
+            "data" => $publication,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function clientSideRead(int $id): JsonResponse
+    {
+
+        $publication = $this->publicationService->getOnePublication($id);
         $response = [
             "data" => $publication,
             "_response_status" => [
@@ -91,7 +112,7 @@ class PublicationController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     function store(Request $request): JsonResponse
     {
@@ -144,6 +165,7 @@ class PublicationController extends Controller
      * Remove the specified resource from storage
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function destroy(int $id): JsonResponse
     {
@@ -185,7 +207,6 @@ class PublicationController extends Controller
 
     public function getPublicPublicationList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', Publication::class);
 
         $filter = $this->publicationService->filterValidator($request)->validate();
         $returnedData = $this->publicationService->getPublicationList($filter, $this->startTime);

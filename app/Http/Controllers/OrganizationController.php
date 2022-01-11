@@ -65,12 +65,28 @@ class OrganizationController extends Controller
     public function read(Request $request, int $id): JsonResponse
     {
         $organization = $this->organizationService->getOneOrganization($id);
-        $requestHeaders = $request->header();
-        /** Policy not checking when service to service call true*/
-        if (empty($requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0]) ||
-            $requestHeaders[BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_KEY][0] === BaseModel::DEFAULT_SERVICE_TO_SERVICE_CALL_FLAG_FALSE) {
-            $this->authorize('view', $organization);
-        }
+        $this->authorize('view', $organization);
+        $response = [
+            "data" => $organization,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Display a specified resource for public
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function organizationDetails(Request $request, int $id): JsonResponse
+    {
+        $organization = $this->organizationService->getOneOrganization($id);
+
         $response = [
             "data" => $organization,
             "_response_status" => [
@@ -99,11 +115,13 @@ class OrganizationController extends Controller
         $this->authorize('create', $organization);
 
         $validated = $this->organizationService->validator($request)->validate();
-
+        $industrySubTrades = $validated['industry_sub_trades'];
         DB::beginTransaction();
         try {
 
             $organization = $this->organizationService->store($organization, $validated);
+
+            $this->organizationService->syncWithIndustrySubTrades($organization, $industrySubTrades);
 
             if (!($organization && $organization->id)) {
                 throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
@@ -184,7 +202,9 @@ class OrganizationController extends Controller
         $this->authorize('update', $organization);
 
         $validated = $this->organizationService->validator($request, $id)->validate();
+        $industrySubTrades = $validated['industry_sub_trades'];
         $data = $this->organizationService->update($organization, $validated);
+        $this->organizationService->syncWithIndustrySubTrades($organization, $industrySubTrades);
         $response = [
             'data' => $data,
             '_response_status' => [

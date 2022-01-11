@@ -125,25 +125,33 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 return \App\Models\AdditionalJobInformation::with(['jobLevels', 'jobLocations', 'workPlaces'])->get();
             });
 
-
         });
-
-
     });
 
-
+    //Service to service direct call without any authorization and authentication
+    $router->group(['prefix' => 'service-to-service-call', 'as' => 'service-to-service-call'], function () use ($router) {
+        /** Single Institute Fetch  */
+        $router->get("organizations/{id}", ["as" => "service-to-service-call.organization", "uses" => "OrganizationController@organizationDetails"]);
+        $router->get("industry-associations/{id}", ["as" => "service-to-service-call.industry-associations", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
+    });
 
 
     $router->group(['prefix' => 'public', 'as' => 'public'], function () use ($router) {
         $router->get('jobs', ["as" => "public.job-list", "uses" => "JobManagementController@getPublicJobList"]);
         $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
+        $router->get("publications/{id}", ["as" => "public.publication-read", "uses" => "PublicationController@clientSideRead"]);
         $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
         $router->get("industry-association-member-details/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
         $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
+        $router->get("organizations/{id}", ["as" => "public.organization.details", "uses" => "OrganizationController@organizationDetails"]);
+        $router->get("industry-associations/{id}", ["as" => "public.industry-association.details", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
     });
 
     /** List of industryAssociation trades */
     $router->get('industry-association-trades', ['as' => 'industry-associations.trades', 'uses' => "IndustryAssociationTradeController@getList"]);
+
+    /** List of industryAssociation trades */
+    $router->get('industry-sub-trades', ['as' => 'industry-sub-trades', 'uses' => "IndustrySubTradeController@getList"]);
 
 
     /** Industry Association open  Registration */

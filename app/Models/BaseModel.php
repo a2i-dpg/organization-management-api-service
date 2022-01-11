@@ -33,6 +33,13 @@ abstract class BaseModel extends Model
     public const ROW_STATUS_PENDING = 2;
     public const ROW_STATUS_REJECTED = 3;
 
+    public const ROW_STATUSES = [
+        self::ROW_STATUS_ACTIVE,
+        self::ROW_STATUS_INACTIVE,
+        self::ROW_STATUS_PENDING,
+        self::ROW_STATUS_REJECTED,
+    ];
+
     public const PASSWORD_MIN_LENGTH = 8;
     public const PASSWORD_MAX_LENGTH = 50;
 

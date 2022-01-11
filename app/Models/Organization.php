@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Ramsey\Collection\Collection;
 
 /**
  * Class Organization
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string domain
  * @property int organization_type_id
  * @property-read OrganizationType organizationType
+ * @property-read Collection industrySubTrades
  */
 class Organization extends BaseModel
 {
@@ -92,5 +94,10 @@ class Organization extends BaseModel
     public function industryAssociations(): BelongsToMany
     {
         return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization')->withTimestamps();
+    }
+
+    public function industrySubTrades(): BelongsToMany
+    {
+        return $this->belongsToMany(IndustrySubTrade::class,'organization_industry_sub_trade','organization_id','industry_sub_trade_id');
     }
 }
