@@ -38,7 +38,7 @@
     ],
     "security": [
         {
-            "bearerAuth": []
+            "User-Token": []
         }
     ],
     "paths": {
@@ -4313,6 +4313,46 @@
                 ]
             }
         },
+        "/public/publications/{publicationId}": {
+            "get": {
+                "summary": "Get a public Publication by Id",
+                "description": "API endpoint to get a publication.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/publicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "data": {
+                                            "id": 4,
+                                            "title": "Cry My Name44444",
+                                            "title_en": "aaaa",
+                                            "description": "Ammon Ammarth",
+                                            "description_en": "Feel the black birds cry",
+                                            "image_path": null
+                                        },
+                                        "_response_status": {
+                                            "success": true,
+                                            "code": 200,
+                                            "query_time": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Publications"
+                ]
+            }
+        },
         "/industry-associations": {
             "get": {
                 "summary": "Get all industry association",
@@ -4351,8 +4391,7 @@
                                 0,
                                 1,
                                 2,
-                                3,
-                                4
+                                3
                             ]
                         }
                     }
@@ -5818,6 +5857,39 @@
                 }
             }
         },
+        "/job/primary-job-information/{jobId}/job-status-change": {
+            "post": {
+                "tags": [
+                    "Primary Job Information"
+                ],
+                "summary": "Change primary job information status",
+                "description": "API endpoint to change primary job information status.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Job-Status-Change"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/job/store-additional-job-information": {
             "post": {
                 "tags": [
@@ -5898,113 +5970,95 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "job_id": "555",
-                                        "job_responsibilities": null,
-                                        "job_context": "lll",
-                                        "job_place_type": 1,
+                                        "id": 1,
+                                        "job_id": "qq-qq",
+                                        "job_responsibilities": "",
+                                        "job_context": "fffgfgfgfg",
+                                        "job_place_type": 2,
                                         "salary_min": null,
                                         "salary_max": null,
-                                        "is_salary_info_show": 1,
-                                        "is_salary_compare_to_expected_salary": 1,
+                                        "is_salary_info_show": 2,
+                                        "is_salary_compare_to_expected_salary": 0,
                                         "is_salary_alert_excessive_than_given_salary_range": 1,
-                                        "salary_review": 1,
+                                        "salary_review": 2,
                                         "festival_bonus": 1,
                                         "additional_salary_info": null,
                                         "is_other_benefits": 1,
-                                        "other_benefits": [
-                                            "c++"
-                                        ],
                                         "lunch_facilities": 1,
                                         "others": null,
-                                        "created_at": "2022-01-02T04:58:29.000000Z",
-                                        "updated_at": "2022-01-02T07:38:09.000000Z",
+                                        "created_at": "2022-01-09T11:40:37.000000Z",
+                                        "updated_at": "2022-01-09T11:40:37.000000Z",
                                         "job_levels": [
                                             {
                                                 "id": 1,
-                                                "additional_job_information_id": 2,
+                                                "job_id": "qq-qq",
+                                                "additional_job_information_id": 1,
                                                 "job_level_id": 1,
-                                                "created_at": "2022-01-02T04:58:30.000000Z",
-                                                "updated_at": "2022-01-02T04:58:30.000000Z",
-                                                "deleted_at": null,
                                                 "job_level_title": "Inside Bangladesh"
                                             },
                                             {
                                                 "id": 2,
-                                                "additional_job_information_id": 2,
+                                                "job_id": "qq-qq",
+                                                "additional_job_information_id": 1,
                                                 "job_level_id": 2,
-                                                "created_at": "2022-01-02T05:03:40.000000Z",
-                                                "updated_at": "2022-01-02T05:03:40.000000Z",
-                                                "deleted_at": null,
                                                 "job_level_title": "Outside Bangladesh"
                                             }
                                         ],
                                         "job_locations": [
                                             {
                                                 "id": 1,
-                                                "additional_job_information_id": 2,
+                                                "job_id": "qq-qq",
+                                                "additional_job_information_id": 1,
                                                 "loc_division_id": 1,
-                                                "loc_district_id": 4,
-                                                "loc_upazila_id": 6,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": null,
                                                 "loc_union_id": null,
                                                 "loc_city_corporation_id": null,
                                                 "loc_city_corporation_ward_id": null,
-                                                "created_at": "2022-01-02T04:58:30.000000Z",
-                                                "updated_at": "2022-01-02T04:58:30.000000Z",
-                                                "deleted_at": null,
-                                                "loc_area_id": 6,
+                                                "loc_area_id": null,
                                                 "loc_division_title": "বরিশাল",
                                                 "loc_division_title_en": "Barisal",
-                                                "loc_district_title": "ঝালকাঠি",
-                                                "loc_district_title_en": "JHALOKATI",
-                                                "loc_area_title": "মোংলা",
-                                                "loc_area_title_en": "MONGLA",
-                                                "location_id": "1_4_6",
-                                                "title": "বরিশাল => ঝালকাঠি => মোংলা",
-                                                "title_en": "BARISAL => JHALOKATI => MONGLA"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "additional_job_information_id": 2,
-                                                "loc_division_id": 0,
-                                                "loc_district_id": null,
-                                                "loc_upazila_id": 0,
-                                                "loc_union_id": null,
-                                                "loc_city_corporation_id": null,
-                                                "loc_city_corporation_ward_id": null,
-                                                "created_at": "2022-01-02T05:03:40.000000Z",
-                                                "updated_at": "2022-01-02T05:03:40.000000Z",
-                                                "deleted_at": null,
-                                                "loc_area_id": null,
-                                                "loc_division_title": null,
-                                                "loc_division_title_en": null,
                                                 "loc_district_title": null,
                                                 "loc_district_title_en": null,
                                                 "loc_area_title": null,
                                                 "loc_area_title_en": null,
-                                                "location_id": "",
-                                                "title": "",
-                                                "title_en": ""
+                                                "location_id": 1,
+                                                "title": "বরিশাল",
+                                                "title_en": "BARISAL"
                                             }
                                         ],
                                         "work_places": [
                                             {
                                                 "id": 1,
-                                                "additional_job_information_id": 2,
-                                                "work_place_id": 2,
-                                                "created_at": "2022-01-02T04:58:30.000000Z",
-                                                "updated_at": "2022-01-02T04:58:30.000000Z",
-                                                "deleted_at": null,
-                                                "work_place_title": "Office"
+                                                "job_id": "qq-qq",
+                                                "additional_job_information_id": 1,
+                                                "work_place_id": 1,
+                                                "work_place_title": "Home"
                                             },
                                             {
                                                 "id": 2,
-                                                "additional_job_information_id": 2,
-                                                "work_place_id": 1,
-                                                "created_at": "2022-01-02T04:58:30.000000Z",
-                                                "updated_at": "2022-01-02T04:58:30.000000Z",
+                                                "job_id": "qq-qq",
+                                                "additional_job_information_id": 1,
+                                                "work_place_id": 2,
+                                                "work_place_title": "Office"
+                                            }
+                                        ],
+                                        "other_benefits": [
+                                            {
+                                                "id": 1,
+                                                "title": "T/A",
+                                                "title_en": "T/A",
                                                 "deleted_at": null,
-                                                "work_place_title": "Home"
+                                                "created_at": null,
+                                                "updated_at": null
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Mobile bill",
+                                                "title_en": "Mobile bill",
+                                                "deleted_at": null,
+                                                "created_at": null,
+                                                "updated_at": null
                                             }
                                         ]
                                     },
@@ -8142,7 +8196,39 @@
                         }
                     }
                 }
+            },
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get all hr demand",
+                "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
             }
+
         },
         "/hr-demand/{hr_demand_id}": {
             "delete": {
@@ -8190,7 +8276,14 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Job published successfully done",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -8200,6 +8293,17 @@
     },
     "components": {
         "schemas": {
+            "Job-Status-Change": {
+                "type": "object",
+                "description": "Job status change",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>Publish 2=>Archive 3=>Draft"
+                    }
+                }
+            },
             "hr-demand": {
                 "type": "object",
                 "description": "Hr Demand",
@@ -8630,17 +8734,15 @@
                         "type": "string"
                     },
                     "is_other_benefits": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        },
+                        "type": "integer",
                         "description": "0=>False 1=>True"
                     },
                     "other_benefits": {
                         "type": "array",
                         "items": {
-                            "type": "string"
-                        }
+                            "type": "integer"
+                        },
+                        "description": "Required when is_other_benefits = TRUE"
                     },
                     "lunch_facilities": {
                         "type": "integer",
@@ -8648,7 +8750,7 @@
                             1,
                             2
                         ],
-                        "description": "1=>Partially Subsidized 2=>Fully Subsidized"
+                        "description": "1=> Partially Subsidized 2=>Fully Subsidized"
                     },
                     "others": {
                         "type": "string"
@@ -8739,7 +8841,8 @@
                     },
                     "application_deadline": {
                         "type": "string",
-                        "format": "y-m-d"
+                        "format": "y-m-d",
+                        "description": "Must be greater than the current date"
                     },
                     "is_apply_online": {
                         "type": "string",
@@ -9155,6 +9258,7 @@
                         "type": "object",
                         "example": " [ \n  [  industry_association_id=>1\n    membership_id =>\"ABC123\"\n\n ],\n [ \n    industry_association_id=>2\n    membership_id =>\"ABCD123\"\n ] \n]"
                     },
+
                     "organization_type_id": {
                         "type": "integer",
                         "description": "'1 => Government, 2 => Private,3=>NGO,4=>International",
@@ -9165,6 +9269,13 @@
                             4
                         ],
                         "example": 2
+                    },
+                    "industry_sub_trades": {
+                        "type": "array",
+                        "description": "Must exist in industry sub trade",
+                        "items": {
+                            "type": "integer"
+                        }
                     },
                     "permission_sub_group_id": {
                         "type": "integer"
@@ -9273,7 +9384,8 @@
                     "password",
                     "password_confirmation",
                     "loc_division_id",
-                    "loc_district_id"
+                    "loc_district_id",
+                    "industry_sub_trades"
                 ]
             },
             "organizationType": {
@@ -9356,6 +9468,13 @@
                         "description": "title in English",
                         "minLength": 2,
                         "maxLength": 300
+                    },
+                    "industry_sub_trades": {
+                        "type": "array",
+                        "description": "Must exist in industry sub trade",
+                        "items": {
+                            "type": "integer"
+                        }
                     },
                     "membership_id": {
                         "type": "string"
@@ -9499,7 +9618,8 @@
                     "email",
                     "address",
                     "loc_division_id",
-                    "loc_district_id"
+                    "loc_district_id",
+                    "industry_sub_trades"
                 ]
             },
             "organizationAdminProfile": {
@@ -10475,10 +10595,10 @@
             }
         },
         "securitySchemes": {
-            "bearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
+            "User-Token": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "User-Token"
             }
         },
         "parameters": {
@@ -10771,7 +10891,7 @@
                 }
             },
             "job_title_en_optional": {
-                "name": "job_title",
+                "name": "job_title_en",
                 "in": "query",
                 "required": false,
                 "style": "form",

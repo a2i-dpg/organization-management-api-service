@@ -106,4 +106,14 @@ abstract class BaseModel extends Model
         0 => "False",
         1 => "True"
     ];
+
+    public const FORM_STEPS = [
+        "PrimaryJobInformation" => 1,
+        "AdditionalJobInformation" => 2,
+        "CandidateRequirement" => 3,
+        "MatchingCriteria" => 4,
+        "CompanyInfoVisibility" => 5,
+        "JobContactInformation" => 6,
+    ];
+
 }

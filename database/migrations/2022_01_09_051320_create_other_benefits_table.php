@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDateOfEstablishmentToOrganizationsTable extends Migration
+class CreateOtherBenefitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddDateOfEstablishmentToOrganizationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('organizations', function (Blueprint $table) {
-            $table->date('date_of_establishment')->after('title_en')->nullable();
+        Schema::create('other_benefits', function (Blueprint $table) {
+            $table->id();
+            $table->string('title', 500);
+            $table->string('title_en', 300)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddDateOfEstablishmentToOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('organizations', function (Blueprint $table) {
-            $table->dropColumn('date_of_establishment');
-        });
+        Schema::dropIfExists('other_benefits');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Models\ContactInfo;
 use App\Services\ContactInfoService;
 use Carbon\Carbon;
@@ -65,16 +66,30 @@ class ContactInfoController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $contactInfo = $this->contactInfoService->getOneContactInfo($id);
-        $this->authorize('view', $contactInfo);
+        $step = JobManagementController::lastAvailableStep($id);
         $response = [
-            "data" => $contactInfo,
-            "_response_status" => [
+            "data" => [
+                "latest_step" => $step
+            ],
+            '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['JobContactInformation']) {
+            $contactInfo = $this->contactInfoService->getOneContactInfo($id);
+            $contactInfo["latest_step"] = $step;
+            $this->authorize('view', $contactInfo);
+            $response = [
+                "data" => $contactInfo,
+                "_response_status" => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 

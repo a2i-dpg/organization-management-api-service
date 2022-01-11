@@ -2,6 +2,7 @@
 
 namespace App\Services\JobManagementServices;
 
+use App\Models\AreaOfExperience;
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,8 +50,8 @@ class CandidateRequirementsService
         $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,title');
 
         $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,title');
-        $candidateRequirementBuilder->with('areaOfExperience');
-        $candidateRequirementBuilder->with('areaOfBusiness:id,title');
+        $candidateRequirementBuilder->with('areaOfExperiences:id,title,title_en');
+        $candidateRequirementBuilder->with('areaOfBusiness:id,title,title_en');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
         $candidateRequirementBuilder->with('genders');
 
@@ -98,16 +99,7 @@ class CandidateRequirementsService
      */
     public function syncWithPreferredEducationalInstitution(CandidateRequirement $candidateRequirements, array $preferredEducationalInstitution)
     {
-        DB::table('candidate_requirement_preferred_educational_institution')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
-        foreach ($preferredEducationalInstitution as $item) {
-            DB::table('candidate_requirement_preferred_educational_institution')->insert(
-                [
-                    'candidate_requirement_id' => $candidateRequirements->id,
-                    'job_id' => $candidateRequirements->job_id,
-                    'preferred_educational_institution_id' => $item
-                ]
-            );
-        }
+        $candidateRequirements->educationalInstitutions()->syncWithPivotValues($preferredEducationalInstitution, ['job_id' => $candidateRequirements->job_id]);
     }
 
     /**
@@ -152,16 +144,7 @@ class CandidateRequirementsService
      */
     public function syncWithAreaOfExperience(CandidateRequirement $candidateRequirements, array $areaOfExperience)
     {
-        DB::table('candidate_requirement_area_of_experience')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
-        foreach ($areaOfExperience as $item) {
-            DB::table('candidate_requirement_area_of_experience')->insert(
-                [
-                    'candidate_requirement_id' => $candidateRequirements->id,
-                    'job_id' => $candidateRequirements->job_id,
-                    'area_of_experience_id' => $item
-                ]
-            );
-        }
+        $candidateRequirements->areaOfExperiences()->syncWithPivotValues($areaOfExperience, ['job_id' => $candidateRequirements->job_id]);
     }
 
     /**
@@ -170,16 +153,7 @@ class CandidateRequirementsService
      */
     public function syncWithAreaOfBusiness(CandidateRequirement $candidateRequirements, array $areaOfBusiness)
     {
-        DB::table('candidate_requirement_area_of_business')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
-        foreach ($areaOfBusiness as $item) {
-            DB::table('candidate_requirement_area_of_business')->insert(
-                [
-                    'candidate_requirement_id' => $candidateRequirements->id,
-                    'job_id' => $candidateRequirements->job_id,
-                    'area_of_business_id' => $item
-                ]
-            );
-        }
+        $candidateRequirements->areaOfBusiness()->syncWithPivotValues($areaOfBusiness, ['job_id' => $candidateRequirements->job_id]);
     }
 
     /**
@@ -188,16 +162,7 @@ class CandidateRequirementsService
      */
     public function syncWithSkills(CandidateRequirement $candidateRequirements, array $skills)
     {
-        DB::table('candidate_requirement_skill')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
-        foreach ($skills as $item) {
-            DB::table('candidate_requirement_skill')->insert(
-                [
-                    'candidate_requirement_id' => $candidateRequirements->id,
-                    'job_id' => $candidateRequirements->job_id,
-                    'skill_id' => $item
-                ]
-            );
-        }
+        $candidateRequirements->skills()->syncWithPivotValues($skills, ['job_id' => $candidateRequirements->job_id]);
     }
 
     /**
@@ -283,6 +248,7 @@ class CandidateRequirementsService
             ],
             "preferred_educational_institution.*" => [
                 "integer",
+                "required",
                 "exists:educational_institutions,id,deleted_at,NULL",
             ],
             "other_educational_qualification" => [
@@ -334,6 +300,8 @@ class CandidateRequirementsService
                 "array",
             ],
             "area_of_experience.*" => [
+                "required",
+                "integer",
                 "exists:area_of_experiences,id,deleted_at,NULL",
             ],
             "area_of_business" => [
@@ -341,6 +309,8 @@ class CandidateRequirementsService
                 "array",
             ],
             "area_of_business.*" => [
+                "integer",
+                "required",
                 "exists:area_of_business,id,deleted_at,NULL",
             ],
             "skills" => [
@@ -348,6 +318,8 @@ class CandidateRequirementsService
                 "array",
             ],
             "skills.*" => [
+                "integer",
+                "required",
                 "exists:skills,id,deleted_at,NULL",
             ],
             "additional_requirements" => [

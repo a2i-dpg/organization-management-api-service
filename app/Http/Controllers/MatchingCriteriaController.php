@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Models\MatchingCriteria;
 use App\Services\JobManagementServices\MatchingCriteriaService;
 use Carbon\Carbon;
@@ -62,15 +63,29 @@ class MatchingCriteriaController extends Controller
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
-        $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId);
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $matchingCriteria,
+            "data" => [
+                "latest_step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['MatchingCriteria']) {
+            $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId);
+            $matchingCriteria["latest_step"] = $step;
+            $response = [
+                "data" => $matchingCriteria,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }

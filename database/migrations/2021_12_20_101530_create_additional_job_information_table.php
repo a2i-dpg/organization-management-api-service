@@ -32,7 +32,6 @@ class CreateAdditionalJobInformationTable extends Migration
             $table->text("additional_salary_info")->nullable();
             $table->text("additional_salary_info_en")->nullable();
             $table->unsignedTinyInteger("is_other_benefits")->comment("0=>No, 1=>Yes");
-            $table->json("other_benefits")->comment("[mobile bill,profit share,.....]")->nullable();
             $table->unsignedTinyInteger('lunch_facilities')->comment('1=>Partially Subsidize, 2=>Full Subsidize');
             $table->text('others')->nullable();
             $table->timestamps();

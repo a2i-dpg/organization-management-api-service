@@ -22,7 +22,7 @@ class CandidateRequirement extends BaseModel
 
     public function educationalInstitutions(): BelongsToMany
     {
-        return $this->belongsToMany(EducationalInstitution::class, 'candidate_requirement_preferred_educational_institution', 'candidate_requirement_id', 'id');
+        return $this->belongsToMany(EducationalInstitution::class, 'candidate_requirement_preferred_educational_institution', 'candidate_requirement_id', 'preferred_educational_institution_id');
 
     }
 
@@ -37,9 +37,9 @@ class CandidateRequirement extends BaseModel
     }
 
 
-    public function areaOfExperience(): BelongsToMany
+    public function areaOfExperiences(): BelongsToMany
     {
-        return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','area_of_experience_id');
+            return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','area_of_experience_id');
     }
 
     public function areaOfBusiness(): BelongsToMany

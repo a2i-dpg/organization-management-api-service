@@ -3,9 +3,7 @@
 namespace App\Services\JobManagementServices;
 
 use App\Models\AdditionalJobInformation;
-use App\Models\AdditionalJobInformationJobLevel;
 use App\Models\AdditionalJobInformationJobLocation;
-use App\Models\AdditionalJobInformationWorkPlace;
 use App\Models\LocDistrict;
 use App\Models\LocDivision;
 use App\Models\LocUpazila;
@@ -42,7 +40,6 @@ class AdditionalJobInformationService
             'additional_job_information.festival_bonus',
             'additional_job_information.additional_salary_info',
             'additional_job_information.is_other_benefits',
-            'additional_job_information.other_benefits',
             'additional_job_information.lunch_facilities',
             'additional_job_information.others',
             'additional_job_information.created_at',
@@ -51,7 +48,7 @@ class AdditionalJobInformationService
 
         $additionalJobInfoBuilder->where('additional_job_information.job_id', $jobId);
 
-        $additionalJobInfoBuilder->with(['jobLevels', 'jobLocations', 'workPlaces']);
+        $additionalJobInfoBuilder->with(['jobLevels', 'jobLocations', 'workPlaces', 'otherBenefits']);
 
         return $additionalJobInfoBuilder->firstOrFail();
 
@@ -161,7 +158,7 @@ class AdditionalJobInformationService
             $key = $tempData['location_id'];
             $jobLocation[$key] = $tempData;
         }
-        Log::info("===>",$jobLocation);
+        Log::info("===>", $jobLocation);
         return $jobLocation;
     }
 
@@ -216,6 +213,15 @@ class AdditionalJobInformationService
             $jobLocationInfo['job_id'] = $additionalJobInformation->job_id;
             DB::table('additional_job_information_job_locations')->insert($jobLocationInfo);
         }
+    }
+
+    /**
+     * @param AdditionalJobInformation $additionalJobInformation
+     * @param array $otherBenefit
+     */
+    public function syncWithOtherBenefit(AdditionalJobInformation $additionalJobInformation, array $otherBenefit)
+    {
+        $additionalJobInformation->otherBenefits()->syncWithPivotValues($otherBenefit, ['job_id' => $additionalJobInformation->job_id]);
     }
 
     private function getJobLocationFormat(array $locIds): array
@@ -279,17 +285,17 @@ class AdditionalJobInformationService
     {
 
         $data = $request->all();
-        if(!empty($data["other_benefits"])){
-            $data["other_benefits"] =  is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
+        if (!empty($data["other_benefits"])) {
+            $data["other_benefits"] = is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
         }
-        if(!empty($data["job_level"])){
-            $data["job_level"] =  is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
+        if (!empty($data["job_level"])) {
+            $data["job_level"] = is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
         }
-        if(!empty($data["work_place"])){
+        if (!empty($data["work_place"])) {
             $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
         }
-        if (!empty($data["job_location"])){
-         $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
+        if (!empty($data["job_location"])) {
+            $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
         }
 
         $rules = [
@@ -340,6 +346,11 @@ class AdditionalJobInformationService
                 }),
                 "nullable",
                 "array"
+            ],
+            "other_benefits.*" => [
+                "nullable",
+                "integer",
+                "exists:other_benefits,id,deleted_at,NULL"
             ],
             "lunch_facilities" => [
                 Rule::in(array_keys(AdditionalJobInformation::LUNCH_FACILITIES))

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -40,8 +41,7 @@ class AdditionalJobInfoController extends Controller
         $jobLevel = $validatedData['job_level'];
         $workPlace = $validatedData['work_place'];
         $jobLocation = $validatedData['job_location'];
-
-        Log::info("----------------------",$jobLocation);
+        $otherBenefit = $validatedData['other_benefits'];
 
         DB::beginTransaction();
         try {
@@ -49,6 +49,7 @@ class AdditionalJobInfoController extends Controller
             $this->additionalJobInformationService->syncWithJobLevel($additionalJobInformation, $jobLevel);
             $this->additionalJobInformationService->syncWithWorkplace($additionalJobInformation, $workPlace);
             $this->additionalJobInformationService->syncWithJobLocation($additionalJobInformation, $jobLocation);
+            $this->additionalJobInformationService->syncWithOtherBenefit($additionalJobInformation, $otherBenefit);
 
             $response = [
                 "data" => $additionalJobInformation,
@@ -88,15 +89,29 @@ class AdditionalJobInfoController extends Controller
      */
     public function getAdditionalJobInformation(string $jobId): JsonResponse
     {
-        $additionalJobInformation = $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId);
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $additionalJobInformation,
+            "data" => [
+                "latest_step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['AdditionalJobInformation']) {
+            $additionalJobInformation = $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId);
+            $additionalJobInformation["latest_step"] = $step;
+            $response = [
+                "data" => $additionalJobInformation,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }

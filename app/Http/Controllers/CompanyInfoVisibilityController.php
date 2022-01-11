@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -53,15 +54,29 @@ class CompanyInfoVisibilityController extends Controller
      */
     public function getCompanyInfoVisibility(string $jobId): JsonResponse
     {
-        $companyInfoVisibility = $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId);
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $companyInfoVisibility,
+            "data" => [
+                "latest_step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['CompanyInfoVisibility']) {
+            $companyInfoVisibility = $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId);
+            $companyInfoVisibility["latest_step"] = $step;
+            $response = [
+                "data" => $companyInfoVisibility,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
