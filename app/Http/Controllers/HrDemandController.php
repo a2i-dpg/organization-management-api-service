@@ -67,24 +67,6 @@ class HrDemandController extends Controller
     }
 
     /**
-     * Display a listing of the Hr Demand Institutes to Institute Admin.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws ValidationException
-     */
-    public function getListForInstitute(Request $request): JsonResponse
-    {
-        $this->authorize('viewAnyByInstitute', HrDemand::class);
-
-        $filter = $this->hrDemandService->filterValidator($request)->validate();
-        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
-
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-    /**
      * Show the form for creating a new resource to Industry Association User.
      *
      * @param int $id
@@ -95,29 +77,6 @@ class HrDemandController extends Controller
     {
         $humanResource = $this->hrDemandService->getOneHrDemand($id);
         $this->authorize('view', $humanResource);
-        $response = [
-            "data" => $humanResource,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-            ]
-        ];
-
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * Show the form for creating a new resource to Industry Association User.
-     *
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     */
-    public function readOnlyByInstitute(int $id): JsonResponse
-    {
-        $humanResource = $this->hrDemandService->getOneHrDemand($id);
-        $this->authorize('viewByInstitute', $humanResource);
         $response = [
             "data" => $humanResource,
             "_response_status" => [
@@ -210,5 +169,4 @@ class HrDemandController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
-
 }
