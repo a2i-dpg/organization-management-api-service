@@ -27,8 +27,9 @@ class HrDemand extends BaseModel
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
-    public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INVALID = 2;
 
     public const BOOLEAN_FLAG = [
         0 => "False",

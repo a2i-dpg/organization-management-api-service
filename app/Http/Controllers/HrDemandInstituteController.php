@@ -51,7 +51,7 @@ class HrDemandInstituteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource to Industry Association User.
+     * Show the resource to Institute Admin user.
      *
      * @param int $id
      * @return JsonResponse
@@ -71,6 +71,36 @@ class HrDemandInstituteController extends Controller
         ];
 
         return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Update the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+        $this->authorize('update', HrDemand::class);
+
+        $validated = $this->hrDemandInstituteService->updateValidator($request, $hrDemandInstitute, $id)->validate();
+        $data = $this->hrDemandInstituteService->update($hrDemandInstitute, $validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Hr Demand updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**

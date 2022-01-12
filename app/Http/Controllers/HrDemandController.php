@@ -76,7 +76,7 @@ class HrDemandController extends Controller
     public function read(int $id): JsonResponse
     {
         $humanResource = $this->hrDemandService->getOneHrDemand($id);
-        $this->authorize('view', $humanResource);
+        $this->authorize('view', HrDemand::class);
         $response = [
             "data" => $humanResource,
             "_response_status" => [
@@ -107,36 +107,6 @@ class HrDemandController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
                 "message" => "Hr demand added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Update the specified resource.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws ValidationException
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $hrDemand = HrDemandInstitute::findOrFail($id);
-        $this->authorize('update', HrDemand::class);
-
-        $validated = $this->hrDemandService->updateValidator($request, $id)->validate();
-        $data = $this->hrDemandService->update($hrDemand, $validated);
-
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Hr Demand updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

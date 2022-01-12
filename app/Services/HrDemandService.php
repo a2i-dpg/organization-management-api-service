@@ -34,7 +34,7 @@ class HrDemandService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $skillIds = $request['skill_ids'] ?? [];
-        $showOnlyHrDemandsApprovedByInstitute = $request['approved_by_institutes'] ?? false;
+        $showOnlyHrDemandsApprovedByInstitute = $request[HrDemand::SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY] ?? false;
 
         /** @var Builder $hrDemandBuilder */
         $hrDemandBuilder = HrDemandInstitute::select([
@@ -154,14 +154,14 @@ class HrDemandService
             $payload = [
                 'industry_association_id' => $data['industry_association_id'],
                 'organization_id' => $data['organization_id'],
-                'end_date' => $data['end_date'],
                 'requirement' => $hrDemand['requirement'],
+                'end_date' => $hrDemand['end_date'],
                 'skill_id' => $hrDemand['skill_id'],
-                'requirement_en' => $hrDemand['requirement_en'],
+                'requirement_en' => $hrDemand['requirement_en'] ?? "",
                 'vacancy' => $hrDemand['vacancy'],
                 'remaining_vacancy' => $hrDemand['vacancy'],
                 'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
+                'updated_by' => Auth::id()
             ];
             $hrDemandInstance = new HrDemand();
             $hrDemandInstance->fill($payload);
@@ -172,26 +172,6 @@ class HrDemandService
             $this->storeHrDemandInstitutes($hrDemand, $hrDemandInstance);
         }
         return $createdHrDemands;
-    }
-
-    /**
-     * @param HrDemand $hrDemand
-     * @param array $data
-     * @return HrDemand
-     */
-    public function update(HrDemand $hrDemand, array $data): HrDemand
-    {
-        $hrDemand->fill($data);
-        $hrDemand->save();
-
-        $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)->pluck('id');
-        foreach ($hrDemandInstituteIds as $id){
-            $hrDemandInstitute = HrDemandInstitute::find($id);
-            $hrDemandInstitute->delete();
-        }
-
-        $this->storeHrDemandInstitutes($data, $hrDemand);
-        return $hrDemand;
     }
 
     /**
@@ -253,12 +233,6 @@ class HrDemandService
                 'int',
                 'exists:organizations,id,deleted_at,NULL',
             ],
-            'end_date' => [
-                'required',
-                'date',
-                'date_format:Y-m-d',
-                'after:'.Carbon::now(),
-            ],
             'hr_demands' => [
                 'required',
                 'array',
@@ -268,6 +242,12 @@ class HrDemandService
                 'required',
                 'int',
                 'exists:skills,id,deleted_at,NULL',
+            ],
+            'hr_demands.*.end_date' => [
+                'required',
+                'date',
+                'date_format:Y-m-d',
+                'after:'.Carbon::now(),
             ],
             'hr_demands.*.requirement' => [
                 'required',
@@ -287,60 +267,6 @@ class HrDemandService
             ],
             'hr_demands.*.institute_ids.*' => [
                 'nullable',
-                'int'
-            ],
-            'row_status' => [
-                'required_if:' . $id . ',!=,null',
-                'nullable',
-                Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
-            ]
-        ];
-        return Validator::make($data, $rules, $customMessage);
-    }
-
-
-    /**
-     * @param Request $request
-     * @param int|null $id
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    public function updateValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
-    {
-        $data = $request->all();
-        $customMessage = [
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
-        ];
-        $rules = [
-            'organization_id' => [
-                'required',
-                'int',
-                'exists:organizations,id,deleted_at,NULL',
-            ],
-            'end_date' => [
-                'required',
-                'date',
-                'date_format:Y-m-d',
-                'after:'.Carbon::now(),
-            ],
-            'skill_id' => [
-                'required',
-                'int',
-                'exists:skills,id,deleted_at,NULL',
-            ],
-            'requirement' => [
-                'required',
-                'string'
-            ],
-            'requirement_en' => [
-                'nullable',
-                'string'
-            ],
-            'vacancy' => [
-                'required',
-                'int'
-            ],
-            'institute_id' => [
-                'required',
                 'int'
             ],
             'row_status' => [
