@@ -766,7 +766,7 @@ class IndustryAssociationService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
-    public function industryAssociationAdminValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function industryAssociationAdminValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
