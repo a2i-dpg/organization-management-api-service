@@ -38,7 +38,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
         $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
         $customRouter()->resourceRoute('hr-demands', 'HrDemandController')->render();
-        $customRouter()->resourceRoute('hr-demand-institutes', 'HrDemandController')->render();
+        $customRouter()->resourceRoute('hr-demand-institutes', 'HrDemandInstituteController')->render();
 
         /** Hr-Demand Single Routes */
         $router->get('hr-demands-approved-by-institute', ['as' => 'hr-demand-list-approved-by-institute', 'uses' => 'HrDemandController@getListApprovedByInstitute']);

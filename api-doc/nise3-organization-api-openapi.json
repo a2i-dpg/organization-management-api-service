@@ -3997,6 +3997,9 @@
                         "$ref": "#/components/parameters/author"
                     },
                     {
+                        "$ref": "#/components/parameters/author_en"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -4015,25 +4018,22 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 11,
-                                            "title": "TestPub",
-                                            "title_en": null,
-                                            "author": null,
-                                            "author_en": null,
-                                            "description": "New Desc",
-                                            "description_en": null,
-                                            "industry_association_id": 2,
-                                            "image_path": null,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-12-09T11:20:01.000000Z",
-                                            "updated_at": "2021-12-09T11:20:01.000000Z",
-                                            "row_status": 1
-                                        }
-                                    ],
+                                    "data": {
+                                        "id": 1,
+                                        "title": "yahoo",
+                                        "title_en": "yahoo",
+                                        "author": "banana khan",
+                                        "author_en": null,
+                                        "description": "horrorrlust",
+                                        "description_en": "chhikamaruu",
+                                        "industry_association_id": 1,
+                                        "image_path": "lll/lllk..jkkk",
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-01-12T06:23:49.000000Z",
+                                        "updated_at": "2022-01-12T06:23:49.000000Z",
+                                        "row_status": 1
+                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -4067,13 +4067,18 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "title": "TestPub",
-                                        "description": "New Desc",
-                                        "industry_association_id": 2,
+                                        "title_en": "yahoo",
+                                        "title": "yahoo",
+                                        "author": "FergieNutts",
+                                        "author_en": "Konohamaruu",
+                                        "description": "AsumaSense",
+                                        "description_en": "chhikamaruu",
+                                        "image_path": "lll/lllk..jkkk",
+                                        "industry_association_id": "1",
                                         "row_status": "1",
-                                        "updated_at": "2021-12-09T11:20:01.000000Z",
-                                        "created_at": "2021-12-09T11:20:01.000000Z",
-                                        "id": 11
+                                        "updated_at": "2022-01-12T06:33:06.000000Z",
+                                        "created_at": "2022-01-12T06:33:06.000000Z",
+                                        "id": 3
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -8560,37 +8565,6 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Hr Demand"
-                ],
-                "summary": "Update an hr demand institute",
-                "description": "API endpoint to Update an hr demand institute.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/hr_demand_id"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/hr-demand"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {}
-                            }
-                        }
-                    }
-                }
-            },
             "delete": {
                 "tags": [
                     "Hr Demand"
@@ -8615,6 +8589,42 @@
                                         "query_time": 0
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demands-approved-by-institute/{hr_demand_id}": {
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get all hr demands approved by institutes",
+                "description": "API endpoint to Get all hr demands approved by institutes.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
                             }
                         }
                     }
@@ -8811,7 +8821,7 @@
                 "description": "vacancy_approved_by_industry_association",
                 "properties": {
                     "vacancy_approved_by_industry_association": {
-                        "type": "object"
+                        "type": "integer"
                     }
                 },
                 "required": [
@@ -9006,7 +9016,7 @@
                     },
                     "degrees": {
                         "type": "object",
-                        "example": " [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n]"
+                        "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
                     },
                     "preferred_educational_institution": {
                         "type": "array",
@@ -11414,6 +11424,14 @@
             },
             "author": {
                 "name": "author",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "author_en": {
+                "name": "author_en",
                 "in": "query",
                 "required": false,
                 "schema": {
