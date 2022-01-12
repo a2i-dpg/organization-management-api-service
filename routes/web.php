@@ -37,12 +37,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('publications', 'PublicationController')->render();
         $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
         $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
-        $customRouter()->resourceRoute('hr-demand', 'HrDemandController')->render();
+        $customRouter()->resourceRoute('hr-demands', 'HrDemandController')->render();
+        $customRouter()->resourceRoute('hr-demand-institutes', 'HrDemandController')->render();
 
-        /** Hr-Demand Routes */
-        $router->get('hr-demand-list-approved-by-institute', ['as' => 'hr-demand-list-approved-by-institute', 'uses' => 'HrDemandController@getListApprovedByInstitute']);
-        $router->get('hr-demand-list-for-institute', ['as' => 'hr-demand-list-for-institute', 'uses' => 'HrDemandController@getListForInstitute']);
-        $router->get('hr-demand-for-institute', ['as' => 'hr-demand-for-institute', 'uses' => 'HrDemandController@readOnlyByInstitute']);
+        /** Hr-Demand Single Routes */
+        $router->get('hr-demands-approved-by-institute', ['as' => 'hr-demand-list-approved-by-institute', 'uses' => 'HrDemandController@getListApprovedByInstitute']);
 
         /** Hr demand approve by institute */
         $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
@@ -89,6 +88,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("industry-association-profile", ["as" => "public.organizations", "uses" => "IndustryAssociationController@getIndustryAssociationProfile"]);
         $router->put('organization-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationProfile']);
         $router->get("industry-association-members", ["as" => "industry-association-members", "uses" => "IndustryAssociationController@getIndustryAssociationMemberList"]);
+        $router->get("industry-association-member-details/{industryId}", ["as" => "industry-association-member-details", "uses" => "IndustryAssociationController@industryAssociationMemberDetails"]);
 
 
         /** job management routes */

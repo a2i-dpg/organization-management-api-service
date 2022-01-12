@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AreaOfExperience;
 use App\Models\Skill;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
@@ -17,9 +18,9 @@ class AreaOfExperienceSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        Skill::query()->truncate();
+        AreaOfExperience::query()->truncate();
 
-        $skills = [
+        $area_of_experiences = [
             [
                 'id' => '1',
                 "title" => "টেকনিকাল রাইটিং",
@@ -163,7 +164,7 @@ class AreaOfExperienceSeeder extends Seeder
 
         ];
 
-        Skill::insert($skills);
+        AreaOfExperience::insert($area_of_experiences);
 
         Schema::enableForeignKeyConstraints();
     }

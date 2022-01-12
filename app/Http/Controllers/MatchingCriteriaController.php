@@ -77,14 +77,8 @@ class MatchingCriteriaController extends Controller
         if ($step >= BaseModel::FORM_STEPS['MatchingCriteria']) {
             $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId);
             $matchingCriteria["latest_step"] = $step;
-            $response = [
-                "data" => $matchingCriteria,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+            $response["data"] = $matchingCriteria;
+            $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
 

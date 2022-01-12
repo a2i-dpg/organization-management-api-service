@@ -98,9 +98,11 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getIndustryAssociationMemberList(Request $request): JsonResponse
     {
+        $this->authorize('viewAnyMember', IndustryAssociation::class);
         $filter = $this->organizationService->IndustryAssociationMemberFilterValidator($request)->validate();
         $response = $this->organizationService->getOrganizationListByIndustryAssociation($filter, $this->startTime);
 
@@ -164,6 +166,27 @@ class IndustryAssociationController extends Controller
     {
         $industry = $this->organizationService->getOneOrganization($industryId);
 
+        $response = [
+            "data" => $industry,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     *Industry member details
+     * @param int $industryId
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function industryAssociationMemberDetails(int $industryId): JsonResponse
+    {
+        $this->authorize('viewMember', IndustryAssociation::class);
+        $industry = $this->organizationService->getOneOrganization($industryId);
         $response = [
             "data" => $industry,
             "_response_status" => [
@@ -380,14 +403,14 @@ class IndustryAssociationController extends Controller
             $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
             $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
             /** sendSms after Industry Association Registration Rejection */
-           // $this->industryAssociationService->sendSmsIndustryAssociationRegistrationRejection($industryAssociation);
+            // $this->industryAssociationService->sendSmsIndustryAssociationRegistrationRejection($industryAssociation);
 
             $mailPayload['industry_association_id'] = $industryAssociationId;
             $mailPayload['subject'] = "Industry Association Registration Rejection";
             $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
 
             /** send Email after Industry Association Registration Approval */
-           // $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
+            // $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
             DB::commit();
             $response = [
                 '_response_status' => [

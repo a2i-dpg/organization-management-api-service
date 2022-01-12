@@ -4558,12 +4558,86 @@
                 ]
             }
         },
+        "/industry-association-member-details/{industryId}": {
+            "get": {
+                "tags": [
+                    "Industry-Association"
+                ],
+                "summary": "Get a industry association membership details",
+                "description": "API endpoint to get an industry association member details.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/industryId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "Collier-Jenkins",
+                                        "title": "Collier-Jenkins",
+                                        "name_of_the_office_head": "Buford Kub III",
+                                        "name_of_the_office_head_en": "Buford Kub III",
+                                        "name_of_the_office_head_designation": "CEO",
+                                        "name_of_the_office_head_designation_en": "CEO",
+                                        "domain": "https://www.stokes.com",
+                                        "fax_no": "(361) 784-3386",
+                                        "mobile": "01750412487",
+                                        "email": "ondricka.weldon@yundt.com",
+                                        "contact_person_name": "Mr. Kristian Glover DDS",
+                                        "contact_person_name_en": "Mr. Kristian Glover DDS",
+                                        "contact_person_mobile": "01720148578",
+                                        "contact_person_email": "squigley@example.com",
+                                        "contact_person_designation": "Photoengraver",
+                                        "contact_person_designation_en": "Photoengraver",
+                                        "description": "Iure facilis aut suscipit officia.",
+                                        "description_en": "Iure facilis aut suscipit officia.",
+                                        "logo": "logo.jpg",
+                                        "loc_division_id": 3,
+                                        "loc_division_title_en": "Dhaka",
+                                        "loc_division_title": "ঢাকা",
+                                        "loc_district_id": 18,
+                                        "loc_district_title_en": "DHAKA",
+                                        "loc_district_title": "ঢাকা ",
+                                        "loc_upazila_id": null,
+                                        "loc_upazila_title_en": null,
+                                        "loc_upazila_title": null,
+                                        "location_latitude": "90.399452",
+                                        "location_longitude": "90.399452",
+                                        "google_map_src": null,
+                                        "organization_type_id": 3,
+                                        "organization_type_title_en": "Public Corporation",
+                                        "organization_type_title": "Public Corporation",
+                                        "address": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                        "address_en": "1619 Garry Forest Suite 874\nPort Jade, NY 35079-8867",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-19T07:49:59.000000Z",
+                                        "updated_at": "2021-12-19T07:49:59.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/public/industry-association-member-details/{industryId}": {
             "get": {
                 "tags": [
                     "Industry-Association"
                 ],
-                "summary": "Get an industry association membership details",
+                "summary": "Get a public industry association membership details",
                 "description": "API endpoint to get an industry association member details.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
@@ -8150,7 +8224,38 @@
                 }
             }
         },
-        "/hr-demand": {
+        "/hr-demands": {
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get all hr demand",
+                "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Hr Demand"
@@ -8196,70 +8301,9 @@
                         }
                     }
                 }
-            },
-            "get": {
-                "tags": [
-                    "Hr Demand"
-                ],
-                "summary": "Get all hr demand",
-                "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/skillIds"
-                    },
-                    {
-                        "$ref": "#/components/parameters/page_size"
-                    },
-                    {
-                        "$ref": "#/components/parameters/order"
-                    },
-                    {
-                        "$ref": "#/components/parameters/row_status_optional"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {}
-                            }
-                        }
-                    }
-                }
             }
-
         },
-        "/hr-demand/{hr_demand_id}": {
-            "delete": {
-                "tags": [
-                    "Hr Demand"
-                ],
-                "summary": "Delete a hr-demand",
-                "description": "API endpoint to Delete a hr-demand.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/hr_demand_id"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "HR Demand Deleted Successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
+        "/hr-demands/{hr_demand_id}": {
             "get": {
                 "tags": [
                     "Hr Demand"
@@ -8288,11 +8332,277 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Update an hr demand institute",
+                "description": "API endpoint to Update an hr demand institute.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/hr-demand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Delete a hr-demand",
+                "description": "API endpoint to Delete a hr-demand.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "HR Demand Deleted Successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demand-institutes": {
+            "get": {
+                "tags": [
+                    "Hr Demand Institute"
+                ],
+                "summary": "Get All Hr demand approved by institute",
+                "description": "API endpoint to get all Hr demand approved by institute. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demand-institutes/{hr_demand_id}": {
+            "get": {
+                "tags": [
+                    "Hr Demand Institute"
+                ],
+                "summary": "Get a single Hr Demand Institute",
+                "description": "API endpoint to get a single Hr demand approved by institute. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/hr-demand-approved-by-institute/{hr_demand_id}": {
+            "put": {
+                "tags": [
+                    "Hr Demand Institute"
+                ],
+                "summary": "Update a single hr-demand approved by institutes",
+                "description": "API endpoint to Get a single hr-demand approved by institutes.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/vacancy_provided_by_institute"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demand-rejected-by-institute/{hr_demand_id}": {
+            "put": {
+                "tags": [
+                    "Hr Demand Institute"
+                ],
+                "summary": "Update a single hr-demand rejected by institutes",
+                "description": "API endpoint to Get a single hr-demand rejected by institutes.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/hr-demand-approved-by-industry-association/{hr_demand_id}": {
+            "put": {
+                "tags": [
+                    "Hr Demand Institute"
+                ],
+                "summary": "Update an hr demand approved by industry association id",
+                "description": "API endpoint to Update an hr demand approved by industry association id. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/vacancy_approved_by_industry_association"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demand-rejected-by-industry-association/{hr_demand_id}": {
+            "put": {
+                "tags": [
+                    "Hr Demand Institute"
+                ],
+                "summary": "Update an hr demand rejected by industry association id",
+                "description": "API endpoint to Update an hr demand rejected by industry association id. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/vacancy_approved_by_industry_association"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
             }
         }
     },
     "components": {
         "schemas": {
+            "vacancy_approved_by_industry_association": {
+                "type": "object",
+                "description": "vacancy_approved_by_industry_association",
+                "properties": {
+                    "vacancy_approved_by_industry_association": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "vacancy_approved_by_industry_association"
+                ]
+            },
+            "vacancy_provided_by_institute": {
+                "type": "object",
+                "description": "vacancy_provided_by_institute",
+                "properties": {
+                    "vacancy_provided_by_institute": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "vacancy_provided_by_institute"
+                ]
+            },
             "Job-Status-Change": {
                 "type": "object",
                 "description": "Job status change",
@@ -8310,33 +8620,21 @@
                 "properties": {
                     "industry_association_id": {
                         "type": "integer",
-                        "description": "Must exist in industry_associationstable"
+                        "description": "Must exist in industry_associations table"
                     },
                     "organization_id": {
                         "type": "integer",
                         "description": "Must exist in organizations table"
                     },
-                    "institute_id": {
+                    "end_date": {
+                        "type": "string",
+                        "description": "Date must be greater than current date"
+                    },
+                    "hr_demands": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         }
-                    },
-                    "end_date": {
-                        "type": "string"
-                    },
-                    "skill_id": {
-                        "type": "integer",
-                        "description": "Must exist in skills table"
-                    },
-                    "requirement": {
-                        "type": "string"
-                    },
-                    "requirement_en": {
-                        "type": "string"
-                    },
-                    "vacancy": {
-                        "type": "integer"
                     },
                     "row_status": {
                         "type": "integer",
@@ -8350,11 +8648,8 @@
                 "required": [
                     "industry_association_id",
                     "organization_id",
-                    "institute_id",
                     "end_date",
-                    "skill_id",
-                    "requirement",
-                    "vacancy"
+                    "hr_demands"
                 ]
             },
             "MatchingCriteria": {
@@ -9017,7 +9312,7 @@
                     "password": {
                         "type": "string",
                         "minimum": 8,
-                        "description": "regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$/"
+                        "description": "Must contain a upper case , a lower case letter and numbers. Minimum length 8"
                     },
                     "password_confirmation": {
                         "type": "string",
@@ -9099,15 +9394,8 @@
                         "example": "BD",
                         "minimum": 2
                     },
-                    "phone_code": {
-                        "type": "string",
-                        "example": "880",
-                        "minimum": 2
-                    },
                     "mobile": {
-                        "type": "string",
-                        "description": "regex: /^(01[3-9]\\d{8})$/",
-                        "minimum": 2
+                        "type": "string"
                     },
                     "email": {
                         "type": "string",
@@ -9153,8 +9441,7 @@
                         "minimum": 2
                     },
                     "domain": {
-                        "type": "string",
-                        "description": "regex:/^(http|https):\\/\\/[a-zA-Z-\\-\\.0-9]+$/"
+                        "type": "string"
                     },
                     "logo": {
                         "type": "string"
@@ -10776,7 +11063,6 @@
                 "required": false,
                 "schema": {
                     "type": "string"
-
                 },
                 "description": "Send skillIds as comma seperated string. example: 1,2,3"
             },

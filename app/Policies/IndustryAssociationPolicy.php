@@ -23,7 +23,6 @@ class IndustryAssociationPolicy
 
     /**
      * Determine whether the user can view the industryAssociation.
-     *
      * @param User $authUser
      * @param IndustryAssociation $industryAssociation
      * @return bool
@@ -67,5 +66,28 @@ class IndustryAssociationPolicy
     public function delete(User $authUser, IndustryAssociation $industryAssociation): bool
     {
         return $authUser->hasPermission('delete_industry_association');
+    }
+
+
+    /**
+     * Determine whether the user can view any industryAssociation Member.
+     * @param User $authUser
+     * @return bool
+     */
+    public function viewAnyMember(User $authUser): bool
+    {
+        return $authUser->hasPermission('view_any_industry_association_member');
+    }
+
+
+    /**
+     * Determine whether the user can view the industryAssociation.
+     * @param User $authUser
+     * @return bool
+     */
+    public function viewMember(User $authUser): bool
+    {
+        return $authUser->hasPermission('view_single_industry_association_member');
+
     }
 }

@@ -148,21 +148,28 @@ class JobManagementController extends Controller
 
     public function jobPreview(string $jobId): JsonResponse
     {
-        $data = collect([
-            'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
-            'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
-            'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
-            'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
-        ]);
-
+        $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
-            "data" => $data,
+            "data" => [
+                "latest_step" => $step
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        if ($step >= BaseModel::FORM_STEPS['JobPreview']) {
+            $data = collect([
+                'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
+                'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
+                'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
+                'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
+            ]);
+            $data["latest_step"] = $step;
+            $response["data"] = $data;
+            $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }

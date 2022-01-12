@@ -103,14 +103,8 @@ class AdditionalJobInfoController extends Controller
         if ($step >= BaseModel::FORM_STEPS['AdditionalJobInformation']) {
             $additionalJobInformation = $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId);
             $additionalJobInformation["latest_step"] = $step;
-            $response = [
-                "data" => $additionalJobInformation,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+            $response["data"] = $additionalJobInformation;
+            $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
 

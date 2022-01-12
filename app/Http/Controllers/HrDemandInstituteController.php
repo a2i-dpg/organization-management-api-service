@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use App\Services\HrDemandInstituteService;
+use App\Services\HrDemandService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -15,17 +16,61 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class HrDemandInstituteController extends Controller
 {
+    public HrDemandService $hrDemandService;
     public HrDemandInstituteService $hrDemandInstituteService;
     private Carbon $startTime;
 
     /**
      * HrDemandInstituteController constructor.
+     * @param HrDemandService $hrDemandService
      * @param HrDemandInstituteService $hrDemandInstituteService
      */
-    public function __construct(HrDemandInstituteService $hrDemandInstituteService)
+    public function __construct(HrDemandService $hrDemandService, HrDemandInstituteService $hrDemandInstituteService)
     {
+        $this->hrDemandService = $hrDemandService;
         $this->hrDemandInstituteService = $hrDemandInstituteService;
         $this->startTime = Carbon::now();
+    }
+
+    /**
+     * Display a listing of the Hr Demand Institutes to Institute Admin.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getList(Request $request): JsonResponse
+    {
+        $this->authorize('viewAnyByInstitute', HrDemand::class);
+
+        $filter = $this->hrDemandService->filterValidator($request)->validate();
+        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Show the form for creating a new resource to Industry Association User.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function read(int $id): JsonResponse
+    {
+        $humanResource = $this->hrDemandService->getOneHrDemand($id);
+        $this->authorize('viewByInstitute', $humanResource);
+        $response = [
+            "data" => $humanResource,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+            ]
+        ];
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**

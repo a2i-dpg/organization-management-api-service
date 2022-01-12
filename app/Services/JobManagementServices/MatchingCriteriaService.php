@@ -39,14 +39,13 @@ class MatchingCriteriaService
         $matchingCriteriaBuilder->where('matching_criteria.job_id', $jobId);
 
         $matchingCriteriaBuilder->with('areaOfExperiences:id,title_en');
-        $matchingCriteriaBuilder->with('areaOfBusiness:id,title');
+        $matchingCriteriaBuilder->with('areaOfBusiness:id,title,title_en');
         $matchingCriteriaBuilder->with('skills:id,title,title_en');
-        $matchingCriteriaBuilder->with('genders:id,gender_id');
-        $matchingCriteriaBuilder->with('candidateRequirement:minimum_year_of_experience,maximum_year_of_experience,age_minimum,age_maximum');
-        $matchingCriteriaBuilder->with('additionalJobInformation:salary_min,salary_max');
-        $matchingCriteriaBuilder->with('jobLevels');//->with('jobLevels:job_level_id');//
-        $matchingCriteriaBuilder->with('jobLocations:loc_division_id,loc_district_id,loc_upazila_id,loc_union_id,loc_city_corporation_id,loc_city_corporation_ward_id');
-
+        $matchingCriteriaBuilder->with('genders:job_id,gender_id');
+        $matchingCriteriaBuilder->with('candidateRequirement:job_id,minimum_year_of_experience,maximum_year_of_experience,age_minimum,age_maximum');
+        $matchingCriteriaBuilder->with('additionalJobInformation:job_id,salary_min,salary_max');
+        $matchingCriteriaBuilder->with('jobLevels:job_id,job_level_id');
+        $matchingCriteriaBuilder->with('jobLocations');
 
         return $matchingCriteriaBuilder->firstOrFail();
     }

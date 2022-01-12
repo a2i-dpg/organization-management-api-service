@@ -47,13 +47,13 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
 
-        $candidateRequirementBuilder->with('trainings:id,candidate_requirement_id,title');
+        $candidateRequirementBuilder->with('trainings:job_id,title');
 
-        $candidateRequirementBuilder->with('professionalCertifications:id,candidate_requirement_id,title');
+        $candidateRequirementBuilder->with('professionalCertifications:job_id,title');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title,title_en');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
-        $candidateRequirementBuilder->with('genders');
+        $candidateRequirementBuilder->with('genders:job_id,gender_id');
 
         return $candidateRequirementBuilder->firstOrFail();
     }
