@@ -8333,37 +8333,6 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Hr Demand"
-                ],
-                "summary": "Update an hr demand institute",
-                "description": "API endpoint to Update an hr demand institute.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/hr_demand_id"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/hr-demand"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {}
-                            }
-                        }
-                    }
-                }
-            },
             "delete": {
                 "tags": [
                     "Hr Demand"
@@ -8388,6 +8357,42 @@
                                         "query_time": 0
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demands-approved-by-institute/{hr_demand_id}": {
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get all hr demands approved by institutes",
+                "description": "API endpoint to Get all hr demands approved by institutes.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
                             }
                         }
                     }
@@ -8584,7 +8589,7 @@
                 "description": "vacancy_approved_by_industry_association",
                 "properties": {
                     "vacancy_approved_by_industry_association": {
-                        "type": "object"
+                        "type": "integer"
                     }
                 },
                 "required": [
@@ -8779,7 +8784,7 @@
                     },
                     "degrees": {
                         "type": "object",
-                        "example": " [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n]"
+                        "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
                     },
                     "preferred_educational_institution": {
                         "type": "array",
