@@ -33,7 +33,7 @@ class HrDemandInstituteController extends Controller
     }
 
     /**
-     * Display a listing of the Hr Demand Institutes to Institute Admin.
+     * Display a listing of the Hr Demand Institutes to Industry Association User & Institute Admin.
      *
      * @param Request $request
      * @return JsonResponse
@@ -42,36 +42,43 @@ class HrDemandInstituteController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyByInstitute', HrDemand::class);
+        $this->authorize('view', HrDemandInstitute::class);
 
-        $filter = $this->hrDemandService->filterValidator($request)->validate();
-        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
-
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * Show the resource to Institute Admin user.
-     *
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     */
-    public function read(int $id): JsonResponse
-    {
-        $humanResource = $this->hrDemandService->getOneHrDemand($id);
-        $this->authorize('viewByInstitute', $humanResource);
-        $response = [
-            "data" => $humanResource,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-            ]
-        ];
+        $filter = $this->hrDemandInstituteService->filterValidator($request)->validate();
+        $response = $this->hrDemandInstituteService->getHrDemandList($filter, $this->startTime);
 
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Update the specified resource.

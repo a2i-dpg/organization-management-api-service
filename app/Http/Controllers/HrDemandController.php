@@ -48,25 +48,6 @@ class HrDemandController extends Controller
     }
 
     /**
-     * Display a listing of the Hr Demand Institutes (Approved by Institute) to Industry Association User.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws ValidationException
-     */
-    public function getListApprovedByInstitute(Request $request): JsonResponse
-    {
-        $this->authorize('viewAny', HrDemand::class);
-
-        $filter = $this->hrDemandService->filterValidator($request)->validate();
-        $filter[HrDemand::SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY] = true;
-        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
-
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-    /**
      * Show the form for creating a new resource to Industry Association User.
      *
      * @param int $id
@@ -113,6 +94,90 @@ class HrDemandController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
+
+    /**
+     * Update the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $hrDemand = HrDemand::findOrFail($id);
+        $this->authorize('update', HrDemand::class);
+
+        $validated = $this->hrDemandService->updateValidator($request, $hrDemand, $id)->validate();
+        $data = $this->hrDemandService->update($hrDemand, $validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Hr Demand updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Display a listing of the Hr Demand Institutes (Approved by Institute) to Industry Association User.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getListApprovedByInstitute(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', HrDemand::class);
+
+        $filter = $this->hrDemandService->filterValidator($request)->validate();
+        $filter[HrDemand::SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY] = true;
+        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

@@ -34,13 +34,10 @@ class HrDemandService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $skillIds = $request['skill_ids'] ?? [];
-        $showOnlyHrDemandsApprovedByInstitute = $request[HrDemand::SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY] ?? false;
 
         /** @var Builder $hrDemandBuilder */
-        $hrDemandBuilder = HrDemandInstitute::select([
-            'hr_demand_institutes.id',
-            'hr_demand_institutes.institute_id',
-            'hr_demands.id as hr_demand_id',
+        $hrDemandBuilder = HrDemand::select([
+            'hr_demands.id',
             'hr_demands.industry_association_id',
             'hr_demands.organization_id',
             'organizations.title',
@@ -50,10 +47,6 @@ class HrDemandService
             'hr_demands.vacancy'
         ])->acl();
 
-        $hrDemandBuilder->join('hr_demands', function ($join) use ($rowStatus) {
-            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id')
-                ->whereNull('hr_demands.deleted_at');
-        });
         $hrDemandBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organizations.id', '=', 'hr_demands.organization_id')
                 ->whereNull('organizations.deleted_at');
@@ -63,11 +56,7 @@ class HrDemandService
             $hrDemandBuilder->whereIn('hr_demands.skill_id', $skillIds);
         }
 
-        if($showOnlyHrDemandsApprovedByInstitute){
-            $hrDemandBuilder->where('hr_demand_institutes.vacancy_provided_by_institute', '!=', 0);
-        }
-
-        $hrDemandBuilder->orderBy('hr_demand_institutes.id', $order);
+        $hrDemandBuilder->orderBy('hr_demands.id', $order);
         if (is_numeric($rowStatus)) {
             $hrDemandBuilder->where('hr_demands.row_status', $rowStatus);
         }
@@ -83,15 +72,6 @@ class HrDemandService
             $response['total'] = $paginateData->total;
         } else {
             $hrDemands = $hrDemandBuilder->get();
-        }
-
-        $instituteIds = $hrDemands->pluck('institute_id')->unique()->toArray();
-        $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
-        foreach ($hrDemands as $hrDemand){
-            if(!empty($titleByInstituteIds[$hrDemand['institute_id']])){
-                $hrDemand['institute_title'] = $titleByInstituteIds[$hrDemand['institute_id']]['title'];
-                $hrDemand['institute_title_en'] = $titleByInstituteIds[$hrDemand['institute_id']]['title_en'];
-            }
         }
 
         $response['order'] = $order;
@@ -111,15 +91,9 @@ class HrDemandService
      */
     public function getOneHrDemand(int $id): HrDemandInstitute
     {
-        /** @var HrDemandInstitute|Builder $hrDemandBuilder */
-        $hrDemandBuilder = HrDemandInstitute::select([
-            'hr_demand_institutes.id',
-            'hr_demand_institutes.institute_id',
-            'hr_demand_institutes.rejected_by_institute',
-            'hr_demand_institutes.vacancy_provided_by_institute',
-            'hr_demand_institutes.rejected_by_industry_association',
-            'hr_demand_institutes.vacancy_approved_by_industry_association',
-            'hr_demands.id as hr_demand_id',
+        /** @var HrDemand|Builder $hrDemandBuilder */
+        $hrDemandBuilder = HrDemand::select([
+            'hr_demands.id',
             'hr_demands.industry_association_id',
             'hr_demands.organization_id',
             'organizations.title',
@@ -129,10 +103,6 @@ class HrDemandService
             'hr_demands.vacancy'
         ]);
 
-        $hrDemandBuilder->join('hr_demands', function ($join) {
-            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id')
-                ->whereNull('hr_demands.deleted_at');
-        });
         $hrDemandBuilder->join('organizations', function ($join) {
             $join->on('organizations.id', '=', 'hr_demands.organization_id')
                 ->whereNull('organizations.deleted_at');
@@ -203,6 +173,36 @@ class HrDemandService
                 $hrDemandInstitute->save();
             }
         }
+    }
+
+    /**
+     * @param HrDemand $hrDemand
+     * @param array $data
+     * @return HrDemand
+     */
+    public function update(HrDemand $hrDemand, array $data): HrDemand
+    {
+        $payloadForHrDemand = [
+            'end_date' => $data['end_date'],
+            'skill_id' => $data['skill_id'],
+            'requirement' => $data['requirement'],
+            'requirement_en' => $data['requirement_en'],
+            'vacancy' => $data['vacancy']
+        ];
+        $hrDemand->fill($payloadForHrDemand);
+        $hrDemand->save();
+
+        /** Invalid all previous Hr demand requests fulfilled by Institute */
+        if($hrDemand->skill_id != $data['skill_id']){
+            $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)->pluck('id');
+            foreach ($hrDemandInstituteIds as $id){
+                $hrDemandInstitute = HrDemandInstitute::find($id);
+                $hrDemandInstitute->row_status = HrDemandInstitute::ROW_STATUS_INVALID;
+                $hrDemandInstitute->save();
+            }
+        }
+
+        return $hrDemand;
     }
 
     /**
@@ -324,5 +324,55 @@ class HrDemandService
                 Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
+    }
+
+
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function updateValidator(Request $request, HrDemand $hrDemand, int $id = null): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+        $customMessage = [
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+        $rules = [
+            'end_date' => [
+                'required',
+                'date',
+                'date_format:Y-m-d',
+                'after:'.Carbon::now(),
+            ],
+            'skill_id' => [
+                'required',
+                'int',
+                'exists:skills,id,deleted_at,NULL',
+            ],
+            'requirement' => [
+                'required',
+                'string'
+            ],
+            'requirement_en' => [
+                'nullable',
+                'string'
+            ],
+            'vacancy' => [
+                'required',
+                'int',
+                function ($attr, $value, $failed) use ($hrDemand, $data) {
+                    if($data['vacancy'] < $hrDemand->vacancy - $hrDemand->remaining_vacancy){
+                        $failed('Vacancy is invalid as already more number of seats are approved by Institutes!');
+                    }
+                }
+            ],
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'nullable',
+                Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
+            ]
+        ];
+        return Validator::make($data, $rules, $customMessage);
     }
 }
