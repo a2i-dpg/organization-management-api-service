@@ -11061,11 +11061,6 @@
                 "type": "object",
                 "description": "Contact Info of an industry association",
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "description": "Primary Key",
-                        "readOnly": true
-                    },
                     "title": {
                         "type": "string",
                         "description": " title in Native",
