@@ -83,9 +83,11 @@ class JobManagementController extends Controller
 
     /**
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getJobList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny',JobManagement::class);
         $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
         $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
 
