@@ -12,6 +12,15 @@ class JobManagementPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
+    /**
+     * Determine whether the user can view any Job.
+     * @param User $authUser
+     * @return bool
+     */
+    public function viewAny(User $authUser): bool
+    {
+        return $authUser->hasPermission('view_any_job');
+    }
 
     /**
      * Determine whether the user can view specific job.
