@@ -46,7 +46,6 @@ class PublicationService
                 'publications.title_en',
                 'publications.author',
                 'publications.author_en',
-                'publications.title_en',
                 'publications.description',
                 'publications.description_en',
                 'publications.industry_association_id',
@@ -202,6 +201,12 @@ class PublicationService
                 'min:2'
             ],
             'author' => [
+                'nullable',
+                'string',
+                'max: 600',
+                'min:2'
+            ],
+            'author_en' => [
                 'nullable',
                 'string',
                 'max: 400',
