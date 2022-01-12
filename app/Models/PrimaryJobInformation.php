@@ -19,7 +19,11 @@ use Ramsey\Uuid\Uuid;
  * @property string job_title
  * @property string | null job_title_en
  * @property int | null no_of_vacancies
- * @property int job_category_id
+ * @property int job_sector_id
+ * @property int occupation_id
+ * @property int industry_association_id
+ * @property int organization_id
+ * @property int institute_id
  * @property Carbon application_deadline
  * @property int is_apply_online
  * @property int resume_receiving_option

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
+use App\Models\JobManagement;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -52,6 +52,7 @@ class PrimaryJobInfoController extends Controller
      */
     public function storePrimaryJobInformation(Request $request): JsonResponse
     {
+        $this->authorize('create', JobManagement::class);
         $validatedData = $this->primaryJobInformationService->validator($request)->validate();
         $employmentTypes = $validatedData['employment_type'];
         DB::beginTransaction();
@@ -78,9 +79,14 @@ class PrimaryJobInfoController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getPrimaryJobInformation(string $jobId): JsonResponse
     {
+        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $primaryJobInformation]);
+
+
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
@@ -94,6 +100,7 @@ class PrimaryJobInfoController extends Controller
         ];
         if ($step >= BaseModel::FORM_STEPS['PrimaryJobInformation']) {
             $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+
             $primaryJobInformation["latest_step"] = $step;
             $response["data"] = $primaryJobInformation;
             $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());

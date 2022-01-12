@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
+use App\Models\JobManagement;
 use App\Models\MatchingCriteria;
+use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\MatchingCriteriaService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +39,7 @@ class MatchingCriteriaController extends Controller
      */
     public function storeMatchingCriteria(Request $request): JsonResponse
     {
+        $this->authorize('create', JobManagement::class);
         $validatedData = $this->matchingCriteriaService->validator($request)->validate();
         DB::beginTransaction();
         try {
@@ -60,9 +64,15 @@ class MatchingCriteriaController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
+        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+        $matchingCriteria = MatchingCriteria::where('job_id', $jobId)->firstOrFail();
+
+        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $matchingCriteria]);
+
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
