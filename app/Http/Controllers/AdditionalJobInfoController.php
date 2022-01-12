@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdditionalJobInformation;
 use App\Models\BaseModel;
+use App\Models\JobManagement;
+use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +40,7 @@ class AdditionalJobInfoController extends Controller
      */
     public function storeAdditionalJobInformation(Request $request): JsonResponse
     {
+        $this->authorize('create', JobManagement::class);
         $validatedData = $this->additionalJobInformationService->validator($request)->validate();
 
         $jobLevel = $validatedData['job_level'];
@@ -86,9 +91,15 @@ class AdditionalJobInfoController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getAdditionalJobInformation(string $jobId): JsonResponse
     {
+        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+        $additionalJobInformation = AdditionalJobInformation::where('job_id', $jobId)->firstOrFail();
+
+        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $additionalJobInformation]);
+
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [

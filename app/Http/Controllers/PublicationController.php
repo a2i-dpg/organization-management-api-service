@@ -138,7 +138,7 @@ class PublicationController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function update(Request $request, int $id): JsonResponse
     {

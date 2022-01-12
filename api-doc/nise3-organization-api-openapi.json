@@ -3997,6 +3997,9 @@
                         "$ref": "#/components/parameters/author"
                     },
                     {
+                        "$ref": "#/components/parameters/author_en"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -4015,25 +4018,22 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 11,
-                                            "title": "TestPub",
-                                            "title_en": null,
-                                            "author": null,
-                                            "author_en": null,
-                                            "description": "New Desc",
-                                            "description_en": null,
-                                            "industry_association_id": 2,
-                                            "image_path": null,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2021-12-09T11:20:01.000000Z",
-                                            "updated_at": "2021-12-09T11:20:01.000000Z",
-                                            "row_status": 1
-                                        }
-                                    ],
+                                    "data": {
+                                        "id": 1,
+                                        "title": "yahoo",
+                                        "title_en": "yahoo",
+                                        "author": "banana khan",
+                                        "author_en": null,
+                                        "description": "horrorrlust",
+                                        "description_en": "chhikamaruu",
+                                        "industry_association_id": 1,
+                                        "image_path": "lll/lllk..jkkk",
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-01-12T06:23:49.000000Z",
+                                        "updated_at": "2022-01-12T06:23:49.000000Z",
+                                        "row_status": 1
+                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -4067,13 +4067,18 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "title": "TestPub",
-                                        "description": "New Desc",
-                                        "industry_association_id": 2,
+                                        "title_en": "yahoo",
+                                        "title": "yahoo",
+                                        "author": "FergieNutts",
+                                        "author_en": "Konohamaruu",
+                                        "description": "AsumaSense",
+                                        "description_en": "chhikamaruu",
+                                        "image_path": "lll/lllk..jkkk",
+                                        "industry_association_id": "1",
                                         "row_status": "1",
-                                        "updated_at": "2021-12-09T11:20:01.000000Z",
-                                        "created_at": "2021-12-09T11:20:01.000000Z",
-                                        "id": 11
+                                        "updated_at": "2022-01-12T06:33:06.000000Z",
+                                        "created_at": "2022-01-12T06:33:06.000000Z",
+                                        "id": 3
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5776,6 +5781,233 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/job-details/{jobId}": {
+            "get": {
+                "tags": [
+                    "Job Management"
+                ],
+                "summary": "Get a single job detail",
+                "description": "API endpoint to Get a single job detail.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "primary_job_information": {
+                                            "id": 1,
+                                            "job_id": "qq-qq",
+                                            "industry_association_id": null,
+                                            "organization_id": null,
+                                            "institute_id": null,
+                                            "service_type": 0,
+                                            "job_title": "NewCrawller",
+                                            "job_title_en": "NewCrawller",
+                                            "no_of_vacancies": 10,
+                                            "occupation_id": 1,
+                                            "occupation_title": "Able Seamen",
+                                            "occupation_title_en": "Able Seamen",
+                                            "job_sector_id": 1,
+                                            "job_sector_title": "Trainer",
+                                            "job_sector_title_en": "Trainer",
+                                            "application_deadline": "0000-00-00",
+                                            "is_apply_online": 0,
+                                            "resume_receiving_option": 0,
+                                            "email": null,
+                                            "is_use_nise3_mail_system": 0,
+                                            "special_instruction_for_job_seekers": null,
+                                            "special_instruction_for_job_seekers_en": null,
+                                            "instruction_for_hard_copy": null,
+                                            "instruction_for_hard_copy_en": null,
+                                            "instruction_for_walk_in_interview": null,
+                                            "instruction_for_walk_in_interview_en": null,
+                                            "is_photograph_enclose_with_resume": 0,
+                                            "is_prefer_video_resume": 0,
+                                            "published_at": null,
+                                            "archived_at": null,
+                                            "created_at": null,
+                                            "updated_at": null,
+                                            "employment_types": []
+                                        },
+                                        "additional_job_information": {
+                                            "id": 1,
+                                            "job_id": "qq-qq",
+                                            "job_responsibilities": "dd",
+                                            "job_context": "yahoo",
+                                            "job_place_type": 2,
+                                            "salary_min": null,
+                                            "salary_max": null,
+                                            "is_salary_info_show": 0,
+                                            "is_salary_compare_to_expected_salary": 0,
+                                            "is_salary_alert_excessive_than_given_salary_range": 0,
+                                            "salary_review": 0,
+                                            "festival_bonus": 0,
+                                            "additional_salary_info": null,
+                                            "is_other_benefits": 0,
+                                            "lunch_facilities": 0,
+                                            "others": null,
+                                            "created_at": null,
+                                            "updated_at": null,
+                                            "job_levels": [],
+                                            "job_locations": [],
+                                            "work_places": [],
+                                            "other_benefits": []
+                                        },
+                                        "candidate_requirements": {
+                                            "id": 1,
+                                            "job_id": "qq-qq",
+                                            "other_educational_qualification": "enim Excepteur sunt esse ullamco",
+                                            "other_educational_qualification_en": "in dolor labore sunt",
+                                            "is_experience_needed": 0,
+                                            "is_freshers_encouraged": 1,
+                                            "minimum_year_of_experience": 1,
+                                            "maximum_year_of_experience": 2,
+                                            "additional_requirements": "exercitation culpa ad nulla",
+                                            "additional_requirements_en": "reprehenderit incididunt sint deserunt",
+                                            "age_minimum": 20,
+                                            "age_maximum": 22,
+                                            "person_with_disability": 1,
+                                            "preferred_retired_army_officer": 1,
+                                            "created_at": "2022-01-11T12:02:30.000000Z",
+                                            "updated_at": "2022-01-11T12:02:30.000000Z",
+                                            "candidate_requirement_degrees": [
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 1,
+                                                    "education_level_id": 1,
+                                                    "edu_group_id": 1,
+                                                    "edu_major": "hello",
+                                                    "education_level": {
+                                                        "id": 1,
+                                                        "title": "PSC/5 Pass",
+                                                        "title_en": "PSC/5 Pass"
+                                                    },
+                                                    "edu_group": {
+                                                        "id": 1,
+                                                        "title": "বিজ্ঞান",
+                                                        "title_en": "Science"
+                                                    }
+                                                },
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "candidate_requirement_id": 1,
+                                                    "education_level_id": 1,
+                                                    "edu_group_id": 1,
+                                                    "edu_major": "hello again",
+                                                    "education_level": {
+                                                        "id": 1,
+                                                        "title": "PSC/5 Pass",
+                                                        "title_en": "PSC/5 Pass"
+                                                    },
+                                                    "edu_group": {
+                                                        "id": 1,
+                                                        "title": "বিজ্ঞান",
+                                                        "title_en": "Science"
+                                                    }
+                                                }
+                                            ],
+                                            "educational_institutions": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "University of Dhaka"
+                                                }
+                                            ],
+                                            "trainings": [
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "title": "laboris irure est"
+                                                },
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "title": "est et"
+                                                }
+                                            ],
+                                            "professional_certifications": [
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "title": "ea elit consectetur ut aute"
+                                                },
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "title": "cupidatat dolor"
+                                                }
+                                            ],
+                                            "area_of_experiences": [
+                                                {
+                                                    "id": 1,
+                                                    "title": "NeoNazzi",
+                                                    "title_en": "NeoNazzi"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "title": "FukushimaCrawl",
+                                                    "title_en": "FukushimaCrawl"
+                                                }
+                                            ],
+                                            "area_of_business": [
+                                                {
+                                                    "id": 1,
+                                                    "title": "Banks",
+                                                    "title_en": null
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "title": "Insurance",
+                                                    "title_en": null
+                                                }
+                                            ],
+                                            "skills": [
+                                                {
+                                                    "id": 1,
+                                                    "title": "টেকনিকাল রাইটিং",
+                                                    "title_en": "Technical Writing"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                    "title_en": "Project Management"
+                                                }
+                                            ],
+                                            "genders": [
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "gender_id": 1
+                                                },
+                                                {
+                                                    "job_id": "qq-qq",
+                                                    "gender_id": 2
+                                                }
+                                            ]
+                                        },
+                                        "company_info_visibility": {
+                                            "id": 1,
+                                            "job_id": "qq-qq",
+                                            "is_company_name_visible": 1,
+                                            "company_name": "Piistech",
+                                            "company_name_en": "Piistech",
+                                            "is_company_address_visible": 0,
+                                            "company_industry_type": 0,
+                                            "is_company_business_visible": 0,
+                                            "created_at": null,
+                                            "updated_at": null
+                                        }
+                                    },
+                                    "_response_status": {
                                         "query_time": 0
                                     }
                                 }
@@ -8333,37 +8565,6 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Hr Demand"
-                ],
-                "summary": "Update an hr demand institute",
-                "description": "API endpoint to Update an hr demand institute.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/hr_demand_id"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/hr-demand"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {}
-                            }
-                        }
-                    }
-                }
-            },
             "delete": {
                 "tags": [
                     "Hr Demand"
@@ -8388,6 +8589,42 @@
                                         "query_time": 0
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hr-demands-approved-by-institute/{hr_demand_id}": {
+            "get": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Get all hr demands approved by institutes",
+                "description": "API endpoint to Get all hr demands approved by institutes.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
                             }
                         }
                     }
@@ -8584,7 +8821,7 @@
                 "description": "vacancy_approved_by_industry_association",
                 "properties": {
                     "vacancy_approved_by_industry_association": {
-                        "type": "object"
+                        "type": "integer"
                     }
                 },
                 "required": [
@@ -8779,7 +9016,7 @@
                     },
                     "degrees": {
                         "type": "object",
-                        "example": " [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n]"
+                        "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
                     },
                     "preferred_educational_institution": {
                         "type": "array",
@@ -10834,11 +11071,6 @@
                 "type": "object",
                 "description": "Contact Info of an industry association",
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "description": "Primary Key",
-                        "readOnly": true
-                    },
                     "title": {
                         "type": "string",
                         "description": " title in Native",
@@ -11187,6 +11419,14 @@
             },
             "author": {
                 "name": "author",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "author_en": {
+                "name": "author_en",
                 "in": "query",
                 "required": false,
                 "schema": {

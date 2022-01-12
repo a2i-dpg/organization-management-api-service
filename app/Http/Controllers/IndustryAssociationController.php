@@ -443,6 +443,7 @@ class IndustryAssociationController extends Controller
         $this->authorize('update', $industryAssociation);
 
         $validated = $this->industryAssociationService->validator($request, $id)->validate();
+
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
         $response = [
             'data' => $data,
@@ -609,17 +610,11 @@ class IndustryAssociationController extends Controller
      */
     public function updateIndustryAssociationProfile(Request $request): JsonResponse
     {
-        //$this->authorize('updateIndustryAssociationProfile', Organization::class);
-        $authUser = Auth::user();
-        $industryAssociationId = null;
-        if ($authUser && $authUser->industry_association_id) {
-            $industryAssociationId = $authUser->industry_association_id;
-        }
+        $industryAssociationId = $request->input('industry_association_id');
+
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
 
-//        $this->authorize('update', $industryAssociation);
-
-        $validated = $this->industryAssociationService->industryAssociationAdminValidator($request, $industryAssociationId)->validate();
+        $validated = $this->industryAssociationService->industryAssociationAdminValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
         $response = [
             'data' => $data,
@@ -638,16 +633,14 @@ class IndustryAssociationController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getIndustryAssociationProfile(): JsonResponse
+    public function getIndustryAssociationProfile(Request $request): JsonResponse
     {
         //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);
 
-        $authUser = Auth::user();
-        $industryAssociationId = null;
-        if ($authUser && $authUser->industry_association_id) {
-            $industryAssociationId = $authUser->industry_association_id;
-        }
-        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $industryAssociationId = $request->input('industry_association_id');
+
+        $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($industryAssociationId);
+
         $response = [
             "data" => $industryAssociation,
             "_response_status" => [

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
+use App\Models\CompanyInfoVisibility;
+use App\Models\JobManagement;
+use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -29,10 +33,13 @@ class CompanyInfoVisibilityController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function storeCompanyInfoVisibility(Request $request): JsonResponse
     {
+
+        $this->authorize('create', JobManagement::class);
+
         $validatedData = $this->companyInfoVisibilityService->companyInfoVisibilityValidator($request)->validate();
         $companyInfoVisibility = $this->companyInfoVisibilityService->storeOrUpdate($validatedData);
         $response = [
@@ -51,9 +58,16 @@ class CompanyInfoVisibilityController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getCompanyInfoVisibility(string $jobId): JsonResponse
     {
+        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+
+        $companyInfoVisibility = CompanyInfoVisibility::where('job_id', $jobId)->firstOrFail();
+
+        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $companyInfoVisibility]);
+
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [

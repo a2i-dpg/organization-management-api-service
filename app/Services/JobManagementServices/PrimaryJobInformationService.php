@@ -189,7 +189,6 @@ class PrimaryJobInformationService
         $primaryJobInformationBuilder->with(['employmentTypes' => function ($query) {
             $query->select('id', 'title');
         }]);
-
         return $primaryJobInformationBuilder->firstOrFail();
     }
 
@@ -306,7 +305,9 @@ class PrimaryJobInformationService
         /** @var User $authUser */
         $authUser = Auth::user();
         $requestData = $request->all();
-        $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
+        if (!empty($requestData["employment_type"])) {
+            $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
+        }
         $rules = [
             "job_id" => [
                 "required",
@@ -510,7 +511,7 @@ class PrimaryJobInformationService
         $isAdditionalJobInformationComplete = (bool)AdditionalJobInformation::where('job_id', $jobId)->count('id');
         $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete ? 3 : $step;
         $isCandidateRequirementComplete = (bool)CandidateRequirement::where('job_id', $jobId)->count('id');
-        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete? 4 : $step;
+        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete ? 4 : $step;
         $isMatchingCriteriaComplete = (bool)MatchingCriteria::where('job_id', $jobId)->count('id');
         $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isMatchingCriteriaComplete ? 5 : $step;
         $isCompanyInfoVisibilityComplete = (bool)CompanyInfoVisibility::where('job_id', $jobId)->count('id');

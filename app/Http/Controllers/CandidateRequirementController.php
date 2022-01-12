@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
+use App\Models\CandidateRequirement;
+use App\Models\JobManagement;
+use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +41,8 @@ class CandidateRequirementController extends Controller
      */
     public function storeCandidateRequirements(Request $request): JsonResponse
     {
+        $this->authorize('create', JobManagement::class);
+
         $validatedData = $this->candidateRequirementsService->validator($request)->validate();
 
         $degrees = $validatedData['degrees'] ?? [];
@@ -52,7 +58,7 @@ class CandidateRequirementController extends Controller
         DB::beginTransaction();
         try {
             $candidateRequirements = $this->candidateRequirementsService->store($validatedData);
-            Log::info("------>",$candidateRequirements->toArray());
+            Log::info("------>", $candidateRequirements->toArray());
             $this->candidateRequirementsService->syncWithDegrees($candidateRequirements, $degrees);
             $this->candidateRequirementsService->syncWithPreferredEducationalInstitution($candidateRequirements, $preferredEducationalInstitution);
             $this->candidateRequirementsService->syncWithTraining($candidateRequirements, $training);
@@ -83,9 +89,16 @@ class CandidateRequirementController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getCandidateRequirements(string $jobId): JsonResponse
     {
+        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+        $candidateRequirement = CandidateRequirement::where('job_id', $jobId)->firstOrFail();
+
+        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $candidateRequirement]);
+
+
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
             "data" => [
