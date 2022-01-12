@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             OrganizationTypeSeeder::class,
             EducationalInstitutionSeeder::class,
             OtherBenefitSeeder::class,
+            AreaOfExperienceSeeder::class,
             AreaOfBusinessSeeder::class,
             EmploymentTypeSeeder::class,
             EduGroupSeeder::class,
