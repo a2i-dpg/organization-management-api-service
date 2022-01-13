@@ -45,7 +45,7 @@ class HrDemandInstituteService
         ])->acl();
 
         if(!empty($hrDemandId)){
-            $hrDemandBuilder->whereIn('hr_demand_institutes.hr_demand_id', $hrDemandId);
+            $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
         }
 
         $hrDemandBuilder->orderBy('hr_demand_institutes.id', $order);
@@ -107,6 +107,8 @@ class HrDemandInstituteService
      */
     public function hrDemandApprovedByInstitute(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
     {
+        $hrDemandInstitute = HrDemandInstitute::find();
+
         if(!$hrDemandInstitute->institute_id){
             $newHrDemandInstitute = new HrDemandInstitute();
             $newHrDemandInstitute->hr_demand_id = $hrDemandInstitute->hr_demand_id;
@@ -215,7 +217,7 @@ class HrDemandInstituteService
                 function ($attr, $value, $failed) use ($hrDemandId) {
                     $hrDemand = HrDemand::find($hrDemandId);
 
-                    if($hrDemand->end_date > Carbon::now()){
+                    if($hrDemand->end_date < Carbon::now()){
                         $failed("Deadline exceed");
                     }
                     if ($value > $hrDemand->vacancy) {

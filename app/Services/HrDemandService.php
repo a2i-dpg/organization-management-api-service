@@ -8,6 +8,7 @@ use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -44,7 +45,9 @@ class HrDemandService
             'organizations.title_en',
             'hr_demands.end_date',
             'hr_demands.skill_id',
-            'hr_demands.vacancy'
+            'hr_demands.vacancy',
+            'hr_demands.remaining_vacancy',
+            'hr_demands.all_institutes'
         ])->acl();
 
         $hrDemandBuilder->join('organizations', function ($join) use ($rowStatus) {
@@ -100,7 +103,9 @@ class HrDemandService
             'organizations.title_en',
             'hr_demands.end_date',
             'hr_demands.skill_id',
-            'hr_demands.vacancy'
+            'hr_demands.vacancy',
+            'hr_demands.remaining_vacancy',
+            'hr_demands.all_institutes'
         ]);
 
         $hrDemandBuilder->join('organizations', function ($join) {
@@ -130,9 +135,14 @@ class HrDemandService
                 'requirement_en' => $hrDemand['requirement_en'] ?? "",
                 'vacancy' => $hrDemand['vacancy'],
                 'remaining_vacancy' => $hrDemand['vacancy'],
+                'all_institutes' => empty($hrDemand['institute_ids']) ? 1 : 0,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id()
             ];
+
+            Log::info("nnnnnnnnnn vvvvv");
+            Log::info(json_encode(Auth::user()));
+
             $hrDemandInstance = new HrDemand();
             $hrDemandInstance->fill($payload);
             $hrDemandInstance->save();
@@ -156,15 +166,13 @@ class HrDemandService
             'skill_id' => $data['skill_id'],
             'requirement' => $data['requirement'],
             'requirement_en' => $data['requirement_en'],
-            'vacancy' => $data['vacancy']
+            'vacancy' => $data['vacancy'],
+            'all_institutes' => empty($data['institute_ids']) ? 1 : 0,
         ];
-        $hrDemand->fill($payloadForHrDemand);
-        $hrDemand->save();
 
-        /** Invalid all previous Hr demand requests fulfilled by Institute */
+        /** If skill_id changed, then Invalid all previous Hr demand requests fulfilled by Institute */
         if($hrDemand->skill_id != $data['skill_id']){
             $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)
-                ->whereNotNull('institute_id')
                 ->pluck('id');
             foreach ($hrDemandInstituteIds as $id){
                 $hrDemandInstitute = HrDemandInstitute::find($id);
@@ -173,32 +181,49 @@ class HrDemandService
             }
         }
 
-        /** Find all existing Hr demand institutes for the Hr Demand */
-        $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
-            ->whereNotNull('institute_id')
-            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
-            ->pluck('institute_id');
+        /** If vacancy changed then do bellow stuff */
+        if($hrDemand->vacancy != $data['vacancy']){
+            $vacancyChanged = $hrDemand->vacancy - $data['vacancy'];
+            $payloadForHrDemand['remaining_vacancy'] = $hrDemand->remaining_vacancy - $vacancyChanged;
+        }
 
-        /** If the given institutes are not present in existing institutes then create new institutes */
-        foreach ($data['institute_ids'] as $instituteId){
-            if(!in_array($instituteId, $existHrDemandInstituteIds)){
-                $institutePayload = [
-                    'hr_demand_id' => $hrDemand->id,
-                    'institute_id' => $instituteId
-                ];
-                $newHrDemandInstitute = new HrDemandInstitute();
-                $newHrDemandInstitute->fill($institutePayload);
-                $newHrDemandInstitute->save();
+        /**
+         * These are the possible case that may happen,
+         * 1) May be previously hr_demand was created with ALL_INSTITUTES and now changed to some institutes
+         * 2) May be previously hr_demand was created with some institutes and now changed to some other institutes
+         * 3) May be previous & current institute_ids are same (No effect)
+         * 4) May be previously hr_demand was created with some institutes and now changed to ALL_INSTITUTES (No effect)
+        */
+        if(!empty($data['institute_ids'])){
+            $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
+                ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+                ->pluck('institute_id');
+
+            /** If the given institute_ids are not present in existing institutes then create new institutes */
+            foreach ($data['institute_ids'] as $instituteId){
+                if(!in_array($instituteId, $existHrDemandInstituteIds)){
+                    $institutePayload = [
+                        'hr_demand_id' => $hrDemand->id,
+                        'institute_id' => $instituteId
+                    ];
+                    $newHrDemandInstitute = new HrDemandInstitute();
+                    $newHrDemandInstitute->fill($institutePayload);
+                    $newHrDemandInstitute->save();
+                }
+            }
+
+            /** If already existing institute is not present in given institutes then INVALID those existing institutes */
+            foreach ($existHrDemandInstituteIds as $id){
+                if(!in_array($id, $data['institute_ids'])){
+                    $newHrDemandInstitute = HrDemandInstitute::find($id);
+                    $newHrDemandInstitute->row_status = HrDemand::ROW_STATUS_INVALID;
+                    $newHrDemandInstitute->save();
+                }
             }
         }
 
-        /** If already existing institute is not present in given institutes then delete those existing institutes */
-        foreach ($existHrDemandInstituteIds as $id){
-            if(!in_array($id, $data['institute_ids'])){
-                $newHrDemandInstitute = HrDemandInstitute::find($id);
-                $newHrDemandInstitute->delete();
-            }
-        }
+        $hrDemand->fill($payloadForHrDemand);
+        $hrDemand->save();
 
         return $hrDemand;
     }
@@ -222,19 +247,9 @@ class HrDemandService
      */
     private function storeHrDemandInstitutes(array $data, HrDemand $hrDemand){
         /**
-         * IF, "institute_ids" Query parameter is an empty array means ALL INSTITUTES
-         * ELSE, save institutes that were given in "institute_ids" array
-         *
+         * Store institutes that were given in "institute_ids" array
          * */
-        if(is_array($data['institute_ids']) && count($data['institute_ids']) == 0){
-            $payload = [
-                'hr_demand_id' => $hrDemand->id
-            ];
-            $hrDemandInstitute = new HrDemandInstitute();
-            $hrDemandInstitute->fill($payload);
-            $hrDemandInstitute->save();
-        }
-        else if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
+        if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
             foreach ($data['institute_ids'] as $id){
                 $payload = [
                     'hr_demand_id' => $hrDemand->id,

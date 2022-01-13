@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string requirement_en
  * @property int vacancy
  * @property int remaining_vacancy
+ * @property int all_institutes
  * @property int row_status
  * @property int created_by
  * @property int updated_by
@@ -30,6 +31,9 @@ class HrDemand extends BaseModel
     public const ROW_STATUS_INACTIVE = 0;
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INVALID = 2;
+
+    public const ALL_INSTITUTES_FALSE = 0;
+    public const ALL_INSTITUTES_TRUE = 1;
 
     public const BOOLEAN_FLAG = [
         0 => "False",
