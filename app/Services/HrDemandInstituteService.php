@@ -240,6 +240,7 @@ class HrDemandInstituteService
             'vacancy_approved_by_industry_association' => [
                 'required',
                 'int',
+                'min:1',
                 function ($attr, $value, $failed) use ($hrDemandInstitute) {
                     $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
                     if ($value > $hrDemand->remaining_vacancy) {
