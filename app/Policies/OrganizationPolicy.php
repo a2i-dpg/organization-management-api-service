@@ -19,7 +19,6 @@ class OrganizationPolicy extends BasePolicy
      */
     public function viewAny(User $authUser): bool
     {
-        Log::debug('viewAny organization---->'.$authUser->hasPermission('view_any_organization'));
         return $authUser->hasPermission('view_any_organization');
     }
 
