@@ -17,7 +17,7 @@ class HrDemandInstitutePolicy
      */
     public function viewAny(User $authUser): bool
     {
-        return $authUser->hasPermission('view_any_hr_demand_institute');
+        return $authUser->hasPermission('view_any_institute_hr_demand');
     }
 
     /**
@@ -28,7 +28,7 @@ class HrDemandInstitutePolicy
      */
     public function view(User $authUser): bool
     {
-        return $authUser->hasPermission('view_single_hr_demand_institute');
+        return $authUser->hasPermission('view_single_institute_hr_demand');
     }
 
     /**
@@ -39,7 +39,7 @@ class HrDemandInstitutePolicy
      */
     public function update(User $authUser): bool
     {
-        return $authUser->hasPermission('update_hr_demand_institute');
+        return $authUser->hasPermission('update_hr_institute_hr_demand');
     }
 
     /**
@@ -50,6 +50,6 @@ class HrDemandInstitutePolicy
      */
     public function updateByInstitute(User $authUser): bool
     {
-        return $authUser->hasPermission('update_hr_demand_institute_by_institute');
+        return $authUser->hasPermission('update_institute_hr_demand_by_institute');
     }
 }
