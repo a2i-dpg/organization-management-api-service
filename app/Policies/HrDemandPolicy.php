@@ -21,17 +21,6 @@ class HrDemandPolicy
     }
 
     /**
-     * Determine whether the TSP user can view any HrDemand.
-     *
-     * @param User $authUser
-     * @return bool
-     */
-    public function viewAnyByInstitute(User $authUser): bool
-    {
-        return $authUser->hasPermission('view_any_hr_demand_by_institute');
-    }
-
-    /**
      * Determine whether the user can view the HrDemand.
      *
      * @param User $authUser
@@ -40,17 +29,6 @@ class HrDemandPolicy
     public function view(User $authUser): bool
     {
         return $authUser->hasPermission('view_single_hr_demand');
-    }
-
-    /**
-     * Determine whether the TSP user can view the HrDemand.
-     *
-     * @param User $authUser
-     * @return bool
-     */
-    public function viewByInstitute(User $authUser): bool
-    {
-        return $authUser->hasPermission('view_single_hr_demand_by_institute');
     }
 
     /**
