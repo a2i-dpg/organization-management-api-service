@@ -7,6 +7,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Laravel\Lumen\Auth\Authorizable;
 
 /**
@@ -64,7 +65,7 @@ class User extends BaseModel implements
         if (!(!empty($this->permissions) && $this->permissions instanceof Collection)) {
             return false;
         }
-
+        Log::debug(json_encode($this->permissions));
         return $this->permissions->contains($key);
     }
 
