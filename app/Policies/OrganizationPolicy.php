@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Log;
 
 class OrganizationPolicy extends BasePolicy
 {
@@ -18,6 +19,7 @@ class OrganizationPolicy extends BasePolicy
      */
     public function viewAny(User $authUser): bool
     {
+        Log::debug('viewAny organization---->'.$authUser->hasPermission('view_any_organization'));
         return $authUser->hasPermission('view_any_organization');
     }
 
