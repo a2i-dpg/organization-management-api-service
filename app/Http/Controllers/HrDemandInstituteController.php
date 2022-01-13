@@ -42,73 +42,40 @@ class HrDemandInstituteController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('view', HrDemandInstitute::class);
+        $this->authorize('viewAny', HrDemandInstitute::class);
 
         $filter = $this->hrDemandInstituteService->filterValidator($request)->validate();
-        $response = $this->hrDemandInstituteService->getHrDemandList($filter, $this->startTime);
+        $response = $this->hrDemandInstituteService->getHrDemandInstituteList($filter, $this->startTime);
 
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * Update the specified resource.
+     * Display a listing of the Hr Demand Institutes to Industry Association User & Institute Admin.
      *
      * @param Request $request
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
-     * @throws ValidationException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
-        $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
-        $this->authorize('update', HrDemand::class);
+        $this->authorize('view', HrDemandInstitute::class);
 
-        $validated = $this->hrDemandInstituteService->updateValidator($request, $hrDemandInstitute, $id)->validate();
-        $data = $this->hrDemandInstituteService->update($hrDemandInstitute, $validated);
+        $response = $this->hrDemandInstituteService->getOneHrDemandInstitute($id);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
+        $responsePayload = [
+            "data" => $response,
+            "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Hr Demand updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ]
         ];
 
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
+        return Response::json($responsePayload,ResponseAlias::HTTP_OK);
     }
+
 
     /**
      * Display the specified resource.
@@ -138,7 +105,6 @@ class HrDemandInstituteController extends Controller
         ];
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
-
     }
 
     /**

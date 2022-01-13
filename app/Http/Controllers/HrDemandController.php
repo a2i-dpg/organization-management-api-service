@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\HrDemand;
-use App\Models\HrDemandInstitute;
 use App\Services\HrDemandService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -96,7 +95,7 @@ class HrDemandController extends Controller
     }
 
     /**
-     * Update the specified resource.
+     * Update the specified Hr Demand.
      *
      * @param Request $request
      * @param int $id
@@ -124,60 +123,6 @@ class HrDemandController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Display a listing of the Hr Demand Institutes (Approved by Institute) to Industry Association User.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws ValidationException
-     */
-    public function getListApprovedByInstitute(Request $request): JsonResponse
-    {
-        $this->authorize('viewAny', HrDemand::class);
-
-        $filter = $this->hrDemandService->filterValidator($request)->validate();
-        $filter[HrDemand::SHOW_ONLY_HR_DEMAND_INSTITUTES_APPROVED_BY_TSP_KEY] = true;
-        $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
-
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-
 
     /**
      * Show the form for editing the specified resource.
