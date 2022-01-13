@@ -96,6 +96,8 @@ class AuthServiceProvider extends ServiceProvider
                     Cache::forget($idpServerUserId);
                 }
             }
+            Log::debug('organization auth user');
+            Log::debug($authUser);
             return Cache::get($idpServerUserId);
         });
     }
