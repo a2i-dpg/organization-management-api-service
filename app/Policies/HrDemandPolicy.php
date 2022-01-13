@@ -17,18 +17,7 @@ class HrDemandPolicy
      */
     public function viewAny(User $authUser): bool
     {
-        return $authUser->hasPermission('view_any_hr_demand');
-    }
-
-    /**
-     * Determine whether the TSP user can view any HrDemand.
-     *
-     * @param User $authUser
-     * @return bool
-     */
-    public function viewAnyByInstitute(User $authUser): bool
-    {
-        return $authUser->hasPermission('view_any_hr_demand_by_institute');
+        return $authUser->hasPermission('view_any_industry_association_hr_demand');
     }
 
     /**
@@ -39,18 +28,7 @@ class HrDemandPolicy
      */
     public function view(User $authUser): bool
     {
-        return $authUser->hasPermission('view_single_hr_demand');
-    }
-
-    /**
-     * Determine whether the TSP user can view the HrDemand.
-     *
-     * @param User $authUser
-     * @return bool
-     */
-    public function viewByInstitute(User $authUser): bool
-    {
-        return $authUser->hasPermission('view_single_hr_demand_by_institute');
+        return $authUser->hasPermission('view_single_industry_association_hr_demand');
     }
 
     /**
@@ -61,7 +39,7 @@ class HrDemandPolicy
      */
     public function create(User $authUser): bool
     {
-        return $authUser->hasPermission('create_hr_demand');
+        return $authUser->hasPermission('create_industry_association_hr_demand');
     }
 
     /**
@@ -72,7 +50,7 @@ class HrDemandPolicy
      */
     public function update(User $authUser): bool
     {
-        return $authUser->hasPermission('update_hr_demand');
+        return $authUser->hasPermission('update_industry_association_hr_demand');
     }
 
     /**
@@ -83,6 +61,6 @@ class HrDemandPolicy
      */
     public function delete(User $authUser): bool
     {
-        return $authUser->hasPermission('delete_hr_demand');
+        return $authUser->hasPermission('delete_industry_association_hr_demand');
     }
 }

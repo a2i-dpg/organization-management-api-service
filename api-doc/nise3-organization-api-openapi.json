@@ -8456,7 +8456,7 @@
                 }
             }
         },
-        "/hr-demands": {
+        "/industry-association-hr-demands": {
             "get": {
                 "tags": [
                     "Hr Demand"
@@ -8482,7 +8482,76 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "industry_association_id": 1,
+                                            "organization_id": 1,
+                                            "title": "RomeOrg",
+                                            "title_en": "RomeOrg",
+                                            "end_date": "2022-10-10",
+                                            "skill_id": 1,
+                                            "vacancy": 10
+                                        },
+                                        {
+                                            "id": 2,
+                                            "industry_association_id": 1,
+                                            "organization_id": 1,
+                                            "title": "RomeOrg",
+                                            "title_en": "RomeOrg",
+                                            "end_date": "2022-12-12",
+                                            "skill_id": 1,
+                                            "vacancy": 10
+                                        },
+                                        {
+                                            "id": 3,
+                                            "industry_association_id": 1,
+                                            "organization_id": 1,
+                                            "title": "RomeOrg",
+                                            "title_en": "RomeOrg",
+                                            "end_date": "2022-10-10",
+                                            "skill_id": 1,
+                                            "vacancy": 10
+                                        },
+                                        {
+                                            "id": 4,
+                                            "industry_association_id": 1,
+                                            "organization_id": 1,
+                                            "title": "RomeOrg",
+                                            "title_en": "RomeOrg",
+                                            "end_date": "2022-12-12",
+                                            "skill_id": 1,
+                                            "vacancy": 10
+                                        },
+                                        {
+                                            "id": 5,
+                                            "industry_association_id": 1,
+                                            "organization_id": 1,
+                                            "title": "RomeOrg",
+                                            "title_en": "RomeOrg",
+                                            "end_date": "2022-10-10",
+                                            "skill_id": 1,
+                                            "vacancy": 10
+                                        },
+                                        {
+                                            "id": 6,
+                                            "industry_association_id": 1,
+                                            "organization_id": 1,
+                                            "title": "RomeOrg",
+                                            "title_en": "RomeOrg",
+                                            "end_date": "2022-12-12",
+                                            "skill_id": 1,
+                                            "vacancy": 10
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -8509,19 +8578,34 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "data": {
-                                        "industry_association_id": 1,
-                                        "organization_id": "1",
-                                        "end_date": "2024-09-09",
-                                        "skill_id": "1",
-                                        "requirement": "no requirement",
-                                        "requirement_en": null,
-                                        "vacancy": "20",
-                                        "row_status": "1",
-                                        "updated_at": "2022-01-05T07:12:28.000000Z",
-                                        "created_at": "2022-01-05T07:12:28.000000Z",
-                                        "id": 1
-                                    },
+                                    "data": [
+                                        {
+                                            "industry_association_id": "1",
+                                            "organization_id": "1",
+                                            "requirement": "Drooling Panda",
+                                            "end_date": "2022-10-10",
+                                            "skill_id": "1",
+                                            "requirement_en": "",
+                                            "vacancy": "10",
+                                            "remaining_vacancy": "10",
+                                            "updated_at": "2022-01-13T06:26:11.000000Z",
+                                            "created_at": "2022-01-13T06:26:11.000000Z",
+                                            "id": 5
+                                        },
+                                        {
+                                            "industry_association_id": "1",
+                                            "organization_id": "1",
+                                            "requirement": "flirtatiousSword",
+                                            "end_date": "2022-12-12",
+                                            "skill_id": "1",
+                                            "requirement_en": "",
+                                            "vacancy": "10",
+                                            "remaining_vacancy": "10",
+                                            "updated_at": "2022-01-13T06:26:11.000000Z",
+                                            "created_at": "2022-01-13T06:26:11.000000Z",
+                                            "id": 6
+                                        }
+                                    ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 201,
@@ -8535,7 +8619,7 @@
                 }
             }
         },
-        "/hr-demands/{hr_demand_id}": {
+        "/industry-association-hr-demands/{hr_demand_id}": {
             "get": {
                 "tags": [
                     "Hr Demand"
@@ -8553,13 +8637,53 @@
                         "content": {
                             "application/json": {
                                 "example": {
+                                    "data": {
+                                        "id": 6,
+                                        "industry_association_id": 1,
+                                        "organization_id": 1,
+                                        "title": "RomeOrg",
+                                        "title_en": "RomeOrg",
+                                        "end_date": "2022-12-12",
+                                        "skill_id": 1,
+                                        "vacancy": 10
+                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job published successfully done",
                                         "query_time": 0
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Hr Demand"
+                ],
+                "summary": "Update a single hr-demand",
+                "description": "API endpoint to update a single hr-demand. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_id"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/update-hr-demand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
                             }
                         }
                     }
@@ -8887,6 +9011,48 @@
                     "organization_id",
                     "end_date",
                     "hr_demands"
+                ]
+            },
+            "update-hr-demand": {
+                "type": "object",
+                "description": "update hr demand",
+                "properties": {
+                    "end_date": {
+                        "type": "string",
+                        "format": "Y-m-d",
+                        "description": "Date must be greater than current date"
+                    },
+                    "skill_id": {
+                        "type": "integer",
+                        "description": "Must exist in skills table"
+                    },
+                    "requirement": {
+                        "type": "string"
+                    },
+                    "requirement_en": {
+                        "type": "string"
+                    },
+                    "vacancy": {
+                        "type": "integer"
+                    },
+                    "institute_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>Active 0=>Inactive. Required when id not null"
+                    }
+                },
+                "required": [
+                    "end_date",
+                    "skill_id",
+                    "requirement",
+                    "vacancy",
+                    "institute_ids"
                 ]
             },
             "MatchingCriteria": {
