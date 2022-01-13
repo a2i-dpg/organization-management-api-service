@@ -65,6 +65,9 @@ class User extends BaseModel implements
         if (!(!empty($this->permissions) && $this->permissions instanceof Collection)) {
             return false;
         }
+        Log::debug('auth user class----->');
+        Log::debug(json_encode($this));
+        Log::debug('auth user permissionssss----->');
         Log::debug(json_encode($this->permissions));
         return $this->permissions->contains($key);
     }
