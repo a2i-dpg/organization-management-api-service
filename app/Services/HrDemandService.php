@@ -87,9 +87,9 @@ class HrDemandService
 
     /**
      * @param int $id
-     * @return HrDemandInstitute
+     * @return HrDemand
      */
-    public function getOneHrDemand(int $id): HrDemandInstitute
+    public function getOneHrDemand(int $id): HrDemand
     {
         /** @var HrDemand|Builder $hrDemandBuilder */
         $hrDemandBuilder = HrDemand::select([
@@ -108,7 +108,7 @@ class HrDemandService
                 ->whereNull('organizations.deleted_at');
         });
 
-        $hrDemandBuilder->where('hr_demand_institutes.id', $id);
+        $hrDemandBuilder->where('hr_demands.id', $id);
 
         return $hrDemandBuilder->firstOrFail();
     }
@@ -163,7 +163,9 @@ class HrDemandService
 
         /** Invalid all previous Hr demand requests fulfilled by Institute */
         if($hrDemand->skill_id != $data['skill_id']){
-            $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)->pluck('id');
+            $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)
+                ->whereNotNull('institute_id')
+                ->pluck('id');
             foreach ($hrDemandInstituteIds as $id){
                 $hrDemandInstitute = HrDemandInstitute::find($id);
                 $hrDemandInstitute->row_status = HrDemandInstitute::ROW_STATUS_INVALID;
@@ -171,13 +173,11 @@ class HrDemandService
             }
         }
 
-        $existHrDemandInstituteIds = [];
-        if(!empty($data['institute_ids'])){
-            $existHrDemandInstituteIds = HrDemandInstitute::whereIn('institute_id', $data['institute_ids'])
-                ->where('hr_demand_id', $hrDemand->id)
-                ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
-                ->pluck('institute_id');
-        }
+        /** Find all existing Hr demand institutes for the Hr Demand */
+        $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
+            ->whereNotNull('institute_id')
+            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+            ->pluck('institute_id');
 
         /** If the given institutes are not present in existing institutes then create new institutes */
         foreach ($data['institute_ids'] as $instituteId){
@@ -221,7 +221,20 @@ class HrDemandService
      * @return void
      */
     private function storeHrDemandInstitutes(array $data, HrDemand $hrDemand){
-        if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
+        /**
+         * IF, "institute_ids" Query parameter is an empty array means ALL INSTITUTES
+         * ELSE, save institutes that were given in "institute_ids" array
+         *
+         * */
+        if(is_array($data['institute_ids']) && count($data['institute_ids']) == 0){
+            $payload = [
+                'hr_demand_id' => $hrDemand->id
+            ];
+            $hrDemandInstitute = new HrDemandInstitute();
+            $hrDemandInstitute->fill($payload);
+            $hrDemandInstitute->save();
+        }
+        else if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
             foreach ($data['institute_ids'] as $id){
                 $payload = [
                     'hr_demand_id' => $hrDemand->id,
