@@ -16,12 +16,15 @@ use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use App\Services\JobManagementServices\EducationInstitutionsService;
+use App\Services\JobManagementServices\JobContactInformationService;
+use App\Services\JobManagementServices\MatchingCriteriaService;
 use App\Services\JobManagementServices\OtherBenefitService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -65,11 +68,15 @@ class JobManagementController extends Controller
      */
     public OtherBenefitService $otherBenefitService;
 
+    public MatchingCriteriaService $matchingCriteriaService;
+
+    public JobContactInformationService $jobContactInformationService;
+
 
     private Carbon $startTime;
 
 
-    public function __construct(AreaOfBusinessService $areaOfBusinessService, EducationInstitutionsService $educationInstitutionsService, CandidateRequirementsService $candidateRequirementsService, CompanyInfoVisibilityService $companyInfoVisibilityService, PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService, OtherBenefitService $otherBenefitService)
+    public function __construct(JobContactInformationService $jobContactInformationService, MatchingCriteriaService $matchingCriteriaService, AreaOfBusinessService $areaOfBusinessService, EducationInstitutionsService $educationInstitutionsService, CandidateRequirementsService $candidateRequirementsService, CompanyInfoVisibilityService $companyInfoVisibilityService, PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService, OtherBenefitService $otherBenefitService)
     {
         $this->areaOfBusinessService = $areaOfBusinessService;
         $this->educationInstitutionsService = $educationInstitutionsService;
@@ -78,6 +85,8 @@ class JobManagementController extends Controller
         $this->primaryJobInformationService = $primaryJobInformationService;
         $this->additionalJobInformationService = $additionalJobInformationService;
         $this->otherBenefitService = $otherBenefitService;
+        $this->matchingCriteriaService = $matchingCriteriaService;
+        $this->jobContactInformationService = $jobContactInformationService;
         $this->startTime = Carbon::now();
     }
 
@@ -87,7 +96,7 @@ class JobManagementController extends Controller
      */
     public function getJobList(Request $request): JsonResponse
     {
-        $this->authorize('viewAny',JobManagement::class);
+        $this->authorize('viewAny', JobManagement::class);
         $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
         $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
 
@@ -222,6 +231,28 @@ class JobManagementController extends Controller
         $response["data"] = $data;
         $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());
 
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getJobInfo(string $jobId): JsonResponse
+    {
+        $data = collect([
+            'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
+            'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
+            'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
+            'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
+            'matching_criteria' => $this->matchingCriteriaService->getMatchingCriteria($jobId),
+            'contact_information' => $this->jobContactInformationService->getContactInformation($jobId),
+        ]);
+        $response["data"] = $data;
+        $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());
+
+        Log::info(json_encode($response));
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
