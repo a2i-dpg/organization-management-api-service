@@ -6,7 +6,7 @@ use App\Models\IndustryAssociation;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class IndustryAssociationPolicy
+class IndustryAssociationPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -89,5 +89,25 @@ class IndustryAssociationPolicy
     {
         return $authUser->hasPermission('view_single_industry_association_member');
 
+    }
+
+    /**
+     * @param User $authUser
+     * @param IndustryAssociation $industryAssociation
+     * @return bool
+     */
+    public function viewProfile(User $authUser, IndustryAssociation $industryAssociation): bool
+    {
+        return $authUser->hasPermission('view_industry_association_profile');
+    }
+
+    /**
+     * @param User $authUser
+     * @param IndustryAssociation $industryAssociation
+     * @return bool
+     */
+    public function updateProfile(User $authUser, IndustryAssociation $industryAssociation): bool
+    {
+        return $authUser->hasPermission('update_industry_association_profile');
     }
 }
