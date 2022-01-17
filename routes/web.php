@@ -85,7 +85,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("industry-association-profile", ["as" => "public.organizations", "uses" => "IndustryAssociationController@getIndustryAssociationProfile"]);
         $router->put('organization-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationProfile']);
         $router->get("industry-association-members", ["as" => "industry-association-members", "uses" => "IndustryAssociationController@getIndustryAssociationMemberList"]);
-        $router->get("industry-association-member-details/{industryId}", ["as" => "industry-association-member-details", "uses" => "IndustryAssociationController@industryAssociationMemberDetails"]);
+        $router->get("industry-association-members/{industryId}", ["as" => "industry-association-member-details", "uses" => "IndustryAssociationController@industryAssociationMemberDetails"]);
 
 
         /** job management routes */
@@ -139,7 +139,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
         $router->get("publications/{id}", ["as" => "public.publication-read", "uses" => "PublicationController@clientSideRead"]);
         $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
-        $router->get("industry-association-member-details/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
+        $router->get("industry-association-members/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
         $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
         $router->get("organizations/{id}", ["as" => "public.organization.details", "uses" => "OrganizationController@organizationDetails"]);
         $router->get("industry-associations/{id}", ["as" => "public.industry-association.details", "uses" => "IndustryAssociationController@industryAssociationDetails"]);

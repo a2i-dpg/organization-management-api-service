@@ -523,18 +523,16 @@ class OrganizationController extends Controller
 
 
     /**
+     * @param Request $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function getOrganizationProfile(): JsonResponse
+    public function getOrganizationProfile(Request $request): JsonResponse
     {
-        //$this->authorize('updateOrganizationProfile', Organization::class);
-
-        $authUser = Auth::user();
-        $organizationId = null;
-        if ($authUser && $authUser->organization_id) {
-            $organizationId = $authUser->organization_id;
-        }
+        $organizationId = $request->input('organization_id');
         $organization = $this->organizationService->getOneOrganization($organizationId);
+
+        $this->authorize('viewProfile', $organization);
 
         $response = [
             "data" => $organization,
@@ -550,18 +548,16 @@ class OrganizationController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function updateOrganizationProfile(Request $request): JsonResponse
     {
-        //$this->authorize('updateOrganizationProfile', Organization::class);
+        $organizationId = $request->input('organization_id');
 
-        $authUser = Auth::user();
-        $organizationId = null;
-        if ($authUser && $authUser->organization_id) {
-            $organizationId = $authUser->organization_id;
-        }
         $organization = Organization::findOrFail($organizationId);
+
+        $this->authorize('updateProfile', $organization);
+
 
         $validated = $this->organizationService->organizationAdminProfileValidator($request, $organizationId)->validate();
         $data = $this->organizationService->update($organization, $validated);

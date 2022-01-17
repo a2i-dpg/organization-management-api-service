@@ -607,12 +607,14 @@ class IndustryAssociationController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function updateIndustryAssociationProfile(Request $request): JsonResponse
     {
         $industryAssociationId = $request->input('industry_association_id');
-
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+
+        $this->authorize('viewProfile', $industryAssociation);
 
         $validated = $this->industryAssociationService->industryAssociationAdminValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
@@ -631,15 +633,16 @@ class IndustryAssociationController extends Controller
 
 
     /**
+     * @param Request $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getIndustryAssociationProfile(Request $request): JsonResponse
     {
-        //$this->authorize('GetIndustryAssociationAdminProfile', Organization::class);
-
         $industryAssociationId = $request->input('industry_association_id');
-
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($industryAssociationId);
+
+        $this->authorize('updateProfile', $industryAssociation);
 
         $response = [
             "data" => $industryAssociation,
