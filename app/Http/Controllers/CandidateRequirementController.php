@@ -93,10 +93,10 @@ class CandidateRequirementController extends Controller
      */
     public function getCandidateRequirements(string $jobId): JsonResponse
     {
-        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-        $candidateRequirement = CandidateRequirement::where('job_id', $jobId)->firstOrFail();
-
-        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $candidateRequirement]);
+//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+//        $candidateRequirement = CandidateRequirement::where('job_id', $jobId)->firstOrFail();
+//
+//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $candidateRequirement]);
 
 
         $step = JobManagementController::lastAvailableStep($jobId);

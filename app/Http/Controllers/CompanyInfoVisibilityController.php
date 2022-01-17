@@ -62,11 +62,11 @@ class CompanyInfoVisibilityController extends Controller
      */
     public function getCompanyInfoVisibility(string $jobId): JsonResponse
     {
-        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-
-        $companyInfoVisibility = CompanyInfoVisibility::where('job_id', $jobId)->firstOrFail();
-
-        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $companyInfoVisibility]);
+//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+//
+//        $companyInfoVisibility = CompanyInfoVisibility::where('job_id', $jobId)->firstOrFail();
+//
+//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $companyInfoVisibility]);
 
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [

@@ -38,10 +38,10 @@ class JobContactInformationController extends Controller
      */
     public function getContactInformation(string $jobId): JsonResponse
     {
-        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-        $jobInformation = JobContactInformation::where('job_id', $jobId)->firstOrFail();
-
-        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $jobInformation]);
+//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+//        $jobInformation = JobContactInformation::where('job_id', $jobId)->firstOrFail();
+//
+//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $jobInformation]);
 
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [

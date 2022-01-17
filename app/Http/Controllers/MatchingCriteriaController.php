@@ -68,10 +68,10 @@ class MatchingCriteriaController extends Controller
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
-        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-        $matchingCriteria = MatchingCriteria::where('job_id', $jobId)->firstOrFail();
-
-        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $matchingCriteria]);
+//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+//        $matchingCriteria = MatchingCriteria::where('job_id', $jobId)->firstOrFail();
+//
+//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $matchingCriteria]);
 
         $step = JobManagementController::lastAvailableStep($jobId);
         $response = [
