@@ -173,6 +173,7 @@ class HrDemandService
         /** If skill_id changed, then Invalid all previous Hr demand requests fulfilled by Institute */
         if($hrDemand->skill_id != $data['skill_id']){
             $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)
+                ->where('institute_id', '!=', 0)                    /* Can't invalid all_institute rows */
                 ->pluck('id');
             foreach ($hrDemandInstituteIds as $id){
                 $hrDemandInstitute = HrDemandInstitute::find($id);
@@ -196,6 +197,7 @@ class HrDemandService
         */
         if(!empty($data['institute_ids'])){
             $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
+                ->where('institute_id', '!=', 0)                    /* all_institute rows can't be compared with given institute_ids rows */
                 ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
                 ->pluck('institute_id');
 
