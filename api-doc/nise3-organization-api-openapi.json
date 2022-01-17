@@ -5994,7 +5994,7 @@
                 ]
             }
         },
-        "/industry-association-member-details/{industryId}": {
+        "/industry-association-members/{industryId}": {
             "get": {
                 "tags": [
                     "Industry-Association"
@@ -6068,7 +6068,7 @@
                 }
             }
         },
-        "/public/industry-association-member-details/{industryId}": {
+        "/public/industry-association-members/{industryId}": {
             "get": {
                 "tags": [
                     "Industry-Association"
