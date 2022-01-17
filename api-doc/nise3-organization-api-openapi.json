@@ -1881,6 +1881,78 @@
                 ]
             }
         },
+        "/public/job-sectors": {
+            "get": {
+                "summary": "Get public job sectors",
+                "description": "API endpoint to get the list of public job sectors.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/jobSector"
+                                },
+                                "example": {
+                                    "current_page": 1,
+                                    "total_page": 1,
+                                    "page_size": 10,
+                                    "total": 2,
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "Insurance Underwriter",
+                                            "title": "Insurance Underwriter",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-22T12:10:28.000000Z",
+                                            "updated_at": "2021-08-22T12:10:28.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "Structural Metal Fabricator",
+                                            "title": "Structural Metal Fabricator",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2021-08-22T12:10:29.000000Z",
+                                            "updated_at": "2021-08-22T12:10:29.000000Z"
+                                        }
+                                    ],
+                                    "response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "JobSectors"
+                ]
+            }
+        },
         "/occupations": {
             "get": {
                 "summary": "get_list",
