@@ -249,7 +249,15 @@ class HrDemandService
         /**
          * Store institutes that were given in "institute_ids" array
          * */
-        if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
+        if(is_array($data['institute_ids']) && count($data['institute_ids']) == 0){
+            $payload = [
+                'hr_demand_id' => $hrDemand->id
+            ];
+            $hrDemandInstitute = new HrDemandInstitute();
+            $hrDemandInstitute->fill($payload);
+            $hrDemandInstitute->save();
+        }
+        else if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
             foreach ($data['institute_ids'] as $id){
                 $payload = [
                     'hr_demand_id' => $hrDemand->id,
