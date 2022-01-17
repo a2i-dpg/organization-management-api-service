@@ -91,7 +91,7 @@ class HrDemandInstituteController extends Controller
 
         $this->authorize('updateByInstitute', $hrDemandInstitute);
 
-        $validated = $this->hrDemandInstituteService->hrDemandApprovedByInstituteValidator($request, $hrDemandInstitute->hr_demand_id)->validate();
+        $validated = $this->hrDemandInstituteService->hrDemandApprovedByInstituteValidator($request, $hrDemandInstitute)->validate();
         $data = $this->hrDemandInstituteService->hrDemandApprovedByInstitute($hrDemandInstitute, $validated);
 
         $response = [
@@ -113,7 +113,7 @@ class HrDemandInstituteController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
+     * @throws AuthorizationException|ValidationException
      */
     public function hrDemandRejectedByInstitute(Request $request, int $id): JsonResponse
     {
@@ -121,7 +121,8 @@ class HrDemandInstituteController extends Controller
 
         $this->authorize('updateByInstitute', $hrDemandInstitute);
 
-        $data = $this->hrDemandInstituteService->hrDemandRejectedByInstitute($hrDemandInstitute);
+        $validated = $this->hrDemandInstituteService->hrDemandRejectedByInstituteValidator($request, $hrDemandInstitute)->validate();
+        $data = $this->hrDemandInstituteService->hrDemandRejectedByInstitute($hrDemandInstitute, $validated);
 
         $response = [
             'data' => $data,

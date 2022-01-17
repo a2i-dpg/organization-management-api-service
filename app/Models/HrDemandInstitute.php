@@ -32,4 +32,15 @@ class HrDemandInstitute extends BaseModel
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
     public const ROW_STATUS_INVALID = 2;
+
+    public const REJECTED_BY_INSTITUTE_FALSE = 0;
+    public const REJECTED_BY_INSTITUTE_TRUE = 1;
+    public const REJECTED_BY_INSTITUTE = [
+        self::REJECTED_BY_INSTITUTE_FALSE,
+        self::REJECTED_BY_INSTITUTE_TRUE
+    ];
+
+    public const REJECTED_BY_INDUSTRY_ASSOCIATION_FALSE = 0;
+    public const REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE = 1;
+
 }

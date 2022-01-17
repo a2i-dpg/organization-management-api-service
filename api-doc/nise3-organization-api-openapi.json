@@ -9956,7 +9956,7 @@
         "/industry-association-hr-demands": {
             "get": {
                 "tags": [
-                    "Hr Demand"
+                    "Industry Association Hr Demand"
                 ],
                 "summary": "Get all hr demand",
                 "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
@@ -10056,7 +10056,7 @@
             },
             "post": {
                 "tags": [
-                    "Hr Demand"
+                    "Industry Association Hr Demand"
                 ],
                 "summary": "Create a new hr demand",
                 "description": "API endpoint to Get all areas of business.A successful request response will show 201 HTTP status code",
@@ -10119,7 +10119,7 @@
         "/industry-association-hr-demands/{hr_demand_id}": {
             "get": {
                 "tags": [
-                    "Hr Demand"
+                    "Industry Association Hr Demand"
                 ],
                 "summary": "Get a single hr-demand",
                 "description": "API endpoint to Get a single hr-demand.A successful request response will show 201 HTTP status code",
@@ -10157,7 +10157,7 @@
             },
             "put": {
                 "tags": [
-                    "Hr Demand"
+                    "Industry Association Hr Demand"
                 ],
                 "summary": "Update a single hr-demand",
                 "description": "API endpoint to update a single hr-demand. A successful request response will show 201 HTTP status code",
@@ -10188,7 +10188,7 @@
             },
             "delete": {
                 "tags": [
-                    "Hr Demand"
+                    "Industry Association Hr Demand"
                 ],
                 "summary": "Delete a hr-demand",
                 "description": "API endpoint to Delete a hr-demand.A successful request response will show 201 HTTP status code",
@@ -10216,52 +10216,16 @@
                 }
             }
         },
-        "/hr-demands-approved-by-institute/{hr_demand_id}": {
+        "/institute-hr-demands": {
             "get": {
                 "tags": [
-                    "Hr Demand"
-                ],
-                "summary": "Get all hr demands approved by institutes",
-                "description": "API endpoint to Get all hr demands approved by institutes.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/hr_demand_id"
-                    },
-                    {
-                        "$ref": "#/components/parameters/skillIds"
-                    },
-                    {
-                        "$ref": "#/components/parameters/page_size"
-                    },
-                    {
-                        "$ref": "#/components/parameters/order"
-                    },
-                    {
-                        "$ref": "#/components/parameters/row_status_optional"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/hr-demand-institutes": {
-            "get": {
-                "tags": [
-                    "Hr Demand Institute"
+                    "Institute Hr Demand"
                 ],
                 "summary": "Get All Hr demand approved by institute",
                 "description": "API endpoint to get all Hr demand approved by institute. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/skillIds"
+                        "$ref": "#/components/parameters/hr_demand_id_q"
                     },
                     {
                         "$ref": "#/components/parameters/page_size"
@@ -10285,10 +10249,10 @@
                 }
             }
         },
-        "/hr-demand-institutes/{hr_demand_id}": {
+        "/institute-hr-demands/{hr_demand_id}": {
             "get": {
                 "tags": [
-                    "Hr Demand Institute"
+                    "Institute Hr Demand"
                 ],
                 "summary": "Get a single Hr Demand Institute",
                 "description": "API endpoint to get a single Hr demand approved by institute. A successful request response will show 201 HTTP status code",
@@ -10302,7 +10266,23 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "hr_demand_id": 1,
+                                        "institute_id": 1,
+                                        "rejected_by_institute": 0,
+                                        "vacancy_provided_by_institute": 0,
+                                        "rejected_by_industry_association": 0,
+                                        "vacancy_approved_by_industry_association": 0,
+                                        "row_status": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -10313,7 +10293,7 @@
         "/hr-demand-approved-by-institute/{hr_demand_id}": {
             "put": {
                 "tags": [
-                    "Hr Demand Institute"
+                    "Institute Hr Demand"
                 ],
                 "summary": "Update a single hr-demand approved by institutes",
                 "description": "API endpoint to Get a single hr-demand approved by institutes.A successful request response will show 201 HTTP status code",
@@ -10346,7 +10326,7 @@
         "/hr-demand-rejected-by-institute/{hr_demand_id}": {
             "put": {
                 "tags": [
-                    "Hr Demand Institute"
+                    "Institute Hr Demand"
                 ],
                 "summary": "Update a single hr-demand rejected by institutes",
                 "description": "API endpoint to Get a single hr-demand rejected by institutes.A successful request response will show 201 HTTP status code",
@@ -10360,7 +10340,27 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "hr_demand_id": 1,
+                                        "institute_id": 1,
+                                        "rejected_by_institute": 1,
+                                        "vacancy_provided_by_institute": 20,
+                                        "rejected_by_industry_association": 0,
+                                        "vacancy_approved_by_industry_association": 0,
+                                        "row_status": 1,
+                                        "created_at": null,
+                                        "updated_at": "2022-01-16T07:29:28.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Hr demand rejected successfully",
+                                        "query_time": 1
+                                    }
+                                }
                             }
                         }
                     }
@@ -10371,7 +10371,7 @@
         "/hr-demand-approved-by-industry-association/{hr_demand_id}": {
             "put": {
                 "tags": [
-                    "Hr Demand Institute"
+                    "Institute Hr Demand"
                 ],
                 "summary": "Update an hr demand approved by industry association id",
                 "description": "API endpoint to Update an hr demand approved by industry association id. A successful request response will show 201 HTTP status code",
@@ -10394,7 +10394,27 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 3,
+                                        "hr_demand_id": 1,
+                                        "institute_id": 3,
+                                        "rejected_by_institute": 0,
+                                        "vacancy_provided_by_institute": 25,
+                                        "rejected_by_industry_association": 1,
+                                        "vacancy_approved_by_industry_association": "20",
+                                        "row_status": 1,
+                                        "created_at": "2022-01-13T06:18:24.000000Z",
+                                        "updated_at": "2022-01-16T04:55:05.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Hr demand approved successfully by Industry Association User",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -10404,7 +10424,7 @@
         "/hr-demand-rejected-by-industry-association/{hr_demand_id}": {
             "put": {
                 "tags": [
-                    "Hr Demand Institute"
+                    "Institute Hr Demand"
                 ],
                 "summary": "Update an hr demand rejected by industry association id",
                 "description": "API endpoint to Update an hr demand rejected by industry association id. A successful request response will show 201 HTTP status code",
@@ -10427,7 +10447,27 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 3,
+                                        "hr_demand_id": 1,
+                                        "institute_id": 3,
+                                        "rejected_by_institute": 0,
+                                        "vacancy_provided_by_institute": 0,
+                                        "rejected_by_industry_association": 1,
+                                        "vacancy_approved_by_industry_association": 0,
+                                        "row_status": 1,
+                                        "created_at": "2022-01-13T06:18:24.000000Z",
+                                        "updated_at": "2022-01-13T11:08:02.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Hr demand rejected successfully by Industry Association User",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -12808,6 +12848,14 @@
                 "name": "hr_demand_id",
                 "in": "path",
                 "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "hr_demand_id_q": {
+                "name": "hr_demand_id",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "string"
                 }
