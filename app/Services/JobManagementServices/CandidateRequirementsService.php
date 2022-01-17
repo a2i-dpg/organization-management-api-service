@@ -55,7 +55,7 @@ class CandidateRequirementsService
         $candidateRequirementBuilder->with('skills:id,title,title_en');
         $candidateRequirementBuilder->with('genders:job_id,gender_id');
 
-        return $candidateRequirementBuilder->firstOrFail();
+        return $candidateRequirementBuilder->first();
     }
 
     /**

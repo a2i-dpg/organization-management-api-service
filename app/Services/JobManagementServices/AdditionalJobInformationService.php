@@ -50,7 +50,7 @@ class AdditionalJobInformationService
 
         $additionalJobInfoBuilder->with(['jobLevels', 'jobLocations', 'workPlaces', 'otherBenefits']);
 
-        return $additionalJobInfoBuilder->firstOrFail();
+        return $additionalJobInfoBuilder->first();
 
     }
 

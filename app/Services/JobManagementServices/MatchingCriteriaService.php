@@ -47,7 +47,7 @@ class MatchingCriteriaService
         $matchingCriteriaBuilder->with('jobLevels:job_id,job_level_id');
         $matchingCriteriaBuilder->with('jobLocations');
 
-        return $matchingCriteriaBuilder->firstOrFail();
+        return $matchingCriteriaBuilder->first();
     }
 
     /**

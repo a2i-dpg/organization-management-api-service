@@ -17,7 +17,7 @@ class JobContactInformationService
      */
     public function getContactInformation(string $jobId): JobContactInformation
     {
-        return JobContactInformation::where('job_id', $jobId)->firstOrFail();
+        return JobContactInformation::where('job_id', $jobId)->first();
     }
 
     /**
