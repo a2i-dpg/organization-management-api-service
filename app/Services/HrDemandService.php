@@ -140,9 +140,6 @@ class HrDemandService
                 'updated_by' => Auth::id()
             ];
 
-            Log::info("nnnnnnnnnn vvvvv");
-            Log::info(json_encode(Auth::user()));
-
             $hrDemandInstance = new HrDemand();
             $hrDemandInstance->fill($payload);
             $hrDemandInstance->save();
