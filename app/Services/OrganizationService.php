@@ -163,7 +163,7 @@ class OrganizationService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $membershipId = $request['membership_id'] ?? "";
-        $industryAssociationId = $request['industry_association_id'];
+        $industryAssociationId = $request['industry_association_id'] ?? "";
         /** No need to add this filter in api doc,will come with request  */
 
 
@@ -203,10 +203,13 @@ class OrganizationService
             ]
         );
 
-        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
-            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
-                ->where('industry_association_organization.industry_association_id', $industryAssociationId);
-        });
+        if($industryAssociationId){
+            $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+                $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                    ->where('industry_association_organization.industry_association_id', $industryAssociationId);
+            });
+        }
+
         $organizationBuilder->where('organizations.row_status', BaseModel::ROW_STATUS_ACTIVE);
         $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
@@ -1453,7 +1456,7 @@ class OrganizationService
             'membership_id' => 'nullable',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
-            'industry_association_id' => 'required|integer|gt:0',
+            'industry_association_id' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
