@@ -57,6 +57,18 @@ class OccupationController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getPublicOccupationList(Request $request):JsonResponse
+    {
+        $filter = $this->occupationService->filterValidator($request)->validate();
+        $response = $this->occupationService->getOccupationList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * Display the specified resource
      * @param int $id
      * @return JsonResponse
