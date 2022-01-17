@@ -84,7 +84,8 @@ class OrganizationService
             'organizations.updated_by',
             'organizations.created_at',
             'organizations.updated_at'
-        ]);
+
+        ])->acl();
 
         $organizationBuilder->join('organization_types', function ($join) use ($rowStatus) {
             $join->on('organizations.organization_type_id', '=', 'organization_types.id')

@@ -56,6 +56,19 @@ class JobSectorController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getPublicJobSectorList(Request $request): JsonResponse
+    {
+        $filter = $this->jobSectorService->filterValidator($request)->validate();
+        $response = $this->jobSectorService->getJobSectorList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
      * Display the specified resource
      * @param int $id
      * @return JsonResponse

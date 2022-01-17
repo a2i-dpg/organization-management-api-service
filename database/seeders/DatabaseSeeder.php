@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             EduGroupSeeder::class,
             EduBoardSeeder::class,
             EducationLevelSeeder::class,
+            IndustrySubTradeSeeder::class
 //            IndustryAssociationSeeder::class,
 //            OrganizationSeeder::class,
 //            HumanResourceTemplateSeeder::class,

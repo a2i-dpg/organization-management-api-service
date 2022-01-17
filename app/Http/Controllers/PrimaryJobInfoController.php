@@ -123,9 +123,9 @@ class PrimaryJobInfoController extends Controller
         $statusCode = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
 
         if ($this->primaryJobInformationService->isJobPublishOrArchiveApplicable($jobId)) {
-            $galleryImageVideo = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-            $validatedData = $this->primaryJobInformationService->publishOrArchiveValidator($request)->validate();
-            $primaryJobInformationModificationFlag = $this->primaryJobInformationService->publishOrArchiveOrDraftJob($validatedData, $galleryImageVideo);
+            $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+            $validatedData = $this->primaryJobInformationService->publishOrArchiveValidator($request,$primaryJobInformation)->validate();
+            $primaryJobInformationModificationFlag = $this->primaryJobInformationService->publishOrArchiveOrDraftJob($validatedData, $primaryJobInformation);
             $message = "";
             if ($request->input('status') == PrimaryJobInformation::STATUS_PUBLISH) {
                 $message = $primaryJobInformationModificationFlag ? "Job published successfully done" : "Job published is not done";
