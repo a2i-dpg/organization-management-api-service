@@ -6189,7 +6189,14 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Job published successfully done",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }

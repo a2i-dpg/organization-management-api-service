@@ -478,14 +478,20 @@ class PrimaryJobInformationService
 
     /**
      * @param Request $request
+     * @param PrimaryJobInformation $primaryJobInformation
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function publishOrArchiveValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function publishOrArchiveValidator(Request $request, PrimaryJobInformation $primaryJobInformation): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'status' => [
                 'integer',
-                Rule::in(PrimaryJobInformation::PUBLISH_OR_ARCHIVE_STATUSES)
+                Rule::in(PrimaryJobInformation::PUBLISH_OR_ARCHIVE_STATUSES),
+                function ($attr, $value, $failed) use ($primaryJobInformation) {
+                    if ($value == PrimaryJobInformation::STATUS_PUBLISH && $primaryJobInformation->application_deadline < Carbon::today()) {
+                        $failed('Application deadline must be greater than or equal today');
+                    }
+                }
             ]
 
         ];
