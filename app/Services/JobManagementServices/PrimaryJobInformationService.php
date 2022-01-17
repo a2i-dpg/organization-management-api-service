@@ -137,7 +137,7 @@ class PrimaryJobInformationService
         return $response;
     }
 
-    public function getPrimaryJobInformationDetails(string $jobId): PrimaryJobInformation
+    public function getPrimaryJobInformationDetails(string $jobId): PrimaryJobInformation | null
     {
         /** @var PrimaryJobInformation|Builder $primaryJobInformationBuilder */
         $primaryJobInformationBuilder = PrimaryJobInformation::select([
@@ -189,7 +189,8 @@ class PrimaryJobInformationService
         $primaryJobInformationBuilder->with(['employmentTypes' => function ($query) {
             $query->select('id', 'title');
         }]);
-        return $primaryJobInformationBuilder->firstOrFail();
+
+        return $primaryJobInformationBuilder->first();
     }
 
     /**
