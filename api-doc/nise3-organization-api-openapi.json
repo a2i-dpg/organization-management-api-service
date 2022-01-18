@@ -110,7 +110,7 @@
                                         "query_time": 1
                                     },
                                     "data": {
-                                        "industry_association_trade_id": "1",
+                                        "trade_id": "1",
                                         "title_en": null,
                                         "title": "NewTitle",
                                         "trade_number": "33",
@@ -170,7 +170,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "industry_association_trade_id": 1,
+                                        "trade_id": 1,
                                         "title": "NewBuddy",
                                         "title_en": null,
                                         "loc_division_id": "2",
@@ -234,7 +234,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "industry_association_trade_id": 1,
+                                        "trade_id": 1,
                                         "title": "Medhurst, Bogan and Leuschke",
                                         "title_en": "Medhurst, Bogan and Leuschke",
                                         "loc_division_id": 3,
@@ -769,25 +769,23 @@
                                         "success": true,
                                         "code": 201,
                                         "message": "Organization has been Created Successfully",
-                                        "query_time": 10
+                                        "query_time": 4
                                     },
                                     "data": {
-                                        "organization_type_id": "2",
-                                        "date_of_establishment": "2020-09-09",
-                                        "title": "Randy Blythe",
+                                        "organization_type_id": "1",
+                                        "title": "sdfvsf",
                                         "loc_division_id": "1",
                                         "loc_district_id": "1",
-                                        "address": "Dhaka",
-                                        "mobile": "01779900909",
-                                        "email": "aa@gmail.com",
-                                        "name_of_the_office_head": "Karmanaraiyan",
-                                        "contact_person_name": "n0obiedobiedoo",
-                                        "contact_person_mobile": "01779900909",
-                                        "contact_person_email": "44@gmail.com",
-                                        "contact_person_designation": "ddfdfdf",
-                                        "updated_at": "2021-12-21T10:22:14.000000Z",
-                                        "created_at": "2021-12-21T10:22:14.000000Z",
-                                        "id": 9
+                                        "address": "sdfvsdf",
+                                        "mobile": "01398978981",
+                                        "email": "esdgfvdsfv@gmail.com",
+                                        "contact_person_name": "siffddc",
+                                        "contact_person_mobile": "01309898675",
+                                        "contact_person_email": "sdgsdfvdfv5@gmail.com",
+                                        "contact_person_designation": "sefgvsdfgv",
+                                        "updated_at": "2022-01-18T09:53:20.000000Z",
+                                        "created_at": "2022-01-18T09:53:20.000000Z",
+                                        "id": 14
                                     }
                                 }
                             }
@@ -818,23 +816,23 @@
                                 },
                                 "example": {
                                     "data": {
-                                        "id": 10,
+                                        "id": 14,
                                         "title_en": null,
-                                        "title": "Randy Blythe",
-                                        "date_of_establishment": "2021-09-09",
-                                        "name_of_the_office_head": "Karmanaraiyan",
+                                        "title": "sdfvsf",
+                                        "date_of_establishment": null,
+                                        "name_of_the_office_head": null,
                                         "name_of_the_office_head_en": null,
                                         "name_of_the_office_head_designation": null,
                                         "name_of_the_office_head_designation_en": null,
                                         "domain": null,
                                         "fax_no": null,
-                                        "mobile": "01779900909",
-                                        "email": "avaaaaaaa@gmail.com",
-                                        "contact_person_name": "n0obiedobiedoo",
+                                        "mobile": "01398978981",
+                                        "email": "esdgfvdsfv@gmail.com",
+                                        "contact_person_name": "siffddc",
                                         "contact_person_name_en": null,
-                                        "contact_person_mobile": "01779900907",
-                                        "contact_person_email": "84@gmail.com",
-                                        "contact_person_designation": "ddfdfdf",
+                                        "contact_person_mobile": "01309898675",
+                                        "contact_person_email": "sdgsdfvdfv5@gmail.com",
+                                        "contact_person_designation": "sefgvsdfgv",
                                         "contact_person_designation_en": null,
                                         "description": null,
                                         "description_en": null,
@@ -851,16 +849,52 @@
                                         "location_latitude": null,
                                         "location_longitude": null,
                                         "google_map_src": null,
-                                        "organization_type_id": 2,
-                                        "organization_type_title_en": "Private Organization",
-                                        "organization_type_title": "Private Organization",
-                                        "address": "Dhaka",
+                                        "organization_type_id": 1,
+                                        "organization_type_title_en": "Government Organization",
+                                        "organization_type_title": "Government Organization",
+                                        "address": "sdfvsdf",
                                         "address_en": null,
                                         "row_status": 2,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-12-21T10:27:58.000000Z",
-                                        "updated_at": "2021-12-21T10:27:58.000000Z"
+                                        "created_at": "2022-01-18T09:53:20.000000Z",
+                                        "updated_at": "2022-01-18T09:53:20.000000Z",
+                                        "sub_trades": [
+                                            {
+                                                "id": 1,
+                                                "title": "Tesla",
+                                                "title_en": "Tesla",
+                                                "trade_id": 1,
+                                                "deleted_at": null,
+                                                "created_at": "2022-01-18T06:26:24.000000Z",
+                                                "updated_at": null,
+                                                "trade": {
+                                                    "id": 1,
+                                                    "title": "Automotive industry in Bangladesh",
+                                                    "title_en": "Automotive industry in Bangladesh",
+                                                    "deleted_at": null,
+                                                    "created_at": null,
+                                                    "updated_at": null
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Daimler AG",
+                                                "title_en": "Daimler AG",
+                                                "trade_id": 1,
+                                                "deleted_at": null,
+                                                "created_at": "2022-01-18T06:26:24.000000Z",
+                                                "updated_at": null,
+                                                "trade": {
+                                                    "id": 1,
+                                                    "title": "Automotive industry in Bangladesh",
+                                                    "title_en": "Automotive industry in Bangladesh",
+                                                    "deleted_at": null,
+                                                    "created_at": null,
+                                                    "updated_at": null
+                                                }
+                                            }
+                                        ]
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -10850,7 +10884,7 @@
                     },
                     "company_industry_type": {
                         "type": "integer",
-                        "description": "Must exist in industry_association_trades"
+                        "description": "Must exist in trades"
                     },
                     "is_company_business_visible": {
                         "type": "integer",
@@ -11158,7 +11192,7 @@
                 "type": "object",
                 "description": "Industry Association registration",
                 "properties": {
-                    "industry_association_trade_id": {
+                    "trade_id": {
                         "type": "integer"
                     },
                     "title": {
@@ -11248,7 +11282,7 @@
                     }
                 },
                 "required": [
-                    "industry_association_trade_id",
+                    "trade_id",
                     "title",
                     "trade_number",
                     "loc_division_id",
@@ -11478,9 +11512,9 @@
                         ],
                         "example": 2
                     },
-                    "industry_sub_trades": {
+                    "sub_trades": {
                         "type": "array",
-                        "description": "Must exist in industry sub trade",
+                        "description": "Must exist in sub trade",
                         "items": {
                             "type": "integer"
                         }
@@ -11593,7 +11627,7 @@
                     "password_confirmation",
                     "loc_division_id",
                     "loc_district_id",
-                    "industry_sub_trades"
+                    "sub_trades"
                 ]
             },
             "organizationType": {
