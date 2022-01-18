@@ -239,15 +239,10 @@ class JobManagementController extends Controller
      * @param string $jobId
      * @return JsonResponse
      */
-    public function getJobInfo(string $jobId): JsonResponse
+    public function getMatchingCriteria(string $jobId): JsonResponse
     {
         $data = collect([
-            'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
-            'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
-            'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
-            'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
             'matching_criteria' => $this->matchingCriteriaService->getMatchingCriteria($jobId),
-            'contact_information' => $this->jobContactInformationService->getContactInformation($jobId),
         ]);
         $response["data"] = $data;
         $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());

@@ -150,8 +150,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     /*** Service to service direct call without any authorization and authentication ***/
     $router->group(['prefix' => 'service-to-service-call', 'as' => 'service-to-service-call'], function () use ($router) {
-        /**jobInfo fetch from youth service  */
-        $router->get("job-info/{jobId}", ["as" => "service-to-service-call.job-info", "uses" => "JobManagementController@getJobInfo"]);
+        /**matching criteria fetch from other service */
+        $router->get("matching-criteria/{jobId}", ["as" => "service-to-service-call.matching-criteria", "uses" => "JobManagementController@getMatchingCriteria"]);
     });
 
     /** List of industryAssociation trades */
