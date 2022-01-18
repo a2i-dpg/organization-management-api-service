@@ -135,9 +135,7 @@ class HrDemandService
                 'requirement_en' => $hrDemand['requirement_en'] ?? "",
                 'vacancy' => $hrDemand['vacancy'],
                 'remaining_vacancy' => $hrDemand['vacancy'],
-                'all_institutes' => empty($hrDemand['institute_ids']) ? 1 : 0,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id()
+                'all_institutes' => empty($hrDemand['institute_ids']) ? 1 : 0
             ];
 
             $hrDemandInstance = new HrDemand();
