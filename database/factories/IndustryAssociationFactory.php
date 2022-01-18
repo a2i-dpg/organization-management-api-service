@@ -31,7 +31,7 @@ class IndustryAssociationFactory extends Factory
         return [
             'title_en' => $title,
             'title' => $title,
-            'industry_association_trade_id' => $industryAssociationTradeId,
+            'trade_id' => $industryAssociationTradeId,
             'loc_division_id' => $location['loc_division_id'],
             'loc_district_id' => $location['loc_district_id'],
             'loc_upazila_id' => $location['loc_upazila_id'],
