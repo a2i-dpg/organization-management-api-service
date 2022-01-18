@@ -10320,6 +10320,13 @@
                         "$ref": "#/components/parameters/hr_demand_id_q"
                     },
                     {
+                        "name": "institute_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
