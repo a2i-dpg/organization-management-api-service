@@ -7,6 +7,7 @@ use App\Models\BaseModel;
 use App\Models\JobManagement;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
+use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -21,14 +22,17 @@ use Throwable;
 class AdditionalJobInfoController extends Controller
 {
     public AdditionalJobInformationService $additionalJobInformationService;
+    public JobManagementService $jobManagementService;
     public Carbon $startTime;
 
     /**
      * @param AdditionalJobInformationService $additionalJobInformationService
+     * @param JobManagementService $jobManagementService
      */
-    public function __construct(AdditionalJobInformationService $additionalJobInformationService)
+    public function __construct(AdditionalJobInformationService $additionalJobInformationService, JobManagementService $jobManagementService)
     {
         $this->additionalJobInformationService = $additionalJobInformationService;
+        $this->jobManagementService = $jobManagementService;
         $this->startTime = Carbon::now();
 
     }
@@ -100,7 +104,7 @@ class AdditionalJobInfoController extends Controller
 //
 //        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $additionalJobInformation]);
 
-        $step = JobManagementController::lastAvailableStep($jobId);
+        $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
             "data" => [
                 "latest_step" => $step
