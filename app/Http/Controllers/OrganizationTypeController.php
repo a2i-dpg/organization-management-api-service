@@ -57,6 +57,19 @@ class OrganizationTypeController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getPublicOrganizationTypeList(Request $request): JsonResponse
+    {
+        $filter = $this->organizationTypeService->filterValidator($request)->validate();
+        $response = $this->organizationTypeService->getAllOrganizationType($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * Display a specified resource
      * @param int $id
      * @return JsonResponse
