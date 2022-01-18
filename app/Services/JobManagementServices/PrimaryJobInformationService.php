@@ -306,8 +306,8 @@ class PrimaryJobInformationService
         /** @var User $authUser */
         $authUser = Auth::user();
         $requestData = $request->all();
-        if (!empty($requestData["employment_type"])) {
-            $requestData["employment_type"] = is_array($requestData['employment_type']) ? $requestData['employment_type'] : explode(',', $requestData['employment_type']);
+        if (!empty($requestData["employment_types"])) {
+            $requestData["employment_types"] = is_array($requestData['employment_types']) ? $requestData['employment_types'] : explode(',', $requestData['employment_types']);
         }
         $rules = [
             "job_id" => [
@@ -365,12 +365,12 @@ class PrimaryJobInformationService
                 "nullable",
                 "exists:industry_associations,id,deleted_at,NULL"
             ],
-            "employment_type" => [
+            "employment_types" => [
                 "required",
                 "array",
                 "min:1"
             ],
-            "employment_type.*" => [
+            "employment_types.*" => [
                 "required",
                 "int",
                 "exists:employment_types,id"
