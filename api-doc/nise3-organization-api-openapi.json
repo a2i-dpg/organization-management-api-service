@@ -21,6 +21,9 @@
             "url": "https://org.bus-staging.softbdltd.com/api/v1"
         },
         {
+            "url": "https://org-phase1.nise.gov.bd/api/v1"
+        },
+        {
             "url": "http://organization.local:8010/api/v1"
         },
         {
@@ -7010,10 +7013,10 @@
                 }
             }
         },
-        "/industry-association-trades": {
+        "/trades": {
             "get": {
                 "tags": [
-                    "Industry association trades"
+                    "trades"
                 ],
                 "summary": "Get industry association trades",
                 "description": "API endpoint to Get industry association trades.A successful request response will show 201 HTTP status code",
@@ -7052,10 +7055,10 @@
                 }
             }
         },
-        "/industry-sub-trades": {
+        "/sub-trades": {
             "get": {
                 "tags": [
-                    "Industry association sub trades"
+                    "Sub trades"
                 ],
                 "summary": "Get industry association sub trades",
                 "description": "API endpoint to Get industry association sub trades.A successful request response will show 201 HTTP status code",
@@ -7067,7 +7070,7 @@
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
-                        "$ref": "#/components/parameters/industry_association_trade_id"
+                        "$ref": "#/components/parameters/trade_id"
                     },
                     {
                         "$ref": "#/components/parameters/order"
@@ -7084,19 +7087,25 @@
                                             "id": 1,
                                             "title": "Tesla",
                                             "title_en": "Tesla",
-                                            "industry_association_trade_id": 1
+                                            "trade_id": 1,
+                                            "trade_title_en": "Automotive industry in Bangladesh",
+                                            "trade_title": "Automotive industry in Bangladesh"
                                         },
                                         {
                                             "id": 2,
                                             "title": "Daimler AG",
                                             "title_en": "Daimler AG",
-                                            "industry_association_trade_id": 1
+                                            "trade_id": 1,
+                                            "trade_title_en": "Automotive industry in Bangladesh",
+                                            "trade_title": "Automotive industry in Bangladesh"
                                         },
                                         {
                                             "id": 3,
                                             "title": "Volkswagen AG",
                                             "title_en": "Volkswagen AG",
-                                            "industry_association_trade_id": 1
+                                            "trade_id": 1,
+                                            "trade_title_en": "Automotive industry in Bangladesh",
+                                            "trade_title": "Automotive industry in Bangladesh"
                                         }
                                     ],
                                     "_response_status": {
@@ -12824,8 +12833,8 @@
             }
         },
         "parameters": {
-            "industry_association_trade_id": {
-                "name": "industry_association_trade_id",
+            "trade_id": {
+                "name": "trade_id",
                 "in": "query",
                 "required": false,
                 "schema": {
