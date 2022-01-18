@@ -157,46 +157,47 @@ class IndustryAssociationController extends Controller
 
     }
 
-    /**
-     * public industry member details
-     * @param int $industryId
-     * @return JsonResponse
-     */
-    public function getPublicIndustryAssociationMemberDetails(int $industryId): JsonResponse
-    {
-        $industry = $this->organizationService->getOneOrganization($industryId);
-
-        $response = [
-            "data" => $industry,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     *Industry member details
-     * @param int $industryId
-     * @return JsonResponse
-     * @throws AuthorizationException
-     */
-    public function industryAssociationMemberDetails(int $industryId): JsonResponse
-    {
-        $this->authorize('viewMember', IndustryAssociation::class);
-        $industry = $this->organizationService->getOneOrganization($industryId);
-        $response = [
-            "data" => $industry,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
+    /** This methods are not using now. Delete after checking */
+//    /**
+//     * public industry member details
+//     * @param int $industryId
+//     * @return JsonResponse
+//     */
+//    public function getPublicIndustryAssociationMemberDetails(int $industryId): JsonResponse
+//    {
+//        $industry = $this->organizationService->getOneOrganization($industryId);
+//
+//        $response = [
+//            "data" => $industry,
+//            "_response_status" => [
+//                "success" => true,
+//                "code" => ResponseAlias::HTTP_OK,
+//                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+//            ]
+//        ];
+//        return Response::json($response, ResponseAlias::HTTP_OK);
+//    }
+//
+//    /**
+//     *Industry member details
+//     * @param int $industryId
+//     * @return JsonResponse
+//     * @throws AuthorizationException
+//     */
+//    public function industryAssociationMemberDetails(int $industryId): JsonResponse
+//    {
+//        $this->authorize('viewMember', IndustryAssociation::class);
+//        $industry = $this->organizationService->getOneOrganization($industryId);
+//        $response = [
+//            "data" => $industry,
+//            "_response_status" => [
+//                "success" => true,
+//                "code" => ResponseAlias::HTTP_OK,
+//                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+//            ]
+//        ];
+//        return Response::json($response, ResponseAlias::HTTP_OK);
+//    }
 
     /**
      * Store a newly created resource in storage.
