@@ -7,6 +7,7 @@ use App\Models\CandidateRequirement;
 use App\Models\JobManagement;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\CandidateRequirementsService;
+use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -22,14 +23,17 @@ class CandidateRequirementController extends Controller
 {
 
     public CandidateRequirementsService $candidateRequirementsService;
+    public JobManagementService $jobManagementService;
     public Carbon $startTime;
 
     /**
      * @param CandidateRequirementsService $candidateRequirementsService
+     * @param JobManagementService $jobManagementService
      */
-    public function __construct(CandidateRequirementsService $candidateRequirementsService)
+    public function __construct(CandidateRequirementsService $candidateRequirementsService, JobManagementService $jobManagementService)
     {
         $this->candidateRequirementsService = $candidateRequirementsService;
+        $this->jobManagementService = $jobManagementService;
         $this->startTime = Carbon::now();
 
     }
@@ -99,7 +103,7 @@ class CandidateRequirementController extends Controller
 //        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $candidateRequirement]);
 
 
-        $step = JobManagementController::lastAvailableStep($jobId);
+        $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
             "data" => [
                 "latest_step" => $step

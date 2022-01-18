@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\JobManagement;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
+use App\Services\JobManagementServices\JobManagementService;
 use App\Services\JobManagementServices\MatchingCriteriaService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -20,14 +21,17 @@ use Throwable;
 class MatchingCriteriaController extends Controller
 {
     public MatchingCriteriaService $matchingCriteriaService;
+    public JobManagementService $jobManagementService;
     public Carbon $startTime;
 
     /**
      * @param MatchingCriteriaService $matchingCriteriaService
+     * @param JobManagementService $jobManagementService
      */
-    public function __construct(MatchingCriteriaService $matchingCriteriaService)
+    public function __construct(MatchingCriteriaService $matchingCriteriaService, JobManagementService $jobManagementService)
     {
         $this->matchingCriteriaService = $matchingCriteriaService;
+        $this->jobManagementService = $jobManagementService;
         $this->startTime = Carbon::now();
 
     }
@@ -73,7 +77,7 @@ class MatchingCriteriaController extends Controller
 //
 //        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $matchingCriteria]);
 
-        $step = JobManagementController::lastAvailableStep($jobId);
+        $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
             "data" => [
                 "latest_step" => $step
