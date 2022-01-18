@@ -127,8 +127,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     /** Service to service direct call without any authorization and authentication */
     $router->group(['prefix' => 'service-to-service-call', 'as' => 'service-to-service-call'], function () use ($router) {
-        /** Single Institute Fetch  */
+        /** Single Organization Fetch  */
         $router->get("organizations/{id}", ["as" => "service-to-service-call.organization", "uses" => "OrganizationController@organizationDetails"]);
+
+        /** Single Industry Association Fetch  */
         $router->get("industry-associations/{id}", ["as" => "service-to-service-call.industry-associations", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
 
         /**matching criteria fetch from other service */
