@@ -2,23 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\IndustryAssociationTrade;
+use App\Models\Trade;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-class IndustryAssociationTradeSeeder extends Seeder
+class TradeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
      * @return void
      */
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        IndustryAssociationTrade::query()->truncate();
+        Trade::query()->truncate();
 
-        $industryAssociationTrades = [
+        $trades = [
             [
                 'id' => '1',
                 "title" => "Automotive industry in Bangladesh",
@@ -98,11 +97,11 @@ class IndustryAssociationTradeSeeder extends Seeder
                 'id' => '16',
                 "title" => "Textile industry in Bangladesh",
                 "title_en" => "Textile industry in Bangladesh"
-            ],];
+            ]
+        ];
 
-        IndustryAssociationTrade::insert($industryAssociationTrades);
+        Trade::insert($trades);
 
         Schema::enableForeignKeyConstraints();
-
     }
 }

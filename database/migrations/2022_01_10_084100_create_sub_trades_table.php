@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndustryAssociationTradesTable extends Migration
+class CreateSubTradesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateIndustryAssociationTradesTable extends Migration
      */
     public function up()
     {
-        Schema::create('industry_association_trades', function (Blueprint $table) {
+        Schema::create('sub_trades', function (Blueprint $table) {
             $table->id();
-            $table->string('title',800);
-            $table->string('title_en',400);
+            $table->string('title', 800);
+            $table->string('title_en', 400);
+            $table->unsignedInteger('trade_id');
             $table->softDeletes();
             $table->timestamps();
-        });
+        }
+        );
     }
 
     /**
@@ -29,6 +31,6 @@ class CreateIndustryAssociationTradesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('industry_association_trades');
+        Schema::dropIfExists('industry_sub_trades');
     }
 }

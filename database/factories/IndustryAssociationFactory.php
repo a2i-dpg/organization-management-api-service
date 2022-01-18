@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
-use App\Models\IndustryAssociationTrade;
+use App\Models\Trade;
 use App\Services\LocationManagementServices\LocationSeederHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +18,7 @@ class IndustryAssociationFactory extends Factory
      */
     public function definition(): array
     {
-        $industryAssociationTradeId = IndustryAssociationTrade::inRandomOrder()->first();
+        $industryAssociationTradeId = Trade::inRandomOrder()->first();
         $title = ucfirst($this->faker->unique()->company);
         $orgAddress = $this->faker->address();
         $len = count(LocationSeederHelper::$data);

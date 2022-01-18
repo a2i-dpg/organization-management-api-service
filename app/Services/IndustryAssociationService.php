@@ -38,14 +38,14 @@ class IndustryAssociationService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $industryAssociationTradeId = $request['industry_association_trade_id'] ?? "";
+        $tradeId = $request['trade_id'] ?? "";
 
         /** @var Builder organizationBuilder */
         $industryAssociationBuilder = IndustryAssociation::select([
             'industry_associations.id',
-            'industry_associations.industry_association_trade_id',
-            'industry_association_trades.title as industry_association_trade_title',
-            'industry_association_trades.title_en as industry_association_trade_title_en',
+            'industry_associations.trade_id',
+            'trades.title as trade_title',
+            'trades.title_en as trade_title_en',
             'industry_associations.title_en',
             'industry_associations.title',
             'industry_associations.loc_division_id',
@@ -86,9 +86,9 @@ class IndustryAssociationService
             'industry_associations.created_at',
             'industry_associations.updated_at'
         ]);
-        $industryAssociationBuilder->join('industry_association_trades', function ($join) {
-            $join->on('industry_association_trades.id', '=', 'industry_associations.industry_association_trade_id')
-                ->whereNull('industry_association_trades.deleted_at');
+        $industryAssociationBuilder->join('trades', function ($join) {
+            $join->on('trades.id', '=', 'industry_associations.trade_id')
+                ->whereNull('trades.deleted_at');
         });
 
         $industryAssociationBuilder->leftjoin('loc_divisions', function ($join) {
@@ -111,8 +111,8 @@ class IndustryAssociationService
             $industryAssociationBuilder->where('industry_associations.row_status', $rowStatus);
         }
 
-        if (is_numeric($industryAssociationTradeId)) {
-            $industryAssociationBuilder->where('industry_associations.industry_association_trade_id', $industryAssociationTradeId);
+        if (is_numeric($tradeId)) {
+            $industryAssociationBuilder->where('industry_associations.trade_id', $tradeId);
         }
 
         if (!empty($titleEn)) {
@@ -152,9 +152,9 @@ class IndustryAssociationService
         /** @var Builder $industryAssociationBuilder */
         $industryAssociationBuilder = IndustryAssociation::select([
             'industry_associations.id',
-            'industry_associations.industry_association_trade_id',
-            'industry_association_trades.title as industry_association_trade_title',
-            'industry_association_trades.title_en as industry_association_trade_title_en',
+            'industry_associations.trade_id',
+            'trades.title as trade_title',
+            'trades.title_en as trade_title_en',
             'industry_associations.title_en',
             'industry_associations.title',
             'industry_associations.loc_division_id',
@@ -196,9 +196,9 @@ class IndustryAssociationService
             'industry_associations.updated_at'
         ]);
 
-        $industryAssociationBuilder->join('industry_association_trades', function ($join) {
-            $join->on('industry_association_trades.id', '=', 'industry_associations.industry_association_trade_id')
-                ->whereNull('industry_association_trades.deleted_at');
+        $industryAssociationBuilder->join('trades', function ($join) {
+            $join->on('trades.id', '=', 'industry_associations.trade_id')
+                ->whereNull('trades.deleted_at');
         });
 
         $industryAssociationBuilder->leftjoin('loc_divisions', function ($join) {
@@ -257,7 +257,7 @@ class IndustryAssociationService
      * @return mixed
      * @throws RequestException
      */
-    public function userDestroy(IndustryAssociation $industryAssociation)
+    public function userDestroy(IndustryAssociation $industryAssociation): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-delete';
         $userPostField = [
@@ -311,7 +311,7 @@ class IndustryAssociationService
 
     /**
      * @param IndustryAssociation $industryAssociation
-     * @return mixed
+     * @return array|null
      * @throws RequestException
      */
     public function industryAssociationUserApproval(IndustryAssociation $industryAssociation): array|null
@@ -605,10 +605,10 @@ class IndustryAssociationService
         ];
 
         $rules = [
-            'industry_association_trade_id' => [
+            'trade_id' => [
                 'required',
                 'int',
-                'exists:industry_association_trades,id,deleted_at,NULL'
+                'exists:trades,id,deleted_at,NULL'
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
@@ -880,10 +880,10 @@ class IndustryAssociationService
         ];
 
         $rules = [
-            'industry_association_trade_id' => [
+            'trade_id' => [
                 'required',
                 'int',
-                'exists:industry_association_trades,id,deleted_at,NULL',
+                'exists:trades,id,deleted_at,NULL',
             ],
             'title_en' => [
                 'nullable',
@@ -1025,7 +1025,7 @@ class IndustryAssociationService
             'title' => 'nullable|max:1200|min:2',
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',
-            'industry_association_trade_id' => 'nullable|integer|gt:0',
+            'trade_id' => 'nullable|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])

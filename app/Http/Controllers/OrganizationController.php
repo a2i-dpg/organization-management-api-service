@@ -115,13 +115,13 @@ class OrganizationController extends Controller
         $this->authorize('create', $organization);
 
         $validated = $this->organizationService->validator($request)->validate();
-        $industrySubTrades = $validated['industry_sub_trades'];
+        $subTrades = $validated['sub_trades'];
         DB::beginTransaction();
         try {
 
             $organization = $this->organizationService->store($organization, $validated);
 
-            $this->organizationService->syncWithIndustrySubTrades($organization, $industrySubTrades);
+            $this->organizationService->syncWithSubTrades($organization, $subTrades);
 
             if (!($organization && $organization->id)) {
                 throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
@@ -204,7 +204,7 @@ class OrganizationController extends Controller
         $validated = $this->organizationService->validator($request, $id)->validate();
         $industrySubTrades = $validated['industry_sub_trades'];
         $data = $this->organizationService->update($organization, $validated);
-        $this->organizationService->syncWithIndustrySubTrades($organization, $industrySubTrades);
+        $this->organizationService->syncWithSubTrades($organization, $industrySubTrades);
         $response = [
             'data' => $data,
             '_response_status' => [

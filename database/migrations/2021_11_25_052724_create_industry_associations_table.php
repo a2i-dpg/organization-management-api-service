@@ -15,7 +15,7 @@ class CreateIndustryAssociationsTable extends Migration
     {
         Schema::create('industry_associations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('industry_association_trade_id');
+            $table->unsignedInteger('trade_id');
 
             $table->string('title', 1200);
             $table->string('title_en', 600)->nullable();

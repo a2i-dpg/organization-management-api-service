@@ -8,28 +8,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
 /**
- * Class IndustrySubTrade
+ * Class SubTrade
  * @package App\Models
  * @property int id
  * @property string title
  * @property string title_en
  * @property-read  Collection organizations
  */
-class IndustrySubTrade extends BaseModel
+class SubTrade extends BaseModel
 {
     use SoftDeletes;
 
     protected $hidden = ['pivot'];
-    protected $table = 'industry_sub_trades';
+    protected $table = 'sub_trades';
 
     public function organizations(): BelongsToMany
     {
-        return $this->belongsToMany(IndustrySubTrade::class, 'organization_industry_sub_trade', 'organization_id', 'industry_sub_trade_id');
+        return $this->belongsToMany(SubTrade::class, 'organization_sub_trade', 'organization_id', 'sub_trade_id');
     }
 
-    public function industryAssociationTrade(): BelongsTo
+    public function trade(): BelongsTo
     {
-        return $this->belongsTo(IndustryAssociationTrade::class);
+        return $this->belongsTo(Trade::class);
 
     }
 

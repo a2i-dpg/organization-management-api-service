@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            IndustryAssociationTradeSeeder::class,
+            TradeSeeder::class,
             ServiceSeeder::class,
             SkillSeeder::class,
             JobSectorSeeder::class,
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             EduGroupSeeder::class,
             EduBoardSeeder::class,
             EducationLevelSeeder::class,
-            IndustrySubTradeSeeder::class
+            SubTradeSeeder::class
 //            IndustryAssociationSeeder::class,
 //            OrganizationSeeder::class,
 //            HumanResourceTemplateSeeder::class,
