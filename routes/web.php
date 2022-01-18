@@ -154,11 +154,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("matching-criteria/{jobId}", ["as" => "service-to-service-call.matching-criteria", "uses" => "JobManagementController@getMatchingCriteria"]);
     });
 
-    /** List of industryAssociation trades */
-    $router->get('industry-association-trades', ['as' => 'industry-associations.trades', 'uses' => "IndustryAssociationTradeController@getList"]);
+    /** List of trades */
+    $router->get('trades', ['as' => 'trades.get-list', 'uses' => "TradeController@getList"]);
 
     /** List of industryAssociation trades */
-    $router->get('industry-sub-trades', ['as' => 'industry-sub-trades', 'uses' => "IndustrySubTradeController@getList"]);
+    $router->get('sub-trades', ['as' => 'trades.get-list', 'uses' => "IndustrySubTradeController@getList"]);
 
 
     /** Industry Association open  Registration */

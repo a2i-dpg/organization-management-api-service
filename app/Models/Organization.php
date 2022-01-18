@@ -98,6 +98,6 @@ class Organization extends BaseModel
 
     public function industrySubTrades(): BelongsToMany
     {
-        return $this->belongsToMany(IndustrySubTrade::class,'organization_industry_sub_trade','organization_id','industry_sub_trade_id');
+        return $this->belongsToMany(SubTrade::class,'organization_industry_sub_trade','organization_id','industry_sub_trade_id');
     }
 }

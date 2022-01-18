@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IndustryAssociation;
-use App\Services\IndustryAssociationTradeService;
+use App\Services\TradeService;
 use Carbon\Carbon;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class IndustryAssociationTradeController extends Controller
+class TradeController extends Controller
 {
 
-
-    protected IndustryAssociationTradeService $industryAssociationTradeService;
+    protected TradeService $tradeService;
 
     private Carbon $startTime;
 
 
-    public function __construct(IndustryAssociationTradeService $industryAssociationTradeService)
+    public function __construct(TradeService $tradeService)
     {
-        $this->industryAssociationTradeService = $industryAssociationTradeService;
+        $this->tradeService = $tradeService;
         $this->startTime = Carbon::now();
     }
 
@@ -34,7 +31,7 @@ class IndustryAssociationTradeController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $returnedData = $this->industryAssociationTradeService->getIndustryAssociationTradeList($this->startTime);
+        $returnedData = $this->tradeService->getTradeList($this->startTime);
         $response = [
             'data' => $returnedData['data'],
             '_response_status' => [
