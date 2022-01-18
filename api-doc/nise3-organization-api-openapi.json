@@ -11660,6 +11660,10 @@
                         ],
                         "example": 2
                     },
+                    "industry_association_id": {
+                        "type": "integer",
+                        "description": "Must exist in industry association table"
+                    },
                     "id": {
                         "type": "integer",
                         "description": "Primary Key",
@@ -11677,7 +11681,7 @@
                         "minLength": 2,
                         "maxLength": 300
                     },
-                    "industry_sub_trades": {
+                    "sub_trades": {
                         "type": "array",
                         "description": "Must exist in industry sub trade",
                         "items": {
@@ -11817,6 +11821,7 @@
                     "title",
                     "permission_sub_group_id",
                     "organization_type_id",
+                    "industry_association_id",
                     "contact_person_name",
                     "contact_person_mobile",
                     "contact_person_designation",
@@ -11827,7 +11832,7 @@
                     "address",
                     "loc_division_id",
                     "loc_district_id",
-                    "industry_sub_trades"
+                    "sub_trades"
                 ]
             },
             "organizationAdminProfile": {

@@ -927,6 +927,10 @@ class OrganizationService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
+        if (!empty($data["sub_trades"])) {
+            $data["sub_trades"] = is_array($data['sub_trades']) ? $data['sub_trades'] : explode(',', $data['sub_trades']);
+        }
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]',
         ];
@@ -1122,7 +1126,7 @@ class OrganizationService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**
