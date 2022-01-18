@@ -419,7 +419,7 @@ class OrganizationService
         });
         $organizationBuilder->where('organizations.id', '=', $id);
 
-        $organizationBuilder->with('industrySubTrades.industryAssociationTrade');
+        $organizationBuilder->with('subTrades.trade');
 
         return $organizationBuilder->firstOrFail();
     }
@@ -477,11 +477,11 @@ class OrganizationService
     /**
      * Add organization to a industryAssociation
      * @param Organization $organization
-     * @param array $industrySubTrades
+     * @param array $subTrades
      */
-    public function syncWithIndustrySubTrades(Organization $organization, array $industrySubTrades)
+    public function syncWithSubTrades(Organization $organization, array $subTrades)
     {
-        $organization->industrySubTrades()->sync($industrySubTrades);
+        $organization->subTrades()->sync($subTrades);
     }
 
     /**
@@ -936,15 +936,15 @@ class OrganizationService
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-            'industry_sub_trades' => [
+            'sub_trades' => [
                 'required',
                 'array',
                 'min:1'
             ],
-            'industry_sub_trades.*' => [
+            'sub_trades.*' => [
                 'nullable',
                 'integer',
-                'exists:industry_sub_trades,id,deleted_at,NULL'
+                'exists:sub_trades,id,deleted_at,NULL'
             ],
             'industry_association_id' => [
                 'required',
