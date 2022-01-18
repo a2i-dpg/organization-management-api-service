@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\IndustrySubTrade;
+use App\Models\SubTrade;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-class IndustrySubTradeSeeder extends Seeder
+class SubTradeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,9 +17,9 @@ class IndustrySubTradeSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        IndustrySubTrade::query()->truncate();
+        SubTrade::query()->truncate();
 
-        $industrySubTrades = [
+        $subTrades = [
             [
                 'id' => '1',
                 "title" => "Tesla",
@@ -112,7 +112,7 @@ class IndustrySubTradeSeeder extends Seeder
                 "created_at" => Carbon::now()
             ],];
 
-        IndustrySubTrade::insert($industrySubTrades);
+        SubTrade::insert($subTrades);
 
         Schema::enableForeignKeyConstraints();
 
