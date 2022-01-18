@@ -162,7 +162,7 @@ class HrDemandService
             'end_date' => $data['end_date'],
             'skill_id' => $data['skill_id'],
             'requirement' => $data['requirement'],
-            'requirement_en' => $data['requirement_en'],
+            'requirement_en' => $data['requirement_en'] ?? "",
             'vacancy' => $data['vacancy'],
             'all_institutes' => empty($data['institute_ids']) ? 1 : 0,
         ];
@@ -196,7 +196,8 @@ class HrDemandService
             $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
                 ->where('institute_id', '!=', 0)                    /* all_institute rows can't be compared with given institute_ids rows */
                 ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
-                ->pluck('institute_id');
+                ->pluck('institute_id')
+                ->toArray();
 
             /** If the given institute_ids are not present in existing institutes then create new institutes */
             foreach ($data['institute_ids'] as $instituteId){
