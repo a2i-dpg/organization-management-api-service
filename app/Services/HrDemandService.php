@@ -140,9 +140,6 @@ class HrDemandService
                 'updated_by' => Auth::id()
             ];
 
-            Log::info("nnnnnnnnnn vvvvv");
-            Log::info(json_encode(Auth::user()));
-
             $hrDemandInstance = new HrDemand();
             $hrDemandInstance->fill($payload);
             $hrDemandInstance->save();
@@ -165,7 +162,7 @@ class HrDemandService
             'end_date' => $data['end_date'],
             'skill_id' => $data['skill_id'],
             'requirement' => $data['requirement'],
-            'requirement_en' => $data['requirement_en'],
+            'requirement_en' => $data['requirement_en'] ?? "",
             'vacancy' => $data['vacancy'],
             'all_institutes' => empty($data['institute_ids']) ? 1 : 0,
         ];
@@ -173,6 +170,7 @@ class HrDemandService
         /** If skill_id changed, then Invalid all previous Hr demand requests fulfilled by Institute */
         if($hrDemand->skill_id != $data['skill_id']){
             $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)
+                ->where('institute_id', '!=', 0)                    /* Can't invalid all_institute rows */
                 ->pluck('id');
             foreach ($hrDemandInstituteIds as $id){
                 $hrDemandInstitute = HrDemandInstitute::find($id);
@@ -196,8 +194,10 @@ class HrDemandService
         */
         if(!empty($data['institute_ids'])){
             $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
+                ->where('institute_id', '!=', 0)                    /* all_institute rows can't be compared with given institute_ids rows */
                 ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
-                ->pluck('institute_id');
+                ->pluck('institute_id')
+                ->toArray();
 
             /** If the given institute_ids are not present in existing institutes then create new institutes */
             foreach ($data['institute_ids'] as $instituteId){
