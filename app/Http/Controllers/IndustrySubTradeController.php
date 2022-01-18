@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\IndustrySubTradeService;
+use App\Services\SubTradeService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,15 +13,15 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class IndustrySubTradeController extends Controller
 {
 
-    public IndustrySubTradeService $industrySubTradeService;
+    public SubTradeService $subTradeService;
 
     private Carbon $startTime;
 
 
-    public function __construct(IndustrySubTradeService $industrySubTradeService)
+    public function __construct(SubTradeService $subTradeService)
     {
         $this->startTime = Carbon::now();
-        $this->industrySubTradeService = $industrySubTradeService;
+        $this->subTradeService = $subTradeService;
     }
 
     /**
@@ -32,8 +32,8 @@ class IndustrySubTradeController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $filter = $this->industrySubTradeService->filterValidator($request)->validate();
-        $returnedData = $this->industrySubTradeService->getIndustrySubTradeList($filter, $this->startTime);
+        $filter = $this->subTradeService->filterValidator($request)->validate();
+        $returnedData = $this->subTradeService->getSubTradeList($filter, $this->startTime);
 
         $response = [
             'data' => $returnedData['data'],

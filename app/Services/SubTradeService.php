@@ -3,46 +3,47 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
-use App\Models\IndustrySubTrade;
+use App\Models\SubTrade;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class IndustrySubTradeService
+class SubTradeService
 {
 
-
-    public function getIndustrySubTradeList(array $request, Carbon $startTime): array
+    public function getSubTradeList(array $request, Carbon $startTime): array
     {
 
         $title = $request['title'] ?? "";
         $titleEn = $request['title_en'] ?? "";
-        $IndustryAssociationTradeId = $request['industry_association_trade_id'] ?? "";
+        $tradeId = $request['trade_id'] ?? "";
         $order = $request['order'] ?? "ASC";
 
 
         /** @var Builder $industrySubTradeBuilder */
-        $industrySubTradeBuilder = IndustrySubTrade::select([
-            'industry_sub_trades.id',
-            'industry_sub_trades.title',
-            'industry_sub_trades.title_en',
-            'industry_sub_trades.industry_association_trade_id',
-            'industry_sub_trades.industry_association_trade_id',
+        $industrySubTradeBuilder = SubTrade::select([
+            'sub_trades.id',
+            'sub_trades.title',
+            'sub_trades.title_en',
+            'sub_trades.trade_id',
+            'trades.title_en as trade_title_en',
+            'trades.title as trade_title',
+
         ]);
-        $industrySubTradeBuilder->join('industry_association_trades','industry_sub_trades.industry_association_trade_id','=','industry_association_trades.id');
-        $industrySubTradeBuilder->orderBy('industry_sub_trades.id', $order);
+        $industrySubTradeBuilder->join('trades', 'sub_trades.trade_id', '=', 'trades.id');
+        $industrySubTradeBuilder->orderBy('sub_trades.id', $order);
 
         if (!empty($titleEn)) {
-            $industrySubTradeBuilder->where('industry_sub_trades.title_en', 'like', '%' . $titleEn . '%');
+            $industrySubTradeBuilder->where('sub_trades.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
-            $industrySubTradeBuilder->where('industry_sub_trades.title', 'like', '%' . $title . '%');
+            $industrySubTradeBuilder->where('sub_trades.title', 'like', '%' . $title . '%');
         }
 
-        if (is_numeric($IndustryAssociationTradeId)) {
-            $industrySubTradeBuilder->where('industry_sub_trades.industry_association_trade_id', $IndustryAssociationTradeId);
+        if (is_numeric($tradeId)) {
+            $industrySubTradeBuilder->where('sub_trades.trade_id', $tradeId);
         }
 
         $industrySubTrades = $industrySubTradeBuilder->get();
@@ -62,7 +63,7 @@ class IndustrySubTradeService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
-            'industry_association_trade_id' => 'nullable|integer',
+            'trade_id' => 'nullable|integer',
             'order' => [
                 'string',
                 'nullable',
