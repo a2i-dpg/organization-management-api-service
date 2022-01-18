@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BaseModel;
 use App\Models\JobManagement;
 use App\Models\PrimaryJobInformation;
+use App\Services\JobManagementServices\JobManagementService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -19,14 +20,17 @@ use Throwable;
 class PrimaryJobInfoController extends Controller
 {
     public PrimaryJobInformationService $primaryJobInformationService;
+    public JobManagementService $jobManagementService;
     public Carbon $startTime;
 
     /**
      * @param PrimaryJobInformationService $primaryJobInformationService
+     * @param JobManagementService $jobManagementService
      */
-    public function __construct(PrimaryJobInformationService $primaryJobInformationService)
+    public function __construct(PrimaryJobInformationService $primaryJobInformationService, JobManagementService $jobManagementService)
     {
         $this->primaryJobInformationService = $primaryJobInformationService;
+        $this->jobManagementService = $jobManagementService;
         $this->startTime = Carbon::now();
 
     }
@@ -87,7 +91,7 @@ class PrimaryJobInfoController extends Controller
 //        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $primaryJobInformation]);
 
 
-        $step = JobManagementController::lastAvailableStep($jobId);
+        $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
             "data" => [
                 "latest_step" => $step

@@ -17,6 +17,7 @@ use App\Services\JobManagementServices\CandidateRequirementsService;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use App\Services\JobManagementServices\EducationInstitutionsService;
 use App\Services\JobManagementServices\JobContactInformationService;
+use App\Services\JobManagementServices\JobManagementService;
 use App\Services\JobManagementServices\MatchingCriteriaService;
 use App\Services\JobManagementServices\OtherBenefitService;
 use App\Services\JobManagementServices\PrimaryJobInformationService;
@@ -72,11 +73,24 @@ class JobManagementController extends Controller
 
     public JobContactInformationService $jobContactInformationService;
 
+    public JobManagementService $jobManagementService;
+
 
     private Carbon $startTime;
 
 
-    public function __construct(JobContactInformationService $jobContactInformationService, MatchingCriteriaService $matchingCriteriaService, AreaOfBusinessService $areaOfBusinessService, EducationInstitutionsService $educationInstitutionsService, CandidateRequirementsService $candidateRequirementsService, CompanyInfoVisibilityService $companyInfoVisibilityService, PrimaryJobInformationService $primaryJobInformationService, AdditionalJobInformationService $additionalJobInformationService, OtherBenefitService $otherBenefitService)
+    public function __construct(
+        JobContactInformationService $jobContactInformationService,
+        MatchingCriteriaService $matchingCriteriaService,
+        AreaOfBusinessService $areaOfBusinessService,
+        EducationInstitutionsService $educationInstitutionsService,
+        CandidateRequirementsService $candidateRequirementsService,
+        CompanyInfoVisibilityService $companyInfoVisibilityService,
+        PrimaryJobInformationService $primaryJobInformationService,
+        AdditionalJobInformationService $additionalJobInformationService,
+        OtherBenefitService $otherBenefitService,
+        JobManagementService $jobManagementService
+    )
     {
         $this->areaOfBusinessService = $areaOfBusinessService;
         $this->educationInstitutionsService = $educationInstitutionsService;
@@ -87,6 +101,7 @@ class JobManagementController extends Controller
         $this->otherBenefitService = $otherBenefitService;
         $this->matchingCriteriaService = $matchingCriteriaService;
         $this->jobContactInformationService = $jobContactInformationService;
+        $this->jobManagementService = $jobManagementService;
         $this->startTime = Carbon::now();
     }
 
@@ -190,7 +205,7 @@ class JobManagementController extends Controller
 //        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
 //        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $primaryJobInformation]);
 
-        $step = JobManagementController::lastAvailableStep($jobId);
+        $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
             "data" => [
                 "latest_step" => $step
@@ -250,15 +265,5 @@ class JobManagementController extends Controller
         Log::info(json_encode($response));
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
-
-    /**
-     * @param string $jobId
-     * @return int
-     */
-    public static function lastAvailableStep(string $jobId): int
-    {
-        return PrimaryJobInformationService::lastAvailableStep($jobId);
-    }
-
 
 }
