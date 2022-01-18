@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
-use App\Models\CandidateRequirement;
 use App\Models\JobManagement;
-use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
@@ -97,10 +95,8 @@ class CandidateRequirementController extends Controller
      */
     public function getCandidateRequirements(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//        $candidateRequirement = CandidateRequirement::where('job_id', $jobId)->firstOrFail();
-//
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $candidateRequirement]);
+
+        $this->authorize('view', JobManagement::class);
 
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);

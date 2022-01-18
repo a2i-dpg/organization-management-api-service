@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
 use App\Models\JobManagement;
-use App\Models\MatchingCriteria;
-use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\JobManagementService;
 use App\Services\JobManagementServices\MatchingCriteriaService;
 use Carbon\Carbon;
@@ -72,10 +70,7 @@ class MatchingCriteriaController extends Controller
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//        $matchingCriteria = MatchingCriteria::where('job_id', $jobId)->firstOrFail();
-//
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $matchingCriteria]);
+        $this->authorize('view', JobManagement::class);
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [

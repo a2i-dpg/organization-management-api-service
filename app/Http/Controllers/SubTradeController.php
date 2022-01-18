@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class IndustrySubTradeController extends Controller
+class SubTradeController extends Controller
 {
 
     public SubTradeService $subTradeService;

@@ -87,9 +87,7 @@ class PrimaryJobInfoController extends Controller
      */
     public function getPrimaryJobInformation(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $primaryJobInformation]);
-
+        $this->authorize('view', JobManagement::class);
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [

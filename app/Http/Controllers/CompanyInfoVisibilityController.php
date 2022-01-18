@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
-use App\Models\CompanyInfoVisibility;
 use App\Models\JobManagement;
-use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
@@ -66,11 +64,8 @@ class CompanyInfoVisibilityController extends Controller
      */
     public function getCompanyInfoVisibility(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//
-//        $companyInfoVisibility = CompanyInfoVisibility::where('job_id', $jobId)->firstOrFail();
-//
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $companyInfoVisibility]);
+
+        $this->authorize('view', JobManagement::class);
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [

@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
-use App\Models\JobContactInformation;
 use App\Models\JobManagement;
-use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\JobContactInformationService;
 use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
@@ -42,10 +40,7 @@ class JobContactInformationController extends Controller
      */
     public function getContactInformation(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//        $jobInformation = JobContactInformation::where('job_id', $jobId)->firstOrFail();
-//
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $jobInformation]);
+        $this->authorize('view', JobManagement::class);
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [

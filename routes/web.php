@@ -157,8 +157,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     /** List of trades */
     $router->get('trades', ['as' => 'trades.get-list', 'uses' => "TradeController@getList"]);
 
-    /** List of industryAssociation trades */
-    $router->get('sub-trades', ['as' => 'trades.get-list', 'uses' => "IndustrySubTradeController@getList"]);
+    /** List of trades */
+    $router->get('sub-trades', ['as' => 'trades.get-list', 'uses' => "SubTradeController@getList"]);
 
 
     /** Industry Association open  Registration */

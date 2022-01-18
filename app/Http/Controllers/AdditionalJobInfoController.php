@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdditionalJobInformation;
 use App\Models\BaseModel;
 use App\Models\JobManagement;
-use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
@@ -13,7 +11,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -99,10 +96,8 @@ class AdditionalJobInfoController extends Controller
      */
     public function getAdditionalJobInformation(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//        $additionalJobInformation = AdditionalJobInformation::where('job_id', $jobId)->firstOrFail();
-//
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $additionalJobInformation]);
+
+        $this->authorize('view', JobManagement::class);
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [

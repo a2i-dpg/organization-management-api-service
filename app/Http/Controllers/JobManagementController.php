@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\AdditionalJobInformation;
 use App\Models\BaseModel;
-use App\Models\CandidateRequirement;
-use App\Models\CompanyInfoVisibility;
-use App\Models\JobContactInformation;
 use App\Models\JobManagement;
-use App\Models\MatchingCriteria;
-use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
@@ -80,17 +74,18 @@ class JobManagementController extends Controller
 
 
     public function __construct(
-        JobContactInformationService $jobContactInformationService,
-        MatchingCriteriaService $matchingCriteriaService,
-        AreaOfBusinessService $areaOfBusinessService,
-        EducationInstitutionsService $educationInstitutionsService,
-        CandidateRequirementsService $candidateRequirementsService,
-        CompanyInfoVisibilityService $companyInfoVisibilityService,
-        PrimaryJobInformationService $primaryJobInformationService,
+        JobContactInformationService    $jobContactInformationService,
+        MatchingCriteriaService         $matchingCriteriaService,
+        AreaOfBusinessService           $areaOfBusinessService,
+        EducationInstitutionsService    $educationInstitutionsService,
+        CandidateRequirementsService    $candidateRequirementsService,
+        CompanyInfoVisibilityService    $companyInfoVisibilityService,
+        PrimaryJobInformationService    $primaryJobInformationService,
         AdditionalJobInformationService $additionalJobInformationService,
-        OtherBenefitService $otherBenefitService,
-        JobManagementService $jobManagementService
+        OtherBenefitService             $otherBenefitService,
+        JobManagementService            $jobManagementService
     )
+
     {
         $this->areaOfBusinessService = $areaOfBusinessService;
         $this->educationInstitutionsService = $educationInstitutionsService;
@@ -202,8 +197,7 @@ class JobManagementController extends Controller
      */
     public function jobPreview(string $jobId): JsonResponse
     {
-//        $primaryJobInformation = PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-//        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $primaryJobInformation]);
+        $this->authorize('view', JobManagement::class);
 
         $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
