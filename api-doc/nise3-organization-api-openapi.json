@@ -11166,7 +11166,7 @@
                     "occupation_id": {
                         "type": "integer"
                     },
-                    "employment_type": {
+                    "employment_types": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -11241,7 +11241,7 @@
                     "job_sector_id",
                     "occupation_id",
                     "is_number_of_vacancy_na",
-                    "employment_type",
+                    "employment_types",
                     "application_deadline",
                     "is_photograph_enclose_with_resume"
                 ]
