@@ -22,9 +22,9 @@ use Illuminate\Validation\Rule;
 class AdditionalJobInformationService
 {
 
-    public function getAdditionalJobInformationDetails(string $jobId): Model|Builder
+    public function getAdditionalJobInformationDetails(string $jobId): AdditionalJobInformation | null
     {
-        /** @var Builder $additionalJobInfoBuilder */
+        /** @var AdditionalJobInformation|Builder $additionalJobInfoBuilder */
         $additionalJobInfoBuilder = AdditionalJobInformation::select([
             'additional_job_information.id',
             'additional_job_information.job_id',
