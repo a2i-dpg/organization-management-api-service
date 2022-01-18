@@ -150,10 +150,10 @@ class OrganizationController extends Controller
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
                 /** Send User Information After Completing Organization Registration */
-                //$this->organizationService->userInfoSendByMail($validated);
+                $this->organizationService->userInfoSendByMail($validated);
                 $recipient = $validated['contact_person_mobile'];
                 $message = "Dear, " . $validated['contact_person_name'] . " your username: " . $validated['contact_person_mobile'] . " & password: " . $validated['password'];
-                //$this->organizationService->userInfoSendBySMS($recipient, $message);
+                $this->organizationService->userInfoSendBySMS($recipient, $message);
 
                 $response['data'] = $organization;
                 DB::commit();

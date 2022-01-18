@@ -7,6 +7,7 @@ use App\Models\CompanyInfoVisibility;
 use App\Models\JobManagement;
 use App\Models\PrimaryJobInformation;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
+use App\Services\JobManagementServices\JobManagementService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -18,14 +19,17 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class CompanyInfoVisibilityController extends Controller
 {
     public CompanyInfoVisibilityService $companyInfoVisibilityService;
+    public JobManagementService $jobManagementService;
     public Carbon $startTime;
 
     /**
      * @param CompanyInfoVisibilityService $companyInfoVisibilityService
+     * @param JobManagementService $jobManagementService
      */
-    public function __construct(CompanyInfoVisibilityService $companyInfoVisibilityService,)
+    public function __construct(CompanyInfoVisibilityService $companyInfoVisibilityService, JobManagementService $jobManagementService)
     {
         $this->companyInfoVisibilityService = $companyInfoVisibilityService;
+        $this->jobManagementService = $jobManagementService;
         $this->startTime = Carbon::now();
 
     }
@@ -68,7 +72,7 @@ class CompanyInfoVisibilityController extends Controller
 //
 //        $this->authorize('view', [JobManagement::class, $primaryJobInformation, $companyInfoVisibility]);
 
-        $step = JobManagementController::lastAvailableStep($jobId);
+        $step = $this->jobManagementService->lastAvailableStep($jobId);
         $response = [
             "data" => [
                 "latest_step" => $step
