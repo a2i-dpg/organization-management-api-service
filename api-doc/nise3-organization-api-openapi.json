@@ -1101,12 +1101,109 @@
                 ]
             }
         },
+        "/public/organizations/{organizationId}": {
+            "get": {
+                "summary": "get public organization",
+                "description": "API endpoint to get the public specified organization.A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/organization"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "WhosTheDaddy",
+                                        "title": "WhosTheDaddy",
+                                        "date_of_establishment": null,
+                                        "name_of_the_office_head": null,
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": null,
+                                        "name_of_the_office_head_designation_en": null,
+                                        "domain": null,
+                                        "fax_no": null,
+                                        "mobile": "",
+                                        "email": "",
+                                        "contact_person_name": null,
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": null,
+                                        "contact_person_email": null,
+                                        "contact_person_designation": null,
+                                        "contact_person_designation_en": null,
+                                        "description": null,
+                                        "description_en": null,
+                                        "logo": null,
+                                        "loc_division_id": null,
+                                        "loc_division_title_en": null,
+                                        "loc_division_title": null,
+                                        "loc_district_id": null,
+                                        "loc_district_title_en": null,
+                                        "loc_district_title": null,
+                                        "loc_upazila_id": null,
+                                        "loc_upazila_title_en": null,
+                                        "loc_upazila_title": null,
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "organization_type_id": 1,
+                                        "organization_type_title_en": "Government Organization",
+                                        "organization_type_title": "Government Organization",
+                                        "address": null,
+                                        "address_en": null,
+                                        "row_status": 2,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": null,
+                                        "updated_at": null,
+                                        "sub_trades": [
+                                            {
+                                                "id": 1,
+                                                "title": "Tesla",
+                                                "title_en": "Tesla",
+                                                "trade_id": 1,
+                                                "deleted_at": null,
+                                                "created_at": "2022-01-18T06:26:24.000000Z",
+                                                "updated_at": null,
+                                                "trade": {
+                                                    "id": 1,
+                                                    "title": "Automotive industry in Bangladesh",
+                                                    "title_en": "Automotive industry in Bangladesh",
+                                                    "deleted_at": null,
+                                                    "created_at": null,
+                                                    "updated_at": null
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "organization"
+                ]
+            }
+        },
         "/organization-profile": {
             "get": {
                 "tags": [
                     "organization profile"
                 ],
-                "summary": "Get an organization profile",
+                "summary": "Get an  organization profile",
                 "description": "API endpoint to update an organization admin profile.A successful request response will show 200 HTTP status code",
                 "responses": {
                     "200": {
