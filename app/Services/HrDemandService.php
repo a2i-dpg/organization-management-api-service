@@ -162,8 +162,10 @@ class HrDemandService
             'requirement' => $data['requirement'],
             'requirement_en' => $data['requirement_en'] ?? "",
             'vacancy' => $data['vacancy'],
+            'remaining_vacancy' => $hrDemand->remaining_vacancy,
             'all_institutes' => empty($data['institute_ids']) ? 1 : 0,
         ];
+        $invalidatedApprovedVacanciesByIndustryAssociation = 0;
 
         /** If skill_id changed, then Invalid all previous Hr demand requests fulfilled by Institute */
         if($hrDemand->skill_id != $data['skill_id']){
@@ -172,6 +174,7 @@ class HrDemandService
                 ->pluck('id');
             foreach ($hrDemandInstituteIds as $id){
                 $hrDemandInstitute = HrDemandInstitute::find($id);
+                $invalidatedApprovedVacanciesByIndustryAssociation += $hrDemandInstitute->vacancy_approved_by_industry_association;
                 $hrDemandInstitute->row_status = HrDemandInstitute::ROW_STATUS_INVALID;
                 $hrDemandInstitute->save();
             }
@@ -188,14 +191,15 @@ class HrDemandService
          * 1) May be previously hr_demand was created with ALL_INSTITUTES and now changed to some institutes
          * 2) May be previously hr_demand was created with some institutes and now changed to some other institutes
          * 3) May be previous & current institute_ids are same (No effect)
-         * 4) May be previously hr_demand was created with some institutes and now changed to ALL_INSTITUTES (No effect)
+         * 4) May be previously hr_demand was created with some institutes and now changed to ALL_INSTITUTES
         */
+
+        /** If ALL INSTITUTE = FALSE */
         if(!empty($data['institute_ids'])){
-            $existHrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
-                ->where('institute_id', '!=', 0)                    /* all_institute rows can't be compared with given institute_ids rows */
+            $existHrDemandInstitutes = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
                 ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
-                ->pluck('institute_id')
-                ->toArray();
+                ->get();
+            $existHrDemandInstituteIds = $existHrDemandInstitutes->pluck('institute_id')->toArray();
 
             /** If the given institute_ids are not present in existing institutes then create new institutes */
             foreach ($data['institute_ids'] as $instituteId){
@@ -210,16 +214,46 @@ class HrDemandService
                 }
             }
 
-            /** If already existing institute is not present in given institutes then INVALID those existing institutes */
-            foreach ($existHrDemandInstituteIds as $id){
-                if(!in_array($id, $data['institute_ids'])){
-                    $newHrDemandInstitute = HrDemandInstitute::find($id);
-                    $newHrDemandInstitute->row_status = HrDemand::ROW_STATUS_INVALID;
+            /** If already existing institute is not present in given institutes then INVALID those existing institutes including all_institute row if exist */
+            foreach ($existHrDemandInstitutes as $hrDemandInstitute){
+                if(!in_array($hrDemandInstitute->institute_id, $data['institute_ids'])){
+                    $newHrDemandInstitute = HrDemandInstitute::find($hrDemandInstitute->id);
+                    $invalidatedApprovedVacanciesByIndustryAssociation += $hrDemandInstitute->vacancy_approved_by_industry_association;
+                    $newHrDemandInstitute->row_status = HrDemandInstitute::ROW_STATUS_INVALID;
                     $newHrDemandInstitute->save();
                 }
             }
+        } else {
+            /**
+             * For ALL INSTITUTE = TRUE,
+             * Create a row for all_institutes if we had no all_institute row previously for this hr_demand.
+             */
+            $allInstituteRow = HrDemandInstitute::where('hr_demand_id',$hrDemand->id)
+                ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+                ->whereNull('institute_id')
+                ->first();
+            if(empty($allInstituteRow)){
+                $institutePayload = [
+                    'hr_demand_id' => $hrDemand->id
+                ];
+                $newHrDemandInstitute = new HrDemandInstitute();
+                $newHrDemandInstitute->fill($institutePayload);
+                $newHrDemandInstitute->save();
+            }
+
+            /** INVALIDATED such institute rows those were not updated by the institute */
+            $invalidHrDemandInstitutes = HrDemandInstitute::where('hr_demand_id', $hrDemand->id)
+                ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+                ->whereNotNull('institute_id')
+                ->where('vacancy_provided_by_institute', 0)
+                ->get();
+            foreach ($invalidHrDemandInstitutes as $hrDemandInstitute){
+                $hrDemandInstitute->row_status = HrDemandInstitute::ROW_STATUS_INVALID;
+                $hrDemandInstitute->save();
+            }
         }
 
+        $payloadForHrDemand['remaining_vacancy'] += $invalidatedApprovedVacanciesByIndustryAssociation;
         $hrDemand->fill($payloadForHrDemand);
         $hrDemand->save();
 
@@ -247,7 +281,7 @@ class HrDemandService
         /**
          * Store institutes that were given in "institute_ids" array
          * */
-        if(is_array($data['institute_ids']) && count($data['institute_ids']) == 0){
+        if(empty($data['institute_ids'])){
             $payload = [
                 'hr_demand_id' => $hrDemand->id
             ];
@@ -255,7 +289,7 @@ class HrDemandService
             $hrDemandInstitute->fill($payload);
             $hrDemandInstitute->save();
         }
-        else if(!empty($data['institute_ids']) && is_array($data['institute_ids'])){
+        else {
             foreach ($data['institute_ids'] as $id){
                 $payload = [
                     'hr_demand_id' => $hrDemand->id,
@@ -325,7 +359,9 @@ class HrDemandService
         $data = $request->all();
         if(!empty($data['hr_demands']) && is_array($data['hr_demands'])){
             foreach ($data['hr_demands'] as &$hrDemand){
-                $hrDemand['institute_ids'] = isset($hrDemand['institute_ids']) && is_array($hrDemand['institute_ids']) ? $hrDemand['institute_ids'] : explode(',', $hrDemand['institute_ids']);
+                if(!empty($hrDemand['institute_ids'])){
+                    $hrDemand['institute_ids'] = isset($hrDemand['institute_ids']) && is_array($hrDemand['institute_ids']) ? $hrDemand['institute_ids'] : explode(',', $hrDemand['institute_ids']);
+                }
             }
         }
 
@@ -372,11 +408,12 @@ class HrDemandService
                 'int'
             ],
             'hr_demands.*.institute_ids' => [
-                'required',
-                'array'
+                'nullable',
+                'array',
+                'min:1'
             ],
             'hr_demands.*.institute_ids.*' => [
-                'nullable',
+                'required',
                 'int'
             ],
             'row_status' => [
@@ -435,11 +472,12 @@ class HrDemandService
                 }
             ],
             'institute_ids' => [
-                'required',
-                'array'
+                'nullable',
+                'array',
+                'min:1'
             ],
             'institute_ids.*' => [
-                'nullable',
+                'required',
                 'int'
             ],
             'row_status' => [
