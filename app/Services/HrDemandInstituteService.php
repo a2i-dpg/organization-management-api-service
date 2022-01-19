@@ -50,7 +50,7 @@ class HrDemandInstituteService
         }
 
         $hrDemandBuilder->where(function ($builder) use ($instituteId) {
-            $builder->orWhere('hr_demand_institutes.institute_id', 0);
+            $builder->orWhereNull('hr_demand_institutes.institute_id');
             if (!empty($instituteId)) {
                 $builder->orWhere('hr_demand_institutes.institute_id', $instituteId);
             }
@@ -74,10 +74,10 @@ class HrDemandInstituteService
             $hrDemands = $hrDemandBuilder->get();
         }
 
-        /** Delete null institute_id row if one  */
+        /** Delete null institute_id row if at least one row for that institute is exist */
         $instituteIdNullIndex = null;
         foreach ($hrDemands as $index => $hrDemand) {
-            if ($hrDemand->institute_id == 0) {
+            if (!$hrDemand->institute_id) {
                 $instituteIdNullIndex = $index;
                 break;
             }
@@ -217,9 +217,12 @@ class HrDemandInstituteService
 
         return Validator::make($requestData, [
             'hr_demand_id' => [
-                'required',
-                'int',
-                'exists:hr_demands,id,deleted_at,NULL'
+                'nullable',
+                'int'
+            ],
+            'institute_id' => [
+                'nullable',
+                'int'
             ],
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
