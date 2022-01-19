@@ -31,6 +31,6 @@ class CreateSubTradesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('industry_sub_trades');
+        Schema::dropIfExists('sub_trades');
     }
 }

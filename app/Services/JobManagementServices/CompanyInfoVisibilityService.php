@@ -72,7 +72,7 @@ class CompanyInfoVisibilityService
             'company_industry_type' => [
                 'required',
                 'integer',
-                'exists:industry_association_trades,id,deleted_at,NULL'
+                'exists:trades,id,deleted_at,NULL'
             ],
             'is_company_business_visible' => [
                 'integer',

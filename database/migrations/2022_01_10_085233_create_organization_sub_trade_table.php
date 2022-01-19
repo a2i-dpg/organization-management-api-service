@@ -28,6 +28,6 @@ class CreateOrganizationSubTradeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_industry_sub_trade');
+        Schema::dropIfExists('organization_sub_trade');
     }
 }
