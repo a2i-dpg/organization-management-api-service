@@ -47,7 +47,8 @@ class AdditionalJobInfoController extends Controller
         $jobLevel = $validatedData['job_level'];
         $workPlace = $validatedData['work_place'];
         $jobLocation = $validatedData['job_location'];
-        $otherBenefit = $validatedData['other_benefits'];
+        $otherBenefit = $validatedData['other_benefits'] ?? [];
+
 
         DB::beginTransaction();
         try {
@@ -55,7 +56,9 @@ class AdditionalJobInfoController extends Controller
             $this->additionalJobInformationService->syncWithJobLevel($additionalJobInformation, $jobLevel);
             $this->additionalJobInformationService->syncWithWorkplace($additionalJobInformation, $workPlace);
             $this->additionalJobInformationService->syncWithJobLocation($additionalJobInformation, $jobLocation);
-            $this->additionalJobInformationService->syncWithOtherBenefit($additionalJobInformation, $otherBenefit);
+            if (!empty($otherBenefit)) {
+                $this->additionalJobInformationService->syncWithOtherBenefit($additionalJobInformation, $otherBenefit);
+            }
 
             $response = [
                 "data" => $additionalJobInformation,
