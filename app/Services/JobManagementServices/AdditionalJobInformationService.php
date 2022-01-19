@@ -304,21 +304,25 @@ class AdditionalJobInformationService
                 "exists:primary_job_information,job_id,deleted_at,NULL",
             ],
             "job_responsibilities" => [
-                "nullable"
+                "required"
             ],
             "job_context" => [
-                "required"
+                "nullable"
             ],
             "job_place_type" => [
                 "required",
                 Rule::in(array_keys(AdditionalJobInformation::JOB_PLACE_TYPE))
             ],
             "salary_min" => [
-                "nullable",
+                Rule::requiredIf(function () use ($request) {
+                    return $request->offsetGet("is_salary_info_show") == 1;
+                }),
                 "numeric"
             ],
             "salary_max" => [
-                "nullable",
+                Rule::requiredIf(function () use ($request) {
+                    return $request->offsetGet("is_salary_info_show") == 1;
+                }),
                 "numeric"
             ],
             "is_salary_info_show" => [
@@ -342,23 +346,25 @@ class AdditionalJobInformationService
             ],
             "other_benefits" => [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->is_other_benefits == AdditionalJobInformation::BOOLEAN_FLAG[1];
+                    return $request->offsetGet("is_other_benefits") == AdditionalJobInformation::BOOLEAN_FLAG[1];
                 }),
                 "nullable",
                 "array"
             ],
             "other_benefits.*" => [
-                "nullable",
                 "integer",
                 "exists:other_benefits,id,deleted_at,NULL"
             ],
             "lunch_facilities" => [
+                "nullable",
                 Rule::in(array_keys(AdditionalJobInformation::LUNCH_FACILITIES))
             ],
             "salary_review" => [
+                "nullable",
                 Rule::in(array_keys(AdditionalJobInformation::SALARY_REVIEW))
             ],
             "festival_bonus" => [
+                "nullable",
                 Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
             ],
             "others" => [

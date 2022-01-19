@@ -58,7 +58,7 @@ class PrimaryJobInfoController extends Controller
     {
         $this->authorize('create', JobManagement::class);
         $validatedData = $this->primaryJobInformationService->validator($request)->validate();
-        $employmentTypes = $validatedData['employment_type'];
+        $employmentTypes = $validatedData['employment_types'];
         DB::beginTransaction();
         try {
             $primaryJobInformation = $this->primaryJobInformationService->store($validatedData);
