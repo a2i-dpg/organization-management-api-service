@@ -202,7 +202,7 @@ class OrganizationController extends Controller
         $this->authorize('update', $organization);
 
         $validated = $this->organizationService->validator($request, $id)->validate();
-        $industrySubTrades = $validated['industry_sub_trades'];
+        $industrySubTrades = $validated['sub_trades'];
         $data = $this->organizationService->update($organization, $validated);
         $this->organizationService->syncWithSubTrades($organization, $industrySubTrades);
         $response = [
