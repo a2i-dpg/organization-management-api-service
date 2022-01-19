@@ -352,17 +352,19 @@ class AdditionalJobInformationService
                 "array"
             ],
             "other_benefits.*" => [
-                "nullable",
                 "integer",
                 "exists:other_benefits,id,deleted_at,NULL"
             ],
             "lunch_facilities" => [
+                "nullable",
                 Rule::in(array_keys(AdditionalJobInformation::LUNCH_FACILITIES))
             ],
             "salary_review" => [
+                "nullable",
                 Rule::in(array_keys(AdditionalJobInformation::SALARY_REVIEW))
             ],
             "festival_bonus" => [
+                "nullable",
                 Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
             ],
             "others" => [
