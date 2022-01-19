@@ -203,14 +203,13 @@ class OrganizationService
             ]
         );
 
-        if($industryAssociationId){
-            $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
-                $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
-                    ->where('industry_association_organization.industry_association_id', $industryAssociationId);
-            });
-        }
 
-        $organizationBuilder->where('organizations.row_status', BaseModel::ROW_STATUS_ACTIVE);
+        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                ->where('industry_association_organization.industry_association_id', $industryAssociationId);
+        });
+
+
         $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
@@ -1460,7 +1459,7 @@ class OrganizationService
             'membership_id' => 'nullable',
             'page_size' => 'integer|gt:0',
             'organization_type_id' => 'nullable|integer|gt:0',
-            'industry_association_id' => 'nullable|integer|gt:0',
+            'industry_association_id' => 'required|integer|gt:0',
             'order' => [
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
