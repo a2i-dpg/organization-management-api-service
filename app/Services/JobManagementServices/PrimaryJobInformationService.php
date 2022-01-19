@@ -388,6 +388,7 @@ class PrimaryJobInformationService
                 Rule::requiredIf(function () use ($request) {
                     return !$request->has('is_apply_online');
                 }),
+                "integer",
                 "nullable",
                 Rule::in(array_keys(PrimaryJobInformation::RESUME_RECEIVING_OPTION))
             ],
@@ -410,38 +411,33 @@ class PrimaryJobInformationService
             ]
         ];
 
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1]) {
-            {
-                $rules["email"] = [
-                    Rule::requiredIf(function () use ($request) {
-                        return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1];
-                    }),
-                    "nullable",
-                    "email"
-                ];
-                $rules["is_use_nise3_mail_system"] = [
-                    "nullable"
-                ];
-            }
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == 1) {
+            $rules["email"] = [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->offsetGet('resume_receiving_option') == 1;
+                }),
+                "email"
+            ];
+            $rules["is_use_nise3_mail_system"] = [
+                "nullable"
+            ];
         }
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2]) {
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == 2) {
             $rules["instruction_for_hard_copy"] = [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2];
-                }),
-                "nullable"
+                    return $request->offsetGet('resume_receiving_option') == 2;
+                })
             ];
             $rules["instruction_for_hard_copy_en"] = [
                 "nullable"
             ];
         }
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3]) {
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == 3) {
             {
                 $rules["instruction_for_walk_in_interview"] = [
                     Rule::requiredIf(function () use ($request) {
-                        return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3];
-                    }),
-                    "nullable"
+                        return $request->offsetGet('resume_receiving_option') == 3;
+                    })
                 ];
                 $rules["instruction_for_walk_in_interview_en"] = [
                     "nullable"
