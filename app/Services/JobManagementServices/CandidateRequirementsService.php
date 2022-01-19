@@ -15,13 +15,14 @@ use Illuminate\Validation\Rule;
 
 class CandidateRequirementsService
 {
+
     /**
      * @param string $jobId
-     * @return Model|Builder
+     * @return CandidateRequirement|null
      */
-    public function getCandidateRequirements(string $jobId): Model|Builder
+    public function getCandidateRequirements(string $jobId): CandidateRequirement|null
     {
-        /** @var Builder $candidateRequirementBuilder */
+        /** @var CandidateRequirement|Builder $candidateRequirementBuilder */
         $candidateRequirementBuilder = CandidateRequirement::select([
             'candidate_requirements.id',
             'candidate_requirements.job_id',

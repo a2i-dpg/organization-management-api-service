@@ -7,7 +7,6 @@ use App\Models\AdditionalJobInformation;
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
-use App\Models\EmploymentType;
 use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
