@@ -56,9 +56,7 @@ class AdditionalJobInfoController extends Controller
             $this->additionalJobInformationService->syncWithJobLevel($additionalJobInformation, $jobLevel);
             $this->additionalJobInformationService->syncWithWorkplace($additionalJobInformation, $workPlace);
             $this->additionalJobInformationService->syncWithJobLocation($additionalJobInformation, $jobLocation);
-            if (!empty($otherBenefit)) {
-                $this->additionalJobInformationService->syncWithOtherBenefit($additionalJobInformation, $otherBenefit);
-            }
+            $this->additionalJobInformationService->syncWithOtherBenefit($additionalJobInformation, $otherBenefit);
 
             $response = [
                 "data" => $additionalJobInformation,
