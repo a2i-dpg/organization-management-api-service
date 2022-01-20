@@ -11,8 +11,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use phpDocumentor\Reflection\Types\Null_;
 use Ramsey\Collection\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -49,12 +51,15 @@ class HrDemandInstituteService
             $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
         }
 
-        $hrDemandBuilder->where(function ($builder) use ($instituteId) {
-            $builder->orWhereNull('hr_demand_institutes.institute_id');
-            if (!empty($instituteId)) {
-                $builder->orWhere('hr_demand_institutes.institute_id', $instituteId);
-            }
-        });
+//        $hrDemandBuilder->Where(function ($builder) use ($instituteId) {
+//            $builder->orWhereNull('hr_demand_institutes.institute_id');
+//            if (!empty($instituteId)) {
+//                $builder->orWhere('hr_demand_institutes.institute_id', $instituteId);
+//            }
+//        });
+        if (!empty($instituteId)) {
+            $hrDemandBuilder->Where('hr_demand_institutes.institute_id', $instituteId);
+        }
 
         $hrDemandBuilder->orderBy('hr_demand_institutes.id', $order);
         if (is_numeric($rowStatus)) {
@@ -133,7 +138,7 @@ class HrDemandInstituteService
      */
     public function hrDemandApprovedByInstitute(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
     {
-        if ($hrDemandInstitute->institute_id == 0) {
+        if ($hrDemandInstitute->institute_id == null) {
             $authUser = Auth::user();
             $newHrDemandInstitute = new HrDemandInstitute();
             $newHrDemandInstitute->hr_demand_id = $hrDemandInstitute->hr_demand_id;

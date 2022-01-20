@@ -10269,13 +10269,6 @@
                         "$ref": "#/components/parameters/hr_demand_id_q"
                     },
                     {
-                        "name": "institute_id",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
                         "$ref": "#/components/parameters/page_size"
                     },
                     {
@@ -10290,7 +10283,36 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "hr_demand_id": 1,
+                                            "institute_id": 1,
+                                            "rejected_by_institute": 1,
+                                            "vacancy_provided_by_institute": 3,
+                                            "rejected_by_industry_association": 1,
+                                            "vacancy_approved_by_industry_association": 2,
+                                            "row_status": 1
+                                        },
+                                        {
+                                            "id": 2,
+                                            "hr_demand_id": 2,
+                                            "institute_id": 1,
+                                            "rejected_by_institute": 0,
+                                            "vacancy_provided_by_institute": 0,
+                                            "rejected_by_industry_association": 0,
+                                            "vacancy_approved_by_industry_association": 0,
+                                            "row_status": 1
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -10401,6 +10423,14 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/hr_demand_id"
+                    },
+                    {
+                        "name": "rejected_by_institute",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
