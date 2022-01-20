@@ -50,15 +50,15 @@ class HrDemandInstituteService
         if (!empty($hrDemandId)) {
             $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
         }
-
-//        $hrDemandBuilder->Where(function ($builder) use ($instituteId) {
-//            $builder->orWhereNull('hr_demand_institutes.institute_id');
-//            if (!empty($instituteId)) {
-//                $builder->orWhere('hr_demand_institutes.institute_id', $instituteId);
-//            }
-//        });
         if (!empty($instituteId)) {
-            $hrDemandBuilder->Where('hr_demand_institutes.institute_id', $instituteId);
+            $x =  $hrDemandBuilder->Where('hr_demand_institutes.institute_id', $instituteId);
+            $y = $hrDemandBuilder->orWhereNull('hr_demand_institutes.institute_id');
+
+
+            $hrDemandBuilder = $y->whereNotIn('hr_demand_id', function($query){
+                $query->select('hr_demand_id')->from(with(new HrDemandInstitute())->getTable())
+                ->Where('hr_demand_institutes.institute_id',Auth::user()->institute_id);
+            });
         }
 
         $hrDemandBuilder->orderBy('hr_demand_institutes.id', $order);
