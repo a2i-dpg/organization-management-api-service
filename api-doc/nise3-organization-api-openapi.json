@@ -8688,7 +8688,7 @@
                 }
             }
         },
-        "/area_of_business": {
+        "/area-of-business": {
             "get": {
                 "tags": [
                     "Area of Business"
@@ -9939,7 +9939,7 @@
                 }
             }
         },
-        "/educational_institutions": {
+        "/educational-institutions": {
             "get": {
                 "tags": [
                     "Educational Institions"
