@@ -27,12 +27,12 @@ class CreateAdditionalJobInformationTable extends Migration
             $table->unsignedTinyInteger('is_salary_compare_to_expected_salary')->comment('Do you want to use this salary to compare with applicants provided expected salary in applicant list')->default(0);
             $table->unsignedTinyInteger('is_salary_alert_excessive_than_given_salary_range')
                 ->comment('Do you want to alert applicant while his provided salary is excessive than given salary range at the time of applying');
-            $table->unsignedTinyInteger('salary_review')->comment('1=>Half Yearly, 2=>Yearly');
-            $table->unsignedTinyInteger('festival_bonus')->comment('01,02,03,04........');
+            $table->unsignedTinyInteger('salary_review')->nullable()->comment('1=>Half Yearly, 2=>Yearly');
+            $table->unsignedTinyInteger('festival_bonus')->nullable()->comment('01,02,03,04........');
             $table->text("additional_salary_info")->nullable();
             $table->text("additional_salary_info_en")->nullable();
             $table->unsignedTinyInteger("is_other_benefits")->comment("0=>No, 1=>Yes");
-            $table->unsignedTinyInteger('lunch_facilities')->comment('1=>Partially Subsidize, 2=>Full Subsidize');
+            $table->unsignedTinyInteger('lunch_facilities')->nullable()->comment('1=>Partially Subsidize, 2=>Full Subsidize');
             $table->text('others')->nullable();
             $table->timestamps();
             $table->softDeletes();

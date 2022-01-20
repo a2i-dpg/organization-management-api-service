@@ -13,9 +13,9 @@ class JobContactInformationService
 
     /**
      * @param string $jobId
-     * @return JobContactInformation
+     * @return JobContactInformation|null
      */
-    public function getContactInformation(string $jobId): JobContactInformation
+    public function getContactInformation(string $jobId): JobContactInformation|null
     {
         return JobContactInformation::where('job_id', $jobId)->first();
     }

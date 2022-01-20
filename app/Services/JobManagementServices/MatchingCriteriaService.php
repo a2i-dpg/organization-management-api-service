@@ -4,20 +4,21 @@ namespace App\Services\JobManagementServices;
 
 
 use App\Models\BaseModel;
-use App\Models\EmploymentType;
 use App\Models\MatchingCriteria;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class MatchingCriteriaService
 {
-
-    public function getMatchingCriteria(string $jobId): Model|Builder
+    /**
+     * @param string $jobId
+     * @return MatchingCriteria|null
+     */
+    public function getMatchingCriteria(string $jobId): MatchingCriteria|null
     {
-        /** @var Builder $matchingCriteriaBuilder */
+        /** @var MatchingCriteria| Builder $matchingCriteriaBuilder */
         $matchingCriteriaBuilder = MatchingCriteria::select([
             'matching_criteria.id',
             'matching_criteria.job_id',

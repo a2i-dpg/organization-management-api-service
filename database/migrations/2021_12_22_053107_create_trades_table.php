@@ -29,6 +29,6 @@ class CreateTradesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('industry_association_trades');
+        Schema::dropIfExists('trades');
     }
 }

@@ -5,7 +5,6 @@ namespace App\Services\JobManagementServices;
 
 use App\Models\CompanyInfoVisibility;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -14,11 +13,11 @@ class CompanyInfoVisibilityService
 {
     /**
      * @param string $jobId
-     * @return Model|Builder
+     * @return CompanyInfoVisibility|null
      */
-    public function getCompanyInfoVisibility(string $jobId): Model|Builder
+    public function getCompanyInfoVisibility(string $jobId): CompanyInfoVisibility|null
     {
-        /** @var Builder $companyInfoVisibilityBuilder */
+        /** @var CompanyInfoVisibility|Builder $companyInfoVisibilityBuilder */
         $companyInfoVisibilityBuilder = CompanyInfoVisibility::select([
             'company_info_visibilities.id',
             'company_info_visibilities.job_id',
@@ -34,7 +33,7 @@ class CompanyInfoVisibilityService
 
         $companyInfoVisibilityBuilder->where('company_info_visibilities.job_id', $jobId);
 
-        return $companyInfoVisibilityBuilder->firstOrFail();
+        return $companyInfoVisibilityBuilder->first();
     }
 
     /**
@@ -72,7 +71,7 @@ class CompanyInfoVisibilityService
             'company_industry_type' => [
                 'required',
                 'integer',
-                'exists:industry_association_trades,id,deleted_at,NULL'
+                'exists:trades,id,deleted_at,NULL'
             ],
             'is_company_business_visible' => [
                 'integer',

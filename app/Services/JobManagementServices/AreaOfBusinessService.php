@@ -46,8 +46,7 @@ class AreaOfBusinessService
             [
                 'area_of_business.id',
                 'area_of_business.title',
-                'area_of_business.created_at',
-                'area_of_business.updated_at'
+                'area_of_business.title_en',
             ]
         );
 

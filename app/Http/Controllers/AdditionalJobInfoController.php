@@ -47,7 +47,8 @@ class AdditionalJobInfoController extends Controller
         $jobLevel = $validatedData['job_level'];
         $workPlace = $validatedData['work_place'];
         $jobLocation = $validatedData['job_location'];
-        $otherBenefit = $validatedData['other_benefits'];
+        $otherBenefit = $validatedData['other_benefits'] ?? [];
+
 
         DB::beginTransaction();
         try {
