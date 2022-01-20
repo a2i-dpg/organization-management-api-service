@@ -59,6 +59,10 @@ class HrDemandInstituteService
                 $query->select('hr_demand_id')->from(with(new HrDemandInstitute())->getTable())
                 ->Where('hr_demand_institutes.institute_id',Auth::user()->institute_id);
             });
+
+            if (empty($hrDemandsWithNoInstituteId)){
+                $hrDemandBuilder = $hrDemandsWithInstituteId ;
+            }
         }
 
         $hrDemandBuilder->orderBy('hr_demand_institutes.id', $order);
