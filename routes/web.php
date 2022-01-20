@@ -133,8 +133,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Single Industry Association Fetch  */
         $router->get("industry-associations/{id}", ["as" => "service-to-service-call.industry-associations", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
 
-        /**matching criteria fetch from other service */
-        $router->get("matching-criteria/{jobId}", ["as" => "service-to-service-call.matching-criteria", "uses" => "JobManagementController@getMatchingCriteria"]);
+        /** apply to job from youth service */
+        $router->post("apply-to-job", ["as" => "service-to-service-call.apply-to-job", "uses" => "JobManagementController@applyToJob"]);
     });
 
 
