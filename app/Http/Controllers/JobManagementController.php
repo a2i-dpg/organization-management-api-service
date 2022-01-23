@@ -19,10 +19,12 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Throwable;
 
 
 class JobManagementController extends Controller
@@ -243,7 +245,6 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-
     /**
      * @param string $jobId
      * @return JsonResponse
@@ -257,6 +258,34 @@ class JobManagementController extends Controller
         $response['_response_status']["query_time"] = $this->startTime->diffInSeconds(Carbon::now());
 
         Log::info(json_encode($response));
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function applyToJob(Request $request): JsonResponse
+    {
+        $validatedData = $this->jobManagementService->applyJobValidator($request)->validate();
+        DB::beginTransaction();
+        try {
+            $appliedJobData = $this->jobManagementService->storeAppliedJob($validatedData);
+            $response = [
+                "data" => $appliedJobData,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Job apply successful",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+            DB::commit();
+        } catch (Throwable $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
