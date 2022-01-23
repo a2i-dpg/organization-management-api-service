@@ -41,6 +41,7 @@ variables:
 
 
   # application config
+  APP_ENV: "STAGING"
   DEV:
     APP_ENV: "local"
     APP_DEBUG: "false"
