@@ -55,9 +55,9 @@ class JobManagementService
 
     /**
      * @param array $data
-     * @return AppliedJob
+     * @return array
      */
-    public function storeAppliedJob(array $data): Array
+    public function storeAppliedJob(array $data): array
     {
         $jobId = $data['job_id'];
         $youthId = intval($data['youth_id']);
@@ -70,8 +70,26 @@ class JobManagementService
                 'job_id' => $jobId,
                 'youth_id' => $youthId,
                 'apply_status' => AppliedJob::APPLY_STATUS["Applied"],
+                'applied_at' => Carbon::now()
             ]
         )->toArray();
+    }
+
+    /**
+     * Reject a candidate from a certain interview step
+     * @param int $applicationId
+     * @return AppliedJob
+     */
+    public function rejectCandidate(int $applicationId): AppliedJob
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Rejected"];
+        $appliedJob->rejected_from = $appliedJob->apply_status;
+        $appliedJob->rejected_at = Carbon::now();
+        $appliedJob->save();
+
+        return $appliedJob;
     }
 
     /**

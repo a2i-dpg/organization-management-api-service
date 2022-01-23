@@ -116,6 +116,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
+            /** Update candidate status in interview steps  */
+            $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
+                $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobContactInformationController@rejectCandidate"]);
+            });
+
         });
 
         /** Provide suggestions in drop downs */
