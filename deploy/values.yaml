@@ -45,11 +45,12 @@ variables:
     APP_ENV: "local"
     APP_DEBUG: "false"
     APP_URL: "org.bus.softbd.xyz"
-    DB_HOST: 172.17.177.79
+
+    DB_HOST: 192.168.10.95
     DB_PORT: "3306"
     DB_DATABASE: org_manage
-    DB_USERNAME: n3_org
-    DB_PASSWORD: "kvx5V3Y^7"
+    DB_USERNAME: nise3
+    DB_PASSWORD: "nise3"
 
     RABBITMQ_HOST: "jaguar.rmq.cloudamqp.com"
     RABBITMQ_PORT: "5672"
