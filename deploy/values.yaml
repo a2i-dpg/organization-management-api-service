@@ -25,8 +25,8 @@ variables:
   serviceTargetPort: 80
 
   #app buil image
-  #imageRepository: registry.bus-staging.softbdltd.com/nise3-organization-management-api-service
-  imageRepository: rhysha/nise3-organization-management-api-service
+  imageRepository: registry.bus-staging.softbdltd.com/nise3-organization-management-api-service
+
 
   #auto scaling config
   #autoScalingEnabled: 0
@@ -41,16 +41,65 @@ variables:
 
 
   # application config
+  DEV:
+    APP_ENV: "local"
+    APP_DEBUG: "false"
+    APP_URL: "org.bus.softbd.xyz"
+    DB_HOST: 172.17.177.79
+    DB_PORT: "3306"
+    DB_DATABASE: org_manage
+    DB_USERNAME: n3_org
+    DB_PASSWORD: "kvx5V3Y^7"
 
-  APP_ENV: "local"
-  APP_DEBUG: "false"
-  APP_URL: "org.bus.softbd.xyz"
-  DB_HOST: 172.17.177.79
-  DB_PORT: "3306"
-  DB_DATABASE: org_manage
-  DB_USERNAME: n3_org
-  DB_PASSWORD: "kvx5V3Y^7"
+    RABBITMQ_HOST: "jaguar.rmq.cloudamqp.com"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_VHOST: "aeihxlmw"
+    RABBITMQ_USER: "aeihxlmw"
+    RABBITMQ_PASSWORD: "uC1-78rvplV09_2sVy5vEnLwG-iUdiWJ"
 
+    WSO2_IDP_BASE_URL: "https://identity.bus-staging.softbdltd.com"
+    WSO2_IDP_USERNAME: admin
+    WSO2_IDP_PASSWORD: Iadmin
+
+  STAGING:
+    APP_ENV: "local"
+    APP_DEBUG: "false"
+    APP_URL: "org.bus.softbd.xyz"
+    DB_HOST: 172.17.177.79
+    DB_PORT: "3306"
+    DB_DATABASE: org_manage
+    DB_USERNAME: n3_org
+    DB_PASSWORD: "kvx5V3Y^7"
+
+    RABBITMQ_HOST: "jaguar.rmq.cloudamqp.com"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_VHOST: "aeihxlmw"
+    RABBITMQ_USER: "aeihxlmw"
+    RABBITMQ_PASSWORD: "uC1-78rvplV09_2sVy5vEnLwG-iUdiWJ"
+
+    WSO2_IDP_BASE_URL: "https://identity.bus-staging.softbdltd.com"
+    WSO2_IDP_USERNAME: admin
+    WSO2_IDP_PASSWORD: Iadmin
+
+  PRODUCTION:
+    APP_ENV: "local"
+    APP_DEBUG: "false"
+    APP_URL: "org.bus.softbd.xyz"
+    DB_HOST: 172.17.177.79
+    DB_PORT: "3306"
+    DB_DATABASE: org_manage
+    DB_USERNAME: n3_org
+    DB_PASSWORD: "kvx5V3Y^7"
+
+    RABBITMQ_HOST: "jaguar.rmq.cloudamqp.com"
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_VHOST: "aeihxlmw"
+    RABBITMQ_USER: "aeihxlmw"
+    RABBITMQ_PASSWORD: "uC1-78rvplV09_2sVy5vEnLwG-iUdiWJ"
+
+    WSO2_IDP_BASE_URL: "https://identity.bus-staging.softbdltd.com"
+    WSO2_IDP_USERNAME: admin
+    WSO2_IDP_PASSWORD: Iadmin
 
   #control git realese branch
   GIT_DEVELOPMENT_BRANCH: "develop"
