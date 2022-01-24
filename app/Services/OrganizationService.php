@@ -302,12 +302,14 @@ class OrganizationService
                 'organizations.updated_at'
             ]
         );
-        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
-            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
-                ->where('industry_association_organization.industry_association_id', $industryAssociationId)
-                ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
-        });
 
+        if (is_numeric($industryAssociationId)) {
+            $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+                $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                    ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+            });
+        }
 
         $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
@@ -352,12 +354,14 @@ class OrganizationService
      */
     public function getOneOrganization(int $id): Organization
     {
+        $industryAssociationId = request("industry_association_id", "");
         /** @var Organization|Builder $organizationBuilder */
         $organizationBuilder = Organization::select([
             'organizations.id',
             'organizations.title_en',
             'organizations.title',
             'organizations.date_of_establishment',
+            'industry_association_organization.membership_id',
             'organizations.name_of_the_office_head',
             'organizations.name_of_the_office_head_en',
             'organizations.name_of_the_office_head_designation',
@@ -416,7 +420,16 @@ class OrganizationService
                 ->whereNull('loc_upazilas.deleted_at');
 
         });
+
+        if (is_numeric($industryAssociationId)) {
+            $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+                $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                    ->where('industry_association_organization.industry_association_id', $industryAssociationId);
+            });
+        }
+
         $organizationBuilder->where('organizations.id', '=', $id);
+
 
         $organizationBuilder->with('subTrades.trade');
 
