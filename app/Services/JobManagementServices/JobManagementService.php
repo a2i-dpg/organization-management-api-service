@@ -13,9 +13,12 @@ use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class JobManagementService
 {
@@ -180,6 +183,58 @@ class JobManagementService
         ];
 
         return \Illuminate\Support\Facades\Validator::make($requestData, $rules, $customMessage);
+    }
+
+    public function getCandidateList(Request $request, string $jobId, int $status=0): array | null
+    {
+        $limit = $request->query('limit', 10);
+        $paginate = $request->query('page');
+        $order = $request->filled('order') ? $request->query('order') : 'ASC';
+        $response = [];
+
+        /** @var AppliedJob|Builder $appliedJobBuilder */
+        $appliedJobBuilder = AppliedJob::select([
+            'applied_jobs.id',
+            'applied_jobs.job_id',
+            'applied_jobs.youth_id',
+            'applied_jobs.apply_status',
+            'applied_jobs.rejected_from',
+            'applied_jobs.applied_at',
+            'applied_jobs.rejected_at',
+            'applied_jobs.shortlisted_at',
+            'applied_jobs.interview_invited_at',
+            'applied_jobs.interview_scheduled_at',
+            'applied_jobs.interviewed_at',
+            'applied_jobs.hire_invited_at',
+            'applied_jobs.hired_at',
+            'applied_jobs.interview_invite_source',
+            'applied_jobs.interview_invite_type',
+            'applied_jobs.hire_invite_type',
+            'applied_jobs.interview_score',
+            'applied_jobs.created_at',
+            'applied_jobs.updated_at',
+        ]);
+
+        $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
+        if ($status > 0) $appliedJobBuilder->where('applied_jobs.apply_status', $status);
+
+        /** @var Collection $candidates */
+        if (is_numeric($paginate) || is_numeric($limit)) {
+            $limit = $limit ?: 10;
+            $candidates = $appliedJobBuilder->paginate($limit);
+            $paginateData = (object)$candidates->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $candidates = $appliedJobBuilder->get();
+        }
+        $arr = $candidates->toArray();
+        $response['order'] = $order;
+        $response['data'] = $arr['data'] ?? $arr;
+
+        return $response;
     }
 
 }

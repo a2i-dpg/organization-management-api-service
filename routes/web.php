@@ -116,6 +116,16 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
+            $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
+                $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAppliedCandidateList"]);
+                $router->get('applied/{jobId}', ["as" => "applied", "uses" => "JobManagementController@getAppliedCandidateList"]);
+                $router->get('rejected/{jobId}', ["as" => "rejected", "uses" => "JobManagementController@getRejectedCandidateList"]);
+                $router->get('shortlisted/{jobId}', ["as" => "shortlisted", "uses" => "JobManagementController@getShortlistedCandidateList"]);
+                $router->get('interview-invited/{jobId}', ["as" => "interview-invited", "uses" => "JobManagementController@getInterviewInvitedCandidateList"]);
+                $router->get('interviewed/{jobId}', ["as" => "interviewed", "uses" => "JobManagementController@getInterviewedCandidateList"]);
+                $router->get('hire-invited/{jobId}', ["as" => "hire-invited", "uses" => "JobManagementController@getHireInvitedCandidateList"]);
+                $router->get('hired/{jobId}', ["as" => "hired", "uses" => "JobManagementController@getHiredCandidateList"]);
+            });
         });
 
         /** Provide suggestions in drop downs */

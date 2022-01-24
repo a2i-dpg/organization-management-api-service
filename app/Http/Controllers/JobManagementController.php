@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\AppliedJob;
 use App\Models\BaseModel;
 use App\Models\JobManagement;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
@@ -287,6 +288,59 @@ class JobManagementController extends Controller
             throw $exception;
         }
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    public function getCandidateList(Request $request, string $jobId, int $status=0): JsonResponse
+    {
+        $response = $this->jobManagementService->getCandidateList($request, $jobId, $status);
+
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    public function getAllCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId);
+    }
+
+    public function getAppliedCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Applied"]);
+    }
+
+    public function getRejectedCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Rejected"]);
+    }
+
+    public function getShortlistedCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Shortlisted"]);
+    }
+
+    public function getInterviewInvitedCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Interview_invited"]);
+    }
+
+    public function getInterviewedCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Interviewed"]);
+    }
+
+    public function getHireInvitedCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Hire_invited"]);
+    }
+
+    public function getHiredCandidateList(Request $request, string $jobId): JsonResponse
+    {
+        return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Hired"]);
     }
 
 }
