@@ -228,13 +228,24 @@ class HrDemandInstituteService
      */
     public function hrDemandApprovedByIndustryAssociation(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
     {
+        $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
+
+        /**
+         * If, hr_demand_institute previously REJECTED by Industry Association User, then assume 0 to find difference of Approval vacancy given by Industry Association
+         * Else, assume previously Approval vacancy given by Industry Association to find Approval vacancy difference
+         */
+        if($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE){
+            $approvedVacancyDifference = 0 - $data['vacancy_approved_by_industry_association'];
+        } else {
+            $approvedVacancyDifference = $hrDemandInstitute->vacancy_approved_by_industry_association - $data['vacancy_approved_by_industry_association'];
+        }
+
+        $hrDemand->remaining_vacancy = $hrDemand->remaining_vacancy + $approvedVacancyDifference;
+        $hrDemand->save();
+
         $hrDemandInstitute->rejected_by_industry_association = HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_FALSE;
         $hrDemandInstitute->vacancy_approved_by_industry_association = $data['vacancy_approved_by_industry_association'];
         $hrDemandInstitute->save();
-
-        $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
-        $hrDemand->remaining_vacancy = $hrDemand->remaining_vacancy - $data['vacancy_approved_by_industry_association'];
-        $hrDemand->save();
 
         return $hrDemandInstitute;
     }
@@ -351,7 +362,19 @@ class HrDemandInstituteService
                 'min:1',
                 function ($attr, $value, $failed) use ($hrDemandInstitute) {
                     $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
-                    if ($value > $hrDemand->remaining_vacancy) {
+
+                    /**
+                     * If, hr_demand_institute previously REJECTED by Industry Association User, then assume 0 to find difference of Approval vacancy given by Industry Association
+                     * Else, assume previously Approval vacancy given by Industry Association to find Approval vacancy difference
+                    */
+                    if($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE){
+                        $approvedVacancyDifference = 0 - $value;
+                    } else {
+                        $approvedVacancyDifference = $hrDemandInstitute->vacancy_approved_by_industry_association - $value;
+                    }
+                    $updatedRemainingVacancy = $hrDemand->remaining_vacancy + $approvedVacancyDifference;
+
+                    if ($updatedRemainingVacancy < 0) {
                         $failed("Remaining Vacancy exceed");
                     }
                     if ($value > $hrDemandInstitute->vacancy_provided_by_institute) {
