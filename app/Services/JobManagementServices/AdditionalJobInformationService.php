@@ -288,14 +288,14 @@ class AdditionalJobInformationService
         if (!empty($data["other_benefits"])) {
             $data["other_benefits"] = is_array($data['other_benefits']) ? $data['other_benefits'] : explode(',', $data['other_benefits']);
         }
-        if (!empty($data["job_level"])) {
-            $data["job_level"] = is_array($data['job_level']) ? $data['job_level'] : explode(',', $data['job_level']);
+        if (!empty($data["job_levels"])) {
+            $data["job_levels"] = is_array($data['job_levels']) ? $data['job_levels'] : explode(',', $data['job_levels']);
         }
-        if (!empty($data["work_place"])) {
-            $data["work_place"] = is_array($data['work_place']) ? $data['work_place'] : explode(',', $data['work_place']);
+        if (!empty($data["work_places"])) {
+            $data["work_places"] = is_array($data['work_places']) ? $data['work_places'] : explode(',', $data['work_places']);
         }
-        if (!empty($data["job_location"])) {
-            $data["job_location"] = is_array($data['job_location']) ? $data['job_location'] : explode(',', $data['job_location']);
+        if (!empty($data["job_locations"])) {
+            $data["job_locations"] = is_array($data['job_locations']) ? $data['job_locations'] : explode(',', $data['job_locations']);
         }
 
         $rules = [
@@ -349,7 +349,8 @@ class AdditionalJobInformationService
                     return $request->offsetGet("is_other_benefits") == AdditionalJobInformation::BOOLEAN_FLAG[1];
                 }),
                 "nullable",
-                "array"
+                "array",
+                "min:1"
             ],
             "other_benefits.*" => [
                 "integer",
@@ -370,27 +371,27 @@ class AdditionalJobInformationService
             "others" => [
                 "nullable"
             ],
-            "job_level" => [
+            "job_levels" => [
                 "required",
                 "array"
             ],
-            "job_level.*" => [
+            "job_levels.*" => [
                 "required",
                 Rule::in(array_keys(AdditionalJobInformation::JOB_LEVEL))
             ],
-            "work_place" => [
+            "work_places" => [
                 "required",
                 "array"
             ],
-            "work_place.*" => [
+            "work_places.*" => [
                 "required",
                 Rule::in(array_keys(AdditionalJobInformation::WORK_PLACE))
             ],
-            "job_location" => [
+            "job_locations" => [
                 "required",
                 "array"
             ],
-            "job_location.*" => [
+            "job_locations.*" => [
                 'required',
                 Rule::in(array_keys($this->getJobLocation()))
             ]

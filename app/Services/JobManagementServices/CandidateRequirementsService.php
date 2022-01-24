@@ -44,12 +44,9 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
         $candidateRequirementBuilder->with('candidateRequirementDegrees.educationLevel:id,title,title_en');
-        $candidateRequirementBuilder->with('candidateRequirementDegrees.eduGroup:id,title,title_en');
-
+        $candidateRequirementBuilder->with('candidateRequirementDegrees.examDegree:id,title,title_en');
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
-
         $candidateRequirementBuilder->with('trainings:job_id,title');
-
         $candidateRequirementBuilder->with('professionalCertifications:job_id,title');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title,title_en');
@@ -79,16 +76,16 @@ class CandidateRequirementsService
     {
         DB::table('candidate_requirement_degrees')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($degrees as $item) {
-            $educationLevel = !empty($item["education_level"]) ? $item["education_level"] : null;
-            $eduGroup = !empty($item["edu_group"]) ? $item["edu_group"] : null;
-            $eduMajor = !empty($item["edu_major"]) ? $item["edu_major"] : null;
+            $educationLevelId = $item["education_level_id"] ?? null;
+            $examDegreeId = $item["exam_degree_id"] ?? null;
+            $majorSubject = $item["major_subject"] ?? null;
             DB::table('candidate_requirement_degrees')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'education_level_id' => $educationLevel,
-                    'edu_group_id' => $eduGroup,
-                    'edu_major' => $eduMajor
+                    'education_level_id' => $educationLevelId,
+                    'exam_degree_id' => $examDegreeId,
+                    'major_subject' => $majorSubject
                 ]
             );
         }
@@ -198,26 +195,26 @@ class CandidateRequirementsService
         if (!empty($data["degrees"])) {
             $data["degrees"] = is_array($data['degrees']) ? $data['degrees'] : explode(',', $data['degrees']);
         }
-        if (!empty($data["preferred_educational_institution"])) {
-            $data["preferred_educational_institution"] = is_array($data['preferred_educational_institution']) ? $data['preferred_educational_institution'] : explode(',', $data['preferred_educational_institution']);
+        if (!empty($data["preferred_educational_institutions"])) {
+            $data["preferred_educational_institutions"] = is_array($data['preferred_educational_institutions']) ? $data['preferred_educational_institutions'] : explode(',', $data['preferred_educational_institutions']);
         }
-        if (!empty($data["training"])) {
-            $data["training"] = is_array($data['training']) ? $data['training'] : explode(',', $data['training']);
+        if (!empty($data["trainings"])) {
+            $data["trainings"] = is_array($data['trainings']) ? $data['trainings'] : explode(',', $data['trainings']);
         }
-        if (!empty($data["professional_certification"])) {
-            $data["professional_certification"] = is_array($data['professional_certification']) ? $data['professional_certification'] : explode(',', $data['professional_certification']);
+        if (!empty($data["professional_certifications"])) {
+            $data["professional_certifications"] = is_array($data['professional_certifications']) ? $data['professional_certifications'] : explode(',', $data['professional_certifications']);
         }
-        if (!empty($data["area_of_experience"])) {
-            $data["area_of_experience"] = is_array($data['area_of_experience']) ? $data['area_of_experience'] : explode(',', $data['area_of_experience']);
+        if (!empty($data["area_of_experiences"])) {
+            $data["area_of_experiences"] = is_array($data['area_of_experiences']) ? $data['area_of_experiences'] : explode(',', $data['area_of_experiences']);
         }
-        if (!empty($data["area_of_business"])) {
-            $data["area_of_business"] = is_array($data['area_of_business']) ? $data['area_of_business'] : explode(',', $data['area_of_business']);
+        if (!empty($data["area_of_businesses"])) {
+            $data["area_of_businesses"] = is_array($data['area_of_businesses']) ? $data['area_of_businesses'] : explode(',', $data['area_of_businesses']);
         }
         if (!empty($data["skills"])) {
             $data["skills"] = is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
         }
-        if (!empty($data["gender"])) {
-            $data["gender"] = is_array($data['gender']) ? $data['gender'] : explode(',', $data['gender']);
+        if (!empty($data["genders"])) {
+            $data["genders"] = is_array($data['genders']) ? $data['genders'] : explode(',', $data['genders']);
         }
 
 
@@ -229,25 +226,24 @@ class CandidateRequirementsService
             "degrees" => [
                 "nullable",
                 "array",
-                "max:24"
             ],
-            "degrees.*.education_level" => [
+            "degrees.*.education_level_id" => [
                 "nullable",
                 "exists:education_levels,id,deleted_at,NULL",
             ],
-            "degrees.*.edu_group" => [
+            "degrees.*.exam_degree_id" => [
                 "nullable",
-                "exists:edu_groups,id,deleted_at,NULL",
+                "exists:exam_degrees,id,deleted_at,NULL",
             ],
-            "degrees.*.edu_major" => [
+            "degrees.*.major_subject" => [
                 "nullable",
                 "string"
             ],
-            "preferred_educational_institution" => [
+            "preferred_educational_institutions" => [
                 "nullable",
                 "array"
             ],
-            "preferred_educational_institution.*" => [
+            "preferred_educational_institutions.*" => [
                 "integer",
                 "required",
                 "exists:educational_institutions,id,deleted_at,NULL",
@@ -260,18 +256,18 @@ class CandidateRequirementsService
                 "nullable",
                 "string",
             ],
-            "training" => [
+            "trainings" => [
                 "nullable",
                 "array"
             ],
-            "training.*" => [
+            "trainings.*" => [
                 "string",
             ],
-            "professional_certification" => [
+            "professional_certifications" => [
                 "nullable",
                 "array"
             ],
-            "professional_certification.*" => [
+            "professional_certifications.*" => [
                 "string",
             ],
             "is_experience_needed" => [
@@ -296,20 +292,20 @@ class CandidateRequirementsService
                 "numeric",
                 Rule::in(array_keys(BaseModel::BOOLEAN_FLAG))
             ],
-            "area_of_experience" => [
+            "area_of_experiences" => [
                 "nullable",
                 "array",
             ],
-            "area_of_experience.*" => [
+            "area_of_experiences.*" => [
                 "required",
                 "integer",
                 "exists:area_of_experiences,id,deleted_at,NULL",
             ],
-            "area_of_business" => [
+            "area_of_businesses" => [
                 "nullable",
                 "array",
             ],
-            "area_of_business.*" => [
+            "area_of_businesses.*" => [
                 "integer",
                 "required",
                 "exists:area_of_business,id,deleted_at,NULL",
@@ -331,11 +327,11 @@ class CandidateRequirementsService
                 "nullable",
                 "string"
             ],
-            "gender" => [
+            "genders" => [
                 "nullable",
                 "array"
             ],
-            "gender.*" => [
+            "genders.*" => [
                 Rule::in(array_keys(BaseModel::GENDERS))
             ],
             "age_minimum" => [
@@ -345,6 +341,7 @@ class CandidateRequirementsService
                 "max:90"
             ],
             "age_maximum" => [
+                "nullable",
                 "numeric",
                 "min:14",
                 "max:90"

@@ -17,7 +17,7 @@ class CandidateRequirement extends BaseModel
 
     public function candidateRequirementDegrees(): HasMany
     {
-        return $this->hasMany(CandidateRequirementDegree::class, 'job_id', 'job_id');
+        return $this->hasMany(CandidateRequirementDegree::class, 'candidate_requirement_id', 'id');
     }
 
     public function educationalInstitutions(): BelongsToMany
