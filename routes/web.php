@@ -118,7 +118,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
             /** Update candidate status in interview steps  */
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
-                $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobContactInformationController@rejectCandidate"]);
+                $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
             });
 
         });
