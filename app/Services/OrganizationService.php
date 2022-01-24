@@ -701,8 +701,21 @@ class OrganizationService
     public function update(Organization $organization, array $data): Organization
     {
         $organization->fill($data);
+        $this->updateIndustryAssociationMembership($organization, $data);
         $organization->save();
         return $organization;
+    }
+
+    /**
+     * @param Organization $organization
+     * @param array $data
+     */
+    public function updateIndustryAssociationMembership(Organization $organization, array $data)
+    {
+        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'membership_id' => $data['membership_id'],
+        ]);
+
     }
 
     /**
