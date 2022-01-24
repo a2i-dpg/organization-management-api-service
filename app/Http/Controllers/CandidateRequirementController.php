@@ -48,14 +48,14 @@ class CandidateRequirementController extends Controller
         $validatedData = $this->candidateRequirementsService->validator($request)->validate();
 
         $degrees = $validatedData['degrees'] ?? [];
-        $preferredEducationalInstitution = $validatedData['preferred_educational_institution'] ?? [];
+        $preferredEducationalInstitution = $validatedData['preferred_educational_institutions'] ?? [];
 
-        $training = $validatedData['training'] ?? [];
-        $professionalCertification = $validatedData['professional_certification'] ?? [];
-        $areaOfExperience = $validatedData['area_of_experience'] ?? [];
-        $areaOfBusiness = $validatedData['area_of_business'] ?? [];
+        $training = $validatedData['trainings'] ?? [];
+        $professionalCertification = $validatedData['professional_certifications'] ?? [];
+        $areaOfExperience = $validatedData['area_of_experiences'] ?? [];
+        $areaOfBusiness = $validatedData['area_of_businesses'] ?? [];
         $skills = $validatedData['skills'] ?? [];
-        $gender = $validatedData['gender'] ?? [];
+        $gender = $validatedData['genders'] ?? [];
 
         DB::beginTransaction();
         try {

@@ -44,9 +44,9 @@ class AdditionalJobInfoController extends Controller
         $this->authorize('create', JobManagement::class);
         $validatedData = $this->additionalJobInformationService->validator($request)->validate();
 
-        $jobLevel = $validatedData['job_level'];
-        $workPlace = $validatedData['work_place'];
-        $jobLocation = $validatedData['job_location'];
+        $jobLevel = $validatedData['job_levels'];
+        $workPlace = $validatedData['work_places'];
+        $jobLocation = $validatedData['job_locations'];
         $otherBenefit = $validatedData['other_benefits'] ?? [];
 
 
