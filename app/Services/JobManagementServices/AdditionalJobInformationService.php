@@ -8,7 +8,6 @@ use App\Models\LocDistrict;
 use App\Models\LocDivision;
 use App\Models\LocUpazila;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +28,9 @@ class AdditionalJobInformationService
             'additional_job_information.id',
             'additional_job_information.job_id',
             'additional_job_information.job_responsibilities',
+            'additional_job_information.job_responsibilities_en',
             'additional_job_information.job_context',
+            'additional_job_information.job_context_en',
             'additional_job_information.job_place_type',
             'additional_job_information.salary_min',
             'additional_job_information.salary_max',
@@ -39,6 +40,7 @@ class AdditionalJobInformationService
             'additional_job_information.salary_review',
             'additional_job_information.festival_bonus',
             'additional_job_information.additional_salary_info',
+            'additional_job_information.additional_salary_info_en',
             'additional_job_information.is_other_benefits',
             'additional_job_information.lunch_facilities',
             'additional_job_information.others',
