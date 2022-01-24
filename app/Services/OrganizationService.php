@@ -302,12 +302,14 @@ class OrganizationService
                 'organizations.updated_at'
             ]
         );
-        $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
-            $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
-                ->where('industry_association_organization.industry_association_id', $industryAssociationId)
-                ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
-        });
 
+        if (is_numeric($industryAssociationId)) {
+            $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+                $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
+                    ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+            });
+        }
 
         $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
@@ -416,9 +418,11 @@ class OrganizationService
                 ->whereNull('loc_upazilas.deleted_at');
 
         });
+
         $organizationBuilder->where('organizations.id', '=', $id);
 
-        $organizationBuilder->with('subTrades.trade');
+
+        $organizationBuilder->with(['subTrades.trade','industryAssociations']);
 
         return $organizationBuilder->firstOrFail();
     }
@@ -688,8 +692,21 @@ class OrganizationService
     public function update(Organization $organization, array $data): Organization
     {
         $organization->fill($data);
+        $this->updateIndustryAssociationMembership($organization, $data);
         $organization->save();
         return $organization;
+    }
+
+    /**
+     * @param Organization $organization
+     * @param array $data
+     */
+    public function updateIndustryAssociationMembership(Organization $organization, array $data)
+    {
+        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+            'membership_id' => $data['membership_id'],
+        ]);
+
     }
 
     /**
