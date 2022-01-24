@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
@@ -11,11 +12,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use phpDocumentor\Reflection\Types\Null_;
+use Psy\Util\Json;
 use Ramsey\Collection\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -42,12 +42,30 @@ class HrDemandInstituteService
             'hr_demand_institutes.id',
             'hr_demand_institutes.hr_demand_id',
             'hr_demand_institutes.institute_id',
+            'hr_demands.organization_id',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
+            'hr_demands.skill_id',
+            'skills.title as skill_title',
+            'skills.title_en as skill_title_en',
             'hr_demand_institutes.rejected_by_institute',
             'hr_demand_institutes.vacancy_provided_by_institute',
             'hr_demand_institutes.rejected_by_industry_association',
             'hr_demand_institutes.vacancy_approved_by_industry_association',
             'hr_demand_institutes.row_status'
         ]);
+
+        $hrDemandBuilder->join('hr_demands', function ($join) {
+            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id');
+        });
+
+        $hrDemandBuilder->join('organizations', function ($join) {
+            $join->on('organizations.id', '=', 'hr_demands.organization_id');
+        });
+
+        $hrDemandBuilder->join('skills', function ($join) {
+            $join->on('skills.id', '=', 'hr_demands.skill_id');
+        });
 
         if (!empty($hrDemandId)) {
             $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
@@ -81,7 +99,7 @@ class HrDemandInstituteService
         $idsToRemove = [];
         $authUser = Auth::user();
         $hrDemandInstituteGroupByHrDemandIds = $hrDemandInstitutes->groupBy('hr_demand_id');
-        foreach ($hrDemandInstituteGroupByHrDemandIds as $hrDemandId => $hrDemandInstituteGroup) {
+        foreach ($hrDemandInstituteGroupByHrDemandIds as $hrDemandInstituteGroup) {
             $hrDemandNullRowId = null;
             foreach ($hrDemandInstituteGroup as $hrDemandInstitute) {
                 if (empty($hrDemandInstitute->institute_id)) {
@@ -110,8 +128,20 @@ class HrDemandInstituteService
             }
         }
 
+        /** Fetch & add Institute titles from Institute Service */
+        $instituteIds = $hrDemandInstitutes->pluck('institute_id')->unique()->toArray();
+        $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
+        foreach ($hrDemandInstitutes as $hrDemandInstitute){
+            if(!empty($hrDemandInstitute['institute_id']) && !empty($titleByInstituteIds[$hrDemandInstitute['institute_id']])){
+                $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'];
+                $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
+            }
+        }
+
+        $hrDemandInstitutes = array_values($hrDemandInstitutes->toArray());
+
         $response['order'] = $order;
-        $response['data'] = $hrDemandInstitutes->toArray()['data'] ?? $hrDemandInstitutes->toArray();
+        $response['data'] = $hrDemandInstitutes;
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
