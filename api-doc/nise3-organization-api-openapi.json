@@ -12018,10 +12018,8 @@
                         "description": "Date must be greater than current date"
                     },
                     "hr_demands": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                        "type": "object",
+                        "example": "[\n\"skill_id\"=>\"1\"\n\"requirement\"=>\"Drooling panda222\",\n\"requirement_en\"=>\"LocustsInHollow\",\n\"vacancy\"=>10,\n\"institute_ids\"=>\"1,2,3\",\n\"end_date\"=>\"2022-10-10\"\n]"
                     },
                     "row_status": {
                         "type": "integer",
