@@ -44,12 +44,9 @@ class CandidateRequirementsService
 
         $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
         $candidateRequirementBuilder->with('candidateRequirementDegrees.educationLevel:id,title,title_en');
-        $candidateRequirementBuilder->with('candidateRequirementDegrees.eduGroup:id,title,title_en');
-
+        $candidateRequirementBuilder->with('candidateRequirementDegrees.examDegree:id,title,title_en');
         $candidateRequirementBuilder->with('educationalInstitutions:id,name');
-
         $candidateRequirementBuilder->with('trainings:job_id,title');
-
         $candidateRequirementBuilder->with('professionalCertifications:job_id,title');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title,title_en');
         $candidateRequirementBuilder->with('areaOfBusiness:id,title,title_en');
@@ -79,16 +76,16 @@ class CandidateRequirementsService
     {
         DB::table('candidate_requirement_degrees')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
         foreach ($degrees as $item) {
-            $educationLevel = !empty($item["education_level"]) ? $item["education_level"] : null;
-            $eduGroup = !empty($item["edu_group"]) ? $item["edu_group"] : null;
-            $eduMajor = !empty($item["edu_major"]) ? $item["edu_major"] : null;
+            $educationLevelId = $item["education_level_id"] ?? null;
+            $examDegreeId = $item["exam_degree_id"] ?? null;
+            $majorSubject = $item["major_subject"] ?? null;
             DB::table('candidate_requirement_degrees')->insert(
                 [
                     'candidate_requirement_id' => $candidateRequirements->id,
                     'job_id' => $candidateRequirements->job_id,
-                    'education_level_id' => $educationLevel,
-                    'edu_group_id' => $eduGroup,
-                    'edu_major' => $eduMajor
+                    'education_level_id' => $educationLevelId,
+                    'exam_degree_id' => $examDegreeId,
+                    'major_subject' => $majorSubject
                 ]
             );
         }
@@ -229,17 +226,16 @@ class CandidateRequirementsService
             "degrees" => [
                 "nullable",
                 "array",
-                "max:24"
             ],
-            "degrees.*.education_level" => [
+            "degrees.*.education_level_id" => [
                 "nullable",
                 "exists:education_levels,id,deleted_at,NULL",
             ],
-            "degrees.*.edu_group" => [
+            "degrees.*.exam_degree_id" => [
                 "nullable",
-                "exists:edu_groups,id,deleted_at,NULL",
+                "exists:exam_degrees,id,deleted_at,NULL",
             ],
-            "degrees.*.edu_major" => [
+            "degrees.*.major_subject" => [
                 "nullable",
                 "string"
             ],
@@ -345,6 +341,7 @@ class CandidateRequirementsService
                 "max:90"
             ],
             "age_maximum" => [
+                "nullable",
                 "numeric",
                 "min:14",
                 "max:90"

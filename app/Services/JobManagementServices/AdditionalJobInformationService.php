@@ -349,7 +349,8 @@ class AdditionalJobInformationService
                     return $request->offsetGet("is_other_benefits") == AdditionalJobInformation::BOOLEAN_FLAG[1];
                 }),
                 "nullable",
-                "array"
+                "array",
+                "min:1"
             ],
             "other_benefits.*" => [
                 "integer",

@@ -17,8 +17,8 @@ class CreateCandidateRequirementDegreesTable extends Migration
             $table->string("job_id")->index();
             $table->integer("candidate_requirement_id")->index();
             $table->integer("education_level_id")->nullable();
-            $table->integer("edu_group_id")->nullable();
-            $table->text("edu_major")->nullable();
+            $table->integer("exam_degree_id")->nullable();
+            $table->text("major_subject")->nullable();
         });
     }
 
