@@ -122,7 +122,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             });
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
-                $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAppliedCandidateList"]);
+                $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAllCandidateList"]);
                 $router->get('applied/{jobId}', ["as" => "applied", "uses" => "JobManagementController@getAppliedCandidateList"]);
                 $router->get('rejected/{jobId}', ["as" => "rejected", "uses" => "JobManagementController@getRejectedCandidateList"]);
                 $router->get('shortlisted/{jobId}', ["as" => "shortlisted", "uses" => "JobManagementController@getShortlistedCandidateList"]);
