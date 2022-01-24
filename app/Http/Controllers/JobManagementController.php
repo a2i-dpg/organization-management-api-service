@@ -313,6 +313,7 @@ class JobManagementController extends Controller
     /**
      * @param int $applicationId
      * @return JsonResponse
+     * @throws Throwable
      */
     public function shortlistCandidate(int $applicationId): JsonResponse
     {

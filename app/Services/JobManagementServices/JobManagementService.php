@@ -111,8 +111,10 @@ class JobManagementService
         if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"]) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
             $appliedJob->shortlisted_at = Carbon::now();
+        } else {
+            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
         }
-        $appliedJob->saveOrFail();
+        $appliedJob->save();
 
         return $appliedJob;
     }
