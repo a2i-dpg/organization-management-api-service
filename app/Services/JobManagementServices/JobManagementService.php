@@ -3,7 +3,6 @@
 namespace App\Services\JobManagementServices;
 
 
-use App\Facade\ServiceToServiceCall;
 use App\Models\AdditionalJobInformation;
 use App\Models\AppliedJob;
 use App\Models\CandidateRequirement;
@@ -14,7 +13,6 @@ use App\Models\PrimaryJobInformation;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class JobManagementService
@@ -60,6 +58,7 @@ class JobManagementService
     public function storeAppliedJob(array $data): array
     {
         $jobId = $data['job_id'];
+        $expectedSalary = $data['expected_salary'];
         $youthId = intval($data['youth_id']);
         return AppliedJob::updateOrCreate(
             [
@@ -70,6 +69,7 @@ class JobManagementService
                 'job_id' => $jobId,
                 'youth_id' => $youthId,
                 'apply_status' => AppliedJob::APPLY_STATUS["Applied"],
+                'expected_salary' => $expectedSalary,
                 'applied_at' => Carbon::now()
             ]
         )->toArray();
@@ -187,6 +187,10 @@ class JobManagementService
                 'required',
                 'integer',
                 Rule::in([1])
+            ],
+            "expected_salary" => [
+                'nullable',
+                'integer',
             ],
         ];
 
