@@ -5,6 +5,7 @@ namespace App\Services\JobManagementServices;
 
 use App\Models\AdditionalJobInformation;
 use App\Models\AppliedJob;
+use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
 use App\Models\JobContactInformation;
@@ -16,7 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class JobManagementService
 {
@@ -91,6 +94,25 @@ class JobManagementService
         $appliedJob->rejected_from = $appliedJob->apply_status;
         $appliedJob->rejected_at = Carbon::now();
         $appliedJob->save();
+
+        return $appliedJob;
+    }
+
+    /**
+     * Shortlist a candidate for next interview step
+     * @param int $applicationId
+     * @return AppliedJob
+     * @throws Throwable
+     */
+    public function shortlistCandidate(int $applicationId): AppliedJob
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"]) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+            $appliedJob->shortlisted_at = Carbon::now();
+        }
+        $appliedJob->saveOrFail();
 
         return $appliedJob;
     }
@@ -207,7 +229,7 @@ class JobManagementService
         return \Illuminate\Support\Facades\Validator::make($requestData, $rules, $customMessage);
     }
 
-    public function getCandidateList(Request $request, string $jobId, int $status=0): array | null
+    public function getCandidateList(Request $request, string $jobId, int $status = 0): array|null
     {
         $limit = $request->query('limit', 10);
         $paginate = $request->query('page');
