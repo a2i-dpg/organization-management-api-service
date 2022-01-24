@@ -435,8 +435,7 @@ class IndustryAssociationService
                 'integer',
                 Rule::exists('industry_association_organization', 'industry_association_id')
                     ->where(function ($query) use ($organizationId) {
-                        $query->where('organization_id', $organizationId)
-                            ->where('row_status', BaseModel::ROW_STATUS_PENDING);
+                        $query->where('organization_id', $organizationId);
                     })
             ]
         ];
