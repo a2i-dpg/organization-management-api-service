@@ -323,7 +323,7 @@ class JobManagementController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Job apply successful",
+                "message" => "Candidate shortlisted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
