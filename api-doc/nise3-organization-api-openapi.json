@@ -12038,10 +12038,6 @@
                         "type": "integer",
                         "description": "Must exist in organizations table"
                     },
-                    "end_date": {
-                        "type": "string",
-                        "description": "Date must be greater than current date"
-                    },
                     "hr_demands": {
                         "type": "object",
                         "example": "[\n\"skill_id\"=>\"1\"\n\"requirement\"=>\"Drooling panda222\",\n\"requirement_en\"=>\"LocustsInHollow\",\n\"vacancy\"=>10,\n\"institute_ids\"=>[1,2,3],\n\"end_date\"=>\"2022-10-10\"\n]"
@@ -12056,9 +12052,7 @@
                     }
                 },
                 "required": [
-                    "industry_association_id",
                     "organization_id",
-                    "end_date",
                     "hr_demands"
                 ]
             },
@@ -12103,8 +12097,7 @@
                     "end_date",
                     "skill_id",
                     "requirement",
-                    "vacancy",
-                    "institute_ids"
+                    "vacancy"
                 ]
             },
             "MatchingCriteria": {
