@@ -7757,29 +7757,27 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "job_id": "1112",
-                                        "job_responsibilities": null,
-                                        "job_context": "hettfield",
-                                        "job_context_en": "hettfield",
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "job_responsibilities": "wq",
+                                        "job_responsibilities_en": null,
+                                        "job_context": "q",
+                                        "job_context_en": null,
                                         "job_place_type": "1",
-                                        "salary_min": "10000",
+                                        "salary_min": "1000",
                                         "salary_max": "20000",
-                                        "is_salary_info_show": "2",
-                                        "is_salary_compare_to_expected_salary": "1",
+                                        "is_salary_info_show": "1",
+                                        "is_salary_compare_to_expected_salary": null,
                                         "is_salary_alert_excessive_than_given_salary_range": "1",
                                         "salary_review": "1",
                                         "festival_bonus": "1",
                                         "additional_salary_info": null,
+                                        "additional_salary_info_en": null,
                                         "is_other_benefits": "1",
-                                        "other_benefits": [
-                                            "ffa",
-                                            "rrr4"
-                                        ],
                                         "lunch_facilities": "1",
                                         "others": null,
-                                        "created_at": "2021-12-30T08:10:04.000000Z",
-                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "created_at": "2022-01-24T12:08:19.000000Z",
+                                        "updated_at": "2022-01-24T12:13:32.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -12786,7 +12784,7 @@
                         "type": "object",
                         "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
                     },
-                    "preferred_educational_institution": {
+                    "preferred_educational_institutions": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -12799,13 +12797,13 @@
                     "other_educational_qualification_en": {
                         "type": "string"
                     },
-                    "training": {
+                    "trainings": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
                     },
-                    "professional_certification": {
+                    "professional_certifications": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -12833,14 +12831,14 @@
                         ],
                         "description": "1=>True 0=> False"
                     },
-                    "area_of_experience": {
+                    "area_of_experiences": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "Id must exist in skills table"
                     },
-                    "area_of_business": {
+                    "area_of_businesses": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -12859,7 +12857,7 @@
                     "additional_requirements_en": {
                         "type": "string"
                     },
-                    "gender": {
+                    "genders": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -13003,10 +13001,12 @@
                     },
                     "is_salary_compare_to_expected_salary": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "is_salary_alert_excessive_than_given_salary_range": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "salary_review": {
@@ -13035,6 +13035,7 @@
                     },
                     "is_other_benefits": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "other_benefits": {
@@ -13055,21 +13056,21 @@
                     "others": {
                         "type": "string"
                     },
-                    "job_level": {
+                    "job_levels": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "1 => Entry,2 => Mid,3 => Top"
                     },
-                    "work_place": {
+                    "work_places": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "1=>Home 2=>Office"
                     },
-                    "job_location": {
+                    "job_locations": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -13079,6 +13080,7 @@
                 },
                 "required": [
                     "job_id",
+                    "job_responsibilities",
                     "job_context",
                     "job_place_type",
                     "is_salary_info_show",
@@ -13087,9 +13089,9 @@
                     "festival_bonus",
                     "is_other_benefits",
                     "lunch_facilities",
-                    "job_level",
-                    "work_place",
-                    "job_location"
+                    "job_levels",
+                    "work_places",
+                    "job_locations"
                 ]
             },
             "PrimaryJobInfo": {
