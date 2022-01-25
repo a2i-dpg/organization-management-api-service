@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @package App\Facade
  * @method static array|mixed getAuthUserWithRolePermission(string $idpUserId)
  * @method static array|mixed getInstituteTitleByIds(array $idpUserId)
+ * @method static array|mixed getYouthProfilesByIds(array $youthIds)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler
