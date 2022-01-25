@@ -121,6 +121,25 @@ class JobManagementService
     }
 
     /**
+     * @throws ValidationException
+     */
+    public function inviteCandidateForInterview(int $applicationId)
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        if($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"]) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interview_invited"];
+            $appliedJob->shortlisted_at = Carbon::now();
+        } else {
+            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+        }
+        $appliedJob->save();
+
+        return $appliedJob;
+
+    }
+
+    /**
      * @param Request $request
      * @return Validator
      */
@@ -288,11 +307,11 @@ class JobManagementService
 
         foreach ($youthProfiles as $item) {
             $id = $item['id'];
-            $indexedYouths[$id.""] = $item;
+            $indexedYouths[$id . ""] = $item;
         }
 
         foreach ($resultArray["data"] as &$item) {
-            $id = $item['youth_id']."";
+            $id = $item['youth_id'] . "";
             $item['youth_profile'] = $indexedYouths[$id];
         }
 

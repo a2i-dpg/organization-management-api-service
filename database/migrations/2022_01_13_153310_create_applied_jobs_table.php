@@ -25,8 +25,8 @@ class CreateAppliedJobsTable extends Migration
             $table->dateTime('shortlisted_at')->nullable();
             $table->dateTime('interview_invited_at')->nullable();
             $table->dateTime('interview_scheduled_at')->nullable();
-            $table->dateTime('is_interview_reschedule_allowed')->nullable();
-            $table->dateTime('is_interview_reschedule_requested')->nullable();
+            $table->tinyInteger('is_interview_reschedule_allowed')->comment('1=>true,0=>false')->nullable();
+            $table->tinyInteger('is_interview_reschedule_requested')->comment('1=>true,0=>false')->nullable();
             $table->dateTime('interviewed_at')->nullable();
             $table->dateTime('interviewed_details')->nullable();
             $table->dateTime('interview_contact')->nullable();

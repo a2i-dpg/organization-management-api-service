@@ -330,6 +330,26 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+    /**
+     * @param int $applicationId
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function inviteCandidateForInterview(int $applicationId): JsonResponse
+    {
+        $shortlistApplication = $this->jobManagementService->inviteCandidateForInterview($applicationId);
+        $response = [
+            "data" => $shortlistApplication,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Job apply successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
 
     public function getCandidateList(Request $request, string $jobId, int $status = 0): JsonResponse
     {
