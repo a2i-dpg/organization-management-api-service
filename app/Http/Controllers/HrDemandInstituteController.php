@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Throwable;
 
 class HrDemandInstituteController extends Controller
 {
@@ -83,7 +84,7 @@ class HrDemandInstituteController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws ValidationException|AuthorizationException
+     * @throws ValidationException|AuthorizationException|Throwable
      */
     public function hrDemandApprovedByInstitute(Request $request, int $id): JsonResponse
     {
@@ -113,16 +114,23 @@ class HrDemandInstituteController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException|ValidationException
+     * @throws AuthorizationException|ValidationException|Throwable
      */
     public function hrDemandRejectedByInstitute(Request $request, int $id): JsonResponse
     {
         $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
 
+        throw_if(empty($hrDemandInstitute->institute_id), ValidationException::withMessages([
+            "All institute row can't be updated by this operation!"
+        ]));
+
+        throw_if($hrDemandInstitute->vacancy_approved_by_industry_association != 0, ValidationException::withMessages([
+            "Already approved by Industry Association User!"
+        ]));
+
         $this->authorize('updateByInstitute', $hrDemandInstitute);
 
-        $validated = $this->hrDemandInstituteService->hrDemandRejectedByInstituteValidator($request, $hrDemandInstitute)->validate();
-        $data = $this->hrDemandInstituteService->hrDemandRejectedByInstitute($hrDemandInstitute, $validated);
+        $data = $this->hrDemandInstituteService->hrDemandRejectedByInstitute($hrDemandInstitute);
 
         $response = [
             'data' => $data,
@@ -144,10 +152,15 @@ class HrDemandInstituteController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException|AuthorizationException
+     * @throws Throwable
      */
     public function hrDemandApprovedByIndustryAssociation(Request $request, int $id): JsonResponse
     {
         $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+
+        throw_if(empty($hrDemandInstitute->institute_id), ValidationException::withMessages([
+            "All institute row can't be updated by this operation!"
+        ]));
 
         $this->authorize('update', HrDemand::class);
 
@@ -175,10 +188,15 @@ class HrDemandInstituteController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
+     * @throws Throwable
      */
     public function hrDemandRejectedByIndustryAssociation(Request $request, int $id): JsonResponse
     {
         $hrDemandInstitute = HrDemandInstitute::findOrFail($id);
+
+        throw_if(empty($hrDemandInstitute->institute_id), ValidationException::withMessages([
+            "All institute row can't be updated by this operation!"
+        ]));
 
         $this->authorize('update', HrDemand::class);
 

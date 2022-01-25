@@ -3,6 +3,7 @@
 namespace App\Services\JobManagementServices;
 
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\AdditionalJobInformation;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
@@ -246,11 +247,13 @@ class JobManagementService
             'applied_jobs.apply_status',
             'applied_jobs.rejected_from',
             'applied_jobs.applied_at',
+            'applied_jobs.profile_viewed_at',
             'applied_jobs.rejected_at',
             'applied_jobs.shortlisted_at',
             'applied_jobs.interview_invited_at',
             'applied_jobs.interview_scheduled_at',
             'applied_jobs.interviewed_at',
+            'applied_jobs.expected_salary',
             'applied_jobs.hire_invited_at',
             'applied_jobs.hired_at',
             'applied_jobs.interview_invite_source',
@@ -267,7 +270,7 @@ class JobManagementService
 
         /** @var Collection $candidates */
         if (is_numeric($paginate) || is_numeric($limit)) {
-            $limit = $limit ?: 10;
+            $limit = $limit ?: BaseModel::DEFAULT_PAGE_SIZE;
             $candidates = $appliedJobBuilder->paginate($limit);
             $paginateData = (object)$candidates->toArray();
             $response['current_page'] = $paginateData->current_page;
@@ -277,9 +280,24 @@ class JobManagementService
         } else {
             $candidates = $appliedJobBuilder->get();
         }
-        $arr = $candidates->toArray();
+
+        $resultArray = $candidates->toArray();
+        $youthIds = $candidates->pluck('youth_id')->toArray();
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthIds);
+        $indexedYouths = [];
+
+        foreach ($youthProfiles as $item) {
+            $id = $item['id'];
+            $indexedYouths[$id.""] = $item;
+        }
+
+        foreach ($resultArray["data"] as &$item) {
+            $id = $item['youth_id']."";
+            $item['youth_profile'] = $indexedYouths[$id];
+        }
+
         $response['order'] = $order;
-        $response['data'] = $arr['data'] ?? $arr;
+        $response['data'] = $resultArray['data'] ?? $resultArray;
 
         return $response;
     }

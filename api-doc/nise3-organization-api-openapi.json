@@ -10792,7 +10792,32 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "industry_association_id": 1,
+                                        "organization_id": 1,
+                                        "end_date": "2022-07-07",
+                                        "skill_id": "2",
+                                        "requirement": "AAAAmmon ammarth",
+                                        "requirement_en": "Cob",
+                                        "vacancy": "11",
+                                        "remaining_vacancy": 11,
+                                        "all_institutes": 0,
+                                        "row_status": 1,
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "created_at": "2022-01-24T07:29:45.000000Z",
+                                        "updated_at": "2022-01-24T11:05:24.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Hr Demand updated successfully",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -12589,10 +12614,8 @@
                         "description": "Date must be greater than current date"
                     },
                     "hr_demands": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                        "type": "object",
+                        "example": "[\n\"skill_id\"=>\"1\"\n\"requirement\"=>\"Drooling panda222\",\n\"requirement_en\"=>\"LocustsInHollow\",\n\"vacancy\"=>10,\n\"institute_ids\"=>[1,2,3],\n\"end_date\"=>\"2022-10-10\"\n]"
                     },
                     "row_status": {
                         "type": "integer",
