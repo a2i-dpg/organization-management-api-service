@@ -3,6 +3,7 @@
 namespace App\Services\JobManagementServices;
 
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\AdditionalJobInformation;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
