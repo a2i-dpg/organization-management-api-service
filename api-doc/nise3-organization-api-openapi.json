@@ -7757,29 +7757,27 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "job_id": "1112",
-                                        "job_responsibilities": null,
-                                        "job_context": "hettfield",
-                                        "job_context_en": "hettfield",
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "job_responsibilities": "wq",
+                                        "job_responsibilities_en": null,
+                                        "job_context": "q",
+                                        "job_context_en": null,
                                         "job_place_type": "1",
-                                        "salary_min": "10000",
+                                        "salary_min": "1000",
                                         "salary_max": "20000",
-                                        "is_salary_info_show": "2",
-                                        "is_salary_compare_to_expected_salary": "1",
+                                        "is_salary_info_show": "1",
+                                        "is_salary_compare_to_expected_salary": null,
                                         "is_salary_alert_excessive_than_given_salary_range": "1",
                                         "salary_review": "1",
                                         "festival_bonus": "1",
                                         "additional_salary_info": null,
+                                        "additional_salary_info_en": null,
                                         "is_other_benefits": "1",
-                                        "other_benefits": [
-                                            "ffa",
-                                            "rrr4"
-                                        ],
                                         "lunch_facilities": "1",
                                         "others": null,
-                                        "created_at": "2021-12-30T08:10:04.000000Z",
-                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "created_at": "2022-01-24T12:08:19.000000Z",
+                                        "updated_at": "2022-01-24T12:13:32.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -7817,7 +7815,9 @@
                                         "id": 1,
                                         "job_id": "qq-qq",
                                         "job_responsibilities": "",
+                                        "job_responsibilities_en": "dddd",
                                         "job_context": "fffgfgfgfg",
+                                        "job_context_en": "fffgfgfgfg",
                                         "job_place_type": 2,
                                         "salary_min": null,
                                         "salary_max": null,
@@ -8106,22 +8106,22 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "555",
-                                        "other_educational_qualification": null,
-                                        "other_educational_qualification_en": null,
-                                        "is_experience_needed": "1",
-                                        "minimum_year_of_experience": "3",
-                                        "maximum_year_of_experience": "5",
+                                        "job_id": "1",
+                                        "other_educational_qualification": "enim Excepteur sunt esse ullamco",
+                                        "other_educational_qualification_en": "in dolor labore sunt",
+                                        "is_experience_needed": "0",
+                                        "minimum_year_of_experience": "1",
+                                        "maximum_year_of_experience": "2",
                                         "is_freshers_encouraged": "1",
-                                        "additional_requirements": null,
-                                        "additional_requirements_en": null,
-                                        "age_minimum": "90",
-                                        "age_maximum": "90",
+                                        "additional_requirements": "exercitation culpa ad nulla",
+                                        "additional_requirements_en": "reprehenderit incididunt sint deserunt",
+                                        "age_minimum": "20",
+                                        "age_maximum": "22",
                                         "person_with_disability": "1",
-                                        "preferred_retired_army_officer": "0",
-                                        "updated_at": "2022-01-02T11:27:50.000000Z",
-                                        "created_at": "2022-01-02T11:27:50.000000Z",
-                                        "id": 18
+                                        "preferred_retired_army_officer": "1",
+                                        "updated_at": "2022-01-25T04:44:19.000000Z",
+                                        "created_at": "2022-01-25T04:44:19.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -8156,106 +8156,108 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "job_id": "555",
-                                        "other_educational_qualification": "psychology",
-                                        "other_educational_qualification_en": "",
-                                        "is_experience_needed": 1,
+                                        "job_id": "1",
+                                        "other_educational_qualification": null,
+                                        "other_educational_qualification_en": null,
+                                        "is_experience_needed": 0,
                                         "is_freshers_encouraged": 1,
-                                        "minimum_year_of_experience": 1,
+                                        "minimum_year_of_experience": 0,
                                         "maximum_year_of_experience": 4,
-                                        "additional_requirements": "Major in Eng",
+                                        "additional_requirements": null,
                                         "additional_requirements_en": null,
                                         "age_minimum": 20,
-                                        "age_maximum": 55,
+                                        "age_maximum": 50,
                                         "person_with_disability": 0,
                                         "preferred_retired_army_officer": 0,
-                                        "created_at": null,
-                                        "updated_at": "2022-01-03T06:09:35.000000Z",
+                                        "created_at": "2022-01-25T04:44:19.000000Z",
+                                        "updated_at": "2022-01-25T04:46:45.000000Z",
+                                        "latest_step": 4,
                                         "candidate_requirement_degrees": [
                                             {
-                                                "id": 1,
-                                                "candidate_requirement_id": 1,
-                                                "education_level_id": 1,
-                                                "edu_group_id": 2,
-                                                "edu_major": "CSE",
-                                                "created_at": null,
-                                                "updated_at": null,
-                                                "education_level": {
-                                                    "id": 1,
-                                                    "title": "PSC/5 Pass",
-                                                    "title_en": "PSC/5 Pass"
-                                                },
-                                                "edu_group": {
-                                                    "id": 2,
-                                                    "title": "মানবিক",
-                                                    "title_en": "Arts and Humanities"
-                                                }
-                                            },
-                                            {
-                                                "id": 2,
+                                                "job_id": "1",
                                                 "candidate_requirement_id": 1,
                                                 "education_level_id": null,
-                                                "edu_group_id": null,
-                                                "edu_major": "EEE",
-                                                "created_at": null,
-                                                "updated_at": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
                                                 "education_level": null,
-                                                "edu_group": null
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
                                             }
                                         ],
                                         "educational_institutions": [
                                             {
                                                 "id": 1,
                                                 "name": "University of Dhaka"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "name": "University of Rajshahi"
-                                            },
-                                            {
-                                                "id": 3,
-                                                "name": "Bangladesh Agricultural University"
                                             }
                                         ],
                                         "trainings": [
                                             {
-                                                "id": 1,
-                                                "candidate_requirement_id": 1,
-                                                "training": "Computer typing"
+                                                "job_id": "1",
+                                                "title": "AAA"
                                             }
                                         ],
                                         "professional_certifications": [
                                             {
-                                                "id": 1,
-                                                "candidate_requirement_id": 1
-                                            },
-                                            {
-                                                "id": 2,
-                                                "candidate_requirement_id": 1
+                                                "job_id": "1",
+                                                "title": "QQQ"
                                             }
                                         ],
                                         "area_of_experiences": [
                                             {
                                                 "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
                                                 "title_en": "Technical Writing"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "title_en": "Project Management"
-                                            },
-                                            {
-                                                "id": 3,
-                                                "title_en": "Computer Programming"
                                             }
                                         ],
                                         "area_of_business": [
                                             {
                                                 "id": 1,
-                                                "title": "Banks"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "title": "Insurance"
+                                                "title": "Banks",
+                                                "title_en": null
                                             }
                                         ],
                                         "skills": [
@@ -8263,11 +8265,12 @@
                                                 "id": 1,
                                                 "title": "টেকনিকাল রাইটিং",
                                                 "title_en": "Technical Writing"
-                                            },
+                                            }
+                                        ],
+                                        "genders": [
                                             {
-                                                "id": 2,
-                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
-                                                "title_en": "Project Management"
+                                                "job_id": "1",
+                                                "gender_id": 1
                                             }
                                         ]
                                     },
@@ -8712,8 +8715,8 @@
                                         "rejected_from": 2,
                                         "applied_at": null,
                                         "profile_viewed_at": null,
-                                        "rejected_at": "2022-01-24T04:53:41.070543Z",
-                                        "shortlisted_at": null,
+                                        "rejected_at": "2022-01-25T05:25:47.019399Z",
+                                        "shortlisted_at": "2022-01-25 05:10:57",
                                         "interview_invited_at": null,
                                         "interview_scheduled_at": null,
                                         "interviewed_at": null,
@@ -8725,13 +8728,13 @@
                                         "hire_invite_type": null,
                                         "interview_score": null,
                                         "created_at": null,
-                                        "updated_at": "2022-01-24T04:53:41.000000Z",
+                                        "updated_at": "2022-01-25T05:25:47.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job apply successful",
+                                        "message": "Candidate rejected successfully",
                                         "query_time": 0
                                     }
                                 }
@@ -8770,20 +8773,22 @@
                                     "total_page": 1,
                                     "page_size": 10,
                                     "total": 1,
-                                    "order": "asc",
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
                                             "job_id": "1",
                                             "youth_id": 1,
                                             "apply_status": 1,
-                                            "rejected_from": 1,
+                                            "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8791,7 +8796,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -8835,20 +8892,22 @@
                                     "total_page": 1,
                                     "page_size": 10,
                                     "total": 1,
-                                    "order": "asc",
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
                                             "job_id": "1",
                                             "youth_id": 1,
                                             "apply_status": 1,
-                                            "rejected_from": 1,
+                                            "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8856,7 +8915,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -8909,11 +9020,13 @@
                                             "apply_status": 2,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8921,7 +9034,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -8974,11 +9139,13 @@
                                             "apply_status": 3,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8986,7 +9153,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9039,11 +9258,13 @@
                                             "apply_status": 4,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9051,7 +9272,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9104,11 +9377,13 @@
                                             "apply_status": 5,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9116,7 +9391,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9169,11 +9496,13 @@
                                             "apply_status": 6,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9181,7 +9510,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9234,11 +9615,13 @@
                                             "apply_status": 7,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9246,12 +9629,117 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/candidate-update/shortlist/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Shortlist a candidate for interview",
+                "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 3,
+                                        "rejected_from": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "rejected_at": null,
+                                        "shortlisted_at": "2022-01-25T05:10:57.385411Z",
+                                        "interview_invited_at": null,
+                                        "interview_scheduled_at": null,
+                                        "interviewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": null,
+                                        "hired_at": null,
+                                        "interview_invite_source": null,
+                                        "interview_invite_type": null,
+                                        "hire_invite_type": null,
+                                        "interview_score": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-01-25T05:10:57.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate shortlisted successfully",
                                         "query_time": 0
                                     }
                                 }
@@ -12802,7 +13290,7 @@
                         "type": "object",
                         "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
                     },
-                    "preferred_educational_institution": {
+                    "preferred_educational_institutions": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -12815,13 +13303,13 @@
                     "other_educational_qualification_en": {
                         "type": "string"
                     },
-                    "training": {
+                    "trainings": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
                     },
-                    "professional_certification": {
+                    "professional_certifications": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -12849,14 +13337,14 @@
                         ],
                         "description": "1=>True 0=> False"
                     },
-                    "area_of_experience": {
+                    "area_of_experiences": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "Id must exist in skills table"
                     },
-                    "area_of_business": {
+                    "area_of_businesses": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -12875,7 +13363,7 @@
                     "additional_requirements_en": {
                         "type": "string"
                     },
-                    "gender": {
+                    "genders": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -13019,10 +13507,12 @@
                     },
                     "is_salary_compare_to_expected_salary": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "is_salary_alert_excessive_than_given_salary_range": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "salary_review": {
@@ -13051,6 +13541,7 @@
                     },
                     "is_other_benefits": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "other_benefits": {
@@ -13071,21 +13562,21 @@
                     "others": {
                         "type": "string"
                     },
-                    "job_level": {
+                    "job_levels": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "1 => Entry,2 => Mid,3 => Top"
                     },
-                    "work_place": {
+                    "work_places": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "1=>Home 2=>Office"
                     },
-                    "job_location": {
+                    "job_locations": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -13095,6 +13586,7 @@
                 },
                 "required": [
                     "job_id",
+                    "job_responsibilities",
                     "job_context",
                     "job_place_type",
                     "is_salary_info_show",
@@ -13103,9 +13595,9 @@
                     "festival_bonus",
                     "is_other_benefits",
                     "lunch_facilities",
-                    "job_level",
-                    "work_place",
-                    "job_location"
+                    "job_levels",
+                    "work_places",
+                    "job_locations"
                 ]
             },
             "PrimaryJobInfo": {
