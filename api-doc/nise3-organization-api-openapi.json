@@ -8715,8 +8715,8 @@
                                         "rejected_from": 2,
                                         "applied_at": null,
                                         "profile_viewed_at": null,
-                                        "rejected_at": "2022-01-24T04:53:41.070543Z",
-                                        "shortlisted_at": null,
+                                        "rejected_at": "2022-01-25T05:25:47.019399Z",
+                                        "shortlisted_at": "2022-01-25 05:10:57",
                                         "interview_invited_at": null,
                                         "interview_scheduled_at": null,
                                         "interviewed_at": null,
@@ -8728,13 +8728,13 @@
                                         "hire_invite_type": null,
                                         "interview_score": null,
                                         "created_at": null,
-                                        "updated_at": "2022-01-24T04:53:41.000000Z",
+                                        "updated_at": "2022-01-25T05:25:47.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job apply successful",
+                                        "message": "Candidate rejected successfully",
                                         "query_time": 0
                                     }
                                 }
