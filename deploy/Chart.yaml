@@ -1,5 +1,5 @@
 apiVersion: v2
-name: nise3-org-management
+name: nise3-org
 description: nise3-org-management
 
 # A chart can be either an 'application' or a 'library' chart.

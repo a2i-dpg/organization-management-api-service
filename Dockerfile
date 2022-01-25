@@ -1,10 +1,11 @@
-FROM composer:2.0.7 as build
+#FROM composer:2.0.7 as build
+FROM oberd/php-8.1-apache
 
 WORKDIR /app
 COPY . /app
-RUN composer install
 
-FROM php:7.4-apache
+#RUN rm composer.lock
+RUN php composer.phar install --ignore-platform-reqs
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -15,14 +16,16 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd soap zip sockets
+
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
 EXPOSE 80
-COPY --from=build /app /app
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+#COPY --from=build /app /app
+RUN rm -f /etc/apache2/sites-enabled/default.conf
+COPY vhost.conf /etc/apache2/sites-enabled/default.conf
 RUN chown -R www-data:www-data /app \
     && a2enmod rewrite
