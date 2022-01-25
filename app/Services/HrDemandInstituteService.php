@@ -56,15 +56,18 @@ class HrDemandInstituteService
         ]);
 
         $hrDemandBuilder->join('hr_demands', function ($join) {
-            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id');
+            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id')
+                ->whereNull('hr_demands.deleted_at');
         });
 
         $hrDemandBuilder->join('organizations', function ($join) {
-            $join->on('organizations.id', '=', 'hr_demands.organization_id');
+            $join->on('organizations.id', '=', 'hr_demands.organization_id')
+                ->whereNull('organizations.deleted_at');
         });
 
         $hrDemandBuilder->join('skills', function ($join) {
-            $join->on('skills.id', '=', 'hr_demands.skill_id');
+            $join->on('skills.id', '=', 'hr_demands.skill_id')
+                ->whereNull('skills.deleted_at');
         });
 
         if (!empty($hrDemandId)) {

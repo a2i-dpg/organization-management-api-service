@@ -2,13 +2,10 @@
 
 namespace App\Services;
 
-use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -41,10 +38,12 @@ class HrDemandService
             'hr_demands.id',
             'hr_demands.industry_association_id',
             'hr_demands.organization_id',
-            'organizations.title',
-            'organizations.title_en',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
             'hr_demands.end_date',
             'hr_demands.skill_id',
+            'skills.title as skill_title',
+            'skills.title_en as skill_title_en',
             'hr_demands.vacancy',
             'hr_demands.remaining_vacancy',
             'hr_demands.all_institutes'
@@ -53,6 +52,11 @@ class HrDemandService
         $hrDemandBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('organizations.id', '=', 'hr_demands.organization_id')
                 ->whereNull('organizations.deleted_at');
+        });
+
+        $hrDemandBuilder->join('skills', function ($join) {
+            $join->on('skills.id', '=', 'hr_demands.skill_id')
+                ->whereNull('skills.deleted_at');
         });
 
         if(!empty($skillIds)){
@@ -99,10 +103,12 @@ class HrDemandService
             'hr_demands.id',
             'hr_demands.industry_association_id',
             'hr_demands.organization_id',
-            'organizations.title',
-            'organizations.title_en',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
             'hr_demands.end_date',
             'hr_demands.skill_id',
+            'skills.title as skill_title',
+            'skills.title_en as skill_title_en',
             'hr_demands.vacancy',
             'hr_demands.remaining_vacancy',
             'hr_demands.all_institutes'
@@ -113,9 +119,26 @@ class HrDemandService
                 ->whereNull('organizations.deleted_at');
         });
 
+        $hrDemandBuilder->join('skills', function ($join) {
+            $join->on('skills.id', '=', 'hr_demands.skill_id')
+                ->whereNull('skills.deleted_at');
+        });
+
         $hrDemandBuilder->where('hr_demands.id', $id);
 
-        return $hrDemandBuilder->firstOrFail();
+        $hrDemand = $hrDemandBuilder->firstOrFail();
+
+        $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$id)
+            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+            ->whereNotNull('institute_id')
+            ->pluck('institute_id')
+            ->toArray();
+
+        if(!empty($hrDemandInstituteIds)){
+            $hrDemand['institute_ids'] = $hrDemandInstituteIds;
+        }
+
+        return $hrDemand;
     }
 
     /**
