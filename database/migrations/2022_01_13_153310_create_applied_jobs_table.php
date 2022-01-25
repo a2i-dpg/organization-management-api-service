@@ -25,12 +25,18 @@ class CreateAppliedJobsTable extends Migration
             $table->dateTime('shortlisted_at')->nullable();
             $table->dateTime('interview_invited_at')->nullable();
             $table->dateTime('interview_scheduled_at')->nullable();
+            $table->dateTime('is_interview_reschedule_allowed')->nullable();
+            $table->dateTime('is_interview_reschedule_requested')->nullable();
             $table->dateTime('interviewed_at')->nullable();
+            $table->dateTime('interviewed_details')->nullable();
+            $table->dateTime('interview_contact')->nullable();
             $table->integer('expected_salary')->nullable();
             $table->dateTime('hire_invited_at')->nullable();
             $table->dateTime('hired_at')->nullable();
             $table->unsignedTinyInteger('interview_invite_source')->nullable();
             $table->unsignedTinyInteger('interview_invite_type')->nullable();
+            $table->unsignedTinyInteger('interview_type')->nullable();
+            $table->unsignedTinyInteger('interview_address')->nullable();
             $table->unsignedTinyInteger('hire_invite_type')->nullable();
             $table->float('interview_score')->nullable();
             $table->timestamps();
