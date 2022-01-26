@@ -285,7 +285,6 @@ class JobManagementService
 
         $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
         if ($status > 0) $appliedJobBuilder->where('applied_jobs.apply_status', $status);
-//        dd($appliedJobBuilder->toSql());
 
         /** @var Collection $candidates */
         if (is_numeric($paginate) || is_numeric($limit)) {
