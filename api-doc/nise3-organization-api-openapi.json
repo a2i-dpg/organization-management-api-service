@@ -7813,45 +7813,41 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "job_id": "qq-qq",
-                                        "job_responsibilities": "",
-                                        "job_responsibilities_en": "dddd",
-                                        "job_context": "fffgfgfgfg",
-                                        "job_context_en": "fffgfgfgfg",
-                                        "job_place_type": 2,
-                                        "salary_min": null,
-                                        "salary_max": null,
-                                        "is_salary_info_show": 2,
-                                        "is_salary_compare_to_expected_salary": 0,
+                                        "job_id": "1",
+                                        "job_responsibilities": "aadddd",
+                                        "job_responsibilities_en": "ffgggg",
+                                        "job_context": "sdasdasd",
+                                        "job_context_en": "asdasdasd",
+                                        "job_place_type": 1,
+                                        "salary_min": 1000,
+                                        "salary_max": 2000,
+                                        "is_salary_info_show": 1,
+                                        "is_salary_compare_to_expected_salary": 1,
                                         "is_salary_alert_excessive_than_given_salary_range": 1,
-                                        "salary_review": 2,
+                                        "salary_review": 1,
                                         "festival_bonus": 1,
-                                        "additional_salary_info": null,
+                                        "additional_salary_info": "1",
+                                        "additional_salary_info_en": "2",
                                         "is_other_benefits": 1,
-                                        "lunch_facilities": 1,
+                                        "lunch_facilities": null,
                                         "others": null,
-                                        "created_at": "2022-01-09T11:40:37.000000Z",
-                                        "updated_at": "2022-01-09T11:40:37.000000Z",
+                                        "others_en": null,
+                                        "created_at": "2022-01-26T06:36:48.000000Z",
+                                        "updated_at": "2022-01-26T06:36:48.000000Z",
+                                        "latest_step": 3,
                                         "job_levels": [
                                             {
                                                 "id": 1,
-                                                "job_id": "qq-qq",
+                                                "job_id": "1",
                                                 "additional_job_information_id": 1,
                                                 "job_level_id": 1,
                                                 "job_level_title": "Inside Bangladesh"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "job_id": "qq-qq",
-                                                "additional_job_information_id": 1,
-                                                "job_level_id": 2,
-                                                "job_level_title": "Outside Bangladesh"
                                             }
                                         ],
                                         "job_locations": [
                                             {
                                                 "id": 1,
-                                                "job_id": "qq-qq",
+                                                "job_id": "1",
                                                 "additional_job_information_id": 1,
                                                 "loc_division_id": 1,
                                                 "loc_district_id": null,
@@ -7869,22 +7865,36 @@
                                                 "location_id": 1,
                                                 "title": "বরিশাল",
                                                 "title_en": "BARISAL"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "job_id": "1",
+                                                "additional_job_information_id": 1,
+                                                "loc_division_id": 2,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": null,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": "চট্টগ্রাম",
+                                                "loc_division_title_en": "Chittagong",
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": 2,
+                                                "title": "চট্টগ্রাম",
+                                                "title_en": "CHITTAGONG"
                                             }
                                         ],
                                         "work_places": [
                                             {
                                                 "id": 1,
-                                                "job_id": "qq-qq",
+                                                "job_id": "1",
                                                 "additional_job_information_id": 1,
                                                 "work_place_id": 1,
                                                 "work_place_title": "Home"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "job_id": "qq-qq",
-                                                "additional_job_information_id": 1,
-                                                "work_place_id": 2,
-                                                "work_place_title": "Office"
                                             }
                                         ],
                                         "other_benefits": [
@@ -13288,7 +13298,7 @@
                     },
                     "degrees": {
                         "type": "object",
-                        "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
+                        "example": "[\n\n'0'=> [\n\t\"education_level_id\"=>1,\n\t\"exam_degree_id\"=>1,\n\t\"major_subject\"=>\"CSE\"\t\t\t\n],\n\n'1'=> [\n\t\"education_level_id\"=>2,\n\t\"exam_degree_id\"=>2,\n\t\"major_subject\"=>\"ECE\"\t\t\t\n]\n\n]"
                     },
                     "preferred_educational_institutions": {
                         "type": "array",
