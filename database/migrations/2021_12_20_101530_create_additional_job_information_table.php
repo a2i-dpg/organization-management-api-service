@@ -34,6 +34,7 @@ class CreateAdditionalJobInformationTable extends Migration
             $table->unsignedTinyInteger("is_other_benefits")->comment("0=>No, 1=>Yes");
             $table->unsignedTinyInteger('lunch_facilities')->nullable()->comment('1=>Partially Subsidize, 2=>Full Subsidize');
             $table->text('others')->nullable();
+            $table->text('others_en')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
