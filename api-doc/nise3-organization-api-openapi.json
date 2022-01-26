@@ -13572,6 +13572,9 @@
                     "others": {
                         "type": "string"
                     },
+                    "others_en": {
+                        "type": "string"
+                    },
                     "job_levels": {
                         "type": "array",
                         "items": {
