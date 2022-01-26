@@ -97,7 +97,7 @@ class CandidateRequirementsService
      */
     public function syncWithPreferredEducationalInstitution(CandidateRequirement $candidateRequirements, array $preferredEducationalInstitution)
     {
-        $candidateRequirements->educationalInstitutions()->syncWithPivotValues($preferredEducationalInstitution, ['job_id' => $candidateRequirements->job_id]);
+        $candidateRequirements->preferredEducationalInstitutions()->syncWithPivotValues($preferredEducationalInstitution, ['job_id' => $candidateRequirements->job_id]);
     }
 
     /**
