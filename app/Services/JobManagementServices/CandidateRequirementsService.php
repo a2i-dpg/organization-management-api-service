@@ -49,7 +49,7 @@ class CandidateRequirementsService
         $candidateRequirementBuilder->with('trainings:job_id,title');
         $candidateRequirementBuilder->with('professionalCertifications:job_id,title');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title,title_en');
-        $candidateRequirementBuilder->with('areaOfBusiness:id,title,title_en');
+        $candidateRequirementBuilder->with('areaOfBusinesses:id,title,title_en');
         $candidateRequirementBuilder->with('skills:id,title,title_en');
         $candidateRequirementBuilder->with('genders:job_id,gender_id');
 
@@ -245,6 +245,7 @@ class CandidateRequirementsService
             ],
             "preferred_educational_institutions.*" => [
                 "integer",
+                "distinct",
                 "required",
                 "exists:educational_institutions,id,deleted_at,NULL",
             ],
@@ -298,6 +299,7 @@ class CandidateRequirementsService
             ],
             "area_of_experiences.*" => [
                 "required",
+                "distinct",
                 "integer",
                 "exists:area_of_experiences,id,deleted_at,NULL",
             ],
@@ -307,6 +309,7 @@ class CandidateRequirementsService
             ],
             "area_of_businesses.*" => [
                 "integer",
+                "distinct",
                 "required",
                 "exists:area_of_business,id,deleted_at,NULL",
             ],
@@ -316,6 +319,7 @@ class CandidateRequirementsService
             ],
             "skills.*" => [
                 "integer",
+                "distinct",
                 "required",
                 "exists:skills,id,deleted_at,NULL",
             ],
@@ -332,6 +336,7 @@ class CandidateRequirementsService
                 "array"
             ],
             "genders.*" => [
+                "distinct",
                 Rule::in(array_keys(BaseModel::GENDERS))
             ],
             "age_minimum" => [

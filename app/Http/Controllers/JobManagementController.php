@@ -8,6 +8,7 @@ use App\Models\BaseModel;
 use App\Models\JobManagement;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\AreaOfBusinessService;
+use App\Services\JobManagementServices\AreaOfExperienceService;
 use App\Services\JobManagementServices\CandidateRequirementsService;
 use App\Services\JobManagementServices\CompanyInfoVisibilityService;
 use App\Services\JobManagementServices\EducationInstitutionsService;
@@ -35,6 +36,11 @@ class JobManagementController extends Controller
      * @var AreaOfBusinessService
      */
     public AreaOfBusinessService $areaOfBusinessService;
+
+    /**
+     * @var AreaOfExperienceService
+     */
+    public AreaOfExperienceService $areaOfExperienceService;
 
     /**
      * @var EducationInstitutionsService
@@ -86,7 +92,8 @@ class JobManagementController extends Controller
         PrimaryJobInformationService    $primaryJobInformationService,
         AdditionalJobInformationService $additionalJobInformationService,
         OtherBenefitService             $otherBenefitService,
-        JobManagementService            $jobManagementService
+        JobManagementService            $jobManagementService,
+        AreaOfExperienceService         $areaOfExperienceService
     )
 
     {
@@ -100,6 +107,7 @@ class JobManagementController extends Controller
         $this->matchingCriteriaService = $matchingCriteriaService;
         $this->jobContactInformationService = $jobContactInformationService;
         $this->jobManagementService = $jobManagementService;
+        $this->areaOfExperienceService = $areaOfExperienceService;
         $this->startTime = Carbon::now();
     }
 
@@ -165,6 +173,18 @@ class JobManagementController extends Controller
     {
         $filter = $this->areaOfBusinessService->filterAreaOfBusinessValidator($request)->validate();
         $response = $this->areaOfBusinessService->getAreaOfBusinessList($filter, $this->startTime);
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getAreaOfExperience(Request $request): JsonResponse
+    {
+        $filter = $this->areaOfExperienceService->filterAreaOfExperienceValidator($request)->validate();
+        $response = $this->areaOfExperienceService->getAreaOfExperienceList($filter, $this->startTime);
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 

@@ -40,7 +40,7 @@ class CandidateRequirement extends BaseModel
             return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','area_of_experience_id');
     }
 
-    public function areaOfBusiness(): BelongsToMany
+    public function areaOfBusinesses(): BelongsToMany
     {
         return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirement_area_of_business','candidate_requirement_id','area_of_business_id');
     }
