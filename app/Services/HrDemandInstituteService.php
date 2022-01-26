@@ -141,10 +141,8 @@ class HrDemandInstituteService
             }
         }
 
-        $hrDemandInstitutes = array_values($hrDemandInstitutes->toArray());
-
         $response['order'] = $order;
-        $response['data'] = $hrDemandInstitutes;
+        $response['data'] = $hrDemandInstitutes->toArray()['data'] ?? array_values($hrDemandInstitutes->toArray());
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
