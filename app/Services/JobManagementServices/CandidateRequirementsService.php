@@ -151,7 +151,7 @@ class CandidateRequirementsService
      */
     public function syncWithAreaOfBusiness(CandidateRequirement $candidateRequirements, array $areaOfBusiness)
     {
-        $candidateRequirements->areaOfBusiness()->syncWithPivotValues($areaOfBusiness, ['job_id' => $candidateRequirements->job_id]);
+        $candidateRequirements->areaOfBusinesses()->syncWithPivotValues($areaOfBusiness, ['job_id' => $candidateRequirements->job_id]);
     }
 
     /**
