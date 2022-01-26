@@ -11055,7 +11055,7 @@
                 }
             }
         },
-        "/industry-association-hr-demands": {
+        "/job-requirements": {
             "get": {
                 "tags": [
                     "Industry Association Hr Demand"
@@ -11218,7 +11218,7 @@
                 }
             }
         },
-        "/industry-association-hr-demands/{hr_demand_id}": {
+        "/job-requirements/{hr_demand_id}": {
             "get": {
                 "tags": [
                     "Industry Association Hr Demand"
@@ -11343,7 +11343,7 @@
                 }
             }
         },
-        "/institute-hr-demands": {
+        "/hr-demands": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11405,7 +11405,7 @@
                 }
             }
         },
-        "/institute-hr-demands/{hr_demand_id}": {
+        "/hr-demands/{hr_demand_id}": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
