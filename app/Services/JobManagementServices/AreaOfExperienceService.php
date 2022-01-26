@@ -28,7 +28,7 @@ class AreaOfExperienceService
             'area_of_experiences.title_en',
         ]);
 
-        $areaOfExperienceBuilder->orderBy('area_of_business.id', $order);
+        $areaOfExperienceBuilder->orderBy('area_of_experiences.id', $order);
 
         if (!empty($title)) {
             $areaOfExperienceBuilder->where('area_of_experiences.title', 'like', '%' . $title . '%');
