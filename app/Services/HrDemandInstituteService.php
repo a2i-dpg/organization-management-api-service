@@ -169,8 +169,6 @@ class HrDemandInstituteService
             'hr_demand_institutes.row_status'
         ]);
 
-        $hrDemandBuilder->where('hr_demand_institutes.institute_id', '!=', 0);
-
         $hrDemandBuilder->where('hr_demand_institutes.id', $id);
 
         return $hrDemandBuilder->firstOrFail();
