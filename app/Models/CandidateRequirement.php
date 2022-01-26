@@ -15,12 +15,12 @@ class CandidateRequirement extends BaseModel
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
 
-    public function candidateRequirementDegrees(): HasMany
+    public function degrees(): HasMany
     {
         return $this->hasMany(CandidateRequirementDegree::class, 'candidate_requirement_id', 'id');
     }
 
-    public function educationalInstitutions(): BelongsToMany
+    public function preferredEducationalInstitutions(): BelongsToMany
     {
         return $this->belongsToMany(EducationalInstitution::class, 'candidate_requirement_preferred_educational_institution', 'candidate_requirement_id', 'preferred_educational_institution_id');
     }
@@ -40,7 +40,7 @@ class CandidateRequirement extends BaseModel
             return $this->belongsToMany(AreaOfExperience::class, 'candidate_requirement_area_of_experience','candidate_requirement_id','area_of_experience_id');
     }
 
-    public function areaOfBusiness(): BelongsToMany
+    public function areaOfBusinesses(): BelongsToMany
     {
         return $this->belongsToMany(AreaOfBusiness::class, 'candidate_requirement_area_of_business','candidate_requirement_id','area_of_business_id');
     }
