@@ -308,7 +308,16 @@ class AdditionalJobInformationService
             "job_responsibilities" => [
                 "required"
             ],
+            "job_responsibilities_en" => [
+                "string",
+                "nullable"
+            ],
             "job_context" => [
+                "string",
+                "nullable"
+            ],
+            "job_context_en" => [
+                "string",
                 "nullable"
             ],
             "job_place_type" => [
@@ -340,6 +349,11 @@ class AdditionalJobInformationService
                 Rule::in(array_keys(AdditionalJobInformation::BOOLEAN_FLAG))
             ],
             "additional_salary_info" => [
+                "string",
+                "nullable"
+            ],
+            "additional_salary_info_en" => [
+                "string",
                 "nullable"
             ],
             "is_other_benefits" => [
