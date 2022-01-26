@@ -43,9 +43,9 @@ class CandidateRequirementsService
         ]);
 
         $candidateRequirementBuilder->where('candidate_requirements.job_id', $jobId);
-        $candidateRequirementBuilder->with('candidateRequirementDegrees.educationLevel:id,title,title_en');
-        $candidateRequirementBuilder->with('candidateRequirementDegrees.examDegree:id,title,title_en');
-        $candidateRequirementBuilder->with('educationalInstitutions:id,name');
+        $candidateRequirementBuilder->with('degrees.educationLevel:id,title,title_en');
+        $candidateRequirementBuilder->with('degrees.examDegree:id,title,title_en');
+        $candidateRequirementBuilder->with('preferredEducationalInstitutions:id,name');
         $candidateRequirementBuilder->with('trainings:job_id,title');
         $candidateRequirementBuilder->with('professionalCertifications:job_id,title');
         $candidateRequirementBuilder->with('areaOfExperiences:id,title,title_en');
