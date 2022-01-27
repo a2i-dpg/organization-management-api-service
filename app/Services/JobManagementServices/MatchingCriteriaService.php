@@ -39,14 +39,14 @@ class MatchingCriteriaService
 
         $matchingCriteriaBuilder->where('matching_criteria.job_id', $jobId);
 
-        $matchingCriteriaBuilder->with('areaOfExperiences:id,title_en');
-        $matchingCriteriaBuilder->with('areaOfBusiness:id,title,title_en');
-        $matchingCriteriaBuilder->with('skills:id,title,title_en');
-        $matchingCriteriaBuilder->with('genders:job_id,gender_id');
+        $matchingCriteriaBuilder->with('candidateRequirement.areaOfExperiences:id,title_en');
+        $matchingCriteriaBuilder->with('candidateRequirement.areaOfBusinesses:id,title,title_en');
+        $matchingCriteriaBuilder->with('candidateRequirement.skills:id,title,title_en');
+        $matchingCriteriaBuilder->with('candidateRequirement.genders:job_id,gender_id');
         $matchingCriteriaBuilder->with('candidateRequirement:job_id,minimum_year_of_experience,maximum_year_of_experience,age_minimum,age_maximum');
         $matchingCriteriaBuilder->with('additionalJobInformation:job_id,salary_min,salary_max');
-        $matchingCriteriaBuilder->with('jobLevels:job_id,job_level_id');
-        $matchingCriteriaBuilder->with('jobLocations');
+        $matchingCriteriaBuilder->with('additionalJobInformation.jobLevels:job_id,job_level_id');
+        $matchingCriteriaBuilder->with('additionalJobInformation.jobLocations');
 
         return $matchingCriteriaBuilder->first();
     }
