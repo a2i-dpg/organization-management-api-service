@@ -126,19 +126,9 @@ class HrDemandService
 
         $hrDemandBuilder->where('hr_demands.id', $id);
 
-        $hrDemand = $hrDemandBuilder->firstOrFail();
+        $hrDemandBuilder->with('hrDemandInstitutes');
 
-        $hrDemandInstituteIds = HrDemandInstitute::where('hr_demand_id',$id)
-            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
-            ->whereNotNull('institute_id')
-            ->pluck('institute_id')
-            ->toArray();
-
-        if(!empty($hrDemandInstituteIds)){
-            $hrDemand['institute_ids'] = $hrDemandInstituteIds;
-        }
-
-        return $hrDemand;
+        return $hrDemandBuilder->firstOrFail();
     }
 
     /**
