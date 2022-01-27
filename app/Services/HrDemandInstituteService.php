@@ -443,7 +443,7 @@ class HrDemandInstituteService
                         $failed("Remaining Vacancy exceed");
                     }
                     if ($value > $hrDemandInstitute->vacancy_provided_by_institute) {
-                        $failed("Vacancy provided by institute exceed");
+                        $failed("Vacancy provided by institute exceed.[66100]");
                     }
                     if ($hrDemandInstitute->rejected_by_institute == HrDemandInstitute::REJECTED_BY_INSTITUTE_TRUE) {
                         $failed("Already rejected by Institute!");
