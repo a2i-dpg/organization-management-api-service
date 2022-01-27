@@ -26,8 +26,8 @@ class CreateCandidateRequirementsTable extends Migration
             $table->text("additional_requirements_en")->nullable();
             $table->unsignedTinyInteger("age_minimum")->nullable();
             $table->unsignedTinyInteger("age_maximum")->nullable();
-            $table->unsignedTinyInteger("person_with_disability")->comment("0=>No, 1=>Yes");
-            $table->unsignedTinyInteger("preferred_retired_army_officer")->comment("0=>No, 1=>Yes");
+            $table->unsignedTinyInteger("person_with_disability")->nullable()->comment("0=>No, 1=>Yes");
+            $table->unsignedTinyInteger("preferred_retired_army_officer")->nullable()->comment("0=>No, 1=>Yes");
             $table->timestamps();
             $table->softDeletes();
         });

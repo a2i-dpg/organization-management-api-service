@@ -7757,29 +7757,27 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "job_id": "1112",
-                                        "job_responsibilities": null,
-                                        "job_context": "hettfield",
-                                        "job_context_en": "hettfield",
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "job_responsibilities": "wq",
+                                        "job_responsibilities_en": null,
+                                        "job_context": "q",
+                                        "job_context_en": null,
                                         "job_place_type": "1",
-                                        "salary_min": "10000",
+                                        "salary_min": "1000",
                                         "salary_max": "20000",
-                                        "is_salary_info_show": "2",
-                                        "is_salary_compare_to_expected_salary": "1",
+                                        "is_salary_info_show": "1",
+                                        "is_salary_compare_to_expected_salary": null,
                                         "is_salary_alert_excessive_than_given_salary_range": "1",
                                         "salary_review": "1",
                                         "festival_bonus": "1",
                                         "additional_salary_info": null,
+                                        "additional_salary_info_en": null,
                                         "is_other_benefits": "1",
-                                        "other_benefits": [
-                                            "ffa",
-                                            "rrr4"
-                                        ],
                                         "lunch_facilities": "1",
                                         "others": null,
-                                        "created_at": "2021-12-30T08:10:04.000000Z",
-                                        "updated_at": "2021-12-30T08:10:04.000000Z",
+                                        "created_at": "2022-01-24T12:08:19.000000Z",
+                                        "updated_at": "2022-01-24T12:13:32.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -7815,43 +7813,41 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "job_id": "qq-qq",
-                                        "job_responsibilities": "",
-                                        "job_context": "fffgfgfgfg",
-                                        "job_place_type": 2,
-                                        "salary_min": null,
-                                        "salary_max": null,
-                                        "is_salary_info_show": 2,
-                                        "is_salary_compare_to_expected_salary": 0,
+                                        "job_id": "1",
+                                        "job_responsibilities": "aadddd",
+                                        "job_responsibilities_en": "ffgggg",
+                                        "job_context": "sdasdasd",
+                                        "job_context_en": "asdasdasd",
+                                        "job_place_type": 1,
+                                        "salary_min": 1000,
+                                        "salary_max": 2000,
+                                        "is_salary_info_show": 1,
+                                        "is_salary_compare_to_expected_salary": 1,
                                         "is_salary_alert_excessive_than_given_salary_range": 1,
-                                        "salary_review": 2,
+                                        "salary_review": 1,
                                         "festival_bonus": 1,
-                                        "additional_salary_info": null,
+                                        "additional_salary_info": "1",
+                                        "additional_salary_info_en": "2",
                                         "is_other_benefits": 1,
-                                        "lunch_facilities": 1,
+                                        "lunch_facilities": null,
                                         "others": null,
-                                        "created_at": "2022-01-09T11:40:37.000000Z",
-                                        "updated_at": "2022-01-09T11:40:37.000000Z",
+                                        "others_en": null,
+                                        "created_at": "2022-01-26T06:36:48.000000Z",
+                                        "updated_at": "2022-01-26T06:36:48.000000Z",
+                                        "latest_step": 3,
                                         "job_levels": [
                                             {
                                                 "id": 1,
-                                                "job_id": "qq-qq",
+                                                "job_id": "1",
                                                 "additional_job_information_id": 1,
                                                 "job_level_id": 1,
                                                 "job_level_title": "Inside Bangladesh"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "job_id": "qq-qq",
-                                                "additional_job_information_id": 1,
-                                                "job_level_id": 2,
-                                                "job_level_title": "Outside Bangladesh"
                                             }
                                         ],
                                         "job_locations": [
                                             {
                                                 "id": 1,
-                                                "job_id": "qq-qq",
+                                                "job_id": "1",
                                                 "additional_job_information_id": 1,
                                                 "loc_division_id": 1,
                                                 "loc_district_id": null,
@@ -7869,22 +7865,36 @@
                                                 "location_id": 1,
                                                 "title": "বরিশাল",
                                                 "title_en": "BARISAL"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "job_id": "1",
+                                                "additional_job_information_id": 1,
+                                                "loc_division_id": 2,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": null,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": "চট্টগ্রাম",
+                                                "loc_division_title_en": "Chittagong",
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": 2,
+                                                "title": "চট্টগ্রাম",
+                                                "title_en": "CHITTAGONG"
                                             }
                                         ],
                                         "work_places": [
                                             {
                                                 "id": 1,
-                                                "job_id": "qq-qq",
+                                                "job_id": "1",
                                                 "additional_job_information_id": 1,
                                                 "work_place_id": 1,
                                                 "work_place_title": "Home"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "job_id": "qq-qq",
-                                                "additional_job_information_id": 1,
-                                                "work_place_id": 2,
-                                                "work_place_title": "Office"
                                             }
                                         ],
                                         "other_benefits": [
@@ -8106,22 +8116,22 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "555",
-                                        "other_educational_qualification": null,
-                                        "other_educational_qualification_en": null,
-                                        "is_experience_needed": "1",
-                                        "minimum_year_of_experience": "3",
-                                        "maximum_year_of_experience": "5",
+                                        "job_id": "1",
+                                        "other_educational_qualification": "enim Excepteur sunt esse ullamco",
+                                        "other_educational_qualification_en": "in dolor labore sunt",
+                                        "is_experience_needed": "0",
+                                        "minimum_year_of_experience": "1",
+                                        "maximum_year_of_experience": "2",
                                         "is_freshers_encouraged": "1",
-                                        "additional_requirements": null,
-                                        "additional_requirements_en": null,
-                                        "age_minimum": "90",
-                                        "age_maximum": "90",
+                                        "additional_requirements": "exercitation culpa ad nulla",
+                                        "additional_requirements_en": "reprehenderit incididunt sint deserunt",
+                                        "age_minimum": "20",
+                                        "age_maximum": "22",
                                         "person_with_disability": "1",
-                                        "preferred_retired_army_officer": "0",
-                                        "updated_at": "2022-01-02T11:27:50.000000Z",
-                                        "created_at": "2022-01-02T11:27:50.000000Z",
-                                        "id": 18
+                                        "preferred_retired_army_officer": "1",
+                                        "updated_at": "2022-01-25T04:44:19.000000Z",
+                                        "created_at": "2022-01-25T04:44:19.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -8156,106 +8166,108 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "job_id": "555",
-                                        "other_educational_qualification": "psychology",
-                                        "other_educational_qualification_en": "",
-                                        "is_experience_needed": 1,
+                                        "job_id": "1",
+                                        "other_educational_qualification": null,
+                                        "other_educational_qualification_en": null,
+                                        "is_experience_needed": 0,
                                         "is_freshers_encouraged": 1,
-                                        "minimum_year_of_experience": 1,
+                                        "minimum_year_of_experience": 0,
                                         "maximum_year_of_experience": 4,
-                                        "additional_requirements": "Major in Eng",
+                                        "additional_requirements": null,
                                         "additional_requirements_en": null,
                                         "age_minimum": 20,
-                                        "age_maximum": 55,
+                                        "age_maximum": 50,
                                         "person_with_disability": 0,
                                         "preferred_retired_army_officer": 0,
-                                        "created_at": null,
-                                        "updated_at": "2022-01-03T06:09:35.000000Z",
+                                        "created_at": "2022-01-25T04:44:19.000000Z",
+                                        "updated_at": "2022-01-25T04:46:45.000000Z",
+                                        "latest_step": 4,
                                         "candidate_requirement_degrees": [
                                             {
-                                                "id": 1,
-                                                "candidate_requirement_id": 1,
-                                                "education_level_id": 1,
-                                                "edu_group_id": 2,
-                                                "edu_major": "CSE",
-                                                "created_at": null,
-                                                "updated_at": null,
-                                                "education_level": {
-                                                    "id": 1,
-                                                    "title": "PSC/5 Pass",
-                                                    "title_en": "PSC/5 Pass"
-                                                },
-                                                "edu_group": {
-                                                    "id": 2,
-                                                    "title": "মানবিক",
-                                                    "title_en": "Arts and Humanities"
-                                                }
-                                            },
-                                            {
-                                                "id": 2,
+                                                "job_id": "1",
                                                 "candidate_requirement_id": 1,
                                                 "education_level_id": null,
-                                                "edu_group_id": null,
-                                                "edu_major": "EEE",
-                                                "created_at": null,
-                                                "updated_at": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
                                                 "education_level": null,
-                                                "edu_group": null
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
+                                            },
+                                            {
+                                                "job_id": "1",
+                                                "candidate_requirement_id": 1,
+                                                "education_level_id": null,
+                                                "exam_degree_id": null,
+                                                "major_subject": null,
+                                                "education_level": null,
+                                                "exam_degree": null
                                             }
                                         ],
                                         "educational_institutions": [
                                             {
                                                 "id": 1,
                                                 "name": "University of Dhaka"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "name": "University of Rajshahi"
-                                            },
-                                            {
-                                                "id": 3,
-                                                "name": "Bangladesh Agricultural University"
                                             }
                                         ],
                                         "trainings": [
                                             {
-                                                "id": 1,
-                                                "candidate_requirement_id": 1,
-                                                "training": "Computer typing"
+                                                "job_id": "1",
+                                                "title": "AAA"
                                             }
                                         ],
                                         "professional_certifications": [
                                             {
-                                                "id": 1,
-                                                "candidate_requirement_id": 1
-                                            },
-                                            {
-                                                "id": 2,
-                                                "candidate_requirement_id": 1
+                                                "job_id": "1",
+                                                "title": "QQQ"
                                             }
                                         ],
                                         "area_of_experiences": [
                                             {
                                                 "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
                                                 "title_en": "Technical Writing"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "title_en": "Project Management"
-                                            },
-                                            {
-                                                "id": 3,
-                                                "title_en": "Computer Programming"
                                             }
                                         ],
                                         "area_of_business": [
                                             {
                                                 "id": 1,
-                                                "title": "Banks"
-                                            },
-                                            {
-                                                "id": 2,
-                                                "title": "Insurance"
+                                                "title": "Banks",
+                                                "title_en": null
                                             }
                                         ],
                                         "skills": [
@@ -8263,11 +8275,12 @@
                                                 "id": 1,
                                                 "title": "টেকনিকাল রাইটিং",
                                                 "title_en": "Technical Writing"
-                                            },
+                                            }
+                                        ],
+                                        "genders": [
                                             {
-                                                "id": 2,
-                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
-                                                "title_en": "Project Management"
+                                                "job_id": "1",
+                                                "gender_id": 1
                                             }
                                         ]
                                     },
@@ -8712,8 +8725,8 @@
                                         "rejected_from": 2,
                                         "applied_at": null,
                                         "profile_viewed_at": null,
-                                        "rejected_at": "2022-01-24T04:53:41.070543Z",
-                                        "shortlisted_at": null,
+                                        "rejected_at": "2022-01-25T05:25:47.019399Z",
+                                        "shortlisted_at": "2022-01-25 05:10:57",
                                         "interview_invited_at": null,
                                         "interview_scheduled_at": null,
                                         "interviewed_at": null,
@@ -8725,13 +8738,13 @@
                                         "hire_invite_type": null,
                                         "interview_score": null,
                                         "created_at": null,
-                                        "updated_at": "2022-01-24T04:53:41.000000Z",
+                                        "updated_at": "2022-01-25T05:25:47.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Job apply successful",
+                                        "message": "Candidate rejected successfully",
                                         "query_time": 0
                                     }
                                 }
@@ -8770,20 +8783,22 @@
                                     "total_page": 1,
                                     "page_size": 10,
                                     "total": 1,
-                                    "order": "asc",
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
                                             "job_id": "1",
                                             "youth_id": 1,
                                             "apply_status": 1,
-                                            "rejected_from": 1,
+                                            "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8791,7 +8806,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -8835,20 +8902,22 @@
                                     "total_page": 1,
                                     "page_size": 10,
                                     "total": 1,
-                                    "order": "asc",
+                                    "order": "ASC",
                                     "data": [
                                         {
                                             "id": 1,
                                             "job_id": "1",
                                             "youth_id": 1,
                                             "apply_status": 1,
-                                            "rejected_from": 1,
+                                            "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8856,7 +8925,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -8909,11 +9030,13 @@
                                             "apply_status": 2,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8921,7 +9044,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -8974,11 +9149,13 @@
                                             "apply_status": 3,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -8986,7 +9163,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9039,11 +9268,13 @@
                                             "apply_status": 4,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9051,7 +9282,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9104,11 +9387,13 @@
                                             "apply_status": 5,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9116,7 +9401,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9169,11 +9506,13 @@
                                             "apply_status": 6,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9181,7 +9520,59 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -9234,11 +9625,13 @@
                                             "apply_status": 7,
                                             "rejected_from": null,
                                             "applied_at": null,
-                                            "rejected_at": "2022-01-24 04:53:41",
-                                            "shortlisted_at": null,
+                                            "profile_viewed_at": null,
+                                            "rejected_at": "2022-01-25 05:25:47",
+                                            "shortlisted_at": "2022-01-25 05:10:57",
                                             "interview_invited_at": null,
                                             "interview_scheduled_at": null,
                                             "interviewed_at": null,
+                                            "expected_salary": null,
                                             "hire_invited_at": null,
                                             "hired_at": null,
                                             "interview_invite_source": null,
@@ -9246,12 +9639,117 @@
                                             "hire_invite_type": null,
                                             "interview_score": null,
                                             "created_at": null,
-                                            "updated_at": "2022-01-24T04:53:41.000000Z"
+                                            "updated_at": "2022-01-25T05:25:47.000000Z",
+                                            "youth_profile": {
+                                                "id": 1,
+                                                "username": "BarbieKing",
+                                                "user_name_type": 1,
+                                                "first_name": "Fishy",
+                                                "first_name_en": "Fishy",
+                                                "last_name": "Brown",
+                                                "last_name_en": "Brown",
+                                                "loc_division_id": 1,
+                                                "division_title": "বরিশাল",
+                                                "division_title_en": "Barisal",
+                                                "loc_district_id": 1,
+                                                "district_title": "বরগুনা",
+                                                "district_title_en": "BARGUNA",
+                                                "loc_upazila_id": 1,
+                                                "upazila_title": "বাগেরহাট সদর",
+                                                "upazila_title_en": "BAGERHAT SADAR",
+                                                "gender": 1,
+                                                "religion": 1,
+                                                "is_freelance_profile": 0,
+                                                "marital_status": null,
+                                                "nationality": 1,
+                                                "email": null,
+                                                "mobile": null,
+                                                "identity_number_type": null,
+                                                "identity_number": null,
+                                                "date_of_birth": "2022-01-18T00:00:00.000000Z",
+                                                "freedom_fighter_status": 1,
+                                                "physical_disability_status": 0,
+                                                "does_belong_to_ethnic_group": 0,
+                                                "bio": null,
+                                                "bio_en": null,
+                                                "photo": null,
+                                                "cv_path": null,
+                                                "signature_image_path": null,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null,
+                                                "profile_completed": 0,
+                                                "total_job_experience": {
+                                                    "year": 0,
+                                                    "month": 0
+                                                },
+                                                "physical_disabilities": [],
+                                                "youth_languages_proficiencies": [],
+                                                "skills": [],
+                                                "youth_educations": [],
+                                                "youth_job_experiences": [],
+                                                "youth_certifications": [],
+                                                "youth_portfolios": [],
+                                                "youth_addresses": []
+                                            }
                                         }
                                     ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/job/candidate-update/shortlist/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Shortlist a candidate for interview",
+                "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 3,
+                                        "rejected_from": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "rejected_at": null,
+                                        "shortlisted_at": "2022-01-25T05:10:57.385411Z",
+                                        "interview_invited_at": null,
+                                        "interview_scheduled_at": null,
+                                        "interviewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": null,
+                                        "hired_at": null,
+                                        "interview_invite_source": null,
+                                        "interview_invite_type": null,
+                                        "hire_invite_type": null,
+                                        "interview_score": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-01-25T05:10:57.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate shortlisted successfully",
                                         "query_time": 0
                                     }
                                 }
@@ -10567,7 +11065,7 @@
                 }
             }
         },
-        "/industry-association-hr-demands": {
+        "/job-requirements": {
             "get": {
                 "tags": [
                     "Industry Association Hr Demand"
@@ -10730,7 +11228,7 @@
                 }
             }
         },
-        "/industry-association-hr-demands/{hr_demand_id}": {
+        "/job-requirements/{hr_demand_id}": {
             "get": {
                 "tags": [
                     "Industry Association Hr Demand"
@@ -10855,7 +11353,7 @@
                 }
             }
         },
-        "/institute-hr-demands": {
+        "/hr-demands": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
@@ -10917,7 +11415,7 @@
                 }
             }
         },
-        "/institute-hr-demands/{hr_demand_id}": {
+        "/hr-demands/{hr_demand_id}": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11328,1221 +11826,408 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "title": "Banks",
+                                            "title_en": "PSC",
+                                            "title": "পিএসসি",
+                                            "education_level_id": 1,
+                                            "education_level_title": "PSC/5 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 2,
-                                            "title": "Insurance",
+                                            "title_en": "Ebtedayee (Madrasah)",
+                                            "title": "ইবতেদায়ি (মাদ্রাসা)",
+                                            "education_level_id": 1,
+                                            "education_level_title": "PSC/5 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 3,
-                                            "title": "Leasing",
+                                            "title_en": "5 Pass",
+                                            "title": "5 Pass",
+                                            "education_level_id": 1,
+                                            "education_level_title": "PSC/5 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 4,
-                                            "title": "Investment/Merchant Banking",
+                                            "title_en": "Others",
+                                            "title": "Others",
+                                            "education_level_id": 1,
+                                            "education_level_title": "PSC/5 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 5,
-                                            "title": "Telecommunication",
+                                            "title_en": "JSC",
+                                            "title": "জেএসসি",
+                                            "education_level_id": 2,
+                                            "education_level_title": "JSC/JDC/8 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 6,
-                                            "title": "Manufacturing (FMCG)",
+                                            "title_en": "JDC (Madrasah)",
+                                            "title": "জেডিসি (মাদ্রাসা)",
+                                            "education_level_id": 2,
+                                            "education_level_title": "JSC/JDC/8 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 7,
-                                            "title": "Manufacturing (Light Engineering & Heavy Industry)",
+                                            "title_en": "8 Pass",
+                                            "title": "8 Pass",
+                                            "education_level_id": 2,
+                                            "education_level_title": "JSC/JDC/8 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 8,
-                                            "title": "Wholesale",
+                                            "title_en": "Others",
+                                            "title": "Others",
+                                            "education_level_id": 2,
+                                            "education_level_title": "JSC/JDC/8 Pass",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 9,
-                                            "title": "Retail Store",
+                                            "title_en": "JSC",
+                                            "title": "এসএসসি",
+                                            "education_level_id": 3,
+                                            "education_level_title": "Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 10,
-                                            "title": "University",
+                                            "title_en": "O Level",
+                                            "title": "ও লেভেল",
+                                            "education_level_id": 3,
+                                            "education_level_title": "Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 11,
-                                            "title": "College",
+                                            "title_en": "Dakhil (Madrasah)",
+                                            "title": "দাখিল (মাদ্রাসা)",
+                                            "education_level_id": 3,
+                                            "education_level_title": "Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 12,
-                                            "title": "Training Institutes",
+                                            "title_en": "SSC (Vocational)",
+                                            "title": "এসএসসি (ভোকেশনাল)",
+                                            "education_level_id": 3,
+                                            "education_level_title": "Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 13,
-                                            "title": "Advertising Agency",
+                                            "title_en": "Others",
+                                            "title": "Others",
+                                            "education_level_id": 3,
+                                            "education_level_title": "Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 14,
-                                            "title": "Design/Printing/Publishing",
+                                            "title_en": "HSC",
+                                            "title": "এইচএসসি",
+                                            "education_level_id": 4,
+                                            "education_level_title": "Higher Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 15,
-                                            "title": "Event Management",
+                                            "title_en": "A Level",
+                                            "title": "এ লেভেল",
+                                            "education_level_id": 4,
+                                            "education_level_title": "Higher Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 16,
-                                            "title": "Software Company",
+                                            "title_en": "Alim (Madrasah)",
+                                            "title": "আলিম (মাদ্রাসা)",
+                                            "education_level_id": 4,
+                                            "education_level_title": "Higher Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 17,
-                                            "title": "IT Enabled Service",
+                                            "title_en": "HSC (Vocational)",
+                                            "title": "এইচএসসি  (ভোকেশনাল)",
+                                            "education_level_id": 4,
+                                            "education_level_title": "Higher Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 18,
-                                            "title": "BPO/ Data Entry Firm",
+                                            "title_en": "Others",
+                                            "title": "Others",
+                                            "education_level_id": 4,
+                                            "education_level_title": "Higher Secondary",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 19,
-                                            "title": "ISP",
+                                            "title_en": "Diploma in IT",
+                                            "title": "ডিপ্লোমা ইন আইটি",
+                                            "education_level_id": 5,
+                                            "education_level_title": "Diploma",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 20,
-                                            "title": "Computer Hardware/Network Companies",
+                                            "title_en": "Bachelor of Science",
+                                            "title": "ব্যাচেলর অফ সায়েন্স",
+                                            "education_level_id": 6,
+                                            "education_level_title": "Bachelor/Honors",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 21,
-                                            "title": "Govt./ Semi Govt./ Autonomous body",
+                                            "title_en": "Bachelor of Arts",
+                                            "title": "ব্যাচেলর অফ আর্টস",
+                                            "education_level_id": 6,
+                                            "education_level_title": "Bachelor/Honors",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
                                         },
                                         {
                                             "id": 22,
-                                            "title": "NGO",
+                                            "title_en": "Master of Science",
+                                            "title": "মাস্টার্স অফ সায়েন্স",
+                                            "education_level_id": 7,
+                                            "education_level_title": "Masters",
+                                            "row_status": 1,
                                             "created_at": null,
                                             "updated_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/suggestions/area-of-experiences": {
+            "get": {
+                "tags": [
+                    "Suggestions"
+                ],
+                "summary": "Get all area of experiences",
+                "description": "API endpoint to Get area of experiences.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "টেকনিকাল রাইটিং",
+                                            "title_en": "Technical Writing"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                            "title_en": "Project Management"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "title": "কম্পিউটার প্রোগ্রামিং",
+                                            "title_en": "Computer Programming"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "title": "ডাটা সাইন্স",
+                                            "title_en": "Data Science"
+                                        },
+                                        {
+                                            "id": 5,
+                                            "title": "একাউন্টিং",
+                                            "title_en": "Accounting"
+                                        },
+                                        {
+                                            "id": 6,
+                                            "title": "ইন্টারনেট",
+                                            "title_en": "Internet"
+                                        },
+                                        {
+                                            "id": 7,
+                                            "title": "ডাটা এন্ট্রি",
+                                            "title_en": "Data Entry"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "title": "ডাটাবেজ অ্যাডমিনিস্ট্রেশন",
+                                            "title_en": "Database Administration"
+                                        },
+                                        {
+                                            "id": 9,
+                                            "title": "মাই.এস.কিউ.এল.",
+                                            "title_en": "MySQL"
+                                        },
+                                        {
+                                            "id": 10,
+                                            "title": "ওরাকল",
+                                            "title_en": "Oracle"
+                                        },
+                                        {
+                                            "id": 11,
+                                            "title": "উক্স ডিসাইন",
+                                            "title_en": "UX Design"
+                                        },
+                                        {
+                                            "id": 12,
+                                            "title": "ওয়েব ডিজাইন",
+                                            "title_en": "Web Design"
+                                        },
+                                        {
+                                            "id": 13,
+                                            "title": "কম্পিউটার মেকানিক",
+                                            "title_en": "Computer Mechanic"
+                                        },
+                                        {
+                                            "id": 14,
+                                            "title": "বৈদ্যুতিক মেকানিক",
+                                            "title_en": "Electrical Mechanic"
+                                        },
+                                        {
+                                            "id": 15,
+                                            "title": "যান্ত্রিক মেকানিক",
+                                            "title_en": "Mechanical Mechanic"
+                                        },
+                                        {
+                                            "id": 16,
+                                            "title": "রাসায়নিক কারিগর",
+                                            "title_en": "Chemical Technician"
+                                        },
+                                        {
+                                            "id": 17,
+                                            "title": "ফার্মাসিউটিক্যাল কারিগর",
+                                            "title_en": "Pharmaceutical Technician"
+                                        },
+                                        {
+                                            "id": 18,
+                                            "title": "সেলাই",
+                                            "title_en": "Sewing"
+                                        },
+                                        {
+                                            "id": 19,
+                                            "title": "দর্জি",
+                                            "title_en": "Tailor"
+                                        },
+                                        {
+                                            "id": 20,
+                                            "title": "ইলেক্ট্রনিক্স মেকানিক",
+                                            "title_en": "Electronics Mechanic"
+                                        },
+                                        {
+                                            "id": 21,
+                                            "title": "রং মিস্ত্রি",
+                                            "title_en": "Color Painter"
+                                        },
+                                        {
+                                            "id": 22,
+                                            "title": "ড্রাইভিং",
+                                            "title_en": "Driving"
                                         },
                                         {
                                             "id": 23,
-                                            "title": "Development Agency",
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "title": "প্লাম্বিং",
+                                            "title_en": "Plumbing"
                                         },
                                         {
                                             "id": 24,
-                                            "title": "Trading or Export/Import",
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "title": "মোটর মেকানিক",
+                                            "title_en": "Motor Mechanic"
                                         },
                                         {
                                             "id": 25,
-                                            "title": "Shipping",
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "title": "পোল্ট্রি ফার্মিং",
+                                            "title_en": "Poultry Farming"
                                         },
                                         {
                                             "id": 26,
-                                            "title": "Logistic/Courier/Air Express Companies",
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "title": "মাছ চাষ",
+                                            "title_en": "Fish Farming"
                                         },
                                         {
                                             "id": 27,
-                                            "title": "Clearing & Forwarding (C&F) Companies",
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "title": "মেশিন লার্নিং",
+                                            "title_en": "Machine Learning"
                                         },
                                         {
                                             "id": 28,
-                                            "title": "Multinational Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 29,
-                                            "title": "Newspaper/Magazine",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 30,
-                                            "title": "Public Relation Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 31,
-                                            "title": "Embassies/Foreign Consulate",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 32,
-                                            "title": "Engineering Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 33,
-                                            "title": "Market Research Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 34,
-                                            "title": "Consulting Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 35,
-                                            "title": "Garments",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 36,
-                                            "title": "Textile",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 37,
-                                            "title": "Buying House",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 38,
-                                            "title": "Audit Firms /Tax Consultant",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 39,
-                                            "title": "Hospital",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 40,
-                                            "title": "Pharmaceutical/Medicine Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 41,
-                                            "title": "Hotel",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 42,
-                                            "title": "Restaurant",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 43,
-                                            "title": "Airline",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 44,
-                                            "title": "Travel Agent",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 45,
-                                            "title": "Tannery/Footwear",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 46,
-                                            "title": "Shrimp",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 47,
-                                            "title": "Food (Packaged)/Beverage",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 48,
-                                            "title": "Agro based firms (incl. Agro Processing/Seed/GM)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 49,
-                                            "title": "CNG",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 50,
-                                            "title": "Tea Garden",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 51,
-                                            "title": "Immigration & Education Consultancy Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 52,
-                                            "title": "Architecture Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 53,
-                                            "title": "Manpower Recruitment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 54,
-                                            "title": "Direct Selling/Marketing Service Company",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 55,
-                                            "title": "Indenting Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 56,
-                                            "title": "Security Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 57,
-                                            "title": "Law Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 59,
-                                            "title": "Cosmetics/Toiletries/Personal Care",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 60,
-                                            "title": "Poultry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 61,
-                                            "title": "Electronic Equipment/Home Appliances",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 62,
-                                            "title": "Medical Equipment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 63,
-                                            "title": "Real Estate",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 64,
-                                            "title": "Freight forwarding",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 65,
-                                            "title": "Overseas Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 66,
-                                            "title": "Group of Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 67,
-                                            "title": "Chemical Industries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 68,
-                                            "title": "Call Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 69,
-                                            "title": "Tobacco",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 70,
-                                            "title": "Automobile",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 71,
-                                            "title": "Share Brokerage/ Securities House",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 72,
-                                            "title": "Research Organization",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 73,
-                                            "title": "Plastic/ Polymer Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 74,
-                                            "title": "Packaging Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 75,
-                                            "title": "Cement Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 76,
-                                            "title": "Furniture Manufacturer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 77,
-                                            "title": "Jute Goods/ Jute Yarn",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 78,
-                                            "title": "Garments Accessories",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 79,
-                                            "title": "Sweater Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 80,
-                                            "title": "Mobile Accessories",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 81,
-                                            "title": "Fisheries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 82,
-                                            "title": "Herbal Medicine",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 83,
-                                            "title": "Physiotherapy center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 84,
-                                            "title": "Paper",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 85,
-                                            "title": "Sanitary ware",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 86,
-                                            "title": "Tiles/Ceramic",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 87,
-                                            "title": "Brick",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 88,
-                                            "title": "Paint",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 89,
-                                            "title": "Satellite TV",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 90,
-                                            "title": "Diagnostic Centre",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 91,
-                                            "title": "Clinic",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 92,
-                                            "title": "Resort",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 93,
-                                            "title": "Motel",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 94,
-                                            "title": "Coffee Shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 95,
-                                            "title": "Catering",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 96,
-                                            "title": "Fast Food Shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 97,
-                                            "title": "Bar/Pub",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 98,
-                                            "title": "GSA",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 99,
-                                            "title": "Tour Operator",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 100,
-                                            "title": "Immigration/Visa Processing",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 101,
-                                            "title": "Transport Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 102,
-                                            "title": "Transportation",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 103,
-                                            "title": "Port Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 104,
-                                            "title": "Inventory/Warehouse",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 105,
-                                            "title": "Supply Chain",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 106,
-                                            "title": "Cement",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 107,
-                                            "title": "Steel",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 108,
-                                            "title": "Shipyard",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 109,
-                                            "title": "Toiletries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 110,
-                                            "title": "Electric Wire/Cable",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 111,
-                                            "title": "Battery, Storage cell",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 112,
-                                            "title": "Tyre manufacturer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 113,
-                                            "title": "Lamps",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 114,
-                                            "title": "Dry cell (Battery)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 115,
-                                            "title": "Furniture",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 116,
-                                            "title": "Bicycle",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 117,
-                                            "title": "Handicraft",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 118,
-                                            "title": "Medical Equipment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 119,
-                                            "title": "Boutique/ Fashion",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 120,
-                                            "title": "Pottery",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 121,
-                                            "title": "Crockeries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1090,
-                                            "title": "Credit Rating Agency",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1091,
-                                            "title": "Financial Consultants",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1092,
-                                            "title": "Venture Capital Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1093,
-                                            "title": "Spinning",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1094,
-                                            "title": "Dyeing Factory",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1095,
-                                            "title": "Washing Factory",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1096,
-                                            "title": "Third Party Auditor (Quality, Health, Environment, Compliance",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1097,
-                                            "title": "Reptile Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1098,
-                                            "title": "Farming",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1099,
-                                            "title": "Livestock",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1100,
-                                            "title": "Animal/Plant Breeding",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1101,
-                                            "title": "Science Laboratory",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1102,
-                                            "title": "Interior Design",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1103,
-                                            "title": "Escalator/Elevator/Lift",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1104,
-                                            "title": "HVAC System",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1105,
-                                            "title": "Developer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1106,
-                                            "title": "Chain shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1107,
-                                            "title": "Super store",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1108,
-                                            "title": "Departmental store",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1109,
-                                            "title": "Importer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1110,
-                                            "title": "Jewelry/Gem",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1111,
-                                            "title": "Tailor shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1112,
-                                            "title": "Grocery shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1113,
-                                            "title": "Watch",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1114,
-                                            "title": "Toy",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1115,
-                                            "title": "Online Newspaper/ News Portal",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1116,
-                                            "title": "Web Media/Blog",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1117,
-                                            "title": "Film Production",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1118,
-                                            "title": "Professional Photographers",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1119,
-                                            "title": "DTP House",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1120,
-                                            "title": "Call Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1121,
-                                            "title": "Cellular Phone Operator",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1122,
-                                            "title": "Technical Infrastructure",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1123,
-                                            "title": "Industrial Machineries (Generator, Diesel Engine etc.)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1124,
-                                            "title": "Motor Vehicle body manufacturer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1125,
-                                            "title": "Motor Workshop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1126,
-                                            "title": "Indenting",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1127,
-                                            "title": "Mining",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1128,
-                                            "title": "Gas",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1129,
-                                            "title": "Coal",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1130,
-                                            "title": "Filling Station",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1131,
-                                            "title": "Power",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1132,
-                                            "title": "Micro-Credit",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1133,
-                                            "title": "School",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1134,
-                                            "title": "Kindergarten",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1135,
-                                            "title": "Madrasa",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1136,
-                                            "title": "Coaching Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2090,
-                                            "title": "Amusement Park",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2091,
-                                            "title": "Cinema Hall/Theater",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2092,
-                                            "title": "Cultural Centre",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2093,
-                                            "title": "Convention center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2094,
-                                            "title": "Shopping mall",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2095,
-                                            "title": "Party/ Community Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2096,
-                                            "title": "Museum",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2097,
-                                            "title": "Gallery",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2098,
-                                            "title": "Club",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2099,
-                                            "title": "Golf Club",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2100,
-                                            "title": "Sports Complex",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2101,
-                                            "title": "Swimming Pool",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2102,
-                                            "title": "Religious Place",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2103,
-                                            "title": "Park",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2104,
-                                            "title": "Food (Packaged)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2105,
-                                            "title": "Beverage",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2106,
-                                            "title": "Ice Cream",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2107,
-                                            "title": "Bakery (Cake, Biscuit, Bread)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2108,
-                                            "title": "Mineral Water",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2109,
-                                            "title": "Fire Fighting and Safety",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2110,
-                                            "title": "Pest Control",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2111,
-                                            "title": "Hatchery",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2112,
-                                            "title": "Salt",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2113,
-                                            "title": "Dairy",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2114,
-                                            "title": "Healthcare/Lifestyle product",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2115,
-                                            "title": "Corrugated Tin",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2116,
-                                            "title": "Radio",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2117,
-                                            "title": "E-commerce",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2118,
-                                            "title": "PSTN",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2119,
-                                            "title": "Land Phone",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2120,
-                                            "title": "CNG Conversion",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2122,
-                                            "title": "LPG Gas/Cylinder Gas",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2123,
-                                            "title": "Fuel/Petroleum",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2124,
-                                            "title": "Chamber",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2125,
-                                            "title": "Individual/Personal Recruitment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2126,
-                                            "title": "Beauty Parlor/Saloon/Spa",
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "title": "কম্পিউটার প্রশিক্ষণ",
+                                            "title_en": "Computer Training"
                                         }
                                     ],
                                     "_response_status": {
@@ -12800,9 +12485,9 @@
                     },
                     "degrees": {
                         "type": "object",
-                        "example": "[\n\n'0'=> [\n\t\"education_level\"=>1,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"CSE\"\t\t\n],\n\n'1'=> [\n\t\"education_level\"=>2,\n\t\"edu_group\"=>2,\n\t\"edu_major\"=>\"ECE\"\t\t\n]\n\n]"
+                        "example": "[\n\n'0'=> [\n\t\"education_level_id\"=>1,\n\t\"exam_degree_id\"=>1,\n\t\"major_subject\"=>\"CSE\"\t\t\t\n],\n\n'1'=> [\n\t\"education_level_id\"=>2,\n\t\"exam_degree_id\"=>2,\n\t\"major_subject\"=>\"ECE\"\t\t\t\n]\n\n]"
                     },
-                    "preferred_educational_institution": {
+                    "preferred_educational_institutions": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -12815,13 +12500,13 @@
                     "other_educational_qualification_en": {
                         "type": "string"
                     },
-                    "training": {
+                    "trainings": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
                     },
-                    "professional_certification": {
+                    "professional_certifications": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -12849,14 +12534,14 @@
                         ],
                         "description": "1=>True 0=> False"
                     },
-                    "area_of_experience": {
+                    "area_of_experiences": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "Id must exist in skills table"
                     },
-                    "area_of_business": {
+                    "area_of_businesses": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -12875,7 +12560,7 @@
                     "additional_requirements_en": {
                         "type": "string"
                     },
-                    "gender": {
+                    "genders": {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -13019,10 +12704,12 @@
                     },
                     "is_salary_compare_to_expected_salary": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "is_salary_alert_excessive_than_given_salary_range": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "salary_review": {
@@ -13051,6 +12738,7 @@
                     },
                     "is_other_benefits": {
                         "type": "integer",
+                        "enum": [1,0],
                         "description": "0=>False 1=>True"
                     },
                     "other_benefits": {
@@ -13071,21 +12759,24 @@
                     "others": {
                         "type": "string"
                     },
-                    "job_level": {
+                    "others_en": {
+                        "type": "string"
+                    },
+                    "job_levels": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "1 => Entry,2 => Mid,3 => Top"
                     },
-                    "work_place": {
+                    "work_places": {
                         "type": "array",
                         "items": {
                             "type": "integer"
                         },
                         "description": "1=>Home 2=>Office"
                     },
-                    "job_location": {
+                    "job_locations": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -13095,6 +12786,7 @@
                 },
                 "required": [
                     "job_id",
+                    "job_responsibilities",
                     "job_context",
                     "job_place_type",
                     "is_salary_info_show",
@@ -13103,9 +12795,9 @@
                     "festival_bonus",
                     "is_other_benefits",
                     "lunch_facilities",
-                    "job_level",
-                    "work_place",
-                    "job_location"
+                    "job_levels",
+                    "work_places",
+                    "job_locations"
                 ]
             },
             "PrimaryJobInfo": {
