@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -128,7 +129,20 @@ class HrDemandService
 
         $hrDemandBuilder->with('hrDemandInstitutes');
 
-        return $hrDemandBuilder->firstOrFail();
+        $hrDemand =  $hrDemandBuilder->firstOrFail();
+
+        dd($hrDemand['hrDemandInstitutes']);
+
+        if(!empty($hrDemand['hrDemandInstitutes']) && is_array($hrDemand['hrDemandInstitutes'])){
+            $instituteIds = $hrDemand->pluck('institute_id');
+            Log::info("bbbbbbbbbbb vqwjfgywsfu");
+            Log::info(json_encode($instituteIds));
+            /*foreach ($hrDemand['hrDemandInstitutes'] as $hrDemandInstitute){
+
+            }*/
+        }
+
+        return $hrDemand;
     }
 
     /**

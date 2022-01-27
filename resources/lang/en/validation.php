@@ -125,6 +125,9 @@ return [
     'url' => 'The :attribute must be a valid URL.[64000]',
     'uuid' => 'The :attribute must be a valid UUID.[65000]',
 
+    // The password must contain at least one uppercase, lowercase letter and at least one number.[66000]
+    // Vacancy provided by institute exceed.[66100]
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -153,6 +156,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        ''
+    ],
 
 ];
