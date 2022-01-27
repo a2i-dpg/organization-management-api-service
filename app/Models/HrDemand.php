@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
- * Class ContactInfo
+ * Class HrDemand
  * @package App\Models
  * @property int id
  * @property int industry_association_id
@@ -22,6 +23,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int row_status
  * @property int created_by
  * @property int updated_by
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Carbon deleted_at
  */
 class HrDemand extends BaseModel
 {

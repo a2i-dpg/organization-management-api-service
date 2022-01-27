@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  */
 class HrDemandInstitute extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, CreatedUpdatedBy;
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 

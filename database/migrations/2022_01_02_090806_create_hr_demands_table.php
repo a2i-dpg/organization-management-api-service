@@ -24,7 +24,7 @@ class CreateHrDemandsTable extends Migration
             $table->unsignedInteger("vacancy");
             $table->unsignedInteger("remaining_vacancy")->nullable();
             $table->unsignedTinyInteger('all_institutes')->default(0);
-            $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active, 2 => invalid');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
