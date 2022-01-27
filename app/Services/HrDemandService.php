@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -131,15 +131,13 @@ class HrDemandService
 
         $hrDemand =  $hrDemandBuilder->firstOrFail();
 
-        dd($hrDemand['hrDemandInstitutes']);
-
-        if(!empty($hrDemand['hrDemandInstitutes']) && is_array($hrDemand['hrDemandInstitutes'])){
-            $instituteIds = $hrDemand->pluck('institute_id');
-            Log::info("bbbbbbbbbbb vqwjfgywsfu");
-            Log::info(json_encode($instituteIds));
-            /*foreach ($hrDemand['hrDemandInstitutes'] as $hrDemandInstitute){
-
-            }*/
+        if(!empty($hrDemand['hrDemandInstitutes'])){
+            $instituteIds = $hrDemand['hrDemandInstitutes']->pluck('institute_id')->toArray();
+            $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
+            foreach ($hrDemand['hrDemandInstitutes'] as $hrDemandInstitute){
+                $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'] ?? "";
+                $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'] ?? "";
+            }
         }
 
         return $hrDemand;
