@@ -50,7 +50,8 @@ class HrDemand extends BaseModel
     public function hrDemandInstitutes(): HasMany
     {
         return $this->hasMany(HrDemandInstitute::class,'hr_demand_id','id')
-            ->whereNotNull('institute_id');
+            ->whereNotNull('institute_id')
+            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE);
     }
 
 

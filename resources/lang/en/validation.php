@@ -127,6 +127,10 @@ return [
 
     // The password must contain at least one uppercase, lowercase letter and at least one number.[66000]
     // Vacancy provided by institute exceed.[66100]
+    // Deadline exceed.[66200]
+    // Vacancy exceed.[66300]
+    // Industry Association already approved more vacancy than the given vacancy.[66400]
+    // Already rejected by Industry Association.[66500]
 
     /*
     |--------------------------------------------------------------------------

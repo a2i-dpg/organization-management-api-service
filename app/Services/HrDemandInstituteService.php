@@ -390,19 +390,19 @@ class HrDemandInstituteService
                     $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
 
                     if ($hrDemand->end_date < Carbon::now()) {
-                        $failed("Deadline exceed");
+                        $failed("Deadline exceed.[66200]");
                     }
                     if ($value > $hrDemand->vacancy) {
-                        $failed("Vacancy exceed");
+                        $failed("Vacancy exceed.[66300]");
                     }
 
                     if ($hrDemandInstitute->institute_id != 0) {
                         if ($hrDemandInstitute->vacancy_approved_by_industry_association != 0 &&
                             $hrDemandInstitute->vacancy_approved_by_industry_association > $data['vacancy_provided_by_institute']) {
-                            $failed("Industry Association already approved more vacancy than the given vacancy !");
+                            $failed("Industry Association already approved more vacancy than the given vacancy.[66400]");
                         }
                         if ($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE) {
-                            $failed("Already rejected by Industry Association!");
+                            $failed("Already rejected by Industry Association.[66500]");
                         }
                     }
                 }
