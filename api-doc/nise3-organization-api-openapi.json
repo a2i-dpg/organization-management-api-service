@@ -8370,7 +8370,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "job_id": "222",
+                                        "job_id": "1",
                                         "is_age_enabled": 1,
                                         "is_total_year_of_experience_enabled": 1,
                                         "is_gender_enabled": 1,
@@ -8379,11 +8379,106 @@
                                         "is_job_location_enabled": 1,
                                         "is_salary_enabled": 1,
                                         "is_area_of_business_enabled": 1,
-                                        "is_job_level_enabled": 0,
-                                        "is_age_mandatory": 1,
+                                        "is_job_level_enabled": 1,
+                                        "is_age_mandatory": null,
                                         "is_total_year_of_experience_mandatory": 1,
-                                        "is_gender_mandatory": 1,
-                                        "is_job_location_mandatory": 0
+                                        "is_gender_mandatory": 0,
+                                        "is_job_location_mandatory": 0,
+                                        "latest_step": 6,
+                                        "area_of_experiences": [
+                                            {
+                                                "id": 1,
+                                                "title_en": "Technical Writing"
+                                            }
+                                        ],
+                                        "area_of_business": [
+                                            {
+                                                "id": 1,
+                                                "title": "Banks",
+                                                "title_en": null
+                                            }
+                                        ],
+                                        "skills": [
+                                            {
+                                                "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
+                                                "title_en": "Technical Writing"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                "title_en": "Project Management"
+                                            }
+                                        ],
+                                        "genders": [
+                                            {
+                                                "job_id": "1",
+                                                "gender_id": 1
+                                            }
+                                        ],
+                                        "candidate_requirement": {
+                                            "job_id": "1",
+                                            "minimum_year_of_experience": 1,
+                                            "maximum_year_of_experience": 2,
+                                            "age_minimum": 20,
+                                            "age_maximum": 22
+                                        },
+                                        "additional_job_information": {
+                                            "job_id": "1",
+                                            "salary_min": 1000,
+                                            "salary_max": 2000
+                                        },
+                                        "job_levels": [
+                                            {
+                                                "job_id": "1",
+                                                "job_level_id": 1,
+                                                "job_level_title": "Inside Bangladesh"
+                                            }
+                                        ],
+                                        "job_locations": [
+                                            {
+                                                "id": 1,
+                                                "job_id": "1",
+                                                "additional_job_information_id": 1,
+                                                "loc_division_id": 1,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": null,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": "বরিশাল",
+                                                "loc_division_title_en": "Barisal",
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": 1,
+                                                "title": "বরিশাল",
+                                                "title_en": "BARISAL"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "job_id": "1",
+                                                "additional_job_information_id": 1,
+                                                "loc_division_id": 2,
+                                                "loc_district_id": null,
+                                                "loc_upazila_id": null,
+                                                "loc_union_id": null,
+                                                "loc_city_corporation_id": null,
+                                                "loc_city_corporation_ward_id": null,
+                                                "loc_area_id": null,
+                                                "loc_division_title": "চট্টগ্রাম",
+                                                "loc_division_title_en": "Chittagong",
+                                                "loc_district_title": null,
+                                                "loc_district_title_en": null,
+                                                "loc_area_title": null,
+                                                "loc_area_title_en": null,
+                                                "location_id": 2,
+                                                "title": "চট্টগ্রাম",
+                                                "title_en": "CHITTAGONG"
+                                            }
+                                        ]
                                     },
                                     "_response_status": {
                                         "success": true,
