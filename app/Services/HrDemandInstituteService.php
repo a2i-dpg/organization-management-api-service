@@ -385,6 +385,7 @@ class HrDemandInstituteService
             'vacancy_provided_by_institute' => [
                 'required',
                 'int',
+                'min:1',
                 function ($attr, $value, $failed) use ($hrDemandInstitute, $data) {
                     $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
 
