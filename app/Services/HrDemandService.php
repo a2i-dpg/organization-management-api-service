@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
@@ -128,7 +129,18 @@ class HrDemandService
 
         $hrDemandBuilder->with('hrDemandInstitutes');
 
-        return $hrDemandBuilder->firstOrFail();
+        $hrDemand =  $hrDemandBuilder->firstOrFail();
+
+        if(!empty($hrDemand['hrDemandInstitutes'])){
+            $instituteIds = $hrDemand['hrDemandInstitutes']->pluck('institute_id')->toArray();
+            $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
+            foreach ($hrDemand['hrDemandInstitutes'] as $hrDemandInstitute){
+                $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'] ?? "";
+                $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'] ?? "";
+            }
+        }
+
+        return $hrDemand;
     }
 
     /**
