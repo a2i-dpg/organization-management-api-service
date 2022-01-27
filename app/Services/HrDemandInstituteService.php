@@ -44,7 +44,9 @@ class HrDemandInstituteService
             'hr_demands.organization_id',
             'organizations.title as organization_title',
             'organizations.title_en as organization_title_en',
+            'hr_demands.end_date',
             'hr_demands.skill_id',
+            'hr_demands.vacancy',
             'skills.title as skill_title',
             'skills.title_en as skill_title_en',
             'hr_demand_institutes.rejected_by_institute',
@@ -162,6 +164,14 @@ class HrDemandInstituteService
             'hr_demand_institutes.id',
             'hr_demand_institutes.hr_demand_id',
             'hr_demand_institutes.institute_id',
+            'hr_demands.organization_id',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
+            'hr_demands.end_date',
+            'hr_demands.skill_id',
+            'hr_demands.vacancy',
+            'skills.title as skill_title',
+            'skills.title_en as skill_title_en',
             'hr_demand_institutes.rejected_by_institute',
             'hr_demand_institutes.vacancy_provided_by_institute',
             'hr_demand_institutes.rejected_by_industry_association',
@@ -169,11 +179,35 @@ class HrDemandInstituteService
             'hr_demand_institutes.row_status'
         ]);
 
-        $hrDemandBuilder->where('hr_demand_institutes.institute_id', '!=', 0);
-
         $hrDemandBuilder->where('hr_demand_institutes.id', $id);
 
-        return $hrDemandBuilder->firstOrFail();
+        $hrDemandBuilder->join('hr_demands', function ($join) {
+            $join->on('hr_demands.id', '=', 'hr_demand_institutes.hr_demand_id')
+                ->whereNull('hr_demands.deleted_at');
+        });
+
+        $hrDemandBuilder->join('organizations', function ($join) {
+            $join->on('organizations.id', '=', 'hr_demands.organization_id')
+                ->whereNull('organizations.deleted_at');
+        });
+
+        $hrDemandBuilder->join('skills', function ($join) {
+            $join->on('skills.id', '=', 'hr_demands.skill_id')
+                ->whereNull('skills.deleted_at');
+        });
+
+        $hrDemandInstitute = $hrDemandBuilder->firstOrFail();
+
+        /** Fetch & add Institute titles from Institute Service */
+        $instituteIds = [];
+        if(!empty($hrDemandInstitute->institute_id)){
+            $instituteIds[] = $hrDemandInstitute->institute_id;
+            $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
+            $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'];
+            $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
+        }
+
+        return $hrDemandInstitute;
     }
 
     /**
