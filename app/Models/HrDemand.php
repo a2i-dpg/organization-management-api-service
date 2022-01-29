@@ -54,5 +54,11 @@ class HrDemand extends BaseModel
             ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE);
     }
 
-
+    public function hrDemandSkills(): HasMany
+    {
+        return $this->hasMany(HrDemandSkill::class,'hr_demand_id','id')
+            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+            ->join('skills', 'skills.id', '=', 'hr_demand_skills.skill_id')
+            ->whereNull('skills.deleted_at');
+    }
 }

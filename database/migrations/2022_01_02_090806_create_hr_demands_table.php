@@ -18,7 +18,6 @@ class CreateHrDemandsTable extends Migration
             $table->unsignedInteger("industry_association_id");
             $table->unsignedInteger("organization_id");
             $table->date('end_date')->comment('Date format = Y-m-d');
-            $table->unsignedMediumInteger("skill_id");
             $table->text("requirement");
             $table->text("requirement_en")->nullable();
             $table->unsignedInteger("vacancy");

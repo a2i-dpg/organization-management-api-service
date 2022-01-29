@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\CreatedUpdatedBy;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -43,4 +44,9 @@ class HrDemandInstitute extends BaseModel
     public const REJECTED_BY_INDUSTRY_ASSOCIATION_FALSE = 0;
     public const REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE = 1;
 
+    public function hrDemand(): BelongsTo
+    {
+        return $this->belongsTo(HrDemand::class,'hr_demand_id','id')
+            ->with('hrDemandSkills');
+    }
 }

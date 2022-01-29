@@ -44,11 +44,6 @@ class HrDemandInstituteService
             'hr_demands.organization_id',
             'organizations.title as organization_title',
             'organizations.title_en as organization_title_en',
-            'hr_demands.end_date',
-            'hr_demands.skill_id',
-            'hr_demands.vacancy',
-            'skills.title as skill_title',
-            'skills.title_en as skill_title_en',
             'hr_demand_institutes.rejected_by_institute',
             'hr_demand_institutes.vacancy_provided_by_institute',
             'hr_demand_institutes.rejected_by_industry_association',
@@ -66,11 +61,6 @@ class HrDemandInstituteService
                 ->whereNull('organizations.deleted_at');
         });
 
-        $hrDemandBuilder->join('skills', function ($join) {
-            $join->on('skills.id', '=', 'hr_demands.skill_id')
-                ->whereNull('skills.deleted_at');
-        });
-
         if (!empty($hrDemandId)) {
             $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
         }
@@ -85,6 +75,8 @@ class HrDemandInstituteService
         if (is_numeric($rowStatus)) {
             $hrDemandBuilder->where('hr_demand_institutes.row_status', $rowStatus);
         }
+
+        $hrDemandBuilder->with('hrDemand');
 
         /** @var Collection $hrDemandInstitutes */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -167,11 +159,6 @@ class HrDemandInstituteService
             'hr_demands.organization_id',
             'organizations.title as organization_title',
             'organizations.title_en as organization_title_en',
-            'hr_demands.end_date',
-            'hr_demands.skill_id',
-            'hr_demands.vacancy',
-            'skills.title as skill_title',
-            'skills.title_en as skill_title_en',
             'hr_demand_institutes.rejected_by_institute',
             'hr_demand_institutes.vacancy_provided_by_institute',
             'hr_demand_institutes.rejected_by_industry_association',
@@ -191,10 +178,7 @@ class HrDemandInstituteService
                 ->whereNull('organizations.deleted_at');
         });
 
-        $hrDemandBuilder->join('skills', function ($join) {
-            $join->on('skills.id', '=', 'hr_demands.skill_id')
-                ->whereNull('skills.deleted_at');
-        });
+        $hrDemandBuilder->with('hrDemand');
 
         $hrDemandInstitute = $hrDemandBuilder->firstOrFail();
 
@@ -391,9 +375,6 @@ class HrDemandInstituteService
 
                     if ($hrDemand->end_date < Carbon::now()) {
                         $failed("Deadline exceed.[66200]");
-                    }
-                    if ($value > $hrDemand->vacancy) {
-                        $failed("Vacancy exceed.[66300]");
                     }
 
                     if ($hrDemandInstitute->institute_id != 0) {
