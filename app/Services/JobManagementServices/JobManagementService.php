@@ -48,12 +48,12 @@ class JobManagementService
         $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete ? 3 : $step;
         $isCandidateRequirementComplete = (bool)CandidateRequirement::where('job_id', $jobId)->count('id');
         $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete ? 4 : $step;
-        $isMatchingCriteriaComplete = (bool)MatchingCriteria::where('job_id', $jobId)->count('id');
-        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isMatchingCriteriaComplete ? 5 : $step;
         $isCompanyInfoVisibilityComplete = (bool)CompanyInfoVisibility::where('job_id', $jobId)->count('id');
-        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isMatchingCriteriaComplete && $isCompanyInfoVisibilityComplete ? 6 : $step;
+        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isCompanyInfoVisibilityComplete ? 5 : $step;
+        $isMatchingCriteriaComplete = (bool)MatchingCriteria::where('job_id', $jobId)->count('id');
+        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isCompanyInfoVisibilityComplete && $isMatchingCriteriaComplete ? 6 : $step;
         $isJobContactInformationComplete = (bool)JobContactInformation::where('job_id', $jobId)->count('id');
-        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isMatchingCriteriaComplete && $isCompanyInfoVisibilityComplete && $isJobContactInformationComplete ? 7 : $step;
+        $step = $isPrimaryJobInformationComplete && $isAdditionalJobInformationComplete && $isCandidateRequirementComplete && $isCompanyInfoVisibilityComplete && $isMatchingCriteriaComplete && $isJobContactInformationComplete ? 7 : $step;
 
         return $step;
     }
@@ -266,7 +266,6 @@ class JobManagementService
 
         $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
         if ($status > 0) $appliedJobBuilder->where('applied_jobs.apply_status', $status);
-//        dd($appliedJobBuilder->toSql());
 
         /** @var Collection $candidates */
         if (is_numeric($paginate) || is_numeric($limit)) {

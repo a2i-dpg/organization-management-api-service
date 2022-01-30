@@ -44,6 +44,7 @@ class AdditionalJobInformationService
             'additional_job_information.is_other_benefits',
             'additional_job_information.lunch_facilities',
             'additional_job_information.others',
+            'additional_job_information.others_en',
             'additional_job_information.created_at',
             'additional_job_information.updated_at',
         ]);
@@ -308,7 +309,16 @@ class AdditionalJobInformationService
             "job_responsibilities" => [
                 "required"
             ],
+            "job_responsibilities_en" => [
+                "string",
+                "nullable"
+            ],
             "job_context" => [
+                "string",
+                "nullable"
+            ],
+            "job_context_en" => [
+                "string",
                 "nullable"
             ],
             "job_place_type" => [
@@ -340,6 +350,11 @@ class AdditionalJobInformationService
                 Rule::in(array_keys(AdditionalJobInformation::BOOLEAN_FLAG))
             ],
             "additional_salary_info" => [
+                "string",
+                "nullable"
+            ],
+            "additional_salary_info_en" => [
+                "string",
                 "nullable"
             ],
             "is_other_benefits" => [
@@ -371,6 +386,11 @@ class AdditionalJobInformationService
                 Rule::in(array_keys(AdditionalJobInformation::FESTIVAL_BONUS))
             ],
             "others" => [
+                "string",
+                "nullable"
+            ],
+            "others_en" => [
+                "string",
                 "nullable"
             ],
             "job_levels" => [

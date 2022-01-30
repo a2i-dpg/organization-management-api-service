@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
- * Class ContactInfo
+ * Class HrDemand
  * @package App\Models
  * @property int id
  * @property int industry_association_id
@@ -22,6 +23,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int row_status
  * @property int created_by
  * @property int updated_by
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Carbon deleted_at
  */
 class HrDemand extends BaseModel
 {
@@ -45,8 +49,16 @@ class HrDemand extends BaseModel
 
     public function hrDemandInstitutes(): HasMany
     {
-        return $this->hasMany(HrDemandInstitute::class,'hr_demand_id','id');
+        return $this->hasMany(HrDemandInstitute::class,'hr_demand_id','id')
+            ->whereNotNull('institute_id')
+            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE);
     }
 
-
+    public function hrDemandSkills(): HasMany
+    {
+        return $this->hasMany(HrDemandSkill::class,'hr_demand_id','id')
+            ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE)
+            ->join('skills', 'skills.id', '=', 'hr_demand_skills.skill_id')
+            ->whereNull('skills.deleted_at');
+    }
 }

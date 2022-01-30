@@ -6,7 +6,6 @@
 variables:
 
   hostName: org-dev.nise3.xyz
-
   # if values is false, then creating ingress will be escape enableEngress <<>> Ingress
   enableEngress: false
 
@@ -53,7 +52,7 @@ variables:
   APP_ENV: "DEV"
   DEV:
     APP_ENV: "local"
-    APP_DEBUG: "false"
+    APP_DEBUG: "true"
     APP_URL: "gateway-dev.nise3.xyz"
 
     DB_HOST: "db-service.default"
