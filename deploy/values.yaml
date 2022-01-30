@@ -5,7 +5,7 @@
 
 variables:
 
-  hostName: org.bus.softbd.xyz
+  hostName: nise3-org.default
 
   # if values is false, then creating ingress will be escape enableEngress <<>> Ingress
   enableEngress: false
