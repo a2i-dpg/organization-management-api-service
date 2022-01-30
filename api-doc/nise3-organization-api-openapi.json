@@ -7695,7 +7695,7 @@
                 }
             }
         },
-        "/job/primary-job-information/{jobId}/job-status-change": {
+        "/jobs/{jobId}/status-change": {
             "post": {
                 "tags": [
                     "Primary Job Information"
