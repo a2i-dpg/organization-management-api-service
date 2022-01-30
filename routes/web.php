@@ -96,10 +96,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('job-preview/{jobId}', ["as" => "job-preview", "uses" => "JobManagementController@jobPreview"]);
             $router->get('jobs', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
             $router->get('other-benefits', ["as" => "other_benefits", "uses" => "JobManagementController@getOtherBenefits"]);
+            $router->post("jobs/{jobId}/status-change", ["as" => "jobs.status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
 
             $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
             $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
-            $router->post("primary-job-information/{jobId}/job-status-change", ["as" => "primary-job-information-job-status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
 
             $router->post("store-additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
             $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "AdditionalJobInfoController@getAdditionalJobInformation"]);
