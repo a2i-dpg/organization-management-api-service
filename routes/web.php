@@ -138,6 +138,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {
             $router->get('education-levels', ["as" => "education-levels.get-list", "uses" => "EducationLevelController@getList"]);
             $router->get('exam-degrees', ["as" => "exam-degrees.get-list", "uses" => "ExamDegreeController@getList"]);
+            $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
+
 
         });
     });
