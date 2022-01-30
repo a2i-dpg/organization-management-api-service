@@ -21,6 +21,7 @@ class CreateInterviewSchedulesTable extends Migration
             $table->unsignedTinyInteger('interview_invite_type')->nullable();
             $table->text('interview_address');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
