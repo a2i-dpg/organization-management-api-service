@@ -21,6 +21,6 @@ class CandidateRequirementDegree extends BaseModel
 
     public function examDegree(): HasOne
     {
-        return $this->hasOne(EduGroup::class, 'id', 'exam_degree_id');
+        return $this->hasOne(ExamDegree::class, 'id', 'exam_degree_id');
     }
 }

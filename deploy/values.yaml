@@ -5,7 +5,7 @@
 
 variables:
 
-  hostName: org.bus.softbd.xyz
+  hostName: nise3-org.default
 
   # if values is false, then creating ingress will be escape enableEngress <<>> Ingress
   enableEngress: false
@@ -18,7 +18,7 @@ variables:
 
   # app version, changing version will auto deploy the app to current version
 
-  imageAppVersion: "1.0.27"
+  imageAppVersion: "1.0.28"
 
   # increase this when you need scale up
   replicaCount: 1
@@ -53,7 +53,7 @@ variables:
   APP_ENV: "DEV"
   DEV:
     APP_ENV: "local"
-    APP_DEBUG: "false"
+    APP_DEBUG: "true"
     APP_URL: "gateway-dev.nise3.xyz"
 
     DB_HOST: 192.168.10.95
