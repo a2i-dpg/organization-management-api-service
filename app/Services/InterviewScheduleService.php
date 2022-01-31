@@ -66,6 +66,10 @@ class InterviewScheduleService
                 'required',
                 'string'
             ],
+            'recruitment_step_id' => [
+                'nullable',
+                'string'
+            ],
             'interview_scheduled_at' => [
                 'nullable',
                 'string'
@@ -81,7 +85,7 @@ class InterviewScheduleService
             'interview_address' =>[
                 'required',
                 'string'
-	    ]
+	        ]
         ];
         return Validator::make($request->all(), $rules);
     }
