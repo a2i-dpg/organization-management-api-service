@@ -12347,25 +12347,31 @@
                 "type": "object",
                 "description": "vacancy_approved_by_industry_association",
                 "properties": {
-                    "vacancy_approved_by_industry_association": {
-                        "type": "integer"
+                    "hr_demand_youth_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
-                },
-                "required": [
-                    "vacancy_approved_by_industry_association"
-                ]
+                }
             },
             "vacancy_provided_by_institute": {
                 "type": "object",
                 "description": "vacancy_provided_by_institute",
                 "properties": {
-                    "vacancy_provided_by_institute": {
-                        "type": "integer"
+                    "cv_links": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "youth_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
-                },
-                "required": [
-                    "vacancy_provided_by_institute"
-                ]
+                }
             },
             "Job-Status-Change": {
                 "type": "object",
