@@ -86,6 +86,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'public-domain-handle' => App\Http\Middleware\PublicApiMiddleware::class,
 ]);
 
 /*

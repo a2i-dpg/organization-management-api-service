@@ -21,7 +21,9 @@ class CreateHrDemandInstitutesTable extends Migration
             $table->unsignedInteger("vacancy_provided_by_institute")->default(0);
             $table->unsignedTinyInteger("rejected_by_industry_association")->default(0);
             $table->unsignedInteger("vacancy_approved_by_industry_association")->default(0);
-            $table->unsignedTinyInteger('row_status')->default(1);
+            $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active, 2 => invalid');
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

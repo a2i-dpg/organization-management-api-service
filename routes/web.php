@@ -89,17 +89,18 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
         /** job management routes */
-        $router->group(["prefix" => "job", "as" => "job"], function () use ($router) {
+        $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
+            $router->get('/', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
+
             $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
             $router->get("job-location", ["as" => "job-location", "uses" => "AdditionalJobInfoController@jobLocation"]);
 
             $router->get('job-preview/{jobId}', ["as" => "job-preview", "uses" => "JobManagementController@jobPreview"]);
-            $router->get('jobs', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
             $router->get('other-benefits', ["as" => "other_benefits", "uses" => "JobManagementController@getOtherBenefits"]);
+            $router->post("status-change/{jobId}", ["as" => "jobs.status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
 
             $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
             $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
-            $router->post("primary-job-information/{jobId}/job-status-change", ["as" => "primary-job-information-job-status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
 
             $router->post("store-additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
             $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "AdditionalJobInfoController@getAdditionalJobInformation"]);
@@ -160,16 +161,22 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->group(['prefix' => 'public', 'as' => 'public'], function () use ($router) {
         $router->get('jobs', ["as" => "public.job-list", "uses" => "JobManagementController@getPublicJobList"]);
         $router->get('job-details/{jobId}', ["as" => "job-details", "uses" => "JobManagementController@publicJobDetails"]);
-        $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
         $router->get("publications/{id}", ["as" => "public.publication-read", "uses" => "PublicationController@clientSideRead"]);
-        $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
         // $router->get("industry-association-members/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
-        $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
         $router->get("organizations/{id}", ["as" => "public.organization.details", "uses" => "OrganizationController@organizationDetails"]);
         $router->get("industry-associations/{id}", ["as" => "public.industry-association.details", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
         $router->get("job-sectors", ["as" => "public.job-sectors", "uses" => "JobSectorController@getPublicJobSectorList"]);
         $router->get("occupations", ["as" => "public.occupations", "uses" => "OccupationController@getPublicOccupationList"]);
         $router->get("organization-types", ["as" => "public.organization-types", "uses" => "OrganizationTypeController@getPublicOrganizationTypeList"]);
+
+
+        //public api by domain name identification
+        $router->group(['middleware' => 'public-domain-handle'], function () use ($router) {
+            $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
+            $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
+            $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
+        });
+
     });
 
 
