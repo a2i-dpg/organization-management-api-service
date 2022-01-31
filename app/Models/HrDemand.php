@@ -60,7 +60,7 @@ class HrDemand extends BaseModel
      */
     public function skills(): BelongsToMany
     {
-        return $this->belongsToMany(Skill::class, 'hr_demand_skills', 'hr_demand_id','skill_id');
+        return $this->belongsToMany(Skill::class, 'hr_demand_skills', 'hr_demand_id', 'skill_id');
     }
 
     /**
@@ -68,7 +68,7 @@ class HrDemand extends BaseModel
      */
     public function hrDemandInstitutes(): HasMany
     {
-        return $this->hasMany(HrDemandInstitute::class,'hr_demand_id','id')
+        return $this->hasMany(HrDemandInstitute::class, 'hr_demand_id', 'id')
             ->whereNotNull('institute_id')
             ->where('row_status', HrDemandInstitute::ROW_STATUS_ACTIVE);
     }
@@ -78,7 +78,7 @@ class HrDemand extends BaseModel
      */
     public function hrDemandSkills(): HasMany
     {
-        return $this->hasMany(HrDemandSkill::class,'hr_demand_id','id')
+        return $this->hasMany(HrDemandSkill::class, 'hr_demand_id', 'id')
             ->join('skills', 'skills.id', '=', 'hr_demand_skills.skill_id')
             ->whereNull('skills.deleted_at');
     }

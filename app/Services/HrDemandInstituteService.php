@@ -186,7 +186,7 @@ class HrDemandInstituteService
 
         /** Fetch & add Institute titles from Institute Service */
         $instituteIds = [];
-        if(!empty($hrDemandInstitute->institute_id)){
+        if (!empty($hrDemandInstitute->institute_id)) {
             $instituteIds[] = $hrDemandInstitute->institute_id;
             $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
             $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'];
@@ -204,7 +204,7 @@ class HrDemandInstituteService
      */
     public function hrDemandApprovedByInstitute(HrDemandInstitute $hrDemandInstitute, array $data): HrDemandInstitute
     {
-        $updatedHrDemandInstitute =  $this->updateHrDemandInstituteByInstituteUser($hrDemandInstitute, $data);
+        $updatedHrDemandInstitute = $this->updateHrDemandInstituteByInstituteUser($hrDemandInstitute, $data);
 
         $this->storeYouthAndCvForHrDemand($updatedHrDemandInstitute, $data);
 
@@ -282,10 +282,11 @@ class HrDemandInstituteService
      * @param array $data
      * @return void
      */
-    public function storeYouthAndCvForHrDemand(HrDemandInstitute $demandInstitute, array $data){
+    public function storeYouthAndCvForHrDemand(HrDemandInstitute $demandInstitute, array $data)
+    {
         /** Store cv_links */
-        if(!empty($data['cv_links'])){
-            foreach ($data['cv_links'] as $cvLink){
+        if (!empty($data['cv_links'])) {
+            foreach ($data['cv_links'] as $cvLink) {
                 $hrDemandYouth = new HrDemandYouth();
                 $hrDemandYouth->fill([
                     'hr_demand_id' => $demandInstitute->hr_demand_id,
@@ -298,8 +299,8 @@ class HrDemandInstituteService
         }
 
         /** Store youth_ids */
-        if(!empty($data['youth_ids'])){
-            foreach ($data['youth_ids'] as $youthId){
+        if (!empty($data['youth_ids'])) {
+            foreach ($data['youth_ids'] as $youthId) {
                 $hrDemandYouth = new HrDemandYouth();
                 $hrDemandYouth->fill([
                     'hr_demand_id' => $demandInstitute->hr_demand_id,
@@ -342,7 +343,7 @@ class HrDemandInstituteService
         $hrDemandInstitute->save();
 
         /** Approve Hr demand Youths */
-        foreach ($data['hr_demand_youth_ids'] as $hrDemandYouthId){
+        foreach ($data['hr_demand_youth_ids'] as $hrDemandYouthId) {
             $hrDemandYouth = HrDemandYouth::find($hrDemandYouthId);
             $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_APPROVED;
             $hrDemandYouth->save();
@@ -368,7 +369,7 @@ class HrDemandInstituteService
 
         /** Reject all Hr demand youths */
         $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute)->get();
-        foreach ($hrDemandYouths as $hrDemandYouth){
+        foreach ($hrDemandYouths as $hrDemandYouth) {
             $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_REJECTED;
             $hrDemandYouth->save();
         }
@@ -448,15 +449,15 @@ class HrDemandInstituteService
             ]));
 
             /** Check that already approved Hr Demand Youth is given OR not */
-            $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id',$hrDemandInstitute->id)->get();
-            foreach ($hrDemandYouths as $hrDemandYouth){
-                if(!empty($data['cv_links']) && is_array($data['cv_links'])){
+            $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+            foreach ($hrDemandYouths as $hrDemandYouth) {
+                if (!empty($data['cv_links']) && is_array($data['cv_links'])) {
                     throw_if(!empty($hrDemandYouth->cv_link) && $hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED && !in_array($hrDemandYouth->cv_link, $data['cv_links']),
                         ValidationException::withMessages([
-                        "CV link: " . $hrDemandYouth->cv_link . " already approved by Industry Association User!"
-                    ]));
+                            "CV link: " . $hrDemandYouth->cv_link . " already approved by Industry Association User!"
+                        ]));
                 }
-                if(!empty($data['youth_ids']) && is_array($data['youth_ids'])){
+                if (!empty($data['youth_ids']) && is_array($data['youth_ids'])) {
                     throw_if(!empty($hrDemandYouth->youth_id) && $hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED && !in_array($hrDemandYouth->youth_id, $data['youth_ids']),
                         ValidationException::withMessages([
                             "Youth id: " . $hrDemandYouth->youth_id . " already approved by Industry Association User!"
