@@ -41,9 +41,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('hr-demands', 'HrDemandInstituteController')->render();
 
         /** Hr demand approve by institute */
-        $router->put("hr--approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
-        $router->put("hr-demanddemand-rejected-by-institute/{id}", ["as" => "institute.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByInstitute"]);
-
+        $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
+        $router->put("hr-demand-rejected-by-institute/{id}", ["as" => "institute.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByInstitute"]);
         /** Hr demand approve by industry association */
         $router->put("hr-demand-approved-by-industry-association/{id}", ["as" => "industry-association.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByIndustryAssociation"]);
         $router->put("hr-demand-rejected-by-industry-association/{id}", ["as" => "industry-association.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByIndustryAssociation"]);
@@ -127,7 +126,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('step-create/{jobId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@createRecruitmentStep"]);
             $router->post('step-update/{jobId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@createRecruitmentStep"]);
             $router->post('step-update/{jobId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@createRecruitmentStep"]);
-
 
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
