@@ -497,7 +497,7 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-//        $this->authorize('delete', $schedule);
+        $this->authorize('delete', $schedule);
 
         DB::beginTransaction();
         try {
