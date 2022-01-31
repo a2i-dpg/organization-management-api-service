@@ -350,6 +350,7 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+
     /**
      * @param int $applicationId
      * @return JsonResponse
@@ -364,6 +365,28 @@ class JobManagementController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "Job apply successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param string $jobId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function storeRecruitmentStep(Request $request, string $jobId): JsonResponse
+    {
+        $filter = $this->jobManagementService->recruitmentStepValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($jobId, $filter);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Recruitment Step stored successful",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
