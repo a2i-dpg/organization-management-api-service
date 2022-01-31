@@ -37,4 +37,11 @@ class HrDemandYouth extends BaseModel
         self::APPROVAL_STATUS_APPROVED,
         self::APPROVAL_STATUS_REJECTED
     ];
+
+    public const HR_DEMAND_YOUTH_TYPE_CV_LINK = 1;
+    public const HR_DEMAND_YOUTH_TYPE_YOUTH_ID = 2;
+    public const HR_DEMAND_YOUTH_TYPES = [
+        self::HR_DEMAND_YOUTH_TYPE_CV_LINK,
+        self::HR_DEMAND_YOUTH_TYPE_YOUTH_ID
+    ];
 }

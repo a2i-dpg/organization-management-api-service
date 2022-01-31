@@ -189,8 +189,10 @@ class HrDemandInstituteService
         if (!empty($hrDemandInstitute->institute_id)) {
             $instituteIds[] = $hrDemandInstitute->institute_id;
             $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
-            $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'];
-            $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
+            if(!empty($hrDemandInstitute['institute_id']) && !empty($titleByInstituteIds[$hrDemandInstitute['institute_id']])){
+                $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'];
+                $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
+            }
         }
 
         return $hrDemandInstitute;
@@ -459,6 +461,9 @@ class HrDemandInstituteService
             $data['youth_ids'] = isset($data['youth_ids']) && is_array($data['youth_ids']) ? $data['youth_ids'] : explode(',', $data['youth_ids']);
         }
 
+        $cv_links = !empty($data['cv_links']) && is_array($data['cv_links']) ? count($data['cv_links']) : 0;
+        $youth_ids = !empty($data['youth_ids']) && is_array($data['youth_ids']) ? count($data['youth_ids']) : 0;
+
         throw_if(empty($data['cv_links']) && empty($data['youth_ids']), ValidationException::withMessages([
             "Both cv_links & youth_ids can't be missing!"
         ]));
@@ -467,33 +472,28 @@ class HrDemandInstituteService
             "Deadline exceed.[66200]"
         ]));
 
-        if (!empty($hrDemandInstitute->institute_id)) {
-            $cv_links = !empty($data['cv_links']) && is_array($data['cv_links']) ? count($data['cv_links']) : 0;
-            $youth_ids = !empty($data['youth_ids']) && is_array($data['youth_ids']) ? count($data['youth_ids']) : 0;
+        throw_if($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE, ValidationException::withMessages([
+            "Already rejected by Industry Association.[66500]"
+        ]));
 
-            throw_if($hrDemandInstitute->vacancy_approved_by_industry_association > $cv_links + $youth_ids, ValidationException::withMessages([
-                "Industry Association already approved more vacancy than the given vacancy.[66400]"
-            ]));
+        throw_if($hrDemandInstitute->vacancy_approved_by_industry_association > $cv_links + $youth_ids, ValidationException::withMessages([
+            "Industry Association already approved more vacancy than the given vacancy.[66400]"
+        ]));
 
-            throw_if($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE, ValidationException::withMessages([
-                "Already rejected by Industry Association.[66500]"
-            ]));
-
-            /** Validate that already approved Hr Demand Youth can't be missing in given cv_links OR youth_ids */
-            $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
-            foreach ($hrDemandYouths as $hrDemandYouth) {
-                if (!empty($data['cv_links']) && is_array($data['cv_links'])) {
-                    throw_if(!empty($hrDemandYouth->cv_link) && $hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED && !in_array($hrDemandYouth->cv_link, $data['cv_links']),
-                        ValidationException::withMessages([
-                            "CV link: " . $hrDemandYouth->cv_link . " already approved by Industry Association User!"
-                        ]));
-                }
-                if (!empty($data['youth_ids']) && is_array($data['youth_ids'])) {
-                    throw_if(!empty($hrDemandYouth->youth_id) && $hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED && !in_array($hrDemandYouth->youth_id, $data['youth_ids']),
-                        ValidationException::withMessages([
-                            "Youth id: " . $hrDemandYouth->youth_id . " already approved by Industry Association User!"
-                        ]));
-                }
+        /** Validate that already approved Hr Demand Youth can't be missing in given cv_links OR youth_ids */
+        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+        foreach ($hrDemandYouths as $hrDemandYouth) {
+            if (!empty($data['cv_links']) && is_array($data['cv_links'])) {
+                throw_if(!empty($hrDemandYouth->cv_link) && $hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED && !in_array($hrDemandYouth->cv_link, $data['cv_links']),
+                    ValidationException::withMessages([
+                        "CV link: " . $hrDemandYouth->cv_link . " already approved by Industry Association User!"
+                    ]));
+            }
+            if (!empty($data['youth_ids']) && is_array($data['youth_ids'])) {
+                throw_if(!empty($hrDemandYouth->youth_id) && $hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED && !in_array($hrDemandYouth->youth_id, $data['youth_ids']),
+                    ValidationException::withMessages([
+                        "Youth id: " . $hrDemandYouth->youth_id . " already approved by Industry Association User!"
+                    ]));
             }
         }
 
