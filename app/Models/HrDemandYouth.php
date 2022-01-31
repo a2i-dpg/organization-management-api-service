@@ -25,6 +25,10 @@ class HrDemandYouth extends BaseModel
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
 
+    public const ROW_STATUS_ACTIVE = 1;
+    public const ROW_STATUS_INACTIVE = 0;
+    public const ROW_STATUS_INVALID = 2;
+
     public const APPROVAL_STATUS_PENDING = 1;
     public const APPROVAL_STATUS_APPROVED = 2;
     public const APPROVAL_STATUS_REJECTED = 3;

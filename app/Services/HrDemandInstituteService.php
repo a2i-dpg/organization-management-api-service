@@ -206,7 +206,7 @@ class HrDemandInstituteService
     {
         $updatedHrDemandInstitute = $this->updateHrDemandInstituteByInstituteUser($hrDemandInstitute, $data);
 
-        $this->storeYouthAndCvForHrDemand($updatedHrDemandInstitute, $data);
+        $this->storeOrUpdateYouthAndCvLinkForHrDemand($updatedHrDemandInstitute, $data);
 
         return $updatedHrDemandInstitute;
     }
@@ -278,37 +278,61 @@ class HrDemandInstituteService
     }
 
     /**
-     * @param HrDemandInstitute $demandInstitute
+     * @param HrDemandInstitute $hrDemandInstitute
      * @param array $data
      * @return void
      */
-    public function storeYouthAndCvForHrDemand(HrDemandInstitute $demandInstitute, array $data)
+    public function storeOrUpdateYouthAndCvLinkForHrDemand(HrDemandInstitute $hrDemandInstitute, array $data)
     {
-        /** Store cv_links */
-        if (!empty($data['cv_links'])) {
-            foreach ($data['cv_links'] as $cvLink) {
-                $hrDemandYouth = new HrDemandYouth();
-                $hrDemandYouth->fill([
-                    'hr_demand_id' => $demandInstitute->hr_demand_id,
-                    'hr_demand_institute_id' => $demandInstitute->id,
-                    'cv_link' => $cvLink,
-                    'approval_status' => HrDemandYouth::APPROVAL_STATUS_PENDING
-                ]);
-                $hrDemandYouth->save();
+        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+        $hrDemandYouthCvLinks = $hrDemandYouths->pluck('cv_link')->toArray();
+        $hrDemandYouthYouthIds = $hrDemandYouths->pluck('youth_id')->toArray();
+
+        /** If previously stored cv_link OR youth_id is missing in given cv_links OR youth_ids, then INVALIDATED those previous rows */
+        foreach ($hrDemandYouths as $hrDemandYouth){
+            if (!empty($data['cv_links'])){
+                if(!in_array($hrDemandYouth->cv_link, $data['cv_links'])){
+                    $hrDemandYouth->row_status = HrDemandYouth::ROW_STATUS_INVALID;
+                    $hrDemandYouth->save();
+                }
+            }
+            if (!empty($data['youth_ids'])){
+                if(!in_array($hrDemandYouth->youth_id, $data['youth_ids'])){
+                    $hrDemandYouth->row_status = HrDemandYouth::ROW_STATUS_INVALID;
+                    $hrDemandYouth->save();
+                }
             }
         }
 
-        /** Store youth_ids */
-        if (!empty($data['youth_ids'])) {
-            foreach ($data['youth_ids'] as $youthId) {
-                $hrDemandYouth = new HrDemandYouth();
-                $hrDemandYouth->fill([
-                    'hr_demand_id' => $demandInstitute->hr_demand_id,
-                    'hr_demand_institute_id' => $demandInstitute->id,
-                    'youth_id' => $youthId,
-                    'approval_status' => HrDemandYouth::APPROVAL_STATUS_PENDING
-                ]);
-                $hrDemandYouth->save();
+        /** If given cv_link is previously not stored, then create new row for given cv_link */
+        if(!empty($data['cv_links'])){
+            foreach ($data['cv_links'] as $link){
+                if(!in_array($link, $hrDemandYouthCvLinks)){
+                    $hrDemandYouth = new HrDemandYouth();
+                    $hrDemandYouth->fill([
+                        'hr_demand_id' => $hrDemandInstitute->hr_demand_id,
+                        'hr_demand_institute_id' => $hrDemandInstitute->id,
+                        'cv_link' => $link,
+                        'approval_status' => HrDemandYouth::APPROVAL_STATUS_PENDING
+                    ]);
+                    $hrDemandYouth->save();
+                }
+            }
+        }
+
+        /** If given youth_id is previously not stored, then create new row for given youth_id */
+        if(!empty($data['youth_ids'])){
+            foreach ($data['youth_ids'] as $youthId){
+                if(!in_array($youthId, $hrDemandYouthYouthIds)){
+                    $hrDemandYouth = new HrDemandYouth();
+                    $hrDemandYouth->fill([
+                        'hr_demand_id' => $hrDemandInstitute->hr_demand_id,
+                        'hr_demand_institute_id' => $hrDemandInstitute->id,
+                        'youth_id' => $youthId,
+                        'approval_status' => HrDemandYouth::APPROVAL_STATUS_PENDING
+                    ]);
+                    $hrDemandYouth->save();
+                }
             }
         }
     }
@@ -428,6 +452,13 @@ class HrDemandInstituteService
         $data = $request->all();
         $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
 
+        if (!empty($data['cv_links'])) {
+            $data['cv_links'] = isset($data['cv_links']) && is_array($data['cv_links']) ? $data['cv_links'] : explode(',', $data['cv_links']);
+        }
+        if (!empty($data['youth_ids'])) {
+            $data['youth_ids'] = isset($data['youth_ids']) && is_array($data['youth_ids']) ? $data['youth_ids'] : explode(',', $data['youth_ids']);
+        }
+
         throw_if(empty($data['cv_links']) && empty($data['youth_ids']), ValidationException::withMessages([
             "Both cv_links & youth_ids can't be missing!"
         ]));
@@ -448,7 +479,7 @@ class HrDemandInstituteService
                 "Already rejected by Industry Association.[66500]"
             ]));
 
-            /** Check that already approved Hr Demand Youth is given OR not */
+            /** Validate that already approved Hr Demand Youth can't be missing in given cv_links OR youth_ids */
             $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
             foreach ($hrDemandYouths as $hrDemandYouth) {
                 if (!empty($data['cv_links']) && is_array($data['cv_links'])) {
@@ -500,6 +531,10 @@ class HrDemandInstituteService
     {
         $data = $request->all();
 
+        if (!empty($data['hr_demand_youth_ids'])) {
+            $data['hr_demand_youth_ids'] = isset($data['hr_demand_youth_ids']) && is_array($data['hr_demand_youth_ids']) ? $data['hr_demand_youth_ids'] : explode(',', $data['hr_demand_youth_ids']);
+        }
+
         $rules = [
             'hr_demand_youth_ids' => [
                 'required',
@@ -537,7 +572,8 @@ class HrDemandInstituteService
             ],
             'hr_demand_youth_ids.*' => [
                 'required',
-                'int'
+                'int',
+                'distinct'
             ]
         ];
         return Validator::make($data, $rules);
