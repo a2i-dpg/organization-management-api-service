@@ -143,13 +143,21 @@ class JobManagementService
     public function storeRecruitmentStep(string $jobId, array $data)
     {
         $recruitmentStep = app(RecruitmentStep::class);
+        $data['job_id'] = $jobId;
+        $recruitmentStep->fill($data);
+        $recruitmentStep->save();
+        return $recruitmentStep;
+    }
+
+    public function updateRecruitmentStep(RecruitmentStep $recruitmentStep, array $data): RecruitmentStep
+    {
         $recruitmentStep->fill($data);
         $recruitmentStep->save();
         return $recruitmentStep;
     }
 
 
-    public function recruitmentStepValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title' => [
@@ -173,6 +181,28 @@ class JobManagementService
             ],
             'interview_contact' => [
                 'string'
+            ]
+        ];
+
+        return validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function recruitmentStepUpdateValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'title' => [
+                'string',
+                'required',
+                'max:300'
+            ],
+            'title_en' => [
+                'string',
+                'nullable',
+                'max:150'
             ]
         ];
 

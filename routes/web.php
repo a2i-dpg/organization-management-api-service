@@ -124,9 +124,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
             /**recruitment step routes **/
-            $router->post('step-create/{jobId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@createRecruitmentStep"]);
-            $router->post('step-update/{jobId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@createRecruitmentStep"]);
-            $router->post('step-update/{jobId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->post('step-create/{jobId}', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->put('step-update/{stepId}', ["as" => "candidate-update.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
 
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
