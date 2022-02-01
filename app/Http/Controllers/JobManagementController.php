@@ -641,7 +641,6 @@ class JobManagementController extends Controller
 
     public function assignCandidates(Request $request , int $id):mixed
     {
-        $schedule =  $this->getOneSchedule($id);
 
         $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
 

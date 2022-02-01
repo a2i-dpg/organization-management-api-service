@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AppliedJob;
 use App\Models\BaseModel;
 use App\Models\InterviewSchedule;
 use Illuminate\Database\Eloquent\Builder;
@@ -113,6 +114,8 @@ class InterviewScheduleService
 
     public function validatorForCandidateAssigning(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $schedule = $this->getOneInterviewSchedule($id);
+
         $rules = [
             'applied_job_ids' => [
                 'required',
@@ -128,15 +131,18 @@ class InterviewScheduleService
     }
 
 
-    public function assignToSchedule($validated)
+    public function assignToSchedule($jobApplicantIds , $id)
     {
-//        DB::table('assign_candidates_to_schedules')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
-        foreach ($validated as $jobApplicant) {
+        foreach($jobApplicantIds as $jobApplicantId){
+            $jobApplicant = AppliedJob::find($jobApplicantId);
             DB::table('assign_candidates_to_schedules')->insert(
                 [
                     'applied_job_id' => $jobApplicant->id,
                     'job_id' => $jobApplicant->job_id,
-                    'recruitment_step_id' => $jobApplicant->recruitment_step_id
+                    'recruitment_step_id' => $jobApplicant->recruitment_step_id,
+                    'schedule_id' => $id,
+                    'invited_at'=> Carbon::now(),
+                    'confirmation_status'=>InterviewSchedule::CONFIRMATION_STATUS
                 ]
             );
         }
