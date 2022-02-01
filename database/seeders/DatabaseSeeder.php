@@ -30,12 +30,12 @@ class DatabaseSeeder extends Seeder
             EduBoardSeeder::class,
             EducationLevelSeeder::class,
             ExamDegreeSeeder::class,
-            SubTradeSeeder::class
-//            IndustryAssociationSeeder::class,
-//            OrganizationSeeder::class,
-//            HumanResourceTemplateSeeder::class,
-//            PublicationSeeder::class,
-//            ContactInfoSeeder::class,
+            SubTradeSeeder::class,
+            IndustryAssociationSeeder::class,
+            OrganizationSeeder::class,
+            HumanResourceTemplateSeeder::class,
+            PublicationSeeder::class,
+            ContactInfoSeeder::class,
         ]);
     }
 }

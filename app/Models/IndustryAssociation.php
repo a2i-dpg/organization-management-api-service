@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class IndustryAssociation
  * @package App\Models
  * @property int id
+ * @property string code
  * @property int industry_association_type_id
  * @property string title
  * @property string title_en
@@ -77,6 +78,9 @@ class IndustryAssociation extends BaseModel
         self::ROW_STATUS_REJECTED
     ];
 
+    public const INDUSTRY_ASSOCIATION_CODE_PREFIX = "INA";
+    public const INDUSTRY_ASSOCIATION_CODE_SIZE = 9;
+
 
     /**
      * @return BelongsToMany
@@ -84,6 +88,14 @@ class IndustryAssociation extends BaseModel
     public function organizations(): BelongsToMany
     {
         return $this->belongsToMany(Organization::class, 'industry_association_organization')->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'industry_association_skills');
     }
 
 
