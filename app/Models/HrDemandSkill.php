@@ -19,10 +19,6 @@ use Illuminate\Support\Carbon;
  */
 class HrDemandSkill extends BaseModel
 {
-    use SoftDeletes;
-
-    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
-
     public const HR_DEMAND_SKILL_TYPE_MANDATORY = 1;
     public const HR_DEMAND_SKILL_TYPE_OPTIONAL = 2;
     public const HR_DEMAND_SKILL_TYPES = [
