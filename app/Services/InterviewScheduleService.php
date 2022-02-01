@@ -110,5 +110,35 @@ class InterviewScheduleService
         return Validator::make($request->all(), $rules);
     }
 
+    public function validatorForCandidateAssigning(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'applied_job_id' => [
+                'required',
+                'string'
+            ],
+            'recruitment_step_id' => [
+                'nullable',
+                'string'
+            ],
+            'interview_scheduled_at' => [
+                'nullable',
+                'string'
+            ],
+            'maximum_number_of_applicants' => [
+                'required',
+                'integer'
+            ],
+            'interview_invite_type' =>[
+                'nullable',
+                'integer'
+            ],
+            'interview_address' =>[
+                'required',
+                'string'
+            ]
+        ];
+        return Validator::make($request->all(), $rules);
+    }
 
 }

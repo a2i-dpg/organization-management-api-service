@@ -540,4 +540,10 @@ class JobManagementController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
+    public function assignCandidates(Request $request , int $id):mixed
+    {
+        $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
+
+    }
 }
