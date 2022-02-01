@@ -119,8 +119,9 @@ class HrDemandService
 
         $hrDemandBuilder->where('hr_demands.id', $id);
 
-        $hrDemandBuilder->with('hrDemandInstitutes')
-            ->with('hrDemandSkills:hr_demand_skills.hr_demand_id,hr_demand_skills.skill_type,hr_demand_skills.skill_id,skills.title as skill_title,skills.title_en as skill_title_en');
+        $hrDemandBuilder->with('hrDemandInstitutes');
+        $hrDemandBuilder->with('mandatorySkills');
+        $hrDemandBuilder->with('optionalSkills');
 
         $hrDemand = $hrDemandBuilder->firstOrFail();
 
