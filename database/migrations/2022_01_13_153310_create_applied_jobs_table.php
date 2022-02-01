@@ -18,7 +18,7 @@ class CreateAppliedJobsTable extends Migration
             $table->string('job_id')->index();
             $table->integer('youth_id')->index();
             $table->unsignedInteger('apply_status')->index();
-            $table->unsignedInteger('current_step_id');
+            $table->unsignedInteger('current_recruitment_id');
             $table->dateTime('applied_at')->nullable();
             $table->dateTime('profile_viewed_at')->nullable();
             $table->integer('expected_salary')->nullable();
