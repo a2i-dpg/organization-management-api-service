@@ -43,7 +43,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Hr demand approve by institute */
         $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
         $router->put("hr-demand-rejected-by-institute/{id}", ["as" => "institute.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByInstitute"]);
-
         /** Hr demand approve by industry association */
         $router->put("hr-demand-approved-by-industry-association/{id}", ["as" => "industry-association.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByIndustryAssociation"]);
         $router->put("hr-demand-rejected-by-industry-association/{id}", ["as" => "industry-association.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByIndustryAssociation"]);
@@ -117,11 +116,24 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
+
+            $router->group(["prefix" => "step-schedule", "as" => "step-schedule"], function () use ($router) {
+                $router->post('create', ["as" => "create-schedule", "uses" => "JobManagementController@createSchedule"]);
+                $router->put('update/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@updateSchedule"]);
+                $router->delete('delete/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@destroySchedule"]);
+            });
+
             /** Update candidate status in interview steps  */
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
                 $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
                 $router->put('shortlist/{applicationId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
             });
+
+
+            /**recruitment step routes **/
+            $router->post('step-create/{jobId}', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->put('step-update/{stepId}', ["as" => "candidate-update.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
                 $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAllCandidateList"]);
@@ -140,7 +152,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('education-levels', ["as" => "education-levels.get-list", "uses" => "EducationLevelController@getList"]);
             $router->get('exam-degrees', ["as" => "exam-degrees.get-list", "uses" => "ExamDegreeController@getList"]);
             $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
-
 
         });
     });

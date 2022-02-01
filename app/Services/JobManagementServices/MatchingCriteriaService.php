@@ -4,6 +4,7 @@ namespace App\Services\JobManagementServices;
 
 
 use App\Models\BaseModel;
+use App\Models\CompanyInfoVisibility;
 use App\Models\MatchingCriteria;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -39,16 +40,45 @@ class MatchingCriteriaService
 
         $matchingCriteriaBuilder->where('matching_criteria.job_id', $jobId);
 
-        $matchingCriteriaBuilder->with('areaOfExperiences:id,title_en');
-        $matchingCriteriaBuilder->with('areaOfBusiness:id,title,title_en');
-        $matchingCriteriaBuilder->with('skills:id,title,title_en');
+        $this->buildRelations($matchingCriteriaBuilder);
+
+        return $matchingCriteriaBuilder->first();
+    }
+
+    /**
+     * @param string $jobId
+     * @return MatchingCriteria|null
+     */
+    public function getMatchingCriteriaRelatedInfo(string $jobId): CompanyInfoVisibility|null
+    {
+        /** @var CompanyInfoVisibility| Builder $matchingCriteriaRelatedInfoBuilder */
+        $matchingCriteriaRelatedInfoBuilder = CompanyInfoVisibility::select([
+            'company_info_visibilities.job_id',
+        ]);
+
+        $matchingCriteriaRelatedInfoBuilder->where('company_info_visibilities.job_id', $jobId);
+
+        $this->buildRelations($matchingCriteriaRelatedInfoBuilder);
+
+        return $matchingCriteriaRelatedInfoBuilder->first();
+    }
+
+    /**
+     * @param MatchingCriteria|CompanyInfoVisibility|null
+     * @return MatchingCriteria|CompanyInfoVisibility|null
+     */
+    public function buildRelations($matchingCriteriaBuilder): Builder|MatchingCriteria|CompanyInfoVisibility|null
+    {
+        $matchingCriteriaBuilder->with('areaOfExperiences');//:id,title_en
+        $matchingCriteriaBuilder->with('areaOfBusiness');//:id,title,title_en
+        $matchingCriteriaBuilder->with('skills');//:id,title,title_en
         $matchingCriteriaBuilder->with('genders:job_id,gender_id');
         $matchingCriteriaBuilder->with('candidateRequirement:job_id,minimum_year_of_experience,maximum_year_of_experience,age_minimum,age_maximum');
         $matchingCriteriaBuilder->with('additionalJobInformation:job_id,salary_min,salary_max');
         $matchingCriteriaBuilder->with('jobLevels:job_id,job_level_id');
         $matchingCriteriaBuilder->with('jobLocations');
 
-        return $matchingCriteriaBuilder->first();
+        return $matchingCriteriaBuilder;
     }
 
     /**

@@ -18,25 +18,19 @@ class CreateAppliedJobsTable extends Migration
             $table->string('job_id')->index();
             $table->integer('youth_id')->index();
             $table->unsignedInteger('apply_status')->index();
-            $table->unsignedInteger('rejected_from')->nullable();
+            $table->unsignedInteger('current_step');
             $table->dateTime('applied_at')->nullable();
             $table->dateTime('profile_viewed_at')->nullable();
-            $table->dateTime('rejected_at')->nullable();
-            $table->dateTime('shortlisted_at')->nullable();
-            $table->dateTime('interview_invited_at')->nullable();
-            $table->dateTime('interview_scheduled_at')->nullable();
-            $table->dateTime('interviewed_at')->nullable();
             $table->integer('expected_salary')->nullable();
             $table->dateTime('hire_invited_at')->nullable();
             $table->dateTime('hired_at')->nullable();
-            $table->unsignedTinyInteger('interview_invite_source')->nullable();
-            $table->unsignedTinyInteger('interview_invite_type')->nullable();
+//            $table->unsignedTinyInteger('interview_invite_source')->nullable();
             $table->unsignedTinyInteger('hire_invite_type')->nullable();
-            $table->float('interview_score')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
     }
+
 
     /**
      * Reverse the migrations.

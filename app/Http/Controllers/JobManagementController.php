@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\InterviewSchedule;
 use App\Models\JobManagement;
+use App\Services\InterviewScheduleService;
+use App\Models\PrimaryJobInformation;
+use App\Models\RecruitmentStep;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\AreaOfExperienceService;
@@ -80,6 +84,7 @@ class JobManagementController extends Controller
 
 
     private Carbon $startTime;
+    private InterviewScheduleService $interviewScheduleService;
 
 
     public function __construct(
@@ -93,7 +98,8 @@ class JobManagementController extends Controller
         AdditionalJobInformationService $additionalJobInformationService,
         OtherBenefitService             $otherBenefitService,
         JobManagementService            $jobManagementService,
-        AreaOfExperienceService         $areaOfExperienceService
+        AreaOfExperienceService         $areaOfExperienceService,
+        InterviewScheduleService        $interviewScheduleService
     )
 
     {
@@ -108,6 +114,7 @@ class JobManagementController extends Controller
         $this->jobContactInformationService = $jobContactInformationService;
         $this->jobManagementService = $jobManagementService;
         $this->areaOfExperienceService = $areaOfExperienceService;
+        $this->interviewScheduleService = $interviewScheduleService;
         $this->startTime = Carbon::now();
     }
 
@@ -351,6 +358,75 @@ class JobManagementController extends Controller
 
     }
 
+    /**
+     * @param int $applicationId
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function inviteCandidateForInterview(int $applicationId): JsonResponse
+    {
+        $shortlistApplication = $this->jobManagementService->inviteCandidateForInterview($applicationId);
+        $response = [
+            "data" => $shortlistApplication,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Job apply successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param string $jobId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function createRecruitmentStep(Request $request, string $jobId): JsonResponse
+    {
+        PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+        $filter = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($jobId, $filter);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Recruitment Step stored successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param int $stepId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
+    {
+        $recruitmentStep = RecruitmentStep::findOrFail($stepId);
+        $filter = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $filter);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Recruitment Step updated successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
     public function getCandidateList(Request $request, string $jobId, int $status = 0): JsonResponse
     {
         $response = $this->jobManagementService->getCandidateList($request, $jobId, $status);
@@ -404,4 +480,94 @@ class JobManagementController extends Controller
         return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Hired"]);
     }
 
+
+
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+
+    function createSchedule(Request $request): JsonResponse
+    {
+        $this->authorize('create', InterviewSchedule::class);
+
+        $validated = $this->interviewScheduleService->validator($request)->validate();
+        $data = $this->interviewScheduleService->store($validated);
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "interview schedule created successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function updateSchedule(Request $request, int $id): JsonResponse
+    {
+        $schedule = InterviewSchedule::findOrFail($id);
+
+        $this->authorize('update', $schedule);
+
+        $validated = $this->interviewScheduleService->validator($request, $id)->validate();
+
+        $data = $this->interviewScheduleService->update($schedule, $validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "schedule updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function destroySchedule(int $id): JsonResponse
+    {
+        $schedule = InterviewSchedule::findOrFail($id);
+
+        $this->authorize('delete', $schedule);
+
+        DB::beginTransaction();
+        try {
+            $this->interviewScheduleService->destroy($schedule);
+
+            DB::commit();
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "schedule deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
 }
