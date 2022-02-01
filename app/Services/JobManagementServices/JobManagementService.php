@@ -12,11 +12,12 @@ use App\Models\CompanyInfoVisibility;
 use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
+use App\Models\RecruitmentStep;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -121,10 +122,98 @@ class JobManagementService
     }
 
     /**
-     * @param Request $request
-     * @return Validator
+     * @throws ValidationException
      */
-    public function applyJobValidator(Request $request): Validator
+    public function inviteCandidateForInterview(int $applicationId)
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        if ($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"]) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interview_invited"];
+            $appliedJob->shortlisted_at = Carbon::now();
+        } else {
+            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+        }
+        $appliedJob->save();
+
+        return $appliedJob;
+
+    }
+
+    public function storeRecruitmentStep(string $jobId, array $data)
+    {
+        $recruitmentStep = app(RecruitmentStep::class);
+        $data['job_id'] = $jobId;
+        $recruitmentStep->fill($data);
+        $recruitmentStep->save();
+        return $recruitmentStep;
+    }
+
+    public function updateRecruitmentStep(RecruitmentStep $recruitmentStep, array $data): RecruitmentStep
+    {
+        $recruitmentStep->fill($data);
+        $recruitmentStep->save();
+        return $recruitmentStep;
+    }
+
+
+    public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'title' => [
+                'string',
+                'required',
+                'max:300'
+            ],
+            'title_en' => [
+                'string',
+                'nullable',
+                'max:150'
+            ],
+            'step_type' => [
+                'required',
+                'integer',
+                Rule::in(RecruitmentStep::STEP_TYPES)
+            ],
+            'is_interview_reschedule_allowed' => [
+                'required',
+                'integer'
+            ],
+            'interview_contact' => [
+                'string'
+            ]
+        ];
+
+        return validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function recruitmentStepUpdateValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'title' => [
+                'string',
+                'required',
+                'max:300'
+            ],
+            'title_en' => [
+                'string',
+                'nullable',
+                'max:150'
+            ]
+        ];
+
+        return validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function applyJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $requestData = $request->all();
         $jobId = $requestData['job_id'];
@@ -229,7 +318,7 @@ class JobManagementService
             'location_valid.in' => 'Location must be valid. [30000]'
         ];
 
-        return \Illuminate\Support\Facades\Validator::make($requestData, $rules, $customMessage);
+        return Validator::make($requestData, $rules, $customMessage);
     }
 
     public function getCandidateList(Request $request, string $jobId, int $status = 0): array|null

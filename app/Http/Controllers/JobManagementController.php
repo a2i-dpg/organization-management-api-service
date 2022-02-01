@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
 use App\Models\JobManagement;
+use App\Models\PrimaryJobInformation;
+use App\Models\RecruitmentStep;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
 use App\Services\JobManagementServices\AreaOfBusinessService;
 use App\Services\JobManagementServices\AreaOfExperienceService;
@@ -344,6 +346,75 @@ class JobManagementController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "Candidate shortlisted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param int $applicationId
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function inviteCandidateForInterview(int $applicationId): JsonResponse
+    {
+        $shortlistApplication = $this->jobManagementService->inviteCandidateForInterview($applicationId);
+        $response = [
+            "data" => $shortlistApplication,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Job apply successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param string $jobId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function createRecruitmentStep(Request $request, string $jobId): JsonResponse
+    {
+        PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
+        $filter = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($jobId, $filter);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Recruitment Step stored successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param int $stepId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
+    {
+        $recruitmentStep = RecruitmentStep::findOrFail($stepId);
+        $filter = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $filter);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Recruitment Step updated successful",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
