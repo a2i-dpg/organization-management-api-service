@@ -530,6 +530,28 @@ class JobManagementController extends Controller
 
 
     /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    function getOneSchedule(Request $request, int $id):JsonResponse
+    {
+        $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
+        $this->authorize('view', $schedule);
+        $response = [
+            "data" => $schedule,
+            "_response_status" => [
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+    ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse

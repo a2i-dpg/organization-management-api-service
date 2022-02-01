@@ -12392,10 +12392,6 @@
                 "type": "object",
                 "description": "Hr Demand",
                 "properties": {
-                    "industry_association_id": {
-                        "type": "integer",
-                        "description": "Must exist in industry_associations table"
-                    },
                     "organization_id": {
                         "type": "integer",
                         "description": "Must exist in organizations table"

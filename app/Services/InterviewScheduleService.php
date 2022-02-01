@@ -19,6 +19,26 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InterviewScheduleService
 {
+
+    /**
+     * @param int $id
+     * @return InterviewSchedule
+     */
+    public function getOneInterviewSchedule(int $id):InterviewSchedule
+    {
+        $scheduleBuilder = InterviewSchedule::select([
+            'interview_schedules.id',
+            'interview_schedules.recruitment_step_id',
+            'interview_schedules.interview_scheduled_at',
+            'interview_schedules.maximum_number_of_applicants',
+            'interview_schedules.interview_invite_type',
+            'interview_schedules.interview_address',
+            'interview_schedules.created_at',
+            'interview_schedules.updated_at',
+            'interview_schedules.deleted_at'
+        ]);
+        return $scheduleBuilder->firstOrFail();
+    }
     /**
      * @param array $data
      * @return InterviewSchedule
