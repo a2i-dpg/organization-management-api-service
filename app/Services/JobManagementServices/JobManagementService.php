@@ -16,6 +16,7 @@ use App\Models\RecruitmentStep;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -154,6 +155,51 @@ class JobManagementService
         $recruitmentStep->fill($data);
         $recruitmentStep->save();
         return $recruitmentStep;
+    }
+
+    /**
+     * @param int $stepId
+     * @return Model|Builder
+     */
+    public function getRecruitmentStep(int $stepId): Model|Builder
+    {
+        /** @var Builder|RecruitmentStep $recruitmentStepBuilder */
+        $recruitmentStepBuilder = RecruitmentStep::select([
+            'recruitment_steps.id',
+            'recruitment_steps.title',
+            'recruitment_steps.title_en',
+            'recruitment_steps.step_type',
+            'recruitment_steps.is_interview_reschedule_allowed',
+            'recruitment_steps.interview_contact',
+            'recruitment_steps.created_at',
+            'recruitment_steps.updated_at',
+        ]);
+
+        $recruitmentStepBuilder->where('recruitment_steps.id', '=', $stepId);
+
+        return $recruitmentStepBuilder->firstOrFail();
+    }
+
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return bool
+     */
+    public function deleteRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    {
+        return $recruitmentStep->delete();
+
+    }
+
+    public function isLastRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    {
+        $maxStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
+            ->max('id');
+
+        $currentStepCandidates = AppliedJob::where('job_id', $recruitmentStep->job_id)
+            ->where('current_recruitment_step_id', $recruitmentStep->job_id)
+            ->count('id');
+
+        return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0;
     }
 
 
@@ -312,10 +358,10 @@ class JobManagementService
         ];
 
         $customMessage = [
-            'age_valid.in' => 'Age must be valid. [30000]',
-            'experience_valid.in' => 'Experience must be valid. [30000]',
-            'gender_valid.in' => 'Gender must be valid. [30000]',
-            'location_valid.in' => 'Location must be valid. [30000]'
+            'age_valid . in' => 'Age must be valid . [30000]',
+            'experience_valid . in' => 'Experience must be valid . [30000]',
+            'gender_valid . in' => 'Gender must be valid . [30000]',
+            'location_valid . in' => 'Location must be valid . [30000]'
         ];
 
         return Validator::make($requestData, $rules, $customMessage);
@@ -330,31 +376,31 @@ class JobManagementService
 
         /** @var AppliedJob|Builder $appliedJobBuilder */
         $appliedJobBuilder = AppliedJob::select([
-            'applied_jobs.id',
-            'applied_jobs.job_id',
-            'applied_jobs.youth_id',
-            'applied_jobs.apply_status',
-            'applied_jobs.rejected_from',
-            'applied_jobs.applied_at',
-            'applied_jobs.profile_viewed_at',
-            'applied_jobs.rejected_at',
-            'applied_jobs.shortlisted_at',
-            'applied_jobs.interview_invited_at',
-            'applied_jobs.interview_scheduled_at',
-            'applied_jobs.interviewed_at',
-            'applied_jobs.expected_salary',
-            'applied_jobs.hire_invited_at',
-            'applied_jobs.hired_at',
-            'applied_jobs.interview_invite_source',
-            'applied_jobs.interview_invite_type',
-            'applied_jobs.hire_invite_type',
-            'applied_jobs.interview_score',
-            'applied_jobs.created_at',
-            'applied_jobs.updated_at',
+            'applied_jobs . id',
+            'applied_jobs . job_id',
+            'applied_jobs . youth_id',
+            'applied_jobs . apply_status',
+            'applied_jobs . rejected_from',
+            'applied_jobs . applied_at',
+            'applied_jobs . profile_viewed_at',
+            'applied_jobs . rejected_at',
+            'applied_jobs . shortlisted_at',
+            'applied_jobs . interview_invited_at',
+            'applied_jobs . interview_scheduled_at',
+            'applied_jobs . interviewed_at',
+            'applied_jobs . expected_salary',
+            'applied_jobs . hire_invited_at',
+            'applied_jobs . hired_at',
+            'applied_jobs . interview_invite_source',
+            'applied_jobs . interview_invite_type',
+            'applied_jobs . hire_invite_type',
+            'applied_jobs . interview_score',
+            'applied_jobs . created_at',
+            'applied_jobs . updated_at',
         ]);
 
-        $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
-        if ($status > 0) $appliedJobBuilder->where('applied_jobs.apply_status', $status);
+        $appliedJobBuilder->where('applied_jobs . job_id', $jobId);
+        if ($status > 0) $appliedJobBuilder->where('applied_jobs . apply_status', $status);
 
         /** @var Collection $candidates */
         if (is_numeric($paginate) || is_numeric($limit)) {
@@ -497,7 +543,7 @@ class JobManagementService
 
         // if ($matchingCriteria["is_job_level_enabled"]) {}
 
-        return $matchTotal/$shouldMatchTotal;
+        return $matchTotal / $shouldMatchTotal;
     }
 
 }
