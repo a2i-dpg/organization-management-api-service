@@ -131,8 +131,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
             /**recruitment step routes **/
+            $router->get('recruitment-steps/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
             $router->post('step-create/{jobId}', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
-            $router->put('step-update/{stepId}', ["as" => "candidate-update.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+            $router->put('step-update/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+            $router->delete('step-delete/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
 
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
