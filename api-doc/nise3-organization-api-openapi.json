@@ -11764,6 +11764,40 @@
                 }
             }
         },
+
+        "/hr-demand-youths/{hr_demand_institute_id}": {
+            "get": {
+                "tags": [
+                    "Institute Hr Demand"
+                ],
+                "summary": "Get hr demand youths by hr_demand_institute_id",
+                "description": "API endpoint to Get hr demand youths by hr_demand_institute_id. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/suggestions/education-levels": {
             "get": {
                 "tags": [
@@ -14738,6 +14772,14 @@
                         "popular",
                         "recent"
                     ]
+                }
+            },
+            "hr_demand_institute_id": {
+                "name": "hr_demand_institute_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
                 }
             },
             "hr_demand_id": {

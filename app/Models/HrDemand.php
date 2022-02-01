@@ -76,9 +76,21 @@ class HrDemand extends BaseModel
     /**
      * @return HasMany
      */
-    public function hrDemandSkills(): HasMany
+    public function mandatorySkills(): HasMany
     {
         return $this->hasMany(HrDemandSkill::class, 'hr_demand_id', 'id')
+            ->where('skill_type', HrDemandSkill::HR_DEMAND_SKILL_TYPE_MANDATORY)
+            ->join('skills', 'skills.id', '=', 'hr_demand_skills.skill_id')
+            ->whereNull('skills.deleted_at');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function optionalSkills(): HasMany
+    {
+        return $this->hasMany(HrDemandSkill::class, 'hr_demand_id', 'id')
+            ->where('skill_type', HrDemandSkill::HR_DEMAND_SKILL_TYPE_OPTIONAL)
             ->join('skills', 'skills.id', '=', 'hr_demand_skills.skill_id')
             ->whereNull('skills.deleted_at');
     }

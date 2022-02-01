@@ -51,7 +51,8 @@ class HrDemandInstitute extends BaseModel
     public function hrDemand(): BelongsTo
     {
         return $this->belongsTo(HrDemand::class, 'hr_demand_id', 'id')
-            ->with('hrDemandSkills');
+            ->with('mandatorySkills')
+            ->with('optionalSkills');
     }
 
     /**
