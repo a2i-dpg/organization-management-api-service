@@ -310,16 +310,21 @@ class IndustryAssociationService
     }
 
     /**
+     * @param Request $request
      * @param IndustryAssociation $industryAssociation
      * @return array|null
      * @throws RequestException
      */
-    public function industryAssociationUserApproval(IndustryAssociation $industryAssociation): array|null
+    public function industryAssociationUserApproval(Request $request, IndustryAssociation $industryAssociation): array|null
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
         $userPostField = [
+            'permission_sub_group_id' => $request->input('permission_sub_group_id') ?? "",
             'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
             'industry_association_id' => $industryAssociation->id,
+            'name_en' => $industryAssociation->contact_person_name ?? "",
+            'name' => $industryAssociation->contact_person_name ?? "",
+            'row_status' => $industryAssociation->row_status
         ];
 
         return Http::withOptions(
