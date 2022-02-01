@@ -438,9 +438,9 @@ class JobManagementController extends Controller
         $response = [
             "data" => $schedule,
             "_response_status" => [
-        "success" => true,
-        "code" => ResponseAlias::HTTP_OK,
-        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now())
     ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
