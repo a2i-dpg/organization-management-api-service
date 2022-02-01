@@ -430,7 +430,12 @@ class JobManagementController extends Controller
     }
 
 
-
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
     function getOneSchedule(Request $request, int $id):JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
