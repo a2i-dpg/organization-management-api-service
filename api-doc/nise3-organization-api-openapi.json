@@ -7152,7 +7152,7 @@
                 }
             }
         },
-        "/job/job-location": {
+        "/jobs/job-location": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -7187,7 +7187,7 @@
                 }
             }
         },
-        "/job/jobs": {
+        "/jobs": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -7548,7 +7548,7 @@
                 }
             }
         },
-        "/job/job-id": {
+        "/jobs/job-id": {
             "get": {
                 "tags": [
                     "Job Management"
@@ -7567,7 +7567,7 @@
                 }
             }
         },
-        "/job/store-primary-job-information": {
+        "/jobs/store-primary-job-information": {
             "post": {
                 "tags": [
                     "Primary Job Information"
@@ -7621,7 +7621,7 @@
                 }
             }
         },
-        "/job/primary-job-information/{jobId}": {
+        "/jobs/primary-job-information/{jobId}": {
             "get": {
                 "tags": [
                     "Primary Job Information"
@@ -7695,7 +7695,7 @@
                 }
             }
         },
-        "/jobs/{jobId}/status-change": {
+        "/jobs/status-change/{jobId}": {
             "post": {
                 "tags": [
                     "Primary Job Information"
@@ -7735,7 +7735,7 @@
                 }
             }
         },
-        "/job/store-additional-job-information": {
+        "/jobs/store-additional-job-information": {
             "post": {
                 "tags": [
                     "Additional Job Information"
@@ -7794,7 +7794,7 @@
                 }
             }
         },
-        "/job/additional-job-information/{jobId}": {
+        "/jobs/additional-job-information/{jobId}": {
             "get": {
                 "tags": [
                     "Additional Job Information"
@@ -7929,7 +7929,7 @@
                 }
             }
         },
-        "/job/store-company-info-visibility": {
+        "/jobs/store-company-info-visibility": {
             "post": {
                 "tags": [
                     "Company info visibility"
@@ -7974,7 +7974,7 @@
                 }
             }
         },
-        "/job/company-info-visibility/{jobId}": {
+        "/jobs/company-info-visibility/{jobId}": {
             "get": {
                 "tags": [
                     "Company info visibility"
@@ -8016,7 +8016,7 @@
                 }
             }
         },
-        "/job/contact-information": {
+        "/jobs/contact-information": {
             "post": {
                 "tags": [
                     "Contact Information"
@@ -8057,7 +8057,7 @@
                 }
             }
         },
-        "/job/contact-information/{jobId}": {
+        "/jobs/contact-information/{jobId}": {
             "get": {
                 "tags": [
                     "Contact Information"
@@ -8096,7 +8096,7 @@
                 }
             }
         },
-        "/job/store-candidate-requirements": {
+        "/jobs/store-candidate-requirements": {
             "post": {
                 "tags": [
                     "Candidate Requirements"
@@ -8149,7 +8149,7 @@
                 }
             }
         },
-        "/job/candidate-requirements/{jobId}": {
+        "/jobs/candidate-requirements/{jobId}": {
             "get": {
                 "tags": [
                     "Candidate Requirements"
@@ -8299,7 +8299,7 @@
                 }
             }
         },
-        "/job/store-matching-criteria": {
+        "/jobs/store-matching-criteria": {
             "post": {
                 "tags": [
                     "Matching Criteria"
@@ -8353,7 +8353,7 @@
                 }
             }
         },
-        "/job/matching-criteria/{jobId}": {
+        "/jobs/matching-criteria/{jobId}": {
             "get": {
                 "tags": [
                     "Matching Criteria"
@@ -8495,7 +8495,7 @@
                 }
             }
         },
-        "/job/job-preview/{jobId}": {
+        "/jobs/job-preview/{jobId}": {
             "get": {
                 "tags": [
                     "Job Preview"
@@ -8799,7 +8799,7 @@
                 }
             }
         },
-        "/job/candidate-update/reject/{applicationId}": {
+        "/jobs/candidate-update/reject/{applicationId}": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Reject a job candidate from interview process",
@@ -8852,7 +8852,7 @@
                 }
             }
         },
-        "/job/candidates/all/{jobId}": {
+        "/jobs/candidates/all/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of candidates",
@@ -8971,7 +8971,7 @@
                 }
             }
         },
-        "/job/candidates/applied/{jobId}": {
+        "/jobs/candidates/applied/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of applied candidates",
@@ -9090,7 +9090,7 @@
                 }
             }
         },
-        "/job/candidates/rejected/{jobId}": {
+        "/jobs/candidates/rejected/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of rejected candidates",
@@ -9209,7 +9209,7 @@
                 }
             }
         },
-        "/job/candidates/shortlisted/{jobId}": {
+        "/jobs/candidates/shortlisted/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of shortlisted candidates",
@@ -9328,7 +9328,7 @@
                 }
             }
         },
-        "/job/candidates/interview-invited/{jobId}": {
+        "/jobs/candidates/interview-invited/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of interview-invited candidates",
@@ -9447,7 +9447,7 @@
                 }
             }
         },
-        "/job/candidates/interviewed/{jobId}": {
+        "/jobs/candidates/interviewed/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of interviewed candidates",
@@ -9566,7 +9566,7 @@
                 }
             }
         },
-        "/job/candidates/hire-invited/{jobId}": {
+        "/jobs/candidates/hire-invited/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of hire-invited candidates",
@@ -9685,7 +9685,7 @@
                 }
             }
         },
-        "/job/candidates/hired/{jobId}": {
+        "/jobs/candidates/hired/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get list of hired candidates",
@@ -9804,7 +9804,7 @@
                 }
             }
         },
-        "/job/candidate-update/shortlist/{applicationId}": {
+        "/jobs/candidate-update/shortlist/{applicationId}": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Shortlist a candidate for interview",
@@ -12347,25 +12347,31 @@
                 "type": "object",
                 "description": "vacancy_approved_by_industry_association",
                 "properties": {
-                    "vacancy_approved_by_industry_association": {
-                        "type": "integer"
+                    "hr_demand_youth_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
-                },
-                "required": [
-                    "vacancy_approved_by_industry_association"
-                ]
+                }
             },
             "vacancy_provided_by_institute": {
                 "type": "object",
                 "description": "vacancy_provided_by_institute",
                 "properties": {
-                    "vacancy_provided_by_institute": {
-                        "type": "integer"
+                    "cv_links": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "youth_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
-                },
-                "required": [
-                    "vacancy_provided_by_institute"
-                ]
+                }
             },
             "Job-Status-Change": {
                 "type": "object",
@@ -12392,7 +12398,7 @@
                     },
                     "hr_demands": {
                         "type": "object",
-                        "example": "[\n\"skill_id\"=>\"1\"\n\"requirement\"=>\"Drooling panda222\",\n\"requirement_en\"=>\"LocustsInHollow\",\n\"vacancy\"=>10,\n\"institute_ids\"=>[1,2,3],\n\"end_date\"=>\"2022-10-10\"\n]"
+                        "example": "[\n\"mandatory_skill_ids\"=>[1,2,3],\n\"optional_skill_ids\"=>[4,5],\n\"requirement\"=>\"Drooling panda222\",\n\"requirement_en\"=>\"LocustsInHollow\",\n\"vacancy\"=>10,\n\"institute_ids\"=>[1,2,3],\n\"end_date\"=>\"2022-10-10\"\n]"
                     },
                     "row_status": {
                         "type": "integer",
@@ -12417,8 +12423,18 @@
                         "format": "Y-m-d",
                         "description": "Date must be greater than current date"
                     },
-                    "skill_id": {
-                        "type": "integer",
+                    "mandatory_skill_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Must exist in skills table"
+                    },
+                    "optional_skill_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "Must exist in skills table"
                     },
                     "requirement": {
@@ -12447,7 +12463,8 @@
                 },
                 "required": [
                     "end_date",
-                    "skill_id",
+                    "mandatory_skill_ids",
+                    "optional_skill_ids",
                     "requirement",
                     "vacancy"
                 ]

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CompanyInfoVisibility extends BaseModel
+class CompanyInfoVisibility extends MatchingRelationBaseModel
 {
     use SoftDeletes;
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE_SOFT_DELETE;
+
+    protected $table = "company_info_visibilities";
 
 
     public const  IS_COMPANY_NAME_VISIBLE_TRUE = 1;

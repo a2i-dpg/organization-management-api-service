@@ -43,7 +43,7 @@ class HrDemandController extends Controller
         $filter = $this->hrDemandService->filterValidator($request)->validate();
         $response = $this->hrDemandService->getHrDemandList($filter, $this->startTime);
 
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -66,7 +66,7 @@ class HrDemandController extends Controller
             ]
         ];
 
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -131,7 +131,7 @@ class HrDemandController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function destroy(int $id) : JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $hrDemand = HrDemand::findOrFail($id);
         $this->authorize('delete', $hrDemand);

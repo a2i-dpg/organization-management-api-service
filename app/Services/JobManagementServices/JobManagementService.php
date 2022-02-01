@@ -12,11 +12,13 @@ use App\Models\CompanyInfoVisibility;
 use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
+use App\Models\RecruitmentStep;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,7 +129,7 @@ class JobManagementService
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
-        if($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"]) {
+        if ($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"]) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interview_invited"];
             $appliedJob->shortlisted_at = Carbon::now();
         } else {
@@ -139,11 +141,125 @@ class JobManagementService
 
     }
 
+    public function storeRecruitmentStep(string $jobId, array $data)
+    {
+        $recruitmentStep = app(RecruitmentStep::class);
+        $data['job_id'] = $jobId;
+        $recruitmentStep->fill($data);
+        $recruitmentStep->save();
+        return $recruitmentStep;
+    }
+
+    public function updateRecruitmentStep(RecruitmentStep $recruitmentStep, array $data): RecruitmentStep
+    {
+        $recruitmentStep->fill($data);
+        $recruitmentStep->save();
+        return $recruitmentStep;
+    }
+
+    /**
+     * @param int $stepId
+     * @return Model|Builder
+     */
+    public function getRecruitmentStep(int $stepId): Model|Builder
+    {
+        /** @var Builder|RecruitmentStep $recruitmentStepBuilder */
+        $recruitmentStepBuilder = RecruitmentStep::select([
+            'recruitment_steps.id',
+            'recruitment_steps.title',
+            'recruitment_steps.title_en',
+            'recruitment_steps.step_type',
+            'recruitment_steps.is_interview_reschedule_allowed',
+            'recruitment_steps.interview_contact',
+            'recruitment_steps.created_at',
+            'recruitment_steps.updated_at',
+        ]);
+
+        $recruitmentStepBuilder->where('recruitment_steps.id', '=', $stepId);
+
+        return $recruitmentStepBuilder->firstOrFail();
+    }
+
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return bool
+     */
+    public function deleteRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    {
+        return $recruitmentStep->delete();
+
+    }
+
+    public function isLastRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    {
+        $maxStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
+            ->max('id');
+
+        $currentStepCandidates = AppliedJob::where('job_id', $recruitmentStep->job_id)
+            ->where('current_recruitment_step_id', $recruitmentStep->job_id)
+            ->count('id');
+
+        return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0;
+    }
+
+
+    public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'title' => [
+                'string',
+                'required',
+                'max:300'
+            ],
+            'title_en' => [
+                'string',
+                'nullable',
+                'max:150'
+            ],
+            'step_type' => [
+                'required',
+                'integer',
+                Rule::in(RecruitmentStep::STEP_TYPES)
+            ],
+            'is_interview_reschedule_allowed' => [
+                'required',
+                'integer'
+            ],
+            'interview_contact' => [
+                'string'
+            ]
+        ];
+
+        return validator::make($request->all(), $rules);
+    }
+
     /**
      * @param Request $request
-     * @return Validator
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function applyJobValidator(Request $request): Validator
+    public function recruitmentStepUpdateValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'title' => [
+                'string',
+                'required',
+                'max:300'
+            ],
+            'title_en' => [
+                'string',
+                'nullable',
+                'max:150'
+            ]
+        ];
+
+        return validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function applyJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $requestData = $request->all();
         $jobId = $requestData['job_id'];
@@ -242,13 +358,13 @@ class JobManagementService
         ];
 
         $customMessage = [
-            'age_valid.in' => 'Age must be valid. [30000]',
-            'experience_valid.in' => 'Experience must be valid. [30000]',
-            'gender_valid.in' => 'Gender must be valid. [30000]',
-            'location_valid.in' => 'Location must be valid. [30000]'
+            'age_valid . in' => 'Age must be valid . [30000]',
+            'experience_valid . in' => 'Experience must be valid . [30000]',
+            'gender_valid . in' => 'Gender must be valid . [30000]',
+            'location_valid . in' => 'Location must be valid . [30000]'
         ];
 
-        return \Illuminate\Support\Facades\Validator::make($requestData, $rules, $customMessage);
+        return Validator::make($requestData, $rules, $customMessage);
     }
 
     public function getCandidateList(Request $request, string $jobId, int $status = 0): array|null
@@ -260,31 +376,31 @@ class JobManagementService
 
         /** @var AppliedJob|Builder $appliedJobBuilder */
         $appliedJobBuilder = AppliedJob::select([
-            'applied_jobs.id',
-            'applied_jobs.job_id',
-            'applied_jobs.youth_id',
-            'applied_jobs.apply_status',
-            'applied_jobs.rejected_from',
-            'applied_jobs.applied_at',
-            'applied_jobs.profile_viewed_at',
-            'applied_jobs.rejected_at',
-            'applied_jobs.shortlisted_at',
-            'applied_jobs.interview_invited_at',
-            'applied_jobs.interview_scheduled_at',
-            'applied_jobs.interviewed_at',
-            'applied_jobs.expected_salary',
-            'applied_jobs.hire_invited_at',
-            'applied_jobs.hired_at',
-            'applied_jobs.interview_invite_source',
-            'applied_jobs.interview_invite_type',
-            'applied_jobs.hire_invite_type',
-            'applied_jobs.interview_score',
-            'applied_jobs.created_at',
-            'applied_jobs.updated_at',
+            'applied_jobs . id',
+            'applied_jobs . job_id',
+            'applied_jobs . youth_id',
+            'applied_jobs . apply_status',
+            'applied_jobs . rejected_from',
+            'applied_jobs . applied_at',
+            'applied_jobs . profile_viewed_at',
+            'applied_jobs . rejected_at',
+            'applied_jobs . shortlisted_at',
+            'applied_jobs . interview_invited_at',
+            'applied_jobs . interview_scheduled_at',
+            'applied_jobs . interviewed_at',
+            'applied_jobs . expected_salary',
+            'applied_jobs . hire_invited_at',
+            'applied_jobs . hired_at',
+            'applied_jobs . interview_invite_source',
+            'applied_jobs . interview_invite_type',
+            'applied_jobs . hire_invite_type',
+            'applied_jobs . interview_score',
+            'applied_jobs . created_at',
+            'applied_jobs . updated_at',
         ]);
 
-        $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
-        if ($status > 0) $appliedJobBuilder->where('applied_jobs.apply_status', $status);
+        $appliedJobBuilder->where('applied_jobs . job_id', $jobId);
+        if ($status > 0) $appliedJobBuilder->where('applied_jobs . apply_status', $status);
 
         /** @var Collection $candidates */
         if (is_numeric($paginate) || is_numeric($limit)) {
@@ -306,18 +422,128 @@ class JobManagementService
 
         foreach ($youthProfiles as $item) {
             $id = $item['id'];
-            $indexedYouths[$id . ""] = $item;
+            $indexedYouths[$id] = $item;
         }
+
+        $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
         foreach ($resultArray["data"] as &$item) {
-            $id = $item['youth_id'] . "";
-            $item['youth_profile'] = $indexedYouths[$id];
+            $id = $item['youth_id'];
+            $youthData = $indexedYouths[$id];
+            $matchRate = $this->getMatchPercent($item, $youthData, $matchingCriteria);
+            $item['match_rate'] = $matchRate;
+            $item['youth_profile'] = $youthData;
         }
 
+        $resultData = $resultArray['data'] ?? $resultArray;
+
         $response['order'] = $order;
-        $response['data'] = $resultArray['data'] ?? $resultArray;
+        $response['data'] = $resultData;
 
         return $response;
+    }
+
+    public function getMatchPercent($requestData, $youthData, $matchingCriteria): float|int
+    {
+        $shouldMatchTotal = 0;
+        $matchTotal = 0;
+
+        if ($matchingCriteria["is_age_enabled"]) {
+            $ageMin = intval($matchingCriteria["candidate_requirement"]["age_minimum"]);
+            $ageMax = intval($matchingCriteria["candidate_requirement"]["age_maximum"]);
+            $dbDate = Carbon::parse($youthData["date_of_birth"]);
+            $age = Carbon::now()->diffInYears($dbDate);
+            $requestData["age_valid"] = $age >= $ageMin && $age <= $ageMax ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["age_valid"];
+        }
+
+        if ($matchingCriteria["is_total_year_of_experience_enabled"]) {
+            $expMin = intval($matchingCriteria["candidate_requirement"]["minimum_year_of_experience"]);
+            $expMax = intval($matchingCriteria["candidate_requirement"]["maximum_year_of_experience"]);
+            $exp = intval($youthData["total_job_experience"]["year"]);
+            $requestData["experience_valid"] = $exp >= $expMin && $exp <= $expMax ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["experience_valid"];
+        }
+
+        if ($matchingCriteria["is_gender_enabled"]) {
+            $gender = intval($youthData["gender"]);
+            $genderMatch = false;
+            foreach ($matchingCriteria["genders"] as $genderItem) {
+                $genderMatch = ($genderMatch || (intval($genderItem['gender_id']) == $gender));
+            }
+            $requestData["gender_valid"] = $genderMatch ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["gender_valid"];
+        }
+
+        if ($matchingCriteria["is_job_location_enabled"]) {
+            $location = [
+                "division" => $youthData["loc_division_id"],
+                "district" => $youthData["loc_district_id"],
+                "upazila" => $youthData["loc_upazila_id"],
+            ];
+            $locationMatch = false;
+            foreach ($matchingCriteria["job_locations"] as $jobLoc) {
+                $division = $jobLoc["loc_division_id"];
+                $district = $jobLoc["loc_district_id"];
+                $upazila = $jobLoc["loc_upazila_id"];
+                // TODO: match these with youth data when available
+                // $union = $jobLoc["loc_union_id"];
+                // $cityCorporation = $jobLoc["loc_city_corporation_id"];
+                // $cityCorporationWard = $jobLoc["loc_city_corporation_ward_id"];
+                // $area = $jobLoc["loc_area_id"];
+                $locationMatch = $locationMatch || (
+                        $division == $location["division"] ||
+                        $district == $location["district"] ||
+                        $upazila == $location["upazila"]
+                    );
+            }
+            $requestData["location_valid"] = $locationMatch ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["location_valid"];
+        }
+
+        $youthSkillsIds = array_map(function ($v) {
+            return $v["id"];
+        }, $youthData["skills"]);
+
+        if ($matchingCriteria["is_area_of_experience_enabled"]) {
+            $aoeMatch = false;
+            foreach ($matchingCriteria["area_of_experiences"] as $aoe) {
+                $aoeMatch = $aoeMatch || in_array($aoe["id"], $youthSkillsIds);
+            }
+            $requestData["area_of_experience_valid"] = $aoeMatch ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["area_of_experience_valid"];
+        }
+
+        if ($matchingCriteria["is_skills_enabled"]) {
+            $skillsMatch = false;
+            foreach ($matchingCriteria["area_of_experiences"] as $skill) {
+                $skillsMatch = $skillsMatch || in_array($skill["id"], $youthSkillsIds);
+            }
+            $requestData["area_of_experience_valid"] = $skillsMatch ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["area_of_experience_valid"];
+        }
+
+        if ($matchingCriteria["is_salary_enabled"]) {
+            $salaryMin = intval($matchingCriteria["additional_job_information"]["salary_min"]);
+            $salaryMax = intval($matchingCriteria["additional_job_information"]["salary_max"]);
+            $expectedSalary = $requestData["expected_salary"] ?? 0;
+            $requestData["expected_salary_valid"] = $expectedSalary >= $salaryMin && $expectedSalary <= $salaryMax ? 1 : 0;
+            $shouldMatchTotal += 1;
+            $matchTotal += $requestData["expected_salary_valid"];
+
+        }
+
+        // if ($matchingCriteria["is_area_of_business_enabled"]) {}
+
+        // if ($matchingCriteria["is_job_level_enabled"]) {}
+
+        return $matchTotal / $shouldMatchTotal;
     }
 
 }
