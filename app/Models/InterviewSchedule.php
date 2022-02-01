@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InterviewSchedule extends BaseModel
@@ -19,15 +20,15 @@ class InterviewSchedule extends BaseModel
     public const ABORTED = 3;
 
     public const CONFIRMATION_STATUS = [
-        self::ROW_STATUS_ACTIVE,
-        self::ROW_STATUS_INACTIVE,
-        self::ROW_STATUS_PENDING,
-        self::ROW_STATUS_REJECTED,
+        self::NOT_CONFIRMED,
+        self::CONFIRMED,
+        self::REQUEST_RESCHEDULED,
+        self::ABORTED,
     ];
 
 
-    public function jobApplicants(): BelongsToMany
+    public function jobApplicants(): hasMany
     {
-        return $this->belongsToMany(AppliedJob::class, 'assign_candidates_to_schedules', 'applied_job_id', 'id');
+        return $this->hasMany(AppliedJob::class, 'assign_candidates_to_schedules', 'applied_job_id', 'id');
     }
 }

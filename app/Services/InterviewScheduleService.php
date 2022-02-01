@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -113,32 +114,32 @@ class InterviewScheduleService
     public function validatorForCandidateAssigning(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
-            'applied_job_id' => [
+            'applied_job_ids' => [
                 'required',
-                'string'
+                'array'
             ],
-            'recruitment_step_id' => [
-                'nullable',
-                'string'
-            ],
-            'interview_scheduled_at' => [
-                'nullable',
-                'string'
-            ],
-            'maximum_number_of_applicants' => [
+            'applied_job_ids.*' => [
                 'required',
-                'integer'
-            ],
-            'interview_invite_type' =>[
-                'nullable',
-                'integer'
-            ],
-            'interview_address' =>[
-                'required',
-                'string'
+                'integer',
+                'exists:applied_jobs,id,deleted_at,NULL'
             ]
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+
+    public function assignToSchedule($validated)
+    {
+//        DB::table('assign_candidates_to_schedules')->where('candidate_requirement_id', $candidateRequirements->id)->delete();
+        foreach ($validated as $jobApplicant) {
+            DB::table('assign_candidates_to_schedules')->insert(
+                [
+                    'applied_job_id' => $jobApplicant->id,
+                    'job_id' => $jobApplicant->job_id,
+                    'recruitment_step_id' => $jobApplicant->recruitment_step_id
+                ]
+            );
+        }
     }
 
 }
