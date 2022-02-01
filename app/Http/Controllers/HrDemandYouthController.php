@@ -32,17 +32,17 @@ class HrDemandYouthController extends Controller
      * Display a listing of the Hr Demand Youths.
      *
      * @param Request $request
-     * @param int $hrDemandInstituteId
+     * @param int $hr_demand_institute_id
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ValidationException
      */
-    public function getHrDemandYouths(Request $request, int $hrDemandInstituteId): JsonResponse
+    public function getHrDemandYouths(Request $request, int $hr_demand_institute_id): JsonResponse
     {
         $this->authorize('viewAny', HrDemandYouth::class);
 
         $filter = $this->hrDemandYouthService->filterValidator($request)->validate();
-        $response = $this->hrDemandYouthService->getHrDemandYouthList($filter, $this->startTime, $hrDemandInstituteId);
+        $response = $this->hrDemandYouthService->getHrDemandYouthList($filter, $this->startTime, $hr_demand_institute_id);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

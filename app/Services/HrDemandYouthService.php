@@ -115,7 +115,7 @@ class HrDemandYouthService
             'row_status' => [
                 'nullable',
                 "integer",
-                Rule::in([HrDemand::ROW_STATUS_ACTIVE, HrDemand::ROW_STATUS_INACTIVE]),
+                Rule::in([HrDemandYouth::ROW_STATUS_ACTIVE, HrDemandYouth::ROW_STATUS_INACTIVE, HrDemandYouth::ROW_STATUS_INVALID]),
             ],
         ], $customMessage);
     }
