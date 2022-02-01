@@ -35,6 +35,11 @@ variables:
   #app buil image
   imageRepository: "registry.nise3.xyz/nise3-organization-management-api-service"
 
+  #git hub project id
+  githubProjectRepoID: "28047551"
+
+  #fetch laravel php artisan or bash command and run on run
+  enableGitCommitCommandFetch: true
 
   #auto scaling config
   #autoScalingEnabled: 0
