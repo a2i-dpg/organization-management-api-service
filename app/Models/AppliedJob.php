@@ -16,8 +16,9 @@ class AppliedJob extends Model
         "Shortlisted" => 3,
         "Interview_invited" => 4,
         "Interviewed" => 5,
-        "Hire_invited" => 6,
-        "Hired" => 7,
+        "Hiring_Listed" => 6,
+        "Hire_invited" => 7,
+        "Hired" => 8,
     ];
 
     public const INTERVIEW_INVITE_SOURCES = [
