@@ -346,19 +346,28 @@ class IndustryAssociationController extends Controller
 
     /**
      * IndustryAssociation Open Registration Approval
+     * @param Request $request
      * @param int $industryAssociationId
      * @return JsonResponse
+     * @throws RequestException
      * @throws Throwable
      */
-    public function industryAssociationRegistrationApproval(int $industryAssociationId): JsonResponse
+    public function industryAssociationRegistrationApproval(Request $request, int $industryAssociationId): JsonResponse
     {
-        /** @var IndustryAssociation $industryAssociation */
+
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
 
+
+        if ($industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
+            throw_if(empty($request->input('permission_sub_group_id')), ValidationException::withMessages([
+                "permission_sub_group_id is required.[50000]"
+            ]));
+        }
         DB::beginTransaction();
         try {
+            $this->industryAssociationService->industryAssociationUserApproval($request, $industryAssociation);
             $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
-            $this->industryAssociationService->industryAssociationUserApproval($industryAssociation);
+
 
             /** send Sms after Industry Association Registration Approval */
             $this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
@@ -564,20 +573,20 @@ class IndustryAssociationController extends Controller
 
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
 
-            $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
+        $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
 
-            $validatedData['subject'] = "Industry Association Membership Application Rejection";
-            $validatedData['organization_id'] = $organizationId;
-            $this->industryAssociationService->sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection($validatedData);
+        $validatedData['subject'] = "Industry Association Membership Application Rejection";
+        $validatedData['organization_id'] = $organizationId;
+        $this->industryAssociationService->sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection($validatedData);
 
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "IndustryAssociation membership rejection successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "IndustryAssociation membership rejection successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
