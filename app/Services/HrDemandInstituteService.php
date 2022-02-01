@@ -189,7 +189,7 @@ class HrDemandInstituteService
         if (!empty($hrDemandInstitute->institute_id)) {
             $instituteIds[] = $hrDemandInstitute->institute_id;
             $titleByInstituteIds = ServiceToServiceCall::getInstituteTitleByIds($instituteIds);
-            if(!empty($hrDemandInstitute['institute_id']) && !empty($titleByInstituteIds[$hrDemandInstitute['institute_id']])){
+            if (!empty($hrDemandInstitute['institute_id']) && !empty($titleByInstituteIds[$hrDemandInstitute['institute_id']])) {
                 $hrDemandInstitute['institute_title'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title'];
                 $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
             }
@@ -220,7 +220,11 @@ class HrDemandInstituteService
      */
     public function hrDemandRejectedByInstitute(HrDemandInstitute $hrDemandInstitute): HrDemandInstitute
     {
-        return $this->updateHrDemandInstituteByInstituteUser($hrDemandInstitute);
+        $updatedHrDemandInstitute = $this->updateHrDemandInstituteByInstituteUser($hrDemandInstitute);
+
+        $this->invalidAllHrDemandYouths($hrDemandInstitute);
+
+        return $updatedHrDemandInstitute;
     }
 
     /**
@@ -291,15 +295,15 @@ class HrDemandInstituteService
         $hrDemandYouthYouthIds = $hrDemandYouths->pluck('youth_id')->toArray();
 
         /** If previously stored cv_link OR youth_id is missing in given cv_links OR youth_ids, then INVALIDATED those previous rows */
-        foreach ($hrDemandYouths as $hrDemandYouth){
-            if (!empty($data['cv_links'])){
-                if(!in_array($hrDemandYouth->cv_link, $data['cv_links'])){
+        foreach ($hrDemandYouths as $hrDemandYouth) {
+            if (!empty($data['cv_links']) && !empty($hrDemandYouth->cv_link)) {
+                if (!in_array($hrDemandYouth->cv_link, $data['cv_links'])) {
                     $hrDemandYouth->row_status = HrDemandYouth::ROW_STATUS_INVALID;
                     $hrDemandYouth->save();
                 }
             }
-            if (!empty($data['youth_ids'])){
-                if(!in_array($hrDemandYouth->youth_id, $data['youth_ids'])){
+            if (!empty($data['youth_ids']) && !empty($hrDemandYouth->youth_id)) {
+                if (!in_array($hrDemandYouth->youth_id, $data['youth_ids'])) {
                     $hrDemandYouth->row_status = HrDemandYouth::ROW_STATUS_INVALID;
                     $hrDemandYouth->save();
                 }
@@ -307,9 +311,9 @@ class HrDemandInstituteService
         }
 
         /** If given cv_link is previously not stored, then create new row for given cv_link */
-        if(!empty($data['cv_links'])){
-            foreach ($data['cv_links'] as $link){
-                if(!in_array($link, $hrDemandYouthCvLinks)){
+        if (!empty($data['cv_links'])) {
+            foreach ($data['cv_links'] as $link) {
+                if (!in_array($link, $hrDemandYouthCvLinks)) {
                     $hrDemandYouth = new HrDemandYouth();
                     $hrDemandYouth->fill([
                         'hr_demand_id' => $hrDemandInstitute->hr_demand_id,
@@ -323,9 +327,9 @@ class HrDemandInstituteService
         }
 
         /** If given youth_id is previously not stored, then create new row for given youth_id */
-        if(!empty($data['youth_ids'])){
-            foreach ($data['youth_ids'] as $youthId){
-                if(!in_array($youthId, $hrDemandYouthYouthIds)){
+        if (!empty($data['youth_ids'])) {
+            foreach ($data['youth_ids'] as $youthId) {
+                if (!in_array($youthId, $hrDemandYouthYouthIds)) {
                     $hrDemandYouth = new HrDemandYouth();
                     $hrDemandYouth->fill([
                         'hr_demand_id' => $hrDemandInstitute->hr_demand_id,
@@ -341,6 +345,19 @@ class HrDemandInstituteService
 
     /**
      * @param HrDemandInstitute $hrDemandInstitute
+     * @return void
+     */
+    private function invalidAllHrDemandYouths(HrDemandInstitute $hrDemandInstitute): void
+    {
+        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+        foreach ($hrDemandYouths as $hrDemandYouth) {
+            $hrDemandYouth->row_status = HrDemandYouth::ROW_STATUS_INVALID;
+            $hrDemandYouth->save();
+        }
+    }
+
+    /**
+     * @param HrDemandInstitute $hrDemandInstitute
      * @param array $data
      * @return HrDemandInstitute
      */
@@ -349,18 +366,10 @@ class HrDemandInstituteService
         $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
 
         /**
-         * If, hr_demand_institute previously REJECTED by Industry Association User,
-         * then assume 0 to find difference between previous Approval vacancy and given Approval vacancy by Industry Association.
-         * The reason to assume 0 is just assuming this row as a newly created row.
-         *
-         * Else, assume previously Approval vacancy given by Industry Association to find Approval vacancy difference
+         * When Industry Association user want to update its previous approval, then first
+         * find difference between previous Approval vacancy and currently given Approval vacancy by Industry Association.
          */
-        if ($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE) {
-            $approvedVacancyDifference = 0 - count($data['hr_demand_youth_ids']);
-        } else {
-            $approvedVacancyDifference = $hrDemandInstitute->vacancy_approved_by_industry_association - count($data['hr_demand_youth_ids']);
-        }
-
+        $approvedVacancyDifference = $hrDemandInstitute->vacancy_approved_by_industry_association - count($data['hr_demand_youth_ids']);
         $hrDemand->remaining_vacancy = $hrDemand->remaining_vacancy + $approvedVacancyDifference;
         $hrDemand->save();
 
@@ -384,17 +393,16 @@ class HrDemandInstituteService
      */
     public function hrDemandRejectedByIndustryAssociation(HrDemandInstitute $hrDemandInstitute): HrDemandInstitute
     {
+        $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
+        $hrDemand->remaining_vacancy += $hrDemandInstitute->vacancy_approved_by_industry_association;
+        $hrDemand->save();
+
         $hrDemandInstitute->rejected_by_industry_association = HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE;
+        $hrDemandInstitute->vacancy_approved_by_industry_association = 0;
         $hrDemandInstitute->save();
 
-        if ($hrDemandInstitute->vacancy_approved_by_industry_association != 0) {
-            $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
-            $hrDemand->remaining_vacancy += $hrDemandInstitute->vacancy_approved_by_industry_association;
-            $hrDemand->save();
-        }
-
         /** Reject all Hr demand youths */
-        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute)->get();
+        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
         foreach ($hrDemandYouths as $hrDemandYouth) {
             $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_REJECTED;
             $hrDemandYouth->save();
@@ -480,6 +488,10 @@ class HrDemandInstituteService
             "Industry Association already approved more vacancy than the given vacancy.[66400]"
         ]));
 
+        throw_if($hrDemandInstitute->row_status == HrDemandInstitute::ROW_STATUS_INVALID, ValidationException::withMessages([
+            "Hr Demand Institute already Invalidated!"
+        ]));
+
         /** Validate that already approved Hr Demand Youth can't be missing in given cv_links OR youth_ids */
         $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
         foreach ($hrDemandYouths as $hrDemandYouth) {
@@ -544,17 +556,11 @@ class HrDemandInstituteService
                     $hrDemand = HrDemand::find($hrDemandInstitute->hr_demand_id);
 
                     /**
-                     * If, hr_demand_institute previously REJECTED by Industry Association User,
-                     * then assume 0 to find difference between previous Approval vacancy and given Approval vacancy by Industry Association.
-                     * The reason to assume 0 is just assuming this row as a newly created row.
-                     *
-                     * Else, assume previously Approval vacancy given by Industry Association to find Approval vacancy difference
+                     * When Industry Association user want to update its previous approval, then first
+                     * find difference between previous Approval vacancy and currently given Approval vacancy by Industry Association.
                      */
-                    if ($hrDemandInstitute->rejected_by_industry_association == HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_TRUE) {
-                        $approvedVacancyDifference = 0 - count($value);
-                    } else {
-                        $approvedVacancyDifference = $hrDemandInstitute->vacancy_approved_by_industry_association - count($value);
-                    }
+                    $approvedVacancyDifference = $hrDemandInstitute->vacancy_approved_by_industry_association - count($value);
+
                     $updatedRemainingVacancy = $hrDemand->remaining_vacancy + $approvedVacancyDifference;
 
                     if ($updatedRemainingVacancy < 0) {
@@ -565,15 +571,34 @@ class HrDemandInstituteService
                         $failed("Vacancy provided by institute exceed.[66100]");
                     }
 
+                    if($hrDemandInstitute->vacancy_provided_by_institute == 0){
+                        $failed("Not yet fulfilled by Institute!");
+                    }
+
                     if ($hrDemandInstitute->rejected_by_institute == HrDemandInstitute::REJECTED_BY_INSTITUTE_TRUE) {
                         $failed("Already rejected by Institute!");
+                    }
+
+                    if ($hrDemandInstitute->row_status == HrDemandInstitute::ROW_STATUS_INVALID) {
+                        $failed("Hr Demand Institute already Invalidated!");
                     }
                 }
             ],
             'hr_demand_youth_ids.*' => [
                 'required',
                 'int',
-                'distinct'
+                'distinct',
+                'exists:hr_demand_youths,id,deleted_at,NULL',
+                function ($attr, $value, $failed) use ($hrDemandInstitute) {
+                    $hrDemandYouth = HrDemandYouth::findOrFail($value);
+                    if($hrDemandYouth->hr_demand_institute_id != $hrDemandInstitute->id){
+                        $failed('HrDemandYouth Id = ' . $value . ' not belongs to HrDemandInstitute Id = ' . $hrDemandInstitute->id);
+                    }
+                    if($hrDemandYouth->hr_demand_institute_id == $hrDemandInstitute->id &&
+                        $hrDemandYouth->row_status == HrDemandYouth::ROW_STATUS_INVALID){
+                        $failed('HrDemandYouth Id = ' . $value . ' already invalidated by Institute!');
+                    }
+                }
             ]
         ];
         return Validator::make($data, $rules);
