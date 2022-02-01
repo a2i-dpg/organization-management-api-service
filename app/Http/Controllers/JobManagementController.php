@@ -431,9 +431,9 @@ class JobManagementController extends Controller
     public function destroyRecruitmentStep(int $stepId): JsonResponse
     {
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
-        $isLastStep = $this->jobManagementService->isLastRecruitmentStep($recruitmentStep);
+        $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
-        throw_if(!$isLastStep, ValidationException::withMessages([
+        throw_if(!$isRecruitmentStepDeletable, ValidationException::withMessages([
             "Recruitment Step can not be deleted"
         ]));
 
@@ -535,17 +535,17 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    function getOneSchedule(Request $request, int $id):JsonResponse
+    function getOneSchedule(Request $request, int $id): JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
         $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
-            "success" => true,
-            "code" => ResponseAlias::HTTP_OK,
-            "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-    ]
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

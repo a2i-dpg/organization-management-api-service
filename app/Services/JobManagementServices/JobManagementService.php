@@ -190,13 +190,17 @@ class JobManagementService
 
     }
 
-    public function isLastRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return bool
+     */
+    public function isRecruitmentStepDeletable(RecruitmentStep $recruitmentStep): bool
     {
         $maxStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
             ->max('id');
 
         $currentStepCandidates = AppliedJob::where('job_id', $recruitmentStep->job_id)
-            ->where('current_recruitment_step_id', $recruitmentStep->job_id)
+            ->where('current_recruitment_step_id', $recruitmentStep->id)
             ->count('id');
 
         return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0;
