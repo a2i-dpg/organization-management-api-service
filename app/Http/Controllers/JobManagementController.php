@@ -434,7 +434,7 @@ class JobManagementController extends Controller
     function getOneSchedule(Request $request, int $id):JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
-//        $this->authorize('view', $schedule);
+        $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
@@ -457,7 +457,7 @@ class JobManagementController extends Controller
 
     function createSchedule(Request $request): JsonResponse
     {
-//        $this->authorize('create', InterviewSchedule::class);
+        $this->authorize('create', InterviewSchedule::class);
 
         $validated = $this->interviewScheduleService->validator($request)->validate();
         $data = $this->interviewScheduleService->store($validated);
