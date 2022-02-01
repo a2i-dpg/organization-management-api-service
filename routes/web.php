@@ -166,6 +166,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Single Industry Association Fetch  */
         $router->get("industry-associations/{id}", ["as" => "service-to-service-call.industry-associations", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
 
+        /** Single Industry Association Code Fetch  */
+        $router->get("industry-associations/{id}/get-code", ["as" => "service-to-service-call.industry-associations.get-code", "uses" => "IndustryAssociationController@getCode"]);
+
         /** apply to job from youth service */
         $router->post("apply-to-job", ["as" => "service-to-service-call.apply-to-job", "uses" => "JobManagementController@applyToJob"]);
     });
