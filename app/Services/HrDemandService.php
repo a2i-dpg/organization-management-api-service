@@ -6,7 +6,6 @@ use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\HrDemand;
 use App\Models\HrDemandInstitute;
-use App\Models\HrDemandSkill;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -59,18 +58,16 @@ class HrDemandService
          */
         if (!empty($skillIds)) {
             $hrDemandBuilder->join('hr_demand_skills', function ($join) {
-                $join->on('hr_demand_skills.hr_demand_id', 'hr_demands.id')
-                    ->whereNull('hr_demand_skills.deleted_at');
+                $join->on('hr_demand_skills.hr_demand_id', 'hr_demands.id');
             });
             $hrDemandBuilder->whereIn('hr_demand_skills.skill_id', $skillIds);
+            $hrDemandBuilder->groupBy('hr_demands.id');
         }
 
         $hrDemandBuilder->orderBy('hr_demands.id', $order);
         if (is_numeric($rowStatus)) {
             $hrDemandBuilder->where('hr_demands.row_status', $rowStatus);
         }
-
-        $hrDemandBuilder->groupBy('hr_demands.id');
 
         /** @var Collection $hrDemands */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -123,7 +120,7 @@ class HrDemandService
         $hrDemandBuilder->where('hr_demands.id', $id);
 
         $hrDemandBuilder->with('hrDemandInstitutes')
-            ->with('hrDemandSkills:hr_demand_skills.id,hr_demand_skills.hr_demand_id,hr_demand_skills.skill_type,hr_demand_skills.skill_id,hr_demand_skills.row_status,skills.title as skill_title,skills.title_en as skill_title_en');
+            ->with('hrDemandSkills:hr_demand_skills.hr_demand_id,hr_demand_skills.skill_type,hr_demand_skills.skill_id,skills.title as skill_title,skills.title_en as skill_title_en');
 
         $hrDemand = $hrDemandBuilder->firstOrFail();
 
@@ -164,7 +161,7 @@ class HrDemandService
 
             $createdHrDemands[] = $hrDemandInstance;
 
-            $this->storeHrDemandSkills($hrDemand, $hrDemandInstance);
+            $this->syncHrDemandSkills($hrDemand, $hrDemandInstance);
             $this->storeHrDemandInstitutes($hrDemand, $hrDemandInstance);
         }
         return $createdHrDemands;
@@ -187,12 +184,8 @@ class HrDemandService
         ];
         $invalidatedApprovedVacanciesByIndustryAssociation = 0;
 
-        /** Delete all previous skills & then create given skills */
-        $hrDemandSkills = HrDemandSkill::where('hr_demand_id', $hrDemand->id)->get();
-        foreach ($hrDemandSkills as $hrDemandSkill) {
-            $hrDemandSkill->delete();
-        }
-        $this->storeHrDemandSkills($data, $hrDemand);
+        /** Update hr_demand skills */
+        $this->syncHrDemandSkills($data, $hrDemand);
 
         /** If vacancy changed then do bellow stuff */
         if ($hrDemand->vacancy != $data['vacancy']) {
@@ -290,37 +283,31 @@ class HrDemandService
      * @param HrDemand $hrDemand
      * @return void
      */
-    private function storeHrDemandSkills(array $data, HrDemand $hrDemand)
+    private function syncHrDemandSkills(array $data, HrDemand $hrDemand)
     {
-        /**
-         * Store Mandatory Skills
-         * */
+        $pivotTableDataToSync = [];
+
+        /** Store Mandatory Skills */
         if (!empty($data['mandatory_skill_ids'])) {
             foreach ($data['mandatory_skill_ids'] as $skillId) {
-                $hrDemandSkill = new HrDemandSkill();
-                $hrDemandSkill->fill([
-                    'hr_demand_id' => $hrDemand->id,
-                    'skill_type' => HrDemandSkill::HR_DEMAND_SKILL_TYPE_MANDATORY,
-                    'skill_id' => $skillId
-                ]);
-                $hrDemandSkill->save();
+                $hrDemandSkill = [
+                    'skill_type' => HrDemand::HR_DEMAND_SKILL_TYPE_MANDATORY
+                ];
+                $pivotTableDataToSync += array($skillId => $hrDemandSkill);
             }
         }
 
-        /**
-         * Store Optional Skills
-         * */
+        /** Store Optional Skills */
         if (!empty($data['optional_skill_ids'])) {
             foreach ($data['optional_skill_ids'] as $skillId) {
-                $hrDemandSkill = new HrDemandSkill();
-                $hrDemandSkill->fill([
-                    'hr_demand_id' => $hrDemand->id,
-                    'skill_type' => HrDemandSkill::HR_DEMAND_SKILL_TYPE_OPTIONAL,
-                    'skill_id' => $skillId
-                ]);
-                $hrDemandSkill->save();
+                $hrDemandSkill = [
+                    'skill_type' => HrDemand::HR_DEMAND_SKILL_TYPE_OPTIONAL
+                ];
+                $pivotTableDataToSync += array($skillId => $hrDemandSkill);
             }
         }
+
+        $hrDemand->skills()->sync($pivotTableDataToSync);
     }
 
     /**

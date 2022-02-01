@@ -48,7 +48,7 @@ class HrDemandInstituteController extends Controller
         $filter = $this->hrDemandInstituteService->filterValidator($request)->validate();
         $response = $this->hrDemandInstituteService->getHrDemandInstituteList($filter, $this->startTime);
 
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -74,7 +74,7 @@ class HrDemandInstituteController extends Controller
             ]
         ];
 
-        return Response::json($responsePayload,ResponseAlias::HTTP_OK);
+        return Response::json($responsePayload, ResponseAlias::HTTP_OK);
     }
 
 
