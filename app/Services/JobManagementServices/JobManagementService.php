@@ -101,6 +101,7 @@ class JobManagementService
         return $appliedJob;
     }
 
+    //TODO : Shortlist method will be just one method for all steps
     /**
      * Shortlist a candidate for next interview step
      * @param int $applicationId
@@ -110,16 +111,63 @@ class JobManagementService
     public function shortlistCandidate(int $applicationId): AppliedJob
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
+        $firstRecruitmentStep = RecruitmentStep::where('job_id', $appliedJob->job_id)->firstOrFail();
 
         if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"]) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
-            $appliedJob->shortlisted_at = Carbon::now();
+            $appliedJob->current_recruitment_step_id = $firstRecruitmentStep->id;
         } else {
             throw ValidationException::withMessages(['candidate can not be selected for  next step']);
         }
         $appliedJob->save();
 
         return $appliedJob;
+    }
+
+    //TODO : Shortlist method will be just one method for all steps
+    /**
+     * Shortlist a candidate for next interview step
+     * @param int $applicationId
+     * @return AppliedJob
+     * @throws Throwable
+     */
+    public function stepForwardRecruitmentStep(int $applicationId): AppliedJob
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
+        $recruitmentStep = RecruitmentStep::findOrFail($currentRecruitmentStepId);
+        $lastRecruitmentStepId = $this->findLastRecruitmentStep($recruitmentStep);
+
+
+        if ($appliedJob->apply_status != AppliedJob::APPLY_STATUS["Rejected"]) {
+            if ($lastRecruitmentStepId == $currentRecruitmentStepId) {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hiring_Listed"];
+                $appliedJob->current_recruitment_step_id = null;
+            } else {
+                $nextStepId = $this->findNextRecruitmentStep($recruitmentStep);
+                $appliedJob->current_recruitment_step_id = $nextStepId;
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+
+            }
+        } else {
+            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+        }
+        $appliedJob->save();
+
+        return $appliedJob;
+    }
+
+
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return mixed
+     */
+    public function findNextRecruitmentStep(RecruitmentStep $recruitmentStep): mixed
+    {
+        return RecruitmentStep::select('id')
+            ->where('job_id', $recruitmentStep->job_id)
+            ->where('id', '>', $recruitmentStep->id)
+            ->first();
     }
 
     /**

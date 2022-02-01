@@ -129,6 +129,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
                 $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
                 $router->put('shortlist/{applicationId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
+                $router->put('step-forward/{applicationId}', ["as" => "candidate-update.'step-forward", "uses" => "JobManagementController@stepForwardRecruitmentStep"]);
             });
 
 
