@@ -54,6 +54,27 @@ class PrimaryJobInformationService
             'primary_job_information.archived_at',
             'primary_job_information.application_deadline',
             'primary_job_information.id',
+            'additional_job_information.job_context',
+            'additional_job_information.job_context_en',
+            'additional_job_information.salary_min',
+            'additional_job_information.salary_max',
+
+            'industry_associations.title as industry_association_title',
+            'industry_associations.title_en as industry_association_title_en',
+            'industry_associations.logo as industry_association_logo',
+            'industry_associations.address as industry_association_address',
+            'industry_associations.address_en as industry_association_address_en',
+
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
+            'organizations.logo as organization_logo',
+            'organizations.address as organization_address',
+            'organizations.address_en as organization_address_en',
+
+            'candidate_requirements.minimum_year_of_experience',
+            'candidate_requirements.maximum_year_of_experience',
+            'candidate_requirements.age_maximum',
+            'candidate_requirements.age_minimum'
         ])->acl();
 
         $jobInformationBuilder->orderBy('primary_job_information.id', $order);
@@ -67,6 +88,29 @@ class PrimaryJobInformationService
         if (!empty($title)) {
             $jobInformationBuilder->where('primary_job_information.title', 'like', '%' . $title . '%');
         }
+
+        $jobInformationBuilder->leftJoin('additional_job_information', function ($join) {
+            $join->on('primary_job_information.job_id', '=', 'additional_job_information.job_id')
+                ->whereNull('additional_job_information.deleted_at');
+        });
+
+        $jobInformationBuilder->leftJoin('candidate_requirements', function ($join) {
+            $join->on('primary_job_information.job_id', '=', 'candidate_requirements.job_id')
+                ->whereNull('candidate_requirements.deleted_at');
+        });
+
+        $jobInformationBuilder->leftJoin('industry_associations', function ($join) {
+            $join->on('primary_job_information.industry_association_id', '=', 'industry_associations.id')
+                ->whereNull('industry_associations.deleted_at')
+                ->whereNotNull('primary_job_information.industry_association_id');
+        });
+        $jobInformationBuilder->leftJoin('organizations', function ($join) {
+            $join->on('primary_job_information.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at')
+                ->whereNotNull('primary_job_information.organization_id');
+        });
+
+
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
