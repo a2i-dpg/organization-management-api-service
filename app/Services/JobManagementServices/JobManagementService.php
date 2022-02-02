@@ -101,7 +101,6 @@ class JobManagementService
         return $appliedJob;
     }
 
-    //TODO : Shortlist method will be just one method for all steps
     /**
      * Shortlist a candidate for next interview step
      * @param int $applicationId
@@ -111,48 +110,33 @@ class JobManagementService
     public function shortlistCandidate(int $applicationId): AppliedJob
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
-        $firstRecruitmentStep = RecruitmentStep::where('job_id', $appliedJob->job_id)->firstOrFail();
+        $firstRecruitmentStep = RecruitmentStep::where('job_id', $appliedJob->job_id)->first();
 
-        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"]) {
+        if (!empty($appliedJob->current_recruitment_step_id)) {
+            $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
+            $recruitmentStep = RecruitmentStep::findOrFail($currentRecruitmentStepId);
+            $lastRecruitmentStepId = $this->findLastRecruitmentStep($recruitmentStep);
+            $nextRecruitmentStepId = $this->findNextRecruitmentStep($recruitmentStep);
+        }
+
+        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"] && $firstRecruitmentStep) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
             $appliedJob->current_recruitment_step_id = $firstRecruitmentStep->id;
+            $appliedJob->save();
+
+        } else if ($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"] && !empty($nextRecruitmentStepId) && !empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId > $currentRecruitmentStepId) {
+            $appliedJob->current_recruitment_step_id = $nextRecruitmentStepId;
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+            $appliedJob->save();
+
+        } else if (!$firstRecruitmentStep || (!empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId == $currentRecruitmentStepId)) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hiring_Listed"];
+            $appliedJob->current_recruitment_step_id = null;
+            $appliedJob->save();
+
         } else {
             throw ValidationException::withMessages(['candidate can not be selected for  next step']);
         }
-        $appliedJob->save();
-
-        return $appliedJob;
-    }
-
-    //TODO : Shortlist method will be just one method for all steps
-    /**
-     * Shortlist a candidate for next interview step
-     * @param int $applicationId
-     * @return AppliedJob
-     * @throws Throwable
-     */
-    public function stepForwardRecruitmentStep(int $applicationId): AppliedJob
-    {
-        $appliedJob = AppliedJob::findOrFail($applicationId);
-        $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
-        $recruitmentStep = RecruitmentStep::findOrFail($currentRecruitmentStepId);
-        $lastRecruitmentStepId = $this->findLastRecruitmentStep($recruitmentStep);
-
-
-        if ($appliedJob->apply_status != AppliedJob::APPLY_STATUS["Rejected"]) {
-            if ($lastRecruitmentStepId == $currentRecruitmentStepId) {
-                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hiring_Listed"];
-                $appliedJob->current_recruitment_step_id = null;
-            } else {
-                $nextStepId = $this->findNextRecruitmentStep($recruitmentStep);
-                $appliedJob->current_recruitment_step_id = $nextStepId;
-                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
-
-            }
-        } else {
-            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
-        }
-        $appliedJob->save();
 
         return $appliedJob;
     }
@@ -164,10 +148,11 @@ class JobManagementService
      */
     public function findNextRecruitmentStep(RecruitmentStep $recruitmentStep): mixed
     {
-        return RecruitmentStep::select('id')
-            ->where('job_id', $recruitmentStep->job_id)
+        $nextStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
             ->where('id', '>', $recruitmentStep->id)
             ->first();
+
+        return $nextStep->id ?? null;
     }
 
     /**
