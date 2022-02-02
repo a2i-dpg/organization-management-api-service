@@ -122,6 +122,8 @@ class IndustryAssociationService
             $industryAssociationBuilder->where('industry_associations.title', 'like', '%' . $title . '%');
         }
 
+        $industryAssociationBuilder->with('skills');
+
         /** @var Collection $organizations */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -216,6 +218,8 @@ class IndustryAssociationService
 
         $industryAssociationBuilder->where('industry_associations.id', '=', $id);
 
+        $industryAssociationBuilder->with('skills');
+
         return $industryAssociationBuilder->firstOrFail();
     }
 
@@ -240,7 +244,19 @@ class IndustryAssociationService
     {
         $industryAssociation->fill($data);
         $industryAssociation->save();
+
+        if (!empty($data['skills'])) {
+            $this->syncSkill($industryAssociation, $data['skills']);
+        } else {
+            $this->syncSkill($industryAssociation, []);
+        }
+
         return $industryAssociation;
+    }
+
+    private function syncSkill(IndustryAssociation $industryAssociation, array $skills)
+    {
+        $industryAssociation->skills()->sync($skills);
     }
 
     /**
@@ -596,6 +612,16 @@ class IndustryAssociationService
         $sendSms->sendSms();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getIndustryAssociationCode($id): mixed
+    {
+        return IndustryAssociation::findOrFail($id)->code;
+
+    }
+
 
     /**
      * @param Request $request
@@ -607,6 +633,11 @@ class IndustryAssociationService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+
+        if (!empty($request->offsetGet('skills'))) {
+            $skillIds = is_array($request->offsetGet('skills')) ? $request->offsetGet('skills') : explode(',', $request->offsetGet('skills'));
+            $request->offsetSet('skills', $skillIds);
+        }
 
         $rules = [
             'trade_id' => [
@@ -758,6 +789,16 @@ class IndustryAssociationService
                         return $query->whereNull('deleted_at');
                     })
             ],
+            "skills" => [
+                "nullable",
+                "array",
+                "min:1"
+            ],
+            "skills.*" => [
+                "required",
+                "int",
+                "exists:skills,id,deleted_at,NULL"
+            ],
             'logo' => [
                 'nullable',
                 'string',
@@ -775,6 +816,11 @@ class IndustryAssociationService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+
+        if (!empty($request->offsetGet('skills'))) {
+            $skillIds = is_array($request->offsetGet('skills')) ? $request->offsetGet('skills') : explode(',', $request->offsetGet('skills'));
+            $request->offsetSet('skills', $skillIds);
+        }
 
         $rules = [
             'title_en' => [
@@ -853,6 +899,16 @@ class IndustryAssociationService
                 'nullable',
                 'max: 250',
                 'min:2'
+            ],
+            "skills" => [
+                "nullable",
+                "array",
+                "min:1"
+            ],
+            "skills.*" => [
+                "required",
+                "int",
+                "exists:skills,id,deleted_at,NULL"
             ],
             'logo' => [
                 'nullable',
@@ -1008,6 +1064,7 @@ class IndustryAssociationService
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }
+
 
     /**
      * @param Request $request

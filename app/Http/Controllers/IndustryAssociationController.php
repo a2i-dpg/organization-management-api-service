@@ -6,6 +6,7 @@ use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
+use App\Services\CommonServices\CodeGenerateService;
 use App\Services\IndustryAssociationService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
@@ -136,6 +137,25 @@ class IndustryAssociationController extends Controller
     }
 
     /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function getCode($id): JsonResponse
+    {
+        $industryAssociation = $this->industryAssociationService->getIndustryAssociationCode($id);
+
+        $response = [
+            "data" => $industryAssociation,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * Display a specified resource
      * @param Request $request
      * @param int $id
@@ -215,6 +235,8 @@ class IndustryAssociationController extends Controller
 
         $validated = $this->industryAssociationService->validator($request)->validate();
 
+        $validated['code'] = CodeGenerateService::getIndustryAssociationCode();
+
         DB::beginTransaction();
         try {
             $industryAssociation = $this->industryAssociationService->store($industryAssociation, $validated);
@@ -285,6 +307,7 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociation = app(IndustryAssociation::class);
         $validated = $this->industryAssociationService->industryAssociationRegistrationValidator($request)->validate();
+        $validated['code'] = CodeGenerateService::getIndustryAssociationCode();
 
         DB::beginTransaction();
         try {
@@ -453,8 +476,10 @@ class IndustryAssociationController extends Controller
         $this->authorize('update', $industryAssociation);
 
         $validated = $this->industryAssociationService->validator($request, $id)->validate();
-
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
+
+        $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
+
         $response = [
             'data' => $data,
             '_response_status' => [
@@ -601,11 +626,10 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
-
         $this->authorize('viewProfile', $industryAssociation);
-
         $validated = $this->industryAssociationService->industryAssociationAdminValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
+        $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
         $response = [
             'data' => $data,
             '_response_status' => [

@@ -530,22 +530,21 @@ class JobManagementController extends Controller
 
 
     /**
-     * @param Request $request
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    function getOneSchedule(Request $request, int $id): JsonResponse
+    function getOneSchedule(int $id):JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
         $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+    ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -638,5 +637,34 @@ class JobManagementController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    public function assignCandidates(Request $request , int $id):mixed
+    {
+
+        $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
+
+        DB::beginTransaction();
+        try {
+
+            $this->interviewScheduleService->assignToSchedule($validated , $id);
+
+            $response = [
+//                "data" => $candidateRequirements,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "CandidateRequirements successfully submitted",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+            DB::commit();
+        } catch (Throwable $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
     }
 }
