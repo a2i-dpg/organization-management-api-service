@@ -170,11 +170,12 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
+                                        "code": "",
                                         "trade_id": 1,
-                                        "title": "NewBuddy",
-                                        "title_en": null,
-                                        "loc_division_id": "2",
-                                        "loc_district_id": "2",
+                                        "title": "CocoJumbo",
+                                        "title_en": "eautyKing",
+                                        "loc_division_id": "1",
+                                        "loc_district_id": "1",
                                         "loc_upazila_id": null,
                                         "location_latitude": null,
                                         "location_longitude": null,
@@ -183,28 +184,42 @@
                                         "address_en": null,
                                         "country": "BD",
                                         "phone_code": "880",
-                                        "mobile": "01787992785",
-                                        "email": "lrunte@jacobson.net",
+                                        "mobile": null,
+                                        "email": null,
                                         "fax_no": null,
-                                        "trade_number": "eos",
-                                        "name_of_the_office_head": "AtHome",
+                                        "trade_number": "",
+                                        "name_of_the_office_head": "ssss",
                                         "name_of_the_office_head_en": null,
-                                        "name_of_the_office_head_designation": "Hanna",
+                                        "name_of_the_office_head_designation": "sss",
                                         "name_of_the_office_head_designation_en": null,
-                                        "contact_person_name": "Boston",
+                                        "contact_person_name": "sssss",
                                         "contact_person_name_en": null,
-                                        "contact_person_mobile": "01776469819",
-                                        "contact_person_email": "colby.predovic@example.org",
-                                        "contact_person_designation": "LucoMatrix",
+                                        "contact_person_mobile": null,
+                                        "contact_person_email": null,
+                                        "contact_person_designation": "sss",
                                         "contact_person_designation_en": null,
-                                        "logo": "ThereIsMyLogO",
-                                        "domain": "https://www.hammes.com",
-                                        "row_status": 1,
+                                        "logo": null,
+                                        "domain": null,
+                                        "row_status": 2,
                                         "created_by": null,
                                         "updated_by": null,
-                                        "created_at": "2021-12-19T07:49:58.000000Z",
-                                        "updated_at": "2021-12-21T10:58:12.000000Z",
-                                        "deleted_at": null
+                                        "created_at": null,
+                                        "updated_at": "2022-02-01T12:43:47.000000Z",
+                                        "deleted_at": null,
+                                        "skills": [
+                                            {
+                                                "id": 1,
+                                                "title": "টেকনিকাল রাইটিং",
+                                                "title_en": "Technical Writing",
+                                                "deleted_at": null
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                "title_en": "Project Management",
+                                                "deleted_at": null
+                                            }
+                                        ]
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -12406,10 +12421,6 @@
                 "type": "object",
                 "description": "Hr Demand",
                 "properties": {
-                    "industry_association_id": {
-                        "type": "integer",
-                        "description": "Must exist in industry_associations table"
-                    },
                     "organization_id": {
                         "type": "integer",
                         "description": "Must exist in organizations table"
@@ -13946,6 +13957,13 @@
                     "description": {
                         "type": "string",
                         "description": "Details about the organization"
+                    },
+                    "skills": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Must exist in skills table"
                     },
                     "logo": {
                         "type": "string"

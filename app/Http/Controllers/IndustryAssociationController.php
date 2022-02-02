@@ -626,11 +626,10 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
-
         $this->authorize('viewProfile', $industryAssociation);
-
         $validated = $this->industryAssociationService->industryAssociationAdminValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
+        $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
         $response = [
             'data' => $data,
             '_response_status' => [
