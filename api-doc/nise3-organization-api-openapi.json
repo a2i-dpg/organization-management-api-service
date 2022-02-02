@@ -306,6 +306,15 @@
                         "$ref": "#/components/parameters/industryAssociationId"
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IndustryAssociationRegistrationApprove"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "successfull",
@@ -12401,6 +12410,15 @@
                         "items": {
                             "type": "integer"
                         }
+                    }
+                }
+            },
+            "IndustryAssociationRegistrationApprove": {
+                "type": "object",
+                "description": "permission_sub_group_id",
+                "properties": {
+                    "permission_sub_group_id": {
+                        "type": "integer"
                     }
                 }
             },
