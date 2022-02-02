@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-class IndustryAssociationCodePessimisticLockingsTableSeeder extends Seeder
+class IndustryCodePessimisticLockingsTableSeeder extends Seeder
 {
 
     /**
@@ -20,11 +20,11 @@ class IndustryAssociationCodePessimisticLockingsTableSeeder extends Seeder
 
         Schema::disableForeignKeyConstraints();
 
-        DB::table('industry_association_code_pessimistic_lockings')->truncate();
+        DB::table('industry_code_pessimistic_lockings')->truncate();
 
-        DB::table('industry_association_code_pessimistic_lockings')->insert(array(
+        DB::table('industry_code_pessimistic_lockings')->insert(array(
             array(
-                'last_incremental_value' => 3,
+                'last_incremental_value' => 0,
             ),
         ));
 
