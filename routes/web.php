@@ -131,14 +131,15 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
                 $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
                 $router->put('shortlist/{applicationId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
+                $router->put('interviewed/{applicationId}', ["as" => "candidate-update.interviewed", "uses" => "JobManagementController@updateInterviewedCandidate"]);
             });
 
 
             /**recruitment step routes **/
             $router->get('recruitment-steps/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
-            $router->post('step-create/{jobId}', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
-            $router->put('step-update/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
-            $router->delete('step-delete/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
+            $router->post('recruitment-steps/{jobId}', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->put('recruitment-steps/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+            $router->delete('recruitment-steps/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
 
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {

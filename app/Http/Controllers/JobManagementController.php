@@ -325,7 +325,6 @@ class JobManagementController extends Controller
     {
         $rejectApplication = $this->jobManagementService->rejectCandidate($applicationId);
         $response = [
-            "data" => $rejectApplication,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -359,19 +358,22 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $applicationId
      * @return JsonResponse
-     * @throws Throwable
+     * @throws ValidationException
      */
-    public function inviteCandidateForInterview(int $applicationId): JsonResponse
+    public function updateInterviewedCandidate(Request $request, int $applicationId): JsonResponse
     {
-        $shortlistApplication = $this->jobManagementService->inviteCandidateForInterview($applicationId);
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $validatedData = $this->jobManagementService->interviewedCandidateUpdateValidator($request)->validate();
+        $shortlistApplication = $this->jobManagementService->updateInterviewedCandidate($appliedJob,$validatedData);
         $response = [
             "data" => $shortlistApplication,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Job apply successful",
+                "message" => "interviewed candidate updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -534,17 +536,17 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    function getOneSchedule(int $id):JsonResponse
+    function getOneSchedule(int $id): JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
         $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
-            "success" => true,
-            "code" => ResponseAlias::HTTP_OK,
-            "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-    ]
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -639,7 +641,7 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    public function assignCandidates(Request $request , int $id):mixed
+    public function assignCandidates(Request $request, int $id): mixed
     {
 
         $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
@@ -647,7 +649,7 @@ class JobManagementController extends Controller
         DB::beginTransaction();
         try {
 
-            $this->interviewScheduleService->assignToSchedule($validated , $id);
+            $this->interviewScheduleService->assignToSchedule($validated, $id);
 
             $response = [
 //                "data" => $candidateRequirements,

@@ -7,6 +7,7 @@ use App\Facade\ServiceToServiceCall;
 use App\Models\AdditionalJobInformation;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\CandidateInterview;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
 use App\Models\JobContactInformation;
@@ -94,8 +95,7 @@ class JobManagementService
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Rejected"];
-        $appliedJob->rejected_from = $appliedJob->apply_status;
-        $appliedJob->rejected_at = Carbon::now();
+        $appliedJob->current_recruitment_step_id = null;
         $appliedJob->save();
 
         return $appliedJob;
@@ -156,21 +156,55 @@ class JobManagementService
     }
 
     /**
-     * @throws ValidationException
      */
-    public function inviteCandidateForInterview(int $applicationId)
+    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data)
     {
-        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $candidateInterview = CandidateInterview::where('job_id', $appliedJob->job_id)
+            ->where('applied_job_id', $appliedJob->id)
+            ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
+            ->first();
 
-        if ($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"]) {
-            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interview_invited"];
-            $appliedJob->shortlisted_at = Carbon::now();
-        } else {
-            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+        if (!$candidateInterview) {
+            $candidateInterview = app(CandidateInterview::class);
+
         }
+
+        $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interviewed"];
         $appliedJob->save();
 
-        return $appliedJob;
+        $candidateInterview->job_id = $appliedJob->job_id;
+        $candidateInterview->applied_job_id = $appliedJob->id;
+        $candidateInterview->is_candidate_present = $data['is_candidate_present'];
+        $candidateInterview->interview_score = $data['interview_score'];
+
+        $candidateInterview->save();
+
+        return $candidateInterview;
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function interviewedCandidateUpdateValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'is_candidate_present' => [
+                'required',
+                'integer',
+                Rule::in(CandidateInterview::CANDIDATE_ATTENDANCE_STATUSES),
+            ],
+            'interview_score' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('is_candidate_present') == CandidateInterview::IS_CANDIDATE_PRESENT_YES;
+                }),
+                'nullable',
+                'numeric',
+            ]
+        ];
+
+        return Validator::make($request->all(), $rules);
 
     }
 
@@ -198,17 +232,17 @@ class JobManagementService
     {
         /** @var Builder|RecruitmentStep $recruitmentStepBuilder */
         $recruitmentStepBuilder = RecruitmentStep::select([
-            'recruitment_steps.id',
-            'recruitment_steps.title',
-            'recruitment_steps.title_en',
-            'recruitment_steps.step_type',
-            'recruitment_steps.is_interview_reschedule_allowed',
-            'recruitment_steps.interview_contact',
-            'recruitment_steps.created_at',
-            'recruitment_steps.updated_at',
+            'recruitment_steps . id',
+            'recruitment_steps . title',
+            'recruitment_steps . title_en',
+            'recruitment_steps . step_type',
+            'recruitment_steps . is_interview_reschedule_allowed',
+            'recruitment_steps . interview_contact',
+            'recruitment_steps . created_at',
+            'recruitment_steps . updated_at',
         ]);
 
-        $recruitmentStepBuilder->where('recruitment_steps.id', '=', $stepId);
+        $recruitmentStepBuilder->where('recruitment_steps . id', ' = ', $stepId);
 
         return $recruitmentStepBuilder->firstOrFail();
     }
