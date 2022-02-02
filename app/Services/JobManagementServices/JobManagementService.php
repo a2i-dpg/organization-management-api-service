@@ -102,6 +102,15 @@ class JobManagementService
     }
 
     /**
+     * @param AppliedJob $appliedJob
+     * @return mixed
+     */
+    public function findFirstRecruitmentStep(AppliedJob $appliedJob): mixed
+    {
+        return RecruitmentStep::where('job_id', $appliedJob->job_id)->first();
+    }
+
+    /**
      * Shortlist a candidate for next interview step
      * @param int $applicationId
      * @return AppliedJob
@@ -110,8 +119,7 @@ class JobManagementService
     public function shortlistCandidate(int $applicationId): AppliedJob
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
-        $firstRecruitmentStep = RecruitmentStep::where('job_id', $appliedJob->job_id)->first();
-
+        $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
         if (!empty($appliedJob->current_recruitment_step_id)) {
             $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
             $recruitmentStep = RecruitmentStep::findOrFail($currentRecruitmentStepId);
@@ -156,8 +164,11 @@ class JobManagementService
     }
 
     /**
+     * @param AppliedJob $appliedJob
+     * @param array $data
+     * @return CandidateInterview
      */
-    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data)
+    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data): CandidateInterview
     {
         $candidateInterview = CandidateInterview::where('job_id', $appliedJob->job_id)
             ->where('applied_job_id', $appliedJob->id)
@@ -166,7 +177,6 @@ class JobManagementService
 
         if (!$candidateInterview) {
             $candidateInterview = app(CandidateInterview::class);
-
         }
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interviewed"];
@@ -182,6 +192,39 @@ class JobManagementService
         return $candidateInterview;
     }
 
+    public function findPreviousRecruitmentStep(AppliedJob $appliedJob)
+    {
+        $currentRecruitmentStep = $appliedJob->current_recruitment_step_id;
+        return RecruitmentStep::where('id', '<', $currentRecruitmentStep)
+            ->orderBy('id', 'desc')
+            ->first();
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @return AppliedJob
+     */
+    public function removeCandidateToPreviousStep(AppliedJob $appliedJob): AppliedJob
+    {
+        $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
+        $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
+
+
+        if (!empty($firstRecruitmentStep) && $firstRecruitmentStep->id == $currentRecruitmentStepId) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Applied"];
+            $appliedJob->current_recruitment_step_id = null;
+            $appliedJob->save();
+        } else {
+            $previousRecruitmentStep = $this->findPreviousRecruitmentStep($appliedJob);
+            if (!empty($previousRecruitmentStep)) {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+                $appliedJob->current_recruitment_step_id = $previousRecruitmentStep->id;
+                $appliedJob->save();
+            }
+        }
+
+        return $appliedJob;
+    }
 
     /**
      * @param Request $request

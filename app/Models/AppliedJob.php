@@ -2,9 +2,30 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class AppliedJob
+ * @package App\Models;
+ * @property int id
+ * @property string job_id
+ * @property int youth_id
+ * @property int apply_status
+ * @property int current_recruitment_step_id
+ * @property Carbon applied_at
+ * @property Carbon profile_viewed_at
+ * @property int expected_salary
+ * @property Carbon hire_invited_at
+ * @property Carbon hired_at
+ * @property int hire_invite_type
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Carbon deleted_at
+ *
+ */
 class AppliedJob extends Model
 {
     protected $guarded = [];

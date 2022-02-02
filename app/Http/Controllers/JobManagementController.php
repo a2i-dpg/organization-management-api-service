@@ -367,13 +367,36 @@ class JobManagementController extends Controller
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
         $validatedData = $this->jobManagementService->interviewedCandidateUpdateValidator($request)->validate();
-        $shortlistApplication = $this->jobManagementService->updateInterviewedCandidate($appliedJob,$validatedData);
+        $shortlistApplication = $this->jobManagementService->updateInterviewedCandidate($appliedJob, $validatedData);
         $response = [
             "data" => $shortlistApplication,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "interviewed candidate updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param int $applicationId
+     * @return JsonResponse
+     */
+    public function removeCandidateToPreviousStep(Request $request, int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $shortlistApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
+        $response = [
+            "data" => $shortlistApplication,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate removed successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
