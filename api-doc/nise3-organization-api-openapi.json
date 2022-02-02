@@ -12414,7 +12414,7 @@
                 }
             },
             "IndustryAssociationRegistrationApprove": {
-                "type": "integer",
+                "type": "object",
                 "description": "permission_sub_group_id",
                 "properties": {
                     "permission_sub_group_id": {
