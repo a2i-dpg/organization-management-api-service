@@ -191,6 +191,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
         });
 
+        $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);
+
     });
 
 
