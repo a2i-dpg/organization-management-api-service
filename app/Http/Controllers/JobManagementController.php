@@ -406,16 +406,14 @@ class JobManagementController extends Controller
 
     /**
      * @param Request $request
-     * @param string $jobId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function createRecruitmentStep(Request $request, string $jobId): JsonResponse
+    public function createRecruitmentStep(Request $request): JsonResponse
     {
-        PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-        $filter = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+        $validatedData = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
 
-        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($jobId, $filter);
+        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($validatedData);
         $response = [
             "data" => $recruitmentStep,
             '_response_status' => [
@@ -485,8 +483,8 @@ class JobManagementController extends Controller
     public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
     {
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
-        $filter = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
-        $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $filter);
+        $validatedData = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $validatedData);
         $response = [
             "data" => $recruitmentStep,
             '_response_status' => [

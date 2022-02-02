@@ -251,10 +251,9 @@ class JobManagementService
 
     }
 
-    public function storeRecruitmentStep(string $jobId, array $data)
+    public function storeRecruitmentStep(array $data)
     {
         $recruitmentStep = app(RecruitmentStep::class);
-        $data['job_id'] = $jobId;
         $recruitmentStep->fill($data);
         $recruitmentStep->save();
         return $recruitmentStep;
@@ -337,6 +336,11 @@ class JobManagementService
     public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
+            'job_id' => [
+                'required',
+                'string',
+                'exists:primary_job_information,id,deleted_at,NULL'
+            ],
             'title' => [
                 'string',
                 'required',
