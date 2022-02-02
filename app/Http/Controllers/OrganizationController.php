@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\User;
+use App\Services\CommonServices\CodeGenerateService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -115,13 +116,15 @@ class OrganizationController extends Controller
         $this->authorize('create', $organization);
 
         $validated = $this->organizationService->validator($request)->validate();
-        $subTrades = $validated['sub_trades'];
+
+        $validated['code'] = CodeGenerateService::getIndustryCode();
+
         DB::beginTransaction();
         try {
 
             $organization = $this->organizationService->store($organization, $validated);
 
-            $this->organizationService->syncWithSubTrades($organization, $subTrades);
+            $this->organizationService->syncWithSubTrades($organization, $validated['sub_trades']);
 
             if (!($organization && $organization->id)) {
                 throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
