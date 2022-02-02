@@ -95,7 +95,6 @@ class JobManagementService
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Rejected"];
-        $appliedJob->current_recruitment_step_id = null;
         $appliedJob->save();
 
         return $appliedJob;
@@ -224,6 +223,29 @@ class JobManagementService
         }
 
         return $appliedJob;
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @return AppliedJob
+     * @throws ValidationException
+     */
+    public function restoreRejectedCandidate(AppliedJob $appliedJob): AppliedJob
+    {
+
+        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Rejected"]) {
+            if (!empty($appliedJob->current_recruitment_step_id)) {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+            } else {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Applied"];
+            }
+            $appliedJob->save();
+        } else {
+            throw ValidationException::withMessages(["Candidate apply_status must be rejected to restore"]);
+        }
+
+        return $appliedJob;
+
     }
 
     /**
