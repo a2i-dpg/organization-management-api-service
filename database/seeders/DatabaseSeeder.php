@@ -31,11 +31,13 @@ class DatabaseSeeder extends Seeder
             EducationLevelSeeder::class,
             ExamDegreeSeeder::class,
             SubTradeSeeder::class,
-//            IndustryAssociationSeeder::class,
+//            DefaultIndustryAssociationSeeder::class,
 //            OrganizationSeeder::class,
 //            HumanResourceTemplateSeeder::class,
 //            PublicationSeeder::class,
 //            ContactInfoSeeder::class,
         ]);
+        $this->call(IndustryAssociationsTableSeeder::class);
+        $this->call(IndustryAssociationCodePessimisticLockingsTableSeeder::class);
     }
 }
