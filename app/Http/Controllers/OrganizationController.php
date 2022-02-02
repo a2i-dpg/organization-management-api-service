@@ -268,6 +268,8 @@ class OrganizationController extends Controller
         $organization = app(Organization::class);
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
 
+        $validated['code'] = CodeGenerateService::getIndustryCode();
+
         Log::channel('org_reg')->info('organization_registration_validated_data', $validated);
 
         DB::beginTransaction();
