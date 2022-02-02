@@ -110,6 +110,10 @@ $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\RabbitMQServiceProvider::class);
 $app->register(VladimirYuldashev\LaravelQueueRabbitMQ\LaravelQueueRabbitMQServiceProvider::class);
 
+if ($app->environment('local')) {
+    $app->register(App\Iseed\IseedServiceProvider::class);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

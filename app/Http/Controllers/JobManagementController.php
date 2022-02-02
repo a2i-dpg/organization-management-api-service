@@ -389,6 +389,7 @@ class JobManagementController extends Controller
     {
         PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
         $filter = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+
         $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($jobId, $filter);
         $response = [
             "data" => $recruitmentStep,
@@ -396,6 +397,53 @@ class JobManagementController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "Recruitment Step stored successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param int $stepId
+     * @return JsonResponse
+     */
+    public function getRecruitmentStep(int $stepId): JsonResponse
+    {
+        $recruitmentStep = $this->jobManagementService->getRecruitmentStep($stepId);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param int $stepId
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function destroyRecruitmentStep(int $stepId): JsonResponse
+    {
+        $recruitmentStep = RecruitmentStep::findOrFail($stepId);
+        $isLastStep = $this->jobManagementService->isLastRecruitmentStep($recruitmentStep);
+
+        throw_if(!$isLastStep, ValidationException::withMessages([
+            "Recruitment Step can not be deleted"
+        ]));
+
+        $data = $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
+        $response = [
+            "data" => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Recruitment Step deleted successfully.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -480,6 +528,26 @@ class JobManagementController extends Controller
         return $this->getCandidateList($request, $jobId, AppliedJob::APPLY_STATUS["Hired"]);
     }
 
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    function getOneSchedule(int $id):JsonResponse
+    {
+        $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
+        $this->authorize('view', $schedule);
+        $response = [
+            "data" => $schedule,
+            "_response_status" => [
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+    ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
 
 
     /**
@@ -569,5 +637,34 @@ class JobManagementController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    public function assignCandidates(Request $request , int $id):mixed
+    {
+
+        $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
+
+        DB::beginTransaction();
+        try {
+
+            $this->interviewScheduleService->assignToSchedule($validated , $id);
+
+            $response = [
+//                "data" => $candidateRequirements,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "CandidateRequirements successfully submitted",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+            DB::commit();
+        } catch (Throwable $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
     }
 }
