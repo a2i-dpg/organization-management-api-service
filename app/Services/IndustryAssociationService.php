@@ -634,6 +634,11 @@ class IndustryAssociationService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
+        if (!empty($request->offsetGet('skills'))) {
+            $skillIds = is_array($request->offsetGet('skills')) ? $request->offsetGet('skills') : explode(',', $request->offsetGet('skills'));
+            $request->offsetSet('skills', $skillIds);
+        }
+
         $rules = [
             'trade_id' => [
                 'required',
@@ -812,6 +817,11 @@ class IndustryAssociationService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
+        if (!empty($request->offsetGet('skills'))) {
+            $skillIds = is_array($request->offsetGet('skills')) ? $request->offsetGet('skills') : explode(',', $request->offsetGet('skills'));
+            $request->offsetSet('skills', $skillIds);
+        }
+
         $rules = [
             'title_en' => [
                 'nullable',
@@ -889,6 +899,16 @@ class IndustryAssociationService
                 'nullable',
                 'max: 250',
                 'min:2'
+            ],
+            "skills" => [
+                "nullable",
+                "array",
+                "min:1"
+            ],
+            "skills.*" => [
+                "required",
+                "int",
+                "exists:skills,id,deleted_at,NULL"
             ],
             'logo' => [
                 'nullable',
