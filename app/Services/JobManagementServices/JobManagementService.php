@@ -169,14 +169,10 @@ class JobManagementService
      */
     public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data): CandidateInterview
     {
-        $candidateInterview = CandidateInterview::where('job_id', $appliedJob->job_id)
-            ->where('applied_job_id', $appliedJob->id)
-            ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
-            ->first();
-
-        if (!$candidateInterview) {
-            $candidateInterview = app(CandidateInterview::class);
-        }
+        $candidateInterview = CandidateInterview::firstOrNew(
+            ['applied_job_id' => $appliedJob->id],
+            ['recruitment_step_id', $appliedJob->current_recruitment_step_id]
+        );
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interviewed"];
         $appliedJob->save();
