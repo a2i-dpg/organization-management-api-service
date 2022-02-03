@@ -11517,7 +11517,7 @@
                 }
             }
         },
-        "/hr-demands/{hr_demand_id}": {
+        "/hr-demands/{hr_demand_institute_id}": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11526,7 +11526,7 @@
                 "description": "API endpoint to get a single Hr demand approved by institute. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "responses": {
@@ -11557,7 +11557,7 @@
                 }
             }
         },
-        "/hr-demand-approved-by-institute/{hr_demand_id}": {
+        "/hr-demand-approved-by-institute/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11566,7 +11566,7 @@
                 "description": "API endpoint to Get a single hr-demand approved by institutes.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "requestBody": {
@@ -11610,7 +11610,7 @@
                 }
             }
         },
-        "/hr-demand-rejected-by-institute/{hr_demand_id}": {
+        "/hr-demand-rejected-by-institute/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11619,7 +11619,7 @@
                 "description": "API endpoint to Get a single hr-demand rejected by institutes.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "responses": {
