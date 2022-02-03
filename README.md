@@ -10,7 +10,9 @@ RELEASE = 'php artisan migrate:fresh --seed'
 
 ## Contributing
 
-
+```
+Dhoro Jodi Hothat Sondhe
+```
 
 ## Security Vulnerabilities
 
