@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-class IndustryAssociationSeeder extends Seeder
+class DefaultIndustryAssociationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
