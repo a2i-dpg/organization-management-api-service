@@ -625,7 +625,7 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
-        $this->authorize('viewProfile', $industryAssociation);
+        $this->authorize('updateProfile', $industryAssociation);
         $validated = $this->industryAssociationService->industryAssociationProfileUpdateValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
         $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
@@ -653,7 +653,8 @@ class IndustryAssociationController extends Controller
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($industryAssociationId);
 
-        $this->authorize('updateProfile', $industryAssociation);
+        $this->authorize('viewProfile', $industryAssociation);
+
 
         $response = [
             "data" => $industryAssociation,
