@@ -1346,7 +1346,7 @@ class OrganizationService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function organizationAdminProfileValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function organizationProfileUpdateValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
 

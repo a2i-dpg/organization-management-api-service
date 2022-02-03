@@ -8,6 +8,7 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
@@ -100,9 +101,14 @@ class PrimaryJobInformation extends BaseModel
         return $this->belongsToMany(EmploymentType::class, "primary_job_information_employment_status");
     }
 
-    public function additionalJobInformation(): BelongsTo
+    public function additionalJobInformation(): HasOne
     {
-        return $this->belongsTo(AdditionalJobInformation::class, 'job_id', "job_id");
+        return $this->hasOne(AdditionalJobInformation::class, 'job_id', "job_id");
+    }
+
+    public function candidateRequirement(): HasOne
+    {
+        return $this->hasOne(CandidateRequirement::class, 'job_id', "job_id");
     }
 
     /**publish or archive status */
