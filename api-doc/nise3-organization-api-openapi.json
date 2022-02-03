@@ -11620,14 +11620,6 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/hr_demand_id"
-                    },
-                    {
-                        "name": "rejected_by_institute",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
                     }
                 ],
                 "responses": {

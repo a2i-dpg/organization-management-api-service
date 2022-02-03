@@ -32,6 +32,10 @@ class PrimaryJobInformationService
         $skillIds = $request['skill_ids'] ?? [];
         $jobSectorIds = $request['job_sector_ids'] ?? [];
         $occupationIds = $request['occupation_ids'] ?? [];
+        $locDistrictId = $request['loc_district_id'] ?? "";
+        $industryAssociationId = $request['industry_association_id'] ?? "";
+        $instituteId = $request['institute_id'] ?? "";
+        $organizationId = $request['organization_id'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -54,6 +58,7 @@ class PrimaryJobInformationService
             'primary_job_information.archived_at',
             'primary_job_information.application_deadline',
             'primary_job_information.id',
+
             'additional_job_information.job_context',
             'additional_job_information.job_context_en',
             'additional_job_information.salary_min',
@@ -79,9 +84,22 @@ class PrimaryJobInformationService
 
         $jobInformationBuilder->orderBy('primary_job_information.id', $order);
 
+        if (is_numeric($industryAssociationId)) {
+            $jobInformationBuilder->where('primary_job_information.industry_association_id', $industryAssociationId);
+        }
+
+        if (is_numeric($instituteId)) {
+            $jobInformationBuilder->where('primary_job_information.institute_id', $instituteId);
+        }
+
+        if (is_numeric($organizationId)) {
+            $jobInformationBuilder->where('primary_job_information.organization_id', $organizationId);
+        }
+
         if (is_numeric($rowStatus)) {
             $jobInformationBuilder->where('primary_job_information.row_status', $rowStatus);
         }
+
         if (!empty($titleEn)) {
             $jobInformationBuilder->where('primary_job_information.title_en', 'like', '%' . $titleEn . '%');
         }
@@ -104,11 +122,17 @@ class PrimaryJobInformationService
                 ->whereNull('industry_associations.deleted_at')
                 ->whereNotNull('primary_job_information.industry_association_id');
         });
+
+        if (is_numeric($locDistrictId)) {
+            $jobInformationBuilder->where('industry_associations.loc_district_id', $locDistrictId);
+        }
+
         $jobInformationBuilder->leftJoin('organizations', function ($join) {
             $join->on('primary_job_information.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at')
                 ->whereNotNull('primary_job_information.organization_id');
         });
+
 
 
 
@@ -256,7 +280,7 @@ class PrimaryJobInformationService
         $primaryJobInformation->employmentTypes()->sync($employmentTypes);
     }
 
-    public function JobListFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function jobListFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'order.in' => 'Order must be within ASC or DESC.[30000]',
@@ -287,6 +311,10 @@ class PrimaryJobInformationService
             'job_title' => 'nullable|max:500|min:2',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
+            'loc_district_id' => 'nullable|integer',
+            'industry_association_id' => 'nullable|integer',
+            'organization_id' => 'nullable|integer',
+            'institute_id' => 'nullable|integer',
             'order' => [
                 'nullable',
                 'string',
