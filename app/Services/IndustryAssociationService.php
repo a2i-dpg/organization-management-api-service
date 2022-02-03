@@ -168,8 +168,8 @@ class IndustryAssociationService
             'industry_associations.loc_upazila_id',
             'loc_upazilas.title_en as loc_upazila_title_en',
             'loc_upazilas.title as loc_upazila_title',
-            'loc_upazilas.title as location_latitude',
-            'loc_upazilas.title as location_longitude',
+            'industry_associations.location_latitude',
+            'industry_associations.location_longitude',
             'loc_upazilas.title as google_map_src',
             'industry_associations.name_of_the_office_head',
             'industry_associations.name_of_the_office_head_en',
@@ -811,7 +811,7 @@ class IndustryAssociationService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
-    public function industryAssociationAdminValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function industryAssociationProfileUpdateValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'

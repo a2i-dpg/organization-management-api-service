@@ -14,7 +14,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -626,8 +625,8 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
-        $this->authorize('viewProfile', $industryAssociation);
-        $validated = $this->industryAssociationService->industryAssociationAdminValidator($request)->validate();
+        $this->authorize('updateProfile', $industryAssociation);
+        $validated = $this->industryAssociationService->industryAssociationProfileUpdateValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
         $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
         $response = [
@@ -654,7 +653,8 @@ class IndustryAssociationController extends Controller
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($industryAssociationId);
 
-        $this->authorize('updateProfile', $industryAssociation);
+        $this->authorize('viewProfile', $industryAssociation);
+
 
         $response = [
             "data" => $industryAssociation,

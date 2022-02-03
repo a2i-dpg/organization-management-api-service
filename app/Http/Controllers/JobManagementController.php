@@ -125,8 +125,8 @@ class JobManagementController extends Controller
     public function getJobList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', JobManagement::class);
-        $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
-        $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+        $filter = $this->jobManagementService->jobListFilterValidator($request)->validate();
+        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime);
 
         $response = [
             'order' => $returnedData['order'],
@@ -147,11 +147,14 @@ class JobManagementController extends Controller
     }
 
 
+    /**
+     * @throws ValidationException
+     */
     public function getPublicJobList(Request $request): JsonResponse
     {
-        $filter = $this->primaryJobInformationService->JobListFilterValidator($request)->validate();
+        $filter = $this->jobManagementService->jobListFilterValidator($request)->validate();
         $filter[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY] = BaseModel::IS_CLIENT_SITE_RESPONSE_FLAG;
-        $returnedData = $this->primaryJobInformationService->getJobList($filter, $this->startTime);
+        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime);
 
         $response = [
             'order' => $returnedData['order'],
