@@ -7226,6 +7226,9 @@
                         "$ref": "#/components/parameters/occupation_ids"
                     },
                     {
+                        "$ref": "#/components/parameters/loc_district_ids"
+                    },
+                    {
                         "$ref": "#/components/parameters/job_sector_ids"
                     },
                     {
@@ -16419,6 +16422,17 @@
                     "type": "string"
                 },
                 "description": "Send occupation_ids as comma seperated string.example 1,2,3 "
+            },
+            "loc_district_ids": {
+                "name": "loc_district_ids",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
             },
             "rankId": {
                 "name": "rankId",
