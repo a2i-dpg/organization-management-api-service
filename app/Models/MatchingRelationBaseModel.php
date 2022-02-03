@@ -54,6 +54,7 @@ class MatchingRelationBaseModel extends BaseModel
             ->leftJoin('area_of_experiences', "area_of_experiences.id", '=', 'candidate_requirement_area_of_experience.area_of_experience_id')
             ->select([
                 "candidate_requirement_area_of_experience.*",
+                "area_of_experiences.id as id",
                 "area_of_experiences.title as title",
                 "area_of_experiences.title_en as title_en",
             ]);
@@ -65,6 +66,7 @@ class MatchingRelationBaseModel extends BaseModel
             ->leftJoin('area_of_business', "area_of_business.id", '=', 'candidate_requirement_area_of_business.area_of_business_id')
             ->select([
                 "candidate_requirement_area_of_business.*",
+                "area_of_business.id as id",
                 "area_of_business.title as title",
                 "area_of_business.title_en as title_en",
             ]);
@@ -76,6 +78,7 @@ class MatchingRelationBaseModel extends BaseModel
             ->leftJoin('skills', "skills.id", '=', 'candidate_requirement_skill.skill_id')
             ->select([
                 "candidate_requirement_skill.*",
+                "skills.id as id",
                 "skills.title as title",
                 "skills.title_en as title_en",
             ]);
