@@ -43,9 +43,10 @@ class JobManagementService
     /**
      * @param array $request
      * @param Carbon $startTime
+     * @param bool $isPublicApiCall
      * @return array
      */
-    public function getJobList(array $request, Carbon $startTime): array
+    public function getJobList(array $request, Carbon $startTime, bool $isPublicApiCall = false): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -92,8 +93,11 @@ class JobManagementService
             'organizations.logo as organization_logo',
             'organizations.address as organization_address',
             'organizations.address_en as organization_address_en',
+        ]);
 
-        ])->acl();
+        if(!$isPublicApiCall){
+            $jobInformationBuilder->acl();
+        }
 
         if (!$type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
             $jobInformationBuilder->orderBy('primary_job_information.id', $order);
