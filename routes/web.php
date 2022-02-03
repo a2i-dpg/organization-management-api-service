@@ -14,6 +14,12 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->get('/test-excel', function () use ($router) {
+
+    $file = public_path() .'/organization-list.xlsx';
+    \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
+});
+
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
