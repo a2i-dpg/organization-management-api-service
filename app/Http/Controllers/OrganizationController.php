@@ -564,7 +564,7 @@ class OrganizationController extends Controller
         $this->authorize('updateProfile', $organization);
 
 
-        $validated = $this->organizationService->organizationAdminProfileValidator($request, $organizationId)->validate();
+        $validated = $this->organizationService->organizationProfileUpdateValidator($request, $organizationId)->validate();
         $data = $this->organizationService->update($organization, $validated);
         $response = [
             'data' => $data ?: [],
