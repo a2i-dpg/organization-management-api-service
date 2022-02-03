@@ -7594,7 +7594,7 @@
         "/jobs/store-primary-job-information": {
             "post": {
                 "tags": [
-                    "Primary Job Information"
+                    "Primary Job Information [Job Management Step : 1]"
                 ],
                 "summary": "Store a primary job information",
                 "description": "API endpoint to Store a primary job information.A successful request response will show 201 HTTP status code",
@@ -7648,7 +7648,7 @@
         "/jobs/primary-job-information/{jobId}": {
             "get": {
                 "tags": [
-                    "Primary Job Information"
+                    "Primary Job Information [Job Management Step : 1]"
                 ],
                 "summary": "Get a primary job information",
                 "parameters": [
@@ -7722,7 +7722,7 @@
         "/jobs/status-change/{jobId}": {
             "post": {
                 "tags": [
-                    "Primary Job Information"
+                    "Primary Job Information [Job Management Step : 1]"
                 ],
                 "summary": "Change primary job information status",
                 "description": "API endpoint to change primary job information status.A successful request response will show 201 HTTP status code",
@@ -7762,7 +7762,7 @@
         "/jobs/store-additional-job-information": {
             "post": {
                 "tags": [
-                    "Additional Job Information"
+                    "Additional Job Information [Job Management Step : 2]"
                 ],
                 "summary": "Store additional job info",
                 "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
@@ -7821,7 +7821,7 @@
         "/jobs/additional-job-information/{jobId}": {
             "get": {
                 "tags": [
-                    "Additional Job Information"
+                    "Additional Job Information [Job Management Step : 2]"
                 ],
                 "summary": "Get a specific additional job info",
                 "description": "API endpoint to Get a specific additional job info.A successful request response will show 201 HTTP status code",
@@ -7956,7 +7956,7 @@
         "/jobs/store-company-info-visibility": {
             "post": {
                 "tags": [
-                    "Company info visibility"
+                    "Company info visibility [Job Management Step : 4]"
                 ],
                 "summary": "Store company info visibility",
                 "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
@@ -8001,7 +8001,7 @@
         "/jobs/company-info-visibility/{jobId}": {
             "get": {
                 "tags": [
-                    "Company info visibility"
+                    "Company info visibility [Job Management Step : 4]"
                 ],
                 "summary": "Get a specific company info visibility",
                 "parameters": [
@@ -8043,7 +8043,7 @@
         "/jobs/contact-information": {
             "post": {
                 "tags": [
-                    "Contact Information"
+                    "Contact Information[Job Management Step : 6]"
                 ],
                 "summary": "Store contact information",
                 "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
@@ -8084,7 +8084,7 @@
         "/jobs/contact-information/{jobId}": {
             "get": {
                 "tags": [
-                    "Contact Information"
+                    "Contact Information[Job Management Step : 6]"
                 ],
                 "summary": "Store contact information",
                 "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
@@ -8123,7 +8123,7 @@
         "/jobs/store-candidate-requirements": {
             "post": {
                 "tags": [
-                    "Candidate Requirements"
+                    "Candidate Requirements [Job Management Step : 3]"
                 ],
                 "summary": "Store Candidate Requirements",
                 "description": "API endpoint to Store Candidate Requirements.A successful request response will show 201 HTTP status code",
@@ -8176,7 +8176,7 @@
         "/jobs/candidate-requirements/{jobId}": {
             "get": {
                 "tags": [
-                    "Candidate Requirements"
+                    "Candidate Requirements [Job Management Step : 3]"
                 ],
                 "summary": "Get a candidate requirement by Id",
                 "description": "API endpoint to Get a candidate requirement by Id.A successful request response will show 201 HTTP status code",
@@ -8326,7 +8326,7 @@
         "/jobs/store-matching-criteria": {
             "post": {
                 "tags": [
-                    "Matching Criteria"
+                    "Matching Criteria [Job Management Step : 5]"
                 ],
                 "summary": "Create a matching crieria",
                 "description": "API endpoint to Create a matching crieria.A successful request response will show 201 HTTP status code",
@@ -8380,7 +8380,7 @@
         "/jobs/matching-criteria/{jobId}": {
             "get": {
                 "tags": [
-                    "Matching Criteria"
+                    "Matching Criteria [Job Management Step : 5]"
                 ],
                 "summary": "Create a matching crieria",
                 "description": "API endpoint to get a matching crieria.A successful request response will show 201 HTTP status code",
@@ -8522,7 +8522,7 @@
         "/jobs/job-preview/{jobId}": {
             "get": {
                 "tags": [
-                    "Job Preview"
+                    "Job Preview[Job Management Step : 7]"
                 ],
                 "summary": "Get a job preview ",
                 "description": "API endpoint to Get a job preview.A successful request response will show 201 HTTP status code",
@@ -11517,7 +11517,7 @@
                 }
             }
         },
-        "/hr-demands/{hr_demand_id}": {
+        "/hr-demands/{hr_demand_institute_id}": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11526,7 +11526,7 @@
                 "description": "API endpoint to get a single Hr demand approved by institute. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "responses": {
@@ -11557,7 +11557,7 @@
                 }
             }
         },
-        "/hr-demand-approved-by-institute/{hr_demand_id}": {
+        "/hr-demand-approved-by-institute/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11566,7 +11566,7 @@
                 "description": "API endpoint to Get a single hr-demand approved by institutes.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "requestBody": {
@@ -11610,7 +11610,7 @@
                 }
             }
         },
-        "/hr-demand-rejected-by-institute/{hr_demand_id}": {
+        "/hr-demand-rejected-by-institute/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11619,7 +11619,7 @@
                 "description": "API endpoint to Get a single hr-demand rejected by institutes.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "responses": {
