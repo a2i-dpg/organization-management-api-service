@@ -7,6 +7,7 @@ use App\Facade\ServiceToServiceCall;
 use App\Models\AdditionalJobInformation;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\CandidateInterview;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
 use App\Models\JobContactInformation;
@@ -94,11 +95,18 @@ class JobManagementService
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Rejected"];
-        $appliedJob->rejected_from = $appliedJob->apply_status;
-        $appliedJob->rejected_at = Carbon::now();
         $appliedJob->save();
 
         return $appliedJob;
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @return mixed
+     */
+    public function findFirstRecruitmentStep(AppliedJob $appliedJob): mixed
+    {
+        return RecruitmentStep::where('job_id', $appliedJob->job_id)->first();
     }
 
     /**
@@ -110,41 +118,160 @@ class JobManagementService
     public function shortlistCandidate(int $applicationId): AppliedJob
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
+        $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
+        if (!empty($appliedJob->current_recruitment_step_id)) {
+            $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
+            $recruitmentStep = RecruitmentStep::findOrFail($currentRecruitmentStepId);
+            $lastRecruitmentStepId = $this->findLastRecruitmentStep($recruitmentStep);
+            $nextRecruitmentStepId = $this->findNextRecruitmentStep($recruitmentStep);
+        }
 
-        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"]) {
+        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Applied"] && $firstRecruitmentStep) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
-            $appliedJob->shortlisted_at = Carbon::now();
+            $appliedJob->current_recruitment_step_id = $firstRecruitmentStep->id;
+            $appliedJob->save();
+
+        } else if ($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"] && !empty($nextRecruitmentStepId) && !empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId > $currentRecruitmentStepId) {
+            $appliedJob->current_recruitment_step_id = $nextRecruitmentStepId;
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+            $appliedJob->save();
+
+        } else if (!$firstRecruitmentStep || (!empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId == $currentRecruitmentStepId)) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hiring_Listed"];
+            $appliedJob->current_recruitment_step_id = null;
+            $appliedJob->save();
+
         } else {
             throw ValidationException::withMessages(['candidate can not be selected for  next step']);
         }
+
+        return $appliedJob;
+    }
+
+
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return mixed
+     */
+    public function findNextRecruitmentStep(RecruitmentStep $recruitmentStep): mixed
+    {
+        $nextStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
+            ->where('id', '>', $recruitmentStep->id)
+            ->first();
+
+        return $nextStep->id ?? null;
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @param array $data
+     * @return CandidateInterview
+     */
+    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data): CandidateInterview
+    {
+        $candidateInterview = CandidateInterview::firstOrNew(
+            ['applied_job_id' => $appliedJob->id],
+            ['recruitment_step_id', $appliedJob->current_recruitment_step_id]
+        );
+
+        $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interviewed"];
         $appliedJob->save();
+
+        $candidateInterview->job_id = $appliedJob->job_id;
+        $candidateInterview->applied_job_id = $appliedJob->id;
+        $candidateInterview->is_candidate_present = $data['is_candidate_present'];
+        $candidateInterview->interview_score = $data['interview_score'];
+
+        $candidateInterview->save();
+
+        return $candidateInterview;
+    }
+
+    public function findPreviousRecruitmentStep(AppliedJob $appliedJob)
+    {
+        $currentRecruitmentStep = $appliedJob->current_recruitment_step_id;
+        return RecruitmentStep::where('id', '<', $currentRecruitmentStep)
+            ->orderBy('id', 'desc')
+            ->first();
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @return AppliedJob
+     */
+    public function removeCandidateToPreviousStep(AppliedJob $appliedJob): AppliedJob
+    {
+        $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
+        $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
+
+
+        if (!empty($firstRecruitmentStep) && $firstRecruitmentStep->id == $currentRecruitmentStepId) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Applied"];
+            $appliedJob->current_recruitment_step_id = null;
+            $appliedJob->save();
+        } else {
+            $previousRecruitmentStep = $this->findPreviousRecruitmentStep($appliedJob);
+            if (!empty($previousRecruitmentStep)) {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+                $appliedJob->current_recruitment_step_id = $previousRecruitmentStep->id;
+                $appliedJob->save();
+            }
+        }
 
         return $appliedJob;
     }
 
     /**
+     * @param AppliedJob $appliedJob
+     * @return AppliedJob
      * @throws ValidationException
      */
-    public function inviteCandidateForInterview(int $applicationId)
+    public function restoreRejectedCandidate(AppliedJob $appliedJob): AppliedJob
     {
-        $appliedJob = AppliedJob::findOrFail($applicationId);
 
-        if ($appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"]) {
-            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interview_invited"];
-            $appliedJob->shortlisted_at = Carbon::now();
+        if ($appliedJob->apply_status == AppliedJob::APPLY_STATUS["Rejected"]) {
+            if (!empty($appliedJob->current_recruitment_step_id)) {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+            } else {
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Applied"];
+            }
+            $appliedJob->save();
         } else {
-            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+            throw ValidationException::withMessages(["Candidate apply_status must be rejected to restore"]);
         }
-        $appliedJob->save();
 
         return $appliedJob;
 
     }
 
-    public function storeRecruitmentStep(string $jobId, array $data)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function interviewedCandidateUpdateValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'is_candidate_present' => [
+                'required',
+                'integer',
+                Rule::in(CandidateInterview::CANDIDATE_ATTENDANCE_STATUSES),
+            ],
+            'interview_score' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('is_candidate_present') == CandidateInterview::IS_CANDIDATE_PRESENT_YES;
+                }),
+                'nullable',
+                'numeric',
+            ]
+        ];
+
+        return Validator::make($request->all(), $rules);
+
+    }
+
+    public function storeRecruitmentStep(array $data)
     {
         $recruitmentStep = app(RecruitmentStep::class);
-        $data['job_id'] = $jobId;
         $recruitmentStep->fill($data);
         $recruitmentStep->save();
         return $recruitmentStep;
@@ -165,17 +292,17 @@ class JobManagementService
     {
         /** @var Builder|RecruitmentStep $recruitmentStepBuilder */
         $recruitmentStepBuilder = RecruitmentStep::select([
-            'recruitment_steps.id',
-            'recruitment_steps.title',
-            'recruitment_steps.title_en',
-            'recruitment_steps.step_type',
-            'recruitment_steps.is_interview_reschedule_allowed',
-            'recruitment_steps.interview_contact',
-            'recruitment_steps.created_at',
-            'recruitment_steps.updated_at',
+            'recruitment_steps . id',
+            'recruitment_steps . title',
+            'recruitment_steps . title_en',
+            'recruitment_steps . step_type',
+            'recruitment_steps . is_interview_reschedule_allowed',
+            'recruitment_steps . interview_contact',
+            'recruitment_steps . created_at',
+            'recruitment_steps . updated_at',
         ]);
 
-        $recruitmentStepBuilder->where('recruitment_steps.id', '=', $stepId);
+        $recruitmentStepBuilder->where('recruitment_steps . id', ' = ', $stepId);
 
         return $recruitmentStepBuilder->firstOrFail();
     }
@@ -190,22 +317,48 @@ class JobManagementService
 
     }
 
-    public function isLastRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return bool
+     */
+    public function isRecruitmentStepDeletable(RecruitmentStep $recruitmentStep): bool
     {
-        $maxStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
-            ->max('id');
-
-        $currentStepCandidates = AppliedJob::where('job_id', $recruitmentStep->job_id)
-            ->where('current_recruitment_step_id', $recruitmentStep->job_id)
-            ->count('id');
+        $maxStep = $this->findLastRecruitmentStep($recruitmentStep);
+        $currentStepCandidates = $this->countCurrentRecruitmentStepCandidate($recruitmentStep);
 
         return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0;
+    }
+
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return mixed
+     */
+    public function countCurrentRecruitmentStepCandidate(RecruitmentStep $recruitmentStep): mixed
+    {
+        return AppliedJob::where('job_id', $recruitmentStep->job_id)
+            ->where('current_recruitment_step_id', $recruitmentStep->id)
+            ->count('id');
+    }
+
+    /**
+     * @param RecruitmentStep $recruitmentStep
+     * @return mixed
+     */
+    public function findLastRecruitmentStep(RecruitmentStep $recruitmentStep): mixed
+    {
+        return RecruitmentStep::where('job_id', $recruitmentStep->job_id)
+            ->max('id');
     }
 
 
     public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
+            'job_id' => [
+                'required',
+                'string',
+                'exists:primary_job_information,id,deleted_at,NULL'
+            ],
             'title' => [
                 'string',
                 'required',
