@@ -51,7 +51,7 @@ class AppliedJob extends Model
     public const INVITE_TYPES = [
         "SMS" => 1,
         "Email" => 2,
-        "SMS and email" => 3,
+        "SMS and Email" => 3,
         "Other" => 4,
     ];
 }

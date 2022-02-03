@@ -350,6 +350,32 @@ class JobManagementService
             ->max('id');
     }
 
+    /**
+     * @param AppliedJob $appliedJob
+     * @param array $data
+     * @return AppliedJob
+     */
+    public function hireInviteCandidate(AppliedJob $appliedJob, array $data): AppliedJob
+    {
+        $data['hire_invited_at'] = Carbon::now();
+        $appliedJob->fill($data);
+        $appliedJob->save();
+        return $appliedJob;
+    }
+
+    public function hireInviteValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'hire_invite_type' => [
+                'integer',
+                'required',
+                Rule::in(AppliedJob::INVITE_TYPES)
+            ]
+        ];
+
+        return Validator::make($request->all(), $rules);
+
+    }
 
     public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {

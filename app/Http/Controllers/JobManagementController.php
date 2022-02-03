@@ -405,12 +405,11 @@ class JobManagementController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param int $applicationId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function restoreRejectedCandidate(Request $request, int $applicationId): JsonResponse
+    public function restoreRejectedCandidate(int $applicationId): JsonResponse
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
@@ -468,6 +467,38 @@ class JobManagementController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function hireInviteCandidate(Request $request, int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $validatedData = $this->jobManagementService->hireInviteValidator($request)->validate();
+        $hireInvitedCandidate = $this->jobManagementService->hireInviteCandidate($appliedJob, $validatedData);
+
+        $hireInviteType = $hireInvitedCandidate;
+        if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS']) {
+            //TODO :send sms to hire invitedCandidate
+        } else if ($hireInviteType == AppliedJob::INVITE_TYPES['Email']) {
+            //TODO :send Email to hire invitedCandidate
+        } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
+            //TODO :send Email and sms to hire invitedCandidate
+        } else {
+            //TODO: Other system to hire Invite Candidae
+        }
+        $response = [
+            "data" => $hireInvitedCandidate,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate  hire  invited successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
