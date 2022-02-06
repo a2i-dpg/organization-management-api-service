@@ -13300,6 +13300,9 @@
                         "$ref": "#/components/parameters/hr_demand_institute_id"
                     },
                     {
+                        "$ref": "#/components/parameters/hr_demand_youth_type"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -16313,6 +16316,16 @@
             }
         },
         "parameters": {
+            "hr_demand_youth_type": {
+                "name": "hr_demand_youth_type",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "enum": [1,2]
+                },
+                "description": "1=> Cv Link 2=> Youth Id"
+            },
             "applicationId": {
                 "name": "applicationId",
                 "in": "path",
