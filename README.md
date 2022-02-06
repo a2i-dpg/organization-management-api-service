@@ -6,10 +6,9 @@ RELEASE = 'php artisan migrate:fresh --seed'
 
 ## Official Documentation
 
-
+N/A Yet
 
 ## Contributing
-
 
 
 ## Security Vulnerabilities

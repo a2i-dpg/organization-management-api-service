@@ -154,7 +154,7 @@ class JobManagementController extends Controller
     {
         $filter = $this->jobManagementService->jobListFilterValidator($request)->validate();
         $filter[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY] = BaseModel::IS_CLIENT_SITE_RESPONSE_FLAG;
-        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime);
+        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime, true);
 
         $response = [
             'order' => $returnedData['order'],
@@ -328,7 +328,6 @@ class JobManagementController extends Controller
     {
         $rejectApplication = $this->jobManagementService->rejectCandidate($applicationId);
         $response = [
-            "data" => $rejectApplication,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -362,19 +361,68 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $applicationId
      * @return JsonResponse
-     * @throws Throwable
+     * @throws ValidationException
      */
-    public function inviteCandidateForInterview(int $applicationId): JsonResponse
+    public function updateInterviewedCandidate(Request $request, int $applicationId): JsonResponse
     {
-        $shortlistApplication = $this->jobManagementService->inviteCandidateForInterview($applicationId);
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $validatedData = $this->jobManagementService->interviewedCandidateUpdateValidator($request)->validate();
+        $shortlistApplication = $this->jobManagementService->updateInterviewedCandidate($appliedJob, $validatedData);
         $response = [
             "data" => $shortlistApplication,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Job apply successful",
+                "message" => "interviewed candidate updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param int $applicationId
+     * @return JsonResponse
+     */
+    public function removeCandidateToPreviousStep(int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $shortlistApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
+        $response = [
+            "data" => $shortlistApplication,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate removed successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+
+    }
+
+    /**
+     * @param int $applicationId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function restoreRejectedCandidate(int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $shortlistApplication = $this->jobManagementService->restoreRejectedCandidate($appliedJob);
+        $response = [
+            "data" => $shortlistApplication,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate restored successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -384,16 +432,14 @@ class JobManagementController extends Controller
 
     /**
      * @param Request $request
-     * @param string $jobId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function createRecruitmentStep(Request $request, string $jobId): JsonResponse
+    public function createRecruitmentStep(Request $request): JsonResponse
     {
-        PrimaryJobInformation::where('job_id', $jobId)->firstOrFail();
-        $filter = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+        $validatedData = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
 
-        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($jobId, $filter);
+        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($validatedData);
         $response = [
             "data" => $recruitmentStep,
             '_response_status' => [
@@ -427,6 +473,38 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @throws ValidationException
+     */
+    public function hireInviteCandidate(Request $request, int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $validatedData = $this->jobManagementService->hireInviteValidator($request)->validate();
+        $hireInvitedCandidate = $this->jobManagementService->hireInviteCandidate($appliedJob, $validatedData);
+
+        $hireInviteType = $hireInvitedCandidate;
+        if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS']) {
+            //TODO :send sms to hire invitedCandidate
+        } else if ($hireInviteType == AppliedJob::INVITE_TYPES['Email']) {
+            //TODO :send Email to hire invitedCandidate
+        } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
+            //TODO :send Email and sms to hire invitedCandidate
+        } else {
+            //TODO: Other system to hire Invite Candidae
+        }
+        $response = [
+            "data" => $hireInvitedCandidate,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate  hire  invited successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param int $stepId
      * @return JsonResponse
      * @throws Throwable
@@ -434,9 +512,9 @@ class JobManagementController extends Controller
     public function destroyRecruitmentStep(int $stepId): JsonResponse
     {
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
-        $isLastStep = $this->jobManagementService->isLastRecruitmentStep($recruitmentStep);
+        $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
-        throw_if(!$isLastStep, ValidationException::withMessages([
+        throw_if(!$isRecruitmentStepDeletable, ValidationException::withMessages([
             "Recruitment Step can not be deleted"
         ]));
 
@@ -463,8 +541,8 @@ class JobManagementController extends Controller
     public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
     {
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
-        $filter = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
-        $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $filter);
+        $validatedData = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
+        $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $validatedData);
         $response = [
             "data" => $recruitmentStep,
             '_response_status' => [

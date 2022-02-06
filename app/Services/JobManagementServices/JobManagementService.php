@@ -43,9 +43,10 @@ class JobManagementService
     /**
      * @param array $request
      * @param Carbon $startTime
+     * @param bool $isPublicApiCall
      * @return array
      */
-    public function getJobList(array $request, Carbon $startTime): array
+    public function getJobList(array $request, Carbon $startTime, bool $isPublicApiCall = false): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -95,7 +96,9 @@ class JobManagementService
             'primary_job_information.row_status',
 
 
-        ])->acl();
+        if(!$isPublicApiCall){
+            $jobInformationBuilder->acl();
+        }
 
         if (!$type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
             $jobInformationBuilder->orderBy('primary_job_information.id', $order);
@@ -651,10 +654,10 @@ class JobManagementService
         ];
 
         $customMessage = [
-            'age_valid . in' => 'Age must be valid . [30000]',
-            'experience_valid . in' => 'Experience must be valid . [30000]',
-            'gender_valid . in' => 'Gender must be valid . [30000]',
-            'location_valid . in' => 'Location must be valid . [30000]'
+            'age_valid.in' => 'Age must be valid.[30000]',
+            'experience_valid.in' => 'Experience must be valid.[30000]',
+            'gender_valid.in' => 'Gender must be valid.[30000]',
+            'location_valid.in' => 'Location must be vali  [30000]'
         ];
 
         return Validator::make($requestData, $rules, $customMessage);
@@ -670,31 +673,24 @@ class JobManagementService
 
         /** @var AppliedJob|Builder $appliedJobBuilder */
         $appliedJobBuilder = AppliedJob::select([
-            'applied_jobs . id',
-            'applied_jobs . job_id',
-            'applied_jobs . youth_id',
-            'applied_jobs . apply_status',
-            'applied_jobs . rejected_from',
-            'applied_jobs . applied_at',
-            'applied_jobs . profile_viewed_at',
-            'applied_jobs . rejected_at',
-            'applied_jobs . shortlisted_at',
-            'applied_jobs . interview_invited_at',
-            'applied_jobs . interview_scheduled_at',
-            'applied_jobs . interviewed_at',
-            'applied_jobs . expected_salary',
-            'applied_jobs . hire_invited_at',
-            'applied_jobs . hired_at',
-            'applied_jobs . interview_invite_source',
-            'applied_jobs . interview_invite_type',
-            'applied_jobs . hire_invite_type',
-            'applied_jobs . interview_score',
-            'applied_jobs . created_at',
-            'applied_jobs . updated_at',
+            'applied_jobs.id',
+            'applied_jobs.job_id',
+            'applied_jobs.youth_id',
+            'applied_jobs.apply_status',
+            'applied_jobs.current_recruitment_step_id',
+            'applied_jobs.applied_at',
+            'applied_jobs.profile_viewed_at',
+            'applied_jobs.expected_salary',
+            'applied_jobs.hire_invited_at',
+            'applied_jobs.hired_at',
+            // 'applied_jobs.interview_invite_source',
+            'applied_jobs.hire_invite_type',
+            'applied_jobs.created_at',
+            'applied_jobs.updated_at',
         ]);
 
-        $appliedJobBuilder->where('applied_jobs . job_id', $jobId);
-        if ($status > 0) $appliedJobBuilder->where('applied_jobs . apply_status', $status);
+        $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
+        if ($status > 0) $appliedJobBuilder->where('applied_jobs.apply_status', $status);
 
         /** @var Collection $candidates */
         if (is_numeric($paginate) || is_numeric($limit)) {
@@ -800,16 +796,16 @@ class JobManagementService
             $matchTotal += $requestData["location_valid"];
         }
 
-        $youthSkillsIds = array_map(function ($v) {
-            return $v["id"];
+        $youthSkillsIds = array_map(function ($skill) {
+            return $skill["id"];
         }, $youthData["skills"]);
 
         if ($matchingCriteria["is_area_of_experience_enabled"]) {
-            $aoeMatch = false;
-            foreach ($matchingCriteria["area_of_experiences"] as $aoe) {
-                $aoeMatch = $aoeMatch || in_array($aoe["id"], $youthSkillsIds);
+            $areaOfExperienceMatch = false;
+            foreach ($matchingCriteria["area_of_experiences"] as $areaOfExperience) {
+                $areaOfExperienceMatch = $areaOfExperienceMatch || in_array($areaOfExperience["id"], $youthSkillsIds);
             }
-            $requestData["area_of_experience_valid"] = $aoeMatch ? 1 : 0;
+            $requestData["area_of_experience_valid"] = $areaOfExperienceMatch ? 1 : 0;
             $shouldMatchTotal += 1;
             $matchTotal += $requestData["area_of_experience_valid"];
         }

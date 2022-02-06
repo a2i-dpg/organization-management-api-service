@@ -131,14 +131,19 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
                 $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
                 $router->put('shortlist/{applicationId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
+                $router->put('interviewed/{applicationId}', ["as" => "candidate-update.interviewed", "uses" => "JobManagementController@updateInterviewedCandidate"]);
+                $router->put('remove/{applicationId}', ["as" => "candidate-update.remove", "uses" => "JobManagementController@removeCandidateToPreviousStep"]);
+                $router->put('restore/{applicationId}', ["as" => "candidate-update.remove", "uses" => "JobManagementController@restoreRejectedCandidate"]);
+                $router->put('hire-invite/{applicationId}', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
+                $router->put('hired/{applicationId}', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hiredCandidate"]);
             });
 
 
             /**recruitment step routes **/
             $router->get('recruitment-steps/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
-            $router->post('step-create/{jobId}', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
-            $router->put('step-update/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
-            $router->delete('step-delete/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
+            $router->post('recruitment-steps', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->put('recruitment-steps/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+            $router->delete('recruitment-steps/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
 
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
@@ -189,6 +194,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("occupations", ["as" => "public.occupations", "uses" => "OccupationController@getPublicOccupationList"]);
         $router->get("organization-types", ["as" => "public.organization-types", "uses" => "OrganizationTypeController@getPublicOrganizationTypeList"]);
 
+        $router->get('area-of-business', ['as' => 'JobSector.AreaOfBusiness', 'uses' => 'JobManagementController@getAreaOfBusiness']);
+        $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
 
         //public api by domain name identification
         $router->group(['middleware' => 'public-domain-handle'], function () use ($router) {
