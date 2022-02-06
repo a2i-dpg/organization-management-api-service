@@ -34,8 +34,6 @@ class PrimaryJobInformationService
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
             'primary_job_information.no_of_vacancies',
-            'primary_job_information.industry_association_id',
-            'primary_job_information.organization_id',
             'primary_job_information.institute_id',
             'primary_job_information.occupation_id',
             'occupations.title as occupation_title',
@@ -56,6 +54,21 @@ class PrimaryJobInformationService
             'primary_job_information.instruction_for_walk_in_interview_en',
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
+
+            'primary_job_information.industry_association_id',
+            'industry_associations.title as industry_association_title',
+            'industry_associations.title_en as industry_association_title_en',
+            'industry_associations.address as industry_association_address',
+            'industry_associations.address_en as industry_association_address_en',
+            'industry_associations.domain',
+
+            'primary_job_information.organization_id',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
+            'organizations.address as organization_address',
+            'organizations.address_en as organization_address_en',
+            'organizations.domain',
+
             'primary_job_information.published_at',
             'primary_job_information.archived_at',
             'primary_job_information.created_at',
@@ -71,6 +84,20 @@ class PrimaryJobInformationService
             $join->on('primary_job_information.job_sector_id', '=', 'job_sectors.id')
                 ->whereNull('job_sectors.deleted_at');
         });
+
+
+        $primaryJobInformationBuilder->leftJoin('organizations', function ($join) {
+            $join->on('primary_job_information.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at')
+                ->whereNotNull('primary_job_information.organization_id');
+        });
+
+        $primaryJobInformationBuilder->leftJoin('industry_associations', function ($join) {
+            $join->on('primary_job_information.industry_association_id', '=', 'industry_associations.id')
+                ->whereNull('industry_associations.deleted_at')
+                ->whereNotNull('primary_job_information.industry_association_id');
+        });
+
 
         $primaryJobInformationBuilder->with(['employmentTypes' => function ($query) {
             $query->select('id', 'title');

@@ -78,6 +78,9 @@ class JobManagementService
             'primary_job_information.archived_at',
             'primary_job_information.is_apply_online',
 
+            'candidate_requirements.minimum_year_of_experience',
+            'candidate_requirements.maximum_year_of_experience',
+
             'industry_associations.title as industry_association_title',
             'industry_associations.title_en as industry_association_title_en',
             'industry_associations.logo as industry_association_logo',
@@ -125,11 +128,15 @@ class JobManagementService
 
         }
 
-
         $jobInformationBuilder->leftJoin('industry_associations', function ($join) {
             $join->on('primary_job_information.industry_association_id', '=', 'industry_associations.id')
                 ->whereNull('industry_associations.deleted_at')
                 ->whereNotNull('primary_job_information.industry_association_id');
+        });
+
+        $jobInformationBuilder->leftJoin('candidate_requirements', function ($join) {
+            $join->on('primary_job_information.job_id', '=', 'candidate_requirements.job_id')
+                ->whereNull('candidate_requirements.deleted_at');
         });
 
         $jobInformationBuilder->leftJoin('organizations', function ($join) {
@@ -425,7 +432,7 @@ class JobManagementService
      * @param array $data
      * @return RecruitmentStep
      */
-    public function storeRecruitmentStep(array $data):RecruitmentStep
+    public function storeRecruitmentStep(array $data): RecruitmentStep
     {
         $recruitmentStep = app(RecruitmentStep::class);
         $recruitmentStep->fill($data);
@@ -1017,7 +1024,6 @@ class JobManagementService
             ->where('current_recruitment_step_id', $recruitmentStep->id)
             ->count('id');
     }
-
 
 
 }
