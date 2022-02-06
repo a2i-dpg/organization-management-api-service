@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
@@ -157,15 +159,21 @@ class IndustryAssociationController extends Controller
     /**
      * Display a specified resource
      * @param Request $request
-     * @param int $id
+     * @param int|null $id
      * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Throwable
      */
-    public function industryAssociationDetails(Request $request, int $id): JsonResponse
+    public function industryAssociationDetails(Request $request, int $id = null): JsonResponse
     {
         if(!$id){
             /** this should be set from PublicApiMiddleWare */
             $id = request()->get('industry_association_id');
         }
+        throw_if(empty($id), ValidationException::withMessages([
+            "industry_association_id not found!"
+        ]));
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
 
         $response = [
