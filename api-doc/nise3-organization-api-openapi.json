@@ -9947,6 +9947,31 @@
                 }
             }
         },
+        "/jobs/recruitment-steps": {
+            "post": {
+                "tags": ["Job Interview"],
+                "summary": "Create a recruitment step a job interview",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/recruitmentStep"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/area-of-business": {
             "get": {
                 "tags": [
@@ -13875,6 +13900,34 @@
     },
     "components": {
         "schemas": {
+            "recruitmentStep": {
+                "type": "object",
+                "description": "Recruitment Step",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "title_en": {
+                        "type": "string"
+                    },
+                    "step_type": {
+                        "type": "integer",
+                        "enum": [1,2,3,4,5],
+                        "description": "1=>Shortlist 2=>Written 3=>Interview 4=>Online Interview 5=>Others"
+                    },
+                    "is_interview_reschedule_allowed": {
+                        "type": "integer"
+                    },
+                    "interview_contact": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "title",
+                    "step_type",
+                    "is_interview_reschedule_allowed"
+                ]
+            },
             "vacancy_approved_by_industry_association": {
                 "type": "object",
                 "description": "vacancy_approved_by_industry_association",
