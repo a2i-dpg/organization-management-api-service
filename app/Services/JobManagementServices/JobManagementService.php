@@ -71,6 +71,7 @@ class JobManagementService
             'primary_job_information.service_type',
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
+            'primary_job_information.no_of_vacancies',
             'primary_job_information.occupation_id',
             'primary_job_information.job_sector_id',
             'primary_job_information.industry_association_id',
@@ -79,8 +80,7 @@ class JobManagementService
             'primary_job_information.application_deadline',
             'primary_job_information.published_at',
             'primary_job_information.archived_at',
-            'primary_job_information.application_deadline',
-            'primary_job_information.id',
+            'primary_job_information.is_apply_online',
 
             'industry_associations.title as industry_association_title',
             'industry_associations.title_en as industry_association_title_en',
@@ -93,6 +93,7 @@ class JobManagementService
             'organizations.logo as organization_logo',
             'organizations.address as organization_address',
             'organizations.address_en as organization_address_en',
+            'primary_job_information.row_status'
         ]);
 
         if(!$isPublicApiCall){
@@ -127,11 +128,6 @@ class JobManagementService
         }
 
 
-        $jobInformationBuilder->leftJoin('applied_jobs', function ($join) {
-            $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
-                ->whereNull('applied_jobs.deleted_at');
-        });
-
         $jobInformationBuilder->leftJoin('industry_associations', function ($join) {
             $join->on('primary_job_information.industry_association_id', '=', 'industry_associations.id')
                 ->whereNull('industry_associations.deleted_at')
@@ -144,18 +140,26 @@ class JobManagementService
                 ->whereNotNull('primary_job_information.organization_id');
         });
 
-        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
+        $jobInformationBuilder->leftJoin('applied_jobs', function ($join) {
+            $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
+                ->whereNull('applied_jobs.deleted_at');
+        });
 
+        $jobInformationBuilder->addSelect(DB::raw("count(applied_jobs.id) as total_enrollment"));
+        $jobInformationBuilder->groupBy('applied_jobs.job_id');
+
+
+        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
+
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->orderBy(DB::raw('count(applied_jobs.id)'), 'DESC');
-            $jobInformationBuilder->groupBy('applied_jobs.job_id');
             $jobInformationBuilder->active();
         }
 
@@ -177,18 +181,18 @@ class JobManagementService
         if ($isRequestFromClientSide) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
-
             $jobInformationBuilder->active();
         }
-
-        $jobInformationBuilder->with('candidateRequirement.degrees:candidate_requirement_id,education_level_id,exam_degree_id,major_subject');
-
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
             $jobInformationBuilder->with(['additionalJobInformation.jobLocations' => function ($query) use ($locDistrictIds) {
                 $query->whereIn('additional_job_information_job_locations.loc_district_id', $locDistrictIds);
             }]);
+        } else {
+            $jobInformationBuilder->with('additionalJobInformation.jobLocations');
         }
+
+        $jobInformationBuilder->with('additionalJobInformation');
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
