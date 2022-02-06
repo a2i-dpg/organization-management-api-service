@@ -152,7 +152,7 @@ class PrimaryJobInfoController extends Controller
             $response = [
                 '_response_status' => [
                     "success" => false,
-                    "code" => $statusCode,
+                    "code" => ResponseAlias::HTTP_BAD_REQUEST,
                     'message' => 'All steps of job posting is not completed.',
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
