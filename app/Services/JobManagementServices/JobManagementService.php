@@ -830,7 +830,7 @@ class JobManagementService
 
         }
 
-        return $matchTotal / $shouldMatchTotal;
+        return $shouldMatchTotal == 0 ? 0 : $matchTotal / $shouldMatchTotal;
     }
 
 }
