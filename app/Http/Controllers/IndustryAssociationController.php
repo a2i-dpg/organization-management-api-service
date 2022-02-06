@@ -162,6 +162,10 @@ class IndustryAssociationController extends Controller
      */
     public function industryAssociationDetails(Request $request, int $id): JsonResponse
     {
+        if(!$id){
+            /** this should be set from PublicApiMiddleWare */
+            $id = request()->get('industry_association_id');
+        }
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
 
         $response = [
