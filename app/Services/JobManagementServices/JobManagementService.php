@@ -48,8 +48,7 @@ class JobManagementService
      */
     public function getJobList(array $request, Carbon $startTime, bool $isPublicApiCall = false): array
     {
-        $titleEn = $request['title_en'] ?? "";
-        $title = $request['title'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $skillIds = $request['skill_ids'] ?? [];
@@ -96,7 +95,7 @@ class JobManagementService
             'primary_job_information.row_status'
         ]);
 
-        if(!$isPublicApiCall){
+        if (!$isPublicApiCall) {
             $jobInformationBuilder->acl();
         }
 
@@ -120,11 +119,13 @@ class JobManagementService
             $jobInformationBuilder->where('primary_job_information.row_status', $rowStatus);
         }
 
-        if (!empty($titleEn)) {
-            $jobInformationBuilder->where('primary_job_information.title_en', 'like', '%' . $titleEn . '%');
-        }
-        if (!empty($title)) {
-            $jobInformationBuilder->where('primary_job_information.title', 'like', '%' . $title . '%');
+        if (!empty($searchText)) {
+            $jobInformationBuilder->where(function ($builder) use ($searchText) {
+
+                $builder->orWhere('primary_job_information.job_title', 'like', '%' . $searchText . '%');
+                $builder->where('primary_job_information.job_title_en', 'like', '%' . $searchText . '%');
+            });
+
         }
 
 
@@ -144,9 +145,10 @@ class JobManagementService
             $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
                 ->whereNull('applied_jobs.deleted_at');
         });
-
-        $jobInformationBuilder->addSelect(DB::raw("count(applied_jobs.id) as total_enrollment"));
         $jobInformationBuilder->groupBy('applied_jobs.job_id');
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as interviewed", [AppliedJob::APPLY_STATUS["Interviewed"]]);
 
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
@@ -166,7 +168,7 @@ class JobManagementService
 
         if (is_array($skillIds) && count($skillIds) > 0) {
             $skillMatchingJobIds = DB::table('candidate_requirement_skill')->whereIn('skill_id', $skillIds)->pluck('job_id');
-            $jobInformationBuilder->whereIn('job_id', $skillMatchingJobIds);
+            $jobInformationBuilder->whereIn('primary_job_information.job_id', $skillMatchingJobIds);
         }
 
         if (is_array($jobSectorIds) && count($jobSectorIds) > 0) {
@@ -216,8 +218,7 @@ class JobManagementService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public
-    function jobListFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function jobListFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'order.in' => 'Order must be within ASC or DESC.[30000]',
@@ -247,8 +248,7 @@ class JobManagementService
 
 
         $rules = [
-            'job_title_en' => 'nullable|max:300|min:2',
-            'job_title' => 'nullable|max:500|min:2',
+            'search_text' => 'nullable',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
 
@@ -348,8 +348,7 @@ class JobManagementService
      * @param array $data
      * @return array
      */
-    public
-    function storeAppliedJob(array $data): array
+    public function storeAppliedJob(array $data): array
     {
         $jobId = $data['job_id'];
         $expectedSalary = $data['expected_salary'];
@@ -482,8 +481,7 @@ class JobManagementService
 
     }
 
-    public
-    function isLastRecruitmentStep(RecruitmentStep $recruitmentStep): bool
+    public function isLastRecruitmentStep(RecruitmentStep $recruitmentStep): bool
     {
         $maxStep = RecruitmentStep::where('job_id', $recruitmentStep->job_id)
             ->max('id');
@@ -496,8 +494,7 @@ class JobManagementService
     }
 
 
-    public
-    function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function recruitmentStepStoreValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'title' => [
@@ -554,8 +551,7 @@ class JobManagementService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public
-    function applyJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    public function applyJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $requestData = $request->all();
         $jobId = $requestData['job_id'];
