@@ -152,7 +152,7 @@ class HrDemandInstituteService
      */
     public function getOneHrDemandInstitute(int $id): HrDemandInstitute
     {
-        /** @var HrDemand|Builder $hrDemandBuilder */
+        /** @var HrDemandInstitute|Builder $hrDemandBuilder */
         $hrDemandBuilder = HrDemandInstitute::select([
             'hr_demand_institutes.id',
             'hr_demand_institutes.hr_demand_id',
@@ -180,7 +180,6 @@ class HrDemandInstituteService
         });
 
         $hrDemandBuilder->with('hrDemand');
-        $hrDemandBuilder->with('hrDemandYouths');
 
         $hrDemandInstitute = $hrDemandBuilder->firstOrFail();
 
@@ -194,6 +193,21 @@ class HrDemandInstituteService
                 $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
             }
         }
+
+        /** Fetch All Hr Demand Youths */
+        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+        $hrDemandYouthCvLinks = [];
+        $hrDemandYouthYouthsIds = [];
+        foreach ($hrDemandYouths as $hrDemandYouth){
+            if($hrDemandYouth['cv_link']){
+                $hrDemandYouthCvLinks[] = $hrDemandYouth;
+            } else if($hrDemandYouth['youth_id']){
+                $hrDemandYouthYouthsIds[] = $hrDemandYouth;
+            }
+        }
+
+        $hrDemandInstitute['hr_demand_youths_cv_links'] = $hrDemandYouthCvLinks;
+        $hrDemandInstitute['hr_demand_youths_youth_ids'] = $hrDemandYouthYouthsIds;
 
         return $hrDemandInstitute;
     }

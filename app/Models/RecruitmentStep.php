@@ -15,7 +15,7 @@ class RecruitmentStep extends Model
     public const STEP_TYPE_WRITTEN = 2;
     public const STEP_TYPE_INTERVIEW = 3;
     public const STEP_TYPE_ONLINE_INTERVIEW = 4;
-    public const STEP_TYPE_OTHERS = 4;
+    public const STEP_TYPE_OTHERS = 5;
 
     public const STEP_TYPES = [
         self::STEP_TYPE_SHORTLIST,
