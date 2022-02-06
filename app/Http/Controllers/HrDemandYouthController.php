@@ -34,12 +34,11 @@ class HrDemandYouthController extends Controller
      * @param Request $request
      * @param int $hr_demand_institute_id
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ValidationException
      */
     public function getHrDemandYouths(Request $request, int $hr_demand_institute_id): JsonResponse
     {
-        $this->authorize('viewAny', HrDemandYouth::class);
+//        $this->authorize('viewAny', HrDemandYouth::class);
 
         $filter = $this->hrDemandYouthService->filterValidator($request)->validate();
         $response = $this->hrDemandYouthService->getHrDemandYouthList($filter, $this->startTime, $hr_demand_institute_id);
