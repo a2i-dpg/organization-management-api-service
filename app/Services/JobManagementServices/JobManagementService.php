@@ -93,8 +93,8 @@ class JobManagementService
             'organizations.logo as organization_logo',
             'organizations.address as organization_address',
             'organizations.address_en as organization_address_en',
-            'primary_job_information.row_status',
-
+            'primary_job_information.row_status'
+        ]);
 
         if(!$isPublicApiCall){
             $jobInformationBuilder->acl();
