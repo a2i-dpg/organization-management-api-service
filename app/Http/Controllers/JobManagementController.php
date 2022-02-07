@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
 use App\Models\InterviewSchedule;
@@ -474,34 +475,82 @@ class JobManagementController extends Controller
 
     /**
      * @throws ValidationException
+     * @throws Throwable
      */
     public function hireInviteCandidate(Request $request, int $applicationId): JsonResponse
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $validatedData = $this->jobManagementService->hireInviteValidator($request)->validate();
-        $hireInvitedCandidate = $this->jobManagementService->hireInviteCandidate($appliedJob, $validatedData);
 
-        $hireInviteType = $hireInvitedCandidate;
-        if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS']) {
-            //TODO :send sms to hire invitedCandidate
-        } else if ($hireInviteType == AppliedJob::INVITE_TYPES['Email']) {
-            //TODO :send Email to hire invitedCandidate
-        } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
-            //TODO :send Email and sms to hire invitedCandidate
+        $hireInviteType = $validatedData['hire_invite_type'];
+
+        $youthId = (array)($appliedJob->youth_id);
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthId);
+        $youth = $youthProfiles[0];
+
+        if ($appliedJob->hire_invited_at == null) {
+            if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
+                $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);
+            } else if ($hireInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
+                $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob, $youth);
+
+            } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
+                if (!empty($youth['email'])) {
+                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob,$youth);
+                }
+                if (!empty($youth['mobile'])) {
+                    $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);
+                }
+            }
+
+            $hireInvitedCandidate = $this->jobManagementService->hireInviteCandidate($appliedJob, $validatedData);
+
+            $response = [
+                "data" => $hireInvitedCandidate,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Candidate  hire  invited successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         } else {
-            //TODO: Other system to hire Invite Candidae
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Candidate  already invited",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         }
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $applicationId
+     * @return JsonResponse
+     */
+    public function updateHiredCandidate(int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $hiredCandidate = $this->jobManagementService->updateHiredCandidate($appliedJob);
+
         $response = [
-            "data" => $hireInvitedCandidate,
+            "data" => $hiredCandidate,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Candidate  hire  invited successfully",
+                "message" => "Candidate hired successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
+
+
     }
 
     /**
