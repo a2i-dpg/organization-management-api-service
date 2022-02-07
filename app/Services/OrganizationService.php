@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Services\CommonServices\MailService;
@@ -158,6 +159,7 @@ class OrganizationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -218,6 +220,9 @@ class OrganizationService
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
+        if (!empty($searchText)) {
+            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
+        }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
         }
@@ -260,6 +265,7 @@ class OrganizationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $order = $request['order'] ?? "ASC";
@@ -318,6 +324,9 @@ class OrganizationService
         }
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($searchText)) {
+            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
@@ -597,12 +606,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -637,13 +648,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) use ($url) {
-                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
-                throw $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -734,12 +746,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->delete($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -875,12 +889,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
 
@@ -900,12 +916,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
 
@@ -1472,6 +1490,7 @@ class OrganizationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
+            'search_text' => 'nullable|max:600|min:2',
             'page' => 'integer|gt:0',
             'membership_id' => 'nullable',
             'page_size' => 'integer|gt:0',

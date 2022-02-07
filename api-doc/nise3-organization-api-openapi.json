@@ -142,14 +142,14 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
         "/industry-association-profile-update": {
             "put": {
                 "tags": [
-                    "Industry Association Profile"
+                    "Industry Association"
                 ],
                 "summary": "Update an industry association admin profile ",
                 "description": "An API endpoint to update  an industry association admin profile ",
@@ -237,7 +237,7 @@
         "/industry-association-profile": {
             "get": {
                 "tags": [
-                    "Industry Association Profile"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association admin profile",
                 "description": "An API endpoint to get  an industry association admin profile ",
@@ -333,7 +333,7 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
@@ -364,7 +364,7 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
@@ -6128,7 +6128,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "post": {
@@ -6195,7 +6195,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             }
         },
@@ -6270,7 +6270,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "put": {
@@ -6346,7 +6346,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "delete": {
@@ -6375,7 +6375,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "patch": {
@@ -6404,7 +6404,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             }
         },
@@ -6446,7 +6446,7 @@
         "/industry-association-members": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
@@ -6456,6 +6456,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/searchText"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -6528,7 +6531,7 @@
         "/public/industry-association-members": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
@@ -6538,6 +6541,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/searchText"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -6612,7 +6618,7 @@
         "/public/industry-association-details": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Public API to Get-one industry association details",
                 "description": "An Public API endpoint to get  an industry association details ",
@@ -6675,7 +6681,7 @@
         "/industry-association-membership-approval/{organizationId}": {
             "put": {
                 "tags": [
-                    "Industry Association Membership Approval Rejection"
+                    "Industry Association"
                 ],
                 "summary": "Approve an industry association membership request for an industry",
                 "description": "API endpoint to Approve an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -6706,7 +6712,7 @@
         "/industry-association-membership-rejection/{organizationId}": {
             "put": {
                 "tags": [
-                    "Industry Association Membership Approval Rejection"
+                    "Industry Association"
                 ],
                 "summary": "Reject an industry association membership request for an industry",
                 "description": "API endpoint to reject an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -8019,173 +8025,6 @@
                 }
             }
         },
-        "/jobs/store-company-info-visibility": {
-            "post": {
-                "tags": [
-                    "Company info visibility [Job Management Step : 4]"
-                ],
-                "summary": "Store company info visibility",
-                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CompanyInfoVisibility"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "job_id": "aaa-bbb",
-                                        "is_company_name_visible": "1",
-                                        "is_company_address_visible": "1",
-                                        "company_industry_type": "3",
-                                        "is_company_business_visible": "1",
-                                        "updated_at": "2021-12-29T11:50:14.000000Z",
-                                        "created_at": "2021-12-29T11:50:14.000000Z",
-                                        "id": 2
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Company Info Visibility successfully submitted",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/jobs/company-info-visibility/{jobId}": {
-            "get": {
-                "tags": [
-                    "Company info visibility [Job Management Step : 4]"
-                ],
-                "summary": "Get a specific company info visibility",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "is_company_name_visible": 0,
-                                        "company_name": "sss",
-                                        "company_name_en": "ssss",
-                                        "is_company_address_visible": 0,
-                                        "company_industry_type": 0,
-                                        "is_company_business_visible": 0,
-                                        "created_at": null,
-                                        "updated_at": null,
-                                        "latest_step": 6
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/jobs/contact-information": {
-            "post": {
-                "tags": [
-                    "Contact Information[Job Management Step : 6]"
-                ],
-                "summary": "Store contact information",
-                "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContactInformation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "job_id": "11122",
-                                        "contact_person_id": "1",
-                                        "updated_at": "2021-12-30T08:47:56.000000Z",
-                                        "created_at": "2021-12-30T08:47:56.000000Z",
-                                        "id": 1
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/jobs/contact-information/{jobId}": {
-            "get": {
-                "tags": [
-                    "Contact Information[Job Management Step : 6]"
-                ],
-                "summary": "Store contact information",
-                "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "contact_person_id": 0,
-                                        "created_at": "2022-01-27T06:19:39.000000Z",
-                                        "updated_at": "2022-01-27T06:19:39.000000Z",
-                                        "deleted_at": null,
-                                        "latest_step": 7
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/jobs/store-candidate-requirements": {
             "post": {
                 "tags": [
@@ -8376,6 +8215,93 @@
                                                 "gender_id": 1
                                             }
                                         ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/store-company-info-visibility": {
+            "post": {
+                "tags": [
+                    "Company info visibility [Job Management Step : 4]"
+                ],
+                "summary": "Store company info visibility",
+                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompanyInfoVisibility"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": "1",
+                                        "is_company_address_visible": "1",
+                                        "company_industry_type": "3",
+                                        "is_company_business_visible": "1",
+                                        "updated_at": "2021-12-29T11:50:14.000000Z",
+                                        "created_at": "2021-12-29T11:50:14.000000Z",
+                                        "id": 2
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Company Info Visibility successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/company-info-visibility/{jobId}": {
+            "get": {
+                "tags": [
+                    "Company info visibility [Job Management Step : 4]"
+                ],
+                "summary": "Get a specific company info visibility",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "is_company_name_visible": 0,
+                                        "company_name": "sss",
+                                        "company_name_en": "ssss",
+                                        "is_company_address_visible": 0,
+                                        "company_industry_type": 0,
+                                        "is_company_business_visible": 0,
+                                        "created_at": null,
+                                        "updated_at": null,
+                                        "latest_step": 6
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -8585,6 +8511,88 @@
                 }
             }
         },
+        "/jobs/contact-information": {
+            "post": {
+                "tags": [
+                    "Contact Information[Job Management Step : 6]"
+                ],
+                "summary": "Store contact information",
+                "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInformation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "11122",
+                                        "contact_person_id": "1",
+                                        "updated_at": "2021-12-30T08:47:56.000000Z",
+                                        "created_at": "2021-12-30T08:47:56.000000Z",
+                                        "id": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/contact-information/{jobId}": {
+            "get": {
+                "tags": [
+                    "Contact Information[Job Management Step : 6]"
+                ],
+                "summary": "Store contact information",
+                "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "contact_person_id": 0,
+                                        "created_at": "2022-01-27T06:19:39.000000Z",
+                                        "updated_at": "2022-01-27T06:19:39.000000Z",
+                                        "deleted_at": null,
+                                        "latest_step": 7
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
         "/jobs/job-preview/{jobId}": {
             "get": {
                 "tags": [
@@ -14190,6 +14198,14 @@
                 "in": "query",
                 "required": false,
                 "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "searchText": {
+                "name": "search_text",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "string"
                 }
