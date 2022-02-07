@@ -23,118 +23,6 @@ use Throwable;
 class PrimaryJobInformationService
 {
 
-    public function getJobList(array $request, Carbon $startTime): array
-    {
-        $titleEn = $request['title_en'] ?? "";
-        $title = $request['title'] ?? "";
-        $paginate = $request['page'] ?? "";
-        $pageSize = $request['page_size'] ?? "";
-        $skillIds = $request['skill_ids'] ?? [];
-        $jobSectorIds = $request['job_sector_ids'] ?? [];
-        $occupationIds = $request['occupation_ids'] ?? [];
-        $rowStatus = $request['row_status'] ?? "";
-        $order = $request['order'] ?? "ASC";
-        $type = $request['type'] ?? "";
-        $isRequestFromClientSide = !empty($request[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY]);
-
-        /** @var Builder $jobInformationBuilder */
-        $jobInformationBuilder = PrimaryJobInformation::select([
-            'primary_job_information.id',
-            'primary_job_information.job_id',
-            'primary_job_information.service_type',
-            'primary_job_information.job_title',
-            'primary_job_information.job_title_en',
-            'primary_job_information.occupation_id',
-            'primary_job_information.job_sector_id',
-            'primary_job_information.industry_association_id',
-            'primary_job_information.organization_id',
-            'primary_job_information.institute_id',
-            'primary_job_information.application_deadline',
-            'primary_job_information.published_at',
-            'primary_job_information.archived_at',
-            'primary_job_information.application_deadline',
-            'primary_job_information.id',
-        ])->acl();
-
-        $jobInformationBuilder->orderBy('primary_job_information.id', $order);
-
-        if (is_numeric($rowStatus)) {
-            $jobInformationBuilder->where('primary_job_information.row_status', $rowStatus);
-        }
-        if (!empty($titleEn)) {
-            $jobInformationBuilder->where('primary_job_information.title_en', 'like', '%' . $titleEn . '%');
-        }
-        if (!empty($title)) {
-            $jobInformationBuilder->where('primary_job_information.title', 'like', '%' . $title . '%');
-        }
-
-        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
-            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
-            $jobInformationBuilder->where(function ($builder) use ($startTime) {
-                $builder->whereNull('primary_job_information.archived_at');
-                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
-            });
-            $jobInformationBuilder->active();
-
-        }
-
-        if (is_array($skillIds) && count($skillIds) > 0) {
-            $skillMatchingJobIds = DB::table('candidate_requirement_skill')->whereIn('skill_id', $skillIds)->pluck('job_id');
-            $jobInformationBuilder->whereIn('job_id', $skillMatchingJobIds);
-        }
-
-        if (is_array($jobSectorIds) && count($jobSectorIds) > 0) {
-            $jobInformationBuilder->whereIn('job_sector_id', $jobSectorIds);
-        }
-
-        if (is_array($occupationIds) && count($occupationIds) > 0) {
-            $jobInformationBuilder->whereIn('occupation_id', $occupationIds);
-        }
-
-        /** TODO:Change popular job search logic when job application process starts */
-
-        if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(30)->endOfDay());
-            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
-            $jobInformationBuilder->where(function ($builder) use ($startTime) {
-                $builder->whereNull('primary_job_information.archived_at');
-                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
-            });
-            $jobInformationBuilder->active();
-
-        }
-
-        /** If request from client side */
-
-        if ($isRequestFromClientSide) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
-            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>=', $startTime);
-            $jobInformationBuilder->where(function ($builder) use ($startTime) {
-                $builder->whereNull('primary_job_information.archived_at');
-                $builder->orWhereDate('primary_job_information.archived_at', '>=', $startTime);
-            });
-
-            $jobInformationBuilder->active();
-        }
-
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
-            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $jobInformation = $jobInformationBuilder->paginate($pageSize);
-            $paginateData = (object)$jobInformation->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
-        } else {
-            $jobInformation = $jobInformationBuilder->get();
-        }
-
-        $response['order'] = $order;
-        $response['data'] = $jobInformation->toArray()['data'] ?? $jobInformation->toArray();
-        $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
-        return $response;
-    }
 
     public function getPrimaryJobInformationDetails(string $jobId): PrimaryJobInformation | null
     {
@@ -146,8 +34,6 @@ class PrimaryJobInformationService
             'primary_job_information.job_title',
             'primary_job_information.job_title_en',
             'primary_job_information.no_of_vacancies',
-            'primary_job_information.industry_association_id',
-            'primary_job_information.organization_id',
             'primary_job_information.institute_id',
             'primary_job_information.occupation_id',
             'occupations.title as occupation_title',
@@ -168,6 +54,21 @@ class PrimaryJobInformationService
             'primary_job_information.instruction_for_walk_in_interview_en',
             'primary_job_information.is_photograph_enclose_with_resume',
             'primary_job_information.is_prefer_video_resume',
+
+            'primary_job_information.industry_association_id',
+            'industry_associations.title as industry_association_title',
+            'industry_associations.title_en as industry_association_title_en',
+            'industry_associations.address as industry_association_address',
+            'industry_associations.address_en as industry_association_address_en',
+            'industry_associations.domain',
+
+            'primary_job_information.organization_id',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
+            'organizations.address as organization_address',
+            'organizations.address_en as organization_address_en',
+            'organizations.domain',
+
             'primary_job_information.published_at',
             'primary_job_information.archived_at',
             'primary_job_information.created_at',
@@ -183,6 +84,20 @@ class PrimaryJobInformationService
             $join->on('primary_job_information.job_sector_id', '=', 'job_sectors.id')
                 ->whereNull('job_sectors.deleted_at');
         });
+
+
+        $primaryJobInformationBuilder->leftJoin('organizations', function ($join) {
+            $join->on('primary_job_information.organization_id', '=', 'organizations.id')
+                ->whereNull('organizations.deleted_at')
+                ->whereNotNull('primary_job_information.organization_id');
+        });
+
+        $primaryJobInformationBuilder->leftJoin('industry_associations', function ($join) {
+            $join->on('primary_job_information.industry_association_id', '=', 'industry_associations.id')
+                ->whereNull('industry_associations.deleted_at')
+                ->whereNotNull('primary_job_information.industry_association_id');
+        });
+
 
         $primaryJobInformationBuilder->with(['employmentTypes' => function ($query) {
             $query->select('id', 'title');
@@ -210,89 +125,6 @@ class PrimaryJobInformationService
     public function syncWithEmploymentStatus(PrimaryJobInformation $primaryJobInformation, array $employmentTypes)
     {
         $primaryJobInformation->employmentTypes()->sync($employmentTypes);
-    }
-
-    public function JobListFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
-    {
-        $customMessage = [
-            'order.in' => 'Order must be within ASC or DESC.[30000]',
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
-        ];
-
-        if ($request->filled('order')) {
-            $request->offsetSet('order', strtoupper($request->get('order')));
-        }
-
-        $requestData = $request->all();
-
-        if (!empty($requestData['skill_ids'])) {
-            $requestData['skill_ids'] = is_array($requestData['skill_ids']) ? $requestData['skill_ids'] : explode(',', $requestData['skill_ids']);
-        }
-
-        if (!empty($requestData['job_sector_ids'])) {
-            $requestData['job_sector_ids'] = is_array($requestData['job_sector_ids']) ? $requestData['job_sector_ids'] : explode(',', $requestData['job_sector_ids']);
-        }
-
-        if (!empty($requestData['occupation_ids'])) {
-            $requestData['occupation_ids'] = is_array($requestData['occupation_ids']) ? $requestData['occupation_ids'] : explode(',', $requestData['occupation_ids']);
-        }
-
-
-        $rules = [
-            'job_title_en' => 'nullable|max:300|min:2',
-            'job_title' => 'nullable|max:500|min:2',
-            'page' => 'nullable|integer|gt:0',
-            'page_size' => 'nullable|integer|gt:0',
-            'order' => [
-                'nullable',
-                'string',
-                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
-            ],
-            'row_status' => [
-                'nullable',
-                "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
-            ],
-            'type' => [
-                'nullable',
-                'string',
-                Rule::in(PrimaryJobInformation::JOB_FILTER_TYPES)
-            ],
-            'skill_ids' => [
-                'nullable',
-                'array',
-                'min:1'
-            ],
-            'skill_ids.*' => [
-                'nullable',
-                'integer',
-                'distinct',
-            ],
-            'job_sector_ids' => [
-                'nullable',
-                'array',
-                'min:1'
-            ],
-            'job_sector_ids.*' => [
-                'nullable',
-                'integer',
-                'distinct',
-            ],
-            'occupation_ids' => [
-                'nullable',
-                'array',
-                'min:1'
-            ],
-            'occupation_ids.*' => [
-                'nullable',
-                'integer',
-                'distinct',
-            ],
-        ];
-
-
-        return Validator::make($requestData, $rules, $customMessage);
-
     }
 
     /**

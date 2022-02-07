@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\User;
+use App\Services\CommonServices\CodeGenerateService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -115,13 +116,15 @@ class OrganizationController extends Controller
         $this->authorize('create', $organization);
 
         $validated = $this->organizationService->validator($request)->validate();
-        $subTrades = $validated['sub_trades'];
+
+        $validated['code'] = CodeGenerateService::getIndustryCode();
+
         DB::beginTransaction();
         try {
 
             $organization = $this->organizationService->store($organization, $validated);
 
-            $this->organizationService->syncWithSubTrades($organization, $subTrades);
+            $this->organizationService->syncWithSubTrades($organization, $validated['sub_trades']);
 
             if (!($organization && $organization->id)) {
                 throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
@@ -264,6 +267,8 @@ class OrganizationController extends Controller
         /** @var Organization $organization */
         $organization = app(Organization::class);
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
+
+        $validated['code'] = CodeGenerateService::getIndustryCode();
 
         Log::channel('org_reg')->info('organization_registration_validated_data', $validated);
 
@@ -559,7 +564,7 @@ class OrganizationController extends Controller
         $this->authorize('updateProfile', $organization);
 
 
-        $validated = $this->organizationService->organizationAdminProfileValidator($request, $organizationId)->validate();
+        $validated = $this->organizationService->organizationProfileUpdateValidator($request, $organizationId)->validate();
         $data = $this->organizationService->update($organization, $validated);
         $response = [
             'data' => $data ?: [],

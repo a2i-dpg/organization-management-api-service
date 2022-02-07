@@ -152,7 +152,7 @@ class HrDemandInstituteService
      */
     public function getOneHrDemandInstitute(int $id): HrDemandInstitute
     {
-        /** @var HrDemand|Builder $hrDemandBuilder */
+        /** @var HrDemandInstitute|Builder $hrDemandBuilder */
         $hrDemandBuilder = HrDemandInstitute::select([
             'hr_demand_institutes.id',
             'hr_demand_institutes.hr_demand_id',
@@ -180,7 +180,6 @@ class HrDemandInstituteService
         });
 
         $hrDemandBuilder->with('hrDemand');
-        $hrDemandBuilder->with('hrDemandYouths');
 
         $hrDemandInstitute = $hrDemandBuilder->firstOrFail();
 
@@ -194,6 +193,21 @@ class HrDemandInstituteService
                 $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
             }
         }
+
+        /** Fetch All Hr Demand Youths */
+        $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+        $hrDemandYouthCvLinks = [];
+        $hrDemandYouthYouthsIds = [];
+        foreach ($hrDemandYouths as $hrDemandYouth){
+            if($hrDemandYouth['cv_link']){
+                $hrDemandYouthCvLinks[] = $hrDemandYouth;
+            } else if($hrDemandYouth['youth_id']){
+                $hrDemandYouthYouthsIds[] = $hrDemandYouth;
+            }
+        }
+
+        $hrDemandInstitute['hr_demand_youths_cv_links'] = $hrDemandYouthCvLinks;
+        $hrDemandInstitute['hr_demand_youths_youth_ids'] = $hrDemandYouthYouthsIds;
 
         return $hrDemandInstitute;
     }
@@ -373,16 +387,30 @@ class HrDemandInstituteService
         $hrDemand->remaining_vacancy = $hrDemand->remaining_vacancy + $approvedVacancyDifference;
         $hrDemand->save();
 
-        $hrDemandInstitute->rejected_by_industry_association = HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_FALSE;
-        $hrDemandInstitute->vacancy_approved_by_industry_association = count($data['hr_demand_youth_ids']);
-        $hrDemandInstitute->save();
-
         /** Approve Hr demand Youths */
+        $previouslyApprovedHrDemandYouthIds = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)
+            ->where('approval_status', HrDemandYouth::APPROVAL_STATUS_APPROVED)
+            ->pluck('id')
+            ->toArray();
+
+        /** If previously stored Hr Demand Youth is not present  */
+        foreach ($previouslyApprovedHrDemandYouthIds as $hrDemandYouthId){
+            if(!in_array($hrDemandYouthId, $data['hr_demand_youth_ids'])){
+                $hrDemandYouth = HrDemandYouth::find($hrDemandYouthId);
+                $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_PENDING;
+                $hrDemandYouth->save();
+            }
+        }
+
         foreach ($data['hr_demand_youth_ids'] as $hrDemandYouthId) {
             $hrDemandYouth = HrDemandYouth::find($hrDemandYouthId);
             $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_APPROVED;
             $hrDemandYouth->save();
         }
+
+        $hrDemandInstitute->rejected_by_industry_association = HrDemandInstitute::REJECTED_BY_INDUSTRY_ASSOCIATION_FALSE;
+        $hrDemandInstitute->vacancy_approved_by_industry_association = count($data['hr_demand_youth_ids']);
+        $hrDemandInstitute->save();
 
         return $hrDemandInstitute;
     }
