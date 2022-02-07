@@ -9951,6 +9951,7 @@
             "post": {
                 "tags": ["Job Interview"],
                 "summary": "Create a recruitment step a job interview",
+                "description": "API endpoint to Create a recruitment step a job interview. A successful request response will show 201 HTTP status code",
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
@@ -9966,6 +9967,44 @@
                         "content": {
                             "application/json": {
                                 "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/recruitment-steps/{stepId}": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get a recruitment step of a job interview",
+                "description": "API endpoint to Get a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "ComprehensionAsessment2",
+                                        "title_en": "ComprehensionAsessment2",
+                                        "step_type": 1,
+                                        "is_interview_reschedule_allowed": 1,
+                                        "interview_contact": "Malibagh",
+                                        "created_at": "2022-02-07T04:56:56.000000Z",
+                                        "updated_at": "2022-02-07T04:56:56.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -13698,6 +13737,14 @@
                 "name": "trade_id",
                 "in": "query",
                 "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "stepId": {
+                "name": "stepId",
+                "in": "path",
+                "required": true,
                 "schema": {
                     "type": "integer"
                 }
