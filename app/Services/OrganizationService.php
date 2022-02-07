@@ -158,6 +158,7 @@ class OrganizationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -217,6 +218,9 @@ class OrganizationService
         }
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($title)) {
+            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
