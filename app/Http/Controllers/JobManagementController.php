@@ -154,7 +154,7 @@ class JobManagementController extends Controller
     {
         $filter = $this->jobManagementService->jobListFilterValidator($request)->validate();
         $filter[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY] = BaseModel::IS_CLIENT_SITE_RESPONSE_FLAG;
-        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime, true);
+        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime);
 
         $response = [
             'order' => $returnedData['order'],
