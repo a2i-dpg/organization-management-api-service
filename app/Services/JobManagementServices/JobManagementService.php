@@ -525,6 +525,7 @@ class JobManagementService
                 'integer'
             ],
             'interview_contact' => [
+                'nullable',
                 'string'
             ]
         ];
@@ -986,6 +987,18 @@ class JobManagementService
     {
         $data['hire_invited_at'] = Carbon::now();
         $appliedJob->fill($data);
+        $appliedJob->save();
+        return $appliedJob;
+    }
+
+    /***
+     * @param AppliedJob $appliedJob
+     * @return AppliedJob
+     */
+    public function updateHiredCandidate(AppliedJob $appliedJob): AppliedJob
+    {
+        $appliedJob->hired_at = Carbon::now();
+        $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hired"];
         $appliedJob->save();
         return $appliedJob;
     }

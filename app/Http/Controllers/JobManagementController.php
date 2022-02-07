@@ -505,6 +505,30 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param int $applicationId
+     * @return JsonResponse
+     */
+    public function updateHiredCandidate(int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        $hiredCandidate = $this->jobManagementService->updateHiredCandidate($appliedJob);
+
+        $response = [
+            "data" => $hiredCandidate,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate hired successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+
+    }
+
+    /**
      * @param int $stepId
      * @return JsonResponse
      * @throws Throwable
