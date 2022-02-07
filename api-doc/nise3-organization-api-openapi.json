@@ -10009,6 +10009,82 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Update a recruitment step of a job interview",
+                "description": "API endpoint to update a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateRecruitmentStep"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "title": "Written",
+                                        "title_en": "Written",
+                                        "step_type": 1,
+                                        "is_interview_reschedule_allowed": 1,
+                                        "interview_contact": null,
+                                        "created_at": "2022-02-07T04:55:55.000000Z",
+                                        "updated_at": "2022-02-07T05:42:04.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Recruitment Step updated successful",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Job Interview"],
+                "summary": "Delete a recruitment step of a job interview",
+                "description": "API endpoint to Delete a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": true,
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Recruitment Step deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/area-of-business": {
@@ -11302,6 +11378,21 @@
     },
     "components": {
         "schemas": {
+            "updateRecruitmentStep": {
+                "type": "object",
+                "description": "Update Recruitment step",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "title_en": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "title"
+                ]
+            },
             "recruitmentStep": {
                 "type": "object",
                 "description": "Recruitment Step",
