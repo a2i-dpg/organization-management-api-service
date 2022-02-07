@@ -40,10 +40,9 @@ class JobManagementService
     /**
      * @param array $request
      * @param Carbon $startTime
-     * @param bool $isPublicApiCall
      * @return array
      */
-    public function getJobList(array $request, Carbon $startTime, bool $isPublicApiCall = false): array
+    public function getJobList(array $request, Carbon $startTime): array
     {
         $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
@@ -95,7 +94,7 @@ class JobManagementService
             'primary_job_information.row_status'
         ]);
 
-        if (!$isPublicApiCall) {
+        if (!$isRequestFromClientSide) {
             $jobInformationBuilder->acl();
         }
 
