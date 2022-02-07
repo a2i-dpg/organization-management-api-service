@@ -14,6 +14,8 @@ use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
 use App\Models\RecruitmentStep;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -998,6 +1000,7 @@ class JobManagementService
     {
         $appliedJob->hired_at = Carbon::now();
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hired"];
+        $appliedJob->current_recruitment_step_id = null;
         $appliedJob->save();
         return $appliedJob;
     }
@@ -1034,6 +1037,50 @@ class JobManagementService
         return AppliedJob::where('job_id', $recruitmentStep->job_id)
             ->where('current_recruitment_step_id', $recruitmentStep->id)
             ->count('id');
+    }
+
+
+    /**
+     * Send hiring listed candidate invite through sms
+     * @param AppliedJob $appliedJob
+     * @param array $youth
+     */
+    public function sendCandidateHireInviteSms(AppliedJob $appliedJob, array $youth)
+    {
+        $job = PrimaryJobInformation::where('job_id',$appliedJob->job_id)->first();
+
+        $youthName = $youth['first_name'] . " " . $youth['last_name'];
+        $recipient = $youth['mobile'];
+        $message = "Congratulation, " . $youthName . " You have been admitted for the ".$job->job_title." role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
+        $sendSms = new SmsService($recipient, $message);
+        $sendSms->sendSms();
+
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @param array $youth
+     * @throws Throwable
+     */
+    public function sendCandidateHireInviteEmail(AppliedJob $appliedJob,array $youth)
+    {
+        $mailService = new MailService();
+        $mailService->setTo([
+            $youth['email']
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Job Offer letter";
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "job_offer_info" => "Job offer message body goes here", //TODO :: properly write the message body for the job offer
+        ]);
+
+        $hiringInviteTemplate= 'mail.send-mail-to-hiring-invite-candidate-for-job';
+        $mailService->setTemplate($hiringInviteTemplate);
+        $mailService->sendMail();
     }
 
 
