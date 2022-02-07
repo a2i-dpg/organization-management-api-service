@@ -171,6 +171,8 @@ class MailService
             $sendMailPayload['attachment'] = $this->attachments;
         }
 
+        Log::info('MailPayloadForOrg'.json_encode($sendMailPayload));
+
         event(new MailSendEvent($sendMailPayload));
     }
 
