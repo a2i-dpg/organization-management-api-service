@@ -10783,6 +10783,37 @@
                 }
             }
         },
+        "/reject-hr-demand-youth/{hr_demand_youth_id}": {
+            "put": {
+                "tags": [
+                    "Institute Hr Demand"
+                ],
+                "summary": "Reject hr demand youths by hr_demand_youth_id",
+                "description": "API endpoint to Reject hr demand youths by hr_demand_youth_id. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_youth_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "HR Demand Youth Rejected Successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/suggestions/education-levels": {
             "get": {
                 "tags": [
@@ -13689,6 +13720,14 @@
                 "required": true,
                 "schema": {
                     "type": "string"
+                }
+            },
+            "hr_demand_youth_id": {
+                "name": "hr_demand_youth_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "hr_demand_id": {
