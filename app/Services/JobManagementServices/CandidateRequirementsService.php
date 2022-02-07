@@ -337,7 +337,7 @@ class CandidateRequirementsService
             ],
             "genders.*" => [
                 "distinct",
-                Rule::in(array_keys(BaseModel::GENDERS))
+                Rule::in(BaseModel::GENDERS)
             ],
             "age_minimum" => [
                 "nullable",
