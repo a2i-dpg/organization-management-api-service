@@ -53,7 +53,7 @@ class HrDemandYouthController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function deleteHrDemandYouth(int $hr_demand_youth_id): JsonResponse
+    public function rejectHrDemandYouth(int $hr_demand_youth_id): JsonResponse
     {
         //$this->authorize('delete', HrDemandYouth::class);
 

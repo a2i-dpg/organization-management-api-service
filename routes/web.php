@@ -54,7 +54,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->put("hr-demand-rejected-by-industry-association/{id}", ["as" => "industry-association.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByIndustryAssociation"]);
         /** Hr demand youths */
         $router->get("hr-demand-youths/{hr_demand_institute_id}", ["as" => "hr.demand.youths", "uses" => "HrDemandYouthController@getHrDemandYouths"]);
-        $router->put("reject-hr-demand-youth/{hr_demand_youth_id}", ["as" => "reject.hr.demand.youth", "uses" => "HrDemandYouthController@deleteHrDemandYouth"]);
+        $router->put("reject-hr-demand-youth/{hr_demand_youth_id}", ["as" => "reject.hr.demand.youth", "uses" => "HrDemandYouthController@rejectHrDemandYouth"]);
 
 
         $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
