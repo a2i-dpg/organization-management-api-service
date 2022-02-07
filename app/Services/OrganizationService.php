@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Services\CommonServices\MailService;
@@ -605,12 +606,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -645,13 +648,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) use ($url) {
-                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
-                throw $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -742,12 +746,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->delete($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -883,12 +889,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
 
@@ -908,12 +916,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
 

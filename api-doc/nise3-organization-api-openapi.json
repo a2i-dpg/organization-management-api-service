@@ -142,14 +142,14 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
         "/industry-association-profile-update": {
             "put": {
                 "tags": [
-                    "Industry Association Profile"
+                    "Industry Association"
                 ],
                 "summary": "Update an industry association admin profile ",
                 "description": "An API endpoint to update  an industry association admin profile ",
@@ -237,7 +237,7 @@
         "/industry-association-profile": {
             "get": {
                 "tags": [
-                    "Industry Association Profile"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association admin profile",
                 "description": "An API endpoint to get  an industry association admin profile ",
@@ -333,7 +333,7 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
@@ -364,7 +364,7 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
@@ -6128,7 +6128,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "post": {
@@ -6195,7 +6195,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             }
         },
@@ -6270,7 +6270,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "put": {
@@ -6346,7 +6346,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "delete": {
@@ -6375,7 +6375,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "patch": {
@@ -6404,7 +6404,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             }
         },
@@ -6446,7 +6446,7 @@
         "/industry-association-members": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
@@ -6531,7 +6531,7 @@
         "/public/industry-association-members": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
@@ -6618,7 +6618,7 @@
         "/public/industry-association-details": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Public API to Get-one industry association details",
                 "description": "An Public API endpoint to get  an industry association details ",
@@ -6681,7 +6681,7 @@
         "/industry-association-membership-approval/{organizationId}": {
             "put": {
                 "tags": [
-                    "Industry Association Membership Approval Rejection"
+                    "Industry Association"
                 ],
                 "summary": "Approve an industry association membership request for an industry",
                 "description": "API endpoint to Approve an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -6712,7 +6712,7 @@
         "/industry-association-membership-rejection/{organizationId}": {
             "put": {
                 "tags": [
-                    "Industry Association Membership Approval Rejection"
+                    "Industry Association"
                 ],
                 "summary": "Reject an industry association membership request for an industry",
                 "description": "API endpoint to reject an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
