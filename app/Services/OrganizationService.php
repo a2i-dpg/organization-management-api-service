@@ -219,7 +219,7 @@ class OrganizationService
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
-        if (!empty($title)) {
+        if (!empty($searchText)) {
             $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
         }
         if (!empty($membershipId)) {
