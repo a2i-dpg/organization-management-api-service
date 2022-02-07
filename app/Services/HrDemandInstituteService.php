@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -195,19 +196,37 @@ class HrDemandInstituteService
         }
 
         /** Fetch All Hr Demand Youths */
+        /** @var HrDemandYouth|Builder $hrDemandYouths */
         $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
+
+        /** Set Youth Details if youth_id exist in HrDemandYouth */
+        $youthIds = $hrDemandYouths->pluck('youth_id')->filter(function ($value) {return !is_null($value);})->toArray();
+        if($youthIds){
+            $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthIds);
+            $indexedYouths = [];
+            foreach ($youthProfiles as $item) {
+                $indexedYouths[$item['id']] = $item;
+            }
+
+            foreach ($hrDemandYouths as $hrDemandYouth) {
+                if(!empty($hrDemandYouth->youth_id)){
+                    $hrDemandYouth['youth_details'] = $indexedYouths[$hrDemandYouth['youth_id']] ?? "";
+                }
+            }
+        }
+
         $hrDemandYouthCvLinks = [];
-        $hrDemandYouthYouthsIds = [];
+        $hrDemandYouthsYouthIds = [];
         foreach ($hrDemandYouths as $hrDemandYouth){
             if($hrDemandYouth['cv_link']){
                 $hrDemandYouthCvLinks[] = $hrDemandYouth;
             } else if($hrDemandYouth['youth_id']){
-                $hrDemandYouthYouthsIds[] = $hrDemandYouth;
+                $hrDemandYouthsYouthIds[] = $hrDemandYouth;
             }
         }
 
         $hrDemandInstitute['hr_demand_youths_cv_links'] = $hrDemandYouthCvLinks;
-        $hrDemandInstitute['hr_demand_youths_youth_ids'] = $hrDemandYouthYouthsIds;
+        $hrDemandInstitute['hr_demand_youths_youth_ids'] = $hrDemandYouthsYouthIds;
 
         return $hrDemandInstitute;
     }
