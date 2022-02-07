@@ -6458,6 +6458,9 @@
                         "$ref": "#/components/parameters/title_en_optional"
                     },
                     {
+                        "$ref": "#/components/parameters/searchText"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -6538,6 +6541,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/searchText"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -14192,6 +14198,14 @@
                 "in": "query",
                 "required": false,
                 "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "searchText": {
+                "name": "search_text",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "string"
                 }
