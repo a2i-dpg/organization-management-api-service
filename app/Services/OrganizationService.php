@@ -431,7 +431,7 @@ class OrganizationService
         $organizationBuilder->where('organizations.id', '=', $id);
 
 
-        $organizationBuilder->with(['subTrades.trade','industryAssociations']);
+        $organizationBuilder->with(['subTrades.trade', 'industryAssociations']);
 
         return $organizationBuilder->firstOrFail();
     }
@@ -932,7 +932,7 @@ class OrganizationService
     /**
      * @throws Throwable
      */
-    public function sendMailToOrganizationAfterRegistrationApprovalOrRejection(array $mailPayload)
+    public function sendMailToOrganizationAfterRegistrationApproval(array $mailPayload)
     {
         $organization = Organization::findOrFail($mailPayload['organization_id']);
         $mailService = new MailService();
@@ -946,10 +946,32 @@ class OrganizationService
         $mailService->setSubject($subject);
 
         $mailService->setMessageBody([
-            "organization_info" => $organization->toArray(),
+            "organization_info" => $organization->toArray()
         ]);
 
-        $instituteRegistrationTemplate = 'mail.organization-registration-approval-or-rejection-template';
+        $instituteRegistrationTemplate = 'mail.organization-registration-approval-template';
+        $mailService->setTemplate($instituteRegistrationTemplate);
+        $mailService->sendMail();
+    }
+
+    public function sendMailToOrganizationAfterRegistrationRejection(array $mailPayload)
+    {
+        $organization = Organization::findOrFail($mailPayload['organization_id']);
+        $mailService = new MailService();
+        $mailService->setTo([
+            $organization->contact_person_email
+        ]);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = $mailPayload['subject'];
+
+        $mailService->setForm($from);
+        $mailService->setSubject($subject);
+
+        $mailService->setMessageBody([
+            "organization_info" => $organization->toArray()
+        ]);
+
+        $instituteRegistrationTemplate = 'mail.organization-registration-rejection-template';
         $mailService->setTemplate($instituteRegistrationTemplate);
         $mailService->sendMail();
     }

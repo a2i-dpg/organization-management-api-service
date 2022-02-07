@@ -158,6 +158,8 @@ class MailService
         }
         if (!empty($this->template)) {
             $sendMailPayload['message_body'] = $this->templateView();
+        } else {
+            $sendMailPayload['message_body'] = '<p>Message body here.......</p>';
         }
         if (!empty($this->cc)) {
             $sendMailPayload['cc'] = $this->cc;
@@ -169,6 +171,8 @@ class MailService
             $sendMailPayload['attachment'] = $this->attachments;
         }
 
+        Log::info('MailPayloadForOrg'.json_encode($sendMailPayload));
+
         event(new MailSendEvent($sendMailPayload));
     }
 
@@ -179,5 +183,12 @@ class MailService
     {
         $data = $this->messageBody;
         return view($this->template, compact('data'))->render();
+    }
+
+    public function messageBody(array $data, $htmlTemplate = null): string
+    {
+        $messageTemplate = !empty($htmlTemplate) ? $htmlTemplate : 'mail.message-default-template';
+        $messageData = $data ?? [];
+        return view($messageTemplate, compact('messageData'))->render();
     }
 }

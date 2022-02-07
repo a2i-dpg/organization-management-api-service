@@ -25,7 +25,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     /** Api info  */
     $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
-
+    /** IndustryAssociation Registration Approval */
+    $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
     /** Auth routes */
     $router->group(['middleware' => 'auth'], function () use ($customRouter, $router) {
         $customRouter()->resourceRoute('ranks', 'RankController')->render();
@@ -63,8 +64,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Assign Service to Organization Unit */
         $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
-        /** IndustryAssociation Registration Approval */
-        $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
+
 
         /** IndustryAssociation Registration Rejection */
         $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationRegistrationRejection"]);
@@ -73,10 +73,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
 
         /** industry registration approval   */
-        $router->put("organization-registration-approval/{organizationId}", ["as" => "organization.organization-registration-approval", "uses" => "OrganizationController@organizationRegistrationApproval"]);
+        $router->put("organization-user-approval/{organizationId}", ["as" => "organization.organization-user-approval", "uses" => "OrganizationController@organizationUserApproval"]);
 
         /** industry registration rejection  */
-        $router->put("organization-registration-rejection/{organizationId}", ["as" => "organization.organization-registration-rejection", "uses" => "OrganizationController@organizationRegistrationRejection"]);
+        $router->put("organization-user-rejection/{organizationId}", ["as" => "organization.organization-user-rejection", "uses" => "OrganizationController@organizationUserRejection"]);
 
         /** Industry Association membership approval */
         $router->put("industry-association-membership-approval/{organizationId}", ["as" => "industry-association-approval", "uses" => "IndustryAssociationController@industryAssociationMembershipApproval"]);
