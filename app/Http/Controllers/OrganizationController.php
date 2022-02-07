@@ -344,7 +344,7 @@ class OrganizationController extends Controller
      * @throws RequestException
      * @throws Throwable
      */
-    public function organizationRegistrationApproval(int $organizationId): JsonResponse
+    public function organizationUserApproval(int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
@@ -355,8 +355,8 @@ class OrganizationController extends Controller
                 if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
 
                     $mailPayload['organization_id'] = $organizationId;
-                    $mailPayload['subject'] = "Organization Registration Approval";
-                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                    $mailPayload['subject'] = "Organization User Approval";
+                    $this->organizationService->sendMailToOrganizationAfterRegistrationApproval($mailPayload);
                 }
                 $response['_response_status'] = [
                     "success" => false,
@@ -386,7 +386,7 @@ class OrganizationController extends Controller
      * @throws RequestException
      * @throws Throwable
      */
-    public function organizationRegistrationRejection(int $organizationId): JsonResponse
+    public function organizationUserRejection(int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
@@ -399,7 +399,7 @@ class OrganizationController extends Controller
                     $mailPayload['organization_id'] = $organizationId;
                     $mailPayload['subject'] = "Organization Registration Rejection";
 
-                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                    $this->organizationService->sendMailToOrganizationAfterRegistrationRejection($mailPayload);
                 }
                 $response['_response_status'] = [
                     "success" => false,
