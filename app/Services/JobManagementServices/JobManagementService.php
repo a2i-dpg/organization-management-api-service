@@ -98,7 +98,7 @@ class JobManagementService
             $jobInformationBuilder->acl();
         }
 
-        if (!$type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
+        if ($type != PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
             $jobInformationBuilder->orderBy('primary_job_information.id', $order);
         }
 
@@ -148,7 +148,7 @@ class JobManagementService
             $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
                 ->whereNull('applied_jobs.deleted_at');
         });
-        $jobInformationBuilder->groupBy('applied_jobs.job_id');
+        $jobInformationBuilder->groupBy('primary_job_information.job_id');
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as interviewed", [AppliedJob::APPLY_STATUS["Interviewed"]]);
@@ -161,7 +161,6 @@ class JobManagementService
         }
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
-
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->orderBy(DB::raw('count(applied_jobs.id)'), 'DESC');
