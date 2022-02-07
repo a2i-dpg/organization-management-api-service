@@ -17,7 +17,7 @@ variables:
 
   # app version, changing version will auto deploy the app to current version
 
-  imageAppVersion: "2.0.1"
+  imageAppVersion: "2.0.2"
 
   # increase this when you need scale up
   replicaCount: 1
@@ -65,6 +65,10 @@ variables:
     DB_DATABASE: "nise_industry_association"
     DB_USERNAME: "core3"
     DB_PASSWORD: "core3"
+
+    REDIS_HOST: "redis.redis"
+    REDIS_PASSWORD: "k?admin"
+    REDIS_PORT: 6379
 
     RABBITMQ_HOST: "rabbitmqcluster.default"
     RABBITMQ_PORT: "5672"
