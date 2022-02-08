@@ -20,7 +20,7 @@ variables:
   imageAppVersion: "2.0.4"
 
   # increase this when you need scale up
-  replicaCount: 1
+  replicaCount: 3
 
   imagePullPolicy: IfNotPresent
 
