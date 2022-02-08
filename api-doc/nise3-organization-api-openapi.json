@@ -9198,6 +9198,50 @@
                 }
             }
         },
+        "/jobs/candidate-update/hired/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Hiring Invitation sent to a candidate",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 8,
+                                        "current_recruitment_step_id": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": "2022-02-08 05:13:00",
+                                        "hired_at": "2022-02-08T05:21:45.186224Z",
+                                        "hire_invite_type": 2,
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T05:21:45.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate hired successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
 
 
