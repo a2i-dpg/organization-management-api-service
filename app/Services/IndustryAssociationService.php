@@ -9,8 +9,6 @@ use App\Models\CandidateRequirement;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
 use App\Models\PrimaryJobInformation;
-use App\Services\CommonServices\MailService;
-use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -417,39 +415,6 @@ class IndustryAssociationService
 
     }
 
-    /**
-     * Send Mail To IndustryAssociation After Membership Application approval or rejection
-     * @param array $data
-     * @throws Throwable
-     */
-
-    public function sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection(array $data)
-    {
-        /** @var IndustryAssociation $industryAssociation */
-        $industryAssociation = IndustryAssociation::findOrFail($data['industry_association_id']);
-
-        /** @var Organization $organization */
-        $organization = Organization::findOrFail($data['organization_id']);
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $industryAssociation->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = $data['subject'];
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization" => $organization->toArray(),
-            "industry_association" => $industryAssociation->toArray()
-        ]);
-
-        $industryAssociationMembership = 'mail.send-mail-to-organization-after-association-membership-approval-rejection-template';
-        $mailService->setTemplate($industryAssociationMembership);
-        $mailService->sendMail();
-    }
-
 
     /**
      * Validator for industry registration/industryAssociation membership  approval/rejection
@@ -548,81 +513,6 @@ class IndustryAssociationService
             ->json();
     }
 
-
-    /**
-     * @param array $mailPayload
-     * @throws Throwable
-     */
-    public function sendIndustryAssociationRegistrationNotificationByMail(array $mailPayload)
-    {
-        $mailService = new MailService();
-        $mailService->setTo([
-            $mailPayload['contact_person_email']
-        ]);
-        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "IndustryAssociation Registration";
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-        $mailService->setMessageBody([
-            "user_name" => $mailPayload['contact_person_mobile'],
-            "password" => $mailPayload['password']
-        ]);
-        $industryAssociationRegistrationTemplate = 'mail.industry-association-registration-default-template';
-        $mailService->setTemplate($industryAssociationRegistrationTemplate);
-        $mailService->sendMail();
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     */
-    public function sendSmsIndustryAssociationRegistrationApproval(IndustryAssociation $industryAssociation)
-    {
-        /** Sms send after institute approval */
-        $recipient = $industryAssociation->contact_person_mobile;
-        $message = "Congratulation, " . $industryAssociation->contact_person_name . " You are approved as industry association user";
-        $sendSms = new SmsService($recipient, $message);
-        $sendSms->sendSms();
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection(array $mailPayload)
-    {
-
-        Log::info("MailPayload" . json_encode($mailPayload));
-
-        $industryAssociation = IndustryAssociation::findOrFail($mailPayload['industry_association_id']);
-        $mailService = new MailService();
-        $mailService->setTo([
-            $mailPayload['contact_person_email']
-        ]);
-        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'];
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-        $mailService->setMessageBody([
-            "industry_association_info" => $industryAssociation->toArray(),
-        ]);
-        $industryAssociationRegistrationApprovalRejectionTemplate = $mailPayload['template'] ?? 'mail.industry-association-registration-approval-or-rejection-template';
-        $mailService->setTemplate($industryAssociationRegistrationApprovalRejectionTemplate);
-        $mailService->sendMail();
-
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     */
-    public function sendSmsIndustryAssociationRegistrationRejection(IndustryAssociation $industryAssociation)
-    {
-        /** Sms send after institute approval */
-        $recipient = $industryAssociation->contact_person_mobile;
-        $message = "Congratulation, " . $industryAssociation->contact_person_name . " You are rejected as industry association user";
-        $sendSms = new SmsService($recipient, $message);
-        $sendSms->sendSms();
-    }
 
     /**
      * @param $id
