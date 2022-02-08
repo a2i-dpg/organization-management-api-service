@@ -100,6 +100,7 @@ abstract class BaseModel extends Model
     public const MALE = 1;
     public const FEMALE = 2;
     public const OTHERS = 3;
+
     public const GENDERS = [
         self::MALE,
         self::FEMALE,
