@@ -17,10 +17,10 @@ variables:
 
   # app version, changing version will auto deploy the app to current version
 
-  imageAppVersion: "2.0.4"
+  imageAppVersion: "2.0.5"
 
   # increase this when you need scale up
-  replicaCount: 3
+  replicaCount: 1
 
   imagePullPolicy: IfNotPresent
 
