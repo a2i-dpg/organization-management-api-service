@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Exceptions\HttpErrorException;
+use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\CandidateRequirement;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
+use App\Models\PrimaryJobInformation;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
@@ -935,6 +938,77 @@ class IndustryAssociationService
             ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return array
+     */
+    public function getIndustryAssociationDashboardStatistics(IndustryAssociation $industryAssociation): array
+    {
+        $organizations = $this->getIndustryCountByIndustryAssociation($industryAssociation);
+        $employed = $this->employmentCountByIndustryAssociation($industryAssociation);
+        $unemployed = 0;
+        $vacancies = $this->getVacancyCountByIndustryAssociation($industryAssociation);
+        $trendingSkills = $this->getTrendingJobSkillsCountByIndustryAssociation($industryAssociation);
+
+        return [
+            "organizations" => $organizations,
+            "employed" => $employed,
+            "unemployed" => $unemployed,
+            "vacancies" => $vacancies,
+            "trending_skills" => $trendingSkills
+        ];
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return int
+     */
+    public function employmentCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
+    {
+        return AppliedJob::query()
+            ->join('primary_job_information', 'primary_job_information.job_id', '=', 'applied_jobs.job_id')
+            ->where('primary_job_information.industry_association_id', $industryAssociation->id)
+            ->where('apply_status', AppliedJob::APPLY_STATUS["Hired"])
+            ->count();
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return int
+     */
+    public function getIndustryCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
+    {
+        return $industryAssociation->organizations()->count('organization_id');
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return int
+     */
+    public function getTrendingJobSkillsCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
+    {
+        $candidateRequirementBuilder = CandidateRequirement::query()
+            ->join('primary_job_information', 'primary_job_information.job_id', '=', 'candidate_requirements.job_id')
+            ->where('primary_job_information.industry_association_id', $industryAssociation->id);
+
+        $candidateRequirement = $candidateRequirementBuilder->firstOrFail();
+
+        return $candidateRequirement->skills()->distinct()->count('skill_id');
+
+    }
+
+    /**
+     * @param IndustryAssociation $industryAssociation
+     * @return int
+     */
+    public function getVacancyCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
+    {
+        return PrimaryJobInformation::where('industry_association_id', $industryAssociation->id)
+            ->where('application_deadline', '>', Carbon::now())
+            ->where('published_at', '<=', Carbon::now())
+            ->sum('no_of_vacancies');
     }
 
     /**
