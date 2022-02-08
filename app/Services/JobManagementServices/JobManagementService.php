@@ -14,6 +14,7 @@ use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
 use App\Models\RecruitmentStep;
+use App\Models\RecruitmentStepCandidateScheduleInterview;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
@@ -915,20 +916,21 @@ class JobManagementService
     /**
      * @param AppliedJob $appliedJob
      * @param array $data
-     * @return CandidateInterview
+     * @return RecruitmentStepCandidateScheduleInterview
      */
-    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data): CandidateInterview
+    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data):RecruitmentStepCandidateScheduleInterview
     {
-        $candidateInterview = CandidateInterview::firstOrNew(
-            ['applied_job_id' => $appliedJob->id],
-            ['recruitment_step_id', $appliedJob->current_recruitment_step_id]
-        );
-
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interviewed"];
         $appliedJob->save();
 
-        $candidateInterview->job_id = $appliedJob->job_id;
-        $candidateInterview->applied_job_id = $appliedJob->id;
+        $candidateInterview = RecruitmentStepCandidateScheduleInterview::firstOrNew(
+            [
+                'applied_job_id' => $appliedJob->id,
+                'recruitment_step_id', $appliedJob->current_recruitment_step_id,
+                'job_id'=> $appliedJob->job_id
+            ]
+        );
+
         $candidateInterview->is_candidate_present = $data['is_candidate_present'];
         $candidateInterview->interview_score = $data['interview_score'];
 
