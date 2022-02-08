@@ -1096,13 +1096,14 @@ class JobManagementService
      */
     public function sendCandidateHireInviteSms(AppliedJob $appliedJob, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id',$appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
 
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $recipient = $youth['mobile'];
-        $message = "Congratulation, " . $youthName . " You have been admitted for the ".$job->job_title." role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
-        $sendSms = new SmsService($recipient, $message);
-        $sendSms->sendSms();
+        $smsMessage = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
+        $smsService = new SmsService();
+        $smsService->sendSms($recipient, $smsMessage);
+
 
     }
 
@@ -1111,24 +1112,17 @@ class JobManagementService
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateHireInviteEmail(AppliedJob $appliedJob,array $youth)
+    public function sendCandidateHireInviteEmail(AppliedJob $appliedJob, array $youth)
     {
-        $mailService = new MailService();
-        $mailService->setTo([
-            $youth['email']
-        ]);
+        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        /** Mail send */
+        $youthName = $youth['first_name'] . " " . $youth['last_name'];
+        $to = array($youth['email']);
         $from = BaseModel::NISE3_FROM_EMAIL;
         $subject = "Job Offer letter";
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "job_offer_info" => "Job offer message body goes here", //TODO :: properly write the message body for the job offer
-        ]);
-
-        $hiringInviteTemplate= 'mail.send-mail-to-hiring-invite-candidate-for-job';
-        $mailService->setTemplate($hiringInviteTemplate);
+        $message ="Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
+        $messageBody = MailService::templateView($message);
+        $mailService = new MailService($to, $from, $subject, $messageBody);
         $mailService->sendMail();
     }
 
