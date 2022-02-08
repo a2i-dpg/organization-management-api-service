@@ -41,6 +41,39 @@ class JobManagementService
 
     /**
      * @param array $request
+     * @param string $jobId
+     * @return array
+     */
+    public function getJobCandidateAppliedDetails(array $request, string $jobId): array
+    {
+        $youthId = $request['youth_id'] ?? "";
+        $isRequestFromClientSide = !empty($request[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY]);
+
+        $jobInformationBuilder = PrimaryJobInformation::select([
+            'primary_job_information.job_id',
+        ]);
+
+        if (!$isRequestFromClientSide) {
+            $jobInformationBuilder->acl();
+        }
+
+        $jobInformationBuilder->leftJoin('applied_jobs', function ($join) {
+            $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
+                ->whereNull('applied_jobs.deleted_at');
+        });
+        $jobInformationBuilder->groupBy('primary_job_information.job_id');
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as interviewed", [AppliedJob::APPLY_STATUS["Interviewed"]]);
+
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
+        $jobInformationBuilder->where("primary_job_information.job_id", $jobId);
+
+        return $jobInformationBuilder->first()->toArray();
+    }
+
+    /**
+     * @param array $request
      * @param Carbon $startTime
      * @return array
      */
@@ -56,6 +89,7 @@ class JobManagementService
         $industryAssociationId = $request['industry_association_id'] ?? "";
         $instituteId = $request['institute_id'] ?? "";
         $organizationId = $request['organization_id'] ?? "";
+        $youthId = $request['youth_id'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -155,6 +189,8 @@ class JobManagementService
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as interviewed", [AppliedJob::APPLY_STATUS["Interviewed"]]);
 
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
+
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
@@ -168,7 +204,6 @@ class JobManagementService
             $jobInformationBuilder->orderBy(DB::raw('count(applied_jobs.id)'), 'DESC');
             $jobInformationBuilder->active();
         }
-
 
         if (is_array($skillIds) && count($skillIds) > 0) {
             $skillMatchingJobIds = DB::table('candidate_requirement_skill')->whereIn('skill_id', $skillIds)->pluck('job_id');
@@ -190,6 +225,8 @@ class JobManagementService
             $jobInformationBuilder->active();
         }
 
+        $jobInformationBuilder->with('additionalJobInformation');
+
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
             $jobInformationBuilder->with(['additionalJobInformation.jobLocations' => function ($query) use ($locDistrictIds) {
                 $query->whereIn('additional_job_information_job_locations.loc_district_id', $locDistrictIds);
@@ -198,7 +235,8 @@ class JobManagementService
             $jobInformationBuilder->with('additionalJobInformation.jobLocations');
         }
 
-        $jobInformationBuilder->with('additionalJobInformation');
+        $jobInformationBuilder->with('candidateRequirement');
+        $jobInformationBuilder->with('candidateRequirement.skills');
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
@@ -216,6 +254,21 @@ class JobManagementService
         $response['data'] = $jobInformation->toArray()['data'] ?? $jobInformation->toArray();
         $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function jobDetailsFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $requestData = $request->all();
+
+        $rules = [
+            'youth_id' => 'nullable|integer'
+        ];
+
+        return Validator::make($requestData, $rules);
     }
 
     /**
@@ -259,6 +312,7 @@ class JobManagementService
             'industry_association_id' => 'nullable|integer',
             'organization_id' => 'nullable|integer',
             'institute_id' => 'nullable|integer',
+            'youth_id' => 'nullable|integer',
 
             'loc_district_ids' => [
                 'nullable',

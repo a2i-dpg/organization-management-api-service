@@ -262,10 +262,13 @@ class JobManagementController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws ValidationException
      */
-    public function publicJobDetails(string $jobId): JsonResponse
+    public function publicJobDetails(Request $request, string $jobId): JsonResponse
     {
+        $validatedData = $this->jobManagementService->jobDetailsFilterValidator($request)->validate();
         $data = collect([
+            'candidate_information' => $this->jobManagementService->getJobCandidateAppliedDetails($validatedData, $jobId),
             'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
             'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
             'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
