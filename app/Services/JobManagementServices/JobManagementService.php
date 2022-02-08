@@ -41,6 +41,39 @@ class JobManagementService
 
     /**
      * @param array $request
+     * @param string $jobId
+     * @return array
+     */
+    public function getJobCandidateAppliedDetails(array $request, string $jobId): array
+    {
+        $youthId = $request['youth_id'] ?? "";
+        $isRequestFromClientSide = !empty($request[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY]);
+
+        $jobInformationBuilder = PrimaryJobInformation::select([
+            'primary_job_information.job_id',
+        ]);
+
+        if (!$isRequestFromClientSide) {
+            $jobInformationBuilder->acl();
+        }
+
+        $jobInformationBuilder->leftJoin('applied_jobs', function ($join) {
+            $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
+                ->whereNull('applied_jobs.deleted_at');
+        });
+        $jobInformationBuilder->groupBy('primary_job_information.job_id');
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as interviewed", [AppliedJob::APPLY_STATUS["Interviewed"]]);
+
+        $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
+        $jobInformationBuilder->where("primary_job_information.job_id", $jobId);
+
+        return $jobInformationBuilder->first()->toArray();
+    }
+
+    /**
+     * @param array $request
      * @param Carbon $startTime
      * @return array
      */
@@ -221,6 +254,21 @@ class JobManagementService
         $response['data'] = $jobInformation->toArray()['data'] ?? $jobInformation->toArray();
         $response['query_time'] = $startTime->diffInSeconds(Carbon::now());
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function jobDetailsFilterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $requestData = $request->all();
+
+        $rules = [
+            'youth_id' => 'nullable|integer'
+        ];
+
+        return Validator::make($requestData, $rules);
     }
 
     /**
