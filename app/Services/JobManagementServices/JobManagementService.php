@@ -53,10 +53,6 @@ class JobManagementService
             'primary_job_information.job_id',
         ]);
 
-        if (!$isRequestFromClientSide) {
-            $jobInformationBuilder->acl();
-        }
-
         $jobInformationBuilder->leftJoin('applied_jobs', function ($join) {
             $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
                 ->whereNull('applied_jobs.deleted_at');
@@ -156,9 +152,8 @@ class JobManagementService
 
         if (!empty($searchText)) {
             $jobInformationBuilder->where(function ($builder) use ($searchText) {
-
                 $builder->orWhere('primary_job_information.job_title', 'like', '%' . $searchText . '%');
-                $builder->where('primary_job_information.job_title_en', 'like', '%' . $searchText . '%');
+                $builder->orWhere('primary_job_information.job_title_en', 'like', '%' . $searchText . '%');
             });
 
         }
