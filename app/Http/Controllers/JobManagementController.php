@@ -408,7 +408,6 @@ class JobManagementController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
-
     }
 
     /**
@@ -500,7 +499,7 @@ class JobManagementController extends Controller
 
             } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
                 if (!empty($youth['email'])) {
-                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob,$youth);
+                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob, $youth);
                 }
                 if (!empty($youth['mobile'])) {
                     $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);
@@ -772,30 +771,29 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    public function assignCandidates(Request $request, int $id): mixed
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function assignCandidates(Request $request, int $id): JsonResponse
     {
 
-        $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
+        $validatedData = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
 
-        DB::beginTransaction();
-        try {
+       $interviewScheduledCandidates = $this->interviewScheduleService->assignToSchedule($validatedData, $id);
 
-            $this->interviewScheduleService->assignToSchedule($validated, $id);
+        $response = [
+            '_response_status' => [
+                "data"=>$interviewScheduledCandidates,
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "CandidateRequirements successfully submitted",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
 
-            $response = [
-//                "data" => $candidateRequirements,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "CandidateRequirements successfully submitted",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-            DB::commit();
-        } catch (Throwable $exception) {
-            DB::rollBack();
-            throw $exception;
-        }
 
         return Response::json($response, ResponseAlias::HTTP_OK);
 

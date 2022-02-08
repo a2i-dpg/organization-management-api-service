@@ -114,12 +114,11 @@ class InterviewScheduleService
 
     public function validatorForCandidateAssigning(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $schedule = $this->getOneInterviewSchedule($id);
-
         $rules = [
             'applied_job_ids' => [
                 'required',
-                'array'
+                'array',
+                'min:1'
             ],
             'applied_job_ids.*' => [
                 'required',
@@ -134,10 +133,9 @@ class InterviewScheduleService
     public function assignToSchedule($jobApplicantIds , $id)
     {
         foreach($jobApplicantIds as $jobApplicantId){
-            $jobApplicant = AppliedJob::find($jobApplicantId);
             DB::table('assign_candidates_to_schedules')->insert(
                 [
-                    'applied_job_id' => $jobApplicant->id,
+                    'applied_job_id' => $jobApplicantId->id,
                     'job_id' => $jobApplicant->job_id,
                     'recruitment_step_id' => $jobApplicant->recruitment_step_id,
                     'schedule_id' => $id,
