@@ -679,5 +679,27 @@ class IndustryAssociationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function industryAssociationDashboardStatistics(Request $request): JsonResponse
+    {
+        $industryAssociationId = $request->input('industry_association_id');
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+
+        $dashboardStatistics = $this->industryAssociationService->getindustryAssociationDashboardStatistics($industryAssociation);
+
+        $response = [
+            "data" => $dashboardStatistics,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
 
 }
