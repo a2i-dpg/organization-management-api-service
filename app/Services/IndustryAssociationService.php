@@ -970,8 +970,8 @@ class IndustryAssociationService
         return AppliedJob::query()
             ->join('primary_job_information', 'primary_job_information.job_id', '=', 'applied_jobs.job_id')
             ->where('primary_job_information.industry_association_id', $industryAssociation->id)
-            ->where('apply_status', AppliedJob::APPLY_STATUS["Hired"])
-            ->count();
+            ->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS["Hired"])
+            ->count('applied_jobs.id');
     }
 
     /**
@@ -1006,7 +1006,7 @@ class IndustryAssociationService
     public function getVacancyCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
     {
         return PrimaryJobInformation::where('industry_association_id', $industryAssociation->id)
-            ->where('application_deadline', '>', Carbon::now())
+            ->where('application_deadline', '>', Carbon::today())
             ->where('published_at', '<=', Carbon::now())
             ->sum('no_of_vacancies');
     }
