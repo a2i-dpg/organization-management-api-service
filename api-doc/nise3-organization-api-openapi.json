@@ -6740,6 +6740,38 @@
                 }
             }
         },
+        "/industry-association-dashboard-statistics": {
+            "get": {
+                "tags": [
+                    "Industry Association"
+                ],
+                "summary": "Get industry association dashboard statistics",
+                "description": "API endpoint to Get industry association dashboard statistics.A successful request response will show 201 HTTP status code",
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "organizations": 2,
+                                        "employed": 2,
+                                        "unemployed": 0,
+                                        "vacancies": 50,
+                                        "trending_skills": 3
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contact-info": {
             "get": {
                 "tags": [
