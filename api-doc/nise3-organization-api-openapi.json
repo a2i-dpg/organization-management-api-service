@@ -8897,6 +8897,7 @@
                 }
             }
         },
+
         "/jobs/candidate-update/reject/{applicationId}": {
             "put": {
                 "tags": ["Job Interview"],
@@ -8950,6 +8951,113 @@
                 }
             }
         },
+        "/jobs/candidate-update/shortlist/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Shortlist a candidate for interview",
+                "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 3,
+                                        "rejected_from": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "rejected_at": null,
+                                        "shortlisted_at": "2022-01-25T05:10:57.385411Z",
+                                        "interview_invited_at": null,
+                                        "interview_scheduled_at": null,
+                                        "interviewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": null,
+                                        "hired_at": null,
+                                        "interview_invite_source": null,
+                                        "interview_invite_type": null,
+                                        "hire_invite_type": null,
+                                        "interview_score": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-01-25T05:10:57.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate shortlisted successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate-update/interviewed/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Update interviewed candidate",
+                "description": "API endpoint to Update interviewed candidate. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/interviewedCandidateUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "applied_job_id": 1,
+                                        "recruitment_step_id": 1,
+                                        "candidate_status": null,
+                                        "is_candidate_present": "1",
+                                        "interview_score": "90",
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T04:28:09.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "interviewed candidate updated successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
+
+
         "/jobs/candidates/all/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
@@ -9902,59 +10010,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/shortlist/{applicationId}": {
-            "put": {
-                "tags": ["Job Interview"],
-                "summary": "Shortlist a candidate for interview",
-                "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/applicationId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "youth_id": 1,
-                                        "apply_status": 3,
-                                        "rejected_from": null,
-                                        "applied_at": null,
-                                        "profile_viewed_at": null,
-                                        "rejected_at": null,
-                                        "shortlisted_at": "2022-01-25T05:10:57.385411Z",
-                                        "interview_invited_at": null,
-                                        "interview_scheduled_at": null,
-                                        "interviewed_at": null,
-                                        "expected_salary": null,
-                                        "hire_invited_at": null,
-                                        "hired_at": null,
-                                        "interview_invite_source": null,
-                                        "interview_invite_type": null,
-                                        "hire_invite_type": null,
-                                        "interview_score": null,
-                                        "created_at": null,
-                                        "updated_at": "2022-01-25T05:10:57.000000Z",
-                                        "deleted_at": null
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Candidate shortlisted successfully",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
+
         "/jobs/recruitment-steps": {
             "post": {
                 "tags": ["Job Interview"],
@@ -11404,6 +11460,24 @@
     },
     "components": {
         "schemas": {
+            "interviewedCandidateUpdate": {
+                "type": "object",
+                "description": "Interviwed Candidate Update",
+                "properties": {
+                    "is_candidate_present": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>YES 0=>NO"
+                    },
+                    "interview_score": {
+                        "type": "number",
+                        "description": "Required if is_candidate_present = YES"
+                    }
+                },
+                "required": [
+                    "is_candidate_present"
+                ]
+            },
             "updateRecruitmentStep": {
                 "type": "object",
                 "description": "Update Recruitment step",
