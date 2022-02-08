@@ -993,9 +993,13 @@ class IndustryAssociationService
             ->join('primary_job_information', 'primary_job_information.job_id', '=', 'candidate_requirements.job_id')
             ->where('primary_job_information.industry_association_id', $industryAssociation->id);
 
-        $candidateRequirement = $candidateRequirementBuilder->firstOrFail();
+        $candidateRequirements = $candidateRequirementBuilder->get();
 
-        return $candidateRequirement->skills()->distinct()->count('skill_id');
+        $trendingSkills = 0;
+        foreach ($candidateRequirements as $candidateRequirement) {
+            $trendingSkills += $candidateRequirement->skills()->distinct()->count('skill_id');
+        }
+        return $trendingSkills;
 
     }
 
