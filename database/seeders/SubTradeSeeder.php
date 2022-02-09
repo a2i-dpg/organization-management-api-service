@@ -22,15 +22,15 @@ class SubTradeSeeder extends Seeder
         $subTrades = [
             [
                 'id' => '1',
-                "title" => "Tesla",
-                "title_en" => "Tesla",
+                "title" => "Automotive Industry Sub Trade 1",
+                "title_en" => "Automotive Industry Sub Trade 1",
                 "trade_id" => 1,
                 "created_at" => Carbon::now()
             ],
             [
                 'id' => '2',
-                "title" => "Daimler AG",
-                "title_en" => "Daimler AG",
+                "title" => "Automotive Industry Sub Trade 2",
+                "title_en" => "Automotive Industry Sub Trade 2",
                 "trade_id" => 1,
                 "created_at" => Carbon::now()
             ],
@@ -80,7 +80,7 @@ class SubTradeSeeder extends Seeder
                 'id' => '9',
                 "title" => "The Coca-Cola Company",
                 "title_en" => "The Coca-Cola Company",
-		        "trade_id" => 3,
+                "trade_id" => 3,
                 "created_at" => Carbon::now()
             ],
             [
@@ -110,7 +110,15 @@ class SubTradeSeeder extends Seeder
                 "title_en" => "AGENTUR GABRIELE KLESSE",
                 "trade_id" => 5,
                 "created_at" => Carbon::now()
-            ],];
+            ],
+            [
+                'id' => '14',
+                "title" => "Chemical Industry Sub Trade",
+                "title_en" => "Chemical Industry Sub Trade",
+                "trade_id" => 17,
+                "created_at" => Carbon::now()
+            ],
+        ];
 
         SubTrade::insert($subTrades);
 

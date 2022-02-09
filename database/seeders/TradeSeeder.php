@@ -20,8 +20,8 @@ class TradeSeeder extends Seeder
         $trades = [
             [
                 'id' => '1',
-                "title" => "Automotive industry in Bangladesh",
-                "title_en" => "Automotive industry in Bangladesh"
+                "title" => "Automotive Industry in Bangladesh",
+                "title_en" => "Automotive Industry in Bangladesh"
             ],
             [
                 'id' => '2',
@@ -30,23 +30,23 @@ class TradeSeeder extends Seeder
             ],
             [
                 'id' => '3',
-                "title" => "Bangladesh Industrial and Technical Assistance Centre",
-                "title_en" => "Bangladesh Industrial and Technical Assistance Centre"
+                "title" => "Bangladesh Industrial and Technical Assistance Center",
+                "title_en" => "Bangladesh Industrial and Technical Assistance Center"
             ],
             [
                 'id' => '4',
-                "title" => "Bangladeshi cuisine",
-                "title_en" => "Bangladeshi cuisine"
+                "title" => "Bangladeshi Cuisine",
+                "title_en" => "Bangladeshi Cuisine"
             ],
             [
                 'id' => '5',
-                "title" => "Call centre industry in Bangladesh",
-                "title_en" => "Call centre industry in Bangladesh"
+                "title" => "Call Centre Industry in Bangladesh",
+                "title_en" => "Call Centre Industry in Bangladesh"
             ],
             [
                 'id' => '6',
-                "title" => "Ceramics industry in Bangladesh",
-                "title_en" => "Ceramics industry in Bangladesh"
+                "title" => "Ceramics Industry in Bangladesh",
+                "title_en" => "Ceramics Industry in Bangladesh"
             ],
             [
                 'id' => '7',
@@ -55,18 +55,18 @@ class TradeSeeder extends Seeder
             ],
             [
                 'id' => '8',
-                "title" => "Food industry in Bangladesh",
-                "title_en" => "Food industry in Bangladesh"
+                "title" => "Food Industry in Bangladesh",
+                "title_en" => "Food Industry in Bangladesh"
             ],
             [
                 'id' => '9',
-                "title" => "Steel industry in Bangladesh",
-                "title_en" => "Steel industry in Bangladesh"
+                "title" => "Steel Industry in Bangladesh",
+                "title_en" => "Steel Industry in Bangladesh"
             ],
             [
                 'id' => '10',
-                "title" => "Jute industry of Bangladesh",
-                "title_en" => "Jute industry of Bangladesh"
+                "title" => "Jute Industry of Bangladesh",
+                "title_en" => "Jute Industry of Bangladesh"
             ],
             [
                 'id' => '11',
@@ -75,8 +75,8 @@ class TradeSeeder extends Seeder
             ],
             [
                 'id' => '12',
-                "title" => "Leather industry in Bangladesh",
-                "title_en" => "Leather industry in Bangladesh"
+                "title" => "Leather Industry in Bangladesh",
+                "title_en" => "Leather Industry in Bangladesh"
             ],
             [
                 'id' => '13',
@@ -85,19 +85,24 @@ class TradeSeeder extends Seeder
             ],
             [
                 'id' => '14',
-                "title" => "Pharmaceutical industry in Bangladesh",
-                "title_en" => "Pharmaceutical industry in Bangladesh"
+                "title" => "Pharmaceutical Industry in Bangladesh",
+                "title_en" => "Pharmaceutical Industry in Bangladesh"
             ],
             [
                 'id' => '15',
-                "title" => "Shipbuilding in Bangladesh",
-                "title_en" => "Shipbuilding in Bangladesh"
+                "title" => "Ship Building in Bangladesh",
+                "title_en" => "Ship Building in Bangladesh"
             ],
             [
                 'id' => '16',
-                "title" => "Textile industry in Bangladesh",
-                "title_en" => "Textile industry in Bangladesh"
-            ]
+                "title" => "Textile Industry in Bangladesh",
+                "title_en" => "Textile Industry in Bangladesh"
+            ],
+            [
+                'id' => '17',
+                "title" => "Chemical Industry in Bangladesh",
+                "title_en" => "Chemical Industry in Bangladesh"
+            ],
         ];
 
         Trade::insert($trades);
