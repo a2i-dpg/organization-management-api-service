@@ -761,7 +761,7 @@ class JobManagementService
 
         $resultArray = $candidates->toArray();
         $youthIds = $candidates->pluck('youth_id')->toArray();
-        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthIds);
+        $youthProfiles = !empty($youthIds) ? ServiceToServiceCall::getYouthProfilesByIds($youthIds) : [];
         $indexedYouths = [];
 
         foreach ($youthProfiles as $item) {
