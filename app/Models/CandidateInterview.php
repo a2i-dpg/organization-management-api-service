@@ -8,6 +8,13 @@ class CandidateInterview extends BaseModel
 {
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE;
 
+    public const NOTIFY_NOW = 1;
+    public const NOTIFY_LATER = 0;
+
+    public const NOTIFICATION = [
+        self::NOTIFY_NOW,
+        self::NOTIFY_LATER
+    ];
 
     public const IS_CANDIDATE_PRESENT_YES = 1;
     public const IS_CANDIDATE_PRESENT_NO = 0;

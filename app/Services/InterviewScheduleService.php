@@ -3,20 +3,12 @@
 namespace App\Services;
 
 use App\Models\AppliedJob;
-use App\Models\BaseModel;
+
+use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Symfony\Component\HttpFoundation\Response;
-
-
 
 
 class InterviewScheduleService
@@ -26,7 +18,7 @@ class InterviewScheduleService
      * @param int $id
      * @return InterviewSchedule
      */
-    public function getOneInterviewSchedule(int $id):InterviewSchedule
+    public function getOneInterviewSchedule(int $id): InterviewSchedule
     {
         $scheduleBuilder = InterviewSchedule::select([
             'interview_schedules.id',
@@ -41,6 +33,7 @@ class InterviewScheduleService
         ]);
         return $scheduleBuilder->firstOrFail();
     }
+
     /**
      * @param array $data
      * @return InterviewSchedule
@@ -100,50 +93,70 @@ class InterviewScheduleService
                 'required',
                 'integer'
             ],
-            'interview_invite_type' =>[
+            'interview_invite_type' => [
                 'nullable',
                 'integer'
             ],
-            'interview_address' =>[
+            'interview_address' => [
                 'required',
                 'string'
-	        ]
-        ];
-        return Validator::make($request->all(), $rules);
-    }
-
-    public function validatorForCandidateAssigning(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
-    {
-        $rules = [
-            'applied_job_ids' => [
-                'required',
-                'array',
-                'min:1'
-            ],
-            'applied_job_ids.*' => [
-                'required',
-                'integer',
-                'exists:applied_jobs,id,deleted_at,NULL'
             ]
         ];
         return Validator::make($request->all(), $rules);
     }
 
-
-    public function assignToSchedule($jobApplicantIds , $id)
+    /**
+     * @param Request $request
+     * @param InterviewSchedule $interviewSchedule
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validatorForCandidateAssigning(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
-        foreach($jobApplicantIds as $jobApplicantId){
-            DB::table('assign_candidates_to_schedules')->insert(
-                [
-                    'applied_job_id' => $jobApplicantId->id,
-                    'job_id' => $jobApplicant->job_id,
-                    'recruitment_step_id' => $jobApplicant->recruitment_step_id,
-                    'schedule_id' => $id,
-                    'invited_at'=> Carbon::now(),
-                    'confirmation_status'=>InterviewSchedule::CONFIRMATION_STATUS
-                ]
-            );
+        $rules = [
+            'notify'=>[
+                'int',
+                Rule::in(CandidateInterview::NOTIFICATION)
+            ],
+            'applied_job_ids' => [
+                'required',
+                'array',
+                'min:1',
+                'distinct',
+                'max:' . $interviewSchedule->maximum_number_of_applicants
+            ],
+            'applied_job_ids.*' => [
+                'required',
+                'integer',
+                Rule::unique('candidate_interviews', 'recruitment_step_id'),
+                'exists:applied_jobs,id,deleted_at,NULL'
+            ]
+        ];
+
+        return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param int $scheduleId
+     * @param array $data
+     */
+    public function assignCandidateToSchedule(int $scheduleId, array $data)
+    {
+        $appliedJobIds = $data["applied_job_ids"];
+
+
+        foreach ($appliedJobIds as $appliedJobId) {
+            $candidateInterview = new CandidateInterview();
+
+            $appliedJob = AppliedJob::findOrFail($appliedJobId);
+
+            $candidateInterview->applied_job_id = $appliedJob->id;
+            $candidateInterview->job_id = $appliedJob->job_id;
+            $candidateInterview->recruitment_step_id = $appliedJob->current_recruitment_step_id;
+            $candidateInterview->interview_schedule_id = $scheduleId;
+
+            $candidateInterview->save();
         }
+
     }
 
 }

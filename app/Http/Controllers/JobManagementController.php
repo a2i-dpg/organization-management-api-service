@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Facade\ServiceToServiceCall;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
 use App\Models\JobManagement;
 use App\Services\InterviewScheduleService;
@@ -773,23 +774,27 @@ class JobManagementController extends Controller
 
     /**
      * @param Request $request
-     * @param int $id
+     * @param int $scheduleId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function assignCandidates(Request $request, int $id): JsonResponse
+    public function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
 
-        $validatedData = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
+        $schedule = InterviewSchedule::findOrFail($scheduleId);
 
-       $interviewScheduledCandidates = $this->interviewScheduleService->assignToSchedule($validatedData, $id);
+        $validatedData = $this->interviewScheduleService->validatorForCandidateAssigning($request, $schedule)->validate();
 
+        $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
+
+        if($validatedData['notify']==CandidateInterview::NOTIFY_NOW){
+            //TODO : send invite to assigned candidates
+        }
         $response = [
             '_response_status' => [
-                "data"=>$interviewScheduledCandidates,
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "CandidateRequirements successfully submitted",
+                "message" => "Candidate assigned to schedule  successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

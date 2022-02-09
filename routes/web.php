@@ -144,6 +144,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->put('restore/{applicationId}', ["as" => "candidate-update.remove", "uses" => "JobManagementController@restoreRejectedCandidate"]);
                 $router->put('hire-invite/{applicationId}', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
                 $router->put('hired/{applicationId}', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
+                $router->put('schedule/{scheduleId}', ["as" => "candidate-update.schedule", "uses" => "JobManagementController@assignCandidateToInterviewSchedule"]);
             });
 
 
