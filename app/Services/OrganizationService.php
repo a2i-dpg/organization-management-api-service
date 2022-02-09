@@ -218,7 +218,10 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
+            $organizationBuilder->where(function ($builder) use($searchText){
+                $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
+            });
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
@@ -323,7 +326,10 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
+            $organizationBuilder->where(function ($builder) use($searchText){
+                $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
+            });
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
