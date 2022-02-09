@@ -308,6 +308,7 @@ class JobManagementController extends Controller
         DB::beginTransaction();
         try {
             $appliedJobData = $this->jobManagementService->storeAppliedJob($validatedData);
+
             $response = [
                 "data" => $appliedJobData,
                 '_response_status' => [
