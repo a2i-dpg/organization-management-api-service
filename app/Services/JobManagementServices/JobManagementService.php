@@ -14,7 +14,6 @@ use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
 use App\Models\RecruitmentStep;
-use App\Models\RecruitmentStepCandidateScheduleInterview;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
@@ -916,27 +915,25 @@ class JobManagementService
     /**
      * @param AppliedJob $appliedJob
      * @param array $data
-     * @return RecruitmentStepCandidateScheduleInterview
+     * @return CandidateInterview
      */
-    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data):RecruitmentStepCandidateScheduleInterview
+    public function updateInterviewedCandidate(AppliedJob $appliedJob, array $data): CandidateInterview
     {
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Interviewed"];
         $appliedJob->save();
 
-        $candidateInterview = RecruitmentStepCandidateScheduleInterview::firstOrNew(
+
+        return CandidateInterview::firstOrCreate (
             [
                 'applied_job_id' => $appliedJob->id,
-                'recruitment_step_id', $appliedJob->current_recruitment_step_id,
-                'job_id'=> $appliedJob->job_id
+                'recruitment_step_id'=> $appliedJob->current_recruitment_step_id,
+            ],
+            [
+                'job_id' => $appliedJob->job_id,
+                'is_candidate_present' => $data['is_candidate_present'],
+                'interview_score' => $data['interview_score']
             ]
         );
-
-        $candidateInterview->is_candidate_present = $data['is_candidate_present'];
-        $candidateInterview->interview_score = $data['interview_score'];
-
-        $candidateInterview->save();
-
-        return $candidateInterview;
     }
 
     /**
@@ -1122,7 +1119,7 @@ class JobManagementService
         $to = array($youth['email']);
         $from = BaseModel::NISE3_FROM_EMAIL;
         $subject = "Job Offer letter";
-        $message ="Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
+        $message = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
         $messageBody = MailService::templateView($message);
         $mailService = new MailService($to, $from, $subject, $messageBody);
         $mailService->sendMail();
