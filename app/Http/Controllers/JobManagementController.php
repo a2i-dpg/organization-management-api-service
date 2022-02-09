@@ -773,6 +773,7 @@ class JobManagementController extends Controller
     }
 
     /**
+     * Assign candidate to schedule
      * @param Request $request
      * @param int $scheduleId
      * @return JsonResponse
@@ -783,7 +784,7 @@ class JobManagementController extends Controller
 
         $schedule = InterviewSchedule::findOrFail($scheduleId);
 
-        $validatedData = $this->interviewScheduleService->validatorForCandidateAssigning($request, $schedule)->validate();
+        $validatedData = $this->interviewScheduleService->CandidateAssigningToScheduleValidator($request, $schedule)->validate();
 
         $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
 
@@ -795,6 +796,34 @@ class JobManagementController extends Controller
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "message" => "Candidate assigned to schedule  successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+    /**
+     * Remove Candidate From Schedule
+     * @param Request $request
+     * @param int $scheduleId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
+    {
+
+        $schedule = InterviewSchedule::findOrFail($scheduleId);
+
+        $validatedData = $this->interviewScheduleService->CandidateRemoveFromScheduleValidator($request, $schedule)->validate();
+
+        $this->interviewScheduleService->removeCandidateFromSchedule($scheduleId, $validatedData);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate removed from schedule  successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
