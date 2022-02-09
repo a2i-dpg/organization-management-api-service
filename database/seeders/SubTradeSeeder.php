@@ -45,8 +45,8 @@ class SubTradeSeeder extends Seeder
                 "created_at" => Carbon::now()
             ],
             [
-                "title" => "Biotech Sub Trade 2",
-                "title_en" => "Biotech Sub Trade 2",
+                "title" => "Biotech Sub Trade 1",
+                "title_en" => "Biotech Sub Trade 1",
                 "trade_id" => 17,
                 "created_at" => Carbon::now()
             ],
@@ -69,8 +69,8 @@ class SubTradeSeeder extends Seeder
                 "created_at" => Carbon::now()
             ],
             [
-                "title" => "T K Group Sub Trade 2",
-                "title_en" => "T K Group Sub Trade 2",
+                "title" => "T K Group Sub Trade 1",
+                "title_en" => "T K Group Sub Trade 1",
                 "trade_id" => 9,
                 "created_at" => Carbon::now()
             ],
@@ -81,8 +81,8 @@ class SubTradeSeeder extends Seeder
                 "created_at" => Carbon::now()
             ],
             [
-                "title" => "Tourism Sub Trade 2",
-                "title_en" => "Tourism Sub Trade 2",
+                "title" => "Tourism Sub Trade 1",
+                "title_en" => "Tourism Sub Trade 1",
                 "trade_id" => 16,
                 "created_at" => Carbon::now()
             ],
