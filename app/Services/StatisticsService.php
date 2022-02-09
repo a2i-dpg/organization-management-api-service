@@ -4,18 +4,20 @@ namespace App\Services;
 
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
-use JetBrains\PhpStorm\ArrayShape;
+use App\Models\PrimaryJobInformation;
+
 
 class StatisticsService
 {
 
-    #[ArrayShape(['total_industry' => "int", 'total_job_provider' => "array", 'total_industry_association' => "int"])]
+
     public function getNiseStatistics(): array
     {
         return [
             'total_industry' => $this->getTotalIndustry(),
             'total_job_provider' => $this->getTotalIndustryAssociationWithProvidedJobs(),
-            'total_industry_association' => $this->getTotalIndustryAssociation()
+            'total_industry_association' => $this->getTotalIndustryAssociation(),
+            'total_popular_job' => $this->getTotalPopularJobWithJobTitle()
         ];
     }
 
@@ -33,7 +35,8 @@ class StatisticsService
     {
         $builder = IndustryAssociation::query();
         $builder->select([
-            "industry_associations.title as industry_associations_title"
+            "industry_associations.title as industry_associations_title",
+            "industry_associations.title_en as industry_associations_title_en"
         ]);
 
         $builder->selectRaw('COUNT(primary_job_information.id) AS total_job_provided');
@@ -41,6 +44,22 @@ class StatisticsService
         $builder->whereNotNull('primary_job_information.published_at');
         $builder->groupBy('primary_job_information.industry_association_id');
         $builder->orderBy('total_job_provided', "DESC");
+
+        return $builder->limit(4)->get()->toArray();
+    }
+
+    private function getTotalPopularJobWithJobTitle(): array
+    {
+        $builder = PrimaryJobInformation::query();
+        $builder->select([
+            "primary_job_information.job_title",
+            "primary_job_information.job_title_en"
+        ]);
+        $builder->selectRaw('COUNT(applied_jobs.id) AS total_applied');
+        $builder->join('applied_jobs', 'primary_job_information.job_id', "applied_jobs.job_id");
+        $builder->whereNotNull('primary_job_information.published_at');
+        $builder->groupBy('applied_jobs.job_id');
+        $builder->orderBy('total_applied', "DESC");
 
         return $builder->limit(4)->get()->toArray();
     }

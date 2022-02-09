@@ -307,6 +307,7 @@ class JobManagementController extends Controller
         DB::beginTransaction();
         try {
             $appliedJobData = $this->jobManagementService->storeAppliedJob($validatedData);
+
             $response = [
                 "data" => $appliedJobData,
                 '_response_status' => [
@@ -500,7 +501,7 @@ class JobManagementController extends Controller
 
             } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
                 if (!empty($youth['email'])) {
-                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob,$youth);
+                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob, $youth);
                 }
                 if (!empty($youth['mobile'])) {
                     $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);

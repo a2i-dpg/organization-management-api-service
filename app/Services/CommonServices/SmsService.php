@@ -2,7 +2,6 @@
 
 namespace App\Services\CommonServices;
 
-use App\Events\MailSendEvent;
 use App\Events\SmsSendEvent;
 
 class SmsService
