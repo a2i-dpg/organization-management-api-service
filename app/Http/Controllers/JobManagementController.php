@@ -671,7 +671,7 @@ class JobManagementController extends Controller
     function getOneSchedule(int $id): JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
-        $this->authorize('view', $schedule);
+//        $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
@@ -720,7 +720,7 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-        $this->authorize('update', $schedule);
+//        $this->authorize('update', $schedule);
 
         $validated = $this->interviewScheduleService->validator($request, $id)->validate();
 
@@ -749,7 +749,7 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-        $this->authorize('delete', $schedule);
+//        $this->authorize('delete', $schedule);
 
         DB::beginTransaction();
         try {
