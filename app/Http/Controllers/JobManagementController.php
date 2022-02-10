@@ -694,7 +694,6 @@ class JobManagementController extends Controller
 
     function createSchedule(Request $request): JsonResponse
     {
-        $this->authorize('create', InterviewSchedule::class);
 
         $validated = $this->interviewScheduleService->validator($request)->validate();
         $data = $this->interviewScheduleService->store($validated);
