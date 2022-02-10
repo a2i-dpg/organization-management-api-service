@@ -127,10 +127,9 @@
                                 <tr>
                                     <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;"
                                         valign="top">
-                                        <h1 style="font-family: sans-serif;margin: 0; margin-bottom: 15px;">
-                                            Congratulation!</h1>
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">
-                                            You are successfully approved.</p>
+                                            {{$message??"Here is message........"}}
+                                        </p>
                                     </td>
                                 </tr>
                             </table>

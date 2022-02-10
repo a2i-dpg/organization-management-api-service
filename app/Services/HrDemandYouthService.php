@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\BaseModel;
 use App\Models\HrDemand;
+use App\Models\HrDemandInstitute;
 use App\Models\HrDemandYouth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,14 +43,14 @@ class HrDemandYouthService
             'hr_demand_youths.row_status'
         ]);
 
-        if(!empty($hrDemandInstituteId)){
+        if (!empty($hrDemandInstituteId)) {
             $hrDemandBuilder->where('hr_demand_institute_id', $hrDemandInstituteId);
         }
 
-        if(!empty($hrDemandYouthType)){
-            if($hrDemandYouthType == HrDemandYouth::HR_DEMAND_YOUTH_TYPE_CV_LINK){
+        if (!empty($hrDemandYouthType)) {
+            if ($hrDemandYouthType == HrDemandYouth::HR_DEMAND_YOUTH_TYPE_CV_LINK) {
                 $hrDemandBuilder->whereNotNull('hr_demand_youths.cv_link');
-            } else if($hrDemandYouthType == HrDemandYouth::HR_DEMAND_YOUTH_TYPE_YOUTH_ID){
+            } else if ($hrDemandYouthType == HrDemandYouth::HR_DEMAND_YOUTH_TYPE_YOUTH_ID) {
                 $hrDemandBuilder->whereNotNull('hr_demand_youths.youth_id');
             }
         }
@@ -81,6 +82,26 @@ class HrDemandYouthService
         ];
 
         return $response;
+    }
+
+    /**
+     *
+     * @param HrDemandYouth $hrDemandYouth
+     * @return void
+     */
+    public function deleteHrDemandYouth(HrDemandYouth $hrDemandYouth)
+    {
+        if ($hrDemandYouth->approval_status == HrDemandYouth::APPROVAL_STATUS_APPROVED) {
+            $hrDemandInstitute = HrDemandInstitute::find($hrDemandYouth->hr_demand_institute_id);
+            $hrDemandInstitute->vacancy_approved_by_industry_association -= 1;
+            $hrDemandInstitute->save();
+
+            $hrDemand = HrDemand::find($hrDemandYouth->hr_demand_id);
+            $hrDemand->remaining_vacancy += 1;
+            $hrDemand->save();
+        }
+        $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_REJECTED;
+        $hrDemandYouth->save();
     }
 
     /**
@@ -118,5 +139,22 @@ class HrDemandYouthService
                 Rule::in([HrDemandYouth::ROW_STATUS_ACTIVE, HrDemandYouth::ROW_STATUS_INACTIVE, HrDemandYouth::ROW_STATUS_INVALID]),
             ],
         ], $customMessage);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function deleteValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $requestData = $request->all();
+
+        return Validator::make($requestData, [
+            'hr_demand_youth_type' => [
+                'nullable',
+                'int',
+                Rule::in(HrDemandYouth::HR_DEMAND_YOUTH_TYPES)
+            ]
+        ]);
     }
 }

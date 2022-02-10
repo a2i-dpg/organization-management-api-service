@@ -142,14 +142,14 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
         "/industry-association-profile-update": {
             "put": {
                 "tags": [
-                    "Industry Association Profile"
+                    "Industry Association"
                 ],
                 "summary": "Update an industry association admin profile ",
                 "description": "An API endpoint to update  an industry association admin profile ",
@@ -237,7 +237,7 @@
         "/industry-association-profile": {
             "get": {
                 "tags": [
-                    "Industry Association Profile"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association admin profile",
                 "description": "An API endpoint to get  an industry association admin profile ",
@@ -333,7 +333,7 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
@@ -364,7 +364,7 @@
                     }
                 },
                 "tags": [
-                    "Industry Association Registration"
+                    "Industry Association"
                 ]
             }
         },
@@ -6128,7 +6128,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "post": {
@@ -6195,7 +6195,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             }
         },
@@ -6270,7 +6270,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "put": {
@@ -6346,7 +6346,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "delete": {
@@ -6375,7 +6375,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             },
             "patch": {
@@ -6404,7 +6404,7 @@
                     }
                 },
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ]
             }
         },
@@ -6446,7 +6446,7 @@
         "/industry-association-members": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
@@ -6456,6 +6456,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/searchText"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -6528,7 +6531,7 @@
         "/public/industry-association-members": {
             "get": {
                 "tags": [
-                    "Industry-Association"
+                    "Industry Association"
                 ],
                 "summary": "Get industry association members",
                 "description": "An Api endpoint to get industry association members for a specific industry association",
@@ -6538,6 +6541,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/searchText"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -6609,10 +6615,73 @@
                 }
             }
         },
+        "/public/industry-association-details": {
+            "get": {
+                "tags": [
+                    "Industry Association"
+                ],
+                "summary": "Public API to Get-one industry association details",
+                "description": "An Public API endpoint to get  an industry association details ",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "trade_id": 1,
+                                        "title": "Medhurst, Bogan and Leuschke",
+                                        "title_en": "Medhurst, Bogan and Leuschke",
+                                        "loc_division_id": 3,
+                                        "loc_district_id": 18,
+                                        "loc_upazila_id": null,
+                                        "location_latitude": "90.399482",
+                                        "location_longitude": "90.399482",
+                                        "google_map_src": null,
+                                        "address": "9197 Carroll Ville\nPort Pamela, MS 27840-1808",
+                                        "address_en": "9197 Carroll Ville\nPort Pamela, MS 27840-1808",
+                                        "country": "BD",
+                                        "phone_code": "880",
+                                        "mobile": "01787992785",
+                                        "email": "lrunte@jacobson.net",
+                                        "fax_no": null,
+                                        "trade_number": "eos",
+                                        "name_of_the_office_head": "Shaina Volkman",
+                                        "name_of_the_office_head_en": "Shaina Volkman",
+                                        "name_of_the_office_head_designation": "CEO",
+                                        "name_of_the_office_head_designation_en": "CEO",
+                                        "contact_person_name": "Duncan Bode",
+                                        "contact_person_name_en": "Duncan Bode",
+                                        "contact_person_mobile": "01776469819",
+                                        "contact_person_email": "colby.predovic@example.org",
+                                        "contact_person_designation": "Fiber Product Cutting Machine Operator",
+                                        "contact_person_designation_en": "Fiber Product Cutting Machine Operator",
+                                        "logo": "logo.jpg",
+                                        "domain": "https://www.hammes.com",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2021-12-19T07:49:58.000000Z",
+                                        "updated_at": "2021-12-19T07:49:58.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/industry-association-membership-approval/{organizationId}": {
             "put": {
                 "tags": [
-                    "Industry Association Membership Approval Rejection"
+                    "Industry Association"
                 ],
                 "summary": "Approve an industry association membership request for an industry",
                 "description": "API endpoint to Approve an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -6643,7 +6712,7 @@
         "/industry-association-membership-rejection/{organizationId}": {
             "put": {
                 "tags": [
-                    "Industry Association Membership Approval Rejection"
+                    "Industry Association"
                 ],
                 "summary": "Reject an industry association membership request for an industry",
                 "description": "API endpoint to reject an industry association membership request for an industry.A successful request response will show 201 HTTP status code",
@@ -6662,6 +6731,38 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "IndustryAssociation membership rejection successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/industry-association-dashboard-statistics": {
+            "get": {
+                "tags": [
+                    "Industry Association"
+                ],
+                "summary": "Get industry association dashboard statistics",
+                "description": "API endpoint to Get industry association dashboard statistics.A successful request response will show 201 HTTP status code",
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "organizations": 2,
+                                        "employed": 2,
+                                        "unemployed": 0,
+                                        "vacancies": 50,
+                                        "trending_skills": 3
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
                                         "query_time": 0
                                     }
                                 }
@@ -7226,6 +7327,9 @@
                         "$ref": "#/components/parameters/occupation_ids"
                     },
                     {
+                        "$ref": "#/components/parameters/loc_district_ids"
+                    },
+                    {
                         "$ref": "#/components/parameters/job_sector_ids"
                     },
                     {
@@ -7594,7 +7698,7 @@
         "/jobs/store-primary-job-information": {
             "post": {
                 "tags": [
-                    "Primary Job Information"
+                    "Primary Job Information [Job Management Step : 1]"
                 ],
                 "summary": "Store a primary job information",
                 "description": "API endpoint to Store a primary job information.A successful request response will show 201 HTTP status code",
@@ -7648,7 +7752,7 @@
         "/jobs/primary-job-information/{jobId}": {
             "get": {
                 "tags": [
-                    "Primary Job Information"
+                    "Primary Job Information [Job Management Step : 1]"
                 ],
                 "summary": "Get a primary job information",
                 "parameters": [
@@ -7722,7 +7826,7 @@
         "/jobs/status-change/{jobId}": {
             "post": {
                 "tags": [
-                    "Primary Job Information"
+                    "Primary Job Information [Job Management Step : 1]"
                 ],
                 "summary": "Change primary job information status",
                 "description": "API endpoint to change primary job information status.A successful request response will show 201 HTTP status code",
@@ -7762,7 +7866,7 @@
         "/jobs/store-additional-job-information": {
             "post": {
                 "tags": [
-                    "Additional Job Information"
+                    "Additional Job Information [Job Management Step : 2]"
                 ],
                 "summary": "Store additional job info",
                 "description": "API endpoint toStore additional job info.A successful request response will show 201 HTTP status code",
@@ -7821,7 +7925,7 @@
         "/jobs/additional-job-information/{jobId}": {
             "get": {
                 "tags": [
-                    "Additional Job Information"
+                    "Additional Job Information [Job Management Step : 2]"
                 ],
                 "summary": "Get a specific additional job info",
                 "description": "API endpoint to Get a specific additional job info.A successful request response will show 201 HTTP status code",
@@ -7953,177 +8057,10 @@
                 }
             }
         },
-        "/jobs/store-company-info-visibility": {
-            "post": {
-                "tags": [
-                    "Company info visibility"
-                ],
-                "summary": "Store company info visibility",
-                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CompanyInfoVisibility"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "job_id": "aaa-bbb",
-                                        "is_company_name_visible": "1",
-                                        "is_company_address_visible": "1",
-                                        "company_industry_type": "3",
-                                        "is_company_business_visible": "1",
-                                        "updated_at": "2021-12-29T11:50:14.000000Z",
-                                        "created_at": "2021-12-29T11:50:14.000000Z",
-                                        "id": 2
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "Company Info Visibility successfully submitted",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/jobs/company-info-visibility/{jobId}": {
-            "get": {
-                "tags": [
-                    "Company info visibility"
-                ],
-                "summary": "Get a specific company info visibility",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "is_company_name_visible": 0,
-                                        "company_name": "sss",
-                                        "company_name_en": "ssss",
-                                        "is_company_address_visible": 0,
-                                        "company_industry_type": 0,
-                                        "is_company_business_visible": 0,
-                                        "created_at": null,
-                                        "updated_at": null,
-                                        "latest_step": 6
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/jobs/contact-information": {
-            "post": {
-                "tags": [
-                    "Contact Information"
-                ],
-                "summary": "Store contact information",
-                "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ContactInformation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "job_id": "11122",
-                                        "contact_person_id": "1",
-                                        "updated_at": "2021-12-30T08:47:56.000000Z",
-                                        "created_at": "2021-12-30T08:47:56.000000Z",
-                                        "id": 1
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/jobs/contact-information/{jobId}": {
-            "get": {
-                "tags": [
-                    "Contact Information"
-                ],
-                "summary": "Store contact information",
-                "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "contact_person_id": 0,
-                                        "created_at": "2022-01-27T06:19:39.000000Z",
-                                        "updated_at": "2022-01-27T06:19:39.000000Z",
-                                        "deleted_at": null,
-                                        "latest_step": 7
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/jobs/store-candidate-requirements": {
             "post": {
                 "tags": [
-                    "Candidate Requirements"
+                    "Candidate Requirements [Job Management Step : 3]"
                 ],
                 "summary": "Store Candidate Requirements",
                 "description": "API endpoint to Store Candidate Requirements.A successful request response will show 201 HTTP status code",
@@ -8176,7 +8113,7 @@
         "/jobs/candidate-requirements/{jobId}": {
             "get": {
                 "tags": [
-                    "Candidate Requirements"
+                    "Candidate Requirements [Job Management Step : 3]"
                 ],
                 "summary": "Get a candidate requirement by Id",
                 "description": "API endpoint to Get a candidate requirement by Id.A successful request response will show 201 HTTP status code",
@@ -8323,10 +8260,97 @@
                 }
             }
         },
+        "/jobs/store-company-info-visibility": {
+            "post": {
+                "tags": [
+                    "Company info visibility [Job Management Step : 4]"
+                ],
+                "summary": "Store company info visibility",
+                "description": "API endpoint to Store company info visibility.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompanyInfoVisibility"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "aaa-bbb",
+                                        "is_company_name_visible": "1",
+                                        "is_company_address_visible": "1",
+                                        "company_industry_type": "3",
+                                        "is_company_business_visible": "1",
+                                        "updated_at": "2021-12-29T11:50:14.000000Z",
+                                        "created_at": "2021-12-29T11:50:14.000000Z",
+                                        "id": 2
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Company Info Visibility successfully submitted",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/company-info-visibility/{jobId}": {
+            "get": {
+                "tags": [
+                    "Company info visibility [Job Management Step : 4]"
+                ],
+                "summary": "Get a specific company info visibility",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "is_company_name_visible": 0,
+                                        "company_name": "sss",
+                                        "company_name_en": "ssss",
+                                        "is_company_address_visible": 0,
+                                        "company_industry_type": 0,
+                                        "is_company_business_visible": 0,
+                                        "created_at": null,
+                                        "updated_at": null,
+                                        "latest_step": 6
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/jobs/store-matching-criteria": {
             "post": {
                 "tags": [
-                    "Matching Criteria"
+                    "Matching Criteria [Job Management Step : 5]"
                 ],
                 "summary": "Create a matching crieria",
                 "description": "API endpoint to Create a matching crieria.A successful request response will show 201 HTTP status code",
@@ -8380,7 +8404,7 @@
         "/jobs/matching-criteria/{jobId}": {
             "get": {
                 "tags": [
-                    "Matching Criteria"
+                    "Matching Criteria [Job Management Step : 5]"
                 ],
                 "summary": "Create a matching crieria",
                 "description": "API endpoint to get a matching crieria.A successful request response will show 201 HTTP status code",
@@ -8519,10 +8543,92 @@
                 }
             }
         },
+        "/jobs/contact-information": {
+            "post": {
+                "tags": [
+                    "Contact Information[Job Management Step : 6]"
+                ],
+                "summary": "Store contact information",
+                "description": "API endpoint to Store contact information.A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInformation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "11122",
+                                        "contact_person_id": "1",
+                                        "updated_at": "2021-12-30T08:47:56.000000Z",
+                                        "created_at": "2021-12-30T08:47:56.000000Z",
+                                        "id": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/contact-information/{jobId}": {
+            "get": {
+                "tags": [
+                    "Contact Information[Job Management Step : 6]"
+                ],
+                "summary": "Store contact information",
+                "description": "API endpoint to get contact information.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "contact_person_id": 0,
+                                        "created_at": "2022-01-27T06:19:39.000000Z",
+                                        "updated_at": "2022-01-27T06:19:39.000000Z",
+                                        "deleted_at": null,
+                                        "latest_step": 7
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
         "/jobs/job-preview/{jobId}": {
             "get": {
                 "tags": [
-                    "Job Preview"
+                    "Job Preview[Job Management Step : 7]"
                 ],
                 "summary": "Get a job preview ",
                 "description": "API endpoint to Get a job preview.A successful request response will show 201 HTTP status code",
@@ -8823,6 +8929,7 @@
                 }
             }
         },
+
         "/jobs/candidate-update/reject/{applicationId}": {
             "put": {
                 "tags": ["Job Interview"],
@@ -8876,6 +8983,300 @@
                 }
             }
         },
+        "/jobs/candidate-update/shortlist/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Shortlist a candidate for interview",
+                "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 3,
+                                        "rejected_from": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "rejected_at": null,
+                                        "shortlisted_at": "2022-01-25T05:10:57.385411Z",
+                                        "interview_invited_at": null,
+                                        "interview_scheduled_at": null,
+                                        "interviewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": null,
+                                        "hired_at": null,
+                                        "interview_invite_source": null,
+                                        "interview_invite_type": null,
+                                        "hire_invite_type": null,
+                                        "interview_score": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-01-25T05:10:57.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate shortlisted successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate-update/interviewed/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Update interviewed candidate",
+                "description": "API endpoint to Update interviewed candidate. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/interviewedCandidateUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "applied_job_id": 1,
+                                        "recruitment_step_id": 1,
+                                        "candidate_status": null,
+                                        "is_candidate_present": "1",
+                                        "interview_score": "90",
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T04:28:09.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "interviewed candidate updated successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate-update/remove/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Remove candidate to previous step",
+                "description": "API endpoint to Remove candidate to previous step. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 1,
+                                        "current_recruitment_step_id": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": null,
+                                        "hired_at": null,
+                                        "hire_invite_type": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T04:43:32.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate removed successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate-update/restore/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Restore a rejected candidate",
+                "description": "API endpoint to Restore a rejected candidate. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 1,
+                                        "current_recruitment_step_id": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": null,
+                                        "hired_at": null,
+                                        "hire_invite_type": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T04:53:18.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate restored successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate-update/hire-invite/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Hiring Invitation sent to a candidate",
+                "description": "API endpoint to Hiring Invitation sent to a candidate",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HireInvite"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 1,
+                                        "current_recruitment_step_id": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": "2022-02-08T05:13:00.289556Z",
+                                        "hired_at": null,
+                                        "hire_invite_type": "2",
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T05:13:00.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate  hire  invited successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate-update/hired/{applicationId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Hiring Invitation sent to a candidate",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "youth_id": 1,
+                                        "apply_status": 8,
+                                        "current_recruitment_step_id": null,
+                                        "applied_at": null,
+                                        "profile_viewed_at": null,
+                                        "expected_salary": null,
+                                        "hire_invited_at": "2022-02-08 05:13:00",
+                                        "hired_at": "2022-02-08T05:21:45.186224Z",
+                                        "hire_invite_type": 2,
+                                        "created_at": null,
+                                        "updated_at": "2022-02-08T05:21:45.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate hired successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
+
         "/jobs/candidates/all/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
@@ -9828,50 +10229,156 @@
                 }
             }
         },
-        "/jobs/candidate-update/shortlist/{applicationId}": {
-            "put": {
+
+        "/jobs/recruitment-steps": {
+            "post": {
                 "tags": ["Job Interview"],
-                "summary": "Shortlist a candidate for interview",
-                "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
+                "summary": "Create a recruitment step a job interview",
+                "description": "API endpoint to Create a recruitment step a job interview. A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/recruitmentStep"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "1",
+                                        "title": "ComprehensionAsessment2",
+                                        "title_en": "ComprehensionAsessment2",
+                                        "step_type": "1",
+                                        "is_interview_reschedule_allowed": "1",
+                                        "interview_contact": "Malibagh",
+                                        "updated_at": "2022-02-07T04:56:56.000000Z",
+                                        "created_at": "2022-02-07T04:56:56.000000Z",
+                                        "id": 2
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Recruitment Step stored successful",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/recruitment-steps/{stepId}": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get a recruitment step of a job interview",
+                "description": "API endpoint to Get a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/applicationId"
+                        "$ref": "#/components/parameters/stepId"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful",
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "ComprehensionAsessment2",
+                                        "title_en": "ComprehensionAsessment2",
+                                        "step_type": 1,
+                                        "is_interview_reschedule_allowed": 1,
+                                        "interview_contact": "Malibagh",
+                                        "created_at": "2022-02-07T04:56:56.000000Z",
+                                        "updated_at": "2022-02-07T04:56:56.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Update a recruitment step of a job interview",
+                "description": "API endpoint to update a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateRecruitmentStep"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
                         "content": {
                             "application/json": {
                                 "example": {
                                     "data": {
                                         "id": 1,
                                         "job_id": "1",
-                                        "youth_id": 1,
-                                        "apply_status": 3,
-                                        "rejected_from": null,
-                                        "applied_at": null,
-                                        "profile_viewed_at": null,
-                                        "rejected_at": null,
-                                        "shortlisted_at": "2022-01-25T05:10:57.385411Z",
-                                        "interview_invited_at": null,
-                                        "interview_scheduled_at": null,
-                                        "interviewed_at": null,
-                                        "expected_salary": null,
-                                        "hire_invited_at": null,
-                                        "hired_at": null,
-                                        "interview_invite_source": null,
-                                        "interview_invite_type": null,
-                                        "hire_invite_type": null,
-                                        "interview_score": null,
-                                        "created_at": null,
-                                        "updated_at": "2022-01-25T05:10:57.000000Z",
+                                        "title": "Written",
+                                        "title_en": "Written",
+                                        "step_type": 1,
+                                        "is_interview_reschedule_allowed": 1,
+                                        "interview_contact": null,
+                                        "created_at": "2022-02-07T04:55:55.000000Z",
+                                        "updated_at": "2022-02-07T05:42:04.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "Candidate shortlisted successfully",
+                                        "message": "Recruitment Step updated successful",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Job Interview"],
+                "summary": "Delete a recruitment step of a job interview",
+                "description": "API endpoint to Delete a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": true,
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Recruitment Step deleted successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -9912,1212 +10419,107 @@
                                             "title": "Insurance",
                                             "created_at": null,
                                             "updated_at": null
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title": "Leasing",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 4,
-                                            "title": "Investment/Merchant Banking",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 5,
-                                            "title": "Telecommunication",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 6,
-                                            "title": "Manufacturing (FMCG)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 7,
-                                            "title": "Manufacturing (Light Engineering & Heavy Industry)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 8,
-                                            "title": "Wholesale",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 9,
-                                            "title": "Retail Store",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 10,
-                                            "title": "University",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 11,
-                                            "title": "College",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 12,
-                                            "title": "Training Institutes",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 13,
-                                            "title": "Advertising Agency",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 14,
-                                            "title": "Design/Printing/Publishing",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 15,
-                                            "title": "Event Management",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 16,
-                                            "title": "Software Company",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 17,
-                                            "title": "IT Enabled Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 18,
-                                            "title": "BPO/ Data Entry Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 19,
-                                            "title": "ISP",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 20,
-                                            "title": "Computer Hardware/Network Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 21,
-                                            "title": "Govt./ Semi Govt./ Autonomous body",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 22,
-                                            "title": "NGO",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 23,
-                                            "title": "Development Agency",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 24,
-                                            "title": "Trading or Export/Import",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 25,
-                                            "title": "Shipping",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 26,
-                                            "title": "Logistic/Courier/Air Express Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 27,
-                                            "title": "Clearing & Forwarding (C&F) Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 28,
-                                            "title": "Multinational Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 29,
-                                            "title": "Newspaper/Magazine",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 30,
-                                            "title": "Public Relation Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 31,
-                                            "title": "Embassies/Foreign Consulate",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 32,
-                                            "title": "Engineering Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 33,
-                                            "title": "Market Research Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 34,
-                                            "title": "Consulting Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 35,
-                                            "title": "Garments",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 36,
-                                            "title": "Textile",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 37,
-                                            "title": "Buying House",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 38,
-                                            "title": "Audit Firms /Tax Consultant",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 39,
-                                            "title": "Hospital",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 40,
-                                            "title": "Pharmaceutical/Medicine Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 41,
-                                            "title": "Hotel",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 42,
-                                            "title": "Restaurant",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 43,
-                                            "title": "Airline",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 44,
-                                            "title": "Travel Agent",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 45,
-                                            "title": "Tannery/Footwear",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 46,
-                                            "title": "Shrimp",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 47,
-                                            "title": "Food (Packaged)/Beverage",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 48,
-                                            "title": "Agro based firms (incl. Agro Processing/Seed/GM)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 49,
-                                            "title": "CNG",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 50,
-                                            "title": "Tea Garden",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 51,
-                                            "title": "Immigration & Education Consultancy Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 52,
-                                            "title": "Architecture Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 53,
-                                            "title": "Manpower Recruitment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 54,
-                                            "title": "Direct Selling/Marketing Service Company",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 55,
-                                            "title": "Indenting Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 56,
-                                            "title": "Security Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 57,
-                                            "title": "Law Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 59,
-                                            "title": "Cosmetics/Toiletries/Personal Care",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 60,
-                                            "title": "Poultry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 61,
-                                            "title": "Electronic Equipment/Home Appliances",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 62,
-                                            "title": "Medical Equipment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 63,
-                                            "title": "Real Estate",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 64,
-                                            "title": "Freight forwarding",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 65,
-                                            "title": "Overseas Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 66,
-                                            "title": "Group of Companies",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 67,
-                                            "title": "Chemical Industries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 68,
-                                            "title": "Call Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 69,
-                                            "title": "Tobacco",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 70,
-                                            "title": "Automobile",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 71,
-                                            "title": "Share Brokerage/ Securities House",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 72,
-                                            "title": "Research Organization",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 73,
-                                            "title": "Plastic/ Polymer Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 74,
-                                            "title": "Packaging Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 75,
-                                            "title": "Cement Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 76,
-                                            "title": "Furniture Manufacturer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 77,
-                                            "title": "Jute Goods/ Jute Yarn",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 78,
-                                            "title": "Garments Accessories",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 79,
-                                            "title": "Sweater Industry",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 80,
-                                            "title": "Mobile Accessories",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 81,
-                                            "title": "Fisheries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 82,
-                                            "title": "Herbal Medicine",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 83,
-                                            "title": "Physiotherapy center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 84,
-                                            "title": "Paper",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 85,
-                                            "title": "Sanitary ware",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 86,
-                                            "title": "Tiles/Ceramic",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 87,
-                                            "title": "Brick",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 88,
-                                            "title": "Paint",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 89,
-                                            "title": "Satellite TV",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 90,
-                                            "title": "Diagnostic Centre",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 91,
-                                            "title": "Clinic",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 92,
-                                            "title": "Resort",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 93,
-                                            "title": "Motel",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 94,
-                                            "title": "Coffee Shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 95,
-                                            "title": "Catering",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 96,
-                                            "title": "Fast Food Shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 97,
-                                            "title": "Bar/Pub",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 98,
-                                            "title": "GSA",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 99,
-                                            "title": "Tour Operator",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 100,
-                                            "title": "Immigration/Visa Processing",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 101,
-                                            "title": "Transport Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 102,
-                                            "title": "Transportation",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 103,
-                                            "title": "Port Service",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 104,
-                                            "title": "Inventory/Warehouse",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 105,
-                                            "title": "Supply Chain",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 106,
-                                            "title": "Cement",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 107,
-                                            "title": "Steel",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 108,
-                                            "title": "Shipyard",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 109,
-                                            "title": "Toiletries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 110,
-                                            "title": "Electric Wire/Cable",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 111,
-                                            "title": "Battery, Storage cell",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 112,
-                                            "title": "Tyre manufacturer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 113,
-                                            "title": "Lamps",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 114,
-                                            "title": "Dry cell (Battery)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 115,
-                                            "title": "Furniture",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 116,
-                                            "title": "Bicycle",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 117,
-                                            "title": "Handicraft",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 118,
-                                            "title": "Medical Equipment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 119,
-                                            "title": "Boutique/ Fashion",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 120,
-                                            "title": "Pottery",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 121,
-                                            "title": "Crockeries",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1090,
-                                            "title": "Credit Rating Agency",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1091,
-                                            "title": "Financial Consultants",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1092,
-                                            "title": "Venture Capital Firm",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1093,
-                                            "title": "Spinning",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1094,
-                                            "title": "Dyeing Factory",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1095,
-                                            "title": "Washing Factory",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1096,
-                                            "title": "Third Party Auditor (Quality, Health, Environment, Compliance",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1097,
-                                            "title": "Reptile Firms",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1098,
-                                            "title": "Farming",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1099,
-                                            "title": "Livestock",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1100,
-                                            "title": "Animal/Plant Breeding",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1101,
-                                            "title": "Science Laboratory",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1102,
-                                            "title": "Interior Design",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1103,
-                                            "title": "Escalator/Elevator/Lift",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1104,
-                                            "title": "HVAC System",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1105,
-                                            "title": "Developer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1106,
-                                            "title": "Chain shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1107,
-                                            "title": "Super store",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1108,
-                                            "title": "Departmental store",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1109,
-                                            "title": "Importer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1110,
-                                            "title": "Jewelry/Gem",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1111,
-                                            "title": "Tailor shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1112,
-                                            "title": "Grocery shop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1113,
-                                            "title": "Watch",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1114,
-                                            "title": "Toy",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1115,
-                                            "title": "Online Newspaper/ News Portal",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1116,
-                                            "title": "Web Media/Blog",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1117,
-                                            "title": "Film Production",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1118,
-                                            "title": "Professional Photographers",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1119,
-                                            "title": "DTP House",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1120,
-                                            "title": "Call Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1121,
-                                            "title": "Cellular Phone Operator",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1122,
-                                            "title": "Technical Infrastructure",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1123,
-                                            "title": "Industrial Machineries (Generator, Diesel Engine etc.)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1124,
-                                            "title": "Motor Vehicle body manufacturer",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1125,
-                                            "title": "Motor Workshop",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1126,
-                                            "title": "Indenting",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1127,
-                                            "title": "Mining",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1128,
-                                            "title": "Gas",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1129,
-                                            "title": "Coal",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1130,
-                                            "title": "Filling Station",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1131,
-                                            "title": "Power",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1132,
-                                            "title": "Micro-Credit",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1133,
-                                            "title": "School",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1134,
-                                            "title": "Kindergarten",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1135,
-                                            "title": "Madrasa",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 1136,
-                                            "title": "Coaching Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2090,
-                                            "title": "Amusement Park",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2091,
-                                            "title": "Cinema Hall/Theater",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2092,
-                                            "title": "Cultural Centre",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2093,
-                                            "title": "Convention center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2094,
-                                            "title": "Shopping mall",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2095,
-                                            "title": "Party/ Community Center",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2096,
-                                            "title": "Museum",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2097,
-                                            "title": "Gallery",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2098,
-                                            "title": "Club",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2099,
-                                            "title": "Golf Club",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2100,
-                                            "title": "Sports Complex",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2101,
-                                            "title": "Swimming Pool",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2102,
-                                            "title": "Religious Place",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2103,
-                                            "title": "Park",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2104,
-                                            "title": "Food (Packaged)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2105,
-                                            "title": "Beverage",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2106,
-                                            "title": "Ice Cream",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2107,
-                                            "title": "Bakery (Cake, Biscuit, Bread)",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2108,
-                                            "title": "Mineral Water",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2109,
-                                            "title": "Fire Fighting and Safety",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2110,
-                                            "title": "Pest Control",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2111,
-                                            "title": "Hatchery",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2112,
-                                            "title": "Salt",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2113,
-                                            "title": "Dairy",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2114,
-                                            "title": "Healthcare/Lifestyle product",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2115,
-                                            "title": "Corrugated Tin",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2116,
-                                            "title": "Radio",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2117,
-                                            "title": "E-commerce",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2118,
-                                            "title": "PSTN",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2119,
-                                            "title": "Land Phone",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2120,
-                                            "title": "CNG Conversion",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2122,
-                                            "title": "LPG Gas/Cylinder Gas",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2123,
-                                            "title": "Fuel/Petroleum",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2124,
-                                            "title": "Chamber",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2125,
-                                            "title": "Individual/Personal Recruitment",
-                                            "created_at": null,
-                                            "updated_at": null
-                                        },
-                                        {
-                                            "id": 2126,
-                                            "title": "Beauty Parlor/Saloon/Spa",
-                                            "created_at": null,
-                                            "updated_at": null
+                                        }
+
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/area-of-business": {
+            "get": {
+                "tags": [
+                    "Area of Business"
+                ],
+                "summary": "Get all public areas of business",
+                "description": "API endpoint to Get all public areas of business.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "Banks",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "Insurance",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/area-of-experiences": {
+            "get": {
+                "tags": [
+                    "Suggestions"
+                ],
+                "summary": "Get all public area of experiences",
+                "description": "API endpoint to Get public area of experiences.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "টেকনিকাল রাইটিং",
+                                            "title_en": "Technical Writing"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                            "title_en": "Project Management"
                                         }
                                     ],
                                     "_response_status": {
@@ -11220,61 +10622,23 @@
                                             "id": 1,
                                             "industry_association_id": 1,
                                             "organization_id": 1,
-                                            "title": "RomeOrg",
-                                            "title_en": "RomeOrg",
-                                            "end_date": "2022-10-10",
-                                            "skill_id": 1,
-                                            "vacancy": 10
+                                            "organization_title": "BarbieLand",
+                                            "organization_title_en": "BarbieLand-Kuvalis",
+                                            "end_date": "2023-07-17",
+                                            "vacancy": 10,
+                                            "remaining_vacancy": 10,
+                                            "all_institutes": 0
                                         },
                                         {
                                             "id": 2,
                                             "industry_association_id": 1,
                                             "organization_id": 1,
-                                            "title": "RomeOrg",
-                                            "title_en": "RomeOrg",
+                                            "organization_title": "RunLoLaRun",
+                                            "organization_title_en": "RunLoLaRun",
                                             "end_date": "2022-12-12",
-                                            "skill_id": 1,
-                                            "vacancy": 10
-                                        },
-                                        {
-                                            "id": 3,
-                                            "industry_association_id": 1,
-                                            "organization_id": 1,
-                                            "title": "RomeOrg",
-                                            "title_en": "RomeOrg",
-                                            "end_date": "2022-10-10",
-                                            "skill_id": 1,
-                                            "vacancy": 10
-                                        },
-                                        {
-                                            "id": 4,
-                                            "industry_association_id": 1,
-                                            "organization_id": 1,
-                                            "title": "RomeOrg",
-                                            "title_en": "RomeOrg",
-                                            "end_date": "2022-12-12",
-                                            "skill_id": 1,
-                                            "vacancy": 10
-                                        },
-                                        {
-                                            "id": 5,
-                                            "industry_association_id": 1,
-                                            "organization_id": 1,
-                                            "title": "RomeOrg",
-                                            "title_en": "RomeOrg",
-                                            "end_date": "2022-10-10",
-                                            "skill_id": 1,
-                                            "vacancy": 10
-                                        },
-                                        {
-                                            "id": 6,
-                                            "industry_association_id": 1,
-                                            "organization_id": 1,
-                                            "title": "RomeOrg",
-                                            "title_en": "RomeOrg",
-                                            "end_date": "2022-12-12",
-                                            "skill_id": 1,
-                                            "vacancy": 10
+                                            "vacancy": 20,
+                                            "remaining_vacancy": 20,
+                                            "all_institutes": 0
                                         }
                                     ],
                                     "_response_status": {
@@ -11313,28 +10677,47 @@
                                         {
                                             "industry_association_id": "1",
                                             "organization_id": "1",
-                                            "requirement": "Drooling Panda",
+                                            "requirement": "Anis req1",
                                             "end_date": "2022-10-10",
-                                            "skill_id": "1",
                                             "requirement_en": "",
                                             "vacancy": "10",
                                             "remaining_vacancy": "10",
-                                            "updated_at": "2022-01-13T06:26:11.000000Z",
-                                            "created_at": "2022-01-13T06:26:11.000000Z",
-                                            "id": 5
+                                            "all_institutes": 0,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "updated_at": "2022-02-01T09:44:39.000000Z",
+                                            "created_at": "2022-02-01T09:44:39.000000Z",
+                                            "id": 7
                                         },
                                         {
                                             "industry_association_id": "1",
                                             "organization_id": "1",
-                                            "requirement": "flirtatiousSword",
+                                            "requirement": "Anis req 2",
                                             "end_date": "2022-12-12",
-                                            "skill_id": "1",
                                             "requirement_en": "",
-                                            "vacancy": "10",
-                                            "remaining_vacancy": "10",
-                                            "updated_at": "2022-01-13T06:26:11.000000Z",
-                                            "created_at": "2022-01-13T06:26:11.000000Z",
-                                            "id": 6
+                                            "vacancy": "20",
+                                            "remaining_vacancy": "20",
+                                            "all_institutes": 0,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "updated_at": "2022-02-01T09:44:39.000000Z",
+                                            "created_at": "2022-02-01T09:44:39.000000Z",
+                                            "id": 8
+                                        },
+                                        {
+                                            "industry_association_id": "1",
+                                            "organization_id": "1",
+                                            "requirement": "Anis req 3",
+                                            "end_date": "2022-12-12",
+                                            "requirement_en": "",
+                                            "vacancy": "30",
+                                            "remaining_vacancy": "30",
+                                            "all_institutes": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "updated_at": "2022-02-01T09:44:39.000000Z",
+                                            "created_at": "2022-02-01T09:44:39.000000Z",
+                                            "id": 9
                                         }
                                     ],
                                     "_response_status": {
@@ -11419,18 +10802,17 @@
                                         "id": 1,
                                         "industry_association_id": 1,
                                         "organization_id": 1,
-                                        "end_date": "2022-07-07",
-                                        "skill_id": "2",
-                                        "requirement": "AAAAmmon ammarth",
-                                        "requirement_en": "Cob",
-                                        "vacancy": "11",
-                                        "remaining_vacancy": 11,
+                                        "end_date": "2023-07-17",
+                                        "requirement": "New Requirement",
+                                        "requirement_en": "",
+                                        "vacancy": "10",
+                                        "remaining_vacancy": 10,
                                         "all_institutes": 0,
                                         "row_status": 1,
                                         "created_by": 1,
                                         "updated_by": 1,
-                                        "created_at": "2022-01-24T07:29:45.000000Z",
-                                        "updated_at": "2022-01-24T11:05:24.000000Z",
+                                        "created_at": "2022-01-31T20:19:04.000000Z",
+                                        "updated_at": "2022-02-01T07:06:23.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
@@ -11537,7 +10919,7 @@
                 }
             }
         },
-        "/hr-demands/{hr_demand_id}": {
+        "/hr-demands/{hr_demand_institute_id}": {
             "get": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11546,7 +10928,7 @@
                 "description": "API endpoint to get a single Hr demand approved by institute. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "responses": {
@@ -11577,7 +10959,7 @@
                 }
             }
         },
-        "/hr-demand-approved-by-institute/{hr_demand_id}": {
+        "/hr-demand-approved-by-institute/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11586,7 +10968,7 @@
                 "description": "API endpoint to Get a single hr-demand approved by institutes.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "requestBody": {
@@ -11630,7 +11012,7 @@
                 }
             }
         },
-        "/hr-demand-rejected-by-institute/{hr_demand_id}": {
+        "/hr-demand-rejected-by-institute/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11639,15 +11021,7 @@
                 "description": "API endpoint to Get a single hr-demand rejected by institutes.A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
-                    },
-                    {
-                        "name": "rejected_by_institute",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "responses": {
@@ -11801,6 +11175,9 @@
                         "$ref": "#/components/parameters/hr_demand_institute_id"
                     },
                     {
+                        "$ref": "#/components/parameters/hr_demand_youth_type"
+                    },
+                    {
                         "$ref": "#/components/parameters/order"
                     },
                     {
@@ -11816,6 +11193,37 @@
                         "content": {
                             "application/json": {
                                 "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reject-hr-demand-youth/{hr_demand_youth_id}": {
+            "put": {
+                "tags": [
+                    "Institute Hr Demand"
+                ],
+                "summary": "Reject hr demand youths by hr_demand_youth_id",
+                "description": "API endpoint to Reject hr demand youths by hr_demand_youth_id. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/hr_demand_youth_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "HR Demand Youth Rejected Successfully.",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
@@ -12254,136 +11662,6 @@
                                             "id": 2,
                                             "title": "প্রজেক্ট ম্যানেজমেন্ট",
                                             "title_en": "Project Management"
-                                        },
-                                        {
-                                            "id": 3,
-                                            "title": "কম্পিউটার প্রোগ্রামিং",
-                                            "title_en": "Computer Programming"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "title": "ডাটা সাইন্স",
-                                            "title_en": "Data Science"
-                                        },
-                                        {
-                                            "id": 5,
-                                            "title": "একাউন্টিং",
-                                            "title_en": "Accounting"
-                                        },
-                                        {
-                                            "id": 6,
-                                            "title": "ইন্টারনেট",
-                                            "title_en": "Internet"
-                                        },
-                                        {
-                                            "id": 7,
-                                            "title": "ডাটা এন্ট্রি",
-                                            "title_en": "Data Entry"
-                                        },
-                                        {
-                                            "id": 8,
-                                            "title": "ডাটাবেজ অ্যাডমিনিস্ট্রেশন",
-                                            "title_en": "Database Administration"
-                                        },
-                                        {
-                                            "id": 9,
-                                            "title": "মাই.এস.কিউ.এল.",
-                                            "title_en": "MySQL"
-                                        },
-                                        {
-                                            "id": 10,
-                                            "title": "ওরাকল",
-                                            "title_en": "Oracle"
-                                        },
-                                        {
-                                            "id": 11,
-                                            "title": "উক্স ডিসাইন",
-                                            "title_en": "UX Design"
-                                        },
-                                        {
-                                            "id": 12,
-                                            "title": "ওয়েব ডিজাইন",
-                                            "title_en": "Web Design"
-                                        },
-                                        {
-                                            "id": 13,
-                                            "title": "কম্পিউটার মেকানিক",
-                                            "title_en": "Computer Mechanic"
-                                        },
-                                        {
-                                            "id": 14,
-                                            "title": "বৈদ্যুতিক মেকানিক",
-                                            "title_en": "Electrical Mechanic"
-                                        },
-                                        {
-                                            "id": 15,
-                                            "title": "যান্ত্রিক মেকানিক",
-                                            "title_en": "Mechanical Mechanic"
-                                        },
-                                        {
-                                            "id": 16,
-                                            "title": "রাসায়নিক কারিগর",
-                                            "title_en": "Chemical Technician"
-                                        },
-                                        {
-                                            "id": 17,
-                                            "title": "ফার্মাসিউটিক্যাল কারিগর",
-                                            "title_en": "Pharmaceutical Technician"
-                                        },
-                                        {
-                                            "id": 18,
-                                            "title": "সেলাই",
-                                            "title_en": "Sewing"
-                                        },
-                                        {
-                                            "id": 19,
-                                            "title": "দর্জি",
-                                            "title_en": "Tailor"
-                                        },
-                                        {
-                                            "id": 20,
-                                            "title": "ইলেক্ট্রনিক্স মেকানিক",
-                                            "title_en": "Electronics Mechanic"
-                                        },
-                                        {
-                                            "id": 21,
-                                            "title": "রং মিস্ত্রি",
-                                            "title_en": "Color Painter"
-                                        },
-                                        {
-                                            "id": 22,
-                                            "title": "ড্রাইভিং",
-                                            "title_en": "Driving"
-                                        },
-                                        {
-                                            "id": 23,
-                                            "title": "প্লাম্বিং",
-                                            "title_en": "Plumbing"
-                                        },
-                                        {
-                                            "id": 24,
-                                            "title": "মোটর মেকানিক",
-                                            "title_en": "Motor Mechanic"
-                                        },
-                                        {
-                                            "id": 25,
-                                            "title": "পোল্ট্রি ফার্মিং",
-                                            "title_en": "Poultry Farming"
-                                        },
-                                        {
-                                            "id": 26,
-                                            "title": "মাছ চাষ",
-                                            "title_en": "Fish Farming"
-                                        },
-                                        {
-                                            "id": 27,
-                                            "title": "মেশিন লার্নিং",
-                                            "title_en": "Machine Learning"
-                                        },
-                                        {
-                                            "id": 28,
-                                            "title": "কম্পিউটার প্রশিক্ষণ",
-                                            "title_en": "Computer Training"
                                         }
                                     ],
                                     "_response_status": {
@@ -12401,6 +11679,83 @@
     },
     "components": {
         "schemas": {
+            "HireInvite": {
+                "type": "object",
+                "description": "Invite Candidate for hiring",
+                "properties": {
+                    "hire_invite_type": {
+                        "type": "integer",
+                        "enum": [1,2,3,4],
+                        "description": "1=>SMS 2=>EMAIL 3=>SMS & EMAIL 4=>OTHERS"
+                    }
+                }
+            },
+            "interviewedCandidateUpdate": {
+                "type": "object",
+                "description": "Interviwed Candidate Update",
+                "properties": {
+                    "is_candidate_present": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>YES 0=>NO"
+                    },
+                    "interview_score": {
+                        "type": "number",
+                        "description": "Required if is_candidate_present = YES"
+                    }
+                },
+                "required": [
+                    "is_candidate_present"
+                ]
+            },
+            "updateRecruitmentStep": {
+                "type": "object",
+                "description": "Update Recruitment step",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "title_en": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "title"
+                ]
+            },
+            "recruitmentStep": {
+                "type": "object",
+                "description": "Recruitment Step",
+                "properties": {
+                    "job_id": {
+                        "type": "string",
+                        "description": "Must exist in primary_job_information table"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "title_en": {
+                        "type": "string"
+                    },
+                    "step_type": {
+                        "type": "integer",
+                        "enum": [1,2,3,4,5],
+                        "description": "1=>Shortlist 2=>Written 3=>Interview 4=>Online Interview 5=>Others"
+                    },
+                    "is_interview_reschedule_allowed": {
+                        "type": "integer"
+                    },
+                    "interview_contact": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "title",
+                    "step_type",
+                    "is_interview_reschedule_allowed"
+                ]
+            },
             "vacancy_approved_by_industry_association": {
                 "type": "object",
                 "description": "vacancy_approved_by_industry_association",
@@ -14786,6 +14141,16 @@
             }
         },
         "parameters": {
+            "hr_demand_youth_type": {
+                "name": "hr_demand_youth_type",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "enum": [1,2]
+                },
+                "description": "1=> Cv Link 2=> Youth Id"
+            },
             "applicationId": {
                 "name": "applicationId",
                 "in": "path",
@@ -14798,6 +14163,14 @@
                 "name": "trade_id",
                 "in": "query",
                 "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "stepId": {
+                "name": "stepId",
+                "in": "path",
+                "required": true,
                 "schema": {
                     "type": "integer"
                 }
@@ -14820,6 +14193,14 @@
                 "required": true,
                 "schema": {
                     "type": "string"
+                }
+            },
+            "hr_demand_youth_id": {
+                "name": "hr_demand_youth_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "hr_demand_id": {
@@ -15012,6 +14393,17 @@
                 },
                 "description": "Send occupation_ids as comma seperated string.example 1,2,3 "
             },
+            "loc_district_ids": {
+                "name": "loc_district_ids",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
             "rankId": {
                 "name": "rankId",
                 "in": "path",
@@ -15110,6 +14502,14 @@
                 "in": "query",
                 "required": false,
                 "style": "form",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "searchText": {
+                "name": "search_text",
+                "in": "query",
+                "required": false,
                 "schema": {
                     "type": "string"
                 }

@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
-use App\Services\CommonServices\MailService;
-use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -18,7 +17,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 /**
  * Class OrganizationService
@@ -158,6 +156,7 @@ class OrganizationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -218,6 +217,12 @@ class OrganizationService
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
+        if (!empty($searchText)) {
+            $organizationBuilder->where(function ($builder) use($searchText){
+                $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
+            });
+        }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
         }
@@ -260,6 +265,7 @@ class OrganizationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $order = $request['order'] ?? "ASC";
@@ -318,6 +324,12 @@ class OrganizationService
         }
         if (!empty($title)) {
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($searchText)) {
+            $organizationBuilder->where(function ($builder) use($searchText){
+                $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
+            });
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
@@ -422,7 +434,7 @@ class OrganizationService
         $organizationBuilder->where('organizations.id', '=', $id);
 
 
-        $organizationBuilder->with(['subTrades.trade','industryAssociations']);
+        $organizationBuilder->with(['subTrades.trade', 'industryAssociations']);
 
         return $organizationBuilder->firstOrFail();
     }
@@ -507,39 +519,6 @@ class OrganizationService
     }
 
     /**
-     * Send Mail To IndustryAssociation After Membership Application
-     * @param array $industryAssociationInfo
-     * @throws Throwable
-     */
-
-    public function sendMailToIndustryAssociationAfterMembershipApplication(array $industryAssociationInfo)
-    {
-        /** @var IndustryAssociation $industryAssociation */
-        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationInfo['industry_association_id']);
-
-        /** @var Organization $organization */
-        $organization = Organization::findOrFail($industryAssociationInfo['organization_id']);
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $industryAssociation->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Membership Application";
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization" => $organization->toArray(),
-            "industry_association_info" => $industryAssociation->toArray()
-        ]);
-
-        $industryAssociationMembership = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
-        $mailService->setTemplate($industryAssociationMembership);
-        $mailService->sendMail();
-    }
-
-    /**
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
@@ -597,12 +576,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -637,51 +618,16 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(function ($response, $e) use ($url) {
-                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . json_encode($response));
-                throw $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
-    }
-
-    /**
-     * @param array $mailPayload
-     * @throws Throwable
-     */
-    public function userInfoSendByMail(array $mailPayload)
-    {
-        Log::info("MailPayload" . json_encode($mailPayload));
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $mailPayload['contact_person_email']
-        ]);
-        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "Organization Registration";
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-        $mailService->setMessageBody([
-            "user_name" => $mailPayload['contact_person_mobile'],
-            "password" => $mailPayload['password']
-        ]);
-        $organizationRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
-        $mailService->setTemplate($organizationRegistrationTemplate);
-        $mailService->sendMail();
-    }
-
-    /**
-     * @param string $recipient
-     * @param string $message
-     */
-    public function userInfoSendBySMS(string $recipient, string $message)
-    {
-        $sms = new SmsService($recipient, $message);
-        $sms->sendSms();
     }
 
     /**
@@ -734,12 +680,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->delete($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
     }
@@ -875,12 +823,14 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
 
@@ -900,40 +850,17 @@ class OrganizationService
         return Http::withOptions(
             [
                 'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
+                'debug' => config('nise3.http_debug')
             ])
+            ->timeout(5)
             ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
             })
             ->json();
 
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function sendMailToOrganizationAfterRegistrationApprovalOrRejection(array $mailPayload)
-    {
-        $organization = Organization::findOrFail($mailPayload['organization_id']);
-        $mailService = new MailService();
-        $mailService->setTo([
-            $organization->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'];
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization_info" => $organization->toArray(),
-        ]);
-
-        $instituteRegistrationTemplate = 'mail.organization-registration-approval-or-rejection-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
-        $mailService->sendMail();
     }
 
     /**
@@ -1346,7 +1273,7 @@ class OrganizationService
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function organizationAdminProfileValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function organizationProfileUpdateValidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
 
@@ -1472,6 +1399,7 @@ class OrganizationService
         return Validator::make($request->all(), [
             'title_en' => 'nullable|max:600|min:2',
             'title' => 'nullable|max:1200|min:2',
+            'search_text' => 'nullable|max:600|min:2',
             'page' => 'integer|gt:0',
             'membership_id' => 'nullable',
             'page_size' => 'integer|gt:0',

@@ -6,6 +6,8 @@ use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\User;
 use App\Services\CommonServices\CodeGenerateService;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -152,11 +154,20 @@ class OrganizationController extends Controller
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
-                /** Send User Information After Completing Organization Registration */
-                $this->organizationService->userInfoSendByMail($validated);
+                /** Mail send after user registration */
+                $to = array($validated['contact_person_email']);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "User Registration Information";
+                $message = "Congratulation, You are successfully complete your registration as " . $validated['title'] . " user. Username: " . $validated['contact_person_mobile'] . " & Password: " . $validated['password'];
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
+
+                /** SMS send after user registration */
                 $recipient = $validated['contact_person_mobile'];
-                $message = "Dear, " . $validated['contact_person_name'] . " your username: " . $validated['contact_person_mobile'] . " & password: " . $validated['password'];
-                $this->organizationService->userInfoSendBySMS($recipient, $message);
+                $smsMessage = "You are successfully complete your registration as " . $validated['title'] . " user";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
 
                 $response['data'] = $organization;
                 DB::commit();
@@ -305,7 +316,21 @@ class OrganizationController extends Controller
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
                 /** Send User Information After Completing Organization Registration */
-                $this->organizationService->userInfoSendByMail($validated);
+
+                /** Mail send after user registration */
+                $to = array($validated['contact_person_email']);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "User Registration Information";
+                $message = "Congratulation, You are successfully complete your registration as " . $validated['title'] . " user. Username: " . $validated['contact_person_mobile'] . " & Password: " . $validated['password'] . " You are an inactive user until approved by System Admin.";
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
+
+                /** SMS send after user registration */
+                $recipient = $validated['contact_person_mobile'];
+                $smsMessage = "You are successfully complete your registration as " . $validated['title'] . " user";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
 
                 $response['data'] = $organization;
                 DB::commit();
@@ -344,7 +369,7 @@ class OrganizationController extends Controller
      * @throws RequestException
      * @throws Throwable
      */
-    public function organizationRegistrationApproval(int $organizationId): JsonResponse
+    public function organizationUserApproval(int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
@@ -354,9 +379,20 @@ class OrganizationController extends Controller
                 $userApproval = $this->organizationService->organizationUserApproval($organization);
                 if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
 
-                    $mailPayload['organization_id'] = $organizationId;
-                    $mailPayload['subject'] = "Organization Registration Approval";
-                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                    /** Mail send */
+                    $to = array($organization->contact_person_email);
+                    $from = BaseModel::NISE3_FROM_EMAIL;
+                    $subject = "User Approval Information";
+                    $message = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
+                    $messageBody = MailService::templateView($message);
+                    $mailService = new MailService($to, $from, $subject, $messageBody);
+                    $mailService->sendMail();
+
+                    /** Sms send */
+                    $recipient = $organization->contact_person_mobile;
+                    $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
+                    $smsService = new SmsService();
+                    $smsService->sendSms($recipient, $smsMessage);
                 }
                 $response['_response_status'] = [
                     "success" => false,
@@ -386,7 +422,7 @@ class OrganizationController extends Controller
      * @throws RequestException
      * @throws Throwable
      */
-    public function organizationRegistrationRejection(int $organizationId): JsonResponse
+    public function organizationUserRejection(int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
@@ -396,10 +432,21 @@ class OrganizationController extends Controller
                 $userRejection = $this->organizationService->organizationUserRejection($organization);
 
                 if (isset($userRejection['_response_status']['success']) && $userRejection['_response_status']['success']) {
-                    $mailPayload['organization_id'] = $organizationId;
-                    $mailPayload['subject'] = "Organization Registration Rejection";
 
-                    $this->organizationService->sendMailToOrganizationAfterRegistrationApprovalOrRejection($mailPayload);
+                    /** Mail send */
+                    $to = array($organization->contact_person_email);
+                    $from = BaseModel::NISE3_FROM_EMAIL;
+                    $subject = "User Rejection Information";
+                    $message = "You are rejected as a " . $organization->title . " user. You are not active user now";
+                    $messageBody = MailService::templateView($message);
+                    $mailService = new MailService($to, $from, $subject, $messageBody);
+                    $mailService->sendMail();
+
+                    /** Sms send */
+                    $recipient = $organization->contact_person_mobile;
+                    $smsMessage = "You are rejected as a " . $organization->title . " user. You are not active user now";
+                    $smsService = new SmsService();
+                    $smsService->sendSms($recipient, $smsMessage);
                 }
                 $response['_response_status'] = [
                     "success" => false,
@@ -514,7 +561,10 @@ class OrganizationController extends Controller
     {
         $validatedData = $this->organizationService->IndustryAssociationMembershipValidation($request)->validate();
         $this->organizationService->IndustryAssociationMembershipApplication($validatedData);
-        $this->organizationService->sendMailToIndustryAssociationAfterMembershipApplication($validatedData);
+
+
+        //TODO: mail configuration
+
         $response = [
             '_response_status' => [
                 "success" => true,
@@ -564,7 +614,7 @@ class OrganizationController extends Controller
         $this->authorize('updateProfile', $organization);
 
 
-        $validated = $this->organizationService->organizationAdminProfileValidator($request, $organizationId)->validate();
+        $validated = $this->organizationService->organizationProfileUpdateValidator($request, $organizationId)->validate();
         $data = $this->organizationService->update($organization, $validated);
         $response = [
             'data' => $data ?: [],

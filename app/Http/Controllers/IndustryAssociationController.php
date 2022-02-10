@@ -7,6 +7,8 @@ use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
 use App\Services\CommonServices\CodeGenerateService;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use App\Services\IndustryAssociationService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
@@ -14,10 +16,11 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
@@ -158,11 +161,21 @@ class IndustryAssociationController extends Controller
     /**
      * Display a specified resource
      * @param Request $request
-     * @param int $id
+     * @param int|null $id
      * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Throwable
      */
-    public function industryAssociationDetails(Request $request, int $id): JsonResponse
+    public function industryAssociationDetails(Request $request, int $id = null): JsonResponse
     {
+        if (!$id) {
+            /** this should be set from PublicApiMiddleWare */
+            $id = request()->get('industry_association_id');
+        }
+        throw_if(empty($id), ValidationException::withMessages([
+            "industry_association_id not found!"
+        ]));
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
 
         $response = [
@@ -261,7 +274,21 @@ class IndustryAssociationController extends Controller
             ];
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
-                $this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
+                /** Mail send after user registration */
+                $to = array($validated['contact_person_email']);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "User Registration Information";
+                $message = "Congratulation, You are successfully complete your registration as " . $validated['title'] . " user. Username: " . $validated['contact_person_mobile'] . " & Password: " . $validated['password'];
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
+
+                /** SMS send after user registration */
+                $recipient = $validated['contact_person_mobile'];
+                $smsMessage = "You are successfully complete your registration as " . $validated['title'] . " user";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
+
                 $response['data'] = $industryAssociation;
                 DB::commit();
                 return Response::json($response, ResponseAlias::HTTP_CREATED);
@@ -333,7 +360,20 @@ class IndustryAssociationController extends Controller
 
             if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
 
-                $this->industryAssociationService->sendIndustryAssociationRegistrationNotificationByMail($validated);
+                /** Mail send after user registration */
+                $to = array($validated['contact_person_email']);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "User Registration Information";
+                $message = "Congratulation, You are successfully complete your registration as " . $validated['title'] . " user. Username: " . $validated['contact_person_mobile'] . " & Password: " . $validated['password'] . " You are an inactive user until approved by System Admin.";
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
+
+                /** SMS send after user registration */
+                $recipient = $validated['contact_person_mobile'];
+                $smsMessage = "You are successfully complete your registration as " . $validated['title'] . " user";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
 
                 $response['data'] = $industryAssociation;
                 DB::commit();
@@ -380,28 +420,33 @@ class IndustryAssociationController extends Controller
 
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
 
-
         if ($industryAssociation->row_status == BaseModel::ROW_STATUS_PENDING) {
             throw_if(empty($request->input('permission_sub_group_id')), ValidationException::withMessages([
                 "permission_sub_group_id is required.[50000]"
             ]));
         }
+
         DB::beginTransaction();
         try {
             $this->industryAssociationService->industryAssociationUserApproval($request, $industryAssociation);
             $this->industryAssociationService->industryAssociationStatusChangeAfterApproval($industryAssociation);
 
-
-            /** send Sms after Industry Association Registration Approval */
-            $this->industryAssociationService->sendSmsIndustryAssociationRegistrationApproval($industryAssociation);
-
-
-            $mailPayload['industry_association_id'] = $industryAssociationId;
-            $mailPayload['subject'] = "Industry Association Registration Approval";
-            $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
-
             /** send Email after Industry Association Registration Approval */
-            $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
+
+            /** Mail send */
+            $to = array($industryAssociation->contact_person_email);
+            $from = BaseModel::NISE3_FROM_EMAIL;
+            $subject = "User Approval Information";
+            $message = "Congratulation, You are  approved as a " . $industryAssociation->title . " user. You are now active user";
+            $messageBody = MailService::templateView($message);
+            $mailService = new MailService($to, $from, $subject, $messageBody);
+            $mailService->sendMail();
+
+            /** Sms send */
+            $recipient = $industryAssociation->contact_person_mobile;
+            $smsMessage = "Congratulation, You are approved as a " . $industryAssociation->title . " user";
+            $smsService = new SmsService();
+            $smsService->sendSms($recipient, $smsMessage);
 
             DB::commit();
             $response = [
@@ -435,15 +480,22 @@ class IndustryAssociationController extends Controller
         try {
             $this->industryAssociationService->industryAssociationStatusChangeAfterRejection($industryAssociation);
             $this->industryAssociationService->industryAssociationUserRejection($industryAssociation);
-            /** sendSms after Industry Association Registration Rejection */
-            $this->industryAssociationService->sendSmsIndustryAssociationRegistrationRejection($industryAssociation);
 
-            $mailPayload['industry_association_id'] = $industryAssociationId;
-            $mailPayload['subject'] = "Industry Association Registration Rejection";
-            $mailPayload['contact_person_email'] = $industryAssociation->contact_person_mobile;
+            /** Mail send */
+            $to = array($industryAssociation->contact_person_email);
+            $from = BaseModel::NISE3_FROM_EMAIL;
+            $subject = "User Rejection Information";
+            $message = "You are rejected as a " . $industryAssociation->title . " user. You are not active user now";
+            $messageBody = MailService::templateView($message);
+            $mailService = new MailService($to, $from, $subject, $messageBody);
+            $mailService->sendMail();
 
-            /** send Email after Industry Association Registration Approval */
-            $this->industryAssociationService->sendEmailAfterIndustryAssociationRegistrationApprovalOrRejection($mailPayload);
+            /** Sms send */
+            $recipient = $industryAssociation->contact_person_mobile;
+            $smsMessage = "You are rejected as a " . $industryAssociation->title . " user. You are not active user now";
+            $smsService = new SmsService();
+            $smsService->sendSms($recipient, $smsMessage);
+
             DB::commit();
             $response = [
                 '_response_status' => [
@@ -565,13 +617,26 @@ class IndustryAssociationController extends Controller
     public function industryAssociationMembershipApproval(Request $request, int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
-
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
-
         $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-        $validatedData['subject'] = "Industry Association Membership Application Approval";
-        $validatedData['organization_id'] = $organizationId;
-        $this->industryAssociationService->sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection($validatedData);
+        $industryAssociation = IndustryAssociation::findOrFail($validatedData['industry_association_id']);
+
+
+        /** Mail send */
+        $to = array($industryAssociation->contact_person_email);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Industry Association Membership Approval";
+        $message = "You are approved as a " . $industryAssociation->title . " member.";
+        $messageBody = MailService::templateView($message);
+        $mailService = new MailService($to, $from, $subject, $messageBody);
+        $mailService->sendMail();
+
+        /** Sms send */
+        $recipient = $industryAssociation->contact_person_mobile;
+        $smsMessage = "You are approved as a " . $industryAssociation->title . " member.";
+        $smsService = new SmsService();
+        $smsService->sendSms($recipient, $smsMessage);
+
 
         $response = [
             '_response_status' => [
@@ -595,14 +660,24 @@ class IndustryAssociationController extends Controller
     public function industryAssociationMembershipRejection(Request $request, int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
-
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
-
         $this->industryAssociationService->industryAssociationMembershipRejection($validatedData, $organization);
+        $industryAssociation = IndustryAssociation::findOrFail($validatedData['industry_association_id']);
 
-        $validatedData['subject'] = "Industry Association Membership Application Rejection";
-        $validatedData['organization_id'] = $organizationId;
-        $this->industryAssociationService->sendMailToOrganizationAfterIndustryAssociationMembershipApprovalOrRejection($validatedData);
+        /** Mail send */
+        $to = array($industryAssociation->contact_person_email);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $subject = "Industry Association Membership Rejection";
+        $message = "You are rejected as a " . $industryAssociation->title . " member.";
+        $messageBody = MailService::templateView($message);
+        $mailService = new MailService($to, $from, $subject, $messageBody);
+        $mailService->sendMail();
+
+        /** Sms send */
+        $recipient = $industryAssociation->contact_person_mobile;
+        $smsMessage = "You are rejected as a " . $industryAssociation->title . " member.";
+        $smsService = new SmsService();
+        $smsService->sendSms($recipient, $smsMessage);
 
         $response = [
             '_response_status' => [
@@ -626,8 +701,8 @@ class IndustryAssociationController extends Controller
     {
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
-        $this->authorize('viewProfile', $industryAssociation);
-        $validated = $this->industryAssociationService->industryAssociationAdminValidator($request)->validate();
+        $this->authorize('updateProfile', $industryAssociation);
+        $validated = $this->industryAssociationService->industryAssociationProfileUpdateValidator($request)->validate();
         $data = $this->industryAssociationService->update($industryAssociation, $validated);
         $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
         $response = [
@@ -654,10 +729,33 @@ class IndustryAssociationController extends Controller
         $industryAssociationId = $request->input('industry_association_id');
         $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($industryAssociationId);
 
-        $this->authorize('updateProfile', $industryAssociation);
+        $this->authorize('viewProfile', $industryAssociation);
+
 
         $response = [
             "data" => $industryAssociation,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function industryAssociationDashboardStatistics(Request $request): JsonResponse
+    {
+        $industryAssociationId = $request->input('industry_association_id');
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+
+        $dashboardStatistics = $this->industryAssociationService->getindustryAssociationDashboardStatistics($industryAssociation);
+
+        $response = [
+            "data" => $dashboardStatistics,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

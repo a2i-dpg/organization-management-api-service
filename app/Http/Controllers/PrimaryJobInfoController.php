@@ -149,6 +149,7 @@ class PrimaryJobInfoController extends Controller
                 ]
             ];
         } else {
+            $statusCode = ResponseAlias::HTTP_BAD_REQUEST;
             $response = [
                 '_response_status' => [
                     "success" => false,

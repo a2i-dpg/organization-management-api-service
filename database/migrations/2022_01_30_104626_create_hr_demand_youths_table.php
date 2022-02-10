@@ -19,7 +19,7 @@ class CreateHrDemandYouthsTable extends Migration
             $table->unsignedInteger("hr_demand_institute_id");
             $table->string("cv_link", '250')->nullable();
             $table->unsignedInteger("youth_id")->nullable();
-            $table->unsignedTinyInteger("approval_status")->default(1)->comment('1 => pending, 2 => approved, 2 => rejected');
+            $table->unsignedTinyInteger("approval_status")->default(1)->comment('1 => pending, 2 => approved, 3 => rejected');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active, 2 => invalid');
             $table->timestamps();
             $table->softDeletes();
