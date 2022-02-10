@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             TradeSeeder::class,
+            SubTradeSeeder::class,
             ServiceSeeder::class,
             SkillSeeder::class,
             JobSectorSeeder::class,
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
             EduBoardSeeder::class,
             EducationLevelSeeder::class,
             ExamDegreeSeeder::class,
-            SubTradeSeeder::class,
+
             IndustryAssociationCodePessimisticLockingsTableSeeder::class,
             IndustryAssociationsTableSeeder::class,
             IndustryCodePessimisticLockingsTableSeeder::class
