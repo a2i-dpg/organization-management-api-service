@@ -110,10 +110,11 @@ class InterviewScheduleService
      * @param InterviewSchedule $interviewSchedule
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validatorForCandidateAssigning(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
+    public function CandidateAssigningToScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
-            'notify'=>[
+            'notify' => [
+                'required',
                 'int',
                 Rule::in(CandidateInterview::NOTIFICATION)
             ],
@@ -129,6 +130,29 @@ class InterviewScheduleService
                 'integer',
                 Rule::unique('candidate_interviews', 'recruitment_step_id'),
                 'exists:applied_jobs,id,deleted_at,NULL'
+            ]
+        ];
+
+        return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @param InterviewSchedule $interviewSchedule
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function CandidateRemoveFromScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'applied_job_ids' => [
+                'required',
+                'array',
+                'min:1',
+                'distinct',
+            ],
+            'applied_job_ids.*' => [
+                'required',
+                'integer',
             ]
         ];
 
@@ -155,6 +179,26 @@ class InterviewScheduleService
             $candidateInterview->interview_schedule_id = $scheduleId;
 
             $candidateInterview->save();
+        }
+
+    }
+
+    /**
+     * @param int $scheduleId
+     * @param array $data
+     */
+    public function removeCandidateFromSchedule(int $scheduleId, array $data)
+    {
+        $appliedJobIds = $data["applied_job_ids"];
+
+
+        foreach ($appliedJobIds as $appliedJobId) {
+            $appliedJob = AppliedJob::findOrFail($appliedJobId);
+           CandidateInterview::where('applied_job_id', $appliedJob->id)
+                ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
+                ->where('interview_schedule_id', $scheduleId)
+                ->delete();
+
         }
 
     }
