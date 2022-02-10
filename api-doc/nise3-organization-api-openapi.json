@@ -11218,7 +11218,7 @@
                 }
             }
         },
-        "/hr-demand-approved-by-industry-association/{hr_demand_id}": {
+        "/hr-demand-approved-by-industry-association/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11227,7 +11227,7 @@
                 "description": "API endpoint to Update an hr demand approved by industry association id. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "requestBody": {
@@ -11271,7 +11271,7 @@
                 }
             }
         },
-        "/hr-demand-rejected-by-industry-association/{hr_demand_id}": {
+        "/hr-demand-rejected-by-industry-association/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11280,18 +11280,9 @@
                 "description": "API endpoint to Update an hr demand rejected by industry association id. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/vacancy_approved_by_industry_association"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "successful",

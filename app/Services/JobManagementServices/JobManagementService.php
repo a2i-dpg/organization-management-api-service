@@ -553,7 +553,7 @@ class JobManagementService
             'job_id' => [
                 'required',
                 'string',
-                'exists:primary_job_information,id,deleted_at,NULL'
+                'exists:primary_job_information,job_id,deleted_at,NULL'
             ],
             'title' => [
                 'string',
@@ -1087,6 +1087,62 @@ class JobManagementService
             ->count('id');
     }
 
+    /**
+     * Send candidate invite through sms
+     * @param array $youth
+     * @param string $smsMessage
+     */
+    public function sendCandidateInviteSms(array $youth, string $smsMessage)
+    {
+        $recipient = $youth['mobile'];
+        $smsService = new SmsService();
+        $smsService->sendSms($recipient, $smsMessage);
+    }
+
+    /**
+     * @param array $youth
+     * @param string $subject
+     * @param string $message
+     * @throws Throwable
+     */
+    public function sendCandidateInviteEmail(array $youth, string $subject, string $message)
+    {
+        /** Mail send */
+        $to = array($youth['email']);
+        $from = BaseModel::NISE3_FROM_EMAIL;
+        $messageBody = MailService::templateView($message);
+        $mailService = new MailService($to, $from, $subject, $messageBody);
+        $mailService->sendMail();
+    }
+
+    /**
+     * Send hiring listed candidate invite through sms
+     * @param AppliedJob $appliedJob
+     * @param array $youth
+     */
+    public function sendCandidateInterviewInviteSms(AppliedJob $appliedJob, array $youth)
+    {
+        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $youthName = $youth['first_name'] . " " . $youth['last_name'];
+        $smsMessage = "Hello, " . $youthName . " You have been selected for an interview for the " . $job->job_title . " role. You have been scheduled for the interview on " . ". We look forward to see your talents.";
+        $this->sendCandidateInviteSms($youth, $smsMessage);
+    }
+
+    /**
+     * @param AppliedJob $appliedJob
+     * @param array $youth
+     * @throws Throwable
+     */
+    public function sendCandidateInterviewInviteEmail(AppliedJob $appliedJob, array $youth)
+    {
+        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        /** Mail send */
+        $youthName = $youth['first_name'] . " " . $youth['last_name'];
+        $subject = "Job Offer letter";
+        $message = "Hello, " . $youthName . " You have been selected for an interview for the " . $job->job_title . " role. You have been scheduled for the interview on " . ". We look forward to see your talents.";
+        $this->sendCandidateInviteEmail($youth, $subject, $message);
+    }
+
 
     /**
      * Send hiring listed candidate invite through sms
@@ -1096,14 +1152,9 @@ class JobManagementService
     public function sendCandidateHireInviteSms(AppliedJob $appliedJob, array $youth)
     {
         $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
-
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
-        $recipient = $youth['mobile'];
         $smsMessage = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
-        $smsService = new SmsService();
-        $smsService->sendSms($recipient, $smsMessage);
-
-
+        $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
@@ -1116,13 +1167,9 @@ class JobManagementService
         $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
-        $to = array($youth['email']);
-        $from = BaseModel::NISE3_FROM_EMAIL;
         $subject = "Job Offer letter";
         $message = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
-        $messageBody = MailService::templateView($message);
-        $mailService = new MailService($to, $from, $subject, $messageBody);
-        $mailService->sendMail();
+        $this->sendCandidateInviteEmail($youth, $subject, $message);
     }
 
 
