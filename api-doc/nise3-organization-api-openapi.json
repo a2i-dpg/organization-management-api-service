@@ -14777,9 +14777,9 @@
                 "schema": {
                     "type": "integer",
                     "enum": [
-                        1,2,3,4,5,6,7
+                        1,2,3,4,5,6,7,8,9
                     ],
-                    "description": "1=>Applied 2=>Rejected 3=>Shortlisted 4=>Interview_invited 5=>Interviewed 6=>Hire_invited 7=>Hired"
+                    "description": "1=>Applied 2=>Rejected 3=>Shortlisted 4=>Interview_scheduled 5=>Interview_invited 6=>Interviewed 7=>Hiring_Listed 8=>Hire_invited 9=>Hired"
                 }
             },
             "page": {
