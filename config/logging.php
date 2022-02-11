@@ -40,10 +40,14 @@ return [
             'path' => storage_path('logs/saga-logs/' . date('Y/F/') . 'saga.log'),
             'level' => 'info'
         ],
-
         'org_reg' => [
             'driver' => 'daily',
             'path' => storage_path('logs/org_reg.log'),
+            'level' => 'info',
+        ],
+        'mail_sms' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/mail-sms/' . date('Y/F/') . 'mail-sms.log'),
             'level' => 'info',
         ],
         'stack' => [
@@ -61,7 +65,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/lumen.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 2,
         ],
 
         'slack' => [

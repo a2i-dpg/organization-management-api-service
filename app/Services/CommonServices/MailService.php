@@ -3,15 +3,12 @@
 namespace App\Services\CommonServices;
 
 use App\Events\MailSendEvent;
-use App\Models\BaseModel;
-use App\Models\Batch;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class MailService
 {
-    public const RECIPIENT_NAME = 'Nise3';
+    public const RECIPIENT_NAME = 'Nise';
 
 
     /** FILE_EXTENSION_ALLOWABLE KEY */
@@ -44,30 +41,28 @@ class MailService
     ];
 
     private array $to;
-    private string $form;
+    private string $from;
     private string $recipientName;
     private string $replyTo;
     private string $subject;
-    private array $messageBody;
-    private string $template;
+    private string $messageBody;
     private array $cc;
     private array $bcc;
     private array $attachments;
 
-    /**
-     * @param array $to
-     */
-    public function setTo(array $to): void
-    {
-        $this->to = $to;
-    }
 
     /**
-     * @param string $form
+     * @param array $to
+     * @param string $from
+     * @param string $subject
+     * @param string $messageBody
      */
-    public function setForm(string $form): void
+    public function __construct(array $to, string $from, string $subject, string $messageBody)
     {
-        $this->form = $form;
+        $this->to = $to;
+        $this->from = $from;
+        $this->subject = $subject;
+        $this->messageBody = $messageBody;
     }
 
     /**
@@ -84,30 +79,6 @@ class MailService
     public function setReplyTo(string $replyTo): void
     {
         $this->replyTo = $replyTo;
-    }
-
-    /**
-     * @param string $subject
-     */
-    public function setSubject(string $subject): void
-    {
-        $this->subject = $subject;
-    }
-
-    /**
-     * @param array $messageBody
-     */
-    public function setMessageBody(array $messageBody): void
-    {
-        $this->messageBody = $messageBody;
-    }
-
-    /**
-     * @param string $template
-     */
-    public function setTemplate(string $template): void
-    {
-        $this->template = $template;
     }
 
     /**
@@ -135,31 +106,18 @@ class MailService
     }
 
 
-    public function __construct()
-    {
-
-    }
-
-
-    /**
-     * @throws Throwable
-     */
     public function sendMail()
     {
         $sendMailPayload = [
             'to' => $this->to,
-            'from' => $this->form,
+            'from' => $this->from,
             'subject' => $this->subject,
+            'message_body' => $this->messageBody,
             'name' => !empty($this->recipientName) ? $this->recipientName : self::RECIPIENT_NAME
         ];
 
         if (!empty($this->replyTo)) {
             $sendMailPayload['reply_to'] = $this->replyTo;
-        }
-        if (!empty($this->template)) {
-            $sendMailPayload['message_body'] = $this->templateView();
-        } else {
-            $sendMailPayload['message_body'] = '<p>Message body here.......</p>';
         }
         if (!empty($this->cc)) {
             $sendMailPayload['cc'] = $this->cc;
@@ -171,7 +129,7 @@ class MailService
             $sendMailPayload['attachment'] = $this->attachments;
         }
 
-        Log::info('MailPayloadForOrg'.json_encode($sendMailPayload));
+        Log::channel('mail_sms')->info('MailPayload: ' . json_encode($sendMailPayload));
 
         event(new MailSendEvent($sendMailPayload));
     }
@@ -179,16 +137,9 @@ class MailService
     /**
      * @throws Throwable
      */
-    private function templateView(): string
+    public static function templateView(string $message): string
     {
-        $data = $this->messageBody;
-        return view($this->template, compact('data'))->render();
-    }
-
-    public function messageBody(array $data, $htmlTemplate = null): string
-    {
-        $messageTemplate = !empty($htmlTemplate) ? $htmlTemplate : 'mail.message-default-template';
-        $messageData = $data ?? [];
-        return view($messageTemplate, compact('messageData'))->render();
+        $template = 'mail.ssp-default-template';
+        return view($template, compact('message'))->render();
     }
 }

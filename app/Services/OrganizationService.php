@@ -5,8 +5,6 @@ namespace App\Services;
 use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
-use App\Services\CommonServices\MailService;
-use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -19,7 +17,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 /**
  * Class OrganizationService
@@ -221,7 +218,10 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
+            $organizationBuilder->where(function ($builder) use($searchText){
+                $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
+            });
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
@@ -326,7 +326,10 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where('organizations.search_text', 'like', '%' . $searchText . '%');
+            $organizationBuilder->where(function ($builder) use($searchText){
+                $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
+            });
         }
         if (!empty($membershipId)) {
             $organizationBuilder->where('industry_association_organization.membership_id', $membershipId);
@@ -516,39 +519,6 @@ class OrganizationService
     }
 
     /**
-     * Send Mail To IndustryAssociation After Membership Application
-     * @param array $industryAssociationInfo
-     * @throws Throwable
-     */
-
-    public function sendMailToIndustryAssociationAfterMembershipApplication(array $industryAssociationInfo)
-    {
-        /** @var IndustryAssociation $industryAssociation */
-        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationInfo['industry_association_id']);
-
-        /** @var Organization $organization */
-        $organization = Organization::findOrFail($industryAssociationInfo['organization_id']);
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $industryAssociation->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Membership Application";
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization" => $organization->toArray(),
-            "industry_association_info" => $industryAssociation->toArray()
-        ]);
-
-        $industryAssociationMembership = 'mail.send-mail-to-industry-association-after-member-ship-application-default-template';
-        $mailService->setTemplate($industryAssociationMembership);
-        $mailService->sendMail();
-    }
-
-    /**
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
@@ -658,42 +628,6 @@ class OrganizationService
                 throw new HttpErrorException($httpResponse);
             })
             ->json();
-    }
-
-    /**
-     * @param array $mailPayload
-     * @throws Throwable
-     */
-    public function userInfoSendByMail(array $mailPayload)
-    {
-        Log::info("MailPayload" . json_encode($mailPayload));
-
-        $mailService = new MailService();
-        $mailService->setTo([
-            $mailPayload['contact_person_email']
-        ]);
-        $from = $mailPayload['from'] ?? BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'] ?? "Organization Registration";
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-        $mailService->setMessageBody([
-            "user_name" => $mailPayload['contact_person_mobile'],
-            "password" => $mailPayload['password']
-        ]);
-        $organizationRegistrationTemplate = $mailPayload['template'] ?? 'mail.organization-create-default-template';
-        $mailService->setTemplate($organizationRegistrationTemplate);
-        $mailService->sendMail();
-    }
-
-    /**
-     * @param string $recipient
-     * @param string $message
-     */
-    public function userInfoSendBySMS(string $recipient, string $message)
-    {
-        $sms = new SmsService($recipient, $message);
-        $sms->sendSms();
     }
 
     /**
@@ -927,53 +861,6 @@ class OrganizationService
             })
             ->json();
 
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function sendMailToOrganizationAfterRegistrationApproval(array $mailPayload)
-    {
-        $organization = Organization::findOrFail($mailPayload['organization_id']);
-        $mailService = new MailService();
-        $mailService->setTo([
-            $organization->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'];
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization_info" => $organization->toArray()
-        ]);
-
-        $instituteRegistrationTemplate = 'mail.organization-registration-approval-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
-        $mailService->sendMail();
-    }
-
-    public function sendMailToOrganizationAfterRegistrationRejection(array $mailPayload)
-    {
-        $organization = Organization::findOrFail($mailPayload['organization_id']);
-        $mailService = new MailService();
-        $mailService->setTo([
-            $organization->contact_person_email
-        ]);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = $mailPayload['subject'];
-
-        $mailService->setForm($from);
-        $mailService->setSubject($subject);
-
-        $mailService->setMessageBody([
-            "organization_info" => $organization->toArray()
-        ]);
-
-        $instituteRegistrationTemplate = 'mail.organization-registration-rejection-template';
-        $mailService->setTemplate($instituteRegistrationTemplate);
-        $mailService->sendMail();
     }
 
     /**
