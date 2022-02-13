@@ -54,6 +54,11 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
+            'sub_trade' => [
+                'required',
+                'integer',
+                'exists:sub_trades,id,deleted_at,NULL'
+            ],
             'membership_id' => [
                 'required',
                 'string',
