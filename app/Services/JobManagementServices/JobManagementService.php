@@ -953,6 +953,7 @@ class JobManagementService
             'viewed' => $this->countProfileViewedCandidate($jobId),
             'not_viewed' => $this->countProfileNotViewedCandidate($jobId),
             'qualified' => $this->countStepQualifiedCandidate($jobId),
+            'rejected' => $this->countStepRejectedCandidate($jobId)
         ];
 
         $response['final_hiring_list'] = [
