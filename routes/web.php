@@ -144,6 +144,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->put('restore/{applicationId}', ["as" => "candidate-update.remove", "uses" => "JobManagementController@restoreRejectedCandidate"]);
                 $router->put('hire-invite/{applicationId}', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
                 $router->put('hired/{applicationId}', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
+                $router->put('schedule/{scheduleId}', ["as" => "candidate-update.schedule", "uses" => "JobManagementController@assignCandidateToInterviewSchedule"]);
+                $router->put('deschedule/{scheduleId}', ["as" => "candidate-update.deschedule", "uses" => "JobManagementController@removeCandidateFromInterviewSchedule"]);
             });
 
 
@@ -152,7 +154,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('recruitment-steps', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
             $router->put('recruitment-steps/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
             $router->delete('recruitment-steps/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
-
+            $router->get('recruitment-steps/{id}/schedules', ["as" => "recruitment-steps.get-schedules", "uses" => "JobManagementController@stepSchedules"]);
+            $router->get('recruitment-step-candidate-list/{jobId}[/{stepId}]', ["as" => "recruitment-step.candidate-list", "uses" => "JobManagementController@recruitmentStepcandidateList"]);
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
                 $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAllCandidateList"]);

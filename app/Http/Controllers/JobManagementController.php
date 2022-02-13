@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Facade\ServiceToServiceCall;
 use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
 use App\Models\JobManagement;
 use App\Services\InterviewScheduleService;
@@ -409,7 +410,6 @@ class JobManagementController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
-
     }
 
     /**
@@ -494,6 +494,7 @@ class JobManagementController extends Controller
         $youth = $youthProfiles[0];
 
         if ($appliedJob->hire_invited_at == null) {
+            //TODO : refactor with assignCandidateToInterviewSchedule
             if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
                 $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);
             } else if ($hireInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
@@ -622,6 +623,28 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     * @param string $jobId
+     * @param int|null $stepId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function recruitmentStepCandidateList(Request $request,string $jobId, int $stepId=null): JsonResponse
+    {
+        $filter = $this->jobManagementService->recruitmentStepCandidateListFilterValidator($request)->validate();
+
+        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter,$jobId, $stepId);
+
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     public function getAllCandidateList(Request $request, string $jobId): JsonResponse
     {
         return $this->getCandidateList($request, $jobId);
@@ -671,7 +694,7 @@ class JobManagementController extends Controller
     function getOneSchedule(int $id): JsonResponse
     {
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
-        $this->authorize('view', $schedule);
+//        $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
@@ -684,6 +707,20 @@ class JobManagementController extends Controller
     }
 
 
+    function stepSchedules(int $id):JsonResponse
+    {
+        $schedule = $this->interviewScheduleService->getSchedulesByStepId($id);
+        $response = [
+            "data" => $schedule,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     /**
      * Store a newly created resource in storage.
      * @param Request $request
@@ -694,7 +731,6 @@ class JobManagementController extends Controller
 
     function createSchedule(Request $request): JsonResponse
     {
-        $this->authorize('create', InterviewSchedule::class);
 
         $validated = $this->interviewScheduleService->validator($request)->validate();
         $data = $this->interviewScheduleService->store($validated);
@@ -721,7 +757,7 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-        $this->authorize('update', $schedule);
+//        $this->authorize('update', $schedule);
 
         $validated = $this->interviewScheduleService->validator($request, $id)->validate();
 
@@ -750,7 +786,7 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-        $this->authorize('delete', $schedule);
+//        $this->authorize('delete', $schedule);
 
         DB::beginTransaction();
         try {
@@ -773,30 +809,84 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    public function assignCandidates(Request $request, int $id): mixed
+    /**
+     * Assign candidate to schedule
+     * @param Request $request
+     * @param int $scheduleId
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
+    {
+        $schedule = InterviewSchedule::findOrFail($scheduleId);
+
+        $validatedData = $this->interviewScheduleService->CandidateAssigningToScheduleValidator($request, $schedule)->validate();
+
+        $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
+
+        $requestData = $request->all();
+        $applicationId = $requestData['application_id'];
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $interviewInviteType = $validatedData['interview_invite_type'];
+
+        $youthId = (array)($appliedJob->youth_id);
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthId);
+        $youth = $youthProfiles[0];
+
+        if($validatedData['notify']==CandidateInterview::NOTIFY_NOW){
+            //TODO : refactor with hireInviteCandidate
+            if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
+                $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+            } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
+                $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+
+            } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
+                if (!empty($youth['email'])) {
+                    $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+                }
+                if (!empty($youth['mobile'])) {
+                    $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                }
+            }
+        }
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate assigned to schedule  successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * Remove Candidate From Schedule
+     * @param Request $request
+     * @param int $scheduleId
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
 
-        $validated = $this->interviewScheduleService->validatorForCandidateAssigning($request, $id)->validate();
+        $schedule = InterviewSchedule::findOrFail($scheduleId);
 
-        DB::beginTransaction();
-        try {
+        $validatedData = $this->interviewScheduleService->CandidateRemoveFromScheduleValidator($request, $schedule)->validate();
 
-            $this->interviewScheduleService->assignToSchedule($validated, $id);
+        $this->interviewScheduleService->removeCandidateFromSchedule($scheduleId, $validatedData);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate removed from schedule  successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
 
-            $response = [
-//                "data" => $candidateRequirements,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "CandidateRequirements successfully submitted",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-            DB::commit();
-        } catch (Throwable $exception) {
-            DB::rollBack();
-            throw $exception;
-        }
 
         return Response::json($response, ResponseAlias::HTTP_OK);
 

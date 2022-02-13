@@ -35,11 +35,29 @@ class AppliedJob extends Model
         "Applied" => 1,
         "Rejected" => 2,
         "Shortlisted" => 3,
-        "Interview_invited" => 4,
-        "Interviewed" => 5,
-        "Hiring_Listed" => 6,
-        "Hire_invited" => 7,
-        "Hired" => 8,
+        "Interview_scheduled" => 4,
+        "Interview_invited" => 5,
+        "Interviewed" => 6,
+        "Hiring_Listed" => 7,
+        "Hire_invited" => 8,
+        "Hired" => 9,
+    ];
+
+    public const PROFILE_VIEWED_YES = 1;
+    public const PROFILE_VIEWED_NO = 0;
+
+    public const PROFILE_VIEWED = [
+        self::PROFILE_VIEWED_YES,
+        self::PROFILE_VIEWED_NO
+    ];
+
+    public const QUALIFIED_YES = 1;
+    public const QUALIFIED_NO = 0;
+
+
+    public const QUALIFIED = [
+        self::QUALIFIED_YES,
+        self::QUALIFIED_NO
     ];
 
     public const INTERVIEW_INVITE_SOURCES = [
