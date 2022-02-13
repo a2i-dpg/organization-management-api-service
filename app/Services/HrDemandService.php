@@ -107,6 +107,8 @@ class HrDemandService
             'organizations.title as organization_title',
             'organizations.title_en as organization_title_en',
             'hr_demands.end_date',
+            'hr_demands.requirement',
+            'hr_demands.requirement_en',
             'hr_demands.vacancy',
             'hr_demands.remaining_vacancy',
             'hr_demands.all_institutes'
