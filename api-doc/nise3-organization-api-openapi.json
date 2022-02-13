@@ -9274,7 +9274,36 @@
                 }
             }
         },
-
+        "/jobs/candidate-update/schedule/{scheduleId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Schedule a candidate",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/scheduleId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/candidateAssigningToSchedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
 
         "/jobs/candidates/all/{jobId}": {
@@ -12151,6 +12180,36 @@
     },
     "components": {
         "schemas": {
+            "candidateAssigningToSchedule": {
+                "type": "object",
+                "description": "Candidate assign to schedule",
+                "properties": {
+                    "notify": {
+                        "type": "integer",
+                        "description": "1=> NOTIFY NOW 0=> NOTIFY_LATER"
+                    },
+                    "applied_job_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "minimum": 1,
+                        "description": "Must exist in candidate_interviews table"
+                    },
+                    "interview_invite_type": {
+                        "type": "integer",
+                        "enum": [
+                            1,2,3,4
+                        ],
+                        "description": "  \"SMS\" => 1,\n        \"Email\" => 2,\n        \"SMS and Email\" => 3,\n        \"Other\" => 4,"
+                    }
+                },
+                "required": [
+                    "notify",
+                    "applied_job_ids",
+                    "interview_invite_type"
+                ]
+            },
             "createSchedule": {
                 "type": "object",
                 "description": "Create a schedule",
@@ -14643,6 +14702,14 @@
             }
         },
         "parameters": {
+            "scheduleId": {
+                "name": "scheduleId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "qualified": {
                 "name": "qualified",
                 "in": "query",
