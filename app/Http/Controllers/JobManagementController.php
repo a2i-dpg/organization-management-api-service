@@ -478,6 +478,27 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param string $jobId
+     * @return JsonResponse
+     */
+    public function getRecruitmentStepList(Request $request,string $jobId): JsonResponse
+    {
+        $recruitmentStep = $this->jobManagementService->getRecruitmentStepList($jobId);
+        $response = [
+            "data" => $recruitmentStep,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
      * @throws ValidationException
      * @throws Throwable
      */
