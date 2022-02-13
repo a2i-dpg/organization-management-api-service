@@ -727,7 +727,7 @@ class JobManagementController extends Controller
      */
     function getOneSchedule(int $id): JsonResponse
     {
-        $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
+        $schedule = $this->interviewScheduleService->getSchedulesByStepId($id);
 //        $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
@@ -859,27 +859,27 @@ class JobManagementController extends Controller
         $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
 
         $requestData = $request->all();
-        $applicationId = $requestData['application_id'];
-        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $applicationIds = $requestData['applied_job_ids'];
+        $appliedJob = AppliedJob::whereIn('id', $applicationIds)->get();
         $interviewInviteType = $validatedData['interview_invite_type'];
 
-        $youthId = (array)($appliedJob->youth_id);
-        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthId);
-        $youth = $youthProfiles[0];
-
-        if($validatedData['notify']==CandidateInterview::NOTIFY_NOW){
-            //TODO : refactor with hireInviteCandidate
-            if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
-                $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
-            } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
-                $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
-
-            } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
-                if (!empty($youth['email'])) {
-                    $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
-                }
-                if (!empty($youth['mobile'])) {
+        $youthIds = $appliedJob->pluck('youth_id')->toArray();
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthIds);
+        foreach ($youthProfiles as $youth) {
+            if ($validatedData['notify'] == CandidateInterview::NOTIFY_NOW) {
+                //TODO : refactor with hireInviteCandidate
+                if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
                     $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
+                    $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+
+                } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
+                    if (!empty($youth['email'])) {
+                        $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+                    }
+                    if (!empty($youth['mobile'])) {
+                        $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                    }
                 }
             }
         }

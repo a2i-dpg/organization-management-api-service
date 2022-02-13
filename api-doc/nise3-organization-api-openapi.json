@@ -9297,7 +9297,14 @@
                         "description": "successfull",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate assigned to schedule  successfully",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
