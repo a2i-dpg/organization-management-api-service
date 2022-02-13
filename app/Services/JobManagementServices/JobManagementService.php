@@ -431,8 +431,6 @@ class JobManagementService
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Rejected"];
-        $appliedJob->rejected_from = $appliedJob->apply_status;
-        $appliedJob->rejected_at = Carbon::now();
         $appliedJob->save();
 
         return $appliedJob;
