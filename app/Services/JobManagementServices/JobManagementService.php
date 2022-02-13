@@ -908,31 +908,133 @@ class JobManagementService
         return $response;
     }
 
+    /**
+     * @param string $jobId
+     * @return array
+     */
+    public function getRecruitmentStepList(string $jobId): array
+    {
 
-    public function countStepShortlistedCandidate(int $stepId = null)
+        /** @var Builder $recruitmentStepBuilder */
+        $recruitmentStepBuilder = RecruitmentStep::select([
+            'recruitment_steps.id',
+            'recruitment_steps.job_id',
+            'recruitment_steps.title',
+            'recruitment_steps.title_en',
+            'recruitment_steps.step_type',
+            'recruitment_steps.is_interview_reschedule_allowed',
+            'recruitment_steps.interview_contact',
+            'recruitment_steps.created_at',
+            'recruitment_steps.updated_at',
+        ]);
+
+        $recruitmentStepBuilder->where('recruitment_steps.job_id', $jobId);
+
+
+        /** @var Collection $recruitmentSteps */
+        $recruitmentSteps = $recruitmentStepBuilder->get();
+
+
+        foreach ($recruitmentSteps as &$recruitmentStep) {
+
+            $recruitmentStep['total_candidate'] = $this->countStepCandidate($jobId, $recruitmentStep->id);
+            $recruitmentStep['shortlisted'] = $this->countStepShortlistedCandidate($jobId, $recruitmentStep->id);
+            $recruitmentStep['qualified'] = $this->countStepQualifiedCandidate($jobId, $recruitmentStep->id);
+
+            if ($recruitmentStep->step_type != RecruitmentStep::STEP_TYPE_SHORTLIST) {
+                $recruitmentStep['interview_scheduled'] = $this->countStepInterviewScheduledCandidate($jobId, $recruitmentStep->id);
+                $recruitmentStep['rejected'] = $this->countStepRejectedCandidate($jobId, $recruitmentStep->id);
+            }
+        }
+
+        $response['all_applications'] = [
+            'all' => $this->countStepAcceptedCandidate($jobId),
+            'total_candidate' => $this->countStepCandidate($jobId),
+            'viewed' => $this->countProfileViewedCandidate($jobId),
+            'not_viewed' => $this->countProfileNotViewedCandidate($jobId),
+            'qualified' => $this->countStepQualifiedCandidate($jobId),
+        ];
+
+        $response['final_hiring_list'] = [
+            'total_candidate' => $this->countFinalHiringListCandidate($jobId),
+        ];
+
+        $response['steps'] = $recruitmentSteps->toArray() ?? [];
+
+
+        return $response;
+
+    }
+
+
+    public function countProfileViewedCandidate(string $jobId, int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
+            ->whereNotNull('profile_viewed_at')
+            ->count('id');
+    }
+
+    public function countProfileNotViewedCandidate(string $jobId, int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
+            ->whereNull('profile_viewed_at')
+            ->count('id');
+    }
+
+    public function countStepCandidate(string $jobId, int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function countFinalHiringListCandidate(): mixed
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+            ->whereNull('current_recruitment_step_id')
+            ->count('id');
+    }
+
+    public function countStepAcceptedCandidate(int $stepId = null)
+    {
+        return AppliedJob::where('apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+            ->where('current_recruitment_step_id', $stepId)
+            ->count('id');
+    }
+
+    public function countStepShortlistedCandidate(string $jobId, int $stepId = null)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Shortlisted'])
             ->where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
-    public function countStepInterviewScheduledCandidate(int $stepId)
+    public function countStepInterviewScheduledCandidate(string $jobId, int $stepId)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Interview_scheduled'])
-            ->where('current_recruitment_step_id', $stepId)
+            ->where('current_recruitment_step_id', $jobId)
+            ->where('job_id', $stepId)
             ->count('id');
     }
 
-    public function countStepRejectedCandidate(int $stepId = null)
+    public function countStepRejectedCandidate(string $jobId, int $stepId = null)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Rejected'])
             ->where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
-    public function countStepQualifiedCandidate(int $stepId = null)
+    public function countStepQualifiedCandidate(string $jobId, int $stepId = 0)
     {
         return AppliedJob::where('current_recruitment_step_id', '>', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
