@@ -123,4 +123,9 @@ class PrimaryJobInformation extends BaseModel
         self::STATUS_DRAFT
     ];
 
+
+    public const JOB_STATUS_LIVE = "live";
+    public const JOB_STATUS_PENDING = "pending";
+    public const JOB_STATUS_EXPIRED = "expired";
+
 }

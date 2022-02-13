@@ -852,6 +852,7 @@ class JobManagementService
         if (!($qualified == AppliedJob::QUALIFIED_YES) || $stepId != null) {
             $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
         }
+        $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
 
         if ($stepId == null) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Applied']);
@@ -953,6 +954,7 @@ class JobManagementService
             'viewed' => $this->countProfileViewedCandidate($jobId),
             'not_viewed' => $this->countProfileNotViewedCandidate($jobId),
             'qualified' => $this->countStepQualifiedCandidate($jobId),
+            'rejected' => $this->countStepRejectedCandidate($jobId)
         ];
 
         $response['final_hiring_list'] = [
