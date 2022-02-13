@@ -130,6 +130,11 @@ class InterviewScheduleService
                 'integer',
                 Rule::unique('candidate_interviews', 'recruitment_step_id'),
                 'exists:applied_jobs,id,deleted_at,NULL'
+            ],
+            'interview_invite_type' => [
+                'integer',
+                'required',
+                Rule::in(AppliedJob::INVITE_TYPES)
             ]
         ];
 

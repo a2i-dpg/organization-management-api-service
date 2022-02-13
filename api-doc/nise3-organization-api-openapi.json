@@ -10388,6 +10388,168 @@
                 }
             }
         },
+        "/jobs/step-schedule/create": {
+            "post": {
+                "tags": ["Job Interview"],
+                "summary": "Create a recruitment step-schedule for a job interview",
+                "description": "API endpoint to Create a recruitment step-schedule for a job interview. A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createSchedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "job_id": "1",
+                                        "recruitment_step_id": "1",
+                                        "interview_scheduled_at": null,
+                                        "maximum_number_of_applicants": "20",
+                                        "interview_invite_type": "1",
+                                        "interview_address": "Mohakhali",
+                                        "updated_at": "2022-02-10T03:59:46.000000Z",
+                                        "created_at": "2022-02-10T03:59:46.000000Z",
+                                        "id": 1
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "interview schedule created successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/step-schedule/update/{stepId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Update a step-schedule step of a job interview",
+                "description": "API endpoint to Update a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createSchedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "job_id": "1",
+                                        "recruitment_step_id": "1",
+                                        "interview_scheduled_at": "2022-09-09",
+                                        "maximum_number_of_applicants": "25",
+                                        "interview_invite_type": "2",
+                                        "interview_address": "Rajabazar",
+                                        "created_at": "2022-02-10T03:59:46.000000Z",
+                                        "updated_at": "2022-02-10T04:09:55.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "schedule updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/step-schedule/get/{stepId}": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get a step-schedule step of a job interview",
+                "description": "API endpoint to Get a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "recruitment_step_id": "1",
+                                        "interview_scheduled_at": "2022-09-09 00:00:00",
+                                        "maximum_number_of_applicants": 25,
+                                        "interview_invite_type": 2,
+                                        "interview_address": "Rajabazar",
+                                        "created_at": "2022-02-10T03:59:46.000000Z",
+                                        "updated_at": "2022-02-10T04:09:55.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/step-schedule/delete/{stepId}": {
+            "delete": {
+                "tags": ["Job Interview"],
+                "summary": "Delete a step-schedule step of a job interview",
+                "description": "API endpoint to Delete a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "schedule deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/area-of-business": {
             "get": {
                 "tags": [
@@ -11056,7 +11218,7 @@
                 }
             }
         },
-        "/hr-demand-approved-by-industry-association/{hr_demand_id}": {
+        "/hr-demand-approved-by-industry-association/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11065,7 +11227,7 @@
                 "description": "API endpoint to Update an hr demand approved by industry association id. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
                 "requestBody": {
@@ -11109,7 +11271,7 @@
                 }
             }
         },
-        "/hr-demand-rejected-by-industry-association/{hr_demand_id}": {
+        "/hr-demand-rejected-by-industry-association/{hr_demand_institute_id}": {
             "put": {
                 "tags": [
                     "Institute Hr Demand"
@@ -11118,18 +11280,9 @@
                 "description": "API endpoint to Update an hr demand rejected by industry association id. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/hr_demand_id"
+                        "$ref": "#/components/parameters/hr_demand_institute_id"
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/vacancy_approved_by_industry_association"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "successful",
@@ -11679,6 +11832,36 @@
     },
     "components": {
         "schemas": {
+            "createSchedule": {
+                "type": "object",
+                "description": "Create a schedule",
+                "properties": {
+                    "job_id": {
+                        "type": "string"
+                    },
+                    "recruitment_step_id": {
+                        "type": "string"
+                    },
+                    "interview_scheduled_at": {
+                        "type": "string",
+                        "format": "Y-m-d"
+                    },
+                    "maximum_number_of_applicants": {
+                        "type": "integer"
+                    },
+                    "interview_invite_type": {
+                        "type": "integer"
+                    },
+                    "interview_address": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "maximum_number_of_applicants",
+                    "interview_address"
+                ]
+            },
             "HireInvite": {
                 "type": "object",
                 "description": "Invite Candidate for hiring",
