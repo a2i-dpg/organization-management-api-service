@@ -39,6 +39,11 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
         if(!empty($request['industry_association_id'])){
             $data['industry_association_id'] = $request['industry_association_id'];
         }
+        if(!empty($request['sub_trade'])){
+            $data['sub_trades'] = [
+                $request['sub_trade']
+            ];
+        }
 
         return $data;
     }
@@ -54,8 +59,13 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                 'int',
                 'exists:organization_types,id,deleted_at,NULL'
             ],
-            'sub_trade' => [
+            'sub_trades' => [
                 'required',
+                'array',
+                'min:1'
+            ],
+            'sub_trades.*' => [
+                'nullable',
                 'integer',
                 'exists:sub_trades,id,deleted_at,NULL'
             ],
@@ -245,7 +255,7 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
 
             $organization = app(OrganizationService::class)->store($organization, $validated);
 
-            $this->organizationService->syncWithSubTrades($organization, $validated['sub_trades']);
+            app(OrganizationService::class)->syncWithSubTrades($organization, $validated['sub_trades']);
 
             if (!($organization && $organization->id)) {
                 throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
@@ -254,7 +264,7 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
             $validated['organization_id'] = $organization->id;
             $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
-            $createdRegisterUser = $this->organizationService->createUser($validated);
+            $createdRegisterUser = app(OrganizationService::class)->createUser($validated);
 
             Log::info('id_user_info:' . json_encode($createdRegisterUser));
 
@@ -267,7 +277,7 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
                     "message" => "Organization has been Created Successfully",
-                    "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                    "query_time" => Carbon::class->diffInSeconds(\Illuminate\Support\Carbon::now()),
                 ]
             ];
 
@@ -315,14 +325,6 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
-        }
-
-
-
-
-        foreach ($collection as $row) {
-            Log::info("Value >>>>>> Value <<<<<<<<<<");
-            Log::info(json_encode($row));
         }
     }
 }
