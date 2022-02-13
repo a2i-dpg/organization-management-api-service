@@ -24,4 +24,5 @@ class RecruitmentStep extends Model
         self::STEP_TYPE_ONLINE_INTERVIEW,
         self::STEP_TYPE_OTHERS
     ];
+
 }

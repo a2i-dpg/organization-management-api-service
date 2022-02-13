@@ -15,14 +15,15 @@ class CreateCandidateInterviewsTable extends Migration
     {
         Schema::create('candidate_interviews', function (Blueprint $table) {
             $table->id();
-            $table->string('job_id')->index();
-            $table->unsignedInteger('applied_job_id')->index();
+            $table->string('applied_job_id')->index();
+            $table->unsignedInteger('job_id')->index();
             $table->unsignedInteger('recruitment_step_id');
-            $table->unsignedTinyInteger('candidate_status')->comment('1=>will come,2=>will not come,3=>Request for reschedule')->nullable();
+            $table->unsignedInteger('interview_schedule_id');
+            $table->dateTime('invited_at')->nullable();
+            $table->unsignedInteger('confirmation_status')->comment("1=>NOT_CONFIRMED,2=>CONFIRMED,3=>REQUEST_RESCHEDULED,4=>ABORTED")->default(1);
             $table->unsignedInteger('is_candidate_present')->comment('1=>true,0=>false')->nullable();
             $table->float('interview_score')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
