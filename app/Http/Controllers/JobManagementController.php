@@ -246,11 +246,24 @@ class JobManagementController extends Controller
             ]
         ];
         if ($step >= BaseModel::FORM_STEPS['JobPreview']) {
+            $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+
+            if($primaryJobInformation->published_at==null){
+               $jobStatus = PrimaryJobInformation::JOB_STATUS_PENDING;
+            }
+            elseif ($primaryJobInformation->application_deadline<=Carbon::now()){
+                $jobStatus = PrimaryJobInformation::JOB_STATUS_EXPIRED;
+            }
+            else{
+                $jobStatus = PrimaryJobInformation::JOB_STATUS_LIVE;
+
+            }
             $data = collect([
-                'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
+                'primary_job_information' => $primaryJobInformation,
                 'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
                 'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
-                'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
+                'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
+                '$jobStatus'=>$jobStatus
             ]);
             $data["latest_step"] = $step;
             $response["data"] = $data;

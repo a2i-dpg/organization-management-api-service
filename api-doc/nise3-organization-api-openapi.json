@@ -9304,6 +9304,44 @@
                 }
             }
         },
+        "/jobs/candidate-update/deschedule/{scheduleId}": {
+            "put": {
+                "tags": ["Job Interview"],
+                "summary": "Deschedule a candidate",
+                "description": "API endpoint to Deschedule a candidate. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/scheduleId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/deschedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate removed from schedule  successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/jobs/recruitment-step-list/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
@@ -9378,7 +9416,6 @@
                 }
             }
         },
-
 
         "/jobs/candidates/all/{jobId}": {
             "get": {
@@ -12254,6 +12291,23 @@
     },
     "components": {
         "schemas": {
+            "deschedule": {
+                "type": "object",
+                "description": "Deschedule",
+                "properties": {
+                    "applied_job_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "minimum": 1,
+                        "description": "Must exist in candidate_interviews table"
+                    }
+                },
+                "required": [
+                    "applied_job_ids"
+                ]
+            },
             "candidateAssigningToSchedule": {
                 "type": "object",
                 "description": "Candidate assign to schedule",
