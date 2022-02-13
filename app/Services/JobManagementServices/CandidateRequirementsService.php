@@ -228,11 +228,11 @@ class CandidateRequirementsService
                 "array",
             ],
             "degrees.*.education_level_id" => [
-                "nullable",
+                // "nullable",
                 "exists:education_levels,id,deleted_at,NULL",
             ],
             "degrees.*.exam_degree_id" => [
-                "nullable",
+                // "nullable",
                 "exists:exam_degrees,id,deleted_at,NULL",
             ],
             "degrees.*.major_subject" => [

@@ -246,11 +246,24 @@ class JobManagementController extends Controller
             ]
         ];
         if ($step >= BaseModel::FORM_STEPS['JobPreview']) {
+            $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
+
+            if($primaryJobInformation->published_at==null){
+               $jobStatus = PrimaryJobInformation::JOB_STATUS_PENDING;
+            }
+            elseif ($primaryJobInformation->application_deadline<=Carbon::now()){
+                $jobStatus = PrimaryJobInformation::JOB_STATUS_EXPIRED;
+            }
+            else{
+                $jobStatus = PrimaryJobInformation::JOB_STATUS_LIVE;
+
+            }
             $data = collect([
-                'primary_job_information' => $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId),
+                'primary_job_information' => $primaryJobInformation,
                 'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
                 'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
-                'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId)
+                'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
+                '$jobStatus'=>$jobStatus
             ]);
             $data["latest_step"] = $step;
             $response["data"] = $data;
@@ -846,27 +859,27 @@ class JobManagementController extends Controller
         $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
 
         $requestData = $request->all();
-        $applicationId = $requestData['application_id'];
-        $appliedJob = AppliedJob::findOrFail($applicationId);
+        $applicationIds = $requestData['applied_job_ids'];
+        $appliedJob = AppliedJob::whereIn('id', $applicationIds)->get();
         $interviewInviteType = $validatedData['interview_invite_type'];
 
-        $youthId = (array)($appliedJob->youth_id);
-        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthId);
-        $youth = $youthProfiles[0];
-
-        if($validatedData['notify']==CandidateInterview::NOTIFY_NOW){
-            //TODO : refactor with hireInviteCandidate
-            if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
-                $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
-            } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
-                $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
-
-            } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
-                if (!empty($youth['email'])) {
-                    $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
-                }
-                if (!empty($youth['mobile'])) {
+        $youthIds = $appliedJob->pluck('youth_id')->toArray();
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthIds);
+        foreach ($youthProfiles as $youth) {
+            if ($validatedData['notify'] == CandidateInterview::NOTIFY_NOW) {
+                //TODO : refactor with hireInviteCandidate
+                if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
                     $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
+                    $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+
+                } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
+                    if (!empty($youth['email'])) {
+                        $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+                    }
+                    if (!empty($youth['mobile'])) {
+                        $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                    }
                 }
             }
         }

@@ -32,7 +32,7 @@ class InterviewScheduleService
             'interview_schedules.updated_at',
             'interview_schedules.deleted_at'
         ]);
-        return $scheduleBuilder->firstOrFail();
+        return $scheduleBuilder->where('interview_schedules.id', $id)->firstOrFail();
     }
 
 
@@ -170,6 +170,10 @@ class InterviewScheduleService
      */
     public function CandidateRemoveFromScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
+        if (!empty($request['applied_job_ids'])) {
+            $request['applied_job_ids'] = isset($request['applied_job_ids']) && is_array($request['applied_job_ids']) ? $request['applied_job_ids'] : explode(',', $request['applied_job_ids']);
+        }
+
         $rules = [
             'applied_job_ids' => [
                 'required',
