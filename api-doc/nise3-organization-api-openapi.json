@@ -9304,6 +9304,80 @@
                 }
             }
         },
+        "/jobs/recruitment-step-list/{jobId}": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get recruitment step list by jobId",
+                "description": "API endpoint to Get recruitment step list by jobId.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/jobId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "all_applications": {
+                                            "all": 0,
+                                            "total_candidate": 0,
+                                            "viewed": 0,
+                                            "not_viewed": 0,
+                                            "qualified": 1
+                                        },
+                                        "final_hiring_list": {
+                                            "total_candidate": 0
+                                        },
+                                        "steps": [
+                                            {
+                                                "id": 2,
+                                                "job_id": "3",
+                                                "title": "Other",
+                                                "title_en": "Other",
+                                                "step_type": 5,
+                                                "is_interview_reschedule_allowed": 1,
+                                                "interview_contact": "Malibagh,Dhaka",
+                                                "created_at": "2022-02-10T10:03:35.000000Z",
+                                                "updated_at": "2022-02-10T10:03:35.000000Z",
+                                                "total_candidate": 0,
+                                                "shortlisted": 0,
+                                                "qualified": 0,
+                                                "interview_scheduled": 0,
+                                                "rejected": 0
+                                            },
+                                            {
+                                                "id": 6,
+                                                "job_id": "3",
+                                                "title": "RunLolaRun",
+                                                "title_en": null,
+                                                "step_type": 2,
+                                                "is_interview_reschedule_allowed": 1,
+                                                "interview_contact": null,
+                                                "created_at": "2022-02-13T11:24:31.000000Z",
+                                                "updated_at": "2022-02-13T11:24:31.000000Z",
+                                                "total_candidate": 0,
+                                                "shortlisted": 0,
+                                                "qualified": 0,
+                                                "interview_scheduled": 0,
+                                                "rejected": 0
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
 
         "/jobs/candidates/all/{jobId}": {
