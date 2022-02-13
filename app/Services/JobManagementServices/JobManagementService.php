@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use phpDocumentor\Reflection\DocBlock\Description;
 use Throwable;
 
 class JobManagementService
@@ -820,13 +821,14 @@ class JobManagementService
 
     /**
      * @param array $request
-     * @param int $stepId
+     * @param string $jobId
+     * @param int|null $stepId
      * @return array
      */
-    public function getRecruitmentStepCandidateList(array $request, string $jobId, int $stepId): array
+    public function getRecruitmentStepCandidateList(array $request, string $jobId, int $stepId = null): array
     {
         $paginate = $request['page'] ?? "";
-        $pageSize = $request['page_size'] ?? "";
+        $pageSize = $request['page_size'] ?? BaseModel::DEFAULT_PAGE_SIZE;
         $applyStatus = $request['apply_status'] ?? "";
         $qualified = $request['qualified'] ?? "";
         $order = $request['order'] ?? "ASC";
@@ -847,9 +849,12 @@ class JobManagementService
             'applied_jobs.created_at',
             'applied_jobs.updated_at',
         ]);
-        if (!($qualified == AppliedJob::QUALIFIED_YES)) {
+        if (!($qualified == AppliedJob::QUALIFIED_YES) || $stepId != null) {
             $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
+        }
 
+        if ($stepId == null) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Applied']);
         }
 
         if (is_numeric($applyStatus)) {
@@ -857,7 +862,7 @@ class JobManagementService
         }
 
         if (is_numeric($qualified)) {
-            $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>',$qualified);
+            $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $qualified);
         }
 
         /** @var Collection $candidates */
@@ -885,6 +890,7 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
+
         foreach ($resultArray["data"] as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
@@ -895,13 +901,39 @@ class JobManagementService
 
         $resultData = $resultArray['data'] ?? $resultArray;
 
+
         $response['order'] = $order;
         $response['data'] = $resultData;
 
-        //TODO : Add statistcs for current step
         return $response;
+    }
 
 
+    public function countStepShortlistedCandidate(int $stepId = null)
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Shortlisted'])
+            ->where('current_recruitment_step_id', $stepId)
+            ->count('id');
+    }
+
+    public function countStepInterviewScheduledCandidate(int $stepId)
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Interview_scheduled'])
+            ->where('current_recruitment_step_id', $stepId)
+            ->count('id');
+    }
+
+    public function countStepRejectedCandidate(int $stepId = null)
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Rejected'])
+            ->where('current_recruitment_step_id', $stepId)
+            ->count('id');
+    }
+
+    public function countStepQualifiedCandidate(int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', '>', $stepId)
+            ->count('id');
     }
 
     /**
