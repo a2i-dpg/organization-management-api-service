@@ -32,7 +32,7 @@ class InterviewScheduleService
             'interview_schedules.updated_at',
             'interview_schedules.deleted_at'
         ]);
-        return $scheduleBuilder->firstOrFail();
+        return $scheduleBuilder->where('interview_schedules.id', $id)->firstOrFail();
     }
 
 

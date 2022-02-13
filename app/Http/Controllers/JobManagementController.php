@@ -727,7 +727,7 @@ class JobManagementController extends Controller
      */
     function getOneSchedule(int $id): JsonResponse
     {
-        $schedule = $this->interviewScheduleService->getSchedulesByStepId($id);
+        $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
 //        $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
