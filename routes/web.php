@@ -172,9 +172,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         });
 
-        $router->get('/organization-import-excel', function (\Illuminate\Http\Request $request) use ($router) {
+        $router->get('/organization-import-excel', function (\Illuminate\Http\Request $request) {
             $file = $request->file('organizations');
-
             \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
         });
     });
