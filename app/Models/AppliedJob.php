@@ -72,4 +72,34 @@ class AppliedJob extends Model
         "SMS and Email" => 3,
         "Other" => 4,
     ];
+
+    /** recruitment step candidate filter type*/
+    public const TYPE_ALL = "all";
+    public const TYPE_NOT_VIEWED = 'not_viewed';
+    public const TYPE_VIEWED = 'viewed';
+    public const TYPE_REJECTED = 'rejected';
+    public const TYPE_QUALIFIED = 'qualified';
+    public const TYPE_SHORTLISTED = 'shortlisted';
+    public const TYPE_SCHEDULED = 'scheduled';
+    public const TYPE_INTERVIEWED = 'interviewed';
+    public const TYPE_HIRE_SELECTED = 'hire_selected';
+    public const TYPE_HIRE_INVITED = 'hire_invited';
+    public const TYPE_HIRED = 'hired';
+
+
+    public const CANDIDATE_LIST_FILTER_TYPES = [
+        self:: TYPE_ALL,
+        self:: TYPE_NOT_VIEWED,
+        self::TYPE_VIEWED,
+        self:: TYPE_REJECTED,
+        self:: TYPE_QUALIFIED,
+        self:: TYPE_SHORTLISTED,
+        self:: TYPE_SCHEDULED,
+        self:: TYPE_INTERVIEWED,
+        self:: TYPE_HIRE_SELECTED,
+        self:: TYPE_HIRE_INVITED,
+        self:: TYPE_HIRED,
+
+    ];
+
 }
