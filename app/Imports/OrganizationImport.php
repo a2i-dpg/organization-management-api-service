@@ -2,9 +2,15 @@
 
 namespace App\Imports;
 
+use App\Facade\ServiceToServiceCall;
 use App\Http\Controllers\Controller;
 use App\Models\BaseModel;
+use App\Models\LocDistrict;
+use App\Models\LocDivision;
+use App\Models\LocUpazila;
 use App\Models\Organization;
+use App\Models\OrganizationType;
+use App\Models\SubTrade;
 use App\Services\CommonServices\CodeGenerateService;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
@@ -33,17 +39,50 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
     {
         /** @var Organization $organization */
         $organization = app(Organization::class);
-        $this->authorize('create', $organization);
+//        $this->authorize('create', $organization);
 
         $request = request()->all();
-        if(!empty($request['industry_association_id'])){
+        if (!empty($request['industry_association_id'])) {
             $data['industry_association_id'] = $request['industry_association_id'];
         }
-        if(!empty($request['sub_trade'])){
-            $data['sub_trades'] = [
-                $request['sub_trade']
-            ];
+        if(!empty($data['organization_type_id'])){
+            $organizationType = OrganizationType::where('title', $data['organization_type_id'])->firstOrFail();
+            $data['organization_type_id'] = $organizationType->id;
         }
+        if (!empty($data['sub_trade'])) {
+            $subTrade = SubTrade::where('title',$data['sub_trade'])->firstOrFail();
+            $data['sub_trades'] = [$subTrade->id];
+        }
+        if(!empty($data['permission_sub_group_id'])){
+            $permissionSubGroup = ServiceToServiceCall::getPermissionSubGroupsByTitle($data['permission_sub_group_id']);
+            $data['permission_sub_group_id'] = $permissionSubGroup['id'];
+        }
+        if(!empty($data['loc_division_id'])){
+            $division = LocDivision::where('title_en', $data['loc_division_id'])->firstOrFail();
+            $data['loc_division_id'] = $division->id;
+        }
+        if(!empty($data['loc_district_id'])){
+            $district = LocDistrict::where('title_en', $data['loc_district_id'])->firstOrFail();
+            $data['loc_district_id'] = $district->id;
+        }
+        if(!empty($data['loc_upazila_id'])){
+            $upazila = LocUpazila::where('title_en', $data['loc_upazila_id'])->firstOrFail();
+            $data['loc_upazila_id'] = $upazila->id;
+        }
+        if(!empty($data['date_of_establishment'])){
+            $data['date_of_establishment'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['date_of_establishment'])->format('Y-m-d');
+        }
+        if(!empty($data['phone_code']) && is_int($data['phone_code'])){
+            $data['phone_code'] = (string)$data['phone_code'];
+        }
+        if(!empty($data['mobile']) && is_int($data['mobile']) && strlen((string)$data['mobile']) == 10 && explode((string)$data['mobile'], '')[0] != 0){
+            $data['mobile'] = '0' . (string)$data['mobile'];
+        }
+        if(!empty($data['contact_person_mobile']) && is_int($data['contact_person_mobile']) && strlen((string)$data['contact_person_mobile']) == 10 && explode((string)$data['contact_person_mobile'], '')[0] != 0){
+            $data['contact_person_mobile'] = '0' . (string)$data['contact_person_mobile'];
+        }
+
+        Log::info("The data: " . json_encode($data));
 
         return $data;
     }
@@ -215,16 +254,6 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                 'nullable',
                 'string',
             ],
-            'domain' => [
-                'nullable',
-                'regex:/^(http|https):\/\/[a-zA-Z-\-\.0-9]+$/',
-                'string',
-                'max:191',
-                Rule::unique('organizations', 'domain')
-                    ->where(function (\Illuminate\Database\Query\Builder $query) {
-                        return $query->whereNull('deleted_at');
-                    })
-            ],
             'logo' => [
                 'nullable',
                 'string',
@@ -237,91 +266,73 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
     }
 
     /**
+     * Store rouse as bulk.
+     *
      * @param Collection $collection
      * @return JsonResponse
      * @throws Throwable
      */
     public function collection(Collection $collection): JsonResponse
     {
-        $validated = $collection->toArray();
-
-        /** @var Organization $organization */
-        $organization = app(Organization::class);
-
-        $validated['code'] = CodeGenerateService::getIndustryCode();
-
+        $rows = $collection->toArray();
         DB::beginTransaction();
         try {
+            foreach ($rows as $rowData){
+                $rowData['code'] = CodeGenerateService::getIndustryCode();
 
-            $organization = app(OrganizationService::class)->store($organization, $validated);
+                /** @var Organization $organization */
+                $organization = app(Organization::class);
 
-            app(OrganizationService::class)->syncWithSubTrades($organization, $validated['sub_trades']);
+                $organization = app(OrganizationService::class)->store($organization, $rowData);
 
-            if (!($organization && $organization->id)) {
-                throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
+                app(OrganizationService::class)->syncWithSubTrades($organization, $rowData['sub_trades']);
+
+                if (!($organization && $organization->id)) {
+                    throw new RuntimeException('Saving Organization/Industry to DB failed!', 500);
+                }
+
+                $rowData['organization_id'] = $organization->id;
+                $rowData['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
+
+                $createdRegisterUser = app(OrganizationService::class)->createUser($rowData);
+
+                Log::info('id_user_info:' . json_encode($createdRegisterUser));
+
+                if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
+                    throw new RuntimeException('Organization/Industry Creation has been failed for Contact person mobile: ' . $rowData['contact_person_mobile'], 500);
+                }
+
+                if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
+
+                    /** Mail send after user registration */
+                    $to = array($rowData['contact_person_email']);
+                    $from = BaseModel::NISE3_FROM_EMAIL;
+                    $subject = "User Registration Information";
+                    $message = "Congratulation, You are successfully complete your registration as " . $rowData['title'] . " user. Username: " . $rowData['contact_person_mobile'] . " & Password: " . $rowData['password'];
+                    $messageBody = MailService::templateView($message);
+                    $mailService = new MailService($to, $from, $subject, $messageBody);
+                    $mailService->sendMail();
+
+                    /** SMS send after user registration */
+                    $recipient = $rowData['contact_person_mobile'];
+                    $smsMessage = "You are successfully complete your registration as " . $rowData['title'] . " user";
+                    $smsService = new SmsService();
+                    $smsService->sendSms($recipient, $smsMessage);
+                } else {
+                    throw new RuntimeException('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
+                }
             }
-
-            $validated['organization_id'] = $organization->id;
-            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
-
-            $createdRegisterUser = app(OrganizationService::class)->createUser($validated);
-
-            Log::info('id_user_info:' . json_encode($createdRegisterUser));
-
-            if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
-                throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
-            }
+            DB::commit();
 
             $response = [
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Organization has been Created Successfully",
-                    "query_time" => Carbon::class->diffInSeconds(\Illuminate\Support\Carbon::now()),
+                    "message" => "Organizations has been Created Successfully"
                 ]
             ];
 
-            if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
-
-                /** Mail send after user registration */
-                $to = array($validated['contact_person_email']);
-                $from = BaseModel::NISE3_FROM_EMAIL;
-                $subject = "User Registration Information";
-                $message = "Congratulation, You are successfully complete your registration as " . $validated['title'] . " user. Username: " . $validated['contact_person_mobile'] . " & Password: " . $validated['password'];
-                $messageBody = MailService::templateView($message);
-                $mailService = new MailService($to, $from, $subject, $messageBody);
-                $mailService->sendMail();
-
-                /** SMS send after user registration */
-                $recipient = $validated['contact_person_mobile'];
-                $smsMessage = "You are successfully complete your registration as " . $validated['title'] . " user";
-                $smsService = new SmsService();
-                $smsService->sendSms($recipient, $smsMessage);
-
-                $response['data'] = $organization;
-                DB::commit();
-                return Response::json($response, ResponseAlias::HTTP_CREATED);
-            }
-
-            DB::rollBack();
-
-            $httpStatusCode = ResponseAlias::HTTP_BAD_REQUEST;
-            if (!empty($createdRegisterUser['_response_status']['code'])) {
-                $httpStatusCode = $createdRegisterUser['_response_status']['code'];
-            }
-
-            $response['_response_status'] = [
-                "success" => false,
-                "code" => $httpStatusCode,
-                "message" => "Error Occurred. Please Contact.",
-                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
-            ];
-
-            if (!empty($createdRegisterUser['errors'])) {
-                $response['errors'] = $createdRegisterUser['errors'];
-            }
-
-            return Response::json($response, $httpStatusCode);
+            return Response::json($response, ResponseAlias::HTTP_CREATED);
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
