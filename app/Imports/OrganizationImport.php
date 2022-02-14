@@ -269,10 +269,10 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
      * Store rouse as bulk.
      *
      * @param Collection $collection
-     * @return JsonResponse
+     * @return void
      * @throws Throwable
      */
-    public function collection(Collection $collection): JsonResponse
+    public function collection(Collection $collection): void
     {
         $rows = $collection->toArray();
         DB::beginTransaction();
@@ -323,16 +323,6 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                 }
             }
             DB::commit();
-
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Organizations has been Created Successfully"
-                ]
-            ];
-
-            return Response::json($response, ResponseAlias::HTTP_CREATED);
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;

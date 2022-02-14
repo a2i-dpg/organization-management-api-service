@@ -751,15 +751,15 @@
             }
         },
         "/organization-import-excel": {
-            "get": {
+            "post": {
                 "tags": [
                     "organization"
                 ],
-                "summary": "Import excel",
-                "description": "Api endpoint to import excel",
+                "summary": "Organization Import excel by Industry Association User",
+                "description": "Api endpoint to import excel for organizations registration",
                 "responses": {
                     "200": {
-                        "description": "successfull",
+                        "description": "successful",
                         "content": {
                             "application/xml": {
                                 "example": {}
