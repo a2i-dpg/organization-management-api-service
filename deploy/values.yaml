@@ -32,7 +32,7 @@ variables:
   serviceTargetPort: 80
 
   #app buil image
-  imageRepository: "registry.nise.gov.bd/nise3-organization-management-api-service"
+  imageRepository: "registry.nise3.xyz/nise3-organization-management-api-service"
 
   #git hub project id
   githubProjectRepoID: "28047551"
