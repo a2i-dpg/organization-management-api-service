@@ -338,6 +338,29 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function youthJobs(Request $request): JsonResponse
+    {
+        $validatedData = $this->jobManagementService->youthJobsValidator($request)->validate();
+        $validatedData["youth_only"] = "1";
+        $youthJobs = $this->jobManagementService->getJobList($validatedData, Carbon::now());
+
+        $response = [
+            "data" => $youthJobs,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "My jobs list get successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param int $applicationId
      * @return JsonResponse
      */
@@ -665,15 +688,14 @@ class JobManagementController extends Controller
     /**
      * @param Request $request
      * @param string $jobId
-     * @param int|null $stepId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function recruitmentStepCandidateList(Request $request, string $jobId, int $stepId = null): JsonResponse
+    public function recruitmentStepCandidateList(Request $request, string $jobId): JsonResponse
     {
         $filter = $this->jobManagementService->recruitmentStepCandidateListFilterValidator($request)->validate();
 
-        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter, $jobId, $stepId);
+        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter, $jobId);
 
         $response['_response_status'] = [
             "success" => true,
