@@ -7355,6 +7355,9 @@
                         "$ref": "#/components/parameters/skillIds"
                     },
                     {
+                        "$ref": "#/components/parameters/job_level"
+                    },
+                    {
                         "$ref": "#/components/parameters/type"
                     },
                     {
@@ -7380,13 +7383,148 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "job_id": "qq-qq",
+                                            "job_id": "3",
                                             "service_type": 2,
-                                            "job_title": "Asansole",
-                                            "job_title_en": null,
+                                            "job_title": "RunLolaRun",
+                                            "job_title_en": "RunLolaRun",
+                                            "no_of_vacancies": 20,
+                                            "occupation_id": 1,
+                                            "job_sector_id": 1,
+                                            "industry_association_id": 1,
+                                            "organization_id": null,
+                                            "institute_id": null,
+                                            "application_deadline": "2022-09-09",
                                             "published_at": null,
                                             "archived_at": null,
-                                            "application_deadline": "2020-09-09"
+                                            "is_apply_online": 1,
+                                            "minimum_year_of_experience": 1,
+                                            "maximum_year_of_experience": 2,
+                                            "industry_association_title": "মেট্রোপলিটন চেম্বার অব কমার্স অ্যান্ড ইন্ড্রাস্ট্রি, ঢাকা",
+                                            "industry_association_title_en": "Metropolitan Chamber of Commerce & Industry, Dhaka (MCCI)",
+                                            "industry_association_logo": null,
+                                            "industry_association_address": "Chamber Building (4th Floor), 122-124, Motijheel CA, Dhaka-1000, Bangladesh",
+                                            "industry_association_address_en": "Chamber Building (4th Floor), 122-124, Motijheel CA, Dhaka-1000, Bangladesh",
+                                            "organization_title": null,
+                                            "organization_title_en": null,
+                                            "organization_logo": null,
+                                            "organization_address": null,
+                                            "organization_address_en": null,
+                                            "row_status": 1,
+                                            "applications": "1",
+                                            "shortlisted": "0",
+                                            "interviewed": "1",
+                                            "has_applied": "0",
+                                            "additional_job_information": {
+                                                "id": 1,
+                                                "job_id": "3",
+                                                "job_responsibilities": "aadddd",
+                                                "job_responsibilities_en": "ffgggg",
+                                                "job_context": "sdasdasd",
+                                                "job_context_en": "asdasdasd",
+                                                "job_place_type": 1,
+                                                "salary_min": 1000,
+                                                "salary_max": 2000,
+                                                "is_salary_info_show": 1,
+                                                "is_salary_compare_to_expected_salary": 1,
+                                                "is_salary_alert_excessive_than_given_salary_range": 1,
+                                                "salary_review": 1,
+                                                "festival_bonus": 1,
+                                                "additional_salary_info": "1",
+                                                "additional_salary_info_en": "2",
+                                                "is_other_benefits": 1,
+                                                "lunch_facilities": null,
+                                                "others": null,
+                                                "others_en": null,
+                                                "created_at": "2022-02-10T08:34:28.000000Z",
+                                                "updated_at": "2022-02-10T08:34:28.000000Z",
+                                                "deleted_at": null,
+                                                "job_locations": [
+                                                    {
+                                                        "id": 1,
+                                                        "job_id": "3",
+                                                        "additional_job_information_id": 1,
+                                                        "loc_division_id": 1,
+                                                        "loc_district_id": null,
+                                                        "loc_upazila_id": null,
+                                                        "loc_union_id": null,
+                                                        "loc_city_corporation_id": null,
+                                                        "loc_city_corporation_ward_id": null,
+                                                        "loc_area_id": null,
+                                                        "loc_division_title": "বরিশাল",
+                                                        "loc_division_title_en": "Barisal",
+                                                        "loc_district_title": null,
+                                                        "loc_district_title_en": null,
+                                                        "loc_area_title": null,
+                                                        "loc_area_title_en": null,
+                                                        "location_id": 1,
+                                                        "title": "বরিশাল",
+                                                        "title_en": "BARISAL"
+                                                    },
+                                                    {
+                                                        "id": 2,
+                                                        "job_id": "3",
+                                                        "additional_job_information_id": 1,
+                                                        "loc_division_id": 2,
+                                                        "loc_district_id": null,
+                                                        "loc_upazila_id": null,
+                                                        "loc_union_id": null,
+                                                        "loc_city_corporation_id": null,
+                                                        "loc_city_corporation_ward_id": null,
+                                                        "loc_area_id": null,
+                                                        "loc_division_title": "চট্টগ্রাম",
+                                                        "loc_division_title_en": "Chittagong",
+                                                        "loc_district_title": null,
+                                                        "loc_district_title_en": null,
+                                                        "loc_area_title": null,
+                                                        "loc_area_title_en": null,
+                                                        "location_id": 2,
+                                                        "title": "চট্টগ্রাম",
+                                                        "title_en": "CHITTAGONG"
+                                                    }
+                                                ],
+                                                "job_levels": [
+                                                    {
+                                                        "id": 1,
+                                                        "job_id": "3",
+                                                        "additional_job_information_id": 1,
+                                                        "job_level_id": 1,
+                                                        "job_level_title": "Inside Bangladesh"
+                                                    }
+                                                ]
+                                            },
+                                            "candidate_requirement": {
+                                                "id": 1,
+                                                "job_id": "3",
+                                                "other_educational_qualification": "enim Excepteur sunt esse ullamco",
+                                                "other_educational_qualification_en": "in dolor labore sunt",
+                                                "is_experience_needed": 0,
+                                                "is_freshers_encouraged": 1,
+                                                "minimum_year_of_experience": 1,
+                                                "maximum_year_of_experience": 2,
+                                                "additional_requirements": "exercitation culpa ad nulla",
+                                                "additional_requirements_en": "reprehenderit incididunt sint deserunt",
+                                                "age_minimum": 20,
+                                                "age_maximum": 22,
+                                                "person_with_disability": 1,
+                                                "preferred_retired_army_officer": 1,
+                                                "created_at": "2022-02-10T08:34:45.000000Z",
+                                                "updated_at": "2022-02-10T08:34:45.000000Z",
+                                                "deleted_at": null,
+                                                "skills": [
+                                                    {
+                                                        "id": 1,
+                                                        "title": "টেকনিকাল রাইটিং",
+                                                        "title_en": "Technical Writing",
+                                                        "deleted_at": null
+                                                    },
+                                                    {
+                                                        "id": 2,
+                                                        "title": "প্রজেক্ট ম্যানেজমেন্ট",
+                                                        "title_en": "Project Management",
+                                                        "deleted_at": null
+                                                    }
+                                                ]
+                                            }
                                         }
                                     ],
                                     "_response_status": {
@@ -14945,6 +15083,15 @@
             }
         },
         "parameters": {
+            "job_level": {
+                "name": "job_level",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "description": "  1 => \"Entry\",\n        2 => \"Mid\",\n        3 => \"Top\""
+            },
             "scheduleId": {
                 "name": "scheduleId",
                 "in": "path",
