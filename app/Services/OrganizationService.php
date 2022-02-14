@@ -1074,6 +1074,26 @@ class OrganizationService
 
     /**
      * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function excelImportValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+        $rules = [
+            [
+                'file'      => $request->file,
+                'extension' => strtolower($request->file->getClientOriginalExtension()),
+            ],
+            [
+                'file'          => 'required',
+                'extension'      => 'required|in:xlsx,xls',
+            ]
+        ];
+        return Validator::make($data, $rules);
+    }
+
+    /**
+     * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
