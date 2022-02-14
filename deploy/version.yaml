@@ -4,4 +4,4 @@ variables:
   imageAppVersion: "2.1.11"
 
   #app buil image
-  imageRepository: "registry.nise.gov.bd/nise3-organization-management-api-service"
+  imageRepository: "registry.nise3.xyz/nise3-organization-management-api-service"
