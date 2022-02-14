@@ -750,6 +750,25 @@
                 ]
             }
         },
+        "/organization-import-excel": {
+            "get": {
+                "tags": [
+                    "organization"
+                ],
+                "summary": "Import excel",
+                "description": "Api endpoint to import excel",
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/xml": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/organizations": {
             "get": {
                 "summary": "get list",
