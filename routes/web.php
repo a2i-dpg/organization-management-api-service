@@ -170,10 +170,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         });
 
-        $router->get('/organization-import-excel', function (\Illuminate\Http\Request $request) {
-            $file = $request->file('organizations');
-            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
-        });
+        $router->post('/organization-import-excel', ["as" => "organization.import.excel", "uses" => "OrganizationController@bulkStoreByExcel"]);
     });
 
     /** Service to service direct call without any authorization and authentication */
