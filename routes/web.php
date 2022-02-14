@@ -14,12 +14,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/test-excel', function () use ($router) {
-
-    $file = public_path() .'/organization-list.xlsx';
-    \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
-});
-
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
@@ -174,6 +168,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('exam-degrees', ["as" => "exam-degrees.get-list", "uses" => "ExamDegreeController@getList"]);
             $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
 
+        });
+
+        $router->get('/organization-import-excel', function (\Illuminate\Http\Request $request) {
+            $file = $request->file('organizations');
+            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
         });
     });
 

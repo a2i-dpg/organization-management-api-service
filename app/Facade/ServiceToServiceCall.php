@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getAuthUserWithRolePermission(string $idpUserId)
  * @method static array|mixed getInstituteTitleByIds(array $idpUserId)
  * @method static array|mixed getYouthProfilesByIds(array $youthIds)
+ * @method static array|mixed getPermissionSubGroupsByTitle(string $permissionSubGroupTitle)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler
