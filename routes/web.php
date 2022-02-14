@@ -126,14 +126,12 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
+            /** step schedule routes */
+            $router->get('step-schedule/get/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
+            $router->post('step-schedule/post', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
+            $router->put('step-schedule/put/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
+            $router->delete('step-schedule/delete/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@destroySchedule"]);
 
-            $router->group(["prefix" => "step-schedule", "as" => "step-schedule"], function () use ($router) {
-                $router->post('create', ["as" => "create-schedule", "uses" => "JobManagementController@createSchedule"]);
-                $router->put('update/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@updateSchedule"]);
-                $router->put('update/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@updateSchedule"]);
-                $router->get('get/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@getOneSchedule"]);
-                $router->delete('delete/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@destroySchedule"]);
-            });
 
             /** Update candidate status in interview steps  */
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
