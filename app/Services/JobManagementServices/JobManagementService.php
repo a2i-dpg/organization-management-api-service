@@ -854,6 +854,8 @@ class JobManagementService
             'applied_jobs.youth_id',
             'applied_jobs.apply_status',
             'applied_jobs.current_recruitment_step_id',
+            'recruitment_steps.title as current_recruitment_step_title ',
+            'recruitment_steps.title_en as current_recruitment_step_title_en ',
             'applied_jobs.applied_at',
             'applied_jobs.profile_viewed_at',
             'applied_jobs.expected_salary',
@@ -863,6 +865,12 @@ class JobManagementService
             'applied_jobs.created_at',
             'applied_jobs.updated_at',
         ]);
+
+        $appliedJobBuilder->leftJoin('recruitment_steps', function ($join){
+            $join->on('applied_jobs.current_recruitment_step_id', '=', 'recruitment_steps.id')
+                ->whereNull('recruitment_steps.deleted_at');
+        });
+
         if (!($qualified == AppliedJob::QUALIFIED_YES) || $stepId != null) {
             $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
         }
