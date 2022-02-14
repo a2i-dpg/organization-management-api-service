@@ -87,6 +87,7 @@ class JobManagementService
         $instituteId = $request['institute_id'] ?? "";
         $organizationId = $request['organization_id'] ?? "";
         $youthId = $request['youth_id'] ?? "";
+        $jobLevel = $request['job_level'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -222,13 +223,24 @@ class JobManagementService
         }
 
         $jobInformationBuilder->with('additionalJobInformation');
+        $jobInformationBuilder->with('additionalJobInformation.jobLocations');
+        $jobInformationBuilder->with('additionalJobInformation.jobLevels');
+
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
-            $jobInformationBuilder->with(['additionalJobInformation.jobLocations' => function ($query) use ($locDistrictIds) {
+            $jobInformationBuilder->whereHas('additionalJobInformation.jobLocations' ,function ($query) use ($locDistrictIds) {
                 $query->whereIn('additional_job_information_job_locations.loc_district_id', $locDistrictIds);
-            }]);
+            });
+        }
+
+        if (is_numeric($jobLevel)) {
+            $jobInformationBuilder->whereHas('additionalJobInformation.jobLevels', function ($query) use ($jobLevel) {
+                $query->where('additional_job_information_job_levels.job_level_id', $jobLevel);
+            });
         } else {
-            $jobInformationBuilder->with('additionalJobInformation.jobLocations');
+
+            $jobInformationBuilder->with('additionalJobInformation.jobLevels');
+
         }
 
         $jobInformationBuilder->with('candidateRequirement');
@@ -309,7 +321,11 @@ class JobManagementService
             'organization_id' => 'nullable|integer',
             'institute_id' => 'nullable|integer',
             'youth_id' => 'nullable|integer',
-
+            'job_level' => [
+                'nullable',
+                'integer',
+                Rule::in(array_keys(AdditionalJobInformation::JOB_LEVEL))
+            ],
             'loc_district_ids' => [
                 'nullable',
                 'array',

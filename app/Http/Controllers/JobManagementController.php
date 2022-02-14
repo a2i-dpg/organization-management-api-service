@@ -261,7 +261,7 @@ class JobManagementController extends Controller
                 'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
                 'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
                 'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
-                '$jobStatus' => $jobStatus
+                'job_status' => $jobStatus
             ]);
             $data["latest_step"] = $step;
             $response["data"] = $data;
