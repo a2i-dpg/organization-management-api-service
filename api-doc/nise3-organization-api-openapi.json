@@ -7695,6 +7695,56 @@
                 }
             }
         },
+        "/jobs/other-benefits": {
+            "get": {
+                "tags": [
+                    "Job Management"
+                ],
+                "summary": "Get Job id",
+                "description": "API endpoint to Get Job id.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title_en_optional"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order": "ASC",
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title": "T/A",
+                                            "title_en": "T/A",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title": "Mobile bill",
+                                            "title_en": "Mobile bill",
+                                            "created_at": null,
+                                            "updated_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/jobs/store-primary-job-information": {
             "post": {
                 "tags": [
@@ -9411,6 +9461,47 @@
                                             }
                                         ]
                                     },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/recruitment-steps/{stepId}/schedules": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get recruitment step schedules by jobId",
+                "description": "API endpoint to Get recruitment step schedules by stepId.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "recruitment_step_id": "2",
+                                            "interview_scheduled_at": null,
+                                            "maximum_number_of_applicants": 12,
+                                            "interview_invite_type": null,
+                                            "interview_address": "Uttara",
+                                            "created_at": "2022-02-13T04:37:49.000000Z",
+                                            "updated_at": "2022-02-13T04:37:49.000000Z",
+                                            "deleted_at": null
+                                        }
+                                    ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
