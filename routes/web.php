@@ -127,10 +127,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
             /** step schedule routes */
-            $router->get('step-schedule/get/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
-            $router->post('step-schedule/post', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
-            $router->put('step-schedule/put/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
-            $router->delete('step-schedule/delete/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@destroySchedule"]);
+            $router->get('step-schedule/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
+            $router->post('step-schedule', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
+            $router->put('step-schedule/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
+            $router->delete('step-schedule/{id}', ["as" => "step-schedule.delete", "uses" => "JobManagementController@destroySchedule"]);
 
 
             /** Update candidate status in interview steps  */
