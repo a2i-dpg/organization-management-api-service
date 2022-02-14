@@ -9423,6 +9423,47 @@
                 }
             }
         },
+        "/jobs/recruitment-steps/{stepId}/schedules": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get recruitment step schedules by jobId",
+                "description": "API endpoint to Get recruitment step schedules by stepId.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/stepId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "recruitment_step_id": "2",
+                                            "interview_scheduled_at": null,
+                                            "maximum_number_of_applicants": 12,
+                                            "interview_invite_type": null,
+                                            "interview_address": "Uttara",
+                                            "created_at": "2022-02-13T04:37:49.000000Z",
+                                            "updated_at": "2022-02-13T04:37:49.000000Z",
+                                            "deleted_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
         "/jobs/candidates/all/{jobId}": {
             "get": {
