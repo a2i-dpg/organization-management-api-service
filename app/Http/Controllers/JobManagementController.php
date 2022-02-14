@@ -495,7 +495,7 @@ class JobManagementController extends Controller
      * @param string $jobId
      * @return JsonResponse
      */
-    public function getRecruitmentStepList(Request $request,string $jobId): JsonResponse
+    public function getRecruitmentStepList(Request $request, string $jobId): JsonResponse
     {
         $recruitmentStep = $this->jobManagementService->getRecruitmentStepList($jobId);
         $response = [
