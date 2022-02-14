@@ -109,6 +109,7 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\RabbitMQServiceProvider::class);
 $app->register(VladimirYuldashev\LaravelQueueRabbitMQ\LaravelQueueRabbitMQServiceProvider::class);
+$app->register(\Maatwebsite\Excel\ExcelServiceProvider::class);
 
 if ($app->environment('local')) {
     $app->register(App\Iseed\IseedServiceProvider::class);

@@ -14,12 +14,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/test-excel', function () use ($router) {
-
-    $file = public_path() .'/organization-list.xlsx';
-    \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
-});
-
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
@@ -127,10 +121,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
             /** step schedule routes */
-            $router->get('step-schedule/get/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
-            $router->post('step-schedule/post', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
-            $router->put('step-schedule/put/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
-            $router->delete('step-schedule/delete/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@destroySchedule"]);
+            $router->get('step-schedule/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
+            $router->post('step-schedule', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
+            $router->put('step-schedule/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
+            $router->delete('step-schedule/{id}', ["as" => "step-schedule.delete", "uses" => "JobManagementController@destroySchedule"]);
 
 
             /** Update candidate status in interview steps  */
@@ -175,6 +169,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
 
         });
+
+        $router->get('/organization-import-excel', function (\Illuminate\Http\Request $request) {
+            $file = $request->file('organizations');
+            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
+        });
     });
 
     /** Service to service direct call without any authorization and authentication */
@@ -190,6 +189,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** apply to job from youth service */
         $router->post("apply-to-job", ["as" => "service-to-service-call.apply-to-job", "uses" => "JobManagementController@applyToJob"]);
+
+        /** get youth jobs from youth service */
+        $router->get("youth-jobs", ["as" => "service-to-service-call.youth-jobs", "uses" => "JobManagementController@youthJobs"]);
     });
 
 

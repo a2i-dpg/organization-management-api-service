@@ -261,7 +261,7 @@ class JobManagementController extends Controller
                 'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
                 'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
                 'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
-                '$jobStatus' => $jobStatus
+                'job_status' => $jobStatus
             ]);
             $data["latest_step"] = $step;
             $response["data"] = $data;
@@ -334,6 +334,29 @@ class JobManagementController extends Controller
             DB::rollBack();
             throw $exception;
         }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function youthJobs(Request $request): JsonResponse
+    {
+        $validatedData = $this->jobManagementService->youthJobsValidator($request)->validate();
+        $validatedData["youth_only"] = "1";
+        $youthJobs = $this->jobManagementService->getJobList($validatedData, Carbon::now());
+
+        $response = [
+            "data" => $youthJobs,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "My jobs list get successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
