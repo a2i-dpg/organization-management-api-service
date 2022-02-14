@@ -10937,16 +10937,10 @@
                         "$ref": "#/components/parameters/jobId"
                     },
                     {
-                        "$ref": "#/components/parameters/stepId_q"
+                        "$ref": "#/components/parameters/step_id"
                     },
                     {
                         "$ref": "#/components/parameters/type_q"
-                    },
-                    {
-                        "$ref": "#/components/parameters/apply_status_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/organization_type_id_optional"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -15133,10 +15127,10 @@
                     "type": "integer"
                 }
             },
-            "stepId_q": {
-                "name": "stepId",
+            "step_id": {
+                "name": "step_id",
                 "in": "query",
-                "required": true,
+                "required": false,
                 "schema": {
                     "type": "integer"
                 }
