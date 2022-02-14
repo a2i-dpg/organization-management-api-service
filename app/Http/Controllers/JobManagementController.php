@@ -665,15 +665,14 @@ class JobManagementController extends Controller
     /**
      * @param Request $request
      * @param string $jobId
-     * @param int|null $stepId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function recruitmentStepCandidateList(Request $request, string $jobId, int $stepId = null): JsonResponse
+    public function recruitmentStepCandidateList(Request $request, string $jobId): JsonResponse
     {
         $filter = $this->jobManagementService->recruitmentStepCandidateListFilterValidator($request)->validate();
 
-        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter, $jobId, $stepId);
+        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter, $jobId);
 
         $response['_response_status'] = [
             "success" => true,
