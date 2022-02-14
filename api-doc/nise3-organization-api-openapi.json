@@ -10945,7 +10945,7 @@
                 }
             }
         },
-        "/jobs/step-schedule/create": {
+        "/jobs/step-schedule/post": {
             "post": {
                 "tags": ["Job Interview"],
                 "summary": "Create a recruitment step-schedule for a job interview",
@@ -10989,14 +10989,14 @@
                 }
             }
         },
-        "/jobs/step-schedule/update/{stepId}": {
+        "/jobs/step-schedule/put/{scheduleId}": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Update a step-schedule step of a job interview",
                 "description": "API endpoint to Update a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/stepId"
+                        "$ref": "#/components/parameters/scheduleId"
                     }
                 ],
                 "requestBody": {
@@ -11039,14 +11039,14 @@
                 }
             }
         },
-        "/jobs/step-schedule/get/{stepId}": {
+        "/jobs/step-schedule/get/{scheduleId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get a step-schedule step of a job interview",
                 "description": "API endpoint to Get a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/stepId"
+                        "$ref": "#/components/parameters/scheduleId"
                     }
                 ],
                 "responses": {
@@ -11078,14 +11078,14 @@
                 }
             }
         },
-        "/jobs/step-schedule/delete/{stepId}": {
+        "/jobs/step-schedule/delete/{scheduleId}": {
             "delete": {
                 "tags": ["Job Interview"],
                 "summary": "Delete a step-schedule step of a job interview",
                 "description": "API endpoint to Delete a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/stepId"
+                        "$ref": "#/components/parameters/scheduleId"
                     }
                 ],
                 "responses": {
