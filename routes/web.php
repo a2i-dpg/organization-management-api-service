@@ -22,6 +22,7 @@ $router->get('/test-excel', function () use ($router) {
 
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
+
     /** Api info  */
     $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
     /** IndustryAssociation Registration Approval */
