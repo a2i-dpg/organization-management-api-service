@@ -993,17 +993,19 @@ class JobManagementService
     /**
      * @return mixed
      */
-    public function countFinalHiringListCandidate(): mixed
+    public function countFinalHiringListCandidate(string $jobId): mixed
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
             ->whereNull('current_recruitment_step_id')
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
-    public function countStepAcceptedCandidate(int $stepId = null)
+    public function countStepAcceptedCandidate(string $jobId)
     {
         return AppliedJob::where('apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-            ->where('current_recruitment_step_id', $stepId)
+            ->whereNull('current_recruitment_step_id')
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
