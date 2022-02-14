@@ -189,6 +189,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** apply to job from youth service */
         $router->post("apply-to-job", ["as" => "service-to-service-call.apply-to-job", "uses" => "JobManagementController@applyToJob"]);
+
+        /** get youth jobs from youth service */
+        $router->get("youth-jobs", ["as" => "service-to-service-call.youth-jobs", "uses" => "JobManagementController@youthJobs"]);
     });
 
 

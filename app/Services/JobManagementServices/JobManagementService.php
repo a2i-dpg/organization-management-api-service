@@ -86,6 +86,7 @@ class JobManagementService
         $industryAssociationId = $request['industry_association_id'] ?? "";
         $instituteId = $request['institute_id'] ?? "";
         $organizationId = $request['organization_id'] ?? "";
+        $youthOnly = $request['youth_only'] ?? "";
         $youthId = $request['youth_id'] ?? "";
         $jobLevel = $request['job_level'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -245,6 +246,10 @@ class JobManagementService
 
         $jobInformationBuilder->with('candidateRequirement');
         $jobInformationBuilder->with('candidateRequirement.skills');
+
+        if (!empty($youthOnly) && !empty($youthId)) {
+            $jobInformationBuilder->where("applied_jobs.youth_id", $youthId);
+        }
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
@@ -650,6 +655,24 @@ class JobManagementService
         ];
 
         return validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function youthJobsValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $requestData = $request->all();
+
+        $rules = [
+            "youth_id" => [
+                "required",
+                "integer"
+            ],
+        ];
+
+        return Validator::make($requestData, $rules);
     }
 
     /**
