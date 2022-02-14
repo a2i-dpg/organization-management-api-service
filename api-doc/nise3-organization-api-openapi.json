@@ -10792,167 +10792,6 @@
                 }
             }
         },
-        "/jobs/recruitment-step-candidate-list/{jobId}/{stepId}": {
-            "get": {
-                "tags": ["Job Interview"],
-                "summary": "Get a recruitment step candidate list of a job interview by step Id",
-                "description": "Get a recruitment step candidate list of a job interview by step Id. A successful request response will show 201 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/jobId"
-                    },
-                    {
-                        "$ref": "#/components/parameters/stepId"
-                    },
-                    {
-                        "$ref": "#/components/parameters/apply_status_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/organization_type_id_optional"
-                    },
-                    {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/page_size"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successfull",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "current_page": 1,
-                                    "total_page": 1,
-                                    "page_size": 10,
-                                    "total": 1,
-                                    "order": "ASC",
-                                    "data": [
-                                        {
-                                            "id": 2,
-                                            "job_id": "3",
-                                            "youth_id": 1,
-                                            "apply_status": 0,
-                                            "current_recruitment_step_id": 1,
-                                            "applied_at": "2022-02-10 10:13:01",
-                                            "profile_viewed_at": "0000-00-00 00:00:00",
-                                            "expected_salary": 500,
-                                            "hire_invited_at": "2022-02-10 10:25:56",
-                                            "hired_at": "0000-00-00 00:00:00",
-                                            "hire_invite_type": 1,
-                                            "created_at": "2022-02-10T10:13:01.000000Z",
-                                            "updated_at": "2022-02-10T10:25:56.000000Z",
-                                            "match_rate": 0,
-                                            "youth_profile": {
-                                                "id": 1,
-                                                "username": "ffff",
-                                                "user_name_type": 0,
-                                                "first_name": "",
-                                                "first_name_en": null,
-                                                "last_name": "",
-                                                "last_name_en": null,
-                                                "expected_salary": 1000,
-                                                "job_level": 2,
-                                                "loc_division_id": null,
-                                                "code": "",
-                                                "division_title": null,
-                                                "division_title_en": null,
-                                                "loc_district_id": null,
-                                                "district_title": null,
-                                                "district_title_en": null,
-                                                "loc_upazila_id": null,
-                                                "upazila_title": null,
-                                                "upazila_title_en": null,
-                                                "gender": 0,
-                                                "religion": null,
-                                                "is_freelance_profile": 0,
-                                                "marital_status": null,
-                                                "nationality": 1,
-                                                "email": null,
-                                                "mobile": null,
-                                                "identity_number_type": null,
-                                                "identity_number": null,
-                                                "date_of_birth": "-000001-11-30T00:00:00.000000Z",
-                                                "freedom_fighter_status": 1,
-                                                "physical_disability_status": 0,
-                                                "does_belong_to_ethnic_group": 0,
-                                                "bio": null,
-                                                "bio_en": null,
-                                                "photo": null,
-                                                "cv_path": null,
-                                                "signature_image_path": null,
-                                                "row_status": 1,
-                                                "created_at": null,
-                                                "updated_at": "2022-02-01T12:27:51.000000Z",
-                                                "profile_completed": 0,
-                                                "total_job_experience": {
-                                                    "year": 0,
-                                                    "month": 6
-                                                },
-                                                "physical_disabilities": [],
-                                                "youth_languages_proficiencies": [],
-                                                "skills": [],
-                                                "youth_educations": [],
-                                                "youth_job_experiences": [
-                                                    {
-                                                        "id": 1,
-                                                        "youth_id": 1,
-                                                        "employment_type_id": 1,
-                                                        "company_name": "HurrayLand",
-                                                        "company_name_en": null,
-                                                        "position": "AnonymousKing",
-                                                        "position_en": null,
-                                                        "location": "YourFather'sHouse",
-                                                        "location_en": null,
-                                                        "job_responsibilities": null,
-                                                        "job_responsibilities_en": null,
-                                                        "start_date": "2022-09-09T00:00:00.000000Z",
-                                                        "end_date": null,
-                                                        "is_currently_working": 1,
-                                                        "created_at": "2022-02-02T04:28:44.000000Z",
-                                                        "updated_at": "2022-02-02T04:49:21.000000Z",
-                                                        "deleted_at": null,
-                                                        "area_of_experiences": [
-                                                            {
-                                                                "id": 1,
-                                                                "youth_id": "1",
-                                                                "youth_job_experience_id": "1",
-                                                                "area_of_experience_id": 1,
-                                                                "title": "টেকনিকাল রাইটিং",
-                                                                "title_en": "Technical Writing"
-                                                            }
-                                                        ],
-                                                        "area_of_businesses": [
-                                                            {
-                                                                "id": 1,
-                                                                "youth_id": "1",
-                                                                "youth_job_experience_id": "1",
-                                                                "area_of_business_id": 1,
-                                                                "title": "Banks",
-                                                                "title_en": null
-                                                            }
-                                                        ]
-                                                    }
-                                                ],
-                                                "youth_certifications": [],
-                                                "youth_portfolios": [],
-                                                "youth_addresses": []
-                                            }
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/jobs/recruitment-step-candidate-list/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
@@ -10961,6 +10800,12 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/jobId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/stepId_q"
+                    },
+                    {
+                        "$ref": "#/components/parameters/type_q"
                     },
                     {
                         "$ref": "#/components/parameters/apply_status_optional"
@@ -15151,6 +14996,23 @@
                 "required": true,
                 "schema": {
                     "type": "integer"
+                }
+            },
+            "stepId_q": {
+                "name": "stepId",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "type_q": {
+                "name": "type",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "enum": ["all" , "not_viewed" , "viewed" , "rejected" , "qualified" , "shortlisted" , "scheduled" , "interviewed" , "hire_selected" , "hire_invited" , "hired"]
                 }
             },
             "type": {
