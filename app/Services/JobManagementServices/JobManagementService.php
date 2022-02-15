@@ -990,6 +990,7 @@ class JobManagementService
             $youthData = $indexedYouths[$id];
             $matchRate = $this->getMatchPercent($item, $youthData, $matchingCriteria);
             $item['match_rate'] = $matchRate;
+            $item['apply_count'] = $this->youthApplyCountToSpecificOrganization($item['youth_id'], $item['job_id']);
             $item['youth_profile'] = $youthData;
         }
 
@@ -1000,6 +1001,39 @@ class JobManagementService
         $response['data'] = $resultData;
 
         return $response;
+    }
+
+    /**
+     * @param int $youthId
+     * @param string $jobId
+     * @return int
+     */
+    public function youthApplyCountToSpecificOrganization(int $youthId, string $jobId): int
+    {
+
+
+        $youthAppliedJobs = AppliedJob::where('youth_id', $youthId)->pluck('job_id');
+        $youthAppliedJobIds = $youthAppliedJobs->toArray();
+
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
+
+        if ($job->industry_association_id) {
+            return PrimaryJobInformation::where('industry_association_id', $job->industry_association_id)
+                ->whereIn('job_id', $youthAppliedJobIds)
+                ->count('id');
+        } else if ($job->organization_id) {
+            return PrimaryJobInformation::where('organization_id', $job->organization_id)
+                ->whereIn('job_id', $youthAppliedJobIds)
+                ->count('id');
+        } else if ($job->institute_id) {
+            return PrimaryJobInformation::where('institute_id', $job->institute_id)
+                ->whereIn('job_id', $youthAppliedJobIds)
+                ->count('id');
+        } else {
+            return 0;
+        }
+
+
     }
 
     /**
@@ -1335,17 +1369,18 @@ class JobManagementService
         $appliedJob->save();
 
 
-        return CandidateInterview::firstOrCreate(
-            [
-                'applied_job_id' => $appliedJob->id,
-                'recruitment_step_id' => $appliedJob->current_recruitment_step_id,
-            ],
-            [
-                'job_id' => $appliedJob->job_id,
-                'is_candidate_present' => $data['is_candidate_present'],
-                'interview_score' => $data['interview_score']
-            ]
-        );
+        $candidateInterview = CandidateInterview::where('applied_job_id', $appliedJob->id)
+            ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
+            ->first();
+
+        $candidateInterview->job_id = $appliedJob->job_id;
+        $candidateInterview->is_candidate_present = $data['is_candidate_present'];
+        $candidateInterview->interview_score = $data['interview_score'];
+
+        $candidateInterview->save();
+
+        return $candidateInterview;
+
     }
 
     /**
