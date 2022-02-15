@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Throwable;
 
-class OrganizationImport extends Controller implements ToCollection, WithValidation, WithHeadingRow
+class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
 {
     // public array $alreadyExistUsernames = [];
 
@@ -270,8 +270,9 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
      * @return void
      * @throws Throwable
      */
-    public function collection(Collection $collection): void
+    public function collection(Collection $collection)
     {
         Log::info("Successfully added all organizations");
+        Log::info(json_encode($collection));
     }
 }
