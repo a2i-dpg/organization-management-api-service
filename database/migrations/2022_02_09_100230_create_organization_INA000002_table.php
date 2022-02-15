@@ -15,6 +15,7 @@ class CreateOrganizationINA000002Table extends Migration
     {
         Schema::create('organization_INA000002', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedMediumInteger('organization_id')->nullable();
             $table->string('application_tracking_no', 191)->nullable();
             $table->unsignedInteger('form_fill_up_by')->comment('1 -> FORM_FILL_UP_BY_OWN, 2 -> FORM_FILL_UP_BY_UDC_ENTREPRENEUR, 3 -> FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION, 4-> FORM_FILL_UP_BY_SME_CLUSTER');
 

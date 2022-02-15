@@ -155,13 +155,14 @@ class NascibMemberController extends Controller
     public function store(Request $request): JsonResponse
     {
         $organizationMember = app(NascibMember::class);
+        $organization = app(Organization::class);
         //$this->authorize('create', $organizationMember);
 
         $validated = $this->nascibMemberService->validator($request)->validate();
 
         DB::beginTransaction();
         try {
-            $organizationMember = $this->nascibMemberService->store($organizationMember, $validated);
+            $organizationMember = $this->nascibMemberService->store($organization,$organizationMember, $validated);
 
             $response = [
                 '_response_status' => [

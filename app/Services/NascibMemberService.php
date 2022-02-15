@@ -17,11 +17,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Throwable;
 
 /**
  *
@@ -149,91 +149,32 @@ class NascibMemberService
         return $response;
     }
 
-    /**
-     * @param int $id
-     * @return Model|Builder
-     */
-    public function getOneIndustryAssociation(int $id): Model|Builder
+    public function store(Organization $organization, NascibMember $nascibMember, array $data): NascibMember
     {
-        /** @var Builder $industryAssociationBuilder */
-        $industryAssociationBuilder = IndustryAssociation::select([
-            'industry_associations.id',
-            'industry_associations.trade_id',
-            'trades.title as trade_title',
-            'trades.title_en as trade_title_en',
-            'industry_associations.title_en',
-            'industry_associations.title',
-            'industry_associations.loc_division_id',
-            'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title as loc_division_title',
-            'industry_associations.loc_district_id',
-            'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title as loc_district_title',
-            'industry_associations.loc_upazila_id',
-            'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title as loc_upazila_title',
-            'industry_associations.location_latitude',
-            'industry_associations.location_longitude',
-            'loc_upazilas.title as google_map_src',
-            'industry_associations.name_of_the_office_head',
-            'industry_associations.name_of_the_office_head_en',
-            'industry_associations.name_of_the_office_head_designation',
-            'industry_associations.name_of_the_office_head_designation_en',
-            'industry_associations.address',
-            'industry_associations.address_en',
-            'industry_associations.country',
-            'industry_associations.phone_code',
-            'industry_associations.mobile',
-            'industry_associations.email',
-            'industry_associations.fax_no',
-            'industry_associations.trade_number',
-            'industry_associations.contact_person_name',
-            'industry_associations.contact_person_name_en',
-            'industry_associations.contact_person_mobile',
-            'industry_associations.contact_person_email',
-            'industry_associations.contact_person_designation',
-            'industry_associations.contact_person_designation_en',
-            'industry_associations.logo',
-            'industry_associations.domain',
-            'industry_associations.row_status',
-            'industry_associations.created_by',
-            'industry_associations.updated_by',
-            'industry_associations.created_at',
-            'industry_associations.updated_at'
-        ]);
+        $authUser = Auth::user();
+        $orgData['organization_type_id'] = 1;//TODO
+        $orgData['membership_id'] = 'MS-ID-123';//TODO
+        $orgData['permission_sub_group_id'] = $authUser->role['permission_sub_group_id'];
+        $orgData['industry_association_id'] = $authUser->role['industry_association_id'];
+        $orgData['title'] = $data['organization_name'];
+        $orgData['loc_division_id'] = 1;//TODO $data['organization_loc_district_id'];
+        $orgData['loc_district_id'] = $data['organization_loc_district_id'];
+        $orgData['loc_upazila_id'] = $data['organization_loc_upazila_id'];
+        $orgData['address'] = $data['organization_address'];
+        $orgData['mobile'] = $data['mobile'];
+        $orgData['email'] = $data['email'];
+        $orgData['contact_person_name'] = $data['name'];
+        $orgData['contact_person_mobile'] = $data['mobile'];
+        $orgData['contact_person_email'] = $data['email'];
+        $orgData['contact_person_designation'] = 'Software Engineer'; //TODO
+        $orgData['additional_info_model_name'] = 'NascibMember'; //TODO
 
-        $industryAssociationBuilder->join('trades', function ($join) {
-            $join->on('trades.id', '=', 'industry_associations.trade_id')
-                ->whereNull('trades.deleted_at');
-        });
+        $organization = $organization->create($orgData);
+        $organizationService = App(OrganizationService::class);
+        $organizationService->addOrganizationToIndustryAssociation($organization, $orgData);
 
-        $industryAssociationBuilder->leftjoin('loc_divisions', function ($join) {
-            $join->on('industry_associations.loc_division_id', '=', 'loc_divisions.id')
-                ->whereNull('loc_divisions.deleted_at');
-        });
-        $industryAssociationBuilder->leftjoin('loc_districts', function ($join) {
-            $join->on('industry_associations.loc_district_id', '=', 'loc_districts.id')
-                ->whereNull('loc_districts.deleted_at');
-        });
-        $industryAssociationBuilder->leftjoin('loc_upazilas', function ($join) {
-            $join->on('industry_associations.loc_upazila_id', '=', 'loc_upazilas.id')
-                ->whereNull('loc_upazilas.deleted_at');
-        });
+        $data['organization_id'] = $organization->id;
 
-        $industryAssociationBuilder->where('industry_associations.id', '=', $id);
-
-        $industryAssociationBuilder->with('skills');
-
-        return $industryAssociationBuilder->firstOrFail();
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @param array $data
-     * @return IndustryAssociation
-     */
-    public function store(NascibMember $nascibMember, array $data): NascibMember
-    {
         $nascibMember->fill($data);
         $nascibMember->save();
         return $nascibMember;
