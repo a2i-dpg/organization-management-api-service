@@ -218,12 +218,10 @@ class OrganizationController extends Controller
 
         $file = $request->file('file');
 
-        $organizationImport = new OrganizationImport();
+//        $organizationImport = new OrganizationImport();
 
         try {
-            Excel::import($organizationImport, $file);
-
-            Log::info("The already exists users are: " . json_encode($organizationImport->alreadyExistUsernames));
+            Excel::import(new OrganizationImport(), $file);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
 
@@ -246,9 +244,9 @@ class OrganizationController extends Controller
             ]
         ];
 
-        if(!empty($organizationImport->alreadyExistUsernames)){
+        /*if(!empty($organizationImport->alreadyExistUsernames)){
             $response['_response_status']['alreadyExistUsernames'] = "Contact Person Mobiles that already registered: " . json_encode($organizationImport->alreadyExistUsernames);
-        }
+        }*/
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
