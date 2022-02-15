@@ -66,6 +66,8 @@ $app->configure('nise3');
 $app->configure('httpclientendpoint');
 $app->configure('queue');
 $app->configure('nise3RabbitMq');
+$app->configure('elasticSearchLogConfig');
+$app->configure('lumenDefaultLogConfig');
 
 /*
 |--------------------------------------------------------------------------

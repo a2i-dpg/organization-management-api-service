@@ -345,6 +345,7 @@ class JobManagementController extends Controller
     public function youthJobs(Request $request): JsonResponse
     {
         $validatedData = $this->jobManagementService->youthJobsValidator($request)->validate();
+        $validatedData = $this->jobManagementService->jobListFilterValidator($request)->validate();
         $validatedData["youth_only"] = "1";
         $youthJobs = $this->jobManagementService->getJobList($validatedData, Carbon::now());
 
