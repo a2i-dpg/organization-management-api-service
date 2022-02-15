@@ -209,8 +209,6 @@ class OrganizationService
         });
 
 
-        $organizationBuilder->orderBy('industry_association_organization.id', $order);
-
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
@@ -316,8 +314,6 @@ class OrganizationService
                     ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
             });
         }
-
-        $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
