@@ -136,6 +136,9 @@ class HrDemandInstituteService
             }
         }
 
+        Log::info("The hrDemandInstitute result is: ");
+        Log::info(json_encode($hrDemandInstitutes));
+
         $response['order'] = $order;
         $response['data'] = !empty($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray());
         $response['_response_status'] = [
