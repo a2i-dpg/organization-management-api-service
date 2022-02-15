@@ -217,7 +217,25 @@ class OrganizationController extends Controller
         //$this->organizationService->excelImportValidator($request)->validate();
 
         $file = $request->file('file');
-        Excel::import(new OrganizationImport(), $file);
+        try {
+            Excel::import(new OrganizationImport(), $file);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+
+            foreach ($failures as $failure) {
+                Log::info("Failures started for excel ******************************* START");
+                Log::info("EXCEL error row: " . json_encode($failure->row()));
+                Log::info("EXCEL error attribute: " . json_encode($failure->attribute()));
+                Log::info("EXCEL error errors: " . json_encode($failure->errors()));
+                Log::info("EXCEL error values: " . json_encode($failure->values()));
+
+
+                /*; // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.*/
+            }
+        }
 
         Log::info("Successfully done excel import.");
 

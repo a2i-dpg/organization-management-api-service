@@ -167,7 +167,7 @@ class InterviewScheduleService
             'applied_job_ids.*' => [
                 'required',
                 'integer',
-                Rule::unique('candidate_interviews', 'recruitment_step_id'),
+                'unique_with:candidate_interviews,recruitment_step_id',
                 'exists:applied_jobs,id,deleted_at,NULL'
             ],
             'interview_invite_type' => [
@@ -220,6 +220,8 @@ class InterviewScheduleService
             $candidateInterview = new CandidateInterview();
 
             $appliedJob = AppliedJob::findOrFail($appliedJobId);
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS['Interview_scheduled'];
+            $appliedJob->save();
 
             $candidateInterview->applied_job_id = $appliedJob->id;
             $candidateInterview->job_id = $appliedJob->job_id;
@@ -242,6 +244,9 @@ class InterviewScheduleService
 
         foreach ($appliedJobIds as $appliedJobId) {
             $appliedJob = AppliedJob::findOrFail($appliedJobId);
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS['Shortlisted'];
+            $appliedJob->save();
+
             CandidateInterview::where('applied_job_id', $appliedJob->id)
                 ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
                 ->where('interview_schedule_id', $scheduleId)
