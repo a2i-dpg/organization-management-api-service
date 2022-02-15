@@ -59,7 +59,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
 
-
         /** IndustryAssociation Registration Rejection */
         $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationRegistrationRejection"]);
 
@@ -190,6 +189,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** get youth jobs from youth service */
         $router->get("youth-jobs", ["as" => "service-to-service-call.youth-jobs", "uses" => "JobManagementController@youthJobs"]);
+
+        /** Youth Feed statistics job data fetch */
+        $router->get('youth-feed-statistics/{youthId}', ["as" => "courses.youth-feed-statistics", "uses" => "JobManagementController@youthFeedStatistics"]);
     });
 
 
