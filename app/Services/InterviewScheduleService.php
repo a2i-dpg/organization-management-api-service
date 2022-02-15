@@ -220,6 +220,8 @@ class InterviewScheduleService
             $candidateInterview = new CandidateInterview();
 
             $appliedJob = AppliedJob::findOrFail($appliedJobId);
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS['Interview_scheduled'];
+            $appliedJob->save();
 
             $candidateInterview->applied_job_id = $appliedJob->id;
             $candidateInterview->job_id = $appliedJob->job_id;
