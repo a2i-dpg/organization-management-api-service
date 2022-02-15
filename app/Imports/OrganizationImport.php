@@ -274,8 +274,6 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
     {
         Log::info("Start inside collection");
 
-
-
         $rows = $collection->toArray();
         Log::info("The collections are: " . json_encode($rows));
         foreach ($rows as $rowData){
@@ -289,6 +287,8 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                     /** @var Organization $organization */
                     $organization = app(Organization::class);
                     $organization = app(OrganizationService::class)->store($organization, $rowData);
+
+                    Log::info("The created organization: " . json_encode($organization));
 
                     app(OrganizationService::class)->syncWithSubTrades($organization, $rowData['sub_trades']);
 
@@ -341,9 +341,6 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                 $this->alreadyExistUsernames[] = $rowData['contact_person_mobile'];
             }
         }
-
-
-
 
         Log::info("Successfully added all organizations");
         Log::info(json_encode($collection));
