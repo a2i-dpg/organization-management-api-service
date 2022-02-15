@@ -955,4 +955,30 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+
+
+    /**
+     * @param Request $request
+     * @param int $youthId
+     * @return array
+     */
+    public function youthFeedStatistics(Request $request, int $youthId): array
+    {
+        $requestData = $request->all();
+        if (!empty($requestData["skill_ids"])) {
+            $requestData["skill_ids"] = is_array($requestData['skill_ids']) ? $requestData['skill_ids'] : explode(',', $requestData['skill_ids']);
+        }
+        $totalJobCount = $this->jobManagementService->getJobCount();
+        $youthAppliedJobCount = $this->jobManagementService->getAppliedJobCount($youthId);
+        $skillMatchingJobCount = 0;
+        if (!empty($requestData["skill_ids"]) && is_array($requestData["skill_ids"]) && count($requestData["skill_ids"]) > 0) {
+            $skillMatchingJobCount = $this->jobManagementService->getSkillMatchingJobCount($requestData["skill_ids"]);
+        }
+
+        return [
+            'applied_jobs' => $youthAppliedJobCount,
+            'total_jobs' => $totalJobCount,
+            'skill_matching_jobs' => $skillMatchingJobCount
+        ];
+    }
 }
