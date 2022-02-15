@@ -325,14 +325,14 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                         $smsMessage = "You are successfully complete your registration as " . $rowData['title'] . " user";
                         $smsService = new SmsService();
                         $smsService->sendSms($recipient, $smsMessage);
-
                         Log::info("Sms has been send");
+
+                        DB::commit();
                     } else {
                         throw new Exception('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
                     }
 
                     Log::info("Organization for contact person mobile: " . $rowData['contact_person_mobile'] . " has been created");
-                    DB::commit();
                 } catch (Throwable $e) {
                     Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
                     DB::rollBack();
