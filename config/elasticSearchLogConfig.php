@@ -94,7 +94,7 @@ return [
             'handler' => \Monolog\Handler\ElasticsearchHandler::class,
             'formatter' => \Monolog\Formatter\ElasticsearchFormatter::class,
             'formatter_with' => [
-                'index' => env('ELASTIC_LOGS_INDEX')."org_reg",
+                'index' => env('ELASTIC_LOGS_INDEX')."_org_reg",
                 'type' => '_doc',
             ],
             'handler_with' => [
