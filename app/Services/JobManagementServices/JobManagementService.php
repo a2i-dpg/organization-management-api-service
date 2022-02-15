@@ -954,7 +954,6 @@ class JobManagementService
 
         } else if ($type == AppliedJob::TYPE_HIRED) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Hired']);
-
         }
 
         /** @var Collection $candidates */
@@ -1085,7 +1084,10 @@ class JobManagementService
         ];
 
         $response['final_hiring_list'] = [
-            'total_candidate' => $this->countFinalHiringListCandidate($jobId),
+            'total_candidate' => $this->countTotalFinalHiringListCandidate($jobId),
+            'hire_selected' => $this->countHireSelectedCandidate($jobId),
+            'hire_invited'  => $this->countHireInvitedCandidate($jobId),
+            'hired'  => $this->countHiredCandidate($jobId),
         ];
 
         $response['steps'] = $recruitmentSteps->toArray() ?? [];
@@ -1094,12 +1096,50 @@ class JobManagementService
         return $response;
 
     }
+    /**
+     * @param string $jobId
+     * @return mixed
+     */
+    public function countHireSelectedCandidate(string $jobId): mixed
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+            ->whereNull('current_recruitment_step_id')
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
+
+    /**
+     * @param string $jobId
+     * @return mixed
+     */
+    public function countHireInvitedCandidate(string $jobId): mixed
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hire_invited'])
+            ->whereNull('current_recruitment_step_id')
+            ->whereNotNull('hire_invited_at')
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
+
+    /**
+     * @param string $jobId
+     * @return mixed
+     */
+    public function countHiredCandidate(string $jobId): mixed
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hired'])
+            ->whereNull('current_recruitment_step_id')
+            ->whereNotNull('hired_at')
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
 
     public function countAllAppliedCandidate(string $jobId)
     {
         return AppliedJob::where('job_id', $jobId)
             ->count('id');
     }
+
 
     public function countProfileViewedCandidate(string $jobId, int $stepId = null)
     {
@@ -1139,9 +1179,9 @@ class JobManagementService
      * @param string $jobId
      * @return mixed
      */
-    public function countFinalHiringListCandidate(string $jobId): mixed
+    public function countTotalFinalHiringListCandidate(string $jobId): mixed
     {
-        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+        return AppliedJob::whereIn('apply_status', [AppliedJob::APPLY_STATUS['Hiring_Listed'],[AppliedJob::APPLY_STATUS['Hire_invited']],[AppliedJob::APPLY_STATUS['Hired']]])
             ->whereNull('current_recruitment_step_id')
             ->where('job_id', $jobId)
             ->count('id');
