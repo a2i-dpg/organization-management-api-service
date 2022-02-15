@@ -95,7 +95,7 @@ class CreateOrganizationINA000002Table extends Migration
             $table->unsignedTinyInteger('status')->default(0)->comment('0 -> initial state, 1 ->accept, 2->rejected');
 
             $table->unsignedTinyInteger('row_status')
-                ->default(2)
+                ->default(1)
                 ->comment('0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected');
 
             $table->unsignedInteger('created_by')->nullable();

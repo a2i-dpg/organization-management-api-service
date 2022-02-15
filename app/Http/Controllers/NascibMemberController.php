@@ -6,10 +6,12 @@ use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
+use App\Models\NascibMember;
 use App\Services\CommonServices\CodeGenerateService;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use App\Services\IndustryAssociationService;
+use App\Services\NascibMemberService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -28,13 +30,13 @@ use Throwable;
 /**
  *
  */
-class OrganizationMemberController extends Controller
+class NascibMemberController extends Controller
 {
 
     /**
-     * @var IndustryAssociationService
+     * @var NascibMemberService
      */
-    protected IndustryAssociationService $industryAssociationService;
+    protected NascibMemberService $nascibMemberService;
     /**
      * @var OrganizationService
      */
@@ -42,9 +44,9 @@ class OrganizationMemberController extends Controller
     private Carbon $startTime;
 
 
-    public function __construct(IndustryAssociationService $industryAssociationService, OrganizationService $organizationService)
+    public function __construct(NascibMemberService $nascibMemberService, OrganizationService $organizationService)
     {
-        $this->industryAssociationService = $industryAssociationService;
+        $this->nascibMemberService = $nascibMemberService;
         $this->organizationService = $organizationService;
         $this->startTime = Carbon::now();
     }
@@ -139,56 +141,6 @@ class OrganizationMemberController extends Controller
 
     }
 
-    /**
-     * @param $id
-     * @return JsonResponse
-     */
-    public function getCode($id): JsonResponse
-    {
-        $industryAssociation = $this->industryAssociationService->getIndustryAssociationCode($id);
-
-        $response = [
-            "data" => $industryAssociation,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * Display a specified resource
-     * @param Request $request
-     * @param int|null $id
-     * @return JsonResponse
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Throwable
-     */
-    public function industryAssociationDetails(Request $request, int $id = null): JsonResponse
-    {
-        if (!$id) {
-            /** this should be set from PublicApiMiddleWare */
-            $id = request()->get('industry_association_id');
-        }
-        throw_if(empty($id), ValidationException::withMessages([
-            "industry_association_id not found!"
-        ]));
-        $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
-
-        $response = [
-            "data" => $industryAssociation,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-
-    }
 
     /** This methods are not using now. Delete after checking */
     /**
@@ -202,76 +154,26 @@ class OrganizationMemberController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        dd($request->all());
-        $industryAssociation = app(IndustryAssociation::class);
-        $this->authorize('create', $industryAssociation);
+        $organizationMember = app(NascibMember::class);
+        //$this->authorize('create', $organizationMember);
 
-        $validated = $this->industryAssociationService->validator($request)->validate();
-
-        $validated['code'] = CodeGenerateService::getIndustryAssociationCode();
+        $validated = $this->nascibMemberService->validator($request)->validate();
 
         DB::beginTransaction();
         try {
-            $industryAssociation = $this->industryAssociationService->store($industryAssociation, $validated);
-            if (!($industryAssociation && $industryAssociation->id)) {
-                throw new CustomException('IndustryAssociation has not been properly saved to db.');
-            }
-            $validated['industry_association_id'] = $industryAssociation->id;
-            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
-            $createdRegisterUser = $this->industryAssociationService->createUser($validated);
+            $organizationMember = $this->nascibMemberService->store($organizationMember, $validated);
 
-
-            if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
-                throw new RuntimeException('Creating User during  IndustryAssociation Creation has been failed!', 500);
-            }
             $response = [
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "IndustryAssociation has been Created Successfully",
+                    "message" => "OrganizationMember has been Created Successfully",
                     "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
                 ]
             ];
 
-            if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
-                /** Mail send after user registration */
-                $to = array($validated['contact_person_email']);
-                $from = BaseModel::NISE3_FROM_EMAIL;
-                $subject = "User Registration Information";
-                $message = "Congratulation, You are successfully complete your registration as " . $validated['title'] . " user. Username: " . $validated['contact_person_mobile'] . " & Password: " . $validated['password'];
-                $messageBody = MailService::templateView($message);
-                $mailService = new MailService($to, $from, $subject, $messageBody);
-                $mailService->sendMail();
-
-                /** SMS send after user registration */
-                $recipient = $validated['contact_person_mobile'];
-                $smsMessage = "You are successfully complete your registration as " . $validated['title'] . " user";
-                $smsService = new SmsService();
-                $smsService->sendSms($recipient, $smsMessage);
-
-                $response['data'] = $industryAssociation;
-                DB::commit();
-                return Response::json($response, ResponseAlias::HTTP_CREATED);
-            }
-
-            DB::rollBack();
-
+            DB::commit();
             $httpStatusCode = ResponseAlias::HTTP_BAD_REQUEST;
-            if (!empty($createdRegisterUser['_response_status']['code'])) {
-                $httpStatusCode = $createdRegisterUser['_response_status']['code'];
-            }
-
-            $response['_response_status'] = [
-                "success" => false,
-                "code" => $httpStatusCode,
-                "message" => "Error Occurred. Please Contact.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-            ];
-
-            if (!empty($createdRegisterUser['errors'])) {
-                $response['errors'] = $createdRegisterUser['errors'];
-            }
-
             return Response::json($response, $httpStatusCode);
         } catch (Throwable $e) {
             DB::rollBack();
