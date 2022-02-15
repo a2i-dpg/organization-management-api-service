@@ -325,7 +325,7 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                         $smsMessage = "You are successfully complete your registration as " . $rowData['title'] . " user";
                         $smsService = new SmsService();
                         $smsService->sendSms($recipient, $smsMessage);
-                        Log::info("Sms has been send");
+                        Log::info("Sms has been send here");
 
                         DB::commit();
                     } else {
