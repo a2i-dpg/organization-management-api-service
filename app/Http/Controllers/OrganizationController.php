@@ -211,7 +211,22 @@ class OrganizationController extends Controller
     public function bulkStoreByExcel(Request $request): JsonResponse
     {
         $file = $request->file('file');
-        Excel::import(new OrganizationImport(), $file);
+
+        $organizationImport = new OrganizationImport();
+
+        try {
+            Excel::import($organizationImport, $file);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+
+            foreach ($failures as $failure) {
+                Log::info("Failures started for excel ******************************* START");
+                Log::info("EXCEL error row: " . json_encode($failure->row()));
+                Log::info("EXCEL error attribute: " . json_encode($failure->attribute()));
+                Log::info("EXCEL error errors: " . json_encode($failure->errors()));
+                Log::info("EXCEL error values: " . json_encode($failure->values()));
+            }
+        }
 
         $response = [
             '_response_status' => [
