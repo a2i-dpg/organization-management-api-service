@@ -288,7 +288,8 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                     $organization = app(Organization::class);
                     $organization = app(OrganizationService::class)->store($organization, $rowData);
 
-                    Log::info("The created organization: " . json_encode($organization));
+//                    Log::info("The created organization: " . json_encode($organization));
+                    Log::info("The created organization demo: ");
 
                     app(OrganizationService::class)->syncWithSubTrades($organization, $rowData['sub_trades']);
 
