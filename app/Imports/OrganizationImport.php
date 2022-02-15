@@ -270,9 +270,11 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
     public function collection(Collection $collection): array
     {
         $rows = $collection->toArray();
+        Log::info("The collections are: " . json_encode($rows));
         $alreadyExistUsernames = [];
         foreach ($rows as $rowData){
             $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
+            Log::info("Core user is: " . json_encode($user));
             if(empty($user)){
                 DB::beginTransaction();
                 try {
@@ -330,7 +332,7 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                     throw $e;
                 }
             } else {
-                $alreadyExistUsersUsername[] = $rowData['contact_person_mobile'];
+                $alreadyExistUsernames[] = $rowData['contact_person_mobile'];
             }
         }
 

@@ -219,6 +219,7 @@ class OrganizationController extends Controller
         $file = $request->file('file');
         try {
             $alreadyExistUsernames = Excel::import(new OrganizationImport(), $file);
+            Log::info("The already exists users are: " . json_encode($alreadyExistUsernames));
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
 
