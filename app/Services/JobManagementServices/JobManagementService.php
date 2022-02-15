@@ -1415,6 +1415,33 @@ class JobManagementService
 
     }
 
+    /**
+     * @return int
+     */
+    public function getJobCount(): int
+    {
+        return PrimaryJobInformation::count('id');
+
+
+    }
+
+    /**
+     * @param int $youthId
+     * @return int
+     */
+    public function getAppliedJobCount(int $youthId): int
+    {
+        return AppliedJob::where('youth_id', $youthId)->count('id');
+    }
+
+
+    public function getSkillMatchingJobCount(array $skillIds)
+    {
+
+        return CandidateRequirement::whereHas('skills', function ($query) use ($skillIds) {
+            $query->whereIn('skill_id', $skillIds);
+        })->count('id');
+    }
 
     /**
      * @param Request $request
