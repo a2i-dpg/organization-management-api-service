@@ -129,4 +129,30 @@ class ServiceToServiceCallHandler
         return $permissionSubGroup;
     }
 
+    /**
+     * @param string $userName
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getUserByUsername(string $userName): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/user-by-username/' . $userName;
+
+        $user = Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->get($url)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+
+        Log::info("UserDetails:" . json_encode($user));
+
+        return $user;
+    }
 }

@@ -1077,8 +1077,8 @@ class OrganizationService
         $data = $request->all();
         $rules = [
             [
-                'file'      => $request->file(),
-                'extension' => strtolower($request->file()->getClientOriginalExtension()),
+                'file'      => $request->file('file'),
+                'extension' => strtolower($request->file('file')->getClientOriginalExtension()),
             ],
             [
                 'file'          => 'required',
