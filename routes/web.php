@@ -165,7 +165,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             });
         });
 
-
         /** Provide suggestions in drop downs */
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {
             $router->get('education-levels', ["as" => "education-levels.get-list", "uses" => "EducationLevelController@getList"]);
