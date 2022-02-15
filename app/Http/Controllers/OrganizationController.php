@@ -228,6 +228,8 @@ class OrganizationController extends Controller
             }
         }
 
+        Log::info(json_encode($organizationImport->alreadyExistUsernames));
+
         $response = [
             '_response_status' => [
                 "success" => true,

@@ -27,7 +27,7 @@ use Throwable;
 
 class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
 {
-    // public array $alreadyExistUsernames = [];
+     public array $alreadyExistUsernames = [];
 
     /**
      * @param $data
@@ -272,6 +272,8 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
      */
     public function collection(Collection $collection)
     {
+        Log::info("Start inside collection");
+
         Log::info("Successfully added all organizations");
         Log::info(json_encode($collection));
     }
