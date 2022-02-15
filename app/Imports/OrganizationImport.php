@@ -310,20 +310,26 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                     $messageBody = MailService::templateView($message);
                     $mailService = new MailService($to, $from, $subject, $messageBody);
                     $mailService->sendMail();
+                    Log::info("Mail has been send");
 
                     /** SMS send after user registration */
                     $recipient = $rowData['contact_person_mobile'];
                     $smsMessage = "You are successfully complete your registration as " . $rowData['title'] . " user";
                     $smsService = new SmsService();
                     $smsService->sendSms($recipient, $smsMessage);
+
+                    Log::info("Sms has been send");
                 } else {
                     throw new RuntimeException('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
                 }
+
+                Log::info("Organization for contact person mobile: " . $rowData['contact_person_mobile'] . " has been created");
             }
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
+        Log::info("Successfully added all organizations");
     }
 }

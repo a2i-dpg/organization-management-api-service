@@ -219,6 +219,8 @@ class OrganizationController extends Controller
         $file = $request->file('file');
         Excel::import(new OrganizationImport(), $file);
 
+        Log::info("Successfully done excel import.");
+
         $response = [
             '_response_status' => [
                 "success" => true,
