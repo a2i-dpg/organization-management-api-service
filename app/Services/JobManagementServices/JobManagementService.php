@@ -902,7 +902,7 @@ class JobManagementService
         if ($type == AppliedJob::TYPE_ALL) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                      ->whereNull('applied_jobs.current_recruitment_Step_id');
+                    ->whereNull('applied_jobs.current_recruitment_Step_id');
 
             });
             $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
@@ -927,7 +927,7 @@ class JobManagementService
 
         } elseif ($type == AppliedJob::TYPE_REJECTED) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Rejected']);
-            if(empty($stepId)){
+            if (empty($stepId)) {
                 $appliedJobBuilder->whereNull('applied_jobs.current_recruitment_step_id');
             }
 
@@ -1042,8 +1042,8 @@ class JobManagementService
         }
 
         $response['all_applications'] = [
-            'all' => $this->countStepAcceptedCandidate($jobId),
-            'total_candidate' => $this->countStepCandidate($jobId),
+            'total_candidate' => $this->countAllAppliedCandidate($jobId),
+            'all' => $this->countAllApplicationAcceptedCandidate($jobId),
             'viewed' => $this->countProfileViewedCandidate($jobId),
             'not_viewed' => $this->countProfileNotViewedCandidate($jobId),
             'qualified' => $this->countStepQualifiedCandidate($jobId),
@@ -1061,21 +1061,37 @@ class JobManagementService
 
     }
 
+    public function countAllAppliedCandidate(string $jobId)
+    {
+        return AppliedJob::where('job_id', $jobId)
+            ->count('id');
+    }
 
     public function countProfileViewedCandidate(string $jobId, int $stepId = null)
     {
-        return AppliedJob::where('current_recruitment_step_id', $stepId)
+        return AppliedJob::whereNotNull('profile_viewed_at')
+            ->where(function ($query) {
+                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->whereNull('applied_jobs.current_recruitment_Step_id');
+                $query->orwhereNotNull('applied_jobs.current_recruitment_step_id');
+
+            })
             ->where('job_id', $jobId)
-            ->whereNotNull('profile_viewed_at')
             ->count('id');
     }
 
     public function countProfileNotViewedCandidate(string $jobId, int $stepId = null)
     {
-        return AppliedJob::where('current_recruitment_step_id', $stepId)
+        return AppliedJob::whereNull('profile_viewed_at')
+            ->where(function ($query) {
+                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->whereNull('applied_jobs.current_recruitment_Step_id');
+                $query->orwhereNotNull('applied_jobs.current_recruitment_step_id');
+
+            })
             ->where('job_id', $jobId)
-            ->whereNull('profile_viewed_at')
             ->count('id');
+
     }
 
     public function countStepCandidate(string $jobId, int $stepId = null)
@@ -1086,6 +1102,7 @@ class JobManagementService
     }
 
     /**
+     * @param string $jobId
      * @return mixed
      */
     public function countFinalHiringListCandidate(string $jobId): mixed
@@ -1096,12 +1113,16 @@ class JobManagementService
             ->count('id');
     }
 
-    public function countStepAcceptedCandidate(string $jobId)
+    public function countAllApplicationAcceptedCandidate(string $jobId)
     {
-        return AppliedJob::where('apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-            ->whereNull('current_recruitment_step_id')
+        return AppliedJob::where(function ($query) {
+            $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                ->whereNull('applied_jobs.current_recruitment_Step_id');
+        })
+            ->orwhereNotNull('applied_jobs.current_recruitment_step_id')
             ->where('job_id', $jobId)
             ->count('id');
+
     }
 
     public function countStepShortlistedCandidate(string $jobId, int $stepId = null)
