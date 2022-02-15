@@ -242,6 +242,9 @@ class InterviewScheduleService
 
         foreach ($appliedJobIds as $appliedJobId) {
             $appliedJob = AppliedJob::findOrFail($appliedJobId);
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS['Shortlisted'];
+            $appliedJob->save();
+
             CandidateInterview::where('applied_job_id', $appliedJob->id)
                 ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
                 ->where('interview_schedule_id', $scheduleId)

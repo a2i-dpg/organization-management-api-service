@@ -1331,17 +1331,18 @@ class JobManagementService
         $appliedJob->save();
 
 
-        return CandidateInterview::firstOrCreate(
-            [
-                'applied_job_id' => $appliedJob->id,
-                'recruitment_step_id' => $appliedJob->current_recruitment_step_id,
-            ],
-            [
-                'job_id' => $appliedJob->job_id,
-                'is_candidate_present' => $data['is_candidate_present'],
-                'interview_score' => $data['interview_score']
-            ]
-        );
+        $candidateInterview = CandidateInterview::where('applied_job_id', $appliedJob->id)
+            ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
+            ->first();
+
+        $candidateInterview->job_id = $appliedJob->job_id;
+        $candidateInterview->is_candidate_present = $data['is_candidate_present'];
+        $candidateInterview->interview_score = $data['interview_score'];
+
+        $candidateInterview->save();
+
+        return $candidateInterview;
+
     }
 
     /**
