@@ -214,10 +214,12 @@ class OrganizationController extends Controller
         $organization = app(Organization::class);
         $this->authorize('create', $organization);
 
-//        $this->organizationService->excelImportValidator($request)->validate();
+        //$this->organizationService->excelImportValidator($request)->validate();
 
         $file = $request->file('file');
         Excel::import(new OrganizationImport(), $file);
+
+        Log::info("Successfully done excel import.");
 
         $response = [
             '_response_status' => [
