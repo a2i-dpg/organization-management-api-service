@@ -877,8 +877,8 @@ class JobManagementService
             'applied_jobs.youth_id',
             'applied_jobs.apply_status',
             'applied_jobs.current_recruitment_step_id',
-            'recruitment_steps.title as current_recruitment_step_title ',
-            'recruitment_steps.title_en as current_recruitment_step_title_en ',
+            'recruitment_steps.title as current_recruitment_step_title',
+            'recruitment_steps.title_en as current_recruitment_step_title_en',
             'applied_jobs.applied_at',
             'applied_jobs.profile_viewed_at',
             'applied_jobs.expected_salary',
@@ -1115,14 +1115,16 @@ class JobManagementService
 
     public function countAllApplicationAcceptedCandidate(string $jobId)
     {
-        return AppliedJob::where(function ($query) {
+        /*return AppliedJob::where(function ($query) {
             $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                ->whereNull('applied_jobs.current_recruitment_Step_id');
+                ->whereNull('applied_jobs.current_recruitment_step_id');
         })
             ->orwhereNotNull('applied_jobs.current_recruitment_step_id')
             ->where('job_id', $jobId)
-            ->count('id');
-
+            ->count('id');*/
+        return AppliedJob::where(function ($query) {
+            $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected']);
+        })->count('id');
     }
 
     public function countStepShortlistedCandidate(string $jobId, int $stepId = null)
