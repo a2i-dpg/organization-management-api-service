@@ -154,8 +154,8 @@ class NascibMemberService
         $authUser = Auth::user();
         $orgData['organization_type_id'] = 1;//TODO
         $orgData['membership_id'] = 'MS-ID-123';//TODO
-        $orgData['permission_sub_group_id'] = $authUser->role['permission_sub_group_id'];
-        $orgData['industry_association_id'] = $authUser->role['industry_association_id'];
+        $orgData['permission_sub_group_id'] = $data['permission_sub_group_id'];;
+        $orgData['industry_association_id'] = $data['industry_association_id'];
         $orgData['title'] = $data['organization_name'];
         $orgData['loc_division_id'] = 1;//TODO $data['organization_loc_district_id'];
         $orgData['loc_district_id'] = $data['organization_loc_district_id'];
@@ -177,6 +177,7 @@ class NascibMemberService
 
         $nascibMember->fill($data);
         $nascibMember->save();
+
         return $nascibMember;
     }
 
@@ -250,134 +251,6 @@ class NascibMemberService
         return $industryAssociation->restore();
     }
 
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return IndustryAssociation
-     */
-    public function industryAssociationStatusChangeAfterApproval(IndustryAssociation $industryAssociation): IndustryAssociation
-    {
-        $industryAssociation->row_status = BaseModel::ROW_STATUS_ACTIVE;
-        $industryAssociation->save();
-        return $industryAssociation;
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return IndustryAssociation
-     */
-    public function industryAssociationStatusChangeAfterRejection(IndustryAssociation $industryAssociation): IndustryAssociation
-    {
-        $industryAssociation->row_status = BaseModel::ROW_STATUS_REJECTED;
-        $industryAssociation->save();
-        return $industryAssociation;
-    }
-
-    /**
-     * @param Request $request
-     * @param IndustryAssociation $industryAssociation
-     * @return array|null
-     * @throws RequestException
-     */
-    public function industryAssociationUserApproval(Request $request, IndustryAssociation $industryAssociation): array|null
-    {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
-        $userPostField = [
-            'permission_sub_group_id' => $request->input('permission_sub_group_id') ?? "",
-            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
-            'industry_association_id' => $industryAssociation->id,
-            'name_en' => $industryAssociation->contact_person_name ?? "",
-            'name' => $industryAssociation->contact_person_name ?? "",
-            'row_status' => $industryAssociation->row_status
-        ];
-
-        return Http::withOptions(
-            [
-                'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
-            ])
-            ->put($url, $userPostField)
-            ->throw(function ($response, $e) {
-                return $e;
-            })
-            ->json();
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return mixed
-     * @throws RequestException
-     */
-
-    public function industryAssociationUserRejection(IndustryAssociation $industryAssociation): mixed
-    {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-rejection';
-        $userPostField = [
-            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
-            'industry_association_id' => $industryAssociation->id,
-        ];
-
-        return Http::withOptions(
-            [
-                'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug')
-            ])
-            ->timeout(5)
-            ->put($url, $userPostField)
-            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
-                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
-                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
-            })
-            ->json();
-    }
-
-    /**
-     * @param array $data
-     * @param Organization $organization
-     * @return int
-     */
-    public function industryAssociationMembershipApproval(array $data, Organization $organization): int
-    {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => BaseModel::ROW_STATUS_ACTIVE
-        ]);
-    }
-
-    /**
-     * @param array $data
-     * @param Organization $organization
-     * @return int
-     */
-    public function industryAssociationMembershipRejection(array $data, Organization $organization): int
-    {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => BaseModel::ROW_STATUS_REJECTED
-        ]);
-
-    }
-
-
-    /**
-     * Validator for industry registration/industryAssociation membership  approval/rejection
-     * @param Request $request
-     * @param int $organizationId
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    public function industryAssociationMembershipValidator(Request $request, int $organizationId): \Illuminate\Contracts\Validation\Validator
-    {
-        $rules = [
-            'industry_association_id' => [
-                'required',
-                'integer',
-                Rule::exists('industry_association_organization', 'industry_association_id')
-                    ->where(function ($query) use ($organizationId) {
-                        $query->where('organization_id', $organizationId);
-                    })
-            ]
-        ];
-        return Validator::make($request->all(), $rules);
-    }
 
 
     /**
@@ -393,11 +266,11 @@ class NascibMemberService
             'permission_sub_group_id' => $data['permission_sub_group_id'] ?? "",
             'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
             'industry_association_id' => $data['industry_association_id'] ?? "",
-            'username' => $data['contact_person_mobile'] ?? "",
-            'name_en' => $data['contact_person_name'] ?? "",
-            'name' => $data['contact_person_name'] ?? "",
-            'email' => $data['contact_person_email'] ?? "",
-            'mobile' => $data['contact_person_mobile'] ?? ""
+            'username' => $data['mobile'] ?? "",
+            'name_en' => $data['name'] ?? "",
+            'name' => $data['name'] ?? "",
+            'email' => $data['email'] ?? "",
+            'mobile' => $data['mobile'] ?? ""
         ];
 
         return Http::withOptions(
@@ -602,6 +475,18 @@ class NascibMemberService
             'info_provider_mobile' => 'nullable|string|max:100',
             'info_collector_name' => 'nullable|string|max:100',
             'info_collector_mobile' => 'nullable|string|max:100',
+            'industry_association_id' => [
+                'required',
+                'int',
+                'exists:industry_associations,id,deleted_at,NULL'
+            ],
+            'permission_sub_group_id' => [
+                Rule::requiredIf(function () use ($id) {
+                    return is_null($id);
+                }),
+                'nullable',
+                'integer'
+            ],
 
         ];
 

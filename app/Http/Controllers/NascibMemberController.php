@@ -19,6 +19,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Psr\Container\ContainerExceptionInterface;
@@ -163,6 +164,19 @@ class NascibMemberController extends Controller
         DB::beginTransaction();
         try {
             $organizationMember = $this->nascibMemberService->store($organization,$organizationMember, $validated);
+
+
+            $validated['organization_id'] = $organizationMember->organization_id;
+            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
+
+
+            $createdRegisterUser = $this->nascibMemberService->createUser($validated);
+
+            Log::info('id_user_info:' . json_encode($createdRegisterUser));
+
+            if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
+                throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
+            }
 
             $response = [
                 '_response_status' => [
