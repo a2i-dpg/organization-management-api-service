@@ -167,7 +167,7 @@ class InterviewScheduleService
             'applied_job_ids.*' => [
                 'required',
                 'integer',
-                Rule::unique('candidate_interviews', 'recruitment_step_id'),
+                'unique_with:candidate_interviews,recruitment_step_id',
                 'exists:applied_jobs,id,deleted_at,NULL'
             ],
             'interview_invite_type' => [
