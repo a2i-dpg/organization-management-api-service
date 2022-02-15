@@ -210,12 +210,6 @@ class OrganizationController extends Controller
      */
     public function bulkStoreByExcel(Request $request): JsonResponse
     {
-        /** @var Organization $organization */
-        $organization = app(Organization::class);
-        $this->authorize('create', $organization);
-
-        //$this->organizationService->excelImportValidator($request)->validate();
-
         $file = $request->file('file');
         try {
             Excel::import(new OrganizationImport(), $file);
@@ -236,8 +230,6 @@ class OrganizationController extends Controller
                 $failure->values(); // The values of the row that has failed.*/
             }
         }
-
-        Log::info("Successfully done excel import.");
 
         $response = [
             '_response_status' => [

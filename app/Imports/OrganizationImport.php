@@ -27,7 +27,7 @@ use Throwable;
 
 class OrganizationImport extends Controller implements ToCollection, WithValidation, WithHeadingRow
 {
-    public array $alreadyExistUsernames = [];
+    // public array $alreadyExistUsernames = [];
 
     /**
      * @param $data
@@ -89,6 +89,7 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
      */
     public function rules(): array
     {
+        Log::info("Inside rule");
         return [
             'organization_type_id' => [
                 'required',
@@ -271,72 +272,6 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
      */
     public function collection(Collection $collection): void
     {
-        $rows = $collection->toArray();
-        Log::info("The collections are: " . json_encode($rows));
-        foreach ($rows as $rowData){
-            $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
-            Log::info("Core user is: " . json_encode($user));
-            if(empty($user)){
-                DB::beginTransaction();
-                try {
-                    $rowData['code'] = CodeGenerateService::getIndustryCode();
-
-                    /** @var Organization $organization */
-                    $organization = app(Organization::class);
-                    $organization = app(OrganizationService::class)->store($organization, $rowData);
-
-                    app(OrganizationService::class)->syncWithSubTrades($organization, $rowData['sub_trades']);
-
-                    if (!($organization && $organization->id)) {
-                        throw new Exception('Saving Organization/Industry to DB failed!', 500);
-                    }
-
-                    $rowData['organization_id'] = $organization->id;
-                    $rowData['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
-
-                    $createdRegisterUser = app(OrganizationService::class)->createUser($rowData);
-
-                    Log::info('id_user_info:' . json_encode($createdRegisterUser));
-
-                    if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
-                        throw new Exception('Organization/Industry Creation has been failed for Contact person mobile: ' . $rowData['contact_person_mobile'], 500);
-                    }
-
-                    if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
-
-                        /** Mail send after user registration */
-                        $to = array($rowData['contact_person_email']);
-                        $from = BaseModel::NISE3_FROM_EMAIL;
-                        $subject = "User Registration Information";
-                        $message = "Congratulation, You are successfully complete your registration as " . $rowData['title'] . " user. Username: " . $rowData['contact_person_mobile'] . " & Password: " . $rowData['password'];
-                        $messageBody = MailService::templateView($message);
-                        $mailService = new MailService($to, $from, $subject, $messageBody);
-                        $mailService->sendMail();
-                        Log::info("Mail has been send");
-
-                        /** SMS send after user registration */
-                        $recipient = $rowData['contact_person_mobile'];
-                        $smsMessage = "You are successfully complete your registration as " . $rowData['title'] . " user";
-                        $smsService = new SmsService();
-                        $smsService->sendSms($recipient, $smsMessage);
-
-                        Log::info("Sms has been send");
-                    } else {
-                        throw new Exception('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
-                    }
-
-                    Log::info("Organization for contact person mobile: " . $rowData['contact_person_mobile'] . " has been created");
-                    DB::commit();
-                } catch (Throwable $e) {
-                    Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
-                    DB::rollBack();
-                    throw $e;
-                }
-            } else {
-                $this->alreadyExistUsernames[] = $rowData['contact_person_mobile'];
-            }
-        }
-
         Log::info("Successfully added all organizations");
     }
 }
