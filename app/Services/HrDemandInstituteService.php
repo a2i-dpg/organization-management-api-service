@@ -67,7 +67,6 @@ class HrDemandInstituteService
             $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
         }
         if (!empty($instituteId)) {
-            Log::info("mmmmmm vv v ");
             $hrDemandBuilder->where(function ($builder) use ($instituteId) {
                 $builder->orWhere('hr_demand_institutes.institute_id', $instituteId);
                 $builder->orWhereNull('hr_demand_institutes.institute_id');
@@ -136,6 +135,11 @@ class HrDemandInstituteService
                 $hrDemandInstitute['institute_title_en'] = $titleByInstituteIds[$hrDemandInstitute['institute_id']]['title_en'];
             }
         }
+
+        Log::info("The hrDemandInstitute result is: ");
+        Log::info(json_encode($hrDemandInstitutes));
+        Log::info("The output will be: ");
+        Log::info(json_encode(!empty($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray())));
 
         $response['order'] = $order;
         $response['data'] = !empty($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray());
