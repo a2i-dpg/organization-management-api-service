@@ -74,10 +74,10 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
             $data['phone_code'] = (string)$data['phone_code'];
         }
         if(!empty($data['mobile']) && is_int($data['mobile']) && strlen((string)$data['mobile']) == 10 && explode((string)$data['mobile'], '')[0] != 0){
-            $data['mobile'] = '0' . (string)$data['mobile'];
+            $data['mobile'] = '0' . $data['mobile'];
         }
         if(!empty($data['contact_person_mobile']) && is_int($data['contact_person_mobile']) && strlen((string)$data['contact_person_mobile']) == 10 && explode((string)$data['contact_person_mobile'], '')[0] != 0){
-            $data['contact_person_mobile'] = '0' . (string)$data['contact_person_mobile'];
+            $data['contact_person_mobile'] = '0' . $data['contact_person_mobile'];
         }
 
         Log::info("The data: " . json_encode($data));
