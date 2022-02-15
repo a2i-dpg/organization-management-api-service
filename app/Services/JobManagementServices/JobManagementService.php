@@ -1124,7 +1124,9 @@ class JobManagementService
             ->count('id');*/
         return AppliedJob::where(function ($query) {
             $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected']);
-        })->count('id');
+        })
+            ->where('job_id', $jobId)
+            ->count('id');
     }
 
     public function countStepShortlistedCandidate(string $jobId, int $stepId = null)
