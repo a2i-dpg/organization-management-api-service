@@ -33,14 +33,12 @@ use Throwable;
 class OrganizationImport extends Controller implements ToCollection, WithValidation, WithHeadingRow
 {
     /**
-     * @throws AuthorizationException
+     * @param $data
+     * @param $index
+     * @return mixed
      */
-    public function prepareForValidation($data, $index)
+    public function prepareForValidation($data, $index): mixed
     {
-        /** @var Organization $organization */
-        $organization = app(Organization::class);
-        $this->authorize('create', $organization);
-
         $request = request()->all();
         if (!empty($request['industry_association_id'])) {
             $data['industry_association_id'] = $request['industry_association_id'];
@@ -269,10 +267,10 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
      * Store rouse as bulk.
      *
      * @param Collection $collection
-     * @return JsonResponse
+     * @return void
      * @throws Throwable
      */
-    public function collection(Collection $collection): JsonResponse
+    public function collection(Collection $collection): void
     {
         $rows = $collection->toArray();
         DB::beginTransaction();
@@ -323,16 +321,6 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                 }
             }
             DB::commit();
-
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Organizations has been Created Successfully"
-                ]
-            ];
-
-            return Response::json($response, ResponseAlias::HTTP_CREATED);
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;

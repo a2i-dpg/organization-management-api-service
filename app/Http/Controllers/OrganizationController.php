@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\OrganizationImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -198,6 +200,33 @@ class OrganizationController extends Controller
             throw $e;
         }
 
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function bulkStoreByExcel(Request $request): JsonResponse
+    {
+        /** @var Organization $organization */
+        $organization = app(Organization::class);
+        $this->authorize('create', $organization);
+
+//        $this->organizationService->excelImportValidator($request)->validate();
+
+        $file = $request->file('file');
+        Excel::import(new OrganizationImport(), $file);
+
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Organizations has been Created Successfully"
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**

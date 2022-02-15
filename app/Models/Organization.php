@@ -43,6 +43,15 @@ class Organization extends BaseModel
      */
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'additional_info_model_name',
+    ];
+
     public const ROW_STATUSES = [
         self::ROW_STATUS_INACTIVE,
         self::ROW_STATUS_ACTIVE, /** Approved Status */

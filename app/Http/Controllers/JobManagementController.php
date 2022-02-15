@@ -248,13 +248,11 @@ class JobManagementController extends Controller
         if ($step >= BaseModel::FORM_STEPS['JobPreview']) {
             $primaryJobInformation = $this->primaryJobInformationService->getPrimaryJobInformationDetails($jobId);
 
-            if($primaryJobInformation->published_at==null){
-               $jobStatus = PrimaryJobInformation::JOB_STATUS_PENDING;
-            }
-            elseif ($primaryJobInformation->application_deadline<=Carbon::now()){
+            if ($primaryJobInformation->published_at == null) {
+                $jobStatus = PrimaryJobInformation::JOB_STATUS_PENDING;
+            } elseif ($primaryJobInformation->application_deadline <= Carbon::now()) {
                 $jobStatus = PrimaryJobInformation::JOB_STATUS_EXPIRED;
-            }
-            else{
+            } else {
                 $jobStatus = PrimaryJobInformation::JOB_STATUS_LIVE;
 
             }
@@ -263,7 +261,7 @@ class JobManagementController extends Controller
                 'additional_job_information' => $this->additionalJobInformationService->getAdditionalJobInformationDetails($jobId),
                 'candidate_requirements' => $this->candidateRequirementsService->getCandidateRequirements($jobId),
                 'company_info_visibility' => $this->companyInfoVisibilityService->getCompanyInfoVisibility($jobId),
-                '$jobStatus'=>$jobStatus
+                'job_status' => $jobStatus
             ]);
             $data["latest_step"] = $step;
             $response["data"] = $data;
@@ -336,6 +334,29 @@ class JobManagementController extends Controller
             DB::rollBack();
             throw $exception;
         }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function youthJobs(Request $request): JsonResponse
+    {
+        $validatedData = $this->jobManagementService->youthJobsValidator($request)->validate();
+        $validatedData["youth_only"] = "1";
+        $youthJobs = $this->jobManagementService->getJobList($validatedData, Carbon::now());
+
+        $response = [
+            "data" => $youthJobs,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "My jobs list get successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -602,20 +623,27 @@ class JobManagementController extends Controller
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
         $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
-        throw_if(!$isRecruitmentStepDeletable, ValidationException::withMessages([
-            "Recruitment Step can not be deleted"
-        ]));
+          if($isRecruitmentStepDeletable){
+             $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
+              $response = [
+                  '_response_status' => [
+                      "success" => true,
+                      "code" => ResponseAlias::HTTP_OK,
+                      "message" => "Recruitment Step deleted successfully.",
+                      "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                  ]
+              ];
+          }else{
+              $response = [
+                  '_response_status' => [
+                      "success" => false,
+                      "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                      "message" => "Recruitment Step can not be deleted.",
+                      "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                  ]
+              ];
+          }
 
-        $data = $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
-        $response = [
-            "data" => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Recruitment Step deleted successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
@@ -660,15 +688,14 @@ class JobManagementController extends Controller
     /**
      * @param Request $request
      * @param string $jobId
-     * @param int|null $stepId
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function recruitmentStepCandidateList(Request $request,string $jobId, int $stepId=null): JsonResponse
+    public function recruitmentStepCandidateList(Request $request, string $jobId): JsonResponse
     {
         $filter = $this->jobManagementService->recruitmentStepCandidateListFilterValidator($request)->validate();
 
-        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter,$jobId, $stepId);
+        $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter, $jobId);
 
         $response['_response_status'] = [
             "success" => true,
@@ -741,7 +768,7 @@ class JobManagementController extends Controller
     }
 
 
-    function stepSchedules(int $id):JsonResponse
+    function stepSchedules(int $id): JsonResponse
     {
         $schedule = $this->interviewScheduleService->getSchedulesByStepId($id);
         $response = [
@@ -813,20 +840,16 @@ class JobManagementController extends Controller
     /**
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws Throwable
      */
     public function destroySchedule(int $id): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-//        $this->authorize('delete', $schedule);
 
-        DB::beginTransaction();
-        try {
-            $this->interviewScheduleService->destroy($schedule);
+        $deleteStatus = $this->interviewScheduleService->destroy($schedule);
 
-            DB::commit();
+        if ($deleteStatus) {
             $response = [
                 '_response_status' => [
                     "success" => true,
@@ -835,9 +858,16 @@ class JobManagementController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e) {
-            DB::rollBack();
-            throw $e;
+
+        } else {
+            $response = [
+                '_response_status' => [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                    "message" => "schedule can not be  deleted.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
         }
 
         return Response::json($response, ResponseAlias::HTTP_OK);

@@ -16,7 +16,7 @@ variables:
   ltsAcme: false
 
   # app version, changing version will auto deploy the app to current version
-  imageAppVersion: "2.1.7"
+  imageAppVersion: "2.1.12"
 
   # increase this when you need scale up
   replicaCount: 1
@@ -32,7 +32,7 @@ variables:
   serviceTargetPort: 80
 
   #app buil image
-  imageRepository: "registry.nise3.xyz/nise3-organization-management-api-service"
+  imageRepository: "registry.nise.gov.bd/nise3-organization-management-api-service"
 
   #git hub project id
   githubProjectRepoID: "28047551"
