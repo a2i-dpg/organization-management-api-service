@@ -209,8 +209,6 @@ class OrganizationService
         });
 
 
-        $organizationBuilder->orderBy('industry_association_organization.id', $order);
-
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
         }
@@ -316,8 +314,6 @@ class OrganizationService
                     ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
             });
         }
-
-        $organizationBuilder->orderBy('industry_association_organization.id', $order);
 
         if (!empty($titleEn)) {
             $organizationBuilder->where('organizations.title_en', 'like', '%' . $titleEn . '%');
@@ -1070,6 +1066,26 @@ class OrganizationService
             ],
         ];
         return Validator::make($data, $rules, $customMessage);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function excelImportValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+        $rules = [
+            [
+                'file'      => $request->file(),
+                'extension' => strtolower($request->file()->getClientOriginalExtension()),
+            ],
+            [
+                'file'          => 'required',
+                'extension'      => 'required|in:xlsx,xls',
+            ]
+        ];
+        return Validator::make($data, $rules);
     }
 
     /**

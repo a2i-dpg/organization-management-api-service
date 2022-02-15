@@ -16,7 +16,7 @@ variables:
   ltsAcme: false
 
   # app version, changing version will auto deploy the app to current version
-  imageAppVersion: "2.1.3"
+  imageAppVersion: "2.1.12"
 
   # increase this when you need scale up
   replicaCount: 1
@@ -32,7 +32,7 @@ variables:
   serviceTargetPort: 80
 
   #app buil image
-  imageRepository: "registry.nise3.xyz/nise3-organization-management-api-service"
+  imageRepository: "registry.nise.gov.bd/nise3-organization-management-api-service"
 
   #git hub project id
   githubProjectRepoID: "28047551"
@@ -64,6 +64,10 @@ variables:
     DB_DATABASE: "nise_industry_association"
     DB_USERNAME: "core3"
     DB_PASSWORD: "core3"
+
+    LOG_CHANNEL: "stack"
+    ELASTIC_HOST: "http://localhost:9200"
+    ELASTIC_LOGS_INDEX: "industry_association_file_logs"
 
     CACHE_DRIVER: "redis"
     REDIS_CLIENT: "predis"
@@ -105,6 +109,16 @@ variables:
     DB_USERNAME: n3_org
     DB_PASSWORD: "kvx5V3Y^7"
 
+    LOG_CHANNEL: "stack"
+    ELASTIC_HOST: "http://localhost:9200"
+    ELASTIC_LOGS_INDEX: "industry_association_file_logs"
+
+    CACHE_DRIVER: "redis"
+    REDIS_CLIENT: "predis"
+    REDIS_HOST: "redis-headless.redis-node"
+    REDIS_PASSWORD: "k?admin"
+    REDIS_PORT: 6379
+
     RABBITMQ_HOST: "jaguar.rmq.cloudamqp.com"
     RABBITMQ_PORT: "5672"
     RABBITMQ_VHOST: "aeihxlmw"
@@ -124,6 +138,16 @@ variables:
     DB_DATABASE: org_manage
     DB_USERNAME: n3_org
     DB_PASSWORD: "kvx5V3Y^7"
+
+    LOG_CHANNEL: "stack"
+    ELASTIC_HOST: "http://localhost:9200"
+    ELASTIC_LOGS_INDEX: "industry_association_file_logs"
+
+    CACHE_DRIVER: "redis"
+    REDIS_CLIENT: "predis"
+    REDIS_HOST: "redis-headless.redis-node"
+    REDIS_PASSWORD: "k?admin"
+    REDIS_PORT: 6379
 
     RABBITMQ_HOST: "jaguar.rmq.cloudamqp.com"
     RABBITMQ_PORT: "5672"

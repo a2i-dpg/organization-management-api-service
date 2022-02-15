@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -86,7 +87,9 @@ class JobManagementService
         $industryAssociationId = $request['industry_association_id'] ?? "";
         $instituteId = $request['institute_id'] ?? "";
         $organizationId = $request['organization_id'] ?? "";
+        $youthOnly = $request['youth_only'] ?? "";
         $youthId = $request['youth_id'] ?? "";
+        $jobLevel = $request['job_level'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
@@ -222,17 +225,32 @@ class JobManagementService
         }
 
         $jobInformationBuilder->with('additionalJobInformation');
+        $jobInformationBuilder->with('additionalJobInformation.jobLocations');
+        $jobInformationBuilder->with('additionalJobInformation.jobLevels');
+
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
-            $jobInformationBuilder->with(['additionalJobInformation.jobLocations' => function ($query) use ($locDistrictIds) {
+            $jobInformationBuilder->whereHas('additionalJobInformation.jobLocations', function ($query) use ($locDistrictIds) {
                 $query->whereIn('additional_job_information_job_locations.loc_district_id', $locDistrictIds);
-            }]);
+            });
+        }
+
+        if (is_numeric($jobLevel)) {
+            $jobInformationBuilder->whereHas('additionalJobInformation.jobLevels', function ($query) use ($jobLevel) {
+                $query->where('additional_job_information_job_levels.job_level_id', $jobLevel);
+            });
         } else {
-            $jobInformationBuilder->with('additionalJobInformation.jobLocations');
+
+            $jobInformationBuilder->with('additionalJobInformation.jobLevels');
+
         }
 
         $jobInformationBuilder->with('candidateRequirement');
         $jobInformationBuilder->with('candidateRequirement.skills');
+
+        if (!empty($youthOnly) && !empty($youthId)) {
+            $jobInformationBuilder->where("applied_jobs.youth_id", $youthId);
+        }
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
@@ -309,7 +327,11 @@ class JobManagementService
             'organization_id' => 'nullable|integer',
             'institute_id' => 'nullable|integer',
             'youth_id' => 'nullable|integer',
-
+            'job_level' => [
+                'nullable',
+                'integer',
+                Rule::in(array_keys(AdditionalJobInformation::JOB_LEVEL))
+            ],
             'loc_district_ids' => [
                 'nullable',
                 'array',
@@ -431,8 +453,6 @@ class JobManagementService
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Rejected"];
-        $appliedJob->rejected_from = $appliedJob->apply_status;
-        $appliedJob->rejected_at = Carbon::now();
         $appliedJob->save();
 
         return $appliedJob;
@@ -642,6 +662,24 @@ class JobManagementService
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
+    public function youthJobsValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $requestData = $request->all();
+
+        $rules = [
+            "youth_id" => [
+                "required",
+                "integer"
+            ],
+        ];
+
+        return Validator::make($requestData, $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function applyJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $requestData = $request->all();
@@ -822,15 +860,14 @@ class JobManagementService
     /**
      * @param array $request
      * @param string $jobId
-     * @param int|null $stepId
      * @return array
      */
-    public function getRecruitmentStepCandidateList(array $request, string $jobId, int $stepId = null): array
+    public function getRecruitmentStepCandidateList(array $request, string $jobId): array
     {
+        $type = $request['type'] ?? "";
+        $stepId = $request['step_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? BaseModel::DEFAULT_PAGE_SIZE;
-        $applyStatus = $request['apply_status'] ?? "";
-        $qualified = $request['qualified'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var AppliedJob|Builder $appliedJobBuilder */
@@ -840,6 +877,8 @@ class JobManagementService
             'applied_jobs.youth_id',
             'applied_jobs.apply_status',
             'applied_jobs.current_recruitment_step_id',
+            'recruitment_steps.title as current_recruitment_step_title ',
+            'recruitment_steps.title_en as current_recruitment_step_title_en ',
             'applied_jobs.applied_at',
             'applied_jobs.profile_viewed_at',
             'applied_jobs.expected_salary',
@@ -849,20 +888,73 @@ class JobManagementService
             'applied_jobs.created_at',
             'applied_jobs.updated_at',
         ]);
-        if (!($qualified == AppliedJob::QUALIFIED_YES) || $stepId != null) {
+        $appliedJobBuilder->where('applied_jobs.job_id', $jobId);
+
+        $appliedJobBuilder->leftJoin('recruitment_steps', function ($join) {
+            $join->on('applied_jobs.current_recruitment_step_id', '=', 'recruitment_steps.id')
+                ->whereNull('recruitment_steps.deleted_at');
+        });
+
+        if ($type != AppliedJob::TYPE_QUALIFIED && is_numeric($stepId)) {
             $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
         }
 
-        if ($stepId == null) {
-            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Applied']);
-        }
+        if ($type == AppliedJob::TYPE_ALL) {
+            $appliedJobBuilder->where(function ($query) {
+                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                      ->whereNull('applied_jobs.current_recruitment_Step_id');
 
-        if (is_numeric($applyStatus)) {
-            $appliedJobBuilder->where('applied_jobs.apply_status', $applyStatus);
-        }
+            });
+            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
 
-        if (is_numeric($qualified)) {
-            $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $qualified);
+        } elseif ($type == AppliedJob::TYPE_VIEWED) {
+            $appliedJobBuilder->whereNotNull('applied_jobs.profile_viewed_at');
+            $appliedJobBuilder->where(function ($query) {
+                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->whereNull('applied_jobs.current_recruitment_step_id');
+
+            });
+            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
+
+        } elseif ($type == AppliedJob::TYPE_NOT_VIEWED) {
+            $appliedJobBuilder->whereNull('applied_jobs.profile_viewed_at');
+            $appliedJobBuilder->where(function ($query) {
+                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->whereNull('applied_jobs.current_recruitment_step_id');
+
+            });
+            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
+
+        } elseif ($type == AppliedJob::TYPE_REJECTED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Rejected']);
+            if(empty($stepId)){
+                $appliedJobBuilder->whereNull('applied_jobs.current_recruitment_step_id');
+            }
+
+        } elseif ($type == AppliedJob::TYPE_QUALIFIED) {
+            if (empty($stepId)) {
+                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', 0);
+            } else {
+                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId);
+            }
+        } else if ($type == AppliedJob::TYPE_SHORTLISTED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Shortlisted']);
+
+        } else if ($type == AppliedJob::TYPE_SCHEDULED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Interview_scheduled']);
+
+        } else if ($type == AppliedJob::TYPE_INTERVIEWED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Interviewed']);
+
+        } else if ($type == AppliedJob::TYPE_HIRE_SELECTED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed']);
+
+        } else if ($type == AppliedJob::TYPE_HIRE_INVITED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Hire_invited']);
+
+        } else if ($type == AppliedJob::TYPE_HIRED) {
+            $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Hired']);
+
         }
 
         /** @var Collection $candidates */
@@ -878,7 +970,9 @@ class JobManagementService
             $candidates = $appliedJobBuilder->get();
         }
 
+
         $resultArray = $candidates->toArray();
+
         $youthIds = $candidates->pluck('youth_id')->toArray();
         $youthProfiles = !empty($youthIds) ? ServiceToServiceCall::getYouthProfilesByIds($youthIds) : [];
         $indexedYouths = [];
@@ -908,31 +1002,136 @@ class JobManagementService
         return $response;
     }
 
+    /**
+     * @param string $jobId
+     * @return array
+     */
+    public function getRecruitmentStepList(string $jobId): array
+    {
 
-    public function countStepShortlistedCandidate(int $stepId = null)
+        /** @var Builder $recruitmentStepBuilder */
+        $recruitmentStepBuilder = RecruitmentStep::select([
+            'recruitment_steps.id',
+            'recruitment_steps.job_id',
+            'recruitment_steps.title',
+            'recruitment_steps.title_en',
+            'recruitment_steps.step_type',
+            'recruitment_steps.is_interview_reschedule_allowed',
+            'recruitment_steps.interview_contact',
+            'recruitment_steps.created_at',
+            'recruitment_steps.updated_at',
+        ]);
+
+        $recruitmentStepBuilder->where('recruitment_steps.job_id', $jobId);
+
+
+        /** @var Collection $recruitmentSteps */
+        $recruitmentSteps = $recruitmentStepBuilder->get();
+
+
+        foreach ($recruitmentSteps as &$recruitmentStep) {
+
+            $recruitmentStep['total_candidate'] = $this->countStepCandidate($jobId, $recruitmentStep->id);
+            $recruitmentStep['shortlisted'] = $this->countStepShortlistedCandidate($jobId, $recruitmentStep->id);
+            $recruitmentStep['qualified'] = $this->countStepQualifiedCandidate($jobId, $recruitmentStep->id);
+
+            if ($recruitmentStep->step_type != RecruitmentStep::STEP_TYPE_SHORTLIST) {
+                $recruitmentStep['interview_scheduled'] = $this->countStepInterviewScheduledCandidate($jobId, $recruitmentStep->id);
+                $recruitmentStep['rejected'] = $this->countStepRejectedCandidate($jobId, $recruitmentStep->id);
+            }
+        }
+
+        $response['all_applications'] = [
+            'all' => $this->countStepAcceptedCandidate($jobId),
+            'total_candidate' => $this->countStepCandidate($jobId),
+            'viewed' => $this->countProfileViewedCandidate($jobId),
+            'not_viewed' => $this->countProfileNotViewedCandidate($jobId),
+            'qualified' => $this->countStepQualifiedCandidate($jobId),
+            'rejected' => $this->countStepRejectedCandidate($jobId)
+        ];
+
+        $response['final_hiring_list'] = [
+            'total_candidate' => $this->countFinalHiringListCandidate($jobId),
+        ];
+
+        $response['steps'] = $recruitmentSteps->toArray() ?? [];
+
+
+        return $response;
+
+    }
+
+
+    public function countProfileViewedCandidate(string $jobId, int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
+            ->whereNotNull('profile_viewed_at')
+            ->count('id');
+    }
+
+    public function countProfileNotViewedCandidate(string $jobId, int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
+            ->whereNull('profile_viewed_at')
+            ->count('id');
+    }
+
+    public function countStepCandidate(string $jobId, int $stepId = null)
+    {
+        return AppliedJob::where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function countFinalHiringListCandidate(string $jobId): mixed
+    {
+        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+            ->whereNull('current_recruitment_step_id')
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
+
+    public function countStepAcceptedCandidate(string $jobId)
+    {
+        return AppliedJob::where('apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+            ->whereNull('current_recruitment_step_id')
+            ->where('job_id', $jobId)
+            ->count('id');
+    }
+
+    public function countStepShortlistedCandidate(string $jobId, int $stepId = null)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Shortlisted'])
             ->where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
-    public function countStepInterviewScheduledCandidate(int $stepId)
+    public function countStepInterviewScheduledCandidate(string $jobId, int $stepId)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Interview_scheduled'])
-            ->where('current_recruitment_step_id', $stepId)
+            ->where('current_recruitment_step_id', $jobId)
+            ->where('job_id', $stepId)
             ->count('id');
     }
 
-    public function countStepRejectedCandidate(int $stepId = null)
+    public function countStepRejectedCandidate(string $jobId, int $stepId = null)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Rejected'])
             ->where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
-    public function countStepQualifiedCandidate(int $stepId = null)
+    public function countStepQualifiedCandidate(string $jobId, int $stepId = 0)
     {
         return AppliedJob::where('current_recruitment_step_id', '>', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
@@ -952,16 +1151,16 @@ class JobManagementService
         }
 
         return Validator::make($request->all(), [
-            'apply_status' => [
-                'nullable',
-                'integer',
-                Rule::in(AppliedJob::APPLY_STATUS)
-            ],
 
-            'qualified' => [
+            'step_id' => [
                 'nullable',
                 'integer',
-                Rule::in(AppliedJob::QUALIFIED)
+                'exists:recruitment_steps,id,deleted_at,NULL'
+            ],
+            'type' => [
+                'nullable',
+                'string',
+                Rule::in(AppliedJob::CANDIDATE_LIST_FILTER_TYPES)
             ],
             'page' => 'integer|gt:0',
             'page_size' => 'integer|gt:0',

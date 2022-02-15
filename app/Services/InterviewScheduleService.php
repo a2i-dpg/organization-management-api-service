@@ -7,8 +7,10 @@ use App\Models\AppliedJob;
 use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 
 class InterviewScheduleService
@@ -31,11 +33,11 @@ class InterviewScheduleService
             'interview_schedules.updated_at',
             'interview_schedules.deleted_at'
         ]);
-        return $scheduleBuilder->firstOrFail();
+        return $scheduleBuilder->where('interview_schedules.id', $id)->firstOrFail();
     }
 
 
-    public function getSchedulesByStepId(int $id):mixed
+    public function getSchedulesByStepId(int $id): mixed
     {
         $scheduleBuilder = InterviewSchedule::select([
             'interview_schedules.id',
@@ -82,7 +84,23 @@ class InterviewScheduleService
      */
     public function destroy(InterviewSchedule $schedule): bool
     {
-        return $schedule->delete();
+        $scheduledCandidates = $this->countCandidatePerScheduled($schedule->id);
+
+        if ($scheduledCandidates == 0) {
+            return $schedule->delete();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param int $scheduleId
+     * @return mixed
+     */
+    public function countCandidatePerScheduled(int $scheduleId): mixed
+    {
+        return CandidateInterview::where('interview_schedule_id', $scheduleId)->count('id');
+
     }
 
 
@@ -129,6 +147,10 @@ class InterviewScheduleService
      */
     public function CandidateAssigningToScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
+        if (!empty($request['applied_job_ids'])) {
+            $request['applied_job_ids'] = isset($request['applied_job_ids']) && is_array($request['applied_job_ids']) ? $request['applied_job_ids'] : explode(',', $request['applied_job_ids']);
+        }
+
         $rules = [
             'notify' => [
                 'required',
@@ -165,6 +187,10 @@ class InterviewScheduleService
      */
     public function CandidateRemoveFromScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
+        if (!empty($request['applied_job_ids'])) {
+            $request['applied_job_ids'] = isset($request['applied_job_ids']) && is_array($request['applied_job_ids']) ? $request['applied_job_ids'] : explode(',', $request['applied_job_ids']);
+        }
+
         $rules = [
             'applied_job_ids' => [
                 'required',
@@ -216,7 +242,7 @@ class InterviewScheduleService
 
         foreach ($appliedJobIds as $appliedJobId) {
             $appliedJob = AppliedJob::findOrFail($appliedJobId);
-           CandidateInterview::where('applied_job_id', $appliedJob->id)
+            CandidateInterview::where('applied_job_id', $appliedJob->id)
                 ->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)
                 ->where('interview_schedule_id', $scheduleId)
                 ->delete();

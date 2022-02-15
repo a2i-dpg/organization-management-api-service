@@ -14,12 +14,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/test-excel', function () use ($router) {
-
-    $file = public_path() .'/organization-list.xlsx';
-    \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\OrganizationImport(), $file);
-});
-
 
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
@@ -126,14 +120,12 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
             $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
 
+            /** step schedule routes */
+            $router->get('step-schedule/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
+            $router->post('step-schedule', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
+            $router->put('step-schedule/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
+            $router->delete('step-schedule/{id}', ["as" => "step-schedule.delete", "uses" => "JobManagementController@destroySchedule"]);
 
-            $router->group(["prefix" => "step-schedule", "as" => "step-schedule"], function () use ($router) {
-                $router->post('create', ["as" => "create-schedule", "uses" => "JobManagementController@createSchedule"]);
-                $router->put('update/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@updateSchedule"]);
-                $router->put('update/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@updateSchedule"]);
-                $router->get('get/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@getOneSchedule"]);
-                $router->delete('delete/{id}', ["as" => "update-schedule", "uses" => "JobManagementController@destroySchedule"]);
-            });
 
             /** Update candidate status in interview steps  */
             $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
@@ -150,12 +142,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
             /**recruitment step routes **/
+            $router->get('recruitment-step-list/{jobId}', ["as" => "recruitment-steps.get-list", "uses" => "JobManagementController@getRecruitmentStepList"]);
             $router->get('recruitment-steps/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
             $router->post('recruitment-steps', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
             $router->put('recruitment-steps/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
             $router->delete('recruitment-steps/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
             $router->get('recruitment-steps/{id}/schedules', ["as" => "recruitment-steps.get-schedules", "uses" => "JobManagementController@stepSchedules"]);
-            $router->get('recruitment-step-candidate-list/{jobId}[/{stepId}]', ["as" => "recruitment-step.candidate-list", "uses" => "JobManagementController@recruitmentStepcandidateList"]);
+            $router->get('recruitment-step-candidate-list/{jobId}', ["as" => "recruitment-step.candidate-list", "uses" => "JobManagementController@recruitmentStepcandidateList"]);
 
             $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
                 $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAllCandidateList"]);
@@ -176,6 +169,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
 
         });
+
+        $router->post('/organization-import-excel', ["as" => "organization.import.excel", "uses" => "OrganizationController@bulkStoreByExcel"]);
     });
 
     /** Service to service direct call without any authorization and authentication */
@@ -191,6 +186,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** apply to job from youth service */
         $router->post("apply-to-job", ["as" => "service-to-service-call.apply-to-job", "uses" => "JobManagementController@applyToJob"]);
+
+        /** get youth jobs from youth service */
+        $router->get("youth-jobs", ["as" => "service-to-service-call.youth-jobs", "uses" => "JobManagementController@youthJobs"]);
     });
 
 
