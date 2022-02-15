@@ -27,6 +27,8 @@ use Throwable;
 
 class OrganizationImport extends Controller implements ToCollection, WithValidation, WithHeadingRow
 {
+    public array $alreadyExistUsernames = [];
+
     /**
      * @param $data
      * @param $index
@@ -264,14 +266,13 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
      * Store rouse as bulk.
      *
      * @param Collection $collection
-     * @return array
+     * @return void
      * @throws Throwable
      */
-    public function collection(Collection $collection): array
+    public function collection(Collection $collection): void
     {
         $rows = $collection->toArray();
         Log::info("The collections are: " . json_encode($rows));
-        $alreadyExistUsernames = [];
         foreach ($rows as $rowData){
             $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
             Log::info("Core user is: " . json_encode($user));
@@ -332,11 +333,10 @@ class OrganizationImport extends Controller implements ToCollection, WithValidat
                     throw $e;
                 }
             } else {
-                $alreadyExistUsernames[] = $rowData['contact_person_mobile'];
+                $this->alreadyExistUsernames[] = $rowData['contact_person_mobile'];
             }
         }
 
         Log::info("Successfully added all organizations");
-        return $alreadyExistUsernames;
     }
 }
