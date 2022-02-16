@@ -216,7 +216,7 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where(function ($builder) use($searchText){
+            $organizationBuilder->where(function ($builder) use ($searchText) {
                 $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
                 $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
             });
@@ -322,7 +322,7 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where(function ($builder) use($searchText){
+            $organizationBuilder->where(function ($builder) use ($searchText) {
                 $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
                 $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
             });
@@ -804,16 +804,21 @@ class OrganizationService
     }
 
     /**
+     * @param Request $request
      * @param Organization $organization
      * @return mixed
      * @throws RequestException
      */
-    public function organizationUserApproval(Organization $organization): mixed
+    public function organizationUserApproval(Request $request, Organization $organization): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'organization_id' => $organization->id,
+            'permission_sub_group_id' => $request->input('permission_sub_group_id') ?? "",
+            'name_en' => $organization->contact_person_name ?? "",
+            'name' => $organization->contact_person_name ?? "",
+            'row_status' => $organization->row_status
         ];
 
         return Http::withOptions(
@@ -1076,7 +1081,7 @@ class OrganizationService
     {
         $data = $request->all();
         $rules = [
-            'file'=> 'required|mimes:xlsx, csv, xls'
+            'file' => 'required|mimes:xlsx, csv, xls'
         ];
         return Validator::make($data, $rules);
     }

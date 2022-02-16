@@ -1576,8 +1576,9 @@ class JobManagementService
     {
         $maxStep = $this->findLastRecruitmentStep($recruitmentStep);
         $currentStepCandidates = $this->countCurrentRecruitmentStepCandidate($recruitmentStep);
+        $finalHiringListCandidates = $this->countTotalFinalHiringListCandidate($recruitmentStep->job_id);
 
-        return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0;
+        return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0 && $finalHiringListCandidates==0;
     }
 
     /**
