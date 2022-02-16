@@ -464,7 +464,7 @@ class JobManagementService
      * @return AppliedJob
      * @throws Throwable
      */
-    public function shortlistCandidate(int $applicationId): AppliedJob
+    public function shortlistCandidate(int $applicationId): mixed
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
         $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
@@ -485,13 +485,13 @@ class JobManagementService
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
             $appliedJob->save();
 
-        } else if (!$firstRecruitmentStep || (!empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId == $currentRecruitmentStepId)) {
+        } else if (!empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId == $currentRecruitmentStepId) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hiring_Listed"];
             $appliedJob->current_recruitment_step_id = null;
             $appliedJob->save();
 
         } else {
-            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+            return false;
         }
 
         return $appliedJob;
