@@ -466,23 +466,25 @@ class OrganizationService
     /**
      * @param Organization $organization
      * @param array $data
+     * @param bool $isOpenReg
      * @return Organization
      */
-    public function store(Organization $organization, array $data): Organization
+    public function store(Organization $organization, array $data, bool $isOpenReg = false): Organization
     {
         $organization->fill($data);
         $organization->save();
-        $this->addOrganizationToIndustryAssociation($organization, $data);
+        $this->addOrganizationToIndustryAssociation($organization, $data, $isOpenReg);
         return $organization;
     }
 
-    public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
+    public function addOrganizationToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
     {
-        $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'membership_id' => $data['membership_id'],
-            'row_status' => BaseModel::ROW_STATUS_ACTIVE
-        ]);
-
+        foreach ($data['industry_associations'] as $row) {
+            $organization->industryAssociations()->attach($row['industry_association_id'], [
+                'membership_id' => $row['membership_id'],
+                'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
+            ]);
+        }
     }
 
     /**
@@ -894,14 +896,23 @@ class OrganizationService
                 'integer',
                 'exists:sub_trades,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
                 'required',
                 'int',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'distinct',
             ],
-            'membership_id' => [
-                'required',
+            'industry_associations.*.membership_id' => [
                 'string',
+                'required',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
