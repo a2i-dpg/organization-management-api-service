@@ -6,11 +6,11 @@ use App\Models\AppliedJob;
 
 use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 
 class InterviewScheduleService
@@ -22,6 +22,7 @@ class InterviewScheduleService
      */
     public function getOneInterviewSchedule(int $id): InterviewSchedule
     {
+        /** @var Builder|Model $scheduleBuilder */
         $scheduleBuilder = InterviewSchedule::select([
             'interview_schedules.id',
             'interview_schedules.recruitment_step_id',
@@ -147,10 +148,11 @@ class InterviewScheduleService
      */
     public function CandidateAssigningToScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
-        if (!empty($request['applied_job_ids'])) {
-            $request['applied_job_ids'] = isset($request['applied_job_ids']) && is_array($request['applied_job_ids']) ? $request['applied_job_ids'] : explode(',', $request['applied_job_ids']);
-        }
 
+        $requestData = $request->all();
+        if (!empty($request['applied_job_ids'])) {
+            $requestData['applied_job_ids'] =is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
+        }
         $rules = [
             'notify' => [
                 'required',
@@ -167,8 +169,11 @@ class InterviewScheduleService
             'applied_job_ids.*' => [
                 'required',
                 'integer',
-                'unique_with:candidate_interviews,recruitment_step_id',
-                'exists:applied_jobs,id,deleted_at,NULL'
+                'exists:applied_jobs,id,deleted_at,NULL',
+                Rule::unique('candidate_interviews','applied_job_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($interviewSchedule){
+                        return $query->where('recruitment_step_id', $interviewSchedule->recruitment_step_id);
+                    })
             ],
             'interview_invite_type' => [
                 'integer',
@@ -177,7 +182,7 @@ class InterviewScheduleService
             ]
         ];
 
-        return Validator::make($request->all(), $rules);
+        return Validator::make($requestData, $rules);
     }
 
     /**
