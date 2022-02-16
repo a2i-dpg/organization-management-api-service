@@ -101,19 +101,19 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('other-benefits', ["as" => "other_benefits", "uses" => "JobManagementController@getOtherBenefits"]);
             $router->post("status-change/{jobId}", ["as" => "jobs.status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
 
-            $router->post("store-primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
+            $router->post("primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
             $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
 
-            $router->post("store-additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
+            $router->post("additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
             $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "AdditionalJobInfoController@getAdditionalJobInformation"]);
 
-            $router->post("store-candidate-requirements", ["as" => "store-candidate-requirements", "uses" => "CandidateRequirementController@storeCandidateRequirements"]);
+            $router->post("candidate-requirements", ["as" => "store-candidate-requirements", "uses" => "CandidateRequirementController@storeCandidateRequirements"]);
             $router->get("candidate-requirements/{jobId}", ["as" => "get-candidate-requirements", "uses" => "CandidateRequirementController@getCandidateRequirements"]);
 
-            $router->post("store-company-info-visibility", ["as" => "store-company-info-visibility", "uses" => "CompanyInfoVisibilityController@storeCompanyInfoVisibility"]);
+            $router->post("company-info-visibility", ["as" => "store-company-info-visibility", "uses" => "CompanyInfoVisibilityController@storeCompanyInfoVisibility"]);
             $router->get("company-info-visibility/{jobId}", ["as" => "get-company-info-visibility", "uses" => "CompanyInfoVisibilityController@getCompanyInfoVisibility"]);
 
-            $router->post("store-matching-criteria", ["as" => "store-matching-criteria", "uses" => "MatchingCriteriaController@storeMatchingCriteria"]);
+            $router->post("matching-criteria", ["as" => "store-matching-criteria", "uses" => "MatchingCriteriaController@storeMatchingCriteria"]);
             $router->get("matching-criteria/{jobId}", ["as" => "get-matching-criteria", "uses" => "MatchingCriteriaController@getMatchingCriteria"]);
 
             $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
@@ -125,29 +125,31 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->put('step-schedule/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
             $router->delete('step-schedule/{id}', ["as" => "step-schedule.delete", "uses" => "JobManagementController@destroySchedule"]);
 
+            $router->put('step-schedule/{scheduleId}/assign', ["as" => "step-schedule.assign", "uses" => "JobManagementController@assignCandidateToInterviewSchedule"]);
+            $router->put('step-schedule/{scheduleId}/unassign', ["as" => "step-schedule.unassign", "uses" => "JobManagementController@removeCandidateFromInterviewSchedule"]);
+
 
             /** Update candidate status in interview steps  */
-            $router->group(["prefix" => "candidate-update", "as" => "candidate-update"], function () use ($router) {
-                $router->put('reject/{applicationId}', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
-                $router->put('shortlist/{applicationId}', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
-                $router->put('interviewed/{applicationId}', ["as" => "candidate-update.interviewed", "uses" => "JobManagementController@updateInterviewedCandidate"]);
-                $router->put('remove/{applicationId}', ["as" => "candidate-update.remove", "uses" => "JobManagementController@removeCandidateToPreviousStep"]);
-                $router->put('restore/{applicationId}', ["as" => "candidate-update.remove", "uses" => "JobManagementController@restoreRejectedCandidate"]);
-                $router->put('hire-invite/{applicationId}', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
-                $router->put('hired/{applicationId}', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
-                $router->put('schedule/{scheduleId}', ["as" => "candidate-update.schedule", "uses" => "JobManagementController@assignCandidateToInterviewSchedule"]);
-                $router->put('deschedule/{scheduleId}', ["as" => "candidate-update.deschedule", "uses" => "JobManagementController@removeCandidateFromInterviewSchedule"]);
+            $router->group(["prefix" => "candidate", "as" => "candidate-update"], function () use ($router) {
+                $router->put('/{applicationId}/reject', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
+                $router->put('/{applicationId}/shortlist', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
+                $router->put('/{applicationId}/interviewed', ["as" => "candidate-update.interviewed", "uses" => "JobManagementController@updateInterviewedCandidate"]);
+                $router->put('/{applicationId}/remove', ["as" => "candidate-update.remove", "uses" => "JobManagementController@removeCandidateToPreviousStep"]);
+                $router->put('/{applicationId}/restore', ["as" => "candidate-update.remove", "uses" => "JobManagementController@restoreRejectedCandidate"]);
+                $router->put('/{applicationId}/hire-invite', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
+                $router->put('/{applicationId}/hired', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
             });
 
 
             /**recruitment step routes **/
-            $router->get('recruitment-step-list/{jobId}', ["as" => "recruitment-steps.get-list", "uses" => "JobManagementController@getRecruitmentStepList"]);
-            $router->get('recruitment-steps/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
-            $router->post('recruitment-steps', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
-            $router->put('recruitment-steps/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
-            $router->delete('recruitment-steps/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
-            $router->get('recruitment-steps/{id}/schedules', ["as" => "recruitment-steps.get-schedules", "uses" => "JobManagementController@stepSchedules"]);
-            $router->get('recruitment-step-candidate-list/{jobId}', ["as" => "recruitment-step.candidate-list", "uses" => "JobManagementController@recruitmentStepcandidateList"]);
+            $router->get('recruitment-step/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
+            $router->post('recruitment-step', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->put('recruitment-step/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+            $router->delete('recruitment-step/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
+            $router->get('recruitment-step/{id}/schedules', ["as" => "recruitment-steps.get-schedules", "uses" => "JobManagementController@stepSchedules"]);
+
+            $router->get('recruitment-steps/{jobId}', ["as" => "recruitment-steps.get-list", "uses" => "JobManagementController@getRecruitmentStepList"]);
+            $router->get('candidates/{jobId}', ["as" => "recruitment-step.candidate-list", "uses" => "JobManagementController@recruitmentStepcandidateList"]);
 
             /**
              * DEPRECATED.
