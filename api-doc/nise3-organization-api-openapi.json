@@ -449,7 +449,45 @@
                         "description": "successfull",
                         "content": {
                             "application/json": {
-                                "example": {}
+                                "example": {
+                                    "_response_status": {
+                                        "success": false,
+                                        "code": 200,
+                                        "message": "organization approved successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/organization-user-rejection/{organizationId}": {
+            "put": {
+                "tags": [
+                    "Organization Registration"
+                ],
+                "summary": "Organization user reject",
+                "description": "API endpoint to Organization user approval.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": false,
+                                        "code": 200,
+                                        "message": "organization rejected successfully",
+                                        "query_time": 0
+                                    }
+                                }
                             }
                         }
                     }
