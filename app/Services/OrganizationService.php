@@ -478,11 +478,12 @@ class OrganizationService
 
     public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
     {
-        $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'membership_id' => $data['membership_id'],
-            'row_status' => BaseModel::ROW_STATUS_ACTIVE
-        ]);
-
+        foreach ($data['industry_associations'] as $row){
+            $organization->industryAssociations()->attach($row['industry_association_id'], [
+                'membership_id' => $row['membership_id'],
+                'row_status' => BaseModel::ROW_STATUS_ACTIVE
+            ]);
+        }
     }
 
     /**
@@ -894,14 +895,23 @@ class OrganizationService
                 'integer',
                 'exists:sub_trades,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
                 'required',
                 'int',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'distinct',
             ],
-            'membership_id' => [
-                'required',
+            'industry_associations.*.membership_id' => [
                 'string',
+                'required',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
