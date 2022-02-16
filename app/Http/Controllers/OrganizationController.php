@@ -223,25 +223,15 @@ class OrganizationController extends Controller
         try {
             Excel::import($organizationImport, $file);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-
-            foreach ($failures as $failure) {
-                Log::info("Failures started for excel ******************************* START");
-                Log::info("EXCEL error row: " . json_encode($failure->row()));
-                Log::info("EXCEL error attribute: " . json_encode($failure->attribute()));
-                Log::info("EXCEL error errors: " . json_encode($failure->errors()));
-                Log::info("EXCEL error values: " . json_encode($failure->values()));
-            }
+            Log::debug('Error occurred: '.$e->getMessage());
         }
-
-        Log::info("Successfully done excel import.");
-        Log::info(json_encode($organizationImport->alreadyExistUsernames));
 
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Organizations has been Created Successfully"
+                "message" => "Organizations has been Created Successfully",
+                "exist_users" => json_encode($organizationImport->alreadyExistUsernames)
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_CREATED);
