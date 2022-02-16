@@ -223,7 +223,7 @@ class OrganizationController extends Controller
         try {
             Excel::import($organizationImport, $file);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            Log::debug('Error occurred: '.$e->getMessage());
+            Log::debug('Error occurred: ' . $e->getMessage());
         }
 
         $response = [
@@ -401,21 +401,28 @@ class OrganizationController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $organizationId
      * @return JsonResponse
      * @throws RequestException
      * @throws Throwable
      */
-    public function organizationUserApproval(int $organizationId): JsonResponse
+    public function organizationUserApproval(Request $request, int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
+
+        if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+            throw_if(empty($organization->input('permission_sub_group_id')), ValidationException::withMessages([
+                "permission_sub_group_id is required.[50000]"
+            ]));
+        }
+
         DB::beginTransaction();
         try {
-            if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+                $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
                 $this->organizationService->organizationStatusChangeAfterApproval($organization);
-                $userApproval = $this->organizationService->organizationUserApproval($organization);
-                if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
 
+                if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
                     /** Mail send */
                     $to = array($organization->contact_person_email);
                     $from = BaseModel::NISE3_FROM_EMAIL;
@@ -431,21 +438,14 @@ class OrganizationController extends Controller
                     $smsService = new SmsService();
                     $smsService->sendSms($recipient, $smsMessage);
                 }
-                $response['_response_status'] = [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "organization approved successfully",
-                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
-                ];
                 DB::commit();
-            } else {
-                $response['_response_status'] = [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "organization can not be approved",
-                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
-                ];
-            }
+            $response['_response_status'] = [
+                "success" => false,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "organization approved successfully",
+                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+            ];
+
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
