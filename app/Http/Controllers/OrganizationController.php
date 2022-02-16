@@ -479,13 +479,14 @@ class OrganizationController extends Controller
     public function organizationUserApproval(Request $request, int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
+        Log::info($organization);;
 
         if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
-            throw_if(empty($organization->input('permission_sub_group_id')), ValidationException::withMessages([
+            throw_if(empty($request->input('permission_sub_group_id')), ValidationException::withMessages([
                 "permission_sub_group_id is required.[50000]"
             ]));
         }
-
+        Log::info("kkdhdsffgd");
         DB::beginTransaction();
         try {
                 $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
