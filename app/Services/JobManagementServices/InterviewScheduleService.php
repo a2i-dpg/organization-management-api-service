@@ -74,17 +74,21 @@ class InterviewScheduleService
      */
     public function update(InterviewSchedule $schedule, array $data): InterviewSchedule|bool
     {
-
-        $scheduledCandidates = $this->countCandidatePerSchedule($schedule->id);
-        if ($scheduledCandidates == 0) {
-            $schedule->fill($data);
-            $schedule->save();
-            return $schedule;
-        } else {
-            return false;
-        }
+        $schedule->fill($data);
+        $schedule->save();
+        return $schedule;
 
     }
+
+    /**
+     * @param int $scheduleId
+     * @return mixed
+     */
+    public function isScheduleUpdatable(int $scheduleId): mixed
+    {
+        return $this->countCandidatePerSchedule($scheduleId)==0;
+    }
+
 
     /**
      * @param InterviewSchedule $schedule
@@ -122,22 +126,24 @@ class InterviewScheduleService
         $rules = [
             'job_id' => [
                 'required',
-                'string'
+                'string',
+                'exists:primary_job_information,id,deleted_at,NULL'
             ],
             'recruitment_step_id' => [
-                'nullable',
-                'string'
+                'integer',
+                'required',
+                'exists:recruitment_steps,id,deleted_at,NULL'
             ],
             'interview_scheduled_at' => [
-                'nullable',
-                'string'
+                'required',
+                'date_format:Y-m-d H:i'
             ],
             'maximum_number_of_applicants' => [
                 'required',
                 'integer'
             ],
             'interview_invite_type' => [
-                'nullable',
+                'required',
                 'integer'
             ],
             'interview_address' => [

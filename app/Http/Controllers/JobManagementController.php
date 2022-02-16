@@ -839,18 +839,18 @@ class JobManagementController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ValidationException
      */
     public function updateSchedule(Request $request, int $id): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-        $validated = $this->interviewScheduleService->validator($request, $id)->validate();
+        $isScheduleUpdatable = $this->interviewScheduleService->isScheduleUpdatable($schedule->id);
 
-        $updateSchedule = $this->interviewScheduleService->update($schedule, $validated);
+        if ($isScheduleUpdatable) {
+            $validated = $this->interviewScheduleService->validator($request, $id)->validate();
+            $this->interviewScheduleService->update($schedule, $validated);
 
-        if (empty($updateSchedule)) {
             $success = false;
             $message = "schedule updated successfully.";
             $code = ResponseAlias::HTTP_BAD_REQUEST;
@@ -859,6 +859,7 @@ class JobManagementController extends Controller
             $message = "schedule can not updated.";
             $code = ResponseAlias::HTTP_OK;
         }
+
         $response = [
             '_response_status' => [
                 "success" => $success,
@@ -876,7 +877,8 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroySchedule(int $id): JsonResponse
+    public
+    function destroySchedule(int $id): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
@@ -910,7 +912,8 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws ValidationException|Throwable
      */
-    public function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
+    public
+    function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($scheduleId);
 
@@ -963,7 +966,8 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
+    public
+    function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
 
         $schedule = InterviewSchedule::findOrFail($scheduleId);
@@ -991,7 +995,8 @@ class JobManagementController extends Controller
      * @param int $youthId
      * @return array
      */
-    public function youthFeedStatistics(Request $request, int $youthId): array
+    public
+    function youthFeedStatistics(Request $request, int $youthId): array
     {
         $requestData = $request->all();
         if (!empty($requestData["skill_ids"])) {
