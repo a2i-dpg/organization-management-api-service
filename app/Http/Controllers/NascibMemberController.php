@@ -51,7 +51,6 @@ class NascibMemberController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
-     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {

@@ -61,6 +61,12 @@ class NascibMember extends BaseModel
     public const FORM_FILL_UP_BY_UDC_ENTREPRENEUR = 2;
     public const FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION = 3;
 
+    public const FORM_FILL_UP_LIST=[
+        self::FORM_FILL_UP_BY_OWN,
+        self::FORM_FILL_UP_BY_UDC_ENTREPRENEUR,
+        self::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION,
+    ];
+
     public const STATUS_INITIAL_STATE = 0;
     public const STATUS_ACCEPT = 1;
     public const STATUS_REJECTED = 2;
@@ -75,16 +81,20 @@ class NascibMember extends BaseModel
     public const PROPRIETORSHIP_PARTNERSHIP_PROPRIETORSHIP = 2;
     public const PROPRIETORSHIP_JOIN_PROPRIETORSHIP = 3;
 
-    public const PROPRIETORSHIP = [
-        1 => 'একক মালিকানা',
-        2 => 'অংশীদারি মালিকানা',
-        3 => 'যৌথ মালিকানা',
+    public const PROPRIETORSHIP_LIST = [
+        self::PROPRIETORSHIP_SOLE_PROPRIETORSHIP => 'Sole Proprietorship (একক মালিকানা)',
+        self::PROPRIETORSHIP_PARTNERSHIP_PROPRIETORSHIP => 'Partnership Proprietorship (অংশীদারি মালিকানা)',
+        self::PROPRIETORSHIP_JOIN_PROPRIETORSHIP => 'Join Proprietorship (যৌথ মালিকানা)',
     ];
 
+    public const TRADE_LICENSING_AUTHORITY_CITY_CORPORATION_KEY = 1;
+    public const TRADE_LICENSING_AUTHORITY_MUNICIPALITY = 2;
+    public const TRADE_LICENSING_AUTHORITY_UNION_COUNCIL = 3;
+
     public const TRADE_LICENSING_AUTHORITY = [
-        1 => 'সিটি কর্পোরেশন',
-        2 => 'পৌরসভা',
-        3 => 'ইউনিয়ন পরিষদ',
+        self::TRADE_LICENSING_AUTHORITY_CITY_CORPORATION_KEY => 'City Corporation (সিটি কর্পোরেশন)',
+        self::TRADE_LICENSING_AUTHORITY_MUNICIPALITY => 'Municipality (পৌরসভা)',
+        self::TRADE_LICENSING_AUTHORITY_UNION_COUNCIL => 'Union Council (ইউনিয়ন পরিষদ)',
     ];
 
     public const SECTOR = [

@@ -163,24 +163,36 @@ class NascibMemberService
     public function store(Organization $organization, NascibMember $nascibMember, array $data): NascibMember
     {
         $authUser = Auth::user();
-        $orgData['organization_type_id'] = 1;//TODO
-        $orgData['membership_id'] = 'MS-ID-123';//TODO
+
+        $orgData['organization_type_id'] = $data['organization_type_id'];
+        $orgData['membership_id'] = $data['membership_id'];
         $orgData['permission_sub_group_id'] = $data['permission_sub_group_id'];;
         $orgData['industry_association_id'] = $data['industry_association_id'];
+
         $orgData['title'] = $data['organization_name'];
-        $orgData['loc_division_id'] = 1;//TODO $data['organization_loc_district_id'];
+        $orgData['title_en'] = $data['organization_name_en'];
+
+        $orgData['loc_division_id'] = $data['organization_loc_division_id'];
         $orgData['loc_district_id'] = $data['organization_loc_district_id'];
         $orgData['loc_upazila_id'] = $data['organization_loc_upazila_id'];
         $orgData['address'] = $data['organization_address'];
+        $orgData['address_en'] = $data['organization_address_en'];
+
         $orgData['mobile'] = $data['mobile'];
         $orgData['email'] = $data['email'];
         $orgData['contact_person_name'] = $data['name'];
+        $orgData['contact_person_name_en'] = $data['name_en'];
         $orgData['contact_person_mobile'] = $data['mobile'];
-        $orgData['contact_person_email'] = $data['email'];
-        $orgData['contact_person_designation'] = 'Software Engineer'; //TODO
-        $orgData['additional_info_model_name'] = 'NascibMember'; //TODO
+        $orgData['contact_person_email'] = $data['contact_person_email'];
+        $orgData['contact_person_designation'] = $data['contact_person_designation'];
+        $orgData['contact_person_designation_en'] = $data['contact_person_designation_en'];
 
-        $organization = $organization->create($orgData);
+        /**Model Name For Nascib Organization */
+        $orgData['additional_info_model_name'] = NascibMember::class;
+
+        $organization->fill($orgData);
+        $organization->save();
+
         $organizationService = App(OrganizationService::class);
         $organizationService->addOrganizationToIndustryAssociation($organization, $orgData);
 
@@ -307,66 +319,97 @@ class NascibMemberService
 
         $rules = [
             'application_tracking_no' => 'nullable|string|max: 191',
+            /** Same as industry */
+            'title' => 'required|string|max:500',
+            'title_en' => 'nullable|string|max:191',
+            'address' => 'required|string|max:1200',
+            'address_en' => 'required|string|max:600',
+            'loc_division_id' => [
+                'required',
+                'integer',
+                'exists:loc_divisions,id,deleted_at,NULL'
+            ],
+            'loc_district_id' => [
+                'required',
+                'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
+            ],
+            'loc_upazila_id' => [
+                'nullable',
+                'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
+            ],
+            'domain' => 'nullable|string|max:255',
+            /** end */
+
+            'trade_license_no' => 'required|string|max:191|unique:nascib_members,trade_license_no',
+            'identification_no' => 'nullable|string|max:191',
+
+            'entrepreneur_name' => 'required|string|max: 100',
+            'entrepreneur_name_bn' => 'nullable|string|max: 100',
+            'entrepreneur_gender' => 'required|int|digits_between: 1,2',
+            'entrepreneur_date_of_birth' => 'required|date_format:Y-m-d',
+            'entrepreneur_educational_qualification' => 'required|string|max: 191',
+            'entrepreneur_nid' => 'required|string',
+            'entrepreneur_nid_file_path' => "required|mimes:pdf|max:2048",
+            'entrepreneur_mobile' => [
+                "required",
+                BaseModel::MOBILE_REGEX
+            ],
+            'entrepreneur_email' => 'required|max:191|email',
+            'entrepreneur_photo_path' => [
+                'required',
+                'string'
+            ],
+
             'form_fill_up_by' => [
                 'required',
                 'int',
-                'between:1,4'
+                Rule::in(array_keys(NascibMember::FORM_FILL_UP_LIST))
             ],
             'udc_name' => 'nullable|string|max: 100',
             'udc_loc_district' => 'nullable|string|max: 191',
             'udc_union' => 'nullable|string|max: 191',
             'udc_code' => 'nullable|string|max: 255',
-
             'chamber_or_association_name' => 'nullable|string|max: 100',
             'chamber_or_association_loc_district_id' => 'nullable|int|exists:loc_districts,id',
             'chamber_or_association_union' => 'nullable|string|max: 191',
             'chamber_or_association_code' => 'nullable|string|max: 255',
 
-            'name' => 'required|string|max: 100',
-            'name_bn' => 'nullable|string|max: 100',
-            'gender' => 'required|int|digits_between: 1,2',
-            'date_of_birth' => 'required|date_format:Y-m-d',
-            'educational_qualification' => 'required|string|max: 191',
-            'nid' => 'required|string|max: 30',
-            'nid_file' => "required|mimes:pdf|max:2048",
-            'mobile' => 'required|string|max: 20',
-            'email' => 'nullable|string|max:191|email',
-            'entrepreneur_photo' => [
-                'required',
-                'image',
-                'mimes:jpeg,jpg,png,gif',
-                'max:500',
-                'dimensions:width=300,height=300'
+            'is_factory' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
-            'organization_trade_license_no' => 'required|string|max:191|unique:organization_ina000002,organization_trade_license_no',
-            'organization_identification_no' => 'nullable|string|max:191',
-            'organization_name' => 'required|string|max:191',
-            'organization_address' => 'required|string|max:191',
-            'organization_loc_district_id' => 'nullable|int|exists:loc_districts,id',
-            'organization_loc_upazila_id' => 'nullable|int|exists:loc_upazilas,id',
-            'organization_domain' => 'nullable|string|max:255',
-            'factory' => 'boolean',
             "factory_address" => "nullable|string|max:255",
-            "factory_loc_district_id" => "required|int|exists:loc_districts,id",
-            "factory_loc_upazila_id" => "required|int|exists:loc_upazilas,id",
             "factory_web_site" => "nullable|string|max:255",
-            "office_or_showroom" => "boolean",
-            "factory_land_own_or_rent" => "boolean",
-
-            'proprietorship' => 'required|int|in: 1,2,3',
+            "factory_land_own_or_rent" => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
+            'is_proprietorship' => [
+                'required',
+                'integer',
+                Rule::in(array_keys(NascibMember::PROPRIETORSHIP_LIST))
+            ],
             'industry_establishment_year' => 'required|date_format:Y',
             'trade_licensing_authority' => [
                 'required',
                 'int',
-                'between:1,3'
+                Rule::in(array_keys(NascibMember::TRADE_LICENSING_AUTHORITY))
             ],
             'trade_license' => "nullable|mimes:pdf|max:2048",
             'industry_last_renew_year' => 'required|string|max:4',
-            'tin' => 'boolean',
+            'is_tin' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'investment_amount' => 'required|string|max:255',
             'current_total_asset' => 'nullable|string|max:255',
 
-            'registered_under_authority' => 'boolean',
+            'is_registered_under_authority' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'registered_authority' => [
                 'nullable',
                 'array',
@@ -376,7 +419,10 @@ class NascibMemberService
                 'nullable',
                 'array',
             ],
-            'specialized_area' => 'boolean',
+            'have_specialized_area' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'specialized_area_name' => [
                 'nullable',
                 'array',
@@ -384,14 +430,17 @@ class NascibMemberService
             'under_sme_cluster' => 'boolean',
             'under_sme_cluster_name' => 'nullable|string|max:100',
 
-            'member_of_association_or_chamber' => 'boolean',
+            'have_member_of_association_or_chamber' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'member_of_association_or_chamber_name' => 'nullable|string|max:191',
             'sector' => 'required|string|max:191',
             'sector_other_name' => 'nullable|string|max:191',
             'business_type' => [
                 'required',
                 'int',
-                'between:1,3'
+                Rule::in(array_keys(NascibMember::BUSINESS_TYPE))
             ],
             'main_product_name' => 'required|string|max:191',
             'main_material_description' => [
@@ -400,35 +449,46 @@ class NascibMemberService
                 'max:5000'
             ],
 
-            'import' => 'boolean',
+            'is_import' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'import_by' => [
                 'nullable',
                 'array'
             ],
-            'export_abroad' => 'boolean',
+            'is_export_abroad' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'export_abroad_by' => [
                 'nullable',
                 'array'
             ],
             'industry_irc_no' => 'nullable|string|max:191',
-
             'salaried_manpower' => [
                 'nullable',
                 'array'
             ],
-            'have_bank_account' => 'boolean',
+            'have_bank_account' => [
+                "required",
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ],
             'bank_account_type' => [
                 'nullable',
                 'array'
             ],
-            'accounting_system' => 'boolean',
+
+            'have_accounting_system' => 'boolean',
             'use_computer' => 'boolean',
-            'internet_connection' => 'boolean',
-            'online_business' => 'boolean',
+            'have_internet_connection' => 'boolean',
+            'have_online_business' => 'boolean',
+
             'info_provider_name' => 'nullable|string|max:100',
             'info_provider_mobile' => 'nullable|string|max:100',
             'info_collector_name' => 'nullable|string|max:100',
             'info_collector_mobile' => 'nullable|string|max:100',
+
             'industry_association_id' => [
                 'required',
                 'int',
@@ -444,21 +504,21 @@ class NascibMemberService
 
         ];
 
-        if (!empty($request->form_fill_up_by == NascibMember::FORM_FILL_UP_BY_UDC_ENTREPRENEUR)) {
+        if (!empty($request->get('form_fill_up_by') == NascibMember::FORM_FILL_UP_BY_UDC_ENTREPRENEUR)) {
             $rules['udc_name'] = 'required|string|max: 100';
             //$rules['udc_loc_district'] = 'required|string|max: 191';
             $rules['udc_union'] = 'required|string|max: 191';
             $rules['udc_code'] = 'required|string|max: 255';
         }
 
-        if (!empty($request->form_fill_up_by == NascibMember::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION)) {
+        if (!empty($request->get('form_fill_up_by') == NascibMember::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION)) {
             $rules['chamber_or_association_name'] = 'required|string|max: 100';
             $rules['chamber_or_association_loc_district_id'] = 'required|int|exists:loc_districts,id';
             $rules['chamber_or_association_union'] = 'required|string|max: 191';
             $rules['chamber_or_association_code'] = 'required|string|max: 255';
         }
 
-        if (!empty($request->factory)) {
+        if (!empty($request->get('factory'))) {
             $rules['factory_loc_district_id'] = 'required|int|exists:loc_districts,id';
             $rules['factory_loc_upazila_id'] = 'required|int|exists:loc_upazilas,id';
             $rules['office_or_showroom'] = 'required|boolean';
@@ -468,30 +528,30 @@ class NascibMemberService
             $rules['office_or_showroom'] = 'boolean';
         }
 
-        if (!empty($request->under_sme_cluster)) {
+        if (!empty($request->get('under_sme_cluster'))) {
             $rules['under_sme_cluster_name'] = 'required|string|max:100';
         }
-        if (!empty($request->member_of_association_or_chamber)) {
+        if (!empty($request->get('member_of_association_or_chamber'))) {
             $rules['member_of_association_or_chamber_name'] = 'required|string|max:191';
         }
 
-        if (!empty($request->export_abroad)) {
+        if (!empty($request->get('export_abroad'))) {
             $rules['industry_irc_no'] = 'required|string|max:191';
         }
 
 
-        if (!empty($request->sector == 'others')) {
+        if (!empty($request->get('sector') == 'others')) {
             $rules['sector_other_name'] = 'required|string|max:191';
         }
 
-        if (!empty($request->export_abroad)) {
+        if (!empty($request->get('export_abroad'))) {
             $rules['export_abroad_by'] = 'required|array|min:1';
         }
 
-        if (!empty($request->import)) {
+        if (!empty($request->get('import'))) {
             $rules['import_by'] = 'required|array|min:1';
         }
-        if (!empty($request->have_bank_account)) {
+        if (!empty($request->get('have_bank_account'))) {
             $rules['bank_account_type'] = 'required|array|min:1';
         }
 
