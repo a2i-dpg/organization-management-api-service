@@ -214,11 +214,14 @@ class OrganizationController extends Controller
         $organization = app(Organization::class);
         $this->authorize('create', $organization);
 
-        //$this->organizationService->excelImportValidator($request)->validate();
+        $this->organizationService->excelImportValidator($request)->validate();
 
         $file = $request->file('file');
+
+        $organizationImport = new OrganizationImport();
+
         try {
-            Excel::import(new OrganizationImport(), $file);
+            Excel::import($organizationImport, $file);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
 
@@ -228,16 +231,11 @@ class OrganizationController extends Controller
                 Log::info("EXCEL error attribute: " . json_encode($failure->attribute()));
                 Log::info("EXCEL error errors: " . json_encode($failure->errors()));
                 Log::info("EXCEL error values: " . json_encode($failure->values()));
-
-
-                /*; // row that went wrong
-                $failure->attribute(); // either heading key (if using heading row concern) or column index
-                $failure->errors(); // Actual error messages from Laravel validator
-                $failure->values(); // The values of the row that has failed.*/
             }
         }
 
         Log::info("Successfully done excel import.");
+        Log::info(json_encode($organizationImport->alreadyExistUsernames));
 
         $response = [
             '_response_status' => [

@@ -1076,14 +1076,7 @@ class OrganizationService
     {
         $data = $request->all();
         $rules = [
-            [
-                'file'      => $request->file(),
-                'extension' => strtolower($request->file()->getClientOriginalExtension()),
-            ],
-            [
-                'file'          => 'required',
-                'extension'      => 'required|in:xlsx,xls',
-            ]
+            'file'=> 'required|mimes:xlsx, csv, xls'
         ];
         return Validator::make($data, $rules);
     }
