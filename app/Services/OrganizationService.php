@@ -466,22 +466,23 @@ class OrganizationService
     /**
      * @param Organization $organization
      * @param array $data
+     * @param bool $isOpenReg
      * @return Organization
      */
-    public function store(Organization $organization, array $data): Organization
+    public function store(Organization $organization, array $data, bool $isOpenReg = false): Organization
     {
         $organization->fill($data);
         $organization->save();
-        $this->addOrganizationToIndustryAssociation($organization, $data);
+        $this->addOrganizationToIndustryAssociation($organization, $data, $isOpenReg);
         return $organization;
     }
 
-    public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
+    public function addOrganizationToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
     {
-        foreach ($data['industry_associations'] as $row){
+        foreach ($data['industry_associations'] as $row) {
             $organization->industryAssociations()->attach($row['industry_association_id'], [
                 'membership_id' => $row['membership_id'],
-                'row_status' => BaseModel::ROW_STATUS_ACTIVE
+                'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
             ]);
         }
     }
