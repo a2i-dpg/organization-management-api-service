@@ -3,17 +3,13 @@
 namespace App\Services;
 
 use App\Exceptions\HttpErrorException;
-use App\Models\AppliedJob;
 use App\Models\BaseModel;
-use App\Models\CandidateRequirement;
 use App\Models\IndustryAssociation;
 use App\Models\Organization;
 use App\Models\NascibMember;
-use App\Models\PrimaryJobInformation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
@@ -34,7 +30,7 @@ class NascibMemberService
      * @param Carbon $startTime
      * @return array
      */
-    public function getIndustryAssociationList(array $request, Carbon $startTime): array
+    public function getNascibMemberList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
@@ -45,101 +41,116 @@ class NascibMemberService
         $tradeId = $request['trade_id'] ?? "";
 
         /** @var Builder organizationBuilder */
-        $industryAssociationBuilder = IndustryAssociation::select([
-            'industry_associations.id',
-            'industry_associations.trade_id',
-            'trades.title as trade_title',
-            'trades.title_en as trade_title_en',
-            'industry_associations.title_en',
-            'industry_associations.title',
-            'industry_associations.loc_division_id',
-            'loc_divisions.title_en as loc_division_title_en',
-            'loc_divisions.title as loc_division_title',
-            'industry_associations.loc_district_id',
-            'loc_districts.title_en as loc_district_title_en',
-            'loc_districts.title as loc_district_title',
-            'industry_associations.loc_upazila_id',
-            'loc_upazilas.title_en as loc_upazila_title_en',
-            'loc_upazilas.title as loc_upazila_title',
-            'loc_upazilas.title as location_latitude',
-            'loc_upazilas.title as location_longitude',
-            'loc_upazilas.title as google_map_src',
-            'industry_associations.name_of_the_office_head',
-            'industry_associations.name_of_the_office_head_en',
-            'industry_associations.name_of_the_office_head_designation',
-            'industry_associations.name_of_the_office_head_designation_en',
-            'industry_associations.address',
-            'industry_associations.address_en',
-            'industry_associations.country',
-            'industry_associations.phone_code',
-            'industry_associations.mobile',
-            'industry_associations.email',
-            'industry_associations.fax_no',
-            'industry_associations.trade_number',
-            'industry_associations.contact_person_name',
-            'industry_associations.contact_person_name_en',
-            'industry_associations.contact_person_mobile',
-            'industry_associations.contact_person_email',
-            'industry_associations.contact_person_designation',
-            'industry_associations.contact_person_designation_en',
-            'industry_associations.logo',
-            'industry_associations.domain',
-            'industry_associations.row_status',
-            'industry_associations.created_by',
-            'industry_associations.updated_by',
-            'industry_associations.created_at',
-            'industry_associations.updated_at'
+        $nascibMemberBuilder = NascibMember::select([
+            'organization_ina000002.id',
+            'organization_ina000002.organization_id',
+            'organizations.title as organization_title',
+            'organizations.title_en as organization_title_en',
+            'organization_ina000002.application_tracking_no',
+            'organization_ina000002.form_fill_up_by',
+            'organization_ina000002.udc_name',
+            'organization_ina000002.udc_loc_district',
+            'organization_ina000002.udc_union',
+            'organization_ina000002.udc_code',
+            'organization_ina000002.chamber_or_association_name',
+            'organization_ina000002.chamber_or_association_loc_district_id',
+            'organization_ina000002.chamber_or_association_union',
+            'organization_ina000002.chamber_or_association_code',
+            'organization_ina000002.name',
+            'organization_ina000002.name_bn',
+            'organization_ina000002.gender',
+            'organization_ina000002.date_of_birth',
+            'organization_ina000002.educational_qualification',
+            'organization_ina000002.nid',
+            'organization_ina000002.nid_file',
+            'organization_ina000002.mobile',
+            'organization_ina000002.email',
+            'organization_ina000002.entrepreneur_photo',
+            'organization_ina000002.organization_trade_license_no',
+            'organization_ina000002.organization_identification_no',
+            'organization_ina000002.organization_name',
+            'organization_ina000002.organization_address',
+            'organization_ina000002.organization_loc_district_id',
+            'organization_ina000002.organization_loc_upazila_id',
+            'organization_ina000002.organization_domain',
+            'organization_ina000002.factory',
+            'organization_ina000002.factory_address',
+            'organization_ina000002.factory_loc_district_id',
+            'organization_ina000002.factory_loc_upazila_id ',
+            'organization_ina000002.factory_web_site',
+            'organization_ina000002.office_or_showroom',
+            'organization_ina000002.factory_land_own_or_rent',
+            'organization_ina000002.proprietorship',
+            'organization_ina000002.industry_establishment_year',
+            'organization_ina000002.trade_licensing_authority',
+            'organization_ina000002.trade_license',
+            'organization_ina000002.industry_last_renew_year',
+            'organization_ina000002.tin',
+            'organization_ina000002.investment_amount',
+            'organization_ina000002.current_total_asset',
+            'organization_ina000002.registered_under_authority',
+            'organization_ina000002.registered_authority',
+            'organization_ina000002.authorized_under_authority',
+            'organization_ina000002.authorized_authority',
+            'organization_ina000002.specialized_area',
+            'organization_ina000002.specialized_area_name',
+            'organization_ina000002.under_sme_cluster',
+            'organization_ina000002.under_sme_cluster_name',
+            'organization_ina000002.member_of_association_or_chamber',
+            'organization_ina000002.member_of_association_or_chamber_name',
+            'organization_ina000002.sector',
+            'organization_ina000002.sector_other_name',
+            'organization_ina000002.business_type',
+            'organization_ina000002.main_product_name',
+            'organization_ina000002.main_material_description',
+            'organization_ina000002.import',
+            'organization_ina000002.import_by',
+            'organization_ina000002.export_abroad',
+            'organization_ina000002.export_abroad_by',
+            'organization_ina000002.industry_irc_no',
+            'organization_ina000002.salaried_manpower',
+            'organization_ina000002.have_bank_account',
+            'organization_ina000002.bank_account_type',
+            'organization_ina000002.accounting_system',
+            'organization_ina000002.use_computer',
+            'organization_ina000002.internet_connection',
+            'organization_ina000002.online_business',
+            'organization_ina000002.info_provider_name',
+            'organization_ina000002.info_provider_mobile',
+            'organization_ina000002.info_collector_name',
+            'organization_ina000002.info_collector_mobile',
+            'organization_ina000002.status',
+            'organization_ina000002.row_status',
+            'organization_ina000002.created_by',
+            'organization_ina000002.updated_by',
+            'organization_ina000002.created_at',
+            'organization_ina000002.updated_at'
         ]);
-        $industryAssociationBuilder->join('trades', function ($join) {
-            $join->on('trades.id', '=', 'industry_associations.trade_id')
-                ->whereNull('trades.deleted_at');
+        $nascibMemberBuilder->join('organizations', function ($join) {
+            $join->on('organizations.id', '=', 'organization_ina000002.organization_id')
+                ->whereNull('organizations.deleted_at');
         });
 
-        $industryAssociationBuilder->leftjoin('loc_divisions', function ($join) {
-            $join->on('industry_associations.loc_division_id', '=', 'loc_divisions.id')
-                ->whereNull('loc_divisions.deleted_at');
-        });
-        $industryAssociationBuilder->leftjoin('loc_districts', function ($join) {
-            $join->on('industry_associations.loc_district_id', '=', 'loc_districts.id')
-                ->whereNull('loc_districts.deleted_at');
-        });
-        $industryAssociationBuilder->leftjoin('loc_upazilas', function ($join) {
-            $join->on('industry_associations.loc_upazila_id', '=', 'loc_upazilas.id')
-                ->whereNull('loc_upazilas.deleted_at');
-        });
-
-        $industryAssociationBuilder->orderBy('industry_associations.id', $order);
+        $nascibMemberBuilder->orderBy('organization_ina000002.id', $order);
 
 
         if (is_numeric($rowStatus)) {
-            $industryAssociationBuilder->where('industry_associations.row_status', $rowStatus);
+            $nascibMemberBuilder->where('organization_ina000002.row_status', $rowStatus);
         }
 
-        if (is_numeric($tradeId)) {
-            $industryAssociationBuilder->where('industry_associations.trade_id', $tradeId);
-        }
-
-        if (!empty($titleEn)) {
-            $industryAssociationBuilder->where('industry_associations.title_en', 'like', '%' . $titleEn . '%');
-        }
-        if (!empty($title)) {
-            $industryAssociationBuilder->where('industry_associations.title', 'like', '%' . $title . '%');
-        }
-
-        $industryAssociationBuilder->with('skills');
 
         /** @var Collection $organizations */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $industryAssociations = $industryAssociationBuilder->paginate($pageSize);
+            $industryAssociations = $nascibMemberBuilder->paginate($pageSize);
             $paginateData = (object)$industryAssociations->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $industryAssociations = $industryAssociationBuilder->get();
+            $industryAssociations = $nascibMemberBuilder->get();
         }
 
         $response['order'] = $order;
@@ -200,11 +211,6 @@ class NascibMemberService
         return $industryAssociation;
     }
 
-    private function syncSkill(IndustryAssociation $industryAssociation, array $skills)
-    {
-        $industryAssociation->skills()->sync($skills);
-    }
-
     /**
      * @param IndustryAssociation $industryAssociation
      * @return bool
@@ -251,8 +257,6 @@ class NascibMemberService
         return $industryAssociation->restore();
     }
 
-
-
     /**
      * industryAssociation comapnyInfoVisibilityvalidator
      * @param array $data
@@ -289,56 +293,6 @@ class NascibMemberService
             ->json();
 
     }
-
-
-    /**
-     * @param array $data
-     * @return array|null
-     * @throws RequestException
-     */
-    public function createOpenRegisterUser(array $data): array|null
-    {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
-
-        $userPostField = [
-            'user_type' => BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE,
-            'username' => $data['contact_person_mobile'] ?? "",
-            'industry_association_id' => $data['industry_association_id'] ?? "",
-            'name_en' => $data['contact_person_name_en'] ?? "",
-            'name' => $data['contact_person_name'] ?? "",
-            'email' => $data['contact_person_email'] ?? "",
-            'mobile' => $data['contact_person_mobile'] ?? "",
-            'password' => $data['password'] ?? ""
-        ];
-
-        Log::channel('org_reg')->info("organization registration data provided to core", $userPostField);
-
-        return Http::withOptions(
-            [
-                'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
-            ])
-            ->post($url, $userPostField)
-            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
-                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
-                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
-            })
-            ->json();
-    }
-
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function getIndustryAssociationCode($id): mixed
-    {
-        return IndustryAssociation::findOrFail($id)->code;
-
-    }
-
 
     /**
      * @param Request $request
@@ -543,220 +497,6 @@ class NascibMemberService
 
         return Validator::make($request->all(), $rules, $customMessage);
     }
-
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return array
-     */
-    public function getIndustryAssociationDashboardStatistics(IndustryAssociation $industryAssociation): array
-    {
-        $organizations = $this->getIndustryCountByIndustryAssociation($industryAssociation);
-        $employed = $this->employmentCountByIndustryAssociation($industryAssociation);
-        $unemployed = 0;
-        $vacancies = $this->getVacancyCountByIndustryAssociation($industryAssociation);
-        $trendingSkills = $this->getTrendingJobSkillsCountByIndustryAssociation($industryAssociation);
-
-        return [
-            "organizations" => $organizations,
-            "employed" => $employed,
-            "unemployed" => $unemployed,
-            "vacancies" => $vacancies,
-            "trending_skills" => $trendingSkills
-        ];
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return int
-     */
-    public function employmentCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
-    {
-        return AppliedJob::query()
-            ->join('primary_job_information', 'primary_job_information.job_id', '=', 'applied_jobs.job_id')
-            ->where('primary_job_information.industry_association_id', $industryAssociation->id)
-            ->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS["Hired"])
-            ->count('applied_jobs.id');
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return int
-     */
-    public function getIndustryCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
-    {
-        return $industryAssociation->organizations()->count('organization_id');
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return int
-     */
-    public function getTrendingJobSkillsCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
-    {
-        $candidateRequirementBuilder = CandidateRequirement::query()
-            ->join('primary_job_information', 'primary_job_information.job_id', '=', 'candidate_requirements.job_id')
-            ->where('primary_job_information.industry_association_id', $industryAssociation->id);
-
-        $candidateRequirements = $candidateRequirementBuilder->get();
-
-        $trendingSkills = 0;
-        foreach ($candidateRequirements as $candidateRequirement) {
-            $trendingSkills += $candidateRequirement->skills()->distinct()->count('skill_id');
-        }
-        return $trendingSkills;
-
-    }
-
-    /**
-     * @param IndustryAssociation $industryAssociation
-     * @return int
-     */
-    public function getVacancyCountByIndustryAssociation(IndustryAssociation $industryAssociation): int
-    {
-        return PrimaryJobInformation::where('industry_association_id', $industryAssociation->id)
-            ->where('application_deadline', '>', Carbon::today())
-            ->where('published_at', '<=', Carbon::now())
-            ->sum('no_of_vacancies');
-    }
-
-    /**
-     * industryAssociation open registration validation
-     * @param Request $request
-     * @return mixed
-     */
-    public function industryAssociationRegistrationValidator(Request $request): \Illuminate\Contracts\Validation\Validator
-    {
-        $customMessage = [
-            'password.regex' => BaseModel::PASSWORD_VALIDATION_MESSAGE
-        ];
-
-        $rules = [
-            'trade_id' => [
-                'required',
-                'int',
-                'exists:trades,id,deleted_at,NULL',
-            ],
-            'title_en' => [
-                'nullable',
-                'string',
-                'max:600',
-                'min:2',
-            ],
-            'title' => [
-                'required',
-                'string',
-                'max:1200',
-                'min:2'
-            ],
-            'loc_division_id' => [
-                'required',
-                'integer',
-                'exists:loc_divisions,id,deleted_at,NULL'
-            ],
-            'loc_district_id' => [
-                'required',
-                'integer',
-                'exists:loc_districts,id,deleted_at,NULL'
-            ],
-            'loc_upazila_id' => [
-                'nullable',
-                'integer',
-                'exists:loc_upazilas,id,deleted_at,NULL'
-            ],
-            "name_of_the_office_head" => [
-                "required",
-                "string",
-                'max:600'
-            ],
-            "name_of_the_office_head_en" => [
-                "nullable",
-                "string",
-                'max:600'
-            ],
-            "name_of_the_office_head_designation" => [
-                "required",
-                "string"
-            ],
-            "name_of_the_office_head_designation_en" => [
-                "nullable",
-                "string"
-            ],
-            'address' => [
-                'nullable',
-                'max: 1200',
-                'min:2'
-            ],
-            'address_en' => [
-                'nullable',
-                'max: 600',
-                'min:2'
-            ],
-            'mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX,
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'contact_person_name' => [
-                'required',
-                'max: 500',
-                'min:2'
-            ],
-            'contact_person_name_en' => [
-                'nullable',
-                'max: 250',
-                'min:2'
-            ],
-            'contact_person_mobile' => [
-                'required',
-                Rule::unique('industry_associations', 'contact_person_mobile')
-                    ->where(function (\Illuminate\Database\Query\Builder $query) {
-                        return $query->whereNull('deleted_at');
-                    }),
-                BaseModel::MOBILE_REGEX,
-            ],
-            'contact_person_email' => [
-                'required',
-                'email',
-                'max:191'
-            ],
-            'contact_person_designation' => [
-                'required',
-                'max: 600',
-                "min:2"
-            ],
-            'contact_person_designation_en' => [
-                'nullable',
-                'max: 300',
-                "min:2"
-            ],
-            /**Commented it for custom validation message*/
-//            "password" => [
-//                "required",
-//                "confirmed",
-//                Password::min(BaseModel::PASSWORD_MIN_LENGTH)
-//                    ->letters()
-//                    ->mixedCase()
-//                    ->numbers()
-//            ],
-            "password" => [
-                'required',
-                'min:' . BaseModel::PASSWORD_MIN_LENGTH,
-                BaseModel::PASSWORD_REGEX
-            ],
-            "password_confirmation" => 'required_with:password',
-            'row_status' => [
-                'nullable',
-                Rule::in([BaseModel::ROW_STATUS_PENDING])
-            ]
-        ];
-        return Validator::make($request->all(), $rules, $customMessage);
-    }
-
 
     /**
      * @param Request $request
