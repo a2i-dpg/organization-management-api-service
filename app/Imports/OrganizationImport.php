@@ -7,17 +7,9 @@ use App\Models\BaseModel;
 use App\Models\LocDistrict;
 use App\Models\LocDivision;
 use App\Models\LocUpazila;
-use App\Models\Organization;
 use App\Models\OrganizationType;
 use App\Models\SubTrade;
-use App\Services\CommonServices\CodeGenerateService;
-use App\Services\CommonServices\MailService;
-use App\Services\CommonServices\SmsService;
-use App\Services\OrganizationService;
-use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -26,8 +18,6 @@ use Throwable;
 
 class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
 {
-     public array $alreadyExistUsernames = [];
-
     /**
      * @param $data
      * @param $index
@@ -40,40 +30,40 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
         if (!empty($request['industry_association_id'])) {
             $data['industry_association_id'] = $request['industry_association_id'];
         }
-        if(!empty($data['organization_type_id'])){
+        if (!empty($data['organization_type_id'])) {
             $organizationType = OrganizationType::where('title', $data['organization_type_id'])->firstOrFail();
             $data['organization_type_id'] = $organizationType->id;
         }
         if (!empty($data['sub_trade'])) {
-            $subTrade = SubTrade::where('title',$data['sub_trade'])->firstOrFail();
+            $subTrade = SubTrade::where('title', $data['sub_trade'])->firstOrFail();
             $data['sub_trades'] = [$subTrade->id];
         }
-        if(!empty($data['permission_sub_group_id'])){
+        if (!empty($data['permission_sub_group_id'])) {
             $permissionSubGroup = ServiceToServiceCall::getPermissionSubGroupsByTitle($data['permission_sub_group_id']);
             $data['permission_sub_group_id'] = $permissionSubGroup['id'];
         }
-        if(!empty($data['loc_division_id'])){
+        if (!empty($data['loc_division_id'])) {
             $division = LocDivision::where('title_en', $data['loc_division_id'])->firstOrFail();
             $data['loc_division_id'] = $division->id;
         }
-        if(!empty($data['loc_district_id'])){
+        if (!empty($data['loc_district_id'])) {
             $district = LocDistrict::where('title_en', $data['loc_district_id'])->firstOrFail();
             $data['loc_district_id'] = $district->id;
         }
-        if(!empty($data['loc_upazila_id'])){
+        if (!empty($data['loc_upazila_id'])) {
             $upazila = LocUpazila::where('title_en', $data['loc_upazila_id'])->firstOrFail();
             $data['loc_upazila_id'] = $upazila->id;
         }
-        if(!empty($data['date_of_establishment'])){
+        if (!empty($data['date_of_establishment'])) {
             $data['date_of_establishment'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['date_of_establishment'])->format('Y-m-d');
         }
-        if(!empty($data['phone_code']) && is_int($data['phone_code'])){
+        if (!empty($data['phone_code']) && is_int($data['phone_code'])) {
             $data['phone_code'] = (string)$data['phone_code'];
         }
-        if(!empty($data['mobile']) && is_int($data['mobile']) && strlen((string)$data['mobile']) == 10 && explode((string)$data['mobile'], '')[0] != 0){
+        if (!empty($data['mobile']) && is_int($data['mobile']) && strlen((string)$data['mobile']) == 10 && explode((string)$data['mobile'], '')[0] != 0) {
             $data['mobile'] = '0' . $data['mobile'];
         }
-        if(!empty($data['contact_person_mobile']) && is_int($data['contact_person_mobile']) && strlen((string)$data['contact_person_mobile']) == 10 && explode((string)$data['contact_person_mobile'], '')[0] != 0){
+        if (!empty($data['contact_person_mobile']) && is_int($data['contact_person_mobile']) && strlen((string)$data['contact_person_mobile']) == 10 && explode((string)$data['contact_person_mobile'], '')[0] != 0) {
             $data['contact_person_mobile'] = '0' . $data['contact_person_mobile'];
         }
 
@@ -259,7 +249,7 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
     }
 
     /**
-     * Store rouse as bulk.
+     * Store organizations as bulk.
      *
      * @param Collection $collection
      * @return void
@@ -267,64 +257,6 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
      */
     public function collection(Collection $collection)
     {
-        $rows = $collection->toArray();
-        foreach ($rows as $rowData){
-            $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
-            if(empty($user)){
-                DB::beginTransaction();
-                try {
-                    $rowData['code'] = CodeGenerateService::getIndustryCode();
 
-                    /** @var Organization $organization */
-                    $organization = app(Organization::class);
-                    $organization = app(OrganizationService::class)->store($organization, $rowData);
-
-                    app(OrganizationService::class)->syncWithSubTrades($organization, $rowData['sub_trades']);
-
-                    if (!($organization && $organization->id)) {
-                        throw new Exception('Saving Organization/Industry to DB failed!', 500);
-                    }
-
-                    $rowData['organization_id'] = $organization->id;
-                    $rowData['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
-
-                    $createdRegisterUser = app(OrganizationService::class)->createUser($rowData);
-
-                    Log::info('id_user_info:' . json_encode($createdRegisterUser));
-
-                    if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
-                        throw new Exception('Organization/Industry Creation has been failed for Contact person mobile: ' . $rowData['contact_person_mobile'], 500);
-                    }
-
-                    if (isset($createdRegisterUser['_response_status']['success']) && $createdRegisterUser['_response_status']['success']) {
-
-                        /** Mail send after user registration */
-                        $to = array($rowData['contact_person_email']);
-                        $from = BaseModel::NISE3_FROM_EMAIL;
-                        $subject = "User Registration Information";
-                        $message = "Congratulation, You are successfully complete your registration as " . $rowData['title'] . " user. Username: " . $rowData['contact_person_mobile'] . " & Password: " . $rowData['password'];
-                        $messageBody = MailService::templateView($message);
-                        $mailService = new MailService($to, $from, $subject, $messageBody);
-                        $mailService->sendMail();
-
-                        /** SMS send after user registration */
-                        $recipient = $rowData['contact_person_mobile'];
-                        $smsMessage = "You are successfully complete your registration as " . $rowData['title'] . " user";
-                        $smsService = new SmsService();
-                        $smsService->sendSms($recipient, $smsMessage);
-
-                        DB::commit();
-                    } else {
-                        throw new Exception('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
-                    }
-                } catch (Throwable $e) {
-                    Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
-                    DB::rollBack();
-                    throw $e;
-                }
-            } else {
-                $this->alreadyExistUsernames[] = $rowData['contact_person_mobile'];
-            }
-        }
     }
 }
