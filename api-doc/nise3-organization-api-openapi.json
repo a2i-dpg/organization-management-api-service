@@ -8037,7 +8037,7 @@
                 }
             }
         },
-        "/jobs/store-primary-job-information": {
+        "/jobs/primary-job-information": {
             "post": {
                 "tags": [
                     "Primary Job Information [Job Management Step : 1]"
@@ -8205,7 +8205,7 @@
                 }
             }
         },
-        "/jobs/store-additional-job-information": {
+        "/jobs/additional-job-information": {
             "post": {
                 "tags": [
                     "Additional Job Information [Job Management Step : 2]"
@@ -8399,7 +8399,7 @@
                 }
             }
         },
-        "/jobs/store-candidate-requirements": {
+        "/jobs/candidate-requirements": {
             "post": {
                 "tags": [
                     "Candidate Requirements [Job Management Step : 3]"
@@ -8602,7 +8602,7 @@
                 }
             }
         },
-        "/jobs/store-company-info-visibility": {
+        "/jobs/company-info-visibility": {
             "post": {
                 "tags": [
                     "Company info visibility [Job Management Step : 4]"
@@ -8689,7 +8689,7 @@
                 }
             }
         },
-        "/jobs/store-matching-criteria": {
+        "/jobs/matching-criteria": {
             "post": {
                 "tags": [
                     "Matching Criteria [Job Management Step : 5]"
@@ -9281,7 +9281,7 @@
             }
         },
 
-        "/jobs/candidate-update/reject/{applicationId}": {
+        "/jobs/candidate/{applicationId}/reject": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Reject a job candidate from interview process",
@@ -9334,7 +9334,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/shortlist/{applicationId}": {
+        "/jobs/candidate/{applicationId}/shortlist": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Shortlist a candidate for interview",
@@ -9387,7 +9387,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/interviewed/{applicationId}": {
+        "/jobs/candidate/{applicationId}/interviewed": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Update interviewed candidate",
@@ -9437,7 +9437,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/remove/{applicationId}": {
+        "/jobs/candidate/{applicationId}/remove": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Remove candidate to previous step",
@@ -9482,7 +9482,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/restore/{applicationId}": {
+        "/jobs/candidate/{applicationId}/restore": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Restore a rejected candidate",
@@ -9527,7 +9527,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/hire-invite/{applicationId}": {
+        "/jobs/candidate/{applicationId}/hire-invite": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Hiring Invitation sent to a candidate",
@@ -9581,7 +9581,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/hired/{applicationId}": {
+        "/jobs/candidate/{applicationId}/hired": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Hiring Invitation sent to a candidate",
@@ -9625,7 +9625,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/schedule/{scheduleId}": {
+        "/jobs/step-schedule/{scheduleId}/assign": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Schedule a candidate",
@@ -9662,7 +9662,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/deschedule/{scheduleId}": {
+        "/jobs/step-schedule/{scheduleId}/unassign": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Deschedule a candidate",
@@ -9700,7 +9700,7 @@
                 }
             }
         },
-        "/jobs/recruitment-step-list/{jobId}": {
+        "/jobs/recruitment-steps/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get recruitment step list by jobId",
@@ -9774,7 +9774,7 @@
                 }
             }
         },
-        "/jobs/recruitment-steps/{stepId}/schedules": {
+        "/jobs/recruitment-step/{id}/schedules": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get recruitment step schedules by jobId",
@@ -10769,7 +10769,7 @@
             }
         },
 
-        "/jobs/recruitment-steps": {
+        "/jobs/recruitment-step": {
             "post": {
                 "tags": ["Job Interview"],
                 "summary": "Create a recruitment step a job interview",
@@ -10813,7 +10813,7 @@
                 }
             }
         },
-        "/jobs/recruitment-steps/{stepId}": {
+        "/jobs/recruitment-step/{stepId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get a recruitment step of a job interview",
@@ -10927,7 +10927,7 @@
                 }
             }
         },
-        "/jobs/recruitment-step-candidate-list/{jobId}": {
+        "/jobs/candidates/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get a recruitment step candidate list of a job interview",
