@@ -236,7 +236,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
     /** Organization open Registration */
-    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
+    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration",'middleware' => 'public-domain-handle']);
 
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",

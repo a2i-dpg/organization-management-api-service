@@ -223,7 +223,7 @@ class OrganizationController extends Controller
         try {
             Excel::import($organizationImport, $file);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            Log::debug('Error occurred: '.$e->getMessage());
+            Log::debug('Error occurred: ' . $e->getMessage());
         }
 
         $response = [
@@ -314,6 +314,11 @@ class OrganizationController extends Controller
     {
         /** @var Organization $organization */
         $organization = app(Organization::class);
+
+        if ($request->industry_association_id) {
+            $industryAssociations = array($request->industry_association_id);
+            $request->offsetSet('industry_associations', $industryAssociations);
+        }
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
 
         $validated['code'] = CodeGenerateService::getIndustryCode();
