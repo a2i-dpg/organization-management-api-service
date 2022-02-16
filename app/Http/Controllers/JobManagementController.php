@@ -486,15 +486,25 @@ class JobManagementController extends Controller
      */
     public function createRecruitmentStep(Request $request): JsonResponse
     {
-        $validatedData = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+        $jobId = $request->input('job_id');
+        $isRecruitmentStepCreatable = $this->jobManagementService->isRecruitmentStepCreatable($jobId);
 
-        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($validatedData);
+        if ($isRecruitmentStepCreatable) {
+            $validatedData = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+            $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($validatedData);
+            $code = ResponseAlias::HTTP_OK;
+            $message = "Recruitment Step stored successful";
+        } else {
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+            $message = "Recruitment Step can not be created";
+        }
+
         $response = [
-            "data" => $recruitmentStep,
+            "data" => $recruitmentStep ?? null,
             '_response_status' => [
                 "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Recruitment Step stored successful",
+                "code" => $code,
+                "message" => $message,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -805,7 +815,6 @@ class JobManagementController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ValidationException
      */
 
