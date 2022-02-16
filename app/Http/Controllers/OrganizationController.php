@@ -230,10 +230,6 @@ class OrganizationController extends Controller
             $rows = $excelData[0];
 
             foreach ($rows as $rowData){
-                if ($request->industry_association_id) {
-                    $industryAssociations = array([ 'industry_association_id' => $request->industry_association_id,'membership_id' => $request->membership_id]);
-                    $rowData['industry_associations'] = $industryAssociations;
-                }
                 $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
                 if(empty($user)){
 

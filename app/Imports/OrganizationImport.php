@@ -28,7 +28,7 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
         $request = request()->all();
 
         //handle only for industry association user
-        if ($request['industry_association_id'] && $data['membership_id']) {
+        if (!empty($request['industry_association_id']) && !empty($data['membership_id'])) {
             $industryAssociations = array([ 'industry_association_id' => $request['industry_association_id'],'membership_id' => $data['membership_id']]);
             $data['industry_associations'] =  $industryAssociations;
         }
