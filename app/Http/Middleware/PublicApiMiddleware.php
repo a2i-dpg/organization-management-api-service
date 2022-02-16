@@ -32,7 +32,6 @@ class PublicApiMiddleware
                 'debug' => config("nise3.is_dev_mode"),
                 'verify' => config("nise3.should_ssl_verify")
             ])
-                ->timeout(5)
                 ->get($url)
                 ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                     Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
