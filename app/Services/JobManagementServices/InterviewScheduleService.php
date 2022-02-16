@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\JobManagementServices;
 
 use App\Models\AppliedJob;
 
@@ -70,13 +70,20 @@ class InterviewScheduleService
     /**
      * @param InterviewSchedule $schedule
      * @param array $data
-     * @return InterviewSchedule
+     * @return InterviewSchedule|bool
      */
-    public function update(InterviewSchedule $schedule, array $data): InterviewSchedule
+    public function update(InterviewSchedule $schedule, array $data): InterviewSchedule|bool
     {
-        $schedule->fill($data);
-        $schedule->save();
-        return $schedule;
+
+        $scheduledCandidates = $this->countCandidatePerSchedule($schedule->id);
+        if ($scheduledCandidates == 0) {
+            $schedule->fill($data);
+            $schedule->save();
+            return $schedule;
+        } else {
+            return false;
+        }
+
     }
 
     /**
@@ -85,7 +92,7 @@ class InterviewScheduleService
      */
     public function destroy(InterviewSchedule $schedule): bool
     {
-        $scheduledCandidates = $this->countCandidatePerScheduled($schedule->id);
+        $scheduledCandidates = $this->countCandidatePerSchedule($schedule->id);
 
         if ($scheduledCandidates == 0) {
             return $schedule->delete();
@@ -98,7 +105,7 @@ class InterviewScheduleService
      * @param int $scheduleId
      * @return mixed
      */
-    public function countCandidatePerScheduled(int $scheduleId): mixed
+    public function countCandidatePerSchedule(int $scheduleId): mixed
     {
         return CandidateInterview::where('interview_schedule_id', $scheduleId)->count('id');
 
@@ -151,7 +158,7 @@ class InterviewScheduleService
 
         $requestData = $request->all();
         if (!empty($request['applied_job_ids'])) {
-            $requestData['applied_job_ids'] =is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
+            $requestData['applied_job_ids'] = is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
         }
         $rules = [
             'notify' => [
@@ -170,8 +177,8 @@ class InterviewScheduleService
                 'required',
                 'integer',
                 'exists:applied_jobs,id,deleted_at,NULL',
-                Rule::unique('candidate_interviews','applied_job_id')
-                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($interviewSchedule){
+                Rule::unique('candidate_interviews', 'applied_job_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($interviewSchedule) {
                         return $query->where('recruitment_step_id', $interviewSchedule->recruitment_step_id);
                     })
             ],

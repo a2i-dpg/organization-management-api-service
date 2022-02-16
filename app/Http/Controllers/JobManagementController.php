@@ -9,7 +9,7 @@ use App\Models\BaseModel;
 use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
 use App\Models\JobManagement;
-use App\Services\InterviewScheduleService;
+use App\Services\JobManagementServices\InterviewScheduleService;
 use App\Models\PrimaryJobInformation;
 use App\Models\RecruitmentStep;
 use App\Services\JobManagementServices\AdditionalJobInformationService;
@@ -388,12 +388,20 @@ class JobManagementController extends Controller
     public function shortlistCandidate(int $applicationId): JsonResponse
     {
         $shortlistApplication = $this->jobManagementService->shortlistCandidate($applicationId);
+        if (empty($shortlistApplication)) {
+            $success = false;
+            $message = "Candidate can not be shortlisted ";
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+        } else {
+            $success = true;
+            $message = "Candidate shortlisted successfully";
+            $code = ResponseAlias::HTTP_OK;
+        }
         $response = [
-            "data" => $shortlistApplication,
             '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Candidate shortlisted successfully",
+                "success" => $success,
+                "code" => $code,
+                "message" => $message,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -624,26 +632,26 @@ class JobManagementController extends Controller
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
         $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
-          if($isRecruitmentStepDeletable){
-             $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
-              $response = [
-                  '_response_status' => [
-                      "success" => true,
-                      "code" => ResponseAlias::HTTP_OK,
-                      "message" => "Recruitment Step deleted successfully.",
-                      "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                  ]
-              ];
-          }else{
-              $response = [
-                  '_response_status' => [
-                      "success" => false,
-                      "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                      "message" => "Recruitment Step can not be deleted.",
-                      "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                  ]
-              ];
-          }
+        if ($isRecruitmentStepDeletable) {
+            $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
+            $response = [
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Recruitment Step deleted successfully.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } else {
+            $response = [
+                '_response_status' => [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                    "message" => "Recruitment Step can not be deleted.",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        }
 
         return Response::json($response, ResponseAlias::HTTP_OK);
 
@@ -819,18 +827,24 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-//        $this->authorize('update', $schedule);
-
         $validated = $this->interviewScheduleService->validator($request, $id)->validate();
 
-        $data = $this->interviewScheduleService->update($schedule, $validated);
+        $updateSchedule = $this->interviewScheduleService->update($schedule, $validated);
 
+        if (empty($updateSchedule)) {
+            $success = false;
+            $message = "schedule updated successfully.";
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+        } else {
+            $success = true;
+            $message = "schedule can not updated.";
+            $code = ResponseAlias::HTTP_OK;
+        }
         $response = [
-            'data' => $data,
             '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "schedule updated successfully.",
+                "success" => $success,
+                "code" => $code,
+                "message" => $message,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -850,27 +864,23 @@ class JobManagementController extends Controller
 
         $deleteStatus = $this->interviewScheduleService->destroy($schedule);
 
-        if ($deleteStatus) {
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "schedule deleted successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-
+        if (empty($deleteStatus)) {
+            $success = false;
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+            $message = "schedule can not be deleted.";
         } else {
-            $response = [
-                '_response_status' => [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                    "message" => "schedule can not be  deleted.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+            $success = true;
+            $code = ResponseAlias::HTTP_OK;
+            $message = "schedule deleted successfully.";
         }
-
+        $response = [
+            '_response_status' => [
+                "success" => $success,
+                "code" => $code,
+                "message" => $message,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
