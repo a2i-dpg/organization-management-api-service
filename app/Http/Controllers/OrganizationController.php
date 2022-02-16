@@ -118,6 +118,11 @@ class OrganizationController extends Controller
 
         $this->authorize('create', $organization);
 
+        if ($request->industry_association_id) {
+            $industryAssociations = array([ 'industry_association_id' => $request->industry_association_id,'membership_id' => $request->membership_id]);
+            $request->offsetSet('industry_associations', $industryAssociations);
+        }
+
         $validated = $this->organizationService->validator($request)->validate();
 
         $validated['code'] = CodeGenerateService::getIndustryCode();
@@ -225,6 +230,10 @@ class OrganizationController extends Controller
             $rows = $excelData[0];
 
             foreach ($rows as $rowData){
+                if ($request->industry_association_id) {
+                    $industryAssociations = array([ 'industry_association_id' => $request->industry_association_id,'membership_id' => $request->membership_id]);
+                    $rowData['industry_associations'] = $industryAssociations;
+                }
                 $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
                 if(empty($user)){
 

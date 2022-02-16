@@ -895,14 +895,23 @@ class OrganizationService
                 'integer',
                 'exists:sub_trades,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
                 'required',
                 'int',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'distinct',
             ],
-            'membership_id' => [
-                'required',
+            'industry_associations.*.membership_id' => [
                 'string',
+                'required',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
