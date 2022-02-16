@@ -488,36 +488,35 @@ class OrganizationController extends Controller
     public function organizationUserApproval(Request $request, int $organizationId): JsonResponse
     {
         $organization = Organization::findOrFail($organizationId);
-        Log::info($organization);;
 
         if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
             throw_if(empty($request->input('permission_sub_group_id')), ValidationException::withMessages([
                 "permission_sub_group_id is required.[50000]"
             ]));
         }
-        Log::info("kkdhdsffgd");
         DB::beginTransaction();
         try {
-                $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
-                $this->organizationService->organizationStatusChangeAfterApproval($organization);
+            $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
+            $this->organizationService->industryAssociationMembershipApproval($organization);
+            $this->organizationService->organizationStatusChangeAfterApproval($organization);
 
-                if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
-                    /** Mail send */
-                    $to = array($organization->contact_person_email);
-                    $from = BaseModel::NISE3_FROM_EMAIL;
-                    $subject = "User Approval Information";
-                    $message = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
-                    $messageBody = MailService::templateView($message);
-                    $mailService = new MailService($to, $from, $subject, $messageBody);
-                    $mailService->sendMail();
+            if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
+                /** Mail send */
+                $to = array($organization->contact_person_email);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "User Approval Information";
+                $message = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
 
-                    /** Sms send */
-                    $recipient = $organization->contact_person_mobile;
-                    $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
-                    $smsService = new SmsService();
-                    $smsService->sendSms($recipient, $smsMessage);
-                }
-                DB::commit();
+                /** Sms send */
+                $recipient = $organization->contact_person_mobile;
+                $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
+            }
+            DB::commit();
             $response['_response_status'] = [
                 "success" => false,
                 "code" => ResponseAlias::HTTP_OK,

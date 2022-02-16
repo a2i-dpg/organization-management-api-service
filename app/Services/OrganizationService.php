@@ -478,7 +478,7 @@ class OrganizationService
 
     public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
     {
-        foreach ($data['industry_associations'] as $row){
+        foreach ($data['industry_associations'] as $row) {
             $organization->industryAssociations()->attach($row['industry_association_id'], [
                 'membership_id' => $row['membership_id'],
                 'row_status' => BaseModel::ROW_STATUS_ACTIVE
@@ -802,6 +802,25 @@ class OrganizationService
         $organization->row_status = BaseModel::ROW_STATUS_REJECTED;
         $organization->save();
         return $organization;
+    }
+
+    /**
+     * @param Organization $organization
+     */
+    public function industryAssociationMembershipApproval(Organization $organization)
+    {
+        $industryAssociationIds = $organization->industryAssociations()
+            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_PENDING)
+            ->pluck('industry_association_id')->toArray();
+
+
+        foreach ($industryAssociationIds as $industryAssociationId) {
+            $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+                'row_status' => BaseModel::ROW_STATUS_ACTIVE
+            ]);
+        }
+
+
     }
 
     /**
