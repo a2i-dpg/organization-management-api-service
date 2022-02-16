@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use mysql_xdevapi\Exception;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
@@ -632,26 +633,35 @@ class JobManagementController extends Controller
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
         $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
-        if ($isRecruitmentStepDeletable) {
-            $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Recruitment Step deleted successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } else {
-            $response = [
-                '_response_status' => [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                    "message" => "Recruitment Step can not be deleted.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+        DB::beginTransaction();
+        try {
+            if ($isRecruitmentStepDeletable) {
+                $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
+                $this->jobManagementService->deleteRecruitmentStepSchedules($recruitmentStep->id);
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "Recruitment Step deleted successfully.",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => false,
+                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                        "message" => "Recruitment Step can not be deleted.",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
         }
+
 
         return Response::json($response, ResponseAlias::HTTP_OK);
 
