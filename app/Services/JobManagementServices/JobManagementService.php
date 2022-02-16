@@ -544,6 +544,15 @@ class JobManagementService
     }
 
     /**
+     * @param string $jobId
+     * @return bool
+     */
+    public function isRecruitmentStepCreatable(string $jobId): bool
+    {
+        return $this->countTotalFinalHiringListCandidate($jobId) == 0;
+    }
+
+    /**
      * @param RecruitmentStep $recruitmentStep
      * @param array $data
      * @return RecruitmentStep
@@ -590,7 +599,7 @@ class JobManagementService
 
     public function deleteRecruitmentStepSchedules(int $recruitmentStepId)
     {
-        return InterviewSchedule::where('recruitment_step_id',$recruitmentStepId)->delete();
+        return InterviewSchedule::where('recruitment_step_id', $recruitmentStepId)->delete();
 
     }
 
