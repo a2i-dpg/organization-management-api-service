@@ -316,7 +316,7 @@ class OrganizationController extends Controller
         $organization = app(Organization::class);
 
         if ($request->industry_association_id) {
-            $industryAssociations = array($request->industry_association_id);
+            $industryAssociations = array([ 'industry_association_id' => $request->industry_association_id,'membership_id' => $request->membership_id]);
             $request->offsetSet('industry_associations', $industryAssociations);
         }
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
