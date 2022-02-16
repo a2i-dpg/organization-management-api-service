@@ -126,7 +126,7 @@ class NascibMemberController extends Controller
 
         DB::beginTransaction();
         try {
-            $organizationMember = $this->nascibMemberService->store($organization,$organizationMember, $validated);
+            $organizationMember = $this->nascibMemberService->store($organization, $organizationMember, $validated);
 
 
             $validated['organization_id'] = $organizationMember->organization_id;
