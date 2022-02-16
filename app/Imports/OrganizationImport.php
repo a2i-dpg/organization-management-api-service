@@ -27,9 +27,12 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
     {
         $request = request()->all();
 
-        if (!empty($request['industry_association_id'])) {
-            $data['industry_association_id'] = $request['industry_association_id'];
+        //handle only for industry association user
+        if ($request['industry_association_id'] && $data['membership_id']) {
+            $industryAssociations = array([ 'industry_association_id' => $request['industry_association_id'],'membership_id' => $data['membership_id']]);
+            $data['industry_associations'] =  $industryAssociations;
         }
+
         if (!empty($data['organization_type_id'])) {
             $organizationType = OrganizationType::where('title', $data['organization_type_id'])->firstOrFail();
             $data['organization_type_id'] = $organizationType->id;
@@ -76,6 +79,24 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
     public function rules(): array
     {
         return [
+            'industry_associations' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
+                'required',
+                'int',
+                'distinct',
+            ],
+            'industry_associations.*.membership_id' => [
+                'string',
+                'required',
+            ],
             'organization_type_id' => [
                 'required',
                 'int',
@@ -90,10 +111,6 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                 'nullable',
                 'integer',
                 'exists:sub_trades,id,deleted_at,NULL'
-            ],
-            'membership_id' => [
-                'required',
-                'string',
             ],
             'permission_sub_group_id' => [
                 'required',
