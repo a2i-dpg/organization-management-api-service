@@ -986,9 +986,9 @@ class JobManagementService
         }
 
 
-        $resultArray = $candidates->toArray();
-
-        $youthIds = $candidates->pluck('youth_id')->toArray();
+        /** TODO: fix reason why duplicates are coming (unique used below) */
+        $resultArray = $candidates->unique('youth_id')->toArray();
+        $youthIds = $candidates->pluck('youth_id')->unique()->toArray();
         $youthProfiles = !empty($youthIds) ? ServiceToServiceCall::getYouthProfilesByIds($youthIds) : [];
         $indexedYouths = [];
 
