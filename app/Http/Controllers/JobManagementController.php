@@ -909,8 +909,7 @@ class JobManagementController extends Controller
 
         $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
 
-        $requestData = $request->all();
-        $applicationIds = $requestData['applied_job_ids'];
+        $applicationIds = $validatedData['applied_job_ids'];
         $appliedJob = AppliedJob::whereIn('id', $applicationIds)->get();
         $interviewInviteType = $validatedData['interview_invite_type'];
 

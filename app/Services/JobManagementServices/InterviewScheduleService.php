@@ -157,7 +157,7 @@ class InterviewScheduleService
     {
 
         $requestData = $request->all();
-        if (!empty($request['applied_job_ids'])) {
+        if (!empty($requestData['applied_job_ids'])) {
             $requestData['applied_job_ids'] = is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
         }
         $rules = [
