@@ -478,11 +478,12 @@ class OrganizationService
 
     public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
     {
-        $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'membership_id' => $data['membership_id'],
-            'row_status' => BaseModel::ROW_STATUS_ACTIVE
-        ]);
-
+        foreach ($data['industry_associations'] as $row){
+            $organization->industryAssociations()->attach($row['industry_association_id'], [
+                'membership_id' => $row['membership_id'],
+                'row_status' => BaseModel::ROW_STATUS_ACTIVE
+            ]);
+        }
     }
 
     /**
