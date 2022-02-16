@@ -280,7 +280,7 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
             $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
             Log::info("Core user is: " . json_encode($user));
             if(empty($user)){
-                DB::beginTransaction();
+//                DB::beginTransaction();
                 try {
                     $rowData['code'] = CodeGenerateService::getIndustryCode();
 
@@ -327,7 +327,7 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                         $smsService->sendSms($recipient, $smsMessage);
                         Log::info("Sms has been send here");
 
-                        DB::commit();
+//                        DB::commit();
                     } else {
                         throw new Exception('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
                     }
@@ -335,7 +335,7 @@ class OrganizationImport implements ToCollection, WithValidation, WithHeadingRow
                     Log::info("Organization for contact person mobile: " . $rowData['contact_person_mobile'] . " has been created");
                 } catch (Throwable $e) {
                     Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
-                    DB::rollBack();
+//                    DB::rollBack();
                     throw $e;
                 }
             } else {
