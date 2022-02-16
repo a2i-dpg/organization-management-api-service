@@ -423,6 +423,39 @@
                 ]
             }
         },
+        "/organization-user-approval/{organizationId}": {
+            "put": {
+                "tags": [
+                    "Organization Registration"
+                ],
+                "summary": "Organization user approval",
+                "description": "API endpoint to Organization user approval.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrganizationUserApproval"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/organization-types": {
             "get": {
                 "summary": "get_list",
@@ -12694,6 +12727,15 @@
                 }
             },
             "IndustryAssociationRegistrationApprove": {
+                "type": "object",
+                "description": "permission_sub_group_id",
+                "properties": {
+                    "permission_sub_group_id": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "OrganizationUserApproval": {
                 "type": "object",
                 "description": "permission_sub_group_id",
                 "properties": {

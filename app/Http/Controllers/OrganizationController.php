@@ -416,7 +416,7 @@ class OrganizationController extends Controller
                 "permission_sub_group_id is required.[50000]"
             ]));
         }
-
+    Log::info("kkdhdsffgd");
         DB::beginTransaction();
         try {
                 $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
