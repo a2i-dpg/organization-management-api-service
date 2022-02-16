@@ -469,42 +469,33 @@ class OrganizationController extends Controller
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
         try {
-            if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
-                $this->organizationService->organizationStatusChangeAfterRejection($organization);
-                $userRejection = $this->organizationService->organizationUserRejection($organization);
+            $this->organizationService->organizationStatusChangeAfterRejection($organization);
+            $userRejection = $this->organizationService->organizationUserRejection($organization);
 
-                if (isset($userRejection['_response_status']['success']) && $userRejection['_response_status']['success']) {
+            if (isset($userRejection['_response_status']['success']) && $userRejection['_response_status']['success']) {
+                /** Mail send */
+                $to = array($organization->contact_person_email);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "User Rejection Information";
+                $message = "You are rejected as a " . $organization->title . " user. You are not active user now";
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
 
-                    /** Mail send */
-                    $to = array($organization->contact_person_email);
-                    $from = BaseModel::NISE3_FROM_EMAIL;
-                    $subject = "User Rejection Information";
-                    $message = "You are rejected as a " . $organization->title . " user. You are not active user now";
-                    $messageBody = MailService::templateView($message);
-                    $mailService = new MailService($to, $from, $subject, $messageBody);
-                    $mailService->sendMail();
-
-                    /** Sms send */
-                    $recipient = $organization->contact_person_mobile;
-                    $smsMessage = "You are rejected as a " . $organization->title . " user. You are not active user now";
-                    $smsService = new SmsService();
-                    $smsService->sendSms($recipient, $smsMessage);
-                }
-                $response['_response_status'] = [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "organization rejected successfully",
-                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
-                ];
-                DB::commit();
-            } else {
-                $response['_response_status'] = [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "organization can not be rejected",
-                    "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
-                ];
+                /** Sms send */
+                $recipient = $organization->contact_person_mobile;
+                $smsMessage = "You are rejected as a " . $organization->title . " user. You are not active user now";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
             }
+            DB::commit();
+            $response['_response_status'] = [
+                "success" => false,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "organization rejected successfully",
+                "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
+            ];
+
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
