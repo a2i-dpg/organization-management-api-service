@@ -988,7 +988,7 @@ class JobManagementService
 
         /** TODO: fix reason why duplicates are coming (unique used below) */
         $resultArray = $candidates->unique('youth_id')->toArray();
-        $youthIds = $candidates->pluck('youth_id')->unique()->toArray();
+        $youthIds = $candidates->unique('youth_id')->pluck('youth_id')->toArray();
         $youthProfiles = !empty($youthIds) ? ServiceToServiceCall::getYouthProfilesByIds($youthIds) : [];
         $indexedYouths = [];
 
@@ -999,8 +999,8 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-
-        foreach ($resultArray["data"] as &$item) {
+        $resultData = $resultArray['data'] ?? $resultArray;
+        foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
             $matchRate = $this->getMatchPercent($item, $youthData, $matchingCriteria);
@@ -1008,9 +1008,6 @@ class JobManagementService
             $item['apply_count'] = $this->youthApplyCountToSpecificOrganization($item['youth_id'], $item['job_id']);
             $item['youth_profile'] = $youthData;
         }
-
-        $resultData = $resultArray['data'] ?? $resultArray;
-
 
         $response['order'] = $order;
         $response['data'] = $resultData;
