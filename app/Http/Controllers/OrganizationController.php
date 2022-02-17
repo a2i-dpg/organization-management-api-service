@@ -229,7 +229,9 @@ class OrganizationController extends Controller
         if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
 
-            foreach ($rows as $rowData) {
+            $this->organizationService->excelDataValidator($rows)->validate();
+
+            foreach ($rows as $rowData){
                 $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
                 if (empty($user)) {
 

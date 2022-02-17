@@ -65,9 +65,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Industry apply for industryAssociation membership */
         $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
 
+        /**TODO: Route name should be organization-approval:piyal
         /** industry registration approval   */
         $router->put("organization-user-approval/{organizationId}", ["as" => "organization.organization-user-approval", "uses" => "OrganizationController@organizationUserApproval"]);
 
+        /**TODO: Route name should be organization-rejection:piyal
         /** industry registration rejection  */
         $router->put("organization-user-rejection/{organizationId}", ["as" => "organization.organization-user-rejection", "uses" => "OrganizationController@organizationUserRejection"]);
 
