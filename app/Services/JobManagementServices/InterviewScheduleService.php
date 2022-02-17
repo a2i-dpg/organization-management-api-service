@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\JobManagementServices;
 
 use App\Models\AppliedJob;
 
 use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 
 class InterviewScheduleService
@@ -22,6 +22,7 @@ class InterviewScheduleService
      */
     public function getOneInterviewSchedule(int $id): InterviewSchedule
     {
+        /** @var Builder|Model $scheduleBuilder */
         $scheduleBuilder = InterviewSchedule::select([
             'interview_schedules.id',
             'interview_schedules.recruitment_step_id',
@@ -69,14 +70,25 @@ class InterviewScheduleService
     /**
      * @param InterviewSchedule $schedule
      * @param array $data
-     * @return InterviewSchedule
+     * @return InterviewSchedule|bool
      */
-    public function update(InterviewSchedule $schedule, array $data): InterviewSchedule
+    public function update(InterviewSchedule $schedule, array $data): InterviewSchedule|bool
     {
         $schedule->fill($data);
         $schedule->save();
         return $schedule;
+
     }
+
+    /**
+     * @param int $scheduleId
+     * @return mixed
+     */
+    public function isScheduleUpdatable(int $scheduleId): mixed
+    {
+        return $this->countCandidatePerSchedule($scheduleId)==0;
+    }
+
 
     /**
      * @param InterviewSchedule $schedule
@@ -84,7 +96,7 @@ class InterviewScheduleService
      */
     public function destroy(InterviewSchedule $schedule): bool
     {
-        $scheduledCandidates = $this->countCandidatePerScheduled($schedule->id);
+        $scheduledCandidates = $this->countCandidatePerSchedule($schedule->id);
 
         if ($scheduledCandidates == 0) {
             return $schedule->delete();
@@ -97,7 +109,7 @@ class InterviewScheduleService
      * @param int $scheduleId
      * @return mixed
      */
-    public function countCandidatePerScheduled(int $scheduleId): mixed
+    public function countCandidatePerSchedule(int $scheduleId): mixed
     {
         return CandidateInterview::where('interview_schedule_id', $scheduleId)->count('id');
 
@@ -114,22 +126,24 @@ class InterviewScheduleService
         $rules = [
             'job_id' => [
                 'required',
-                'string'
+                'string',
+                'exists:primary_job_information,job_id,deleted_at,NULL'
             ],
             'recruitment_step_id' => [
-                'nullable',
-                'string'
+                'integer',
+                'required',
+                'exists:recruitment_steps,id,deleted_at,NULL'
             ],
             'interview_scheduled_at' => [
-                'nullable',
-                'string'
+                'required',
+                'date_format:Y-m-d H:i'
             ],
             'maximum_number_of_applicants' => [
                 'required',
                 'integer'
             ],
             'interview_invite_type' => [
-                'nullable',
+                'required',
                 'integer'
             ],
             'interview_address' => [
@@ -147,10 +161,11 @@ class InterviewScheduleService
      */
     public function CandidateAssigningToScheduleValidator(Request $request, InterviewSchedule $interviewSchedule): \Illuminate\Contracts\Validation\Validator
     {
-        if (!empty($request['applied_job_ids'])) {
-            $request['applied_job_ids'] = isset($request['applied_job_ids']) && is_array($request['applied_job_ids']) ? $request['applied_job_ids'] : explode(',', $request['applied_job_ids']);
-        }
 
+        $requestData = $request->all();
+        if (!empty($requestData['applied_job_ids'])) {
+            $requestData['applied_job_ids'] = is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
+        }
         $rules = [
             'notify' => [
                 'required',
@@ -167,8 +182,11 @@ class InterviewScheduleService
             'applied_job_ids.*' => [
                 'required',
                 'integer',
-                'unique_with:candidate_interviews,recruitment_step_id',
-                'exists:applied_jobs,id,deleted_at,NULL'
+                'exists:applied_jobs,id,deleted_at,NULL',
+                Rule::unique('candidate_interviews', 'applied_job_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($interviewSchedule) {
+                        return $query->where('recruitment_step_id', $interviewSchedule->recruitment_step_id);
+                    })
             ],
             'interview_invite_type' => [
                 'integer',
@@ -177,7 +195,7 @@ class InterviewScheduleService
             ]
         ];
 
-        return Validator::make($request->all(), $rules);
+        return Validator::make($requestData, $rules);
     }
 
     /**

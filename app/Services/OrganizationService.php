@@ -216,7 +216,7 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where(function ($builder) use($searchText){
+            $organizationBuilder->where(function ($builder) use ($searchText) {
                 $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
                 $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
             });
@@ -322,7 +322,7 @@ class OrganizationService
             $organizationBuilder->where('organizations.title', 'like', '%' . $title . '%');
         }
         if (!empty($searchText)) {
-            $organizationBuilder->where(function ($builder) use($searchText){
+            $organizationBuilder->where(function ($builder) use ($searchText) {
                 $builder->orwhere('organizations.title', 'like', '%' . $searchText . '%');
                 $builder->orwhere('organizations.title_en', 'like', '%' . $searchText . '%');
             });
@@ -466,23 +466,25 @@ class OrganizationService
     /**
      * @param Organization $organization
      * @param array $data
+     * @param bool $isOpenReg
      * @return Organization
      */
-    public function store(Organization $organization, array $data): Organization
+    public function store(Organization $organization, array $data, bool $isOpenReg = false): Organization
     {
         $organization->fill($data);
         $organization->save();
-        $this->addOrganizationToIndustryAssociation($organization, $data);
+        $this->addOrganizationToIndustryAssociation($organization, $data, $isOpenReg);
         return $organization;
     }
 
-    public function addOrganizationToIndustryAssociation(Organization $organization, array $data)
+    public function addOrganizationToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
     {
-        $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'membership_id' => $data['membership_id'],
-            'row_status' => BaseModel::ROW_STATUS_ACTIVE
-        ]);
-
+        foreach ($data['industry_associations'] as $row) {
+            $organization->industryAssociations()->attach($row['industry_association_id'], [
+                'membership_id' => $row['membership_id'],
+                'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
+            ]);
+        }
     }
 
     /**
@@ -805,15 +807,46 @@ class OrganizationService
 
     /**
      * @param Organization $organization
+     */
+    public function industryAssociationMembershipApproval(Organization $organization)
+    {
+        $industryAssociationId = request('industry_association_id');
+
+        $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+            'row_status' => BaseModel::ROW_STATUS_ACTIVE
+        ]);
+
+    }
+
+
+    /**
+     * @param Organization $organization
+     */
+    public function industryAssociationMembershipRejection(Organization $organization)
+    {
+        $industryAssociationId = request('industry_association_id');
+
+        $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+            'row_status' => BaseModel::ROW_STATUS_REJECTED
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Organization $organization
      * @return mixed
      * @throws RequestException
      */
-    public function organizationUserApproval(Organization $organization): mixed
+    public function organizationUserApproval(Request $request, Organization $organization): mixed
     {
         $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-approval';
         $userPostField = [
             'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
             'organization_id' => $organization->id,
+            'permission_sub_group_id' => $request->input('permission_sub_group_id') ?? "",
+            'name_en' => $organization->contact_person_name ?? "",
+            'name' => $organization->contact_person_name ?? "",
+            'row_status' => $organization->row_status
         ];
 
         return Http::withOptions(
@@ -889,14 +922,23 @@ class OrganizationService
                 'integer',
                 'exists:sub_trades,id,deleted_at,NULL'
             ],
-            'industry_association_id' => [
+            'industry_associations' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            'industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            'industry_associations.*.industry_association_id' => [
                 'required',
                 'int',
-                'exists:industry_associations,id,deleted_at,NULL'
+                'distinct',
             ],
-            'membership_id' => [
-                'required',
+            'industry_associations.*.membership_id' => [
                 'string',
+                'required',
             ],
             'permission_sub_group_id' => [
                 Rule::requiredIf(function () use ($id) {
@@ -1076,9 +1118,203 @@ class OrganizationService
     {
         $data = $request->all();
         $rules = [
-            'file'=> 'required|mimes:xlsx, csv, xls'
+            'file' => 'required|mimes:xlsx, csv, xls'
         ];
         return Validator::make($data, $rules);
+    }
+
+    /**
+     * @param array $excelData
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function excelDataValidator(array $excelData): \Illuminate\Contracts\Validation\Validator
+    {
+        /** $excelData owns an array. So use * as prefix */
+        $rules = [
+            '*.industry_associations' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            '*.industry_associations.*' => [
+                'array',
+                'required',
+            ],
+            '*.industry_associations.*.industry_association_id' => [
+                'required',
+                'int',
+            ],
+            '*.industry_associations.*.membership_id' => [
+                'string',
+                'required',
+            ],
+            '*.organization_type_id' => [
+                'required',
+                'int',
+                'exists:organization_types,id,deleted_at,NULL'
+            ],
+            '*.sub_trades' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+            '*.sub_trades.*' => [
+                'nullable',
+                'integer',
+                'exists:sub_trades,id,deleted_at,NULL'
+            ],
+            '*.permission_sub_group_id' => [
+                'required',
+                'integer'
+            ],
+            '*.date_of_establishment' => [
+                'nullable',
+                'date_format:Y-m-d'
+            ],
+            '*.title_en' => [
+                'nullable',
+                'string',
+                'max:600',
+                'min:2',
+            ],
+            '*.title' => [
+                'required',
+                'string',
+                'max:1200',
+                'min:2'
+            ],
+            '*.loc_division_id' => [
+                'required',
+                'integer',
+                'exists:loc_divisions,id,deleted_at,NULL'
+            ],
+            '*.loc_district_id' => [
+                'required',
+                'integer',
+                'exists:loc_districts,id,deleted_at,NULL'
+            ],
+            '*.loc_upazila_id' => [
+                'nullable',
+                'integer',
+                'exists:loc_upazilas,id,deleted_at,NULL'
+            ],
+            "*.location_latitude" => [
+                'nullable',
+                'string',
+            ],
+            "*.location_longitude" => [
+                'nullable',
+                'string',
+            ],
+            "*.google_map_src" => [
+                'nullable',
+                'integer',
+            ],
+            '*.address' => [
+                'required',
+                'max: 1200',
+                'min:2'
+            ],
+            '*.address_en' => [
+                'nullable',
+                'max: 600',
+                'min:2'
+            ],
+            "*.country" => [
+                "nullable",
+                "string",
+                "min:2"
+            ],
+            "*.phone_code" => [
+                "nullable",
+                "string"
+            ],
+            '*.mobile' => [
+                'required',
+                BaseModel::MOBILE_REGEX,
+            ],
+            '*.email' => [
+                'required',
+                'email',
+                'max:320'
+            ],
+            '*.fax_no' => [
+                'nullable',
+                'string',
+                'max: 30',
+            ],
+            "*.name_of_the_office_head" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "*.name_of_the_office_head_en" => [
+                "nullable",
+                "string",
+                'max:600'
+            ],
+            "*.name_of_the_office_head_designation" => [
+                "nullable",
+                "string"
+            ],
+            "*.name_of_the_office_head_designation_en" => [
+                "nullable",
+                "string"
+            ],
+            '*.contact_person_name' => [
+                'required',
+                'max: 500',
+                'min:2'
+            ],
+            '*.contact_person_name_en' => [
+                'nullable',
+                'max: 250',
+                'min:2'
+            ],
+            '*.contact_person_mobile' => [
+                'required',
+                Rule::unique('organizations', 'contact_person_mobile')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    }),
+                BaseModel::MOBILE_REGEX,
+            ],
+            '*.contact_person_email' => [
+                'required',
+                'email',
+                Rule::unique('organizations', 'contact_person_email')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    })
+            ],
+            '*.contact_person_designation' => [
+                'required',
+                'max: 600',
+                "min:2"
+            ],
+            '*.contact_person_designation_en' => [
+                'nullable',
+                'max: 300',
+                "min:2"
+            ],
+            '*.description' => [
+                'nullable',
+                'string',
+            ],
+            '*.description_en' => [
+                'nullable',
+                'string',
+            ],
+            '*.logo' => [
+                'nullable',
+                'string',
+            ],
+            '*.row_status' => [
+                'nullable',
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ]
+        ];
+        return Validator::make($excelData, $rules);
     }
 
     /**

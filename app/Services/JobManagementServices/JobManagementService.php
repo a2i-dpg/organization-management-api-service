@@ -10,6 +10,7 @@ use App\Models\BaseModel;
 use App\Models\CandidateInterview;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
+use App\Models\InterviewSchedule;
 use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
 use App\Models\PrimaryJobInformation;
@@ -464,7 +465,7 @@ class JobManagementService
      * @return AppliedJob
      * @throws Throwable
      */
-    public function shortlistCandidate(int $applicationId): AppliedJob
+    public function shortlistCandidate(int $applicationId): mixed
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
         $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
@@ -485,13 +486,13 @@ class JobManagementService
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
             $appliedJob->save();
 
-        } else if (!$firstRecruitmentStep || (!empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId == $currentRecruitmentStepId)) {
+        } else if (!empty($lastRecruitmentStepId) && !empty($currentRecruitmentStepId) && $lastRecruitmentStepId == $currentRecruitmentStepId) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hiring_Listed"];
             $appliedJob->current_recruitment_step_id = null;
             $appliedJob->save();
 
         } else {
-            throw ValidationException::withMessages(['candidate can not be selected for  next step']);
+            return false;
         }
 
         return $appliedJob;
@@ -543,6 +544,15 @@ class JobManagementService
     }
 
     /**
+     * @param string $jobId
+     * @return bool
+     */
+    public function isRecruitmentStepCreatable(string $jobId): bool
+    {
+        return $this->countTotalFinalHiringListCandidate($jobId) == 0;
+    }
+
+    /**
      * @param RecruitmentStep $recruitmentStep
      * @param array $data
      * @return RecruitmentStep
@@ -583,7 +593,13 @@ class JobManagementService
      */
     public function deleteRecruitmentStep(RecruitmentStep $recruitmentStep): bool
     {
+
         return $recruitmentStep->delete();
+    }
+
+    public function deleteRecruitmentStepSchedules(int $recruitmentStepId)
+    {
+        return InterviewSchedule::where('recruitment_step_id', $recruitmentStepId)->delete();
 
     }
 
@@ -970,9 +986,9 @@ class JobManagementService
         }
 
 
-        $resultArray = $candidates->toArray();
-
-        $youthIds = $candidates->pluck('youth_id')->toArray();
+        /** TODO: fix reason why duplicates are coming (unique used below) */
+        $resultArray = $candidates->unique('youth_id')->toArray();
+        $youthIds = $candidates->unique('youth_id')->pluck('youth_id')->toArray();
         $youthProfiles = !empty($youthIds) ? ServiceToServiceCall::getYouthProfilesByIds($youthIds) : [];
         $indexedYouths = [];
 
@@ -983,8 +999,8 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-
-        foreach ($resultArray["data"] as &$item) {
+        $resultData = $resultArray['data'] ?? $resultArray;
+        foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
             $matchRate = $this->getMatchPercent($item, $youthData, $matchingCriteria);
@@ -992,9 +1008,6 @@ class JobManagementService
             $item['apply_count'] = $this->youthApplyCountToSpecificOrganization($item['youth_id'], $item['job_id']);
             $item['youth_profile'] = $youthData;
         }
-
-        $resultData = $resultArray['data'] ?? $resultArray;
-
 
         $response['order'] = $order;
         $response['data'] = $resultData;
@@ -1086,8 +1099,8 @@ class JobManagementService
         $response['final_hiring_list'] = [
             'total_candidate' => $this->countTotalFinalHiringListCandidate($jobId),
             'hire_selected' => $this->countHireSelectedCandidate($jobId),
-            'hire_invited'  => $this->countHireInvitedCandidate($jobId),
-            'hired'  => $this->countHiredCandidate($jobId),
+            'hire_invited' => $this->countHireInvitedCandidate($jobId),
+            'hired' => $this->countHiredCandidate($jobId),
         ];
 
         $response['steps'] = $recruitmentSteps->toArray() ?? [];
@@ -1096,6 +1109,7 @@ class JobManagementService
         return $response;
 
     }
+
     /**
      * @param string $jobId
      * @return mixed
@@ -1181,7 +1195,7 @@ class JobManagementService
      */
     public function countTotalFinalHiringListCandidate(string $jobId): mixed
     {
-        return AppliedJob::whereIn('apply_status', [AppliedJob::APPLY_STATUS['Hiring_Listed'],[AppliedJob::APPLY_STATUS['Hire_invited']],[AppliedJob::APPLY_STATUS['Hired']]])
+        return AppliedJob::whereIn('apply_status', [AppliedJob::APPLY_STATUS['Hiring_Listed'], [AppliedJob::APPLY_STATUS['Hire_invited']], [AppliedJob::APPLY_STATUS['Hired']]])
             ->whereNull('current_recruitment_step_id')
             ->where('job_id', $jobId)
             ->count('id');
@@ -1495,6 +1509,24 @@ class JobManagementService
     }
 
     /**
+     * @param array $requestData
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function getCandidateProfileValidator(array $requestData): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'applied_job_id' => [
+                'integer',
+                'required',
+                'exists:applied_jobs,id,deleted_at,NULL',
+            ]
+        ];
+
+        return Validator::make($requestData, $rules);
+
+    }
+
+    /**
      * @return int
      */
     public function getJobCount(): int
@@ -1576,8 +1608,9 @@ class JobManagementService
     {
         $maxStep = $this->findLastRecruitmentStep($recruitmentStep);
         $currentStepCandidates = $this->countCurrentRecruitmentStepCandidate($recruitmentStep);
+        $finalHiringListCandidates = $this->countTotalFinalHiringListCandidate($recruitmentStep->job_id);
 
-        return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0;
+        return $maxStep == $recruitmentStep->id && $currentStepCandidates == 0 && $finalHiringListCandidates == 0;
     }
 
     /**
