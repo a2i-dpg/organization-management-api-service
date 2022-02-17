@@ -77,6 +77,11 @@ class Organization extends BaseModel
         self::ORGANIZATION_TYPE_INTERNATIONAL
     ];
 
+    public const PAYMENT_SUCCESS = 1;
+    public const PAYMENT_PENDING = 2;
+    public const PAYMENT_CANCEL = 3;
+    public const PAYMENT_FAIL = 4;
+
     /**
      * @return BelongsTo
      */

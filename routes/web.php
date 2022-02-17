@@ -40,7 +40,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
         $customRouter()->resourceRoute('job-requirements', 'HrDemandController')->render();
         $customRouter()->resourceRoute('hr-demands', 'HrDemandInstituteController')->render();
-        $customRouter()->resourceRoute('nascib-members', 'NascibMemberController')->render();
+
 
         /** Hr demand approve by institute */
         $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
@@ -218,6 +218,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
             $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
             $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
+
+            /** Nascib Registration */
+            $router->post('nascib-members/open-registration', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@openRegistration']);
         });
 
         $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);

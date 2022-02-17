@@ -46,10 +46,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class NascibMember extends BaseModel
 {
-    protected $table = 'organization_ina000002';
-    use ScopeRowStatusTrait, SoftDeletes;
 
-    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
+    protected $table = 'nascib_members';
+    use ScopeRowStatusTrait;
+
+    protected $guarded = ['id'];
+    public $timestamps = false;
 
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
@@ -61,7 +63,7 @@ class NascibMember extends BaseModel
     public const FORM_FILL_UP_BY_UDC_ENTREPRENEUR = 2;
     public const FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION = 3;
 
-    public const FORM_FILL_UP_LIST=[
+    public const FORM_FILL_UP_LIST = [
         self::FORM_FILL_UP_BY_OWN,
         self::FORM_FILL_UP_BY_UDC_ENTREPRENEUR,
         self::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION,
@@ -96,7 +98,7 @@ class NascibMember extends BaseModel
         self::TRADE_LICENSING_AUTHORITY_MUNICIPALITY => 'Municipality (পৌরসভা)',
         self::TRADE_LICENSING_AUTHORITY_UNION_COUNCIL => 'Union Council (ইউনিয়ন পরিষদ)',
     ];
-
+    const OTHER_SECTOR_KEY = 1001;
     public const SECTOR = [
         1 => 'পাটজাত',
         2 => 'চামড়া',
@@ -116,6 +118,58 @@ class NascibMember extends BaseModel
         16 => 'জুয়েলারি',
         17 => 'হস্তশিল্প (বিভিন্ন প্রকার)',
         18 => 'খাদ্য ও পানীয়',
+        self::OTHER_SECTOR_KEY => 'অন্যন্য'
+    ];
+
+    public const REGISTERED_AUTHORITY = [
+        1 => 'জয়েন্ট-স্টক কোম্পানি',
+        2 => 'সমবায় অধিদপ্তর',
+        3 => 'এনজিও বিষয়ক ব্যুরো',
+        4 => 'সমাজসেবা অধিদপ্তর',
+        5 => 'মহিলা বিষয়ক অধিদপ্তর',
+        6 => 'যুব উন্নয়ন অধিদপ্তর',
+        7 => 'বিটিআরসি',
+        8 => 'স্বাস্থ্য অধিদপ্তর',
+        9 => 'বাংলাদেশ ক্ষুদ্র ও কুটির শিল্প কর্পোরেশন(বিসিক)',
+    ];
+
+    public const AUTHORIZED_AUTHORITY = [
+        1 => 'কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর',
+        2 => 'বাংলাদেশ পরিবেশ অধিদপ্তর',
+        3 => 'বাংলাদেশ ফায়ার সার্ভিস ও সিভিল ডিফেন্স অধিদপ্তর',
+        4 => 'আমদানি ও রপ্তানি প্রধান নিয়ন্ত্রকের অধিদপ্তর',
+        5 => 'ঔষধ প্রশাসন অধিদপ্তর',
+        6 => 'বাংলাদেশ এনার্জি রেগুলেটরি কমিশন',
+        7 => 'বিস্ফোরক পরিদপ্তর',
+        8 => 'অন্যন্য'
+    ];
+
+    public const SPECIALIZED_AREA = [
+        1 => 'বাংলাদেশ রপ্তানি প্রক্রিয়াকরণ অঞ্চল (EPZ)',
+        2 => 'বাংলাদেশ অর্থনৈতিক অঞ্চল (BEZA)',
+        3 => 'বিসিক শিল্প নগরী',
+        4 => 'বেসরকারি ইকোনমিক জোন',
+    ];
+
+    public const IMPORT_EXPORT_TYPE = [
+        1 => 'Direct',
+        2 => 'InDirect'
+    ];
+
+    public const MANPOWER_TYPE = [
+        1 => 'Permanent worker (স্থায়ী কর্মী)',
+        2 => 'Temporary worker (অস্থায়ী কর্মী)',
+        3 => 'Seasonal worker (মৌসুমী কর্মী)'
+    ];
+
+    public const BANK_ACCOUNT_TYPE = [
+        1 => 'Personal account (ব্যক্তিগত হিসাব)',
+        2 => 'Organization accounts (প্রতিষ্ঠানের হিসাব)'
+    ];
+
+    public const LAND_TYPE = [
+        1 => 'Own Land',
+        2 => 'Rent'
     ];
 
     public const BUSINESS_TYPE = [
@@ -133,10 +187,10 @@ class NascibMember extends BaseModel
     protected $casts = [
         'registered_authority' => 'array',
         'authorized_authority' => 'array',
-        'specialized_area_name' => 'array',
+        'specialized_area' => 'array',
         'salaried_manpower' => 'array',
-        'export_abroad_by' => 'array',
-        'import_by' => 'array',
+        'export_type' => 'array',
+        'import_type' => 'array',
         'bank_account_type' => 'array',
     ];
 

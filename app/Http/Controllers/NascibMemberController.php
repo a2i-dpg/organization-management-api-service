@@ -45,77 +45,7 @@ class NascibMemberController extends Controller
         $this->startTime = Carbon::now();
     }
 
-
-    /**
-     * Display a listing of the resource.
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function getList(Request $request): JsonResponse
-    {
-        //$this->authorize('viewAny', IndustryAssociation::class);
-        $filter = $this->nascibMemberService->filterValidator($request)->validate();
-        $returnedData = $this->nascibMemberService->getNascibMemberList($filter, $this->startTime);
-
-        $response = [
-            'order' => $returnedData['order'],
-            'data' => $returnedData['data'],
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                'query_time' => $returnedData['query_time']
-            ]
-
-        ];
-        if (isset($returnedData['total_page'])) {
-            $response['total'] = $returnedData['total'];
-            $response['current_page'] = $returnedData['current_page'];
-            $response['total_page'] = $returnedData['total_page'];
-            $response['page_size'] = $returnedData['page_size'];
-        }
-        return Response::json($response, ResponseAlias::HTTP_OK);
-
-    }
-
-
-    /**
-     * Display a specified resource
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     */
-    public function read(Request $request, int $id): JsonResponse
-    {
-        $industryAssociation = $this->industryAssociationService->getOneIndustryAssociation($id);
-
-        $this->authorize('view', $industryAssociation);
-
-        $response = [
-            "data" => $industryAssociation,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-
-    }
-
-
-    /** This methods are not using now. Delete after checking */
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return JsonResponse
-     * @throws CustomException
-     * @throws RequestException
-     * @throws Throwable
-     * @throws ValidationException
-     */
-    public function store(Request $request): JsonResponse
+    public function openRegistration(Request $request): JsonResponse
     {
         $organizationMember = app(NascibMember::class);
         $organization = app(Organization::class);
@@ -125,16 +55,16 @@ class NascibMemberController extends Controller
 
         DB::beginTransaction();
         try {
-            $organizationMember = $this->nascibMemberService->store($organization, $organizationMember, $validated);
+            $organizationMember = $this->nascibMemberService->registerNascib($organization, $organizationMember, $validated);
 
 
             $validated['organization_id'] = $organizationMember->organization_id;
             $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
 
-            $createdRegisterUser = $this->nascibMemberService->createUser($validated);
+            $createdRegisterUser = $this->nascibMemberService->createNascibUser($validated); //TODO: IDP user is not created
 
-            Log::info('id_user_info:' . json_encode($createdRegisterUser));
+            Log::info('Nascib id_user_info:' . json_encode($createdRegisterUser));
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
@@ -151,105 +81,12 @@ class NascibMemberController extends Controller
 
             DB::commit();
             $httpStatusCode = ResponseAlias::HTTP_BAD_REQUEST;
-            return Response::json($response, $httpStatusCode);
+
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
-
-    }
-
-
-    /**
-     * Update the specified resource from storage.
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     * @throws ValidationException
-     * @throws AuthorizationException
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $industryAssociation = IndustryAssociation::findOrFail($id);
-
-        $this->authorize('update', $industryAssociation);
-
-        $validated = $this->industryAssociationService->validator($request, $id)->validate();
-        $data = $this->industryAssociationService->update($industryAssociation, $validated);
-
-        $data = array_merge($data->toArray(), ["skills" => $data->skills()->get()]);
-
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "IndustryAssociation updated successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return JsonResponse
-     * @throws Throwable
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $industryAssociation = IndustryAssociation::findOrFail($id);
-        $this->authorize('delete', $industryAssociation);
-        DB::beginTransaction();
-        try {
-            $this->industryAssociationService->destroy($industryAssociation);
-            $this->industryAssociationService->userDestroy($industryAssociation);
-            DB::commit();
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "industryAssociation deleted successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e) {
-            DB::rollBack();
-            throw $e;
-        }
-
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "IndustryAssociation deleted successfully.",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function restore(int $id): JsonResponse
-    {
-
-        $industryAssociation = IndustryAssociation::onlyTrashed()->findOrFail($id);
-        $this->industryAssociationService->restore($industryAssociation);
-
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "IndustryAssociation restored successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, $httpStatusCode);
     }
 
 }
