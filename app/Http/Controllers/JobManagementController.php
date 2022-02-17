@@ -480,6 +480,37 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @throws ValidationException
+     * @throws Throwable
+     */
+    public function getCandidateProfile(Request $request, int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        // $requestData = ['applied_job_id' => $applicationId];
+        // $validatedData = $this->jobManagementService->getCandidateProfileValidator($requestData)->validate();
+
+        $youthId = (array)($appliedJob->youth_id);
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthId);
+        $youth = $youthProfiles[0];
+
+        $appliedJob->profile_viewed_at = Carbon::now();
+        $appliedJob->save();
+
+        $response = [
+            "data" => $youth,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate profile get successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -912,8 +943,7 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws ValidationException|Throwable
      */
-    public
-    function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
+    public function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($scheduleId);
 
@@ -966,8 +996,7 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public
-    function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
+    public function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
 
         $schedule = InterviewSchedule::findOrFail($scheduleId);
@@ -995,8 +1024,7 @@ class JobManagementController extends Controller
      * @param int $youthId
      * @return array
      */
-    public
-    function youthFeedStatistics(Request $request, int $youthId): array
+    public function youthFeedStatistics(Request $request, int $youthId): array
     {
         $requestData = $request->all();
         if (!empty($requestData["skill_ids"])) {

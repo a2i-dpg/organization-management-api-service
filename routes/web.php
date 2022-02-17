@@ -128,6 +128,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->put('step-schedule/{scheduleId}/assign', ["as" => "step-schedule.assign", "uses" => "JobManagementController@assignCandidateToInterviewSchedule"]);
             $router->put('step-schedule/{scheduleId}/unassign', ["as" => "step-schedule.unassign", "uses" => "JobManagementController@removeCandidateFromInterviewSchedule"]);
 
+            $router->get('candidate/{applicationId}', ["as" => "candidate.view", "uses" => "JobManagementController@getCandidateProfile"]);
 
             /** Update candidate status in interview steps  */
             $router->group(["prefix" => "candidate", "as" => "candidate-update"], function () use ($router) {

@@ -1509,6 +1509,24 @@ class JobManagementService
     }
 
     /**
+     * @param array $requestData
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function getCandidateProfileValidator(array $requestData): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            'applied_job_id' => [
+                'integer',
+                'required',
+                'exists:applied_jobs,id,deleted_at,NULL',
+            ]
+        ];
+
+        return Validator::make($requestData, $rules);
+
+    }
+
+    /**
      * @return int
      */
     public function getJobCount(): int
