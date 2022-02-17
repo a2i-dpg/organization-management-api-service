@@ -947,6 +947,8 @@ class JobManagementController extends Controller
     {
         $schedule = InterviewSchedule::findOrFail($scheduleId);
 
+        $job = PrimaryJobInformation::where('job_id', $schedule->job_id)->findOrFail();
+
         $validatedData = $this->interviewScheduleService->CandidateAssigningToScheduleValidator($request, $schedule)->validate();
 
         $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
@@ -973,6 +975,18 @@ class JobManagementController extends Controller
                         $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
                     }
                 }
+
+                /** set youth calendar event for interview using ServiceToServiceCall */
+                $scheduleData = [
+                    'job_title' => $job->job_title,
+                    'job_title_en' => $job->job_title_en,
+                    'youth_id' => $youth['id'],
+                    'start_date' => Carbon::parse($schedule->interview_scheduled_at)->format('Y-m-d'),
+                    'end_date' => Carbon::parse($schedule->interview_scheduled_at)->format('Y-m-d'),
+                    'start_time' => Carbon::parse($schedule->interview_scheduled_at)->format('H:i'),
+                    'end_time' => Carbon::parse($schedule->interview_scheduled_at)->format('H:i'),
+                ];
+                ServiceToServiceCall::createEventAfterInterviewScheduleAssign($scheduleData);
             }
         }
         $response = [
