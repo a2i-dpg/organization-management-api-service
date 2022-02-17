@@ -11177,15 +11177,15 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "1",
-                                        "recruitment_step_id": "1",
-                                        "interview_scheduled_at": null,
+                                        "job_id": "3",
+                                        "recruitment_step_id": "2",
+                                        "interview_scheduled_at": "2022-04-16 21:30",
                                         "maximum_number_of_applicants": "20",
-                                        "interview_invite_type": "1",
-                                        "interview_address": "Mohakhali",
-                                        "updated_at": "2022-02-10T03:59:46.000000Z",
-                                        "created_at": "2022-02-10T03:59:46.000000Z",
-                                        "id": 1
+                                        "interview_invite_type": "2",
+                                        "interview_address": "Uttra",
+                                        "updated_at": "2022-02-17T04:42:24.000000Z",
+                                        "created_at": "2022-02-17T04:42:24.000000Z",
+                                        "id": 6
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -11264,21 +11264,19 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "recruitment_step_id": "1",
-                                        "interview_scheduled_at": "2022-09-09",
-                                        "maximum_number_of_applicants": "25",
-                                        "interview_invite_type": "2",
-                                        "interview_address": "Rajabazar",
-                                        "created_at": "2022-02-10T03:59:46.000000Z",
-                                        "updated_at": "2022-02-10T04:09:55.000000Z",
+                                        "id": 6,
+                                        "recruitment_step_id": "2",
+                                        "interview_scheduled_at": "2022-01-02 02:23:00",
+                                        "maximum_number_of_applicants": 20,
+                                        "interview_invite_type": 3,
+                                        "interview_address": "Dhaka",
+                                        "created_at": "2022-02-17T04:42:24.000000Z",
+                                        "updated_at": "2022-02-17T04:44:30.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "schedule updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -12650,10 +12648,11 @@
                 "description": "Create a schedule",
                 "properties": {
                     "job_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Must exist in primary_job_information table"
                     },
                     "recruitment_step_id": {
-                        "type": "string"
+                        "type": "integer"
                     },
                     "interview_scheduled_at": {
                         "type": "string",
@@ -12671,7 +12670,10 @@
                 },
                 "required": [
                     "job_id",
+                    "recruitment_step_id",
+                    "interview_scheduled_at",
                     "maximum_number_of_applicants",
+                    "interview_invite_type",
                     "interview_address"
                 ]
             },

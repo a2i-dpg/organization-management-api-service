@@ -127,7 +127,7 @@ class InterviewScheduleService
             'job_id' => [
                 'required',
                 'string',
-                'exists:primary_job_information,id,deleted_at,NULL'
+                'exists:primary_job_information,job_id,deleted_at,NULL'
             ],
             'recruitment_step_id' => [
                 'integer',
