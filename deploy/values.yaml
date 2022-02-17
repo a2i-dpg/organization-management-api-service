@@ -130,8 +130,8 @@ variables:
     WSO2_IDP_PASSWORD: Iadmin
 
   PRODUCTION:
-    APP_ENV: "local"
-    APP_DEBUG: "true"
+    APP_ENV: "production"
+    APP_DEBUG: "false"
     APP_URL: "gateway-dev.nise3.xyz"
 
     DB_HOST: "db-service.default"
