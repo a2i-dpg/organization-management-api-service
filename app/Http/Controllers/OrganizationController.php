@@ -407,7 +407,6 @@ class OrganizationController extends Controller
             Log::channel('org_reg')->info('organization_stored_data', $organization->toArray());
 
             $validated['organization_id'] = $organization->id;
-            $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
             $createdRegisterUser = $this->organizationService->createOpenRegisterUser($validated);
 
