@@ -119,7 +119,7 @@ class OrganizationController extends Controller
         $this->authorize('create', $organization);
 
         if ($request->industry_association_id) {
-            $industryAssociations = array([ 'industry_association_id' => $request->industry_association_id,'membership_id' => $request->membership_id]);
+            $industryAssociations = array(['industry_association_id' => $request->industry_association_id, 'membership_id' => $request->membership_id]);
             $request->offsetSet('industry_associations', $industryAssociations);
         }
 
@@ -226,14 +226,14 @@ class OrganizationController extends Controller
         $alreadyExistUsernames = [];
         $organizationCreated = 0;
 
-        if(!empty($excelData) && !empty($excelData[0])){
+        if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
 
             $this->organizationService->excelDataValidator($rows)->validate();
 
             foreach ($rows as $rowData){
                 $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
-                if(empty($user)){
+                if (empty($user)) {
 
                     DB::beginTransaction();
                     try {
@@ -281,7 +281,7 @@ class OrganizationController extends Controller
                         } else {
                             throw new \Exception('Organization/Industry Creation for Contact person mobile: ' . $rowData['contact_person_mobile'] . ' not succeed!', 500);
                         }
-                        ++ $organizationCreated;
+                        ++$organizationCreated;
                     } catch (Throwable $e) {
                         Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
                         DB::rollBack();
@@ -301,7 +301,7 @@ class OrganizationController extends Controller
             ]
         ];
 
-        if(!empty($alreadyExistUsernames)){
+        if (!empty($alreadyExistUsernames)) {
             $response['_response_status']['user_exists'] = $alreadyExistUsernames;
         }
 
@@ -387,7 +387,7 @@ class OrganizationController extends Controller
         $organization = app(Organization::class);
 
         if ($request->industry_association_id) {
-            $industryAssociations = array([ 'industry_association_id' => $request->industry_association_id,'membership_id' => $request->membership_id]);
+            $industryAssociations = array(['industry_association_id' => $request->industry_association_id, 'membership_id' => $request->membership_id]);
             $request->offsetSet('industry_associations', $industryAssociations);
         }
         $validated = $this->organizationService->registerOrganizationValidator($request)->validate();
@@ -398,7 +398,7 @@ class OrganizationController extends Controller
 
         DB::beginTransaction();
         try {
-            $organization = $this->organizationService->store($organization, $validated,true);
+            $organization = $this->organizationService->store($organization, $validated, true);
 
             if (!($organization && $organization->id)) {
                 throw new CustomException('Organization/Industry has not been properly saved to db.');
@@ -541,6 +541,7 @@ class OrganizationController extends Controller
         DB::beginTransaction();
         try {
             $this->organizationService->organizationStatusChangeAfterRejection($organization);
+            $this->organizationService->industryAssociationMembershipRejection($organization);
             $userRejection = $this->organizationService->organizationUserRejection($organization);
 
             if (isset($userRejection['_response_status']['success']) && $userRejection['_response_status']['success']) {
