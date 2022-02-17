@@ -132,7 +132,7 @@ variables:
   PRODUCTION:
     APP_ENV: "production"
     APP_DEBUG: "false"
-    APP_URL: "gateway-dev.nise3.xyz"
+    APP_URL: "nise3-org.default"
 
     DB_HOST: "db-service.default"
     DB_PORT: 3306
