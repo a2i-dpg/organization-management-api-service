@@ -9845,7 +9845,7 @@
                 }
             }
         },
-        "/jobs/recruitment-step/{id}/schedules": {
+        "/jobs/recruitment-step/{stepId}/schedules": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get recruitment step schedules by jobId",
