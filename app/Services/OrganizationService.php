@@ -810,18 +810,25 @@ class OrganizationService
      */
     public function industryAssociationMembershipApproval(Organization $organization)
     {
-        $industryAssociationIds = $organization->industryAssociations()
-            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_PENDING)
-            ->pluck('industry_association_id')->toArray();
+        $industryAssociationId = request('industry_association_id');
+
+        $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+            'row_status' => BaseModel::ROW_STATUS_ACTIVE
+        ]);
+
+    }
 
 
-        foreach ($industryAssociationIds as $industryAssociationId) {
-            $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
-                'row_status' => BaseModel::ROW_STATUS_ACTIVE
-            ]);
-        }
+    /**
+     * @param Organization $organization
+     */
+    public function industryAssociationMembershipRejection(Organization $organization)
+    {
+        $industryAssociationId = request('industry_association_id');
 
-
+        $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+            'row_status' => BaseModel::ROW_STATUS_REJECTED
+        ]);
     }
 
     /**
