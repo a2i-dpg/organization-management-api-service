@@ -1437,27 +1437,28 @@ class JobManagementService
 
     }
 
+
     /**
      * @param AppliedJob $appliedJob
-     * @return AppliedJob
+     * @return AppliedJob|false
      */
-    public function removeCandidateToPreviousStep(AppliedJob $appliedJob): AppliedJob
+    public function removeCandidateToPreviousStep(AppliedJob $appliedJob): AppliedJob|bool
     {
         $currentRecruitmentStepId = $appliedJob->current_recruitment_step_id;
         $firstRecruitmentStep = $this->findFirstRecruitmentStep($appliedJob);
+        $previousRecruitmentStep = $this->findPreviousRecruitmentStep($appliedJob);
 
 
         if (!empty($firstRecruitmentStep) && $firstRecruitmentStep->id == $currentRecruitmentStepId) {
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Applied"];
             $appliedJob->current_recruitment_step_id = null;
             $appliedJob->save();
-        } else {
-            $previousRecruitmentStep = $this->findPreviousRecruitmentStep($appliedJob);
-            if (!empty($previousRecruitmentStep)) {
-                $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
-                $appliedJob->current_recruitment_step_id = $previousRecruitmentStep->id;
-                $appliedJob->save();
-            }
+        } else if (!empty($previousRecruitmentStep)) {
+            $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
+            $appliedJob->current_recruitment_step_id = $previousRecruitmentStep->id;
+            $appliedJob->save();
+        }else{
+            return false;
         }
 
         return $appliedJob;
@@ -1479,7 +1480,7 @@ class JobManagementService
      */
     public function findPreviousRecruitmentStep(AppliedJob $appliedJob): mixed
     {
-        $currentRecruitmentStep = $appliedJob->current_recruitment_step_id;
+        $currentRecruitmentStep = $appliedJob->current_recruitment_step_id ?? 0;
         return RecruitmentStep::where('id', '<', $currentRecruitmentStep)
             ->orderBy('id', 'desc')
             ->first();
