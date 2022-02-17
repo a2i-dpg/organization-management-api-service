@@ -11313,6 +11313,131 @@
                 }
             }
         },
+        "/jobs/candidate/{applicationId}": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get a Candidate Profile",
+                "description": "API endpoint to Get a Candidate Profile. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "username": "ffff",
+                                        "user_name_type": 0,
+                                        "first_name": "Obscura",
+                                        "first_name_en": "Katakalysm",
+                                        "last_name": "",
+                                        "last_name_en": "Poison Green",
+                                        "expected_salary": 1000,
+                                        "job_level": 2,
+                                        "loc_division_id": null,
+                                        "code": "",
+                                        "division_title": null,
+                                        "division_title_en": null,
+                                        "loc_district_id": null,
+                                        "district_title": null,
+                                        "district_title_en": null,
+                                        "loc_upazila_id": null,
+                                        "upazila_title": null,
+                                        "upazila_title_en": null,
+                                        "gender": 0,
+                                        "religion": null,
+                                        "is_freelance_profile": 0,
+                                        "marital_status": null,
+                                        "nationality": 1,
+                                        "email": null,
+                                        "mobile": null,
+                                        "identity_number_type": null,
+                                        "identity_number": null,
+                                        "date_of_birth": "2011-11-30T00:00:00.000000Z",
+                                        "freedom_fighter_status": 1,
+                                        "physical_disability_status": 0,
+                                        "does_belong_to_ethnic_group": 0,
+                                        "bio": null,
+                                        "bio_en": null,
+                                        "photo": null,
+                                        "cv_path": null,
+                                        "signature_image_path": null,
+                                        "default_cv_template": "CLASSIC",
+                                        "row_status": 1,
+                                        "created_at": null,
+                                        "updated_at": "2022-02-01T12:27:51.000000Z",
+                                        "profile_completed": 0,
+                                        "total_job_experience": {
+                                            "year": 0,
+                                            "month": 6
+                                        },
+                                        "physical_disabilities": [],
+                                        "youth_languages_proficiencies": [],
+                                        "skills": [],
+                                        "youth_educations": [],
+                                        "youth_job_experiences": [
+                                            {
+                                                "id": 1,
+                                                "youth_id": 1,
+                                                "employment_type_id": 1,
+                                                "company_name": "HurrayLand",
+                                                "company_name_en": null,
+                                                "position": "AnonymousKing",
+                                                "position_en": null,
+                                                "location": "YourFather'sHouse",
+                                                "location_en": null,
+                                                "job_responsibilities": null,
+                                                "job_responsibilities_en": null,
+                                                "start_date": "2022-09-09T00:00:00.000000Z",
+                                                "end_date": null,
+                                                "is_currently_working": 1,
+                                                "created_at": "2022-02-02T04:28:44.000000Z",
+                                                "updated_at": "2022-02-02T04:49:21.000000Z",
+                                                "deleted_at": null,
+                                                "area_of_experiences": [
+                                                    {
+                                                        "id": 1,
+                                                        "youth_id": "1",
+                                                        "youth_job_experience_id": "1",
+                                                        "area_of_experience_id": 1,
+                                                        "title": "টেকনিকাল রাইটিং",
+                                                        "title_en": "Technical Writing"
+                                                    }
+                                                ],
+                                                "area_of_businesses": [
+                                                    {
+                                                        "id": 1,
+                                                        "youth_id": "1",
+                                                        "youth_job_experience_id": "1",
+                                                        "area_of_business_id": 1,
+                                                        "title": "Banks",
+                                                        "title_en": null
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "youth_certifications": [],
+                                        "youth_portfolios": [],
+                                        "youth_addresses": []
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate profile get successful",
+                                        "query_time": 2
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
         "/area-of-business": {
             "get": {
