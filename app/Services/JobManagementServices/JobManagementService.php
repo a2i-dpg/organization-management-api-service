@@ -1457,7 +1457,7 @@ class JobManagementService
             $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Shortlisted"];
             $appliedJob->current_recruitment_step_id = $previousRecruitmentStep->id;
             $appliedJob->save();
-        }else{
+        } else {
             return false;
         }
 
@@ -1481,7 +1481,8 @@ class JobManagementService
     public function findPreviousRecruitmentStep(AppliedJob $appliedJob): mixed
     {
         $currentRecruitmentStep = $appliedJob->current_recruitment_step_id ?? 0;
-        return RecruitmentStep::where('id', '<', $currentRecruitmentStep)
+        return RecruitmentStep::where('job_id', $appliedJob->job_id)
+            ->where('id', '<', $currentRecruitmentStep)
             ->orderBy('id', 'desc')
             ->first();
     }
