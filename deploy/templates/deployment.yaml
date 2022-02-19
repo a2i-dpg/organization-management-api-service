@@ -120,10 +120,11 @@ spec:
             mountPath: /vol
             {{end}}
       hostAliases:
-      - ip: "192.168.10.95"
+      - ip: "172.17.177.53"
         hostnames:
-        - "apim-dev.nise3.xyz"
-        - "identity-dev.nise3.xyz"
+        - "apim.nise.gov.bd"
+        - "identity.nise.gov.bd"
+        - "registry.nise.gov.bd"
       volumes:
       - name: "{{ .Chart.Name }}"
         persistentVolumeClaim:
