@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use mysql_xdevapi\Exception;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
@@ -479,21 +480,62 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @throws ValidationException
+     * @throws Throwable
+     */
+    public function getCandidateProfile(Request $request, int $applicationId): JsonResponse
+    {
+        $appliedJob = AppliedJob::findOrFail($applicationId);
+
+        // $requestData = ['applied_job_id' => $applicationId];
+        // $validatedData = $this->jobManagementService->getCandidateProfileValidator($requestData)->validate();
+
+        $youthId = (array)($appliedJob->youth_id);
+        $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthId);
+        $youth = $youthProfiles[0];
+
+        $appliedJob->profile_viewed_at = Carbon::now();
+        $appliedJob->save();
+
+        $response = [
+            "data" => $youth,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Candidate profile get successful",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
      */
     public function createRecruitmentStep(Request $request): JsonResponse
     {
-        $validatedData = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+        $jobId = $request->input('job_id');
+        $isRecruitmentStepCreatable = $this->jobManagementService->isRecruitmentStepCreatable($jobId);
 
-        $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($validatedData);
+        if ($isRecruitmentStepCreatable) {
+            $validatedData = $this->jobManagementService->recruitmentStepStoreValidator($request)->validate();
+            $recruitmentStep = $this->jobManagementService->storeRecruitmentStep($validatedData);
+            $code = ResponseAlias::HTTP_OK;
+            $message = "Recruitment Step stored successful";
+        } else {
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+            $message = "Recruitment Step can not be created";
+        }
+
         $response = [
-            "data" => $recruitmentStep,
+            "data" => $recruitmentStep ?? null,
             '_response_status' => [
                 "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Recruitment Step stored successful",
+                "code" => $code,
+                "message" => $message,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -632,26 +674,35 @@ class JobManagementController extends Controller
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
         $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
-        if ($isRecruitmentStepDeletable) {
-            $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
-            $response = [
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Recruitment Step deleted successfully.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } else {
-            $response = [
-                '_response_status' => [
-                    "success" => false,
-                    "code" => ResponseAlias::HTTP_BAD_REQUEST,
-                    "message" => "Recruitment Step can not be deleted.",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+        DB::beginTransaction();
+        try {
+            if ($isRecruitmentStepDeletable) {
+                $this->jobManagementService->deleteRecruitmentStep($recruitmentStep);
+                $this->jobManagementService->deleteRecruitmentStepSchedules($recruitmentStep->id);
+                $response = [
+                    '_response_status' => [
+                        "success" => true,
+                        "code" => ResponseAlias::HTTP_OK,
+                        "message" => "Recruitment Step deleted successfully.",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            } else {
+                $response = [
+                    '_response_status' => [
+                        "success" => false,
+                        "code" => ResponseAlias::HTTP_BAD_REQUEST,
+                        "message" => "Recruitment Step can not be deleted.",
+                        "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                    ]
+                ];
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
         }
+
 
         return Response::json($response, ResponseAlias::HTTP_OK);
 
@@ -795,7 +846,6 @@ class JobManagementController extends Controller
      * Store a newly created resource in storage.
      * @param Request $request
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ValidationException
      */
 
@@ -820,18 +870,18 @@ class JobManagementController extends Controller
      * @param Request $request
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
      * @throws ValidationException
      */
     public function updateSchedule(Request $request, int $id): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
-        $validated = $this->interviewScheduleService->validator($request, $id)->validate();
+        $isScheduleUpdatable = $this->interviewScheduleService->isScheduleUpdatable($schedule->id);
 
-        $updateSchedule = $this->interviewScheduleService->update($schedule, $validated);
+        if ($isScheduleUpdatable) {
+            $validated = $this->interviewScheduleService->validator($request, $id)->validate();
+            $this->interviewScheduleService->update($schedule, $validated);
 
-        if (empty($updateSchedule)) {
             $success = false;
             $message = "schedule updated successfully.";
             $code = ResponseAlias::HTTP_BAD_REQUEST;
@@ -840,6 +890,7 @@ class JobManagementController extends Controller
             $message = "schedule can not updated.";
             $code = ResponseAlias::HTTP_OK;
         }
+
         $response = [
             '_response_status' => [
                 "success" => $success,
@@ -857,7 +908,8 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroySchedule(int $id): JsonResponse
+    public
+    function destroySchedule(int $id): JsonResponse
     {
         $schedule = InterviewSchedule::findOrFail($id);
 
@@ -899,8 +951,7 @@ class JobManagementController extends Controller
 
         $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
 
-        $requestData = $request->all();
-        $applicationIds = $requestData['applied_job_ids'];
+        $applicationIds = $validatedData['applied_job_ids'];
         $appliedJob = AppliedJob::whereIn('id', $applicationIds)->get();
         $interviewInviteType = $validatedData['interview_invite_type'];
 

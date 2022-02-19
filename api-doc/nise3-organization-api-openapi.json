@@ -423,6 +423,77 @@
                 ]
             }
         },
+        "/organization-user-approval/{organizationId}": {
+            "put": {
+                "tags": [
+                    "Organization Registration"
+                ],
+                "summary": "Organization user approval",
+                "description": "API endpoint to Organization user approval.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrganizationUserApproval"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": false,
+                                        "code": 200,
+                                        "message": "organization approved successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/organization-user-rejection/{organizationId}": {
+            "put": {
+                "tags": [
+                    "Organization Registration"
+                ],
+                "summary": "Organization user reject",
+                "description": "API endpoint to Organization user approval.A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/organizationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": false,
+                                        "code": 200,
+                                        "message": "organization rejected successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/organization-types": {
             "get": {
                 "summary": "get_list",
@@ -8037,7 +8108,7 @@
                 }
             }
         },
-        "/jobs/store-primary-job-information": {
+        "/jobs/primary-job-information": {
             "post": {
                 "tags": [
                     "Primary Job Information [Job Management Step : 1]"
@@ -8205,7 +8276,7 @@
                 }
             }
         },
-        "/jobs/store-additional-job-information": {
+        "/jobs/additional-job-information": {
             "post": {
                 "tags": [
                     "Additional Job Information [Job Management Step : 2]"
@@ -8399,7 +8470,7 @@
                 }
             }
         },
-        "/jobs/store-candidate-requirements": {
+        "/jobs/candidate-requirements": {
             "post": {
                 "tags": [
                     "Candidate Requirements [Job Management Step : 3]"
@@ -8602,7 +8673,7 @@
                 }
             }
         },
-        "/jobs/store-company-info-visibility": {
+        "/jobs/company-info-visibility": {
             "post": {
                 "tags": [
                     "Company info visibility [Job Management Step : 4]"
@@ -8689,7 +8760,7 @@
                 }
             }
         },
-        "/jobs/store-matching-criteria": {
+        "/jobs/matching-criteria": {
             "post": {
                 "tags": [
                     "Matching Criteria [Job Management Step : 5]"
@@ -9281,7 +9352,7 @@
             }
         },
 
-        "/jobs/candidate-update/reject/{applicationId}": {
+        "/jobs/candidate/{applicationId}/reject": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Reject a job candidate from interview process",
@@ -9334,7 +9405,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/shortlist/{applicationId}": {
+        "/jobs/candidate/{applicationId}/shortlist": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Shortlist a candidate for interview",
@@ -9387,7 +9458,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/interviewed/{applicationId}": {
+        "/jobs/candidate/{applicationId}/interviewed": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Update interviewed candidate",
@@ -9437,7 +9508,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/remove/{applicationId}": {
+        "/jobs/candidate/{applicationId}/remove": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Remove candidate to previous step",
@@ -9482,7 +9553,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/restore/{applicationId}": {
+        "/jobs/candidate/{applicationId}/restore": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Restore a rejected candidate",
@@ -9527,7 +9598,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/hire-invite/{applicationId}": {
+        "/jobs/candidate/{applicationId}/hire-invite": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Hiring Invitation sent to a candidate",
@@ -9581,7 +9652,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/hired/{applicationId}": {
+        "/jobs/candidate/{applicationId}/hired": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Hiring Invitation sent to a candidate",
@@ -9625,7 +9696,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/schedule/{scheduleId}": {
+        "/jobs/step-schedule/{scheduleId}/assign": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Schedule a candidate",
@@ -9662,7 +9733,7 @@
                 }
             }
         },
-        "/jobs/candidate-update/deschedule/{scheduleId}": {
+        "/jobs/step-schedule/{scheduleId}/unassign": {
             "put": {
                 "tags": ["Job Interview"],
                 "summary": "Deschedule a candidate",
@@ -9700,7 +9771,7 @@
                 }
             }
         },
-        "/jobs/recruitment-step-list/{jobId}": {
+        "/jobs/recruitment-steps/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get recruitment step list by jobId",
@@ -9774,7 +9845,7 @@
                 }
             }
         },
-        "/jobs/recruitment-steps/{stepId}/schedules": {
+        "/jobs/recruitment-step/{stepId}/schedules": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get recruitment step schedules by jobId",
@@ -10769,7 +10840,7 @@
             }
         },
 
-        "/jobs/recruitment-steps": {
+        "/jobs/recruitment-step": {
             "post": {
                 "tags": ["Job Interview"],
                 "summary": "Create a recruitment step a job interview",
@@ -10813,7 +10884,7 @@
                 }
             }
         },
-        "/jobs/recruitment-steps/{stepId}": {
+        "/jobs/recruitment-step/{stepId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get a recruitment step of a job interview",
@@ -10927,7 +10998,7 @@
                 }
             }
         },
-        "/jobs/recruitment-step-candidate-list/{jobId}": {
+        "/jobs/candidates/{jobId}": {
             "get": {
                 "tags": ["Job Interview"],
                 "summary": "Get a recruitment step candidate list of a job interview",
@@ -11106,15 +11177,15 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "job_id": "1",
-                                        "recruitment_step_id": "1",
-                                        "interview_scheduled_at": null,
+                                        "job_id": "3",
+                                        "recruitment_step_id": "2",
+                                        "interview_scheduled_at": "2022-04-16 21:30",
                                         "maximum_number_of_applicants": "20",
-                                        "interview_invite_type": "1",
-                                        "interview_address": "Mohakhali",
-                                        "updated_at": "2022-02-10T03:59:46.000000Z",
-                                        "created_at": "2022-02-10T03:59:46.000000Z",
-                                        "id": 1
+                                        "interview_invite_type": "2",
+                                        "interview_address": "Uttra",
+                                        "updated_at": "2022-02-17T04:42:24.000000Z",
+                                        "created_at": "2022-02-17T04:42:24.000000Z",
+                                        "id": 6
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -11193,21 +11264,19 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 1,
-                                        "job_id": "1",
-                                        "recruitment_step_id": "1",
-                                        "interview_scheduled_at": "2022-09-09",
-                                        "maximum_number_of_applicants": "25",
-                                        "interview_invite_type": "2",
-                                        "interview_address": "Rajabazar",
-                                        "created_at": "2022-02-10T03:59:46.000000Z",
-                                        "updated_at": "2022-02-10T04:09:55.000000Z",
+                                        "id": 6,
+                                        "recruitment_step_id": "2",
+                                        "interview_scheduled_at": "2022-01-02 02:23:00",
+                                        "maximum_number_of_applicants": 20,
+                                        "interview_invite_type": 3,
+                                        "interview_address": "Dhaka",
+                                        "created_at": "2022-02-17T04:42:24.000000Z",
+                                        "updated_at": "2022-02-17T04:44:30.000000Z",
                                         "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "schedule updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -11236,6 +11305,131 @@
                                         "code": 200,
                                         "message": "schedule deleted successfully.",
                                         "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/jobs/candidate/{applicationId}": {
+            "get": {
+                "tags": ["Job Interview"],
+                "summary": "Get a Candidate Profile",
+                "description": "API endpoint to Get a Candidate Profile. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/applicationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "username": "ffff",
+                                        "user_name_type": 0,
+                                        "first_name": "Obscura",
+                                        "first_name_en": "Katakalysm",
+                                        "last_name": "",
+                                        "last_name_en": "Poison Green",
+                                        "expected_salary": 1000,
+                                        "job_level": 2,
+                                        "loc_division_id": null,
+                                        "code": "",
+                                        "division_title": null,
+                                        "division_title_en": null,
+                                        "loc_district_id": null,
+                                        "district_title": null,
+                                        "district_title_en": null,
+                                        "loc_upazila_id": null,
+                                        "upazila_title": null,
+                                        "upazila_title_en": null,
+                                        "gender": 0,
+                                        "religion": null,
+                                        "is_freelance_profile": 0,
+                                        "marital_status": null,
+                                        "nationality": 1,
+                                        "email": null,
+                                        "mobile": null,
+                                        "identity_number_type": null,
+                                        "identity_number": null,
+                                        "date_of_birth": "2011-11-30T00:00:00.000000Z",
+                                        "freedom_fighter_status": 1,
+                                        "physical_disability_status": 0,
+                                        "does_belong_to_ethnic_group": 0,
+                                        "bio": null,
+                                        "bio_en": null,
+                                        "photo": null,
+                                        "cv_path": null,
+                                        "signature_image_path": null,
+                                        "default_cv_template": "CLASSIC",
+                                        "row_status": 1,
+                                        "created_at": null,
+                                        "updated_at": "2022-02-01T12:27:51.000000Z",
+                                        "profile_completed": 0,
+                                        "total_job_experience": {
+                                            "year": 0,
+                                            "month": 6
+                                        },
+                                        "physical_disabilities": [],
+                                        "youth_languages_proficiencies": [],
+                                        "skills": [],
+                                        "youth_educations": [],
+                                        "youth_job_experiences": [
+                                            {
+                                                "id": 1,
+                                                "youth_id": 1,
+                                                "employment_type_id": 1,
+                                                "company_name": "HurrayLand",
+                                                "company_name_en": null,
+                                                "position": "AnonymousKing",
+                                                "position_en": null,
+                                                "location": "YourFather'sHouse",
+                                                "location_en": null,
+                                                "job_responsibilities": null,
+                                                "job_responsibilities_en": null,
+                                                "start_date": "2022-09-09T00:00:00.000000Z",
+                                                "end_date": null,
+                                                "is_currently_working": 1,
+                                                "created_at": "2022-02-02T04:28:44.000000Z",
+                                                "updated_at": "2022-02-02T04:49:21.000000Z",
+                                                "deleted_at": null,
+                                                "area_of_experiences": [
+                                                    {
+                                                        "id": 1,
+                                                        "youth_id": "1",
+                                                        "youth_job_experience_id": "1",
+                                                        "area_of_experience_id": 1,
+                                                        "title": "টেকনিকাল রাইটিং",
+                                                        "title_en": "Technical Writing"
+                                                    }
+                                                ],
+                                                "area_of_businesses": [
+                                                    {
+                                                        "id": 1,
+                                                        "youth_id": "1",
+                                                        "youth_job_experience_id": "1",
+                                                        "area_of_business_id": 1,
+                                                        "title": "Banks",
+                                                        "title_en": null
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "youth_certifications": [],
+                                        "youth_portfolios": [],
+                                        "youth_addresses": []
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Candidate profile get successful",
+                                        "query_time": 2
                                     }
                                 }
                             }
@@ -12579,10 +12773,11 @@
                 "description": "Create a schedule",
                 "properties": {
                     "job_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Must exist in primary_job_information table"
                     },
                     "recruitment_step_id": {
-                        "type": "string"
+                        "type": "integer"
                     },
                     "interview_scheduled_at": {
                         "type": "string",
@@ -12600,7 +12795,10 @@
                 },
                 "required": [
                     "job_id",
+                    "recruitment_step_id",
+                    "interview_scheduled_at",
                     "maximum_number_of_applicants",
+                    "interview_invite_type",
                     "interview_address"
                 ]
             },
@@ -12694,6 +12892,15 @@
                 }
             },
             "IndustryAssociationRegistrationApprove": {
+                "type": "object",
+                "description": "permission_sub_group_id",
+                "properties": {
+                    "permission_sub_group_id": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "OrganizationUserApproval": {
                 "type": "object",
                 "description": "permission_sub_group_id",
                 "properties": {
