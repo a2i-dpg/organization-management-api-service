@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getAuthUserWithRolePermission(string $idpUserId)
  * @method static array|mixed getInstituteTitleByIds(array $idpUserId)
  * @method static array|mixed getYouthProfilesByIds(array $youthIds)
+ * @method static array|mixed createEventAfterInterviewScheduleAssign(array $data)
  * @method static array|mixed getPermissionSubGroupsByTitle(string $permissionSubGroupTitle)
  * @method static array|mixed getCoreUserByUsername(string $username)
  * @method static array|mixed getYouthUserByUsername(string $username)

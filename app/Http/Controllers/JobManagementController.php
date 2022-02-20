@@ -299,6 +299,7 @@ class JobManagementController extends Controller
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
         $data = collect([
             'matching_criteria' => $this->matchingCriteriaService->getMatchingCriteria($jobId),
         ]);
@@ -365,9 +366,11 @@ class JobManagementController extends Controller
     /**
      * @param int $applicationId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function rejectCandidate(int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $rejectApplication = $this->jobManagementService->rejectCandidate($applicationId);
         $response = [
             '_response_status' => [
@@ -388,6 +391,7 @@ class JobManagementController extends Controller
      */
     public function shortlistCandidate(int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $shortlistApplication = $this->jobManagementService->shortlistCandidate($applicationId);
         if (empty($shortlistApplication)) {
             $success = false;
@@ -415,9 +419,11 @@ class JobManagementController extends Controller
      * @param int $applicationId
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function updateInterviewedCandidate(Request $request, int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $appliedJob = AppliedJob::findOrFail($applicationId);
         $validatedData = $this->jobManagementService->interviewedCandidateUpdateValidator($request)->validate();
         $shortlistApplication = $this->jobManagementService->updateInterviewedCandidate($appliedJob, $validatedData);
@@ -437,18 +443,28 @@ class JobManagementController extends Controller
     /**
      * @param int $applicationId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function removeCandidateToPreviousStep(int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
-        $shortlistApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
+        $removedApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
+        if($removedApplication){
+            $success =true;
+            $message ="Candidate removed successfully";
+            $code = ResponseAlias::HTTP_OK;
+        }else{
+            $success =false;
+            $message ="Candidate can not be removed ";
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+        }
         $response = [
-            "data" => $shortlistApplication,
             '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Candidate removed successfully",
+                "success" => $success,
+                "code" => $code,
+                "message" => $message,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -460,9 +476,11 @@ class JobManagementController extends Controller
      * @param int $applicationId
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function restoreRejectedCandidate(int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $shortlistApplication = $this->jobManagementService->restoreRejectedCandidate($appliedJob);
@@ -480,11 +498,11 @@ class JobManagementController extends Controller
     }
 
     /**
-     * @throws ValidationException
      * @throws Throwable
      */
     public function getCandidateProfile(Request $request, int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         // $requestData = ['applied_job_id' => $applicationId];
@@ -514,9 +532,11 @@ class JobManagementController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function createRecruitmentStep(Request $request): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $jobId = $request->input('job_id');
         $isRecruitmentStepCreatable = $this->jobManagementService->isRecruitmentStepCreatable($jobId);
 
@@ -546,9 +566,11 @@ class JobManagementController extends Controller
     /**
      * @param int $stepId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getRecruitmentStep(int $stepId): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
         $recruitmentStep = $this->jobManagementService->getRecruitmentStep($stepId);
         $response = [
             "data" => $recruitmentStep,
@@ -569,6 +591,7 @@ class JobManagementController extends Controller
      */
     public function getRecruitmentStepList(Request $request, string $jobId): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
         $recruitmentStep = $this->jobManagementService->getRecruitmentStepList($jobId);
         $response = [
             "data" => $recruitmentStep,
@@ -589,6 +612,7 @@ class JobManagementController extends Controller
      */
     public function hireInviteCandidate(Request $request, int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $validatedData = $this->jobManagementService->hireInviteValidator($request)->validate();
@@ -643,9 +667,11 @@ class JobManagementController extends Controller
     /**
      * @param int $applicationId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function updateHiredCandidate(int $applicationId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $hiredCandidate = $this->jobManagementService->updateHiredCandidate($appliedJob);
@@ -671,6 +697,7 @@ class JobManagementController extends Controller
      */
     public function destroyRecruitmentStep(int $stepId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
         $isRecruitmentStepDeletable = $this->jobManagementService->isRecruitmentStepDeletable($recruitmentStep);
 
@@ -716,6 +743,7 @@ class JobManagementController extends Controller
      */
     public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $recruitmentStep = RecruitmentStep::findOrFail($stepId);
         $validatedData = $this->jobManagementService->recruitmentStepUpdateValidator($request)->validate();
         $recruitmentStep = $this->jobManagementService->updateRecruitmentStep($recruitmentStep, $validatedData);
@@ -734,6 +762,7 @@ class JobManagementController extends Controller
 
     public function getCandidateList(Request $request, string $jobId, int $status = 0): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
         $response = $this->jobManagementService->getCandidateList($request, $jobId, $status);
 
         $response['_response_status'] = [
@@ -750,9 +779,12 @@ class JobManagementController extends Controller
      * @param string $jobId
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function recruitmentStepCandidateList(Request $request, string $jobId): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
+
         $filter = $this->jobManagementService->recruitmentStepCandidateListFilterValidator($request)->validate();
 
         $response = $this->jobManagementService->getRecruitmentStepCandidateList($filter, $jobId);
@@ -814,8 +846,8 @@ class JobManagementController extends Controller
      */
     function getOneSchedule(int $id): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
         $schedule = $this->interviewScheduleService->getOneInterviewSchedule($id);
-//        $this->authorize('view', $schedule);
         $response = [
             "data" => $schedule,
             "_response_status" => [
@@ -828,8 +860,12 @@ class JobManagementController extends Controller
     }
 
 
+    /**
+     * @throws AuthorizationException
+     */
     function stepSchedules(int $id): JsonResponse
     {
+        $this->authorize('view', JobManagement::class);
         $schedule = $this->interviewScheduleService->getSchedulesByStepId($id);
         $response = [
             "data" => $schedule,
@@ -847,11 +883,12 @@ class JobManagementController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
 
     function createSchedule(Request $request): JsonResponse
     {
-
+        $this->authorize('update', JobManagement::class);
         $validated = $this->interviewScheduleService->validator($request)->validate();
         $data = $this->interviewScheduleService->store($validated);
         $response = [
@@ -871,9 +908,11 @@ class JobManagementController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function updateSchedule(Request $request, int $id): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $schedule = InterviewSchedule::findOrFail($id);
 
         $isScheduleUpdatable = $this->interviewScheduleService->isScheduleUpdatable($schedule->id);
@@ -908,9 +947,9 @@ class JobManagementController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public
-    function destroySchedule(int $id): JsonResponse
+    public function destroySchedule(int $id): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $schedule = InterviewSchedule::findOrFail($id);
 
 
@@ -945,7 +984,10 @@ class JobManagementController extends Controller
      */
     public function assignCandidateToInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $schedule = InterviewSchedule::findOrFail($scheduleId);
+
+        $job = PrimaryJobInformation::where('job_id', $schedule->job_id)->findOrFail();
 
         $validatedData = $this->interviewScheduleService->CandidateAssigningToScheduleValidator($request, $schedule)->validate();
 
@@ -973,6 +1015,18 @@ class JobManagementController extends Controller
                         $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
                     }
                 }
+
+                /** set youth calendar event for interview using ServiceToServiceCall */
+                $scheduleData = [
+                    'job_title' => $job->job_title,
+                    'job_title_en' => $job->job_title_en,
+                    'youth_id' => $youth['id'],
+                    'start_date' => Carbon::parse($schedule->interview_scheduled_at)->format('Y-m-d'),
+                    'end_date' => Carbon::parse($schedule->interview_scheduled_at)->format('Y-m-d'),
+                    'start_time' => Carbon::parse($schedule->interview_scheduled_at)->format('H:i'),
+                    'end_time' => Carbon::parse($schedule->interview_scheduled_at)->format('H:i'),
+                ];
+                ServiceToServiceCall::createEventAfterInterviewScheduleAssign($scheduleData);
             }
         }
         $response = [
@@ -995,9 +1049,11 @@ class JobManagementController extends Controller
      * @param int $scheduleId
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function removeCandidateFromInterviewSchedule(Request $request, int $scheduleId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
 
         $schedule = InterviewSchedule::findOrFail($scheduleId);
 

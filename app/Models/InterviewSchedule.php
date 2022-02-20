@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property mixed $recruitment_step_id
+ * @property mixed $job_id
+ * @property mixed $id
+ */
 class InterviewSchedule extends BaseModel
 {
     use SoftDeletes;
