@@ -44,7 +44,9 @@ class HrDemandService
             'hr_demands.end_date',
             'hr_demands.vacancy',
             'hr_demands.remaining_vacancy',
-            'hr_demands.all_institutes'
+            'hr_demands.all_institutes',
+            'hr_demands.designation',
+            'hr_demands.designation_en'
         ])->acl();
 
         $hrDemandBuilder->join('organizations', function ($join) use ($rowStatus) {
@@ -111,7 +113,9 @@ class HrDemandService
             'hr_demands.requirement_en',
             'hr_demands.vacancy',
             'hr_demands.remaining_vacancy',
-            'hr_demands.all_institutes'
+            'hr_demands.all_institutes',
+            'hr_demands.designation',
+            'hr_demands.designation_en'
         ]);
 
         $hrDemandBuilder->join('organizations', function ($join) {
@@ -155,7 +159,9 @@ class HrDemandService
                 'requirement_en' => $hrDemand['requirement_en'] ?? "",
                 'vacancy' => $hrDemand['vacancy'],
                 'remaining_vacancy' => $hrDemand['vacancy'],
-                'all_institutes' => empty($hrDemand['institute_ids']) ? 1 : 0
+                'all_institutes' => empty($hrDemand['institute_ids']) ? 1 : 0,
+                'designation' => $hrDemand['vacancy'],
+                'designation_en' => $hrDemand['vacancy']
             ];
 
             $hrDemandInstance = new HrDemand();
@@ -184,6 +190,8 @@ class HrDemandService
             'vacancy' => $data['vacancy'],
             'remaining_vacancy' => $hrDemand->remaining_vacancy,
             'all_institutes' => empty($data['institute_ids']) ? 1 : 0,
+            'designation' => $hrDemand['vacancy'],
+            'designation_en' => $hrDemand['vacancy']
         ];
         $invalidatedApprovedVacanciesByIndustryAssociation = 0;
 
@@ -483,6 +491,14 @@ class HrDemandService
                 'nullable',
                 'string'
             ],
+            'hr_demands.*.designation' => [
+                'required',
+                'string'
+            ],
+            'hr_demands.*.designation_en' => [
+                'nullable',
+                'string'
+            ],
             'hr_demands.*.vacancy' => [
                 'required',
                 'int'
@@ -559,6 +575,14 @@ class HrDemandService
                 'string'
             ],
             'requirement_en' => [
+                'nullable',
+                'string'
+            ],
+            'designation' => [
+                'required',
+                'string'
+            ],
+            'designation_en' => [
                 'nullable',
                 'string'
             ],
