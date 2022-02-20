@@ -224,6 +224,7 @@ class OrganizationController extends Controller
         $file = $request->file('file');
         $excelData = Excel::toCollection(new OrganizationImport(), $file)->toArray();
         $alreadyExistUsernames = [];
+        $errorOccurUsernames = [];
         $organizationCreated = 0;
 
         if (!empty($excelData) && !empty($excelData[0])) {
@@ -232,8 +233,10 @@ class OrganizationController extends Controller
             $this->organizationService->excelDataValidator($rows)->validate();
 
             foreach ($rows as $rowData){
-                $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
-                if (empty($user)) {
+                $coreUser = ServiceToServiceCall::getCoreUserByUsername($rowData['contact_person_mobile']);
+                $youthUser = ServiceToServiceCall::getYouthUserByUsername($rowData['contact_person_mobile']);
+
+                if (empty($coreUser) && empty($youthUser)) {
 
                     DB::beginTransaction();
                     try {
@@ -285,7 +288,7 @@ class OrganizationController extends Controller
                     } catch (Throwable $e) {
                         Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
                         DB::rollBack();
-                        throw $e;
+                        $errorOccurUsernames[] = $rowData['contact_person_mobile'];
                     }
                 } else {
                     $alreadyExistUsernames[] = $rowData['contact_person_mobile'];
@@ -303,6 +306,10 @@ class OrganizationController extends Controller
 
         if (!empty($alreadyExistUsernames)) {
             $response['_response_status']['user_exists'] = $alreadyExistUsernames;
+        }
+
+        if (!empty($errorOccurUsernames)) {
+            $response['_response_status']['error_occur_username'] = $errorOccurUsernames;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
