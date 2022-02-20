@@ -136,11 +136,11 @@ class HrDemandInstituteService
             }
         }
 
-        Log::info("The hrDemandInstitute result is: ");
+        /*Log::info("The hrDemandInstitute result is: ");
         Log::info(json_encode($hrDemandInstitutes));
         Log::info("The output will be: ");
         Log::info(json_encode(!isset($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray())));
-        Log::info("The data is here: " . json_encode(isset($hrDemandInstitutes->toArray()['data'])));
+        Log::info("The data is here: " . json_encode(isset($hrDemandInstitutes->toArray()['data'])));*/
 
         $response['order'] = $order;
         $response['data'] = !empty($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray());

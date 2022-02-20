@@ -233,8 +233,10 @@ class OrganizationController extends Controller
             $this->organizationService->excelDataValidator($rows)->validate();
 
             foreach ($rows as $rowData){
-                $user = ServiceToServiceCall::getUserByUsername($rowData['contact_person_mobile']);
-                if (empty($user)) {
+                $coreUser = ServiceToServiceCall::getCoreUserByUsername($rowData['contact_person_mobile']);
+                $youthUser = ServiceToServiceCall::getYouthUserByUsername($rowData['contact_person_mobile']);
+
+                if (empty($coreUser) && empty($youthUser)) {
 
                     DB::beginTransaction();
                     try {
