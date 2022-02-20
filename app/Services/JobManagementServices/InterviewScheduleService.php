@@ -6,6 +6,8 @@ use App\Models\AppliedJob;
 
 use App\Models\CandidateInterview;
 use App\Models\InterviewSchedule;
+use App\Models\RecruitmentStep;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -166,6 +168,25 @@ class InterviewScheduleService
         if (!empty($requestData['applied_job_ids'])) {
             $requestData['applied_job_ids'] = is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
         }
+
+        $step = RecruitmentStep::where('id', $interviewSchedule->recruitment_step_id)->where('job_id', $interviewSchedule->job_id)->findOrFail();
+
+        /** @var CandidateInterview|Builder $currentScheduleCandidateCount */
+        $currentScheduleCandidateCount = CandidateInterview::where('recruitment_step_id', $step->id)
+            ->where('interview_schedule_id', $interviewSchedule->id)
+            ->count();
+
+        /** @var CandidateInterview|Builder $existingScheduleCandidateCount */
+        $existingScheduleCandidateCount = CandidateInterview::where('recruitment_step_id', $step->id)
+            ->where('interview_schedule_id', $interviewSchedule->id)
+            ->whereIn('applied_job_id', $requestData['applied_job_ids'])
+            ->count();
+
+        /** @var AppliedJob|Builder $applicantCount */
+        $applicantCount = AppliedJob::where('job_id', $interviewSchedule->job_id)->whereIn('id', $requestData['applied_job_ids'])->count();
+
+        if ($applicantCount != count($requestData['applied_job_ids'])) throw new ValidationException('applied_job_ids not valid.');
+
         $rules = [
             'notify' => [
                 'required',
@@ -177,12 +198,13 @@ class InterviewScheduleService
                 'array',
                 'min:1',
                 'distinct',
-                'max:' . $interviewSchedule->maximum_number_of_applicants
+                // 'max:' . $interviewSchedule->maximum_number_of_applicants
+                'max:' . ($interviewSchedule->maximum_number_of_applicants - $currentScheduleCandidateCount + $existingScheduleCandidateCount)
             ],
             'applied_job_ids.*' => [
                 'required',
                 'integer',
-                'exists:applied_jobs,id,deleted_at,NULL',
+                'exists:applied_jobs,id,deleted_at,NULL,job_id,' . $interviewSchedule->job_id,
                 Rule::unique('candidate_interviews', 'applied_job_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($interviewSchedule) {
                         return $query->where('recruitment_step_id', $interviewSchedule->recruitment_step_id);
