@@ -442,13 +442,21 @@ class JobManagementController extends Controller
     {
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
-        $shortlistApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
+        $removedApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
+        if($removedApplication){
+            $success =true;
+            $message ="Candidate removed successfully";
+            $code = ResponseAlias::HTTP_OK;
+        }else{
+            $success =false;
+            $message ="Candidate can not be removed ";
+            $code = ResponseAlias::HTTP_BAD_REQUEST;
+        }
         $response = [
-            "data" => $shortlistApplication,
             '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Candidate removed successfully",
+                "success" => $success,
+                "code" => $code,
+                "message" => $message,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
