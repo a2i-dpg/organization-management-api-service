@@ -120,6 +120,7 @@ class PrimaryJobInfoController extends Controller
      */
     public function jobStatusChange(Request $request, string $jobId): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
 
         $response = [];
         $statusCode = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
