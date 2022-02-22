@@ -987,11 +987,11 @@ class JobManagementController extends Controller
         $this->authorize('update', JobManagement::class);
         $schedule = InterviewSchedule::findOrFail($scheduleId);
 
-        $job = PrimaryJobInformation::where('job_id', $schedule->job_id)->findOrFail();
+        $job = PrimaryJobInformation::where('job_id', $schedule->job_id)->firstOrFail();
 
         $validatedData = $this->interviewScheduleService->CandidateAssigningToScheduleValidator($request, $schedule)->validate();
 
-        $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $validatedData);
+        $this->interviewScheduleService->assignCandidateToSchedule($scheduleId, $schedule->recruitment_step_id, $validatedData);
 
         $applicationIds = $validatedData['applied_job_ids'];
         $appliedJob = AppliedJob::whereIn('id', $applicationIds)->get();
