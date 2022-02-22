@@ -15,8 +15,8 @@ class CreateCandidateInterviewsTable extends Migration
     {
         Schema::create('candidate_interviews', function (Blueprint $table) {
             $table->id();
-            $table->string('applied_job_id')->index();
-            $table->unsignedInteger('job_id')->index();
+            $table->string('job_id')->index();
+            $table->unsignedInteger('applied_job_id')->index();
             $table->unsignedInteger('recruitment_step_id');
             $table->unsignedInteger('interview_schedule_id');
             $table->dateTime('invited_at')->nullable();
