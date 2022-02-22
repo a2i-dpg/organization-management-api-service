@@ -1274,19 +1274,19 @@ class OrganizationService
             ],
             '*.contact_person_mobile' => [
                 'required',
-                Rule::unique('organizations', 'contact_person_mobile')
+                /*Rule::unique('organizations', 'contact_person_mobile')
                     ->where(function (\Illuminate\Database\Query\Builder $query) {
                         return $query->whereNull('deleted_at');
-                    }),
+                    }),*/
                 BaseModel::MOBILE_REGEX,
             ],
             '*.contact_person_email' => [
                 'required',
                 'email',
-                Rule::unique('organizations', 'contact_person_email')
+                /*Rule::unique('organizations', 'contact_person_email')
                     ->where(function (\Illuminate\Database\Query\Builder $query) {
                         return $query->whereNull('deleted_at');
-                    })
+                    })*/
             ],
             '*.contact_person_designation' => [
                 'required',
