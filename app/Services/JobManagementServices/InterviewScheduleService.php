@@ -11,8 +11,10 @@ use Dotenv\Exception\ValidationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 
 class InterviewScheduleService
@@ -169,7 +171,7 @@ class InterviewScheduleService
             $requestData['applied_job_ids'] = is_array($requestData['applied_job_ids']) ? $requestData['applied_job_ids'] : explode(',', $requestData['applied_job_ids']);
         }
 
-        $step = RecruitmentStep::where('id', $interviewSchedule->recruitment_step_id)->where('job_id', $interviewSchedule->job_id)->findOrFail();
+        $step = RecruitmentStep::where('id', $interviewSchedule->recruitment_step_id)->where('job_id', $interviewSchedule->job_id)->firstOrFail();
 
         /** @var CandidateInterview|Builder $currentScheduleCandidateCount */
         $currentScheduleCandidateCount = CandidateInterview::where('recruitment_step_id', $step->id)
@@ -183,7 +185,10 @@ class InterviewScheduleService
             ->count();
 
         /** @var AppliedJob|Builder $applicantCount */
-        $applicantCount = AppliedJob::where('job_id', $interviewSchedule->job_id)->whereIn('id', $requestData['applied_job_ids'])->count();
+        $applicantCount = AppliedJob::where('job_id', $interviewSchedule->job_id)
+            ->where('current_recruitment_step_id', $step->id)
+            ->whereIn('id', $requestData['applied_job_ids'])
+            ->count();
 
         if ($applicantCount != count($requestData['applied_job_ids'])) throw new ValidationException('applied_job_ids not valid.');
 
@@ -205,10 +210,12 @@ class InterviewScheduleService
                 'required',
                 'integer',
                 'exists:applied_jobs,id,deleted_at,NULL,job_id,' . $interviewSchedule->job_id,
-                Rule::unique('candidate_interviews', 'applied_job_id')
+                // 'unique_with:candidate_interviews,applied_job_id,recruitment_step_id,deleted_at',
+                /* Has problems, not required, updateOrCreate used */
+                /*Rule::unique('candidate_interviews', 'applied_job_id')
                     ->where(function (\Illuminate\Database\Query\Builder $query) use ($interviewSchedule) {
                         return $query->where('recruitment_step_id', $interviewSchedule->recruitment_step_id);
-                    })
+                    })*/
             ],
             'interview_invite_type' => [
                 'integer',
@@ -250,27 +257,37 @@ class InterviewScheduleService
     /**
      * @param int $scheduleId
      * @param array $data
+     * @throws Throwable
      */
-    public function assignCandidateToSchedule(int $scheduleId, array $data)
+    public function assignCandidateToSchedule(int $scheduleId, int $stepId, array $data)
     {
         $appliedJobIds = $data["applied_job_ids"];
+        DB::beginTransaction();
+        try {
+            foreach ($appliedJobIds as $appliedJobId) {
 
+                $appliedJob = AppliedJob::findOrFail($appliedJobId);
+                $appliedJob->apply_status = AppliedJob::APPLY_STATUS['Interview_scheduled'];
+                $appliedJob->save();
 
-        foreach ($appliedJobIds as $appliedJobId) {
-            $candidateInterview = new CandidateInterview();
-
-            $appliedJob = AppliedJob::findOrFail($appliedJobId);
-            $appliedJob->apply_status = AppliedJob::APPLY_STATUS['Interview_scheduled'];
-            $appliedJob->save();
-
-            $candidateInterview->applied_job_id = $appliedJob->id;
-            $candidateInterview->job_id = $appliedJob->job_id;
-            $candidateInterview->recruitment_step_id = $appliedJob->current_recruitment_step_id;
-            $candidateInterview->interview_schedule_id = $scheduleId;
-
-            $candidateInterview->save();
+                CandidateInterview::updateOrCreate(
+                    [
+                        'recruitment_step_id' => $stepId,
+                        'applied_job_id' => $appliedJob->id,
+                    ],
+                    [
+                        'recruitment_step_id' => $stepId,
+                        'applied_job_id' => $appliedJob->id,
+                        'interview_schedule_id' => $scheduleId,
+                        'job_id' => $appliedJob->job_id,
+                    ],
+                );
+            }
+            DB::commit();
+        } catch (Throwable $exception) {
+            DB::rollBack();
+            throw $exception;
         }
-
     }
 
     /**

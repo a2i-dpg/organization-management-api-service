@@ -918,7 +918,7 @@ class JobManagementService
         if ($type == AppliedJob::TYPE_ALL) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                    ->whereNull('applied_jobs.current_recruitment_Step_id');
+                    ->whereNull('applied_jobs.current_recruitment_step_id');
 
             });
             $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
@@ -1263,8 +1263,7 @@ class JobManagementService
             $request->offsetSet('order', strtoupper($request->get('order')));
         }
 
-        return Validator::make($request->all(), [
-
+        $rules = [
             'step_id' => [
                 'nullable',
                 'integer',
@@ -1282,8 +1281,9 @@ class JobManagementService
                 'string',
                 Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
             ],
+        ];
 
-        ], $customMessage);
+        return Validator::make($request->all(), $rules, $customMessage);
     }
 
     public function getMatchPercent($requestData, $youthData, $matchingCriteria): float|int
