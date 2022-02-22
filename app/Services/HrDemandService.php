@@ -160,8 +160,8 @@ class HrDemandService
                 'vacancy' => $hrDemand['vacancy'],
                 'remaining_vacancy' => $hrDemand['vacancy'],
                 'all_institutes' => empty($hrDemand['institute_ids']) ? 1 : 0,
-                'designation' => $hrDemand['vacancy'],
-                'designation_en' => $hrDemand['vacancy']
+                'designation' => $hrDemand['designation'],
+                'designation_en' => $hrDemand['designation_en']
             ];
 
             $hrDemandInstance = new HrDemand();
@@ -190,8 +190,8 @@ class HrDemandService
             'vacancy' => $data['vacancy'],
             'remaining_vacancy' => $hrDemand->remaining_vacancy,
             'all_institutes' => empty($data['institute_ids']) ? 1 : 0,
-            'designation' => $hrDemand['vacancy'],
-            'designation_en' => $hrDemand['vacancy']
+            'designation' => $hrDemand['designation'],
+            'designation_en' => $hrDemand['designation_en']
         ];
         $invalidatedApprovedVacanciesByIndustryAssociation = 0;
 
