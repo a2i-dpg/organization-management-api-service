@@ -40,4 +40,26 @@ class JobManagementPolicy extends BasePolicy
         return $authUser->hasPermission('create_job');
 
     }
+
+    /**
+     * Determine whether the user can update the HrDemand.
+     *
+     * @param User $authUser
+     * @return bool
+     */
+    public function update(User $authUser): bool
+    {
+        return $authUser->hasPermission('update_job');
+    }
+
+    /**
+     * Determine whether the user can delete the HrDemand.
+     *
+     * @param User $authUser
+     * @return bool
+     */
+    public function delete(User $authUser): bool
+    {
+        return $authUser->hasPermission('delete_job');
+    }
 }

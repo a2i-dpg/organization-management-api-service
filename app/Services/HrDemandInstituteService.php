@@ -136,14 +136,8 @@ class HrDemandInstituteService
             }
         }
 
-        Log::info("The hrDemandInstitute result is: ");
-        Log::info(json_encode($hrDemandInstitutes));
-        Log::info("The output will be: ");
-        Log::info(json_encode(!isset($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray())));
-        Log::info("The data is here: " . json_encode(isset($hrDemandInstitutes->toArray()['data'])));
-
         $response['order'] = $order;
-        $response['data'] = !empty($hrDemandInstitutes->toArray()['data']) ? array_values($hrDemandInstitutes->toArray()['data']) : array_values($hrDemandInstitutes->toArray());
+        $response['data'] = $hrDemandInstitutes->toArray()['data'] ?? $hrDemandInstitutes->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -206,8 +200,10 @@ class HrDemandInstituteService
         $hrDemandYouths = HrDemandYouth::where('hr_demand_institute_id', $hrDemandInstitute->id)->get();
 
         /** Set Youth Details if youth_id exist in HrDemandYouth */
-        $youthIds = $hrDemandYouths->pluck('youth_id')->filter(function ($value) {return !is_null($value);})->toArray();
-        if($youthIds){
+        $youthIds = $hrDemandYouths->pluck('youth_id')->filter(function ($value) {
+            return !is_null($value);
+        })->toArray();
+        if ($youthIds) {
             $youthProfiles = ServiceToServiceCall::getYouthProfilesByIds($youthIds);
             $indexedYouths = [];
             foreach ($youthProfiles as $item) {
@@ -215,7 +211,7 @@ class HrDemandInstituteService
             }
 
             foreach ($hrDemandYouths as $hrDemandYouth) {
-                if(!empty($hrDemandYouth->youth_id)){
+                if (!empty($hrDemandYouth->youth_id)) {
                     $hrDemandYouth['youth_details'] = $indexedYouths[$hrDemandYouth['youth_id']] ?? "";
                 }
             }
@@ -223,10 +219,10 @@ class HrDemandInstituteService
 
         $hrDemandYouthCvLinks = [];
         $hrDemandYouthsYouthIds = [];
-        foreach ($hrDemandYouths as $hrDemandYouth){
-            if($hrDemandYouth['cv_link']){
+        foreach ($hrDemandYouths as $hrDemandYouth) {
+            if ($hrDemandYouth['cv_link']) {
                 $hrDemandYouthCvLinks[] = $hrDemandYouth;
-            } else if($hrDemandYouth['youth_id']){
+            } else if ($hrDemandYouth['youth_id']) {
                 $hrDemandYouthsYouthIds[] = $hrDemandYouth;
             }
         }
@@ -419,8 +415,8 @@ class HrDemandInstituteService
             ->toArray();
 
         /** If previously stored Hr Demand Youth is not present  */
-        foreach ($previouslyApprovedHrDemandYouthIds as $hrDemandYouthId){
-            if(!in_array($hrDemandYouthId, $data['hr_demand_youth_ids'])){
+        foreach ($previouslyApprovedHrDemandYouthIds as $hrDemandYouthId) {
+            if (!in_array($hrDemandYouthId, $data['hr_demand_youth_ids'])) {
                 $hrDemandYouth = HrDemandYouth::find($hrDemandYouthId);
                 $hrDemandYouth->approval_status = HrDemandYouth::APPROVAL_STATUS_PENDING;
                 $hrDemandYouth->save();
@@ -624,7 +620,7 @@ class HrDemandInstituteService
                         $failed("Vacancy provided by institute exceed.[66100]");
                     }
 
-                    if($hrDemandInstitute->vacancy_provided_by_institute == 0){
+                    if ($hrDemandInstitute->vacancy_provided_by_institute == 0) {
                         $failed("Not yet fulfilled by Institute!");
                     }
 
@@ -644,11 +640,11 @@ class HrDemandInstituteService
                 'exists:hr_demand_youths,id,deleted_at,NULL',
                 function ($attr, $value, $failed) use ($hrDemandInstitute) {
                     $hrDemandYouth = HrDemandYouth::findOrFail($value);
-                    if($hrDemandYouth->hr_demand_institute_id != $hrDemandInstitute->id){
+                    if ($hrDemandYouth->hr_demand_institute_id != $hrDemandInstitute->id) {
                         $failed('HrDemandYouth Id = ' . $value . ' not belongs to HrDemandInstitute Id = ' . $hrDemandInstitute->id);
                     }
-                    if($hrDemandYouth->hr_demand_institute_id == $hrDemandInstitute->id &&
-                        $hrDemandYouth->row_status == HrDemandYouth::ROW_STATUS_INVALID){
+                    if ($hrDemandYouth->hr_demand_institute_id == $hrDemandInstitute->id &&
+                        $hrDemandYouth->row_status == HrDemandYouth::ROW_STATUS_INVALID) {
                         $failed('HrDemandYouth Id = ' . $value . ' already invalidated by Institute!');
                     }
                 }
