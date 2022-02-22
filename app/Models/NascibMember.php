@@ -64,9 +64,9 @@ class NascibMember extends BaseModel
     public const FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION = 3;
 
     public const FORM_FILL_UP_LIST = [
-        self::FORM_FILL_UP_BY_OWN,
-        self::FORM_FILL_UP_BY_UDC_ENTREPRENEUR,
-        self::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION,
+        self::FORM_FILL_UP_BY_OWN => "Form fill up by own",
+        self::FORM_FILL_UP_BY_UDC_ENTREPRENEUR => "Form fill up by UDC Entrepreneur",
+        self::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION => "Form fill up by Chamber or Association"
     ];
 
     public const STATUS_INITIAL_STATE = 0;
@@ -132,7 +132,7 @@ class NascibMember extends BaseModel
         8 => 'স্বাস্থ্য অধিদপ্তর',
         9 => 'বাংলাদেশ ক্ষুদ্র ও কুটির শিল্প কর্পোরেশন(বিসিক)',
     ];
-
+    const OTHER_AUTHORITY_KEY = 'other_authority';
     public const AUTHORIZED_AUTHORITY = [
         1 => 'কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর',
         2 => 'বাংলাদেশ পরিবেশ অধিদপ্তর',
@@ -141,7 +141,7 @@ class NascibMember extends BaseModel
         5 => 'ঔষধ প্রশাসন অধিদপ্তর',
         6 => 'বাংলাদেশ এনার্জি রেগুলেটরি কমিশন',
         7 => 'বিস্ফোরক পরিদপ্তর',
-        8 => 'অন্যন্য'
+        self::OTHER_AUTHORITY_KEY => 'অন্যন্য'
     ];
 
     public const SPECIALIZED_AREA = [
@@ -156,15 +156,26 @@ class NascibMember extends BaseModel
         2 => 'InDirect'
     ];
 
+    public const PERMANENT_WORKER_KEY = 'permanent_worker';
+    public const TEMPORARY_WORKER_KEY = 'temporary_worker';
+    public const SEASONAL_WORKER_KEY = 'seasonal_worker';
+    public const WORKER_TYPE = [
+        self::PERMANENT_WORKER_KEY => 'Permanent worker (স্থায়ী কর্মী)',
+        self::TEMPORARY_WORKER_KEY => 'Temporary worker (অস্থায়ী কর্মী)',
+        self::SEASONAL_WORKER_KEY => 'Seasonal worker (মৌসুমী কর্মী)'
+    ];
+    public const MANPOWER_TYPE_MALE = 'male';
+    public const MANPOWER_TYPE_FEMALE = 'female';
     public const MANPOWER_TYPE = [
-        1 => 'Permanent worker (স্থায়ী কর্মী)',
-        2 => 'Temporary worker (অস্থায়ী কর্মী)',
-        3 => 'Seasonal worker (মৌসুমী কর্মী)'
+        self::MANPOWER_TYPE_MALE,
+        self::MANPOWER_TYPE_FEMALE
     ];
 
+    public const BANK_ACCOUNT_PERSONAL = 'personal';
+    public const BANK_ACCOUNT_INDUSTRY = 'industry';
     public const BANK_ACCOUNT_TYPE = [
-        1 => 'Personal account (ব্যক্তিগত হিসাব)',
-        2 => 'Organization accounts (প্রতিষ্ঠানের হিসাব)'
+        self::BANK_ACCOUNT_PERSONAL => 'Personal account (ব্যক্তিগত হিসাব)',
+        self::BANK_ACCOUNT_INDUSTRY => 'industry accounts (প্রতিষ্ঠানের হিসাব)'
     ];
 
     public const LAND_TYPE = [

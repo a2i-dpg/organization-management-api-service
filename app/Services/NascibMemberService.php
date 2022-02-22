@@ -5,15 +5,11 @@ namespace App\Services;
 use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
-use App\Models\Organization;
 use App\Models\NascibMember;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Organization;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -39,7 +35,7 @@ class NascibMemberService
         $orgData['contact_person_designation'] = 'উদ্যোক্তা';
         $orgData['contact_person_designation_en'] = 'Entrepreneur';
         $orgData['payment_status'] = Organization::PAYMENT_PENDING;
-        $orgData['membership_id'] = 'NASCIF-' . time(); //TODO:member ship id
+        $orgData['membership_id'] = 'NASCIF-' . time();  //TODO:membership id
 
         /**Model Name For Nascib Organization */
         $orgData['additional_info_model_name'] = NascibMember::class;
@@ -47,8 +43,7 @@ class NascibMemberService
         $organization->fill($data);
         $organization->save();
 
-        $organizationService = App(OrganizationService::class);
-        $organizationService->addOrganizationToIndustryAssociation($organization, $data);
+        $this->attachToIndustryAssociation($organization, $data, true);
 
         $data['organization_id'] = $organization->id;
 
@@ -56,6 +51,15 @@ class NascibMemberService
         $nascibMember->save();
 
         return $nascibMember;
+    }
+
+    private function attachToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
+    {
+        $organization->industryAssociations()->attach($data['industry_association_id'], [
+            'membership_id' => $data['membership_id'],
+            'payment_status' => BaseModel::PAYMENT_PENDING,
+            'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
+        ]);
     }
 
     /**
@@ -131,34 +135,17 @@ class NascibMemberService
      */
     public function createNascibUser(array $data): mixed
     {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'user-open-registration';
-        $userPostField = [
-            'user_type' => BaseModel::ORGANIZATION_USER_TYPE,
-            'organization_id' => $data['organization_id'] ?? "",
-            'username' => $data['entrepreneur_mobile'],
-            'name_en' => $data['entrepreneur_name_en'],
-            'name' => $data['entrepreneur_name'],
-            'email' => $data['entrepreneur_email'],
-            'mobile' => $data['entrepreneur_mobile'],
+        $nascibUserPostField = [
+            'organization_id' => $data['organization_id'],
+            'contact_person_name' => $data['entrepreneur_name'],
+            'contact_person_name_en' => $data['entrepreneur_name_en'],
+            'contact_person_email' => $data['entrepreneur_email'],
+            'contact_person_mobile' => $data['entrepreneur_mobile'],
             'password' => $data['password']
         ];
 
-        Log::channel('idp_user')->info('Nascib User Payload: ' . json_encode($userPostField));
-
-        return Http::withOptions(
-            [
-                'verify' => config('nise3.should_ssl_verify'),
-                'debug' => config('nise3.http_debug'),
-                'timeout' => config('nise3.http_timeout'),
-            ])
-            ->timeout(5)
-            ->post($url, $userPostField)
-            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
-                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
-                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
-            })
-            ->json();
+        Log::channel('idp_user')->info('Nascib-User-Payload: ' . json_encode($nascibUserPostField));
+        return app(OrganizationService::class)->createOpenRegisterUser($nascibUserPostField);
 
     }
 
@@ -284,24 +271,20 @@ class NascibMemberService
                 'array',
             ],
             'authorized_authority.*.authority_type' => [
-                "required",
+                Rule::requiredIf(function () use ($request) {
+                    return !array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'));
+                }),
+                'nullable',
                 "integer",
                 Rule::in(array_keys(NascibMember::AUTHORIZED_AUTHORITY))
             ],
             'authorized_authority.*.registration_number' => [
-                "required",
+                Rule::requiredIf(function () use ($request) {
+                    return !array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'));
+                }),
+                'nullable',
                 "string"
             ],
-
-            'other_authority_name' => [
-                "nullable",
-                "string"
-            ],
-            'other_registration_number' => [
-                "nullable",
-                "string"
-            ],
-
             'have_specialized_area' => [
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
@@ -313,12 +296,6 @@ class NascibMemberService
                 'nullable',
                 'array',
             ],
-            'specialized_area.*' => [
-                'required',
-                'integer',
-                Rule::in(array_keys(NascibMember::SPECIALIZED_AREA))
-            ],
-
             'is_under_sme_cluster' => [
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
@@ -416,10 +393,41 @@ class NascibMemberService
                 'nullable',
                 'array'
             ],
-            'salaried_manpower.*' => [
+            'salaried_manpower.' . NascibMember::PERMANENT_WORKER_KEY => [
                 'required',
-                Rule::in(array_keys(NascibMember::MANPOWER_TYPE)),
                 'array'
+            ],
+            'salaried_manpower.' . NascibMember::PERMANENT_WORKER_KEY . '.' . NascibMember::MANPOWER_TYPE_MALE => [
+                'nullable',
+                'integer'
+            ],
+            'salaried_manpower.' . NascibMember::PERMANENT_WORKER_KEY . '.' . NascibMember::MANPOWER_TYPE_FEMALE => [
+                'nullable',
+                'integer'
+            ],
+            'salaried_manpower.' . NascibMember::TEMPORARY_WORKER_KEY => [
+                'required',
+                'array'
+            ],
+            'salaried_manpower.' . NascibMember::TEMPORARY_WORKER_KEY . '.' . NascibMember::MANPOWER_TYPE_MALE => [
+                'nullable',
+                'integer'
+            ],
+            'salaried_manpower.' . NascibMember::TEMPORARY_WORKER_KEY . '.' . NascibMember::MANPOWER_TYPE_FEMALE => [
+                'nullable',
+                'integer'
+            ],
+            'salaried_manpower.' . NascibMember::SEASONAL_WORKER_KEY => [
+                'required',
+                'array'
+            ],
+            'salaried_manpower.' . NascibMember::SEASONAL_WORKER_KEY . '.' . NascibMember::MANPOWER_TYPE_MALE => [
+                'nullable',
+                'integer'
+            ],
+            'salaried_manpower.' . NascibMember::SEASONAL_WORKER_KEY . '.' . NascibMember::MANPOWER_TYPE_FEMALE => [
+                'nullable',
+                'integer'
             ],
             'have_bank_account' => [
                 "required",
@@ -431,11 +439,6 @@ class NascibMemberService
                 }),
                 'nullable',
                 'array'
-            ],
-            'bank_account_type.*' => [
-                'required',
-                'integer',
-                Rule::in(array_keys(array_keys(NascibMember::BANK_ACCOUNT_TYPE)))
             ],
 
             'have_daily_accounting_system' => [
@@ -466,6 +469,29 @@ class NascibMemberService
 
         ];
 
+        /** other Authority */
+        if (array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'))) {
+            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'authority_name'] = [
+                "required",
+                "string"
+            ];
+            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'register_number'] = [
+                "required",
+                "string"
+            ];
+        }
+
+        /** Bank Account Type */
+        if (!empty($request->get('bank_account_type'))) {
+            $rules['bank_account_type.' . NascibMember::BANK_ACCOUNT_PERSONAL] = [
+                'required',
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ];
+            $rules['bank_account_type.' . NascibMember::BANK_ACCOUNT_INDUSTRY] = [
+                'required',
+                Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
+            ];
+        }
 
         if (!empty($request->get('form_fill_up_by')) && $request->get('form_fill_up_by') == NascibMember::FORM_FILL_UP_BY_UDC_ENTREPRENEUR) {
             $rules['udc_name'] = 'required|string|max: 100';
@@ -553,7 +579,6 @@ class NascibMemberService
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ];
         }
-
         return Validator::make($request->all(), $rules, $customMessage);
     }
 

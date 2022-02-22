@@ -479,6 +479,7 @@ class OrganizationService
 
     public function addOrganizationToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
     {
+
         foreach ($data['industry_associations'] as $row) {
             $organization->industryAssociations()->attach($row['industry_association_id'], [
                 'membership_id' => $row['membership_id'],
