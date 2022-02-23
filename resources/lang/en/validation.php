@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | The following language lines contain the default error messages used by
-    | the validator class. Some of these rules have multiple versions such
+    | the comapnyInfoVisibilityvalidator class. Some of these rules have multiple versions such
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
@@ -125,6 +125,13 @@ return [
     'url' => 'The :attribute must be a valid URL.[64000]',
     'uuid' => 'The :attribute must be a valid UUID.[65000]',
 
+    // The password must contain at least one uppercase, lowercase letter and at least one number.[66000]
+    // Vacancy provided by institute exceed.[66100]
+    // Deadline exceed.[66200]
+    // Vacancy exceed.[66300]
+    // Industry Association already approved more vacancy than the given vacancy.[66400]
+    // Already rejected by Industry Association.[66500]
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -153,6 +160,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        ''
+    ],
 
 ];

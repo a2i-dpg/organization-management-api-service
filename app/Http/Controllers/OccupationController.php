@@ -57,6 +57,18 @@ class OccupationController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getPublicOccupationList(Request $request):JsonResponse
+    {
+        $filter = $this->occupationService->filterValidator($request)->validate();
+        $response = $this->occupationService->getOccupationList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * Display the specified resource
      * @param int $id
      * @return JsonResponse
@@ -67,7 +79,7 @@ class OccupationController extends Controller
         $occupation = $this->occupationService->getOneOccupation($id);
         $this->authorize('view', $occupation);
         $response = [
-            "data" => $occupation ?: [],
+            "data" => $occupation,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -92,7 +104,7 @@ class OccupationController extends Controller
         $validated = $this->occupationService->validator($request)->validate();
         $data = $this->occupationService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -120,7 +132,7 @@ class OccupationController extends Controller
         $validated = $this->occupationService->validator($request, $id)->validate();
         $data = $this->occupationService->update($occupation, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

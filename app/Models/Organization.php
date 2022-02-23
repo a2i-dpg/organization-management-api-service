@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Ramsey\Collection\Collection;
 
 /**
  * Class Organization
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int id
  * @property string title_en
  * @property string title
+ * @property int industry_association_id
  * @property string address
  * @property string mobile
  * @property string email
@@ -29,10 +32,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string domain
  * @property int organization_type_id
  * @property-read OrganizationType organizationType
+ * @property-read Collection industrySubTrades
  */
 class Organization extends BaseModel
 {
     use SoftDeletes, ScopeRowStatusTrait;
+
+    /**
+     * @var string[]
+     */
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'additional_info_model_name',
+    ];
 
     public const ROW_STATUSES = [
         self::ROW_STATUS_INACTIVE,
@@ -41,10 +59,11 @@ class Organization extends BaseModel
         self::ROW_STATUS_REJECTED
     ];
 
-    /**
-     * @var string[]
-     */
-    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
+    public const IS_REG_APPROVAL_TRUE = 1;
+    public const IS_REG_APPROVAL_FALSE = 0;
+
+    public const INDUSTRY_CODE_PREFIX = "IND";
+    public const INDUSTRY_CODE_SIZE = 11;
 
     public const ORGANIZATION_TYPE_GOVT = 1;
     public const ORGANIZATION_TYPE_PRIVATE = 2;
@@ -79,5 +98,18 @@ class Organization extends BaseModel
     public function rankTypes(): HasMany
     {
         return $this->hasMany(RankType::class, 'organization_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function industryAssociations(): BelongsToMany
+    {
+        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization','organization_id','industry_association_id')->withPivot('membership_id','row_status')->withTimestamps();
+    }
+
+    public function subTrades(): BelongsToMany
+    {
+        return $this->belongsToMany(SubTrade::class,'organization_sub_trade','organization_id','sub_trade_id');
     }
 }

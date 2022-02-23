@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Log;
 
 class OrganizationPolicy extends BasePolicy
 {
@@ -30,7 +31,7 @@ class OrganizationPolicy extends BasePolicy
      */
     public function view(User $authUser, Organization $organization): bool
     {
-       return $authUser->hasPermission('view_single_organization');
+        return $authUser->hasPermission('view_single_organization');
     }
 
     /**
@@ -46,7 +47,6 @@ class OrganizationPolicy extends BasePolicy
 
     /**
      * Determine whether the user can update the organization.
-     *
      * @param User $authUser
      * @param Organization $organization
      * @return bool
@@ -66,5 +66,25 @@ class OrganizationPolicy extends BasePolicy
     public function delete(User $authUser, Organization $organization): bool
     {
         return $authUser->hasPermission('delete_organization');
+    }
+
+    /**
+     * @param User $authUser
+     * @param Organization $organization
+     * @return bool
+     */
+    public function viewProfile(User $authUser, Organization $organization): bool
+    {
+        return $authUser->hasPermission('view_organization_profile');
+    }
+
+    /**
+     * @param User $authUser
+     * @param Organization $organization
+     * @return bool
+     */
+    public function updateProfile(User $authUser, Organization $organization): bool
+    {
+        return $authUser->hasPermission('update_organization_profile');
     }
 }

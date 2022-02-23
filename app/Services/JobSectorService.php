@@ -3,7 +3,9 @@
 
 namespace App\Services;
 
+use App\Models\AreaOfBusiness;
 use App\Models\BaseModel;
+use App\Models\EducationalInstitution;
 use App\Models\JobSector;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,6 +85,12 @@ class JobSectorService
 
         return $response;
     }
+
+
+
+
+
+
 
     /**
      * @param int $id
@@ -250,6 +258,9 @@ class JobSectorService
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }
+
+
+
 
     /**
      * @param Request $request

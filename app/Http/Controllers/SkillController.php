@@ -62,7 +62,7 @@ class SkillController extends Controller
     {
         $skill = $this->skillService->getOneSkill($id, $this->startTime);
         $response = [
-            "data" => $skill ?: [],
+            "data" => $skill,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -83,7 +83,7 @@ class SkillController extends Controller
         $validated = $this->skillService->validator($request)->validate();
         $data = $this->skillService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -108,7 +108,7 @@ class SkillController extends Controller
 
         $data = $this->skillService->update($skill, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

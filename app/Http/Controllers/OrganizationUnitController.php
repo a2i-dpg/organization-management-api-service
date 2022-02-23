@@ -65,7 +65,7 @@ class OrganizationUnitController extends Controller
         $organizationUnit = $this->organizationUnitService->getOneOrganizationUnit($id);
         $this->authorize('view', $organizationUnit);
         $response = [
-            "data" => $organizationUnit ?: [],
+            "data" => $organizationUnit,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

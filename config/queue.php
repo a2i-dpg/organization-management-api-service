@@ -30,6 +30,62 @@ return [
 
     'connections' => [
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_QUEUE','organization.q'),
+            'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
+            'hosts' => [
+                [
+                    'host' => env('RABBITMQ_HOST','localhost'),
+                    'port' => env('RABBITMQ_PORT', 5672),
+                    'user' => env('RABBITMQ_USER','guest'),
+                    'password' => env('RABBITMQ_PASSWORD','guest'),
+                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                ],
+            ],
+            'options' => [
+                'queue' => [
+                    'exchange' => env('RABBITMQ_EXCHANGE_NAME','organization.x'),
+                    'exchange_type' => env('RABBITMQ_EXCHANGE_TYPE','topic'),
+                    'exchange_routing_key' => env('EXCHANGE_ROUTING_KEY','organization.routing.key'),
+                    'prioritize_delayed_messages' =>  false,
+                    'queue_max_priority' => 10,
+
+                    'enable_retry_limit' => env('RABBITMQ_ENABLE_RETRY_LIMIT', true),
+                    'retry_limit' => env('RABBITMQ_RETRY_LIMIT', 5),
+                    'error_exchange_name' => env('RABBITMQ_ERROR_EXCHANGE_NAME', 'error.x'),
+                    'error_queue_name' => env('RABBITMQ_ERROR_QUEUE_NAME', 'error.q')
+                ],
+                'exchange' => [
+                    'name' => env('RABBITMQ_EXCHANGE_NAME','organization.x'),
+                    'type' => env('RABBITMQ_EXCHANGE_TYPE','topic'),
+                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
+                    'durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
+                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
+                    'arguments' => env('RABBITMQ_EXCHANGE_ARGUMENTS', 'default'),
+                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+                ],
+                'alternate_exchange' => [
+                    'name' => env('RABBITMQ_ALTERNATE_EXCHANGE', 'organization.alternate.x'),
+                    'type' => env('RABBITMQ_ALTERNATE_EXCHANGE_TYPE','fanout'),
+                    'queue' => env('RABBITMQ_ALTERNATE_QUEUE','organization.alternate.q')
+                ],
+                'dlx' => [
+                    'name' => env('RABBITMQ_RETRY_DLX', 'organization.dlx'),
+                    'type' => env('RABBITMQ_RETRY_DLX_TYPE', 'fanout'),
+                    'dlq' => env('RABBITMQ_RETRY_DLQ', 'organization.dlq'),
+                    'x_message_ttl' => env('RABBITMQ_RETRY_MESSAGE_TTL', 120000)
+                ],
+                'ssl_options' => [
+                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
+                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
+                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
+                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
+                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                ],
+            ],
+        ],
+
         'sync' => [
             'driver' => 'sync',
         ],
@@ -79,7 +135,6 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => env('QUEUE_FAILED_TABLE', 'failed_jobs'),
     ],

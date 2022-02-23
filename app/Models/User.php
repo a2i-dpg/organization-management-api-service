@@ -7,6 +7,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Laravel\Lumen\Auth\Authorizable;
 
 /**
@@ -21,6 +22,7 @@ use Laravel\Lumen\Auth\Authorizable;
  * @property int $role_id
  * @property int $user_type
  * @property int organization_id
+ * @property int industry_association_id
  * @property int institute_id
  * @property int loc_division_id
  * @property int loc_district_id
@@ -37,7 +39,7 @@ class User extends BaseModel implements
 {
     use Authenticatable, Authorizable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     protected Collection $permissions;
     protected Role $role;
@@ -64,7 +66,32 @@ class User extends BaseModel implements
             return false;
         }
 
+        Log::info("mmmmmmmmm");
+        Log::info($key);
+        Log::info(json_encode($this->permissions));
+        Log::info(json_encode($this->permissions->contains($key)));
+
         return $this->permissions->contains($key);
+    }
+
+    public function isSystemUser(): bool
+    {
+        return $this->user_type == BaseModel::SYSTEM_USER_TYPE;
+    }
+
+    public function isOrganizationUser(): bool
+    {
+        return $this->user_type == BaseModel::ORGANIZATION_USER_TYPE && $this->organization_id;
+    }
+
+    public function isIndustryAssociationUser(): bool
+    {
+        return $this->user_type == BaseModel::INDUSTRY_ASSOCIATION_USER_TYPE && $this->industry_association_id;
+    }
+
+    public function isInstituteUser(): bool
+    {
+        return $this->user_type == BaseModel::INSTITUTE_USER_TYPE && $this->institute_id;
     }
 
 }

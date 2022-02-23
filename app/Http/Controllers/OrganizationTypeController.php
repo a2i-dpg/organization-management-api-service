@@ -49,8 +49,21 @@ class OrganizationTypeController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', OrganizationType::class);
+        $this->authorize('viewAny', OrganizationType::class);
 
+        $filter = $this->organizationTypeService->filterValidator($request)->validate();
+        $response = $this->organizationTypeService->getAllOrganizationType($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getPublicOrganizationTypeList(Request $request): JsonResponse
+    {
         $filter = $this->organizationTypeService->filterValidator($request)->validate();
         $response = $this->organizationTypeService->getAllOrganizationType($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
@@ -68,7 +81,7 @@ class OrganizationTypeController extends Controller
         $organizationType = $this->organizationTypeService->getOneOrganizationType($id);
         $this->authorize('view', $organizationType);
         $response = [
-            "data" => $organizationType ?: [],
+            "data" => $organizationType,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -93,7 +106,7 @@ class OrganizationTypeController extends Controller
         $validated = $this->organizationTypeService->validator($request)->validate();
         $data = $this->organizationTypeService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -121,7 +134,7 @@ class OrganizationTypeController extends Controller
         $validated = $this->organizationTypeService->validator($request, $id)->validate();
         $data = $this->organizationTypeService->update($organizationType, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

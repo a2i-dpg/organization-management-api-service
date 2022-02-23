@@ -63,7 +63,7 @@ class ServiceController extends Controller
         $service = $this->serviceService->getOneService($id);
         $this->authorize('view', $service);
         $response = [
-            "data" => $service ?: [],
+            "data" => $service,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -88,7 +88,7 @@ class ServiceController extends Controller
         $data = $this->serviceService->store($validatedData);
 
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -119,7 +119,7 @@ class ServiceController extends Controller
         $data = $this->serviceService->update($service, $validated);
 
         $response = [
-            'data' => $data ? $data : null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

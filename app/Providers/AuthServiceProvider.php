@@ -7,6 +7,7 @@ use App\Facade\ServiceToServiceCall;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -52,41 +53,53 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('token', function (Request $request) {
 
-            $token = $request->bearerToken();
+            $token = bearerUserToken($request);
+
+            Log::info('Bearer Token: ' . $token);
 
             if (!$token) {
                 return null;
             }
 
-            Log::info('Bearer Token: ' . $token);
-
             $authUser = null;
             $idpServerUserId = AuthTokenUtility::getIdpServerIdFromToken($token);
+
             Log::info("Auth idp user id-->" . $idpServerUserId);
 
             if ($idpServerUserId) {
-                $userWithRolePermission = ServiceToServiceCall::getAuthUserWithRolePermission($idpServerUserId);
-                if ($userWithRolePermission) {
-                    $role = app(Role::class);
-                    if (isset($userWithRolePermission['role'])) {
-                        $role = new Role($userWithRolePermission['role']);
-                    }
-                    $authUser = new User($userWithRolePermission);
-                    $authUser->setRole($role);
 
-                    $permissions = collect([]);
-                    if (isset($userWithRolePermission['permissions'])) {
-                        $permissions = collect($userWithRolePermission['permissions']);
+                Cache::remember($idpServerUserId, config('nise3.user_cache_ttl'), function () use ($idpServerUserId, $authUser) {
+                    $userWithRolePermission = ServiceToServiceCall::getAuthUserWithRolePermission($idpServerUserId);
+                    if ($userWithRolePermission) {
+                        $role = app(Role::class);
+                        if (isset($userWithRolePermission['role'])) {
+                            $role = new Role($userWithRolePermission['role']);
+                        }
+
+                        $authUser = new User($userWithRolePermission);
+                        $authUser->setRole($role);
+
+                        $permissions = collect([]);
+                        if (isset($userWithRolePermission['permissions'])) {
+                            $permissions = collect($userWithRolePermission['permissions']);
+                        }
+
+                        $authUser->setPermissions($permissions);
+
+                        Log::info("userInfoWithIdpId:" . json_encode($authUser));
                     }
 
-                    $authUser->setPermissions($permissions);
+                    return $authUser;
+                });
+                /** Remove cache key when value is null. Null can be set through previous cache remember function */
+                if (Cache::get($idpServerUserId) == null) {
+                    Cache::forget($idpServerUserId);
                 }
-
-                Log::info("userInfoWithIdpId:" . json_encode($authUser));
             }
-            return $authUser;
+            Log::debug('organization auth user');
+            Log::debug($authUser);
+            return Cache::get($idpServerUserId);
         });
-
     }
 
 

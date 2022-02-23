@@ -56,6 +56,19 @@ class JobSectorController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getPublicJobSectorList(Request $request): JsonResponse
+    {
+        $filter = $this->jobSectorService->filterValidator($request)->validate();
+        $response = $this->jobSectorService->getJobSectorList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+
+    /**
      * Display the specified resource
      * @param int $id
      * @return JsonResponse
@@ -66,7 +79,7 @@ class JobSectorController extends Controller
         $jobSector = $this->jobSectorService->getOneJobSector($id);
         $this->authorize('view', $jobSector);
         $response = [
-            "data" => $jobSector ?: [],
+            "data" => $jobSector,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -90,7 +103,7 @@ class JobSectorController extends Controller
         $validated = $this->jobSectorService->validator($request)->validate();
         $data = $this->jobSectorService->store($validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -119,7 +132,7 @@ class JobSectorController extends Controller
 
         $data = $this->jobSectorService->update($jobSector, $validated);
         $response = [
-            'data' => $data ? $data : null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -204,4 +217,6 @@ class JobSectorController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
+
 }

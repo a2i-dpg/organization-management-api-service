@@ -14,31 +14,251 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+
 $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($router, $customRouter) {
 
+    /** Api info  */
     $router->get('/', ['as' => 'api-info', 'uses' => 'ApiInfoController@apiInfo']);
-    $customRouter()->resourceRoute('ranks', 'RankController')->render();
-    $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
-    $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();
-    $customRouter()->resourceRoute('skills', 'SkillController')->render();
-    $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
-    $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
-    $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
-    $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
-    $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
-    $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
-    $customRouter()->resourceRoute('services', 'ServiceController')->render();
-    $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+    /** IndustryAssociation Registration Approval */
+    $router->put("industry-association-registration-approval/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-approval", "uses" => "IndustryAssociationController@industryAssociationRegistrationApproval"]);
+    /** Auth routes */
+    $router->group(['middleware' => 'auth'], function () use ($customRouter, $router) {
+        $customRouter()->resourceRoute('ranks', 'RankController')->render();
+        $customRouter()->resourceRoute('rank-types', 'RankTypeController')->render();
+        $customRouter()->resourceRoute('job-sectors', 'JobSectorController')->render();
+        //$customRouter()->resourceRoute('skills', 'SkillController')->render(); //moved to youth service
+        $customRouter()->resourceRoute('occupations', 'OccupationController')->render();
+        $customRouter()->resourceRoute('organization-types', 'OrganizationTypeController')->render();
+        $customRouter()->resourceRoute('organizations', 'OrganizationController')->render();
+        $customRouter()->resourceRoute('organization-unit-types', 'OrganizationUnitTypeController')->render();
+        $customRouter()->resourceRoute('human-resource-templates', 'HumanResourceTemplateController')->render();
+        $customRouter()->resourceRoute('human-resources', 'HumanResourceController')->render();
+        $customRouter()->resourceRoute('services', 'ServiceController')->render();
+        $customRouter()->resourceRoute('organization-units', 'OrganizationUnitController')->render();
+        $customRouter()->resourceRoute('publications', 'PublicationController')->render();
+        $customRouter()->resourceRoute('industry-associations', 'IndustryAssociationController')->render();
+        $customRouter()->resourceRoute('contact-info', 'ContactInfoController')->render();
+        $customRouter()->resourceRoute('job-requirements', 'HrDemandController')->render();
+        $customRouter()->resourceRoute('hr-demands', 'HrDemandInstituteController')->render();
+
+        /** Hr demand approve by institute */
+        $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
+        $router->put("hr-demand-rejected-by-institute/{id}", ["as" => "institute.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByInstitute"]);
+        /** Hr demand approve by industry association */
+        $router->put("hr-demand-approved-by-industry-association/{id}", ["as" => "industry-association.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByIndustryAssociation"]);
+        $router->put("hr-demand-rejected-by-industry-association/{id}", ["as" => "industry-association.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByIndustryAssociation"]);
+        /** Hr demand youths */
+        $router->get("hr-demand-youths/{hr_demand_institute_id}", ["as" => "hr.demand.youths", "uses" => "HrDemandYouthController@getHrDemandYouths"]);
+        $router->put("reject-hr-demand-youth/{hr_demand_youth_id}", ["as" => "reject.hr.demand.youth", "uses" => "HrDemandYouthController@rejectHrDemandYouth"]);
 
 
-    $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
-    $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
+        $router->get('organization-unit-types/{id}/get-hierarchy', ['as' => 'organization-unit-types.hierarchy', 'uses' => 'OrganizationUnitTypeController@getHierarchy']);
+        $router->get('organization-units/{id}/get-hierarchy', ['as' => 'organization-units.hierarchy', 'uses' => 'OrganizationUnitController@getHierarchy']);
 
-    /** Assign Service to Organization Unit */
-    $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
+        /** Assign Service to Organization Unit */
+        $router->post('organization-units/{id}/assign-service-to-organization-unit', ['as' => 'organization-units.assign-service-to-organization-unit', 'uses' => 'OrganizationUnitController@assignServiceToOrganizationUnit']);
 
-    /** Organization Registration */
-    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration"]);
+
+        /** IndustryAssociation Registration Rejection */
+        $router->put("industry-association-registration-rejection/{industryAssociationId}", ["as" => "IndustryAssociation.industry-associations-registration-rejection", "uses" => "IndustryAssociationController@industryAssociationRegistrationRejection"]);
+
+        /** Industry apply for industryAssociation membership */
+        $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
+
+        /**TODO: Route name should be organization-approval:piyal
+        /** industry registration approval   */
+        $router->put("organization-user-approval/{organizationId}", ["as" => "organization.organization-user-approval", "uses" => "OrganizationController@organizationUserApproval"]);
+
+        /**TODO: Route name should be organization-rejection:piyal
+        /** industry registration rejection  */
+        $router->put("organization-user-rejection/{organizationId}", ["as" => "organization.organization-user-rejection", "uses" => "OrganizationController@organizationUserRejection"]);
+
+        /** Industry Association membership approval */
+        $router->put("industry-association-membership-approval/{organizationId}", ["as" => "industry-association-approval", "uses" => "IndustryAssociationController@industryAssociationMembershipApproval"]);
+
+        /** Industry Association membership rejection */
+        $router->put("industry-association-membership-rejection/{organizationId}", ["as" => "industry-association-rejection", "uses" => "IndustryAssociationController@industryAssociationMembershipRejection"]);
+
+
+        $router->get('organization-profile', ['as' => 'organization.admin-profile', 'uses' => 'OrganizationController@getOrganizationProfile']);
+        $router->get('area-of-business', ['as' => 'JobSector.AreaOfBusiness', 'uses' => 'JobManagementController@getAreaOfBusiness']);
+        $router->get('educational-institutions', ['as' => 'JobSector.EducationalInstitutions', 'uses' => 'JobManagementController@getEducationalInstitutions']);
+
+        $router->put("industry-association-profile-update", ["as" => "public.organizations", "uses" => "IndustryAssociationController@updateIndustryAssociationProfile"]);
+        $router->get("industry-association-profile", ["as" => "public.organizations", "uses" => "IndustryAssociationController@getIndustryAssociationProfile"]);
+        $router->put('organization-profile-update', ['as' => 'organization.admin-profile-update', 'uses' => 'OrganizationController@updateOrganizationProfile']);
+        $router->get("industry-association-members", ["as" => "industry-association-members", "uses" => "IndustryAssociationController@getIndustryAssociationMemberList"]);
+        $router->get("industry-association-dashboard-statistics", ["as" => "industry-association-dashboard-statistics", "uses" => "IndustryAssociationController@industryAssociationDashboardStatistics"]);
+        //$router->get("industry-association-members/{industryId}", ["as" => "industry-association-member-details", "uses" => "IndustryAssociationController@industryAssociationMemberDetails"]);
+
+
+        /** job management routes */
+        $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
+            $router->get('/', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
+
+            $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
+            $router->get("job-location", ["as" => "job-location", "uses" => "AdditionalJobInfoController@jobLocation"]);
+
+            $router->get('job-preview/{jobId}', ["as" => "job-preview", "uses" => "JobManagementController@jobPreview"]);
+            $router->get('other-benefits', ["as" => "other_benefits", "uses" => "JobManagementController@getOtherBenefits"]);
+            $router->post("status-change/{jobId}", ["as" => "jobs.status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
+
+            $router->post("primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
+            $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
+
+            $router->post("additional-job-information", ["as" => "store-additional-job-information", "uses" => "AdditionalJobInfoController@storeAdditionalJobInformation"]);
+            $router->get("additional-job-information/{jobId}", ["as" => "get-additional-job-information", "uses" => "AdditionalJobInfoController@getAdditionalJobInformation"]);
+
+            $router->post("candidate-requirements", ["as" => "store-candidate-requirements", "uses" => "CandidateRequirementController@storeCandidateRequirements"]);
+            $router->get("candidate-requirements/{jobId}", ["as" => "get-candidate-requirements", "uses" => "CandidateRequirementController@getCandidateRequirements"]);
+
+            $router->post("company-info-visibility", ["as" => "store-company-info-visibility", "uses" => "CompanyInfoVisibilityController@storeCompanyInfoVisibility"]);
+            $router->get("company-info-visibility/{jobId}", ["as" => "get-company-info-visibility", "uses" => "CompanyInfoVisibilityController@getCompanyInfoVisibility"]);
+
+            $router->post("matching-criteria", ["as" => "store-matching-criteria", "uses" => "MatchingCriteriaController@storeMatchingCriteria"]);
+            $router->get("matching-criteria/{jobId}", ["as" => "get-matching-criteria", "uses" => "MatchingCriteriaController@getMatchingCriteria"]);
+
+            $router->post('contact-information', ["as" => "contact-information.store", "uses" => "JobContactInformationController@storeContactInformation"]);
+            $router->get('contact-information/{jobId}', ["as" => "contact-information.get", "uses" => "JobContactInformationController@getContactInformation"]);
+
+            /** step schedule routes */
+            $router->get('step-schedule/{id}', ["as" => "step-schedule.get", "uses" => "JobManagementController@getOneSchedule"]);
+            $router->post('step-schedule', ["as" => "step-schedule.post", "uses" => "JobManagementController@createSchedule"]);
+            $router->put('step-schedule/{id}', ["as" => "step-schedule.put", "uses" => "JobManagementController@updateSchedule"]);
+            $router->delete('step-schedule/{id}', ["as" => "step-schedule.delete", "uses" => "JobManagementController@destroySchedule"]);
+
+            $router->put('step-schedule/{scheduleId}/assign', ["as" => "step-schedule.assign", "uses" => "JobManagementController@assignCandidateToInterviewSchedule"]);
+            $router->put('step-schedule/{scheduleId}/unassign', ["as" => "step-schedule.unassign", "uses" => "JobManagementController@removeCandidateFromInterviewSchedule"]);
+
+            $router->get('candidate/{applicationId}', ["as" => "candidate.view", "uses" => "JobManagementController@getCandidateProfile"]);
+
+            /** Update candidate status in interview steps  */
+            $router->group(["prefix" => "candidate", "as" => "candidate-update"], function () use ($router) {
+                $router->put('/{applicationId}/reject', ["as" => "candidate-update.reject", "uses" => "JobManagementController@rejectCandidate"]);
+                $router->put('/{applicationId}/shortlist', ["as" => "candidate-update.shortList", "uses" => "JobManagementController@shortlistCandidate"]);
+                $router->put('/{applicationId}/interviewed', ["as" => "candidate-update.interviewed", "uses" => "JobManagementController@updateInterviewedCandidate"]);
+                $router->put('/{applicationId}/remove', ["as" => "candidate-update.remove", "uses" => "JobManagementController@removeCandidateToPreviousStep"]);
+                $router->put('/{applicationId}/restore', ["as" => "candidate-update.remove", "uses" => "JobManagementController@restoreRejectedCandidate"]);
+                $router->put('/{applicationId}/hire-invite', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
+                $router->put('/{applicationId}/hired', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
+            });
+
+
+            /**recruitment step routes **/
+            $router->get('recruitment-step/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
+            $router->post('recruitment-step', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
+            $router->put('recruitment-step/{stepId}', ["as" => "recruitment-step.update", "uses" => "JobManagementController@updateRecruitmentStep"]);
+            $router->delete('recruitment-step/{stepId}', ["as" => "recruitment-step.delete", "uses" => "JobManagementController@destroyRecruitmentStep"]);
+            $router->get('recruitment-step/{id}/schedules', ["as" => "recruitment-steps.get-schedules", "uses" => "JobManagementController@stepSchedules"]);
+
+            $router->get('recruitment-steps/{jobId}', ["as" => "recruitment-steps.get-list", "uses" => "JobManagementController@getRecruitmentStepList"]);
+            $router->get('candidates/{jobId}', ["as" => "recruitment-step.candidate-list", "uses" => "JobManagementController@recruitmentStepcandidateList"]);
+
+            /**
+             * DEPRECATED.
+             * USE GET recruitment-step-candidate-list/{jobId}
+             **/
+            $router->group(["prefix" => "candidates", "as" => "candidate-list"], function () use ($router) {
+                $router->get('all/{jobId}', ["as" => "all", "uses" => "JobManagementController@getAllCandidateList"]);
+                $router->get('applied/{jobId}', ["as" => "applied", "uses" => "JobManagementController@getAppliedCandidateList"]);
+                $router->get('rejected/{jobId}', ["as" => "rejected", "uses" => "JobManagementController@getRejectedCandidateList"]);
+                $router->get('shortlisted/{jobId}', ["as" => "shortlisted", "uses" => "JobManagementController@getShortlistedCandidateList"]);
+                $router->get('interview-invited/{jobId}', ["as" => "interview-invited", "uses" => "JobManagementController@getInterviewInvitedCandidateList"]);
+                $router->get('interviewed/{jobId}', ["as" => "interviewed", "uses" => "JobManagementController@getInterviewedCandidateList"]);
+                $router->get('hire-invited/{jobId}', ["as" => "hire-invited", "uses" => "JobManagementController@getHireInvitedCandidateList"]);
+                $router->get('hired/{jobId}', ["as" => "hired", "uses" => "JobManagementController@getHiredCandidateList"]);
+            });
+        });
+
+        /** Provide suggestions in drop downs */
+        $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {
+            $router->get('education-levels', ["as" => "education-levels.get-list", "uses" => "EducationLevelController@getList"]);
+            $router->get('exam-degrees', ["as" => "exam-degrees.get-list", "uses" => "ExamDegreeController@getList"]);
+            $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
+
+        });
+
+        $router->post('/organization-import-excel', ["as" => "organization.import.excel", "uses" => "OrganizationController@bulkStoreByExcel"]);
+    });
+
+    /** Service to service direct call without any authorization and authentication */
+    $router->group(['prefix' => 'service-to-service-call', 'as' => 'service-to-service-call'], function () use ($router) {
+        /** Single Organization Fetch  */
+        $router->get("organizations/{id}", ["as" => "service-to-service-call.organization", "uses" => "OrganizationController@organizationDetails"]);
+
+        /** Single Industry Association Fetch  */
+        $router->get("industry-associations/{id}", ["as" => "service-to-service-call.industry-associations", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
+
+        /** Single Industry Association Code Fetch  */
+        $router->get("industry-associations/{id}/get-code", ["as" => "service-to-service-call.industry-associations.get-code", "uses" => "IndustryAssociationController@getCode"]);
+
+        /** apply to job from youth service */
+        $router->post("apply-to-job", ["as" => "service-to-service-call.apply-to-job", "uses" => "JobManagementController@applyToJob"]);
+
+        /** get youth jobs from youth service */
+        $router->get("youth-jobs", ["as" => "service-to-service-call.youth-jobs", "uses" => "JobManagementController@youthJobs"]);
+
+        /** Youth Feed statistics job data fetch */
+        $router->get('youth-feed-statistics/{youthId}', ["as" => "courses.youth-feed-statistics", "uses" => "JobManagementController@youthFeedStatistics"]);
+    });
+
+
+    $router->group(['prefix' => 'public', 'as' => 'public'], function () use ($router) {
+        $router->get('job-details/{jobId}', ["as" => "job-details", "uses" => "JobManagementController@publicJobDetails"]);
+        $router->get("publications/{id}", ["as" => "public.publication-read", "uses" => "PublicationController@clientSideRead"]);
+        // $router->get("industry-association-members/{industryId}", ["as" => "public.industry-association-member-details", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberDetails"]);
+        $router->get("organizations/{id}", ["as" => "public.organization.details", "uses" => "OrganizationController@organizationDetails"]);
+        $router->get("job-sectors", ["as" => "public.job-sectors", "uses" => "JobSectorController@getPublicJobSectorList"]);
+        $router->get("occupations", ["as" => "public.occupations", "uses" => "OccupationController@getPublicOccupationList"]);
+        $router->get("organization-types", ["as" => "public.organization-types", "uses" => "OrganizationTypeController@getPublicOrganizationTypeList"]);
+
+        $router->get('area-of-business', ['as' => 'JobSector.AreaOfBusiness', 'uses' => 'JobManagementController@getAreaOfBusiness']);
+        $router->get('area-of-experiences', ['as' => 'area-of-experiences.get-list', 'uses' => 'JobManagementController@getAreaOfExperience']);
+
+        //public api by domain name identification
+        $router->group(['middleware' => 'public-domain-handle'], function () use ($router) {
+            $router->get('jobs', ["as" => "public.job-list", "uses" => "JobManagementController@getPublicJobList"]);
+            $router->get("industry-association-details", ["as" => "public.industry-association.details", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
+            $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
+            $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
+            $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
+        });
+
+        $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);
+
+    });
+
+
+    /** List of trades */
+    $router->get('trades', ['as' => 'trades.get-list', 'uses' => "TradeController@getList"]);
+
+    /** List of trades */
+    $router->get('sub-trades', ['as' => 'trades.get-list', 'uses' => "SubTradeController@getList"]);
+
+
+    /** Industry Association open  Registration */
+    $router->post("industry-association-registration", ["as" => "register.industryAssociation", "uses" => "IndustryAssociationController@industryAssociationOpenRegistration"]);
+
+
+    /** Organization open Registration */
+    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration",'middleware' => 'public-domain-handle']);
+
+    /** Organization Title by Ids for Internal Api */
+    $router->post("get-organization-title-by-ids",
+        [
+            "as" => "organizations.get-organization-title-by-ids",
+            "uses" => "OrganizationController@getOrganizationTitleByIds"
+        ]
+    );
+
+    /** Industry Association Title by Ids for Internal Api */
+    $router->post("get-industry-association-title-by-ids",
+        [
+            "as" => "organizations.get-industry-association-title-by-ids",
+            "uses" => "OrganizationController@getIndustryAssociationTitleByIds"
+        ]
+    );
+
 
     /** TODO: Properly Organize Trashed Routes through CustomRouter */
     /** OrganizationType Trash */
@@ -56,58 +276,5 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('organization-unit-types-restore{id}', ['as' => 'organization-unit-types.restore', 'uses' => 'OrganizationUnitTypeController@restore']);
     $router->delete('organization-unit-types-force-delete/{id}', ['as' => 'organization-unit-types.force-delete', 'uses' => 'OrganizationUnitTypeController@forceDelete']);
 
-    /** OrganizationUnit Trash */
-    $router->get('organization-units-trashed-data', ['as' => 'organization-units.get-trashed-data', 'uses' => 'OrganizationUnitController@getTrashedData']);
-    $router->patch('organization-units-restore/{id}', ['as' => 'organization-units.restore', 'uses' => 'OrganizationUnitController@restore']);
-    $router->delete('organization-units-force-delete/{id}', ['as' => 'organization-units.force-delete', 'uses' => 'OrganizationUnitController@forceDelete']);
-
-    /** Skill Trash */
-    $router->get('skills-trashed-data', ['as' => 'skills.get-trashed-data', 'uses' => 'SkillController@getTrashedData']);
-    $router->patch('skills-restore/{id}', ['as' => 'skills.restore', 'uses' => 'SkillController@restore']);
-    $router->delete('skills-force-delete/{id}', ['as' => 'skills.force-delete', 'uses' => 'SkillController@forceDelete']);
-
-    /** JobSector Trash */
-    $router->get('job-sectors-trashed-data', ['as' => 'skills.get-trashed-data', 'uses' => 'SkillController@getTrashedData']);
-    $router->patch('job-sectors-restore/{id}', ['as' => 'skills.restore', 'uses' => 'SkillController@restore']);
-    $router->delete('job-sectors-force-delete/{id}', ['as' => 'skills.force-delete', 'uses' => 'SkillController@forceDelete']);
-
-    /** Occupation Trash */
-    $router->get('occupations-trashed-data', ['as' => 'occupations.get-trashed-data', 'uses' => 'OccupationController@getTrashedData']);
-    $router->patch('occupations-restore/{id}', ['as' => 'occupations.restore', 'uses' => 'OccupationController@restore']);
-    $router->delete('occupations-force-delete/{id}', ['as' => 'occupations.force-delete', 'uses' => 'OccupationController@forceDelete']);
-
-    /** RankType Trash */
-    $router->get('rank-types-trashed-data', ['as' => 'rank-types.get-trashed-data', 'uses' => 'RankTypeController@getTrashedData']);
-    $router->patch('rank-types-restore/{id}', ['as' => 'rank-types.restore', 'uses' => 'RankTypeController@restore']);
-    $router->delete('rank-types-force-delete/{id}', ['as' => 'rank-types.force-delete', 'uses' => 'RankTypeController@forceDelete']);
-
-    /** Rank Trash */
-    $router->get('ranks-trashed-data', ['as' => 'ranks.get-trashed-data', 'uses' => 'RankController@getTrashedData']);
-    $router->patch('ranks-restore/{id}', ['as' => 'ranks.restore', 'uses' => 'RankController@restore']);
-    $router->delete('ranks-force-delete/{id}', ['as' => 'ranks.force-delete', 'uses' => 'RankController@forceDelete']);
-
-    /** Service Trash */
-    $router->get('services-trashed-data', ['as' => 'services.get-trashed-data', 'uses' => 'ServiceController@getTrashedData']);
-    $router->patch('services-restore/{id}', ['as' => 'services.restore', 'uses' => 'ServiceController@restore']);
-    $router->delete('services-force-delete/{id}', ['as' => 'services.force-delete', 'uses' => 'ServiceController@forceDelete']);
-
-    /** HumanResourceTemplate Trash */
-    $router->get('human-resource-templates-trashed-data', ['as' => 'human-resource-templates.get-trashed-data', 'uses' => 'HumanResourceTemplateController@getTrashedData']);
-    $router->patch('human-resource-templates-restore/{id}', ['as' => 'human-resource-templates.restore', 'uses' => 'HumanResourceTemplateController@restore']);
-    $router->delete('human-resource-templates-force-delete/{id}', ['as' => 'human-resource-templates.force-delete', 'uses' => 'HumanResourceTemplateController@forceDelete']);
-
-
-    /** HumanResource Trash */
-    $router->get('human-resources-trashed-data', ['as' => 'human-resources.get-trashed-data', 'uses' => 'HumanResourceController@getTrashedData']);
-    $router->patch('human-resources-restore/{id}', ['as' => 'human-resources.restore', 'uses' => 'HumanResourceController@restore']);
-    $router->delete('human-resources-force-delete/{id}', ['as' => 'human-resources.force-delete', 'uses' => 'HumanResourceController@forceDelete']);
-
-    /** Organization Title by Ids for Internal Api */
-    $router->post("get-organization-title-by-ids",
-        [
-            "as"=>"organizations.get-organization-title-by-ids",
-            "uses"=>"OrganizationController@getOrganizationTitleByIds"
-        ]
-    );
 
 });

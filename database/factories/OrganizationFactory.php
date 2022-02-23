@@ -39,6 +39,7 @@ class OrganizationFactory extends Factory
         return [
             'title_en' => $title,
             'title' => $title,
+            'date_of_establishment'=>$this->faker->date('Y-m-d',2020),
             'organization_type_id' => random_int(2, 3),
             'loc_division_id' => $location['loc_division_id'],
             'loc_district_id' => $location['loc_district_id'],
@@ -61,6 +62,7 @@ class OrganizationFactory extends Factory
             'name_of_the_office_head_designation_en' => 'CEO',
 
             'contact_person_name_en' => $contactPersonName,
+            'contact_person_name' => $contactPersonName,
             'contact_person_mobile' => $this->faker->numerify('017########'),
             'contact_person_email' => $this->faker->safeEmail(),
             'contact_person_designation' => $contactPersonJobTitle,

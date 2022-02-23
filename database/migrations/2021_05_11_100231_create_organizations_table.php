@@ -24,7 +24,7 @@ class CreateOrganizationsTable extends Migration
 
             $table->string('title', 1200);
             $table->string('title_en', 600)->nullable();
-
+            $table->date('date_of_establishment')->nullable();
             $table->unsignedMediumInteger('loc_division_id')->nullable()
                 ->index('org_loc_division_id_inx');
             $table->unsignedMediumInteger('loc_district_id')->nullable()
@@ -61,6 +61,8 @@ class CreateOrganizationsTable extends Migration
 
             $table->string('logo', 500)->nullable();
             $table->string('domain', 250)->nullable();
+
+            $table->string('additional_info_model_name')->nullable();
 
             $table->unsignedTinyInteger('row_status')
                 ->default(2)

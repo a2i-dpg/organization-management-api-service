@@ -2,9 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\BaseModel;
+use App\Models\User;
 use Closure;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate
 {
@@ -30,14 +33,31 @@ class Authenticate
      * Handle an incoming request.
      *
      * @param Request $request
-     * @param  \Closure  $next
+     * @param \Closure $next
      * @param string|null $guard
      * @return mixed
      */
     public function handle(Request $request, Closure $next, string $guard = null)
     {
-        if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+        if (!Auth::id()) {
+            return response()->json([
+                "_response_status" => [
+                    "success" => false,
+                    "code" => ResponseAlias::HTTP_UNAUTHORIZED,
+                    "message" => "Unauthenticated action"
+                ]
+            ], ResponseAlias::HTTP_UNAUTHORIZED);
+
+        } else { // industry and industry association id set with check type
+            /** @var User $authUser */
+            $authUser = Auth::user();
+            if ($authUser && $authUser->isOrganizationUser()) {
+                $request->offsetSet('organization_id', $authUser->organization_id);
+            } elseif ($authUser && $authUser->isIndustryAssociationUser()) {
+                $request->offsetSet('industry_association_id', $authUser->industry_association_id);
+            } elseif ($authUser && $authUser->isInstituteUser()) {
+                $request->offsetSet('institute_id', $authUser->institute_id);
+            }
         }
 
         return $next($request);

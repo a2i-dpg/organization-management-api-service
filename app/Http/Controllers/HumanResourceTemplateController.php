@@ -90,7 +90,7 @@ class HumanResourceTemplateController extends Controller
         $validatedData = $this->humanResourceTemplateService->validator($request)->validate();
         $data = $this->humanResourceTemplateService->store($validatedData);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -117,7 +117,7 @@ class HumanResourceTemplateController extends Controller
         $validated = $this->humanResourceTemplateService->validator($request, $id)->validate();
         $data = $this->humanResourceTemplateService->update($humanResourceTemplate, $validated);
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

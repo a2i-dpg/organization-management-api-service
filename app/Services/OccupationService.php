@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,8 +28,10 @@ class OccupationService
     {
         $titleEn = $request['title_en'] ?? "";
         $title = $request['title'] ?? "";
+        $author = $request['author'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
+        $jobSectorId = $request['job_sector_id'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
@@ -59,11 +62,17 @@ class OccupationService
         if (is_numeric($rowStatus)) {
             $occupationBuilder->where('occupations.row_status', $rowStatus);
         }
+        if (is_numeric($jobSectorId)) {
+            $occupationBuilder->where('occupations.job_sector_id', $jobSectorId);
+        }
         if (!empty($titleEn)) {
             $occupationBuilder->where('occupations.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
             $occupationBuilder->where('occupations.title', 'like', '%' . $title . '%');
+        }
+        if (!empty($author)) {
+            $occupationBuilder->where('occupations.author', 'like', '%' . $author . '%');
         }
 
         /** @var Collection $occupations */
@@ -291,6 +300,7 @@ class OccupationService
             'title_en' => 'nullable|max:400|min:2',
             'title' => 'nullable|max:800|min:2',
             'page' => 'nullable|integer|gt:0',
+            'job_sector_id' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
                 'nullable',

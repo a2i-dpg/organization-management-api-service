@@ -60,7 +60,7 @@ class RankController extends Controller
         $rank = $this->rankService->getOneRank($id);
         $this->authorize('view', $rank);
         $response = [
-            "data" => $rank ?: [],
+            "data" => $rank,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -85,7 +85,7 @@ class RankController extends Controller
         $data = $this->rankService->store($validated);
 
         $response = [
-            'data' => $data ? $data : null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
@@ -114,7 +114,7 @@ class RankController extends Controller
         $data = $this->rankService->update($rank, $validated);
 
         $response = [
-            'data' => $data ?: null,
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,

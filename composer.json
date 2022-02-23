@@ -4,17 +4,28 @@
     "keywords": ["framework", "laravel", "lumen"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://github.com/anisurrahman072/laravel-queue-rabbitmq"
+        }
+    ],
     "require": {
         "php": "^8.0",
         "ext-json": "*",
         "ext-pdo": "*",
-        "laravel/lumen-framework": "^8.0",
-        "laravel/tinker": "^2.6",
-        "guzzlehttp/guzzle": "^7.3",
+        "elasticsearch/elasticsearch": "^8.0",
         "felixkiss/uniquewith-validator": "^3.4",
         "flipbox/lumen-generator": "^8.2",
+        "guzzlehttp/guzzle": "^7.3",
+        "illuminate/redis": "^8.73",
         "irazasyed/larasupport": "^1.7",
-        "phabloraylan/lumen-middleware-trim-or-convert-strings": "^1.0"
+        "laravel/lumen-framework": "^8.0",
+        "laravel/tinker": "^2.6",
+        "maatwebsite/excel": "^3.1",
+        "phabloraylan/lumen-middleware-trim-or-convert-strings": "^1.0",
+        "predis/predis": "~1.0",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "dev-feat/give-accessibility-to-access-rabbitmqjob-instance"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -39,7 +50,10 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "github-oauth": {
+            "github.com": "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"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
