@@ -66,11 +66,6 @@ class User extends BaseModel implements
             return false;
         }
 
-        Log::info("mmmmmmmmm");
-        Log::info($key);
-        Log::info(json_encode($this->permissions));
-        Log::info(json_encode($this->permissions->contains($key)));
-
         return $this->permissions->contains($key);
     }
 
