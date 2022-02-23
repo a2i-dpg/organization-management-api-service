@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -59,7 +60,9 @@ class PrimaryJobInformation extends BaseModel
         self::JOB_FILTER_TYPE_RECENT,
     ];
 
-    public const JOB_ID_PREFIX = "IDSA-";
+    public const INDUSTRY_ASSOCIATION_JOB_ID_PREFIX = "IDSA-";
+    public const INDUSTRY_JOB_ID_PREFIX = "INDS-";
+
     public const JOB_SERVICE_TYPE = [
         1 => "Basic Listing",
         2 => "Stand-out-listing",
@@ -88,7 +91,13 @@ class PrimaryJobInformation extends BaseModel
 
     public static function jobId(): string
     {
-        $id = self::JOB_ID_PREFIX . Uuid::uuid4();
+        $authUser = Auth::user();
+
+        if ($authUser && $authUser->isIndustryAssociationUser()) {
+            $id = self::INDUSTRY_ASSOCIATION_JOB_ID_PREFIX . Uuid::uuid4();
+        } else if ($authUser && $authUser->isOrganizationUser()) {
+            $id = self::INDUSTRY_JOB_ID_PREFIX . Uuid::uuid4();
+        }
         $isUnique = !(bool)PrimaryJobInformation::where('job_id', $id)->count('id');
         if ($isUnique) {
             return $id;
