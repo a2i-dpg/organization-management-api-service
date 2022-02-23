@@ -918,10 +918,9 @@ class JobManagementService
         if ($type == AppliedJob::TYPE_ALL) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                    ->whereNull('applied_jobs.current_recruitment_step_id');
-
+                    ->whereNull('applied_jobs.current_recruitment_step_id')
+                    ->orwhereNotNull('applied_jobs.current_recruitment_step_id');
             });
-            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
 
         } elseif ($type == AppliedJob::TYPE_VIEWED) {
             $appliedJobBuilder->whereNotNull('applied_jobs.profile_viewed_at');
