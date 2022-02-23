@@ -1458,7 +1458,7 @@
             }
         },
 
-        "/nascib-members/open-registration": {
+        "/public/nascib-members/open-registration": {
             "post": {
                 "tags": ["Nascib"],
                 "summary": "Register a nascib member",
@@ -1467,7 +1467,17 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": ""
+                                "$ref": "#/components/schemas/NascibMemberRegister"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {}
                             }
                         }
                     }
@@ -12856,7 +12866,8 @@
                     },
                     "registered_authority": {
                         "type": "object",
-                        "description": "[\n\n'0'=> [\n\t\"authority_type\"=>1,\n\t\"registration_number\"=>366363633,\t\t\t\n],\n\n'1'=> [\n\t\"authority_type\"=>2,\n\t\"registration_number\"=>36636363333\n\t\n]\n\n]"
+                        "description": "Required when is_registered_under_authority = True",
+                        "example": "[\n\n'0'=> [\n\t\"authority_type\"=>1,\n\t\"registration_number\"=>366363633,\t\t\t\n],\n\n'1'=> [\n\t\"authority_type\"=>2,\n\t\"registration_number\"=>36636363333\n\t\n]\n\n]"
                     },
                     "is_authorized_under_authority": {
                         "type": "integer",
@@ -12999,6 +13010,82 @@
                     },
                     "permission_sub_group_id": {
                         "type": "integer"
+                    },
+                    "info_provider_name": {
+                        "type": "string"
+                    },
+                    "info_provider_mobile": {
+                        "type": "string"
+                    },
+                    "info_collector_name": {
+                        "type": "string"
+                    },
+                    "info_collector_mobile": {
+                        "type": "string"
+                    },
+                    "udc_name": {
+                        "type": "string"
+                    },
+                    "udc_loc_district": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by UDC Entrepreneur"
+                    },
+                    "udc_union": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by UDC Entrepreneur\""
+                    },
+                    "udc_code": {
+                        "type": "string",
+                        "description": " Required when form_fill_up_by = Form fill up by UDC Entrepreneur\""
+                    },
+
+                    "chamber_or_association_name": {
+                        "type": "string",
+                        "description": "Required when form_fill_up_by = Form fill up by Chamber or Association"
+                    },
+                    "chamber_or_association_loc_district_id": {
+                        "type": "integer",
+                        "description": "  Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by Chamber or Association "
+                    },
+                    "chamber_or_association_union_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_unions table and Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by Chamber or Association "
+                    },
+                    "chamber_or_association_code": {
+                        "type": "string",
+                        "description": "Required when form_fill_up_by = Form fill up by Chamber or Association"
+                    },
+                    "factory_address": {
+                        "type": "string",
+                        "description": "Required when have_factory = True"
+                    },
+                    "factory_address_en": {
+                        "type": "string"
+                    },
+                    "factory_loc_division_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_divisions table and have_factory = True"
+                    },
+                    "factory_loc_district_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table and have_factory = True"
+                    },
+                    "factory_loc_upazila_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_upazilas table and have_factory = True"
+                    },
+                    "factory_web_site": {
+                        "type": "string"
+                    },
+                    "have_own_land": {
+                        "type": "integer",
+                        "enum": [1,2],
+                        "description": " 1 => 'Own Land', 2 => 'Rent' . Required when have_factory = True"
+                    },
+                    "have_office_or_showroom": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
                     }
 
 
@@ -13018,7 +13105,8 @@
                     "have_specialized_area","is_under_sme_cluster","under_sme_cluster_id",
                     "is_under_of_association_or_chamber","sector_id","business_type","main_product_name",
                     "main_material_description","is_import","have_bank_account","have_daily_accounting_system",
-                    "use_computer","have_internet_connection","have_online_business","industry_association_id"
+                    "use_computer","have_internet_connection","have_online_business","industry_association_id",
+                    "udc_name"
 
 
 
