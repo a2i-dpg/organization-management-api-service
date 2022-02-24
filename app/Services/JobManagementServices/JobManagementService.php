@@ -978,6 +978,9 @@ class JobManagementService
         } elseif ($type == AppliedJob::TYPE_VIEWED) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hire_invited'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hired'])
                     ->whereNotNull('applied_jobs.profile_viewed_at')
                     ->whereNull('applied_jobs.current_recruitment_step_id');
 
@@ -987,6 +990,9 @@ class JobManagementService
         } elseif ($type == AppliedJob::TYPE_NOT_VIEWED) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hire_invited'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hired'])
                     ->whereNull('applied_jobs.profile_viewed_at')
                     ->whereNull('applied_jobs.current_recruitment_step_id');
 
@@ -1005,8 +1011,8 @@ class JobManagementService
             } else {
                 $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId)
                     ->orwhere(function ($query) use ($jobId) {
-                        $query->where('job_id', $jobId)
-                            ->whereIn('apply_status', [
+                        $query->where('applied_jobs.job_id', $jobId)
+                            ->whereIn('applied_jobs.apply_status', [
                                 AppliedJob::APPLY_STATUS['Hire_invited'],
                                 AppliedJob::APPLY_STATUS['Hiring_Listed'],
                                 AppliedJob::APPLY_STATUS['Hired']
