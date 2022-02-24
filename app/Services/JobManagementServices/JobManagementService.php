@@ -1019,7 +1019,7 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-        $resultData = $resultArray['data'] ?? $resultArray;
+        $resultData = array_values($resultArray['data'] ??  $resultArray);
         foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
@@ -1248,8 +1248,8 @@ class JobManagementService
     public function countStepInterviewScheduledCandidate(string $jobId, int $stepId)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Interview_scheduled'])
-            ->where('current_recruitment_step_id', $jobId)
-            ->where('job_id', $stepId)
+            ->where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
