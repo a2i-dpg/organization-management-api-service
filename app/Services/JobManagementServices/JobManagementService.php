@@ -444,18 +444,20 @@ class JobManagementService
         )->toArray();
     }
 
-//    /**
-//     * @param array $data
-//     * @return array
-//     */
-//    public function updateAppliedJobRespond(array $data): array
-//    {
-//        $jobId = $data['job_id'];
-//        $youthId = intval($data['youth_id']);
-//        return AppliedJob::where('job_id', $jobId)
-//            ->where('youth_id', $youthId)
-//            ->toArray();
-//    }
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function updateAppliedJobRespond(array $data): array
+    {
+        $jobId = $data['job_id'];
+        $youthId = intval($data['youth_id']);
+        $appliedJob = AppliedJob::where('job_id', $jobId)->where('youth_id', $youthId);
+        $candidateInterview = CandidateInterview::where('applied_job_id', $appliedJob->id)->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)->firstOrFail();
+        $candidateInterview->confirmation_status = $data['confirmation_status'];
+        $candidateInterview->save();
+        return $candidateInterview;
+    }
 
     /**
      * Reject a candidate from a certain interview step
@@ -817,28 +819,33 @@ class JobManagementService
         return Validator::make($requestData, $rules, $customMessage);
     }
 
-//    /**
-//     * @param Request $request
-//     * @return \Illuminate\Contracts\Validation\Validator
-//     */
-//    public function respondJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
-//    {
-//        $requestData = $request->all();
-//        $jobId = $requestData['job_id'];
-//        $rules = [
-//            "job_id" => [
-//                "required",
-//                "string",
-//                "exists:primary_job_information,job_id,deleted_at,NULL",
-//            ],
-//            "youth_id" => [
-//                "required",
-//                "integer"
-//            ],
-//        ];
-//        $customMessage = [];
-//        return Validator::make($requestData, $rules, $customMessage);
-//    }
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function respondJobValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $requestData = $request->all();
+        $jobId = $requestData['job_id'];
+        $rules = [
+            "job_id" => [
+                "required",
+                "string",
+                "exists:primary_job_information,job_id,deleted_at,NULL",
+            ],
+            "youth_id" => [
+                "required",
+                "integer"
+            ],
+            "confirmation_status" => [
+                "required",
+                "integer",
+                Rule::in(CandidateInterview::CONFIRMATION_STATUS)
+            ]
+        ];
+        $customMessage = [];
+        return Validator::make($requestData, $rules, $customMessage);
+    }
 
     public function getCandidateList(Request $request, string $jobId, int $status = 0): array|null
     {
@@ -957,9 +964,9 @@ class JobManagementService
                 ->where('candidate_interviews.recruitment_step_id', $stepId);
         });
 
-        if ($type != AppliedJob::TYPE_QUALIFIED && is_numeric($stepId)) {
-            $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
-        }
+        // if ($type != AppliedJob::TYPE_QUALIFIED && is_numeric($stepId)) {
+        //     $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
+        // }
 
         if ($type == AppliedJob::TYPE_ALL) {
             $appliedJobBuilder->where(function ($query) {
@@ -996,7 +1003,12 @@ class JobManagementService
             if (empty($stepId)) {
                 $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', 0);
             } else {
-                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId);
+                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId)
+                    ->orwhereIn('applied_jobs.apply_status', [
+                        AppliedJob::APPLY_STATUS['Hiring_Listed'],
+                        AppliedJob::APPLY_STATUS['Hire_invited'],
+                        AppliedJob::APPLY_STATUS['Hired']
+                    ]);
             }
         } else if ($type == AppliedJob::TYPE_SHORTLISTED) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Shortlisted']);
@@ -1672,7 +1684,8 @@ class JobManagementService
      */
     public function hireInviteCandidate(AppliedJob $appliedJob, array $data): AppliedJob
     {
-        $data['hire_invited_at'] = Carbon::now();
+        $appliedJob->hire_invited_at = Carbon::now();
+        $appliedJob->apply_status = AppliedJob::APPLY_STATUS["Hire_invited"];
         $appliedJob->fill($data);
         $appliedJob->save();
         return $appliedJob;
