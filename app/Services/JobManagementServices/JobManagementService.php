@@ -1008,7 +1008,7 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-        $resultData = $resultArray['data'] ?? $resultArray;
+        $resultData = array_values($resultArray['data'] ??  $resultArray);
         foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
