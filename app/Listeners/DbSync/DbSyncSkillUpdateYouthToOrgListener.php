@@ -7,13 +7,13 @@ use App\Models\Skill;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use PDOException;
 use Throwable;
 
 
-class DbSyncSkillUpdateYouthToTspListener implements ShouldQueue
+class DbSyncSkillUpdateYouthToOrgListener implements ShouldQueue
 {
-
     /**
      * @param $event
      * @return void
@@ -24,6 +24,7 @@ class DbSyncSkillUpdateYouthToTspListener implements ShouldQueue
         $eventData = json_decode(json_encode($event), true);
         $data = isset($eventData['data']) && is_array($eventData['data']) ? $eventData['data'] : [];
 
+        Log::debug($eventData['data']);
         try {
 
             throw_if(!(isset($data['operation']) && in_array($data['operation'], ['add', 'update', 'delete']) && !empty($data['skill_data'])));
