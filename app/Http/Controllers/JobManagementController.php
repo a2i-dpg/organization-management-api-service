@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
-use mysql_xdevapi\Exception;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
@@ -626,16 +625,16 @@ class JobManagementController extends Controller
         if ($appliedJob->hire_invited_at == null) {
             //TODO : refactor with assignCandidateToInterviewSchedule
             if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
-                $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);
+                $this->jobManagementService->sendCandidateHireInviteSms($appliedJob->job_id, $youth);
             } else if ($hireInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
-                $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob, $youth);
+                $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob->job_id, $youth);
 
             } else if ($hireInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
                 if (!empty($youth['email'])) {
-                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob, $youth);
+                    $this->jobManagementService->sendCandidateHireInviteEmail($appliedJob->job_id, $youth);
                 }
                 if (!empty($youth['mobile'])) {
-                    $this->jobManagementService->sendCandidateHireInviteSms($appliedJob, $youth);
+                    $this->jobManagementService->sendCandidateHireInviteSms($appliedJob->job_id, $youth);
                 }
             }
 
@@ -1003,16 +1002,16 @@ class JobManagementController extends Controller
             if ($validatedData['notify'] == CandidateInterview::NOTIFY_NOW) {
                 //TODO : refactor with hireInviteCandidate
                 if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS'] && !empty($youth['mobile'])) {
-                    $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                    $this->jobManagementService->sendCandidateInterviewInviteSms($job->job_id, $youth);
                 } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['Email'] && !empty($youth['email'])) {
-                    $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+                    $this->jobManagementService->sendCandidateInterviewInviteEmail($job->job_id, $youth);
 
                 } else if ($interviewInviteType == AppliedJob::INVITE_TYPES['SMS and Email']) {
                     if (!empty($youth['email'])) {
-                        $this->jobManagementService->sendCandidateInterviewInviteEmail($appliedJob, $youth);
+                        $this->jobManagementService->sendCandidateInterviewInviteEmail($job->job_id, $youth);
                     }
                     if (!empty($youth['mobile'])) {
-                        $this->jobManagementService->sendCandidateInterviewInviteSms($appliedJob, $youth);
+                        $this->jobManagementService->sendCandidateInterviewInviteSms($job->job_id, $youth);
                     }
                 }
 

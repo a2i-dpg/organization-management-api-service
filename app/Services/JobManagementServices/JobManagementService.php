@@ -895,6 +895,11 @@ class JobManagementService
             'applied_jobs.current_recruitment_step_id',
             'recruitment_steps.title as current_recruitment_step_title',
             'recruitment_steps.title_en as current_recruitment_step_title_en',
+            'candidate_interviews.interview_schedule_id as candidate_interviews_interview_schedule_id',
+            'candidate_interviews.invited_at as candidate_interviews_invited_at',
+            'candidate_interviews.confirmation_status as candidate_interviews_confirmation_status',
+            'candidate_interviews.is_candidate_present as candidate_interviews_is_candidate_present',
+            'candidate_interviews.interview_score as candidate_interviews_interview_score',
             'applied_jobs.applied_at',
             'applied_jobs.profile_viewed_at',
             'applied_jobs.expected_salary',
@@ -911,6 +916,11 @@ class JobManagementService
                 ->whereNull('recruitment_steps.deleted_at');
         });
 
+        $appliedJobBuilder->leftJoin('candidate_interviews', function ($join) use ($stepId) {
+            $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id')
+                ->where('candidate_interviews.recruitment_step_id', $stepId);
+        });
+
         if ($type != AppliedJob::TYPE_QUALIFIED && is_numeric($stepId)) {
             $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
         }
@@ -923,22 +933,22 @@ class JobManagementService
             });
 
         } elseif ($type == AppliedJob::TYPE_VIEWED) {
-            $appliedJobBuilder->whereNotNull('applied_jobs.profile_viewed_at');
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->whereNotNull('applied_jobs.profile_viewed_at')
                     ->whereNull('applied_jobs.current_recruitment_step_id');
 
             });
-            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
+            // $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
 
         } elseif ($type == AppliedJob::TYPE_NOT_VIEWED) {
-            $appliedJobBuilder->whereNull('applied_jobs.profile_viewed_at');
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->whereNull('applied_jobs.profile_viewed_at')
                     ->whereNull('applied_jobs.current_recruitment_step_id');
 
             });
-            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
+            // $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
 
         } elseif ($type == AppliedJob::TYPE_REJECTED) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Rejected']);
@@ -998,7 +1008,7 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-        $resultData = $resultArray['data'] ?? $resultArray;
+        $resultData = array_values($resultArray['data'] ??  $resultArray);
         foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
@@ -1115,9 +1125,9 @@ class JobManagementService
      */
     public function countHireSelectedCandidate(string $jobId): mixed
     {
-        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+        return AppliedJob::where('job_id', $jobId)
+            ->where('apply_status', AppliedJob::APPLY_STATUS['Hiring_Listed'])
             ->whereNull('current_recruitment_step_id')
-            ->where('job_id', $jobId)
             ->count('id');
     }
 
@@ -1127,10 +1137,10 @@ class JobManagementService
      */
     public function countHireInvitedCandidate(string $jobId): mixed
     {
-        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hire_invited'])
+        return AppliedJob::where('job_id', $jobId)
+            ->where('apply_status', AppliedJob::APPLY_STATUS['Hire_invited'])
             ->whereNull('current_recruitment_step_id')
             ->whereNotNull('hire_invited_at')
-            ->where('job_id', $jobId)
             ->count('id');
     }
 
@@ -1140,10 +1150,11 @@ class JobManagementService
      */
     public function countHiredCandidate(string $jobId): mixed
     {
-        return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Hired'])
+        return AppliedJob::where('job_id', $jobId)
+            ->where('apply_status', AppliedJob::APPLY_STATUS['Hired'])
             ->whereNull('current_recruitment_step_id')
+            ->whereNotNull('hire_invited_at')
             ->whereNotNull('hired_at')
-            ->where('job_id', $jobId)
             ->count('id');
     }
 
@@ -1156,35 +1167,39 @@ class JobManagementService
 
     public function countProfileViewedCandidate(string $jobId, int $stepId = null)
     {
-        return AppliedJob::whereNotNull('profile_viewed_at')
+        return AppliedJob::where('job_id', $jobId)
+            ->whereNotNull('profile_viewed_at')
             ->where(function ($query) {
-                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                    ->whereNull('applied_jobs.current_recruitment_Step_id');
-                $query->orwhereNotNull('applied_jobs.current_recruitment_step_id');
-
+                $query
+                    ->whereNull('applied_jobs.current_recruitment_Step_id')
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hire_invited'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hired'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected']);
             })
-            ->where('job_id', $jobId)
             ->count('id');
     }
 
     public function countProfileNotViewedCandidate(string $jobId, int $stepId = null)
     {
-        return AppliedJob::whereNull('profile_viewed_at')
+        return AppliedJob::where('job_id', $jobId)
+            ->whereNull('profile_viewed_at')
             ->where(function ($query) {
-                $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                    ->whereNull('applied_jobs.current_recruitment_Step_id');
-                $query->orwhereNotNull('applied_jobs.current_recruitment_step_id');
-
+                $query
+                    ->whereNull('applied_jobs.current_recruitment_Step_id')
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hire_invited'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hired'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected']);
             })
-            ->where('job_id', $jobId)
             ->count('id');
 
     }
 
     public function countStepCandidate(string $jobId, int $stepId = null)
     {
-        return AppliedJob::where('current_recruitment_step_id', $stepId)
-            ->where('job_id', $jobId)
+        return AppliedJob::where('job_id', $jobId)
+            ->where('current_recruitment_step_id', $stepId)
             ->count('id');
     }
 
@@ -1194,9 +1209,13 @@ class JobManagementService
      */
     public function countTotalFinalHiringListCandidate(string $jobId): mixed
     {
-        return AppliedJob::whereIn('apply_status', [AppliedJob::APPLY_STATUS['Hiring_Listed'], [AppliedJob::APPLY_STATUS['Hire_invited']], [AppliedJob::APPLY_STATUS['Hired']]])
+        return AppliedJob::where('job_id', $jobId)
+            ->whereIn('apply_status', [
+                AppliedJob::APPLY_STATUS['Hiring_Listed'],
+                AppliedJob::APPLY_STATUS['Hire_invited'],
+                AppliedJob::APPLY_STATUS['Hired']
+            ])
             ->whereNull('current_recruitment_step_id')
-            ->where('job_id', $jobId)
             ->count('id');
     }
 
@@ -1209,10 +1228,8 @@ class JobManagementService
             ->orwhereNotNull('applied_jobs.current_recruitment_step_id')
             ->where('job_id', $jobId)
             ->count('id');*/
-        return AppliedJob::where(function ($query) {
-            $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected']);
-        })
-            ->where('job_id', $jobId)
+        return AppliedJob::where('job_id', $jobId)
+            ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
             ->count('id');
     }
 
@@ -1227,8 +1244,8 @@ class JobManagementService
     public function countStepInterviewScheduledCandidate(string $jobId, int $stepId)
     {
         return AppliedJob::where('apply_status', AppliedJob::APPLY_STATUS['Interview_scheduled'])
-            ->where('current_recruitment_step_id', $jobId)
-            ->where('job_id', $stepId)
+            ->where('current_recruitment_step_id', $stepId)
+            ->where('job_id', $jobId)
             ->count('id');
     }
 
@@ -1242,8 +1259,16 @@ class JobManagementService
 
     public function countStepQualifiedCandidate(string $jobId, int $stepId = 0)
     {
-        return AppliedJob::where('current_recruitment_step_id', '>', $stepId)
-            ->where('job_id', $jobId)
+        return AppliedJob::where('job_id', $jobId)
+            ->where('current_recruitment_step_id', '>', $stepId)
+            ->orwhere(function ($query) use ($jobId) {
+                $query->where('job_id', $jobId)
+                    ->whereIn('apply_status', [
+                        AppliedJob::APPLY_STATUS['Hire_invited'],
+                        AppliedJob::APPLY_STATUS['Hiring_Listed'],
+                        AppliedJob::APPLY_STATUS['Hired']
+                    ]);
+            })
             ->count('id');
     }
 
@@ -1665,25 +1690,25 @@ class JobManagementService
 
     /**
      * Send hiring listed candidate invite through sms
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      */
-    public function sendCandidateInterviewInviteSms(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateInterviewInviteSms(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $smsMessage = "Hello, " . $youthName . " You have been selected for an interview for the " . $job->job_title . " role. You have been scheduled for the interview on " . ". We look forward to see your talents.";
         $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateInterviewInviteEmail(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateInterviewInviteEmail(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $subject = "Job Offer letter";
@@ -1694,25 +1719,25 @@ class JobManagementService
 
     /**
      * Send hiring listed candidate invite through sms
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      */
-    public function sendCandidateHireInviteSms(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateHireInviteSms(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $smsMessage = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
         $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateHireInviteEmail(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateHireInviteEmail(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $subject = "Job Offer letter";

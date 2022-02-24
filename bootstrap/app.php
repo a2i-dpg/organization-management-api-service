@@ -69,6 +69,7 @@ $app->configure('nise3RabbitMq');
 $app->configure('elasticSearchLogConfig');
 $app->configure('lumenDefaultLogConfig');
 $app->configure('excel');
+$app->configure('sslcommerz');
 
 /*
 |--------------------------------------------------------------------------

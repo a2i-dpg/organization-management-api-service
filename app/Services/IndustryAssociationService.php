@@ -7,6 +7,7 @@ use App\Models\AppliedJob;
 use App\Models\BaseModel;
 use App\Models\CandidateRequirement;
 use App\Models\IndustryAssociation;
+use App\Models\NascibMember;
 use App\Models\Organization;
 use App\Models\PrimaryJobInformation;
 use Carbon\Carbon;
@@ -393,13 +394,27 @@ class IndustryAssociationService
     /**
      * @param array $data
      * @param Organization $organization
-     * @return int
+     * @return array
      */
-    public function industryAssociationMembershipApproval(array $data, Organization $organization): int
+    public function industryAssociationMembershipApproval(array $data, Organization $organization): array
     {
-        return $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'row_status' => BaseModel::ROW_STATUS_ACTIVE
-        ]);
+        $status = 0;
+        $message = 'Unprocessable Request';
+        if ($organization->industryAssociations->payment_status == BaseModel::PAYMENT_PENDING) {
+            $message = 'Payment is till now pending, so unable to process this request. Please complete payment.';
+        } elseif ($organization->industryAssociations->payment_status == BaseModel::PAYMENT_SUCCESS) {
+            $status = $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
+                'row_status' => BaseModel::ROW_STATUS_ACTIVE
+            ]);
+            if ($status) {
+                $message = 'Successfully add as a member';
+            }
+        }
+        return [
+            $status,
+            $message
+        ];
+
     }
 
     /**

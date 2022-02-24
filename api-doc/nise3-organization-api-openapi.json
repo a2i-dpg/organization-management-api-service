@@ -1457,6 +1457,139 @@
                 }
             }
         },
+
+        "/public/nascib-members/open-registration": {
+            "post": {
+                "tags": ["Nascib"],
+                "summary": "Register a nascib member",
+                "description": "API endpoint to Register a nascib member.A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NascibMemberRegister"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 36,
+                                        "title_en": "Nascib Organization en",
+                                        "title": "Nascib Organization",
+                                        "date_of_establishment": "2007-01-01",
+                                        "name_of_the_office_head": null,
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": null,
+                                        "name_of_the_office_head_designation_en": null,
+                                        "domain": "domain",
+                                        "fax_no": null,
+                                        "mobile": "01767777007",
+                                        "email": "entrepreneur@gmail.com",
+                                        "contact_person_name": "First Name",
+                                        "contact_person_name_en": "Last Name",
+                                        "contact_person_mobile": "01767777007",
+                                        "contact_person_email": "entrepreneur@gmail.com",
+                                        "contact_person_designation": "উদ্যোক্তা",
+                                        "contact_person_designation_en": "Entrepreneur",
+                                        "description": null,
+                                        "description_en": null,
+                                        "logo": null,
+                                        "loc_division_id": 1,
+                                        "loc_division_title_en": "Barisal",
+                                        "loc_division_title": "বরিশাল",
+                                        "loc_district_id": 1,
+                                        "loc_district_title_en": "BARGUNA",
+                                        "loc_district_title": "বরগুনা",
+                                        "loc_upazila_id": 1,
+                                        "loc_upazila_title_en": "BAGERHAT SADAR",
+                                        "loc_upazila_title": "বাগেরহাট সদর",
+                                        "location_latitude": null,
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "organization_type_id": 2,
+                                        "organization_type_title_en": "Private Organization",
+                                        "organization_type_title": "Private Organization",
+                                        "address": "Nascib Organization address",
+                                        "address_en": "Nascib Organization address en",
+                                        "row_status": 2,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-02-23T07:04:38.000000Z",
+                                        "updated_at": "2022-02-23T07:04:38.000000Z",
+                                        "sub_trades": [],
+                                        "industry_associations": [
+                                            {
+                                                "id": 1,
+                                                "code": "INA000001",
+                                                "trade_id": 1,
+                                                "title": "মেট্রোপলিটন চেম্বার অব কমার্স অ্যান্ড ইন্ড্রাস্ট্রি, ঢাকা",
+                                                "title_en": "Metropolitan Chamber of Commerce & Industry, Dhaka (MCCI)",
+                                                "loc_division_id": 3,
+                                                "loc_district_id": 18,
+                                                "loc_upazila_id": null,
+                                                "location_latitude": "23.730008133458",
+                                                "location_longitude": "90.416003515341",
+                                                "google_map_src": "https://www.google.com/maps/place/Metropolitan+Chamber+of+Commerce+and+Industry,+Dhaka/@23.7290456,90.4159606,15z/data=!4m2!3m1!1s0x0:0x29be237f53cc431b?sa=X&ved=2ahUKEwiYn6r0x-D1AhUK7nMBHa-5DtgQ_BJ6BAgyEAU",
+                                                "address": "Chamber Building (4th Floor), 122-124, Motijheel CA, Dhaka-1000, Bangladesh",
+                                                "address_en": "Chamber Building (4th Floor), 122-124, Motijheel CA, Dhaka-1000, Bangladesh",
+                                                "country": "BD",
+                                                "phone_code": "880",
+                                                "mobile": "01767111434",
+                                                "email": "tasmidurrahman@gmail.com",
+                                                "fax_no": null,
+                                                "trade_number": "",
+                                                "name_of_the_office_head": "Mr Motior",
+                                                "name_of_the_office_head_en": "Mr Motior",
+                                                "name_of_the_office_head_designation": "CEO",
+                                                "name_of_the_office_head_designation_en": "CEO",
+                                                "contact_person_name": "Mr Razzak",
+                                                "contact_person_name_en": "Mr Razzak",
+                                                "contact_person_mobile": "01767111434",
+                                                "contact_person_email": "tasmidurrahman@gmail.com",
+                                                "contact_person_designation": "CEO",
+                                                "contact_person_designation_en": "CEO",
+                                                "logo": null,
+                                                "domain": "https://mccibd.org",
+                                                "row_status": 1,
+                                                "created_by": 1,
+                                                "updated_by": 1,
+                                                "created_at": "2022-01-18T16:30:08.000000Z",
+                                                "updated_at": "2022-01-30T14:32:15.000000Z",
+                                                "deleted_at": null,
+                                                "pivot": {
+                                                    "organization_id": 36,
+                                                    "industry_association_id": 1,
+                                                    "membership_id": "NASCIF-1645599878",
+                                                    "row_status": 2,
+                                                    "payment_status": 2,
+                                                    "payment_date": null,
+                                                    "renewal_date": null,
+                                                    "created_at": "2022-02-23T07:04:38.000000Z",
+                                                    "updated_at": "2022-02-23T07:04:38.000000Z"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "OrganizationMember has been Created Successfully",
+                                        "query_time": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -12721,6 +12854,373 @@
     },
     "components": {
         "schemas": {
+            "NascibMemberRegister": {
+                "type": "object",
+                "description": "Register a nascib member",
+                "properties": {
+                    "form_fill_up_by": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>Form fill up by own  2=> Form fill up by UDC Entrepreneur  3=>Form fill up by Chamber or Association"
+                    },
+                    "application_tracking_no": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "title_en": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "address_en": {
+                        "type": "string"
+                    },
+                    "loc_division_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_divisions table"
+                    },
+                    "loc_district_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table"
+                    },
+                    "loc_upazila_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_upazilas table"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "identification_no": {
+                        "type": "string"
+                    },
+                    "entrepreneur_name": {
+                        "type": "string"
+                    },
+                    "entrepreneur_name_en": {
+                        "type": "string"
+                    },
+                    "entrepreneur_gender": {
+                        "type": "integer",
+                        "enum": [ 1, 2 ]
+                    },
+                    "entrepreneur_date_of_birth": {
+                        "type": "string",
+                        "format": "Y-m-d"
+                    },
+                    "entrepreneur_educational_qualification": {
+                        "type": "string"
+                    },
+                    "entrepreneur_nid": {
+                        "type": "string"
+                    },
+                    "entrepreneur_nid_file_path": {
+                        "type": "string"
+                    },
+                    "entrepreneur_mobile": {
+                        "type": "string"
+                    },
+                    "entrepreneur_email": {
+                        "type": "string"
+                    },
+                    "entrepreneur_photo_path": {
+                        "type": "string"
+                    },
+                    "have_factory": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "is_proprietorship": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>Sole Proprietorship (একক মালিকানা) 2=>Partnership Proprietorship (অংশীদারি মালিকানা) 3=>Join Proprietorship (যৌথ মালিকানা)"
+                    },
+                    "date_of_establishment": {
+                        "type": "string",
+                        "format": "Y-m-d"
+                    },
+                    "trade_licensing_authority": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": "1=>City Corporation (সিটি কর্পোরেশন) 2=>Municipality (পৌরসভা) 3=>Union Council (ইউনিয়ন পরিষদ)"
+                    },
+                    "trade_license_path": {
+                        "type": "string"
+                    },
+                    "trade_license_last_renew_year": {
+                        "type": "string"
+                    },
+                    "have_tin": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "investment_amount": {
+                        "type": "integer"
+                    },
+                    "current_total_asset": {
+                        "type": "integer"
+                    },
+                    "is_registered_under_authority": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "registered_authority": {
+                        "type": "object",
+                        "description": "Required when is_registered_under_authority = True",
+                        "example": "[\n\n'0'=> [\n\t\"authority_type\"=>1,\n\t\"registration_number\"=>366363633,\t\t\t\n],\n\n'1'=> [\n\t\"authority_type\"=>2,\n\t\"registration_number\"=>36636363333\n\t\n]\n\n]"
+                    },
+                    "is_authorized_under_authority": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "authorized_authority": {
+                        "type": "object",
+                        "description": "Required when is_authorized_under_authority = True",
+                        "example": "[\n\n'0'=> [\n\t\"authority_type\"=>1,\n\t\"registration_number\"=>366363633,\t\t\t\n],\n\n'1'=> [\n\t\"authority_type\"=>2,\n\t\"registration_number\"=>36636363333\n\t\n]\n'other_authority'=>[\n\t'authority_name'=>1,\n\t'register_number'=>1443333333\n]\n\n]"
+                    },
+                    "have_specialized_area": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "specialized_area": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Required when have_specialized_area = True"
+                    },
+                    "is_under_sme_cluster": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "under_sme_cluster_id": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "is_under_of_association_or_chamber": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "under_association_or_chamber_name": {
+                        "type": "string",
+                        "description": "Required when is_under_of_association_or_chamber = True"
+                    },
+                    "under_association_or_chamber_name_en": {
+                        "type": "string"
+                    },
+                    "sector_id": {
+                        "type": "integer",
+                        "enum": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
+                        "description": "  1 => 'পাটজাত',\n        2 => 'চামড়া',\n        3 => 'হস্তশিল্প',\n        4 => 'ফ্যাশন',\n        5 => 'হালকা প্রকৌশল',\n        6 => 'পোশাক',\n        7 => 'ডিজাইন',\n        8 => 'কৃষি প্রক্রিয়াজাত',\n        9 => 'আইটি',\n        10 => 'হারবাল',\n        11 => 'প্লাস্তিক',\n        12 => 'সিনথেটিকস',\n        13 => 'ইলেক্ট্রিক্যাল',\n        14 => 'ইলেক্ট্রনিক',\n        15 => 'লাইট ইঞ্জিনিয়ারিং',\n        16 => 'জুয়েলারি',\n        17 => 'হস্তশিল্প (বিভিন্ন প্রকার)',\n        18 => 'খাদ্য ও পানীয়',"
+                    },
+                    "other_sector_name": {
+                        "type": "string",
+                        "description": "Required when sector_id in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]"
+                    },
+                    "other_sector_name_en": {
+                        "type": "string"
+                    },
+                    "business_type": {
+                        "type": "integer",
+                        "enum": [1,2,3],
+                        "description": " 1 => 'ম্যানুফ্যাকচারিং',\n        2 => 'সার্ভিস',\n        3 => 'ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)',"
+                    },
+                    "main_product_name": {
+                        "type": "string"
+                    },
+                    "main_product_name_en": {
+                        "type": "string"
+                    },
+                    "main_material_description": {
+                        "type": "string"
+                    },
+                    "main_material_description_en": {
+                        "type": "string"
+                    },
+                    "is_import": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "import_type": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Required if is_import = True"
+                    },
+                    "is_export": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "export_type": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Required if is_export = True"
+                    },
+                    "industry_irc_no": {
+                        "type": "string",
+                        "description": "Required if is_export = True"
+                    },
+                    "salaried_manpower": {
+                        "type": "object",
+                        "description": "[\n\n'permanent_worker'=> [\n\t\"male\"=>10101,\n\t\"female\"=>201,\t\t\t\n],\n\n'temporary_worker'=> [\n\t\"male\"=>10101,\n\t\"female\"=>201\n\t\n]\n,\n'seasonal_worker'=>[\n\t\"male\"=>10101,\n\t\"female\"=>201\n]\n\n]"
+                    },
+                    "have_bank_account": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "bank_account_type": {
+                        "type": "object",
+                        "description": "Required when have_bank_account=True",
+                        "example": "[\n\n'personal'=> 1,\n\n'personal'=>2\n\n]"
+                    },
+                    "have_daily_accounting_system": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "use_computer": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "have_internet_connection": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "have_online_business": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    },
+                    "industry_association_id": {
+                        "type": "integer",
+                        "description": "Must exist in industry_associations table"
+                    },
+                    "permission_sub_group_id": {
+                        "type": "integer"
+                    },
+                    "info_provider_name": {
+                        "type": "string"
+                    },
+                    "info_provider_mobile": {
+                        "type": "string"
+                    },
+                    "info_collector_name": {
+                        "type": "string"
+                    },
+                    "info_collector_mobile": {
+                        "type": "string"
+                    },
+                    "udc_name": {
+                        "type": "string"
+                    },
+                    "udc_loc_district": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by UDC Entrepreneur"
+                    },
+                    "udc_union": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by UDC Entrepreneur\""
+                    },
+                    "udc_code": {
+                        "type": "string",
+                        "description": " Required when form_fill_up_by = Form fill up by UDC Entrepreneur\""
+                    },
+
+                    "chamber_or_association_name": {
+                        "type": "string",
+                        "description": "Required when form_fill_up_by = Form fill up by Chamber or Association"
+                    },
+                    "chamber_or_association_loc_district_id": {
+                        "type": "integer",
+                        "description": "  Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by Chamber or Association "
+                    },
+                    "chamber_or_association_union_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_unions table and Must exist in loc_districts table and Required when form_fill_up_by = Form fill up by Chamber or Association "
+                    },
+                    "chamber_or_association_code": {
+                        "type": "string",
+                        "description": "Required when form_fill_up_by = Form fill up by Chamber or Association"
+                    },
+                    "factory_address": {
+                        "type": "string",
+                        "description": "Required when have_factory = True"
+                    },
+                    "factory_address_en": {
+                        "type": "string"
+                    },
+                    "factory_loc_division_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_divisions table and have_factory = True"
+                    },
+                    "factory_loc_district_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_districts table and have_factory = True"
+                    },
+                    "factory_loc_upazila_id": {
+                        "type": "integer",
+                        "description": "Must exist in loc_upazilas table and have_factory = True"
+                    },
+                    "factory_web_site": {
+                        "type": "string"
+                    },
+                    "have_own_land": {
+                        "type": "integer",
+                        "enum": [1,2],
+                        "description": " 1 => 'Own Land', 2 => 'Rent' . Required when have_factory = True"
+                    },
+                    "have_office_or_showroom": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=>True 0=>False"
+                    }
+
+
+
+
+
+
+
+                },
+                "required": [
+                    "form_fill_up_by","title","address","loc_division_id","loc_district_id","entrepreneur_name",
+                    "entrepreneur_gender", "entrepreneur_date_of_birth","entrepreneur_educational_qualification",
+                    "entrepreneur_nid","entrepreneur_nid_file_path","entrepreneur_mobile","entrepreneur_photo_path",
+                    "have_factory","is_proprietorship","date_of_establishment","trade_licensing_authority",
+                    "trade_license_path","trade_license_last_renew_year","have_tin","investment_amount",
+                    "is_registered_under_authority","is_authorized_under_authority",
+                    "have_specialized_area","is_under_sme_cluster","under_sme_cluster_id",
+                    "is_under_of_association_or_chamber","sector_id","business_type","main_product_name",
+                    "main_material_description","is_import","have_bank_account","have_daily_accounting_system",
+                    "use_computer","have_internet_connection","have_online_business","industry_association_id",
+                    "udc_name"
+
+
+
+
+
+
+
+                ]
+            },
             "deschedule": {
                 "type": "object",
                 "description": "Deschedule",

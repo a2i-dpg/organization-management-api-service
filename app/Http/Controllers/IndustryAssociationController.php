@@ -618,35 +618,36 @@ class IndustryAssociationController extends Controller
     {
         $organization = Organization::findOrFail($organizationId);
         $validatedData = $this->industryAssociationService->industryAssociationMembershipValidator($request, $organizationId)->validate();
-        $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
-        $industryAssociation = IndustryAssociation::findOrFail($validatedData['industry_association_id']);
+        [$status, $errorMessage] = $this->industryAssociationService->industryAssociationMembershipApproval($validatedData, $organization);
 
+        if ($status) {
+            $industryAssociation = IndustryAssociation::findOrFail($validatedData['industry_association_id']);
+            /** Mail send */
+            $to = array($industryAssociation->contact_person_email);
+            $from = BaseModel::NISE3_FROM_EMAIL;
+            $subject = "Industry Association Membership Approval";
+            $message = "You are approved as a " . $industryAssociation->title . " member.";
+            $messageBody = MailService::templateView($message);
+            $mailService = new MailService($to, $from, $subject, $messageBody);
+            $mailService->sendMail();
 
-        /** Mail send */
-        $to = array($industryAssociation->contact_person_email);
-        $from = BaseModel::NISE3_FROM_EMAIL;
-        $subject = "Industry Association Membership Approval";
-        $message = "You are approved as a " . $industryAssociation->title . " member.";
-        $messageBody = MailService::templateView($message);
-        $mailService = new MailService($to, $from, $subject, $messageBody);
-        $mailService->sendMail();
+            /** Sms send */
+            $recipient = $industryAssociation->contact_person_mobile;
+            $smsMessage = "You are approved as a " . $industryAssociation->title . " member.";
+            $smsService = new SmsService();
+            $smsService->sendSms($recipient, $smsMessage);
+        }
 
-        /** Sms send */
-        $recipient = $industryAssociation->contact_person_mobile;
-        $smsMessage = "You are approved as a " . $industryAssociation->title . " member.";
-        $smsService = new SmsService();
-        $smsService->sendSms($recipient, $smsMessage);
-
-
+        $statusCode = $status ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
         $response = [
             '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "IndustryAssociation membership approved successfully",
+                "success" => (bool)$status,
+                "code" => $statusCode,
+                "message" => $errorMessage,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, $statusCode);
     }
 
     /**
