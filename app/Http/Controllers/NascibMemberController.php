@@ -92,8 +92,6 @@ class NascibMemberController extends Controller
 
             $createdRegisterUser = $this->nascibMemberService->createNascibUser($validated); //TODO: IDP user is not created
 
-            Log::info('Nascib id_user_info:' . json_encode($createdRegisterUser));
-
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
             }
