@@ -20,8 +20,8 @@ class CreateMembershipTypesTable extends Migration
             $table->string('name_en', 191)->nullable();
             $table->unsignedFloat('fee')->nullable();
             $table->unsignedFloat('renewal_fee')->nullable();
-            $table->unsignedFloat('payment_nature')->nullable()->comment('1=>DATE_WISE, 2=>SESSION_WISE');
-            $table->unsignedFloat('payment_frequency')->nullable()->comment('1=>MONTHLY, 2=>QUARTERLY, 3=>HALF_YEARLY, 4=>YEARLY, 5=>SESSIONAL');
+            $table->unsignedTinyInteger('payment_nature')->nullable()->comment('1=>DATE_WISE, 2=>SESSION_WISE');
+            $table->unsignedTinyInteger('payment_frequency')->nullable()->comment('1=>MONTHLY, 2=>QUARTERLY, 3=>HALF_YEARLY, 4=>YEARLY, 5=>SESSIONAL');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active, 2 => invalid');
             $table->timestamps();
         });

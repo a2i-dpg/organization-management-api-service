@@ -18,14 +18,14 @@ class IndustryAssociationConfigSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        MembershipType::query()->truncate();
+        IndustryAssociationConfig::query()->truncate();
         $config = [
             [
                 'industry_association_id' => 1,
                 'session_type' => IndustryAssociationConfig::SESSION_TYPE_JUNE_JULY,
-                'payment_gateways' => [
+                'payment_gateways' => json_encode([
                     PaymentTransactionHistory::PAYMENT_GATEWAY_SSLCOMMERZ => config('sslcommerz')
-                ]
+                ])
             ]
         ];
         IndustryAssociationConfig::insert($config);

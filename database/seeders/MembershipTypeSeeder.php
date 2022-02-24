@@ -17,6 +17,9 @@ class MembershipTypeSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
         MembershipType::query()->truncate();
+        /**
+         * if payment nature is SESSION_WISE, payment_frequency must be yearly except others
+         */
         $membershipTypes = [
             [
                 "industry_association_id" => 1,
@@ -25,7 +28,7 @@ class MembershipTypeSeeder extends Seeder
                 "fee" => 1000,
                 "renewal_fee" => 800,
                 "payment_nature" => MembershipType::PAYMENT_NATURE_SESSION_WISE_KEY,
-                "payment_frequency" => MembershipType::PAYMENT_FREQUENCY_MONTHLY_KEY
+                "payment_frequency" => MembershipType::PAYMENT_FREQUENCY_YEARLY_KEY
             ],
             [
                 "industry_association_id" => 1,
@@ -34,7 +37,7 @@ class MembershipTypeSeeder extends Seeder
                 "fee" => 1000,
                 "renewal_fee" => 800,
                 "payment_nature" => MembershipType::PAYMENT_NATURE_SESSION_WISE_KEY,
-                "payment_frequency" => MembershipType::PAYMENT_FREQUENCY_QUARTERLY_KEY
+                "payment_frequency" => MembershipType::PAYMENT_FREQUENCY_YEARLY_KEY
             ]
         ];
         MembershipType::insert($membershipTypes);

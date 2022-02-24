@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Monolog\Handler\ElasticaHandler;
 
 /**
  *
@@ -60,11 +61,11 @@ class NascibMemberService
 
     private function attachToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
     {
+
         $organization->industryAssociations()->attach($data['industry_association_id'], [
             'membership_id' => $data['membership_id'],
             'membership_type_id' => $data['membership_type_id'],
             'payment_status' => BaseModel::PAYMENT_PENDING,
-            'member_ship_expire_date' => $this->getMembershipExpireDate($data['membership_type_id']),
             'additional_info_model_name' => $data['additional_info_model_name'],
             'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
         ]);
@@ -76,8 +77,8 @@ class NascibMemberService
     private function getMembershipExpireDate(int $membershipTypeId)
     {
         $memberShipExpirationDate = null;
-        $membershipType = MembershipType::where('id', $membershipTypeId)
-            ->where('row_status', BaseModel::ROW_STATUS_ACTIVE)
+        $membershipType = MembershipType::where('membership_types.id', $membershipTypeId)
+            ->where('membership_types.row_status', BaseModel::ROW_STATUS_ACTIVE)
             ->join('industry_association_configs', 'industry_association_configs.industry_association_id', 'membership_types.industry_association_id')
             ->firstOrFail([
                 'membership_types.payment_nature',
@@ -85,6 +86,7 @@ class NascibMemberService
                 'membership_types.industry_association_id',
                 'industry_association_configs.session_type'
             ]);
+
         if ($membershipType->payment_nature == MembershipType::PAYMENT_NATURE_SESSION_WISE_KEY) {
             if ($membershipType->payment_frequency == MembershipType::PAYMENT_FREQUENCY_YEARLY_KEY) {
                 $memberShipExpirationDate = $this->getSessionalDate($membershipType->session_type);
@@ -92,7 +94,7 @@ class NascibMemberService
         } elseif ($membershipType->payment_nature == MembershipType::PAYMENT_NATURE_DATE_WISE_KEY) {
             $memberShipExpirationDate = $this->getDateWiseDate($membershipType->payment_frequency);
         }
-
+        Log::info($memberShipExpirationDate);
         return $memberShipExpirationDate;
     }
 
@@ -101,8 +103,7 @@ class NascibMemberService
         $memberShipExpirationDate = null;
 
         $currentDate = Carbon::now()->format('Y-m-d');
-        $sessionEndDate = config('payment_config.session_type_wise_expiration_date.' . $sessionType . '.end_date');
-
+        $sessionEndDate = config('nise3.payment_config.session_type_wise_expiration_date.' . $sessionType . '.end_date');
         if ($sessionType == IndustryAssociationConfig::SESSION_TYPE_JUNE_JULY) {
             if (Carbon::parse($currentDate)->lessThanOrEqualTo($sessionEndDate)) {
                 $memberShipExpirationDate = $sessionEndDate;

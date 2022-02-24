@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\SSLPaymentService\Library;
+namespace App\Services\PaymentService\Library;
 
 interface SslCommerzInterface
 {
