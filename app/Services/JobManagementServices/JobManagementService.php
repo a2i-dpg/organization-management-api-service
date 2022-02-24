@@ -1675,25 +1675,25 @@ class JobManagementService
 
     /**
      * Send hiring listed candidate invite through sms
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      */
-    public function sendCandidateInterviewInviteSms(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateInterviewInviteSms(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $smsMessage = "Hello, " . $youthName . " You have been selected for an interview for the " . $job->job_title . " role. You have been scheduled for the interview on " . ". We look forward to see your talents.";
         $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateInterviewInviteEmail(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateInterviewInviteEmail(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $subject = "Job Offer letter";
@@ -1704,25 +1704,25 @@ class JobManagementService
 
     /**
      * Send hiring listed candidate invite through sms
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      */
-    public function sendCandidateHireInviteSms(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateHireInviteSms(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $smsMessage = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
         $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateHireInviteEmail(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateHireInviteEmail(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $subject = "Job Offer letter";
