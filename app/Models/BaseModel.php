@@ -29,7 +29,6 @@ abstract class BaseModel extends Model
 
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
-
     public const ROW_STATUS_PENDING = 2;
     public const ROW_STATUS_REJECTED = 3;
 
@@ -38,6 +37,33 @@ abstract class BaseModel extends Model
         self::ROW_STATUS_INACTIVE,
         self::ROW_STATUS_PENDING,
         self::ROW_STATUS_REJECTED,
+    ];
+
+    /** Payment Status */
+    public const PAYMENT_SUCCESS = 1;
+    public const PAYMENT_PENDING = 2;
+    public const PAYMENT_CANCEL = 3;
+    public const PAYMENT_FAIL = 4;
+
+    /** Payment Gateway Type */
+    public const EK_PAY_LABEL = "ek_pay";
+    public const SSLCOMMERZ_LABEL = "ssl_commerz";
+    public const DBBL_MOBILE_BANKING = "dbbl_mobile_banking";
+    public const BKASH = "bkash";
+    public const PORT_WALLET = "port_wallet";
+
+    public const PAYMENT_GATEWAY_EK_PAY = 1;
+    public const PAYMENT_GATEWAY_SSLCOMMERZ = 2;
+    public const PAYMENT_GATEWAY_DBBL_MOBILE_BANKING = 3;
+    public const PAYMENT_GATEWAY_BKASH = 4;
+    public const PAYMENT_GATEWAY_PORT_WALLET = 5;
+
+    public const PAYMENT_GATEWAYS = [
+        self::EK_PAY_LABEL => self::PAYMENT_GATEWAY_EK_PAY,
+        self::SSLCOMMERZ_LABEL => self::PAYMENT_GATEWAY_SSLCOMMERZ,
+        self::DBBL_MOBILE_BANKING => self::PAYMENT_GATEWAY_DBBL_MOBILE_BANKING,
+        self::BKASH => self::PAYMENT_GATEWAY_BKASH,
+        self::PORT_WALLET => self::PAYMENT_GATEWAY_PORT_WALLET
     ];
 
     public const PASSWORD_MIN_LENGTH = 8;

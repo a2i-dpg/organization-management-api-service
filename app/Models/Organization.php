@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Collection\Collection;
+use function React\Promise\all;
 
 /**
  * Class Organization
@@ -33,6 +34,7 @@ use Ramsey\Collection\Collection;
  * @property int organization_type_id
  * @property-read OrganizationType organizationType
  * @property-read Collection industrySubTrades
+ * @property Collection industryAssociations
  */
 class Organization extends BaseModel
 {
@@ -43,14 +45,6 @@ class Organization extends BaseModel
      */
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'additional_info_model_name',
-    ];
 
     public const ROW_STATUSES = [
         self::ROW_STATUS_INACTIVE,
@@ -76,6 +70,11 @@ class Organization extends BaseModel
         self:: ORGANIZATION_TYPE_NGO,
         self::ORGANIZATION_TYPE_INTERNATIONAL
     ];
+
+    public const PAYMENT_SUCCESS = 1;
+    public const PAYMENT_PENDING = 2;
+    public const PAYMENT_CANCEL = 3;
+    public const PAYMENT_FAIL = 4;
 
     /**
      * @return BelongsTo
@@ -105,11 +104,25 @@ class Organization extends BaseModel
      */
     public function industryAssociations(): BelongsToMany
     {
-        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization','organization_id','industry_association_id')->withPivot('membership_id','row_status')->withTimestamps();
+        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization', 'organization_id', 'industry_association_id')->withPivot('membership_id', 'row_status', 'payment_status', 'payment_date', 'renewal_date')->withTimestamps();
     }
 
     public function subTrades(): BelongsToMany
     {
-        return $this->belongsToMany(SubTrade::class,'organization_sub_trade','organization_id','sub_trade_id');
+        return $this->belongsToMany(SubTrade::class, 'organization_sub_trade', 'organization_id', 'sub_trade_id');
     }
+
+    /**public function toArray(): \Illuminate\Database\Eloquent\Collection|array
+     * {
+     * $originalData = parent::toArray();
+     *
+     * if (!empty($originalData['additional_info_model_name']) && class_exists($originalData['additional_info_model_name'])) {
+     * $model = app($originalData['additional_info_model_name']);
+     * $modelData = $model->where('organization_id', $originalData['id'])->firstOrFail()->makeHidden(['id', 'organization_id'])->toArray();
+     * if ($modelData) {
+     * $originalData = array_merge($originalData, $modelData);
+     * }
+     * }
+     * return $originalData;
+     * }*/
 }

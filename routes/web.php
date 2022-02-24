@@ -41,6 +41,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('job-requirements', 'HrDemandController')->render();
         $customRouter()->resourceRoute('hr-demands', 'HrDemandInstituteController')->render();
 
+
         /** Hr demand approve by institute */
         $router->put("hr-demand-approved-by-institute/{id}", ["as" => "institute.hr-demand.approve", "uses" => "HrDemandInstituteController@hrDemandApprovedByInstitute"]);
         $router->put("hr-demand-rejected-by-institute/{id}", ["as" => "institute.hr-demand.reject", "uses" => "HrDemandInstituteController@hrDemandRejectedByInstitute"]);
@@ -65,11 +66,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** Industry apply for industryAssociation membership */
         $router->post("industry-association-membership-application", ["as" => "organizations.industry-associations-membership-application", "uses" => "OrganizationController@IndustryAssociationMembershipApplication"]);
 
-        /**TODO: Route name should be organization-approval:piyal
         /** industry registration approval   */
         $router->put("organization-user-approval/{organizationId}", ["as" => "organization.organization-user-approval", "uses" => "OrganizationController@organizationUserApproval"]);
 
-        /**TODO: Route name should be organization-rejection:piyal
         /** industry registration rejection  */
         $router->put("organization-user-rejection/{organizationId}", ["as" => "organization.organization-user-rejection", "uses" => "OrganizationController@organizationUserRejection"]);
 
@@ -222,6 +221,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
             $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
             $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
+
+            /** Nascib Registration */
+            $router->post('nascib-members/open-registration', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@openRegistration']);
+            $router->get('nascib-members/get-static-data', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@nascibMemberStaticInfo']);
         });
 
         $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);
@@ -241,7 +244,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 
     /** Organization open Registration */
-    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration",'middleware' => 'public-domain-handle']);
+    $router->post("organization-registration", ["as" => "register.organization", "uses" => "OrganizationController@organizationOpenRegistration", 'middleware' => 'public-domain-handle']);
 
     /** Organization Title by Ids for Internal Api */
     $router->post("get-organization-title-by-ids",

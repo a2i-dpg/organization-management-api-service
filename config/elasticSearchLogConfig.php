@@ -77,11 +77,11 @@ return [
             'handler' => \Monolog\Handler\ElasticsearchHandler::class,
             'formatter' => \Monolog\Formatter\ElasticsearchFormatter::class,
             'formatter_with' => [
-                'index' => env('ELASTIC_LOGS_INDEX'),
+                'index' => env('ELASTIC_LOGS_INDEX',"industry_association_file_logs"),
                 'type' => '_doc',
             ],
             'handler_with' => [
-                'client' => \Elasticsearch\ClientBuilder::create()->setHosts([env('ELASTIC_HOST')])->build(),
+                'client' => \Elasticsearch\ClientBuilder::create()->setHosts([env('ELASTIC_HOST','http://localhost:9200')])->build(),
             ]
         ],
 
@@ -91,11 +91,11 @@ return [
             'handler' => \Monolog\Handler\ElasticsearchHandler::class,
             'formatter' => \Monolog\Formatter\ElasticsearchFormatter::class,
             'formatter_with' => [
-                'index' => env('ELASTIC_LOGS_INDEX'),
+                'index' => env('ELASTIC_LOGS_INDEX',"industry_association_file_logs"),
                 'type' => '_doc',
             ],
             'handler_with' => [
-                'client' => \Elasticsearch\ClientBuilder::create()->setHosts([env('ELASTIC_HOST')])->build(),
+                'client' => \Elasticsearch\ClientBuilder::create()->setHosts([env('ELASTIC_HOST','http://localhost:9200')])->build(),
             ]
         ],
 
@@ -105,11 +105,11 @@ return [
             'handler' => \Monolog\Handler\ElasticsearchHandler::class,
             'formatter' => \Monolog\Formatter\ElasticsearchFormatter::class,
             'formatter_with' => [
-                'index' => env('ELASTIC_LOGS_INDEX'),
+                'index' => env('ELASTIC_LOGS_INDEX',"industry_association_file_logs"),
                 'type' => '_doc',
             ],
             'handler_with' => [
-                'client' => \Elasticsearch\ClientBuilder::create()->setHosts([env('ELASTIC_HOST')])->build(),
+                'client' => \Elasticsearch\ClientBuilder::create()->setHosts([env('ELASTIC_HOST','http://localhost:9200')])->build(),
             ]
         ],
 
