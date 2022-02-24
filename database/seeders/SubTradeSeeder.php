@@ -20,78 +20,19 @@ class SubTradeSeeder extends Seeder
         SubTrade::query()->truncate();
 
         $subTrades = [
-            [
-                "title" => "Automotive Industry Sub Trade 1",
-                "title_en" => "Automotive Industry Sub Trade 1",
-                "trade_id" => 1,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Automotive Industry Sub Trade 2",
-                "title_en" => "Automotive Industry Sub Trade 2",
-                "trade_id" => 1,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Chemical Sub Trade 1",
-                "title_en" => "Chemical Sub Trade 1",
-                "trade_id" => 14,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Chemical Sub Trade 2",
-                "title_en" => "Chemical Sub Trade 2",
-                "trade_id" => 14,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Biotech Sub Trade 1",
-                "title_en" => "Biotech Sub Trade 1",
-                "trade_id" => 17,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Biotech Sub Trade 2",
-                "title_en" => "Biotech Sub Trade 2",
-                "trade_id" => 17,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Pharmaceutical Sub Trade 1",
-                "title_en" => "Pharmaceutical Sub Trade 1",
-                "trade_id" => 11,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Pharmaceutical Sub Trade 2",
-                "title_en" => "Pharmaceutical Sub Trade 2",
-                "trade_id" => 11,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "T K Group Sub Trade 1",
-                "title_en" => "T K Group Sub Trade 1",
-                "trade_id" => 9,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "T K Group Sub Trade 2",
-                "title_en" => "T K Group Sub Trade 2",
-                "trade_id" => 9,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Tourism Sub Trade 1",
-                "title_en" => "Tourism Sub Trade 1",
-                "trade_id" => 16,
-                "created_at" => Carbon::now()
-            ],
-            [
-                "title" => "Tourism Sub Trade 2",
-                "title_en" => "Tourism Sub Trade 2",
-                "trade_id" => 16,
-                "created_at" => Carbon::now()
-            ]
+            array('id' => '1', 'title' => 'Tesla', 'title_en' => 'Tesla', 'trade_id' => '1', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '2', 'title' => 'Daimler AG', 'title_en' => 'Daimler AG', 'trade_id' => '1', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '3', 'title' => 'Volkswagen AG', 'title_en' => 'Volkswagen AG', 'trade_id' => '1', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '4', 'title' => 'Ford Motor', 'title_en' => 'Ford Motor', 'trade_id' => '2', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '5', 'title' => 'Bayerische Motoren', 'title_en' => 'Bayerische Motoren', 'trade_id' => '2', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '6', 'title' => 'Geely Automobile', 'title_en' => 'Geely Automobile', 'trade_id' => '2', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '7', 'title' => 'Champion Automotive Repair Services', 'title_en' => 'Champion Automotive Repair Services', 'trade_id' => '3', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '8', 'title' => 'PepsiCo', 'title_en' => 'PepsiCo', 'trade_id' => '3', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '9', 'title' => 'The Coca-Cola Company', 'title_en' => 'The Coca-Cola Company', 'trade_id' => '3', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '10', 'title' => 'Mondelēz International', 'title_en' => 'Mondelēz International', 'trade_id' => '4', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '11', 'title' => 'Anheuser-Busch InBev', 'title_en' => 'Anheuser-Busch InBev', 'trade_id' => '5', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '12', 'title' => 'AUTO-SATTLEREI BRUHN', 'title_en' => 'AUTO-SATTLEREI BRUHN', 'trade_id' => '5', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL),
+            array('id' => '13', 'title' => 'AGENTUR GABRIELE KLESSE', 'title_en' => 'AGENTUR GABRIELE KLESSE', 'trade_id' => '5', 'deleted_at' => NULL, 'created_at' => '2022-02-08 19:41:28', 'updated_at' => NULL)
         ];
 
         SubTrade::insert($subTrades);

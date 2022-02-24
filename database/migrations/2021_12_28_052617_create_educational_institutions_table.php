@@ -15,8 +15,9 @@ class CreateEducationalInstitutionsTable extends Migration
     {
         Schema::create('educational_institutions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type');
+            $table->string('name', 600);
+            $table->string('name_en')->nullable();
+            $table->string('type', 20);
             $table->softDeletes();
             $table->timestamps();
         });
