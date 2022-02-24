@@ -161,7 +161,6 @@ class AdditionalJobInformationService
             $key = $tempData['location_id'];
             $jobLocation[$key] = $tempData;
         }
-        Log::info("===>", $jobLocation);
         return $jobLocation;
     }
 

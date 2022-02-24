@@ -40,7 +40,6 @@ if (!function_exists("idpUserErrorMessage")) {
     function idUserErrorMessage($exception): array
     {
         $statusCode = $exception->getCode();
-        Log::info("status.code" . $statusCode);
         $errors = [
             '_response_status' => [
                 'success' => false,
