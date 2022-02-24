@@ -36,11 +36,6 @@ class DatabaseSeeder extends Seeder
             IndustryAssociationsTableSeeder::class,
             IndustryCodePessimisticLockingsTableSeeder::class
 
-//            DefaultIndustryAssociationSeeder::class,
-//            OrganizationSeeder::class,
-//            HumanResourceTemplateSeeder::class,
-//            PublicationSeeder::class,
-//            ContactInfoSeeder::class,
         ]);
     }
 }

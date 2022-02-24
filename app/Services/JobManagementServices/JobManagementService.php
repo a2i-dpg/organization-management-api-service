@@ -895,6 +895,11 @@ class JobManagementService
             'applied_jobs.current_recruitment_step_id',
             'recruitment_steps.title as current_recruitment_step_title',
             'recruitment_steps.title_en as current_recruitment_step_title_en',
+            'candidate_interviews.interview_schedule_id as candidate_interviews_interview_schedule_id',
+            'candidate_interviews.invited_at as candidate_interviews_invited_at',
+            'candidate_interviews.confirmation_status as candidate_interviews_confirmation_status',
+            'candidate_interviews.is_candidate_present as candidate_interviews_is_candidate_present',
+            'candidate_interviews.interview_score as candidate_interviews_interview_score',
             'applied_jobs.applied_at',
             'applied_jobs.profile_viewed_at',
             'applied_jobs.expected_salary',
@@ -911,6 +916,11 @@ class JobManagementService
                 ->whereNull('recruitment_steps.deleted_at');
         });
 
+        $appliedJobBuilder->leftJoin('candidate_interviews', function ($join) use ($stepId) {
+            $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id')
+                ->where('candidate_interviews.recruitment_step_id', $stepId);
+        });
+
         if ($type != AppliedJob::TYPE_QUALIFIED && is_numeric($stepId)) {
             $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', $stepId);
         }
@@ -918,10 +928,9 @@ class JobManagementService
         if ($type == AppliedJob::TYPE_ALL) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
-                    ->whereNull('applied_jobs.current_recruitment_step_id');
-
+                    ->whereNull('applied_jobs.current_recruitment_step_id')
+                    ->orwhereNotNull('applied_jobs.current_recruitment_step_id');
             });
-            $appliedJobBuilder->orwhereNotNull('applied_jobs.current_recruitment_step_id');
 
         } elseif ($type == AppliedJob::TYPE_VIEWED) {
             $appliedJobBuilder->whereNotNull('applied_jobs.profile_viewed_at');
@@ -1666,25 +1675,25 @@ class JobManagementService
 
     /**
      * Send hiring listed candidate invite through sms
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      */
-    public function sendCandidateInterviewInviteSms(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateInterviewInviteSms(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $smsMessage = "Hello, " . $youthName . " You have been selected for an interview for the " . $job->job_title . " role. You have been scheduled for the interview on " . ". We look forward to see your talents.";
         $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateInterviewInviteEmail(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateInterviewInviteEmail(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $subject = "Job Offer letter";
@@ -1695,25 +1704,25 @@ class JobManagementService
 
     /**
      * Send hiring listed candidate invite through sms
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      */
-    public function sendCandidateHireInviteSms(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateHireInviteSms(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $smsMessage = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
         $this->sendCandidateInviteSms($youth, $smsMessage);
     }
 
     /**
-     * @param AppliedJob $appliedJob
+     * @param string $jobId
      * @param array $youth
      * @throws Throwable
      */
-    public function sendCandidateHireInviteEmail(AppliedJob $appliedJob, array $youth)
+    public function sendCandidateHireInviteEmail(string $jobId, array $youth)
     {
-        $job = PrimaryJobInformation::where('job_id', $appliedJob->job_id)->first();
+        $job = PrimaryJobInformation::where('job_id', $jobId)->first();
         /** Mail send */
         $youthName = $youth['first_name'] . " " . $youth['last_name'];
         $subject = "Job Offer letter";
