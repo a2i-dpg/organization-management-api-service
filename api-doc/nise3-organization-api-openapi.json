@@ -11577,6 +11577,41 @@
                 "tags": ["Job Interview"],
                 "summary": "Get Industry Association Member Jobs",
                 "description": "API endpoint to Get Industry Association Member Jobs. A successful request response will show 201 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/job_title_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/occupation_ids"
+                    },
+                    {
+                        "$ref": "#/components/parameters/loc_district_ids"
+                    },
+                    {
+                        "$ref": "#/components/parameters/job_sector_ids"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skillIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/job_level"
+                    },
+                    {
+                        "$ref": "#/components/parameters/type"
+                    },
+                    {
+                        "$ref": "#/components/parameters/job_title_en_optional"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page_size"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/row_status_optional"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "successful",
@@ -11603,20 +11638,20 @@
                                             "is_apply_online": 1,
                                             "minimum_year_of_experience": 1,
                                             "maximum_year_of_experience": 2,
-                                            "industry_association_title": "মেট্রোপলিটন চেম্বার অব কমার্স অ্যান্ড ইন্ড্রাস্ট্রি, ঢাকা",
-                                            "industry_association_title_en": "Metropolitan Chamber of Commerce & Industry, Dhaka (MCCI)",
+                                            "industry_association_title": null,
+                                            "industry_association_title_en": null,
                                             "industry_association_logo": null,
-                                            "industry_association_address": "Chamber Building (4th Floor), 122-124, Motijheel CA, Dhaka-1000, Bangladesh",
-                                            "industry_association_address_en": "Chamber Building (4th Floor), 122-124, Motijheel CA, Dhaka-1000, Bangladesh",
-                                            "organization_title": null,
-                                            "organization_title_en": null,
+                                            "industry_association_address": null,
+                                            "industry_association_address_en": null,
+                                            "organization_title": "Yorksire",
+                                            "organization_title_en": "Yorksire",
                                             "organization_logo": null,
-                                            "organization_address": null,
-                                            "organization_address_en": null,
+                                            "organization_address": "Aqua",
+                                            "organization_address_en": "Aqua",
                                             "row_status": 1,
-                                            "applications": "1",
+                                            "applications": "2",
                                             "shortlisted": "0",
-                                            "interviewed": "1",
+                                            "interviewed": "0",
                                             "has_applied": "0",
                                             "additional_job_information": {
                                                 "id": 1,
@@ -11648,7 +11683,7 @@
                                                         "job_id": "3",
                                                         "additional_job_information_id": 1,
                                                         "loc_division_id": 1,
-                                                        "loc_district_id": null,
+                                                        "loc_district_id": 1,
                                                         "loc_upazila_id": null,
                                                         "loc_union_id": null,
                                                         "loc_city_corporation_id": null,
@@ -11656,13 +11691,13 @@
                                                         "loc_area_id": null,
                                                         "loc_division_title": "বরিশাল",
                                                         "loc_division_title_en": "Barisal",
-                                                        "loc_district_title": null,
-                                                        "loc_district_title_en": null,
+                                                        "loc_district_title": "বরগুনা",
+                                                        "loc_district_title_en": "BARGUNA",
                                                         "loc_area_title": null,
                                                         "loc_area_title_en": null,
-                                                        "location_id": 1,
-                                                        "title": "বরিশাল",
-                                                        "title_en": "BARISAL"
+                                                        "location_id": "1_1",
+                                                        "title": "বরিশাল => বরগুনা",
+                                                        "title_en": "BARISAL => BARGUNA"
                                                     },
                                                     {
                                                         "id": 2,
@@ -16272,6 +16307,22 @@
             },
             "organization_id_optional": {
                 "name": "organization_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "institute_id_optional": {
+                "name": "institute_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "youth_id_optional": {
+                "name": "youth_id",
                 "in": "query",
                 "required": false,
                 "schema": {
