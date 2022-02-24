@@ -49,19 +49,19 @@ class NascibMemberController extends Controller
     {
         $response = [
             'data' => [
-                "form_fill_up_by"=>NascibMember::FORM_FILL_UP_LIST,
-                "proprietorship"=>NascibMember::PROPRIETORSHIP_LIST,
-                "trade_license_authority"=>NascibMember::TRADE_LICENSING_AUTHORITY,
-                "sector"=>NascibMember::SECTOR,
-                "registered_authority"=>NascibMember::REGISTERED_AUTHORITY,
-                "authorized_authority"=>NascibMember::AUTHORIZED_AUTHORITY,
-                "specialized_area"=>NascibMember::SPECIALIZED_AREA,
-                "import_or_export_type"=>NascibMember::IMPORT_EXPORT_TYPE,
-                "worker_type"=>NascibMember::WORKER_TYPE,
-                "manpower_type"=>NascibMember::MANPOWER_TYPE,
-                "bank_account_type"=>NascibMember::BANK_ACCOUNT_TYPE,
-                "land_type"=>NascibMember::LAND_TYPE,
-                "business_type"=>NascibMember::BUSINESS_TYPE
+                "form_fill_up_by" => NascibMember::FORM_FILL_UP_LIST,
+                "proprietorship" => NascibMember::PROPRIETORSHIP_LIST,
+                "trade_license_authority" => NascibMember::TRADE_LICENSING_AUTHORITY,
+                "sector" => NascibMember::SECTOR,
+                "registered_authority" => NascibMember::REGISTERED_AUTHORITY,
+                "authorized_authority" => NascibMember::AUTHORIZED_AUTHORITY,
+                "specialized_area" => NascibMember::SPECIALIZED_AREA,
+                "import_or_export_type" => NascibMember::IMPORT_EXPORT_TYPE,
+                "worker_type" => NascibMember::WORKER_TYPE,
+                "manpower_type" => NascibMember::MANPOWER_TYPE,
+                "bank_account_type" => NascibMember::BANK_ACCOUNT_TYPE,
+                "land_type" => NascibMember::LAND_TYPE,
+                "business_type" => NascibMember::BUSINESS_TYPE
             ],
             '_response_status' => [
                 "success" => true,
@@ -78,28 +78,25 @@ class NascibMemberController extends Controller
         $organizationMember = app(NascibMember::class);
         /** @var Organization $organization */
         $organization = app(Organization::class);
-        $organization = $organization->firstOrFail();
-        return $organization->industryAssociations;
-        //$this->authorize('create', $organizationMember);
+
         $validated = $this->nascibMemberService->validator($request)->validate();
         DB::beginTransaction();
         try {
-            $organizationMember = $this->nascibMemberService->registerNascib($organization, $organizationMember, $validated);
-
-            $validated['organization_id'] = $organizationMember->organization_id;
+            [$organization, $nascibMemberData] = $this->nascibMemberService->registerNascib($organization, $organizationMember, $validated);
+            $validated['organization_id'] = $organization->id;
             $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
 
-            $createdRegisterUser = $this->nascibMemberService->createNascibUser($validated); //TODO: IDP user is not created
+            $createdRegisterUser = $this->nascibMemberService->createNascibUser($validated);
 
-            Log::info('Nascib id_user_info:' . json_encode($createdRegisterUser));
+            Log::info('nascib_id_user_info:' . json_encode($createdRegisterUser));
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
             }
 
             $response = [
-                'data' => app(OrganizationService::class)->getOneOrganization($validated['organization_id']),
+                'data' => $organization,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,

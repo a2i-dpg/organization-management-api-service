@@ -18,7 +18,7 @@ class CreateNascibMembersTable extends Migration
             $table->unsignedInteger('form_fill_up_by')
                 ->comment('1 -> FORM_FILL_UP_BY_OWN, 2 -> FORM_FILL_UP_BY_UDC_ENTREPRENEUR, 3 -> FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION, 4-> FORM_FILL_UP_BY_SME_CLUSTER');
             /** Industry information */
-            $table->unsignedMediumInteger('organization_id')->nullable();
+            $table->unsignedMediumInteger('industry_association_organization_id')->nullable();
             $table->string('application_tracking_no', 191)->nullable();
             $table->string('trade_license_no', 191);
             /** Common attributes between industry and nascib */

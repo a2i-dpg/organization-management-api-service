@@ -63,9 +63,6 @@ class CreateOrganizationsTable extends Migration
 
             $table->string('logo', 500)->nullable();
             $table->string('domain', 250)->nullable();
-
-            $table->string('additional_info_model_name')->nullable();
-
             $table->unsignedTinyInteger('row_status')
                 ->default(2)
                 ->comment('0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected');
