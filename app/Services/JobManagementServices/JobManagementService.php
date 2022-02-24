@@ -225,15 +225,31 @@ class JobManagementService
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
+
+            //TODO: check if the below commented part working with Public domain
+//            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+//                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+//                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
+//                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page',PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE);
+//            });
         }
 
         if ($isIndustryAssociationMemberJobs) {
-            $jobInformationBuilder->join('industry_association_organization', function ($join) {
+            $jobInformationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
                 $join->on('primary_job_information.organization_id', '=', 'industry_association_organization.organization_id')
-                    ->where('industry_association_organization.industry_association_id', request('industry_association_id'))
+                    ->where('industry_association_organization.industry_association_id', $industryAssociationId)
                     ->where('industry_association_organization.row_status', '=', BaseModel::ROW_STATUS_ACTIVE)
                     ->whereNull('primary_job_information.industry_association_id');
             });
+
+            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId);
+            });
+
+            $jobInformationBuilder->addSelect('industry_association_member_landing_page_jobs.show_in_landing_page');
+
+
         }
 
 
@@ -1827,20 +1843,20 @@ class JobManagementService
     /**
      * @param array $data
      * @param $industryAssociationId
+     * @return mixed
      */
-    public function showInLandingPageStatusChange(array $data, $industryAssociationId)
+    public function showInLandingPageStatusChange(array $data, $industryAssociationId): mixed
     {
-        if ($data['show_in_landing_page'] == PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE) {
-            $industryAssociationMemberJob = app(IndustryAssociationMemberLandingPageJob::class);
-            $industryAssociationMemberJob->industry_association_id = $industryAssociationId;
-            $industryAssociationMemberJob->organization_id = $data['organization_id'];
-            $industryAssociationMemberJob->job_id = $data['job_id'];
-            $industryAssociationMemberJob->save();
-        } else {
-            IndustryAssociationMemberLandingPageJob::where('industry_association_id', $industryAssociationId)
-                ->where('job_id', $data['job_id'])
-                ->delete();
-        }
+
+        return IndustryAssociationMemberLandingPageJob::updateOrCreate([
+            'industry_association_id' => $industryAssociationId,
+            'job_id' => $data['job_id']
+
+        ],
+            [
+                'organization_id' => $data['organization_id'],
+                'show_in_landing_page' => $data['show_in_landing_page']
+            ]);
 
     }
 
