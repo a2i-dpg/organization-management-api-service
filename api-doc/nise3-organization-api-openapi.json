@@ -11579,7 +11579,7 @@
                 "description": "API endpoint to Get Industry Association Member Jobs. A successful request response will show 201 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/job_title_optional"
+                        "$ref": "#/components/parameters/searchText"
                     },
                     {
                         "$ref": "#/components/parameters/occupation_ids"
@@ -11598,9 +11598,6 @@
                     },
                     {
                         "$ref": "#/components/parameters/type"
-                    },
-                    {
-                        "$ref": "#/components/parameters/job_title_en_optional"
                     },
                     {
                         "$ref": "#/components/parameters/page_size"
@@ -16276,7 +16273,10 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "description": "Send occupation_ids as comma seperated string.example 1,2,3 "
             },
