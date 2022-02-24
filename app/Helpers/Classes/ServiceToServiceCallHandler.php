@@ -67,8 +67,6 @@ class ServiceToServiceCallHandler
             })
             ->json('data');
 
-        Log::info("Institute Data:" . json_encode($instituteData));
-
         return $instituteData;
     }
 
@@ -97,8 +95,6 @@ class ServiceToServiceCallHandler
             })
             ->json('data');
 
-        Log::info("Youth Data:" . json_encode($youthData));
-
         return $youthData;
     }
 
@@ -122,8 +118,6 @@ class ServiceToServiceCallHandler
                 throw new HttpErrorException($httpResponse);
             })
             ->json('data');
-
-        Log::info("Event Data:" . json_encode($responseData));
 
         return $responseData;
     }
@@ -150,8 +144,6 @@ class ServiceToServiceCallHandler
             })
             ->json('data');
 
-        Log::info("permission-sub-group:" . json_encode($permissionSubGroup));
-
         return $permissionSubGroup;
     }
 
@@ -177,8 +169,6 @@ class ServiceToServiceCallHandler
             })
             ->json('data');
 
-        Log::info("UserDetails:" . json_encode($user));
-
         return $user;
     }
 
@@ -203,8 +193,6 @@ class ServiceToServiceCallHandler
                 throw new HttpErrorException($httpResponse);
             })
             ->json('data');
-
-        Log::info("UserDetails:" . json_encode($user));
 
         return $user;
     }
