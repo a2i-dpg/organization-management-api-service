@@ -208,6 +208,28 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
 
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function showInLandingPageStatusChange(Request $request): JsonResponse
+    {
+        $industryAssociationId = $request->input('industry_association_id');
+        $filter = $this->jobManagementService->showInLandingPageValidator($request, $industryAssociationId)->validate();
+        $this->jobManagementService->showInLandingPageStatusChange($filter, $industryAssociationId);
+
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            'message' => 'Show in landing page status changed successfully',
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -482,13 +504,13 @@ class JobManagementController extends Controller
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $removedApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
-        if($removedApplication){
-            $success =true;
-            $message ="Candidate removed successfully";
+        if ($removedApplication) {
+            $success = true;
+            $message = "Candidate removed successfully";
             $code = ResponseAlias::HTTP_OK;
-        }else{
-            $success =false;
-            $message ="Candidate can not be removed ";
+        } else {
+            $success = false;
+            $message = "Candidate can not be removed ";
             $code = ResponseAlias::HTTP_BAD_REQUEST;
         }
         $response = [

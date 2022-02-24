@@ -10,6 +10,7 @@ use App\Models\BaseModel;
 use App\Models\CandidateInterview;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
+use App\Models\IndustryAssociationMemberLandingPageJob;
 use App\Models\InterviewSchedule;
 use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
@@ -132,7 +133,7 @@ class JobManagementService
             'primary_job_information.row_status'
         ]);
 
-        if (!$isRequestFromClientSide && !$isIndustryAssociationMemberJobs ){
+        if (!$isRequestFromClientSide && !$isIndustryAssociationMemberJobs) {
             $jobInformationBuilder->acl();
         }
 
@@ -226,11 +227,11 @@ class JobManagementService
             $jobInformationBuilder->active();
         }
 
-        if($isIndustryAssociationMemberJobs){
+        if ($isIndustryAssociationMemberJobs) {
             $jobInformationBuilder->join('industry_association_organization', function ($join) {
                 $join->on('primary_job_information.organization_id', '=', 'industry_association_organization.organization_id')
-                    ->where('industry_association_organization.industry_association_id',request('industry_association_id'))
-                    ->where('industry_association_organization.row_status','=',BaseModel::ROW_STATUS_ACTIVE)
+                    ->where('industry_association_organization.industry_association_id', request('industry_association_id'))
+                    ->where('industry_association_organization.row_status', '=', BaseModel::ROW_STATUS_ACTIVE)
                     ->whereNull('primary_job_information.industry_association_id');
             });
         }
@@ -1019,7 +1020,7 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-        $resultData = array_values($resultArray['data'] ??  $resultArray);
+        $resultData = array_values($resultArray['data'] ?? $resultArray);
         foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
@@ -1739,6 +1740,58 @@ class JobManagementService
         $subject = "Job Offer letter";
         $message = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
         $this->sendCandidateInviteEmail($youth, $subject, $message);
+    }
+
+
+    /**
+     * @param array $data
+     * @param $industryAssociationId
+     */
+    public function showInLandingPageStatusChange(array $data, $industryAssociationId)
+    {
+        if ($data['show_in_landing_page'] == PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE) {
+            $industryAssociationMemberJob = app(IndustryAssociationMemberLandingPageJob::class);
+            $industryAssociationMemberJob->industry_association_id = $industryAssociationId;
+            $industryAssociationMemberJob->organization_id = $data['organization_id'];
+            $industryAssociationMemberJob->job_id = $data['job_id'];
+            $industryAssociationMemberJob->save();
+        } else {
+            IndustryAssociationMemberLandingPageJob::where('industry_association_id', $industryAssociationId)
+                ->where('job_id', $data['job_id'])
+                ->delete();
+        }
+
+    }
+
+
+    /**
+     * @param Request $request
+     * @param $industryAssociationId
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function showInLandingPageValidator(Request $request, $industryAssociationId): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            "job_id" => [
+                "required",
+                "exists:primary_job_information,job_id,deleted_at,NULL",
+            ],
+            'organization_id' => [
+                "required",
+                "exists:organizations,id,deleted_at,NULL",
+                Rule::exists('industry_association_organization', 'organization_id')
+                    ->where(function ($query) use ($industryAssociationId) {
+                        $query->where('industry_association_id', $industryAssociationId);
+                        $query->where('row_status', BaseModel::ROW_STATUS_ACTIVE);
+                    })
+            ],
+            'show_in_landing_page' => [
+                'required',
+                'integer',
+                Rule::in(PrimaryJobInformation::SHOW_IN_LANDING_PAGE)
+            ]
+        ];
+        return Validator::make($request->all(), $rules);
     }
 
 

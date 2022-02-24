@@ -58,6 +58,13 @@ class PrimaryJobInformation extends BaseModel
     public const IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_KEY = 'is_industry_association_member_jobs';
     public const IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_FLAG = true;
 
+    public const SHOW_IN_LANDING_PAGE_TRUE = 1;
+    public const SHOW_IN_LANDING_PAGE_FALSE = 0;
+
+    public const SHOW_IN_LANDING_PAGE = [
+        self::SHOW_IN_LANDING_PAGE_TRUE,
+        self::SHOW_IN_LANDING_PAGE_FALSE
+    ];
 
     public const JOB_FILTER_TYPES = [
         self::JOB_FILTER_TYPE_POPULAR,
