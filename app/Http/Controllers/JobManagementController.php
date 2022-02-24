@@ -392,6 +392,28 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+//    /**
+//     * @param Request $request
+//     * @return JsonResponse
+//     * @throws ValidationException|Throwable
+//     */
+//    public function respondToJob(Request $request): JsonResponse
+//    {
+//        $validatedData = $this->jobManagementService->respondJobValidator($request)->validate();
+//        $respondData = $this->jobManagementService->updateAppliedJobRespond($validatedData);
+//
+//        $response = [
+//            "data" => $respondData,
+//            '_response_status' => [
+//                "success" => true,
+//                "code" => ResponseAlias::HTTP_OK,
+//                "message" => "Job apply successful",
+//                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+//            ]
+//        ];
+//        return Response::json($response, ResponseAlias::HTTP_OK);
+//    }
+
     /**
      * @param Request $request
      * @return JsonResponse

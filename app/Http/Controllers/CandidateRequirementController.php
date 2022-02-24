@@ -60,7 +60,6 @@ class CandidateRequirementController extends Controller
         DB::beginTransaction();
         try {
             $candidateRequirements = $this->candidateRequirementsService->store($validatedData);
-            Log::info("------>", $candidateRequirements->toArray());
             $this->candidateRequirementsService->syncWithDegrees($candidateRequirements, $degrees);
             $this->candidateRequirementsService->syncWithPreferredEducationalInstitution($candidateRequirements, $preferredEducationalInstitution);
             $this->candidateRequirementsService->syncWithTraining($candidateRequirements, $training);
