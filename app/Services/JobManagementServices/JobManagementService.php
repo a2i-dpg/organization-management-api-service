@@ -1009,16 +1009,16 @@ class JobManagementService
             if (empty($stepId)) {
                 $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', 0);
             } else {
-                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId)
-                    ->orwhere(function ($query) use ($jobId) {
-                        $query->where('applied_jobs.job_id', $jobId)
-                            ->whereIn('applied_jobs.apply_status', [
-                                AppliedJob::APPLY_STATUS['Hire_invited'],
-                                AppliedJob::APPLY_STATUS['Hiring_Listed'],
-                                AppliedJob::APPLY_STATUS['Hired']
-                            ]);
-                    });
+                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId);
             }
+            $appliedJobBuilder->orwhere(function ($query) use ($jobId) {
+                $query->where('applied_jobs.job_id', $jobId)
+                    ->whereIn('applied_jobs.apply_status', [
+                        AppliedJob::APPLY_STATUS['Hire_invited'],
+                        AppliedJob::APPLY_STATUS['Hiring_Listed'],
+                        AppliedJob::APPLY_STATUS['Hired']
+                    ]);
+            });
         } else if ($type == AppliedJob::TYPE_SHORTLISTED) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Shortlisted']);
 
