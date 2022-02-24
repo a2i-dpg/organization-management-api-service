@@ -175,13 +175,6 @@ class PrimaryJobInformationService
                 "required",
                 "exists:job_sectors,id,deleted_at,NULL"
             ],
-            "organization_id" => [
-                Rule::requiredIf(function () use ($authUser) {
-                    return $authUser->isOrganizationUser();
-                }),
-                "nullable",
-                "exists:organizations,id,deleted_at,NULL"
-            ],
             "institute_id" => [
                 Rule::requiredIf(function () use ($authUser) {
                     return $authUser->isInstituteUser();
@@ -232,7 +225,7 @@ class PrimaryJobInformationService
                 "required",
                 Rule::in(PrimaryJobInformation::BOOLEAN_FLAG)
             ],
-            "is_prefer_video_resume" => [        // TODO :will work this field in future
+            "is_prefer_video_resume" => [        // TODO :will work with this field in future
 //                Rule::requiredIf(function () use ($request) {
 //                    return $request->resume_receiving_option == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1];
 //                }),
@@ -241,10 +234,31 @@ class PrimaryJobInformationService
             ]
         ];
 
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == 1) {
+        if ($authUser->isIndustryAssociationUser() && !empty($requestData['organization_id'])) {
+            $industryAssociationId = request('industry_association_id');
+            $rules["organization_id"] = [
+                "required",
+                "exists:organizations,id,deleted_at,NULL",
+                Rule::exists('industry_association_organization', 'organization_id')
+                    ->where(function ($query) use ($industryAssociationId) {
+                        $query->where('industry_association_id', $industryAssociationId);
+                        $query->where('row_status', BaseModel::ROW_STATUS_ACTIVE);
+                    })
+            ];
+        } else {
+            $rules["organization_id"] = [
+                Rule::requiredIf(function () use ($authUser) {
+                    return $authUser->isOrganizationUser();
+                }),
+                "nullable",
+                "exists:organizations,id,deleted_at,NULL"
+            ];
+        }
+
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1]) {
             $rules["email"] = [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->offsetGet('resume_receiving_option') == 1;
+                    return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[1];
                 }),
                 "email"
             ];
@@ -252,10 +266,10 @@ class PrimaryJobInformationService
                 "nullable"
             ];
         }
-        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == 2) {
+        if (!empty($requestData['resume_receiving_option']) && $requestData['resume_receiving_option'] == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2]) {
             $rules["instruction_for_hard_copy"] = [
                 Rule::requiredIf(function () use ($request) {
-                    return $request->offsetGet('resume_receiving_option') == 2;
+                    return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[2];
                 })
             ];
             $rules["instruction_for_hard_copy_en"] = [
@@ -266,7 +280,7 @@ class PrimaryJobInformationService
             {
                 $rules["instruction_for_walk_in_interview"] = [
                     Rule::requiredIf(function () use ($request) {
-                        return $request->offsetGet('resume_receiving_option') == 3;
+                        return $request->offsetGet('resume_receiving_option') == PrimaryJobInformation::RESUME_RECEIVING_OPTION[3];
                     })
                 ];
                 $rules["instruction_for_walk_in_interview_en"] = [
