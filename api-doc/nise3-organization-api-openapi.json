@@ -15985,7 +15985,8 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "integer",
+                    "enum": [1,2,3]
                 },
                 "description": "  1 => \"Entry\",\n        2 => \"Mid\",\n        3 => \"Top\""
             },
@@ -16255,7 +16256,10 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "description": "Send skillIds as comma seperated string. example: 1,2,3"
             },
@@ -16527,7 +16531,10 @@
                 "in": "query",
                 "required": false,
                 "schema": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+
+                    }
                 },
                 "description": "Send job_sector_ids as comma seperated string.example:1,2,3"
             }
