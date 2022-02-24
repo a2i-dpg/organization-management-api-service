@@ -176,6 +176,38 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getIndustryAssociationMembersJobList(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', JobManagement::class);
+        $filter = $this->jobManagementService->jobListFilterValidator($request)->validate();
+        $filter[PrimaryJobInformation::IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_KEY] = PrimaryJobInformation::IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_FLAG;
+        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
     /**
      * @param Request $request
      * @return JsonResponse

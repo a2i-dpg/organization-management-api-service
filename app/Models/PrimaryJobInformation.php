@@ -55,6 +55,10 @@ class PrimaryJobInformation extends BaseModel
     public const JOB_FILTER_TYPE_RECENT = 'recent';
 
 
+    public const IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_KEY = 'is_industry_association_member_jobs';
+    public const IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_FLAG = true;
+
+
     public const JOB_FILTER_TYPES = [
         self::JOB_FILTER_TYPE_POPULAR,
         self::JOB_FILTER_TYPE_RECENT,
