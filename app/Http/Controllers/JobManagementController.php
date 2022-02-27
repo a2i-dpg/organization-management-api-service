@@ -176,6 +176,60 @@ class JobManagementController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function getIndustryAssociationMembersJobList(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', JobManagement::class);
+        $filter = $this->jobManagementService->jobListFilterValidator($request)->validate();
+        $filter[PrimaryJobInformation::IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_KEY] = PrimaryJobInformation::IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_FLAG;
+        $returnedData = $this->jobManagementService->getJobList($filter, $this->startTime);
+
+        $response = [
+            'order' => $returnedData['order'],
+            'data' => $returnedData['data'],
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                'query_time' => $returnedData['query_time']
+            ]
+        ];
+        if (isset($returnedData['total_page'])) {
+            $response['total'] = $returnedData['total'];
+            $response['current_page'] = $returnedData['current_page'];
+            $response['total_page'] = $returnedData['total_page'];
+            $response['page_size'] = $returnedData['page_size'];
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
+
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function showInLandingPageStatusChange(Request $request): JsonResponse
+    {
+        $industryAssociationId = $request->input('industry_association_id');
+        $filter = $this->jobManagementService->showInLandingPageValidator($request, $industryAssociationId)->validate();
+        $this->jobManagementService->showInLandingPageStatusChange($filter, $industryAssociationId);
+
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => ResponseAlias::HTTP_OK,
+            'message' => 'Show in landing page status changed successfully',
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -472,13 +526,13 @@ class JobManagementController extends Controller
         $appliedJob = AppliedJob::findOrFail($applicationId);
 
         $removedApplication = $this->jobManagementService->removeCandidateToPreviousStep($appliedJob);
-        if($removedApplication){
-            $success =true;
-            $message ="Candidate removed successfully";
+        if ($removedApplication) {
+            $success = true;
+            $message = "Candidate removed successfully";
             $code = ResponseAlias::HTTP_OK;
-        }else{
-            $success =false;
-            $message ="Candidate can not be removed ";
+        } else {
+            $success = false;
+            $message = "Candidate can not be removed ";
             $code = ResponseAlias::HTTP_BAD_REQUEST;
         }
         $response = [

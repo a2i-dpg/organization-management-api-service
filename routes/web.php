@@ -94,13 +94,14 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** job management routes */
         $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
             $router->get('/', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
-
+            $router->get('industry-association-member-jobs', ["as" => "industry-association-members-job-list", "uses" => "JobManagementController@getIndustryAssociationMembersJobList"]);
             $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
             $router->get("job-location", ["as" => "job-location", "uses" => "AdditionalJobInfoController@jobLocation"]);
 
             $router->get('job-preview/{jobId}', ["as" => "job-preview", "uses" => "JobManagementController@jobPreview"]);
             $router->get('other-benefits', ["as" => "other_benefits", "uses" => "JobManagementController@getOtherBenefits"]);
             $router->post("status-change/{jobId}", ["as" => "jobs.status-change", "uses" => "PrimaryJobInfoController@jobStatusChange"]);
+            $router->post("show-in-landing-page-status-change", ["as" => "jobs.show-in-landing-page-status-change", "uses" => "JobManagementController@showInLandingPageStatusChange"]);
 
             $router->post("primary-job-information", ["as" => "store-primary-job-information", "uses" => "PrimaryJobInfoController@storePrimaryJobInformation"]);
             $router->get("primary-job-information/{jobId}", ["as" => "get-primary-job-information", "uses" => "PrimaryJobInfoController@getPrimaryJobInformation"]);
