@@ -290,7 +290,7 @@ class JobManagementService
 
             $jobInformationBuilder->leftJoin('candidate_interviews', function ($join) {
                 $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id')
-                    ->on('applied_jobs.current_recruitment_step_id', 'candidate_interviews.recruitment_step_id');
+                    ->on('applied_jobs.current_recruitment_step_id', '=', 'candidate_interviews.recruitment_step_id');
             });
 
             $jobInformationBuilder->leftJoin('interview_schedules', function ($join) {
