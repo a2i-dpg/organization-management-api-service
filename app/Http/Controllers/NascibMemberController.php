@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use App\Models\MembershipType;
 use App\Models\Organization;
 use App\Models\NascibMember;
 use App\Services\NascibMemberService;
@@ -47,6 +48,7 @@ class NascibMemberController extends Controller
 
     public function nascibMemberStaticInfo(): JsonResponse
     {
+        $membershipType = MembershipType::all();
         $response = [
             'data' => [
                 "form_fill_up_by" => NascibMember::FORM_FILL_UP_LIST,
@@ -61,7 +63,8 @@ class NascibMemberController extends Controller
                 "manpower_type" => NascibMember::MANPOWER_TYPE,
                 "bank_account_type" => NascibMember::BANK_ACCOUNT_TYPE,
                 "land_type" => NascibMember::LAND_TYPE,
-                "business_type" => NascibMember::BUSINESS_TYPE
+                "business_type" => NascibMember::BUSINESS_TYPE,
+                "membership_types" => $membershipType->toArray()
             ],
             '_response_status' => [
                 "success" => true,
