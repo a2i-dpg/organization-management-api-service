@@ -8242,6 +8242,42 @@
                 }
             }
         },
+        "/jobs/show-in-landing-page-status-change": {
+            "post": {
+                "tags": [
+                    "Job Management"
+                ],
+                "summary": "Show in landing page status change",
+                "description": "API endpoint to Show in landing page status change. A successful request response will show 201 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/showInLandingPageStatusChange"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Show in landing page status changed successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
         "/jobs/primary-job-information": {
             "post": {
                 "tags": [
@@ -13058,6 +13094,30 @@
     },
     "components": {
         "schemas": {
+            "showInLandingPageStatusChange": {
+                "type": "object",
+                "description": "Show in landing page status change",
+                "properties": {
+                    "job_id": {
+                        "type": "string",
+                        "description": "Must exist in primary_job_information table"
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "description": "Must exist in organizations table"
+                    },
+                    "show_in_landing_page": {
+                        "type": "integer",
+                        "enum": [1,0],
+                        "description": "1=> True 0=> False"
+                    }
+                },
+                "required": [
+                    "job_id",
+                    "organization_id",
+                    "show_in_landing_page"
+                ]
+            },
             "NascibMemberRegister": {
                 "type": "object",
                 "description": "Register a nascib member",
