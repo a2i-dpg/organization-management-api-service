@@ -258,7 +258,7 @@ class NascibMemberService
             'title' => 'required|string|max:500',
             'title_en' => 'nullable|string|max:191',
             'address' => 'required|string|max:1200',
-            'address_en' => 'required|string|max:600',
+            'address_en' => 'nullable|string|max:600',
             'loc_division_id' => [
                 'required',
                 'integer',
