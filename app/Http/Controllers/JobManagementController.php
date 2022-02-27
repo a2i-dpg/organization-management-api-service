@@ -218,7 +218,7 @@ class JobManagementController extends Controller
     {
         $industryAssociationId = $request->input('industry_association_id');
         $filter = $this->jobManagementService->showInLandingPageValidator($request, $industryAssociationId)->validate();
-        $response = $this->jobManagementService->showInLandingPageStatusChange($filter, $industryAssociationId);
+        $this->jobManagementService->showInLandingPageStatusChange($filter, $industryAssociationId);
 
         $response['_response_status'] = [
             "success" => true,

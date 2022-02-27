@@ -226,12 +226,12 @@ class JobManagementService
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
 
-            //TODO: check if the below commented part working with Public domain
-//            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
-//                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
-//                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
-//                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page',PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE);
-//            });
+            //TODO: check if the below part working with Public domain
+            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page',PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE);
+            });
         }
 
         if ($isIndustryAssociationMemberJobs) {
