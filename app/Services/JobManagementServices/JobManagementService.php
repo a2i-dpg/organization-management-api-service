@@ -116,6 +116,10 @@ class JobManagementService
             'primary_job_information.archived_at',
             'primary_job_information.is_apply_online',
 
+            'interview_schedules.interview_address',
+            'interview_schedules.interview_scheduled_at',
+            'candidate_interviews.confirmation_status',
+
             'candidate_requirements.minimum_year_of_experience',
             'candidate_requirements.maximum_year_of_experience',
 
@@ -142,7 +146,18 @@ class JobManagementService
         }
 
         if (is_numeric($industryAssociationId) && $isRequestFromClientSide) {
-            $jobInformationBuilder->where('primary_job_information.industry_association_id', $industryAssociationId);
+            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page', PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE)
+                    ->whereNull('primary_job_information.industry_association_id');
+            });
+
+            $jobInformationBuilder->where(function ($jobInformationBuilder) use ($industryAssociationId) {
+                $jobInformationBuilder->orwhere('primary_job_information.industry_association_id', $industryAssociationId);
+                $jobInformationBuilder->orwhere('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId);
+            });
+
         }
 
         if (is_numeric($instituteId)) {
@@ -225,13 +240,6 @@ class JobManagementService
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
-
-            //TODO: check if the below part working with Public domain
-            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
-                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
-                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
-                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page',PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE);
-            });
         }
 
         if ($isIndustryAssociationMemberJobs) {
@@ -279,6 +287,12 @@ class JobManagementService
 
         if (!empty($youthOnly) && !empty($youthId)) {
             $jobInformationBuilder->where("applied_jobs.youth_id", $youthId);
+            $jobInformationBuilder->join('candidate_interviews', function ($join) {
+                $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id');
+            });
+            $jobInformationBuilder->join('interview_schedules', function ($join) {
+                $join->on('candidate_interviews.interview_schedule_id', '=', 'interview_schedules.id');
+            });
         }
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -1180,7 +1194,7 @@ class JobManagementService
 
             if ($recruitmentStep->step_type != RecruitmentStep::STEP_TYPE_SHORTLIST) {
                 $recruitmentStep['interview_scheduled'] = $this->countStepInterviewScheduledCandidate($jobId, $recruitmentStep->id);
-                $recruitmentStep['interview_not_invited'] = $this-> countStepInterviewNotInvitedCandidate($jobId, $recruitmentStep->id);
+                $recruitmentStep['interview_not_invited'] = $this->countStepInterviewNotInvitedCandidate($jobId, $recruitmentStep->id);
                 $recruitmentStep['interview_invited'] = $this->countStepInterviewInvitedCandidate($jobId, $recruitmentStep->id);
                 $recruitmentStep['interviewed'] = $this->countStepInterviewedCandidate($jobId, $recruitmentStep->id);
                 $recruitmentStep['rejected'] = $this->countStepRejectedCandidate($jobId, $recruitmentStep->id);
