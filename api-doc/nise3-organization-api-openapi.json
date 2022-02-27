@@ -8263,11 +8263,6 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "industry_association_id": 1,
-                                    "job_id": "3",
-                                    "organization_id": "1",
-                                    "show_in_landing_page": "1",
-                                    "id": 1,
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
