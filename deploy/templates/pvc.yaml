@@ -5,9 +5,9 @@ metadata:
   labels:
     app: "{{ .Chart.Name }}"
 spec:
-  storageClassName: nfs
+  storageClassName: nfs-client
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 500Mi
+      storage: 1Gi
