@@ -554,7 +554,7 @@ class NascibMemberService
         ];
 
         /** other Authority */
-        if (array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'))) {
+        if (!empty($request->get('authorized_authority')) && is_array($request->get('authorized_authority')) && array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'))) {
             $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'authority_name'] = [
                 "required",
                 "string"

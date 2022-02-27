@@ -73,7 +73,7 @@ class NascibMemberController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    public function openRegistration(Request $request)
+    public function openRegistration(Request $request): JsonResponse
     {
         $organizationMember = app(NascibMember::class);
         /** @var Organization $organization */
