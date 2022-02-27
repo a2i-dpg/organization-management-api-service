@@ -283,5 +283,23 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('organization-unit-types-restore{id}', ['as' => 'organization-unit-types.restore', 'uses' => 'OrganizationUnitTypeController@restore']);
     $router->delete('organization-unit-types-force-delete/{id}', ['as' => 'organization-unit-types.force-delete', 'uses' => 'OrganizationUnitTypeController@forceDelete']);
 
+    $router->group(['prefix' => 'payment', 'as' => 'payment'], function () use ($router) {
 
+        $router->post("nascib-member-ship-pay-via-ssl/payNow/{customerIdentityKey}", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+        $router->post("nascib-member-ship-pay-via-ssl/success}", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@success"]);
+        $router->post("nascib-member-ship-pay-via-ssl/fail}", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+        $router->post("nascib-member-ship-pay-via-ssl/cancel", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+        $router->post("nascib-member-ship-pay-via-ssl/ipn", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+
+    });
+
+});
+
+
+$router->get("jwt", function (\Illuminate\Http\Request $request) {
+    $payload = [
+        "purpose" => "NEW_APPLICATION",
+        "purpose_related_id" => "40",
+    ];
+    return \App\Services\CommonServices\CodeGenerateService::jwtToken($payload);
 });
