@@ -10,6 +10,7 @@ use App\Models\BaseModel;
 use App\Models\CandidateInterview;
 use App\Models\CandidateRequirement;
 use App\Models\CompanyInfoVisibility;
+use App\Models\IndustryAssociationMemberLandingPageJob;
 use App\Models\InterviewSchedule;
 use App\Models\JobContactInformation;
 use App\Models\MatchingCriteria;
@@ -95,6 +96,7 @@ class JobManagementService
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
         $isRequestFromClientSide = !empty($request[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY]);
+        $isIndustryAssociationMemberJobs = !empty($request[PrimaryJobInformation::IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_KEY]);
 
         /** @var Builder $jobInformationBuilder */
         $jobInformationBuilder = PrimaryJobInformation::select([
@@ -131,7 +133,7 @@ class JobManagementService
             'primary_job_information.row_status'
         ]);
 
-        if (!$isRequestFromClientSide) {
+        if (!$isRequestFromClientSide && !$isIndustryAssociationMemberJobs) {
             $jobInformationBuilder->acl();
         }
 
@@ -139,7 +141,7 @@ class JobManagementService
             $jobInformationBuilder->orderBy('primary_job_information.id', $order);
         }
 
-        if (is_numeric($industryAssociationId)) {
+        if (is_numeric($industryAssociationId) && $isRequestFromClientSide) {
             $jobInformationBuilder->where('primary_job_information.industry_association_id', $industryAssociationId);
         }
 
@@ -223,7 +225,33 @@ class JobManagementService
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
+
+            //TODO: check if the below part working with Public domain
+            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page',PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE);
+            });
         }
+
+        if ($isIndustryAssociationMemberJobs) {
+            $jobInformationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.organization_id', '=', 'industry_association_organization.organization_id')
+                    ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_organization.row_status', '=', BaseModel::ROW_STATUS_ACTIVE)
+                    ->whereNull('primary_job_information.industry_association_id');
+            });
+
+            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId);
+            });
+
+            $jobInformationBuilder->addSelect('industry_association_member_landing_page_jobs.show_in_landing_page');
+
+
+        }
+
 
         $jobInformationBuilder->with('additionalJobInformation');
         $jobInformationBuilder->with('additionalJobInformation.jobLocations');
@@ -452,11 +480,11 @@ class JobManagementService
     {
         $jobId = $data['job_id'];
         $youthId = intval($data['youth_id']);
-        $appliedJob = AppliedJob::where('job_id', $jobId)->where('youth_id', $youthId);
+        $appliedJob = AppliedJob::where('job_id', $jobId)->where('youth_id', $youthId)->firstOrFail();
         $candidateInterview = CandidateInterview::where('applied_job_id', $appliedJob->id)->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)->firstOrFail();
         $candidateInterview->confirmation_status = $data['confirmation_status'];
         $candidateInterview->save();
-        return $candidateInterview;
+        return $candidateInterview->toArray();
     }
 
     /**
@@ -978,6 +1006,9 @@ class JobManagementService
         } elseif ($type == AppliedJob::TYPE_VIEWED) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hire_invited'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hired'])
                     ->whereNotNull('applied_jobs.profile_viewed_at')
                     ->whereNull('applied_jobs.current_recruitment_step_id');
 
@@ -987,6 +1018,9 @@ class JobManagementService
         } elseif ($type == AppliedJob::TYPE_NOT_VIEWED) {
             $appliedJobBuilder->where(function ($query) {
                 $query->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Rejected'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hire_invited'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hiring_Listed'])
+                    ->where('applied_jobs.apply_status', '!=', AppliedJob::APPLY_STATUS['Hired'])
                     ->whereNull('applied_jobs.profile_viewed_at')
                     ->whereNull('applied_jobs.current_recruitment_step_id');
 
@@ -1003,13 +1037,16 @@ class JobManagementService
             if (empty($stepId)) {
                 $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', 0);
             } else {
-                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId)
-                    ->orwhereIn('applied_jobs.apply_status', [
-                        AppliedJob::APPLY_STATUS['Hiring_Listed'],
+                $appliedJobBuilder->where('applied_jobs.current_recruitment_step_id', '>', $stepId);
+            }
+            $appliedJobBuilder->orwhere(function ($query) use ($jobId) {
+                $query->where('applied_jobs.job_id', $jobId)
+                    ->whereIn('applied_jobs.apply_status', [
                         AppliedJob::APPLY_STATUS['Hire_invited'],
+                        AppliedJob::APPLY_STATUS['Hiring_Listed'],
                         AppliedJob::APPLY_STATUS['Hired']
                     ]);
-            }
+            });
         } else if ($type == AppliedJob::TYPE_SHORTLISTED) {
             $appliedJobBuilder->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS['Shortlisted']);
 
@@ -1059,7 +1096,7 @@ class JobManagementService
 
         $matchingCriteria = $this->matchingCriteriaService->getMatchingCriteria($jobId)->toArray();
 
-        $resultData = array_values($resultArray['data'] ??  $resultArray);
+        $resultData = array_values($resultArray['data'] ?? $resultArray);
         foreach ($resultData as &$item) {
             $id = $item['youth_id'];
             $youthData = $indexedYouths[$id];
@@ -1822,6 +1859,58 @@ class JobManagementService
         $subject = "Job Offer letter";
         $message = "Congratulation, " . $youthName . " You have been admitted for the " . $job->job_title . " role.We are eager to have you as part of our team.We look forward to hearing your decision on our offer";
         $this->sendCandidateInviteEmail($youth, $subject, $message);
+    }
+
+
+    /**
+     * @param array $data
+     * @param $industryAssociationId
+     * @return mixed
+     */
+    public function showInLandingPageStatusChange(array $data, $industryAssociationId): mixed
+    {
+
+        return IndustryAssociationMemberLandingPageJob::updateOrCreate([
+            'industry_association_id' => $industryAssociationId,
+            'job_id' => $data['job_id']
+
+        ],
+            [
+                'organization_id' => $data['organization_id'],
+                'show_in_landing_page' => $data['show_in_landing_page']
+            ]);
+
+    }
+
+
+    /**
+     * @param Request $request
+     * @param $industryAssociationId
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function showInLandingPageValidator(Request $request, $industryAssociationId): \Illuminate\Contracts\Validation\Validator
+    {
+        $rules = [
+            "job_id" => [
+                "required",
+                "exists:primary_job_information,job_id,deleted_at,NULL",
+            ],
+            'organization_id' => [
+                "required",
+                "exists:organizations,id,deleted_at,NULL",
+                Rule::exists('industry_association_organization', 'organization_id')
+                    ->where(function ($query) use ($industryAssociationId) {
+                        $query->where('industry_association_id', $industryAssociationId);
+                        $query->where('row_status', BaseModel::ROW_STATUS_ACTIVE);
+                    })
+            ],
+            'show_in_landing_page' => [
+                'required',
+                'integer',
+                Rule::in(PrimaryJobInformation::SHOW_IN_LANDING_PAGE)
+            ]
+        ];
+        return Validator::make($request->all(), $rules);
     }
 
 
