@@ -116,6 +116,10 @@ class JobManagementService
             'primary_job_information.archived_at',
             'primary_job_information.is_apply_online',
 
+            'interview_schedules.interview_address',
+            'interview_schedules.interview_scheduled_at',
+            'candidate_interviews.confirmation_status',
+
             'candidate_requirements.minimum_year_of_experience',
             'candidate_requirements.maximum_year_of_experience',
 
@@ -283,6 +287,12 @@ class JobManagementService
 
         if (!empty($youthOnly) && !empty($youthId)) {
             $jobInformationBuilder->where("applied_jobs.youth_id", $youthId);
+            $jobInformationBuilder->join('candidate_interviews', function ($join) {
+                $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id');
+            });
+            $jobInformationBuilder->join('interview_schedules', function ($join) {
+                $join->on('candidate_interviews.interview_schedule_id', '=', 'interview_schedules.id');
+            });
         }
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
