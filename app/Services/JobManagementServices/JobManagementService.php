@@ -480,11 +480,11 @@ class JobManagementService
     {
         $jobId = $data['job_id'];
         $youthId = intval($data['youth_id']);
-        $appliedJob = AppliedJob::where('job_id', $jobId)->where('youth_id', $youthId);
+        $appliedJob = AppliedJob::where('job_id', $jobId)->where('youth_id', $youthId)->firstOrFail();
         $candidateInterview = CandidateInterview::where('applied_job_id', $appliedJob->id)->where('recruitment_step_id', $appliedJob->current_recruitment_step_id)->firstOrFail();
         $candidateInterview->confirmation_status = $data['confirmation_status'];
         $candidateInterview->save();
-        return $candidateInterview;
+        return $candidateInterview->toArray();
     }
 
     /**
