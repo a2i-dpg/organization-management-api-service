@@ -403,7 +403,9 @@ class JobManagementController extends Controller
         $respondData = $this->jobManagementService->updateAppliedJobRespond($validatedData);
 
         $response = [
-            "data" => $respondData,
+            "data" => [
+                'confirmation_status' => $respondData['confirmation_status']
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
