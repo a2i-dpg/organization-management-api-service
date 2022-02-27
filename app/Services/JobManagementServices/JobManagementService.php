@@ -95,6 +95,7 @@ class JobManagementService
         $order = $request['order'] ?? "ASC";
         $type = $request['type'] ?? "";
         $isRequestFromClientSide = !empty($request[BaseModel::IS_CLIENT_SITE_RESPONSE_KEY]);
+        $isIndustryAssociationMemberJobs = !empty($request[PrimaryJobInformation::IS_INDUSTRY_ASSOCIATION_MEMBER_JOBS_KEY]);
 
         /** @var Builder $jobInformationBuilder */
         $jobInformationBuilder = PrimaryJobInformation::select([
@@ -131,7 +132,7 @@ class JobManagementService
             'primary_job_information.row_status'
         ]);
 
-        if (!$isRequestFromClientSide) {
+        if (!$isRequestFromClientSide && !$isIndustryAssociationMemberJobs ){
             $jobInformationBuilder->acl();
         }
 
@@ -139,7 +140,7 @@ class JobManagementService
             $jobInformationBuilder->orderBy('primary_job_information.id', $order);
         }
 
-        if (is_numeric($industryAssociationId)) {
+        if (is_numeric($industryAssociationId) && $isRequestFromClientSide) {
             $jobInformationBuilder->where('primary_job_information.industry_association_id', $industryAssociationId);
         }
 
@@ -224,6 +225,16 @@ class JobManagementService
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
+
+        if($isIndustryAssociationMemberJobs){
+            $jobInformationBuilder->join('industry_association_organization', function ($join) {
+                $join->on('primary_job_information.organization_id', '=', 'industry_association_organization.organization_id')
+                    ->where('industry_association_organization.industry_association_id',request('industry_association_id'))
+                    ->where('industry_association_organization.row_status','=',BaseModel::ROW_STATUS_ACTIVE)
+                    ->whereNull('primary_job_information.industry_association_id');
+            });
+        }
+
 
         $jobInformationBuilder->with('additionalJobInformation');
         $jobInformationBuilder->with('additionalJobInformation.jobLocations');

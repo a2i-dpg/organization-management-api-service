@@ -94,7 +94,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /** job management routes */
         $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
             $router->get('/', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
-
+            $router->get('industry-association-member-jobs', ["as" => "industry-association-members-job-list", "uses" => "JobManagementController@getIndustryAssociationMembersJobList"]);
             $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
             $router->get("job-location", ["as" => "job-location", "uses" => "AdditionalJobInfoController@jobLocation"]);
 
