@@ -29,7 +29,7 @@ use PHPUnit\Util\Json;
  */
 class PaymentTransactionHistory extends BaseModel
 {
-    protected $guarded=BaseModel::COMMON_GUARDED_FIELDS_SIMPLE;
+    protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE;
 
     /** Payment Status */
     public const PAYMENT_SUCCESS = 1;
@@ -59,12 +59,22 @@ class PaymentTransactionHistory extends BaseModel
     ];
 
     /** Payment purpose code */
-    public const PAYMENT_PURPOSE_COURSE_ENROLLMENT_CODE = 1;
-    public const PAYMENT_PURPOSE_COURSE_ENROLLMENT_LABEL = "Course Enrollment";
+    public const PAYMENT_PURPOSE_NASCIB_MEMBER_REGISTRATION = 1;
+    public const PAYMENT_PURPOSE_ASCIB_MEMBER_REGISTRATION_LABEL = "Nascib Member Registration";
 
     public const PAYMENT_PURPOSES = [
-        self::PAYMENT_PURPOSE_COURSE_ENROLLMENT_CODE => self::PAYMENT_PURPOSE_COURSE_ENROLLMENT_LABEL
+        self::PAYMENT_PURPOSE_NASCIB_MEMBER_REGISTRATION => self::PAYMENT_PURPOSE_ASCIB_MEMBER_REGISTRATION_LABEL
     ];
+
+    public const SSL_COMMERZ_SHIPPING_METHOD_NO = 'NO';
+    public const SSL_COMMERZ_SHIPPING_METHOD_YES = 'YES';
+    public const SSL_COMMERZ_PRODUCT_PROFILE_GENERAL = 'general';
+    public const SSL_COMMERZ_PRODUCT_PROFILE_PHYSICAL_GOODS = 'physical-goods';
+    public const SSL_COMMERZ_PRODUCT_PROFILE_NON_PHYSICAL_GOODS = 'non-physical-goods';
+    public const SSL_COMMERZ_PRODUCT_PROFILE_AIRLINE_TICKETS = 'airline-tickets';
+    public const SSL_COMMERZ_PRODUCT_PROFILE_TRAVEL_VERTICAL = 'travel-vertical';
+    public const SSL_COMMERZ_PRODUCT_PROFILE_TELECOM_VERTICAL = 'telecom-vertical';
+    public const SSL_COMMERZ_INVOICE_SIZE = 36;
 
     public const PAYMENT_TYPE_COURSE_ENROLLMENT = 1;
     public const TRANSACTION_COMPLETED_SUCCESSFULLY = 1020;

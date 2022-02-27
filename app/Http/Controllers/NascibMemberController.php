@@ -86,14 +86,13 @@ class NascibMemberController extends Controller
             $validated['organization_id'] = $organization->id;
             $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
 
+            $createdRegisterUser = $this->nascibMemberService->createNascibUser($validated);
 
-//            $createdRegisterUser = $this->nascibMemberService->createNascibUser($validated);
-//
-//            Log::info('nascib_id_user_info:' . json_encode($createdRegisterUser));
-//
-//            if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
-//                throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
-//            }
+            Log::info('nascib_id_user_info:' . json_encode($createdRegisterUser));
+
+            if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
+                throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
+            }
 
             $response = [
                 'data' => $organization,

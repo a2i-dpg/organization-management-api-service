@@ -194,6 +194,12 @@ class NascibMember extends BaseModel
         1 => 'হ্যাঁ',
     ];
 
+    public const APPLICATION_TYPE_NEW = 1;
+    public const APPLICATION_TYPE_RENEW = 2;
+    public const APPLICATION_TYPE = [
+        self::APPLICATION_TYPE_NEW => "New Application",
+        self::APPLICATION_TYPE_RENEW => "Renew Application"
+    ];
 
     protected $casts = [
         'registered_authority' => 'array',
