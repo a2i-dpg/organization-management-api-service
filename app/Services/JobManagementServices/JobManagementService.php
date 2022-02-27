@@ -149,8 +149,11 @@ class JobManagementService
                     ->whereNull('primary_job_information.industry_association_id');
             });
 
-            $jobInformationBuilder->orwhere('primary_job_information.industry_association_id', $industryAssociationId);
-            $jobInformationBuilder->orwhere('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId);
+            $jobInformationBuilder->where(function ($jobInformationBuilder) use ($industryAssociationId) {
+                $jobInformationBuilder->orwhere('primary_job_information.industry_association_id', $industryAssociationId);
+                $jobInformationBuilder->orwhere('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId);
+            });
+
         }
 
         if (is_numeric($instituteId)) {
