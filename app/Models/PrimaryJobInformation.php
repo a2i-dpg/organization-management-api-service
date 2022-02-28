@@ -134,6 +134,11 @@ class PrimaryJobInformation extends BaseModel
         return $this->hasOne(CandidateRequirement::class, 'job_id', "job_id");
     }
 
+    public function companyInfoVisibility(): HasOne
+    {
+        return $this->hasOne(CompanyInfoVisibility::class, 'job_id', "job_id");
+    }
+
     /**publish or archive status */
 
     public const STATUS_PUBLISH = 1;
