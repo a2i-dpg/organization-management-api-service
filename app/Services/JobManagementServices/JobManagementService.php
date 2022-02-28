@@ -197,6 +197,7 @@ class JobManagementService
             $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
                 ->whereNull('applied_jobs.deleted_at');
         });
+
         $jobInformationBuilder->groupBy('primary_job_information.job_id');
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
@@ -253,14 +254,12 @@ class JobManagementService
 
             $jobInformationBuilder->addSelect('industry_association_member_landing_page_jobs.show_in_landing_page');
 
-
         }
 
-
+        $jobInformationBuilder->with('companyInfoVisibility');
         $jobInformationBuilder->with('additionalJobInformation');
         $jobInformationBuilder->with('additionalJobInformation.jobLocations');
         $jobInformationBuilder->with('additionalJobInformation.jobLevels');
-
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
             $jobInformationBuilder->whereHas('additionalJobInformation.jobLocations', function ($query) use ($locDistrictIds) {
