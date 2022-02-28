@@ -8,6 +8,7 @@ use App\Models\IndustryAssociation;
 use App\Models\MembershipType;
 use App\Models\Organization;
 use App\Models\NascibMember;
+use App\Models\SmefCluster;
 use App\Services\NascibMemberService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
@@ -130,7 +131,8 @@ class NascibMemberController extends Controller
                         "title" => $value
                     ];
                 }, array_keys(NascibMember::BUSINESS_TYPE), NascibMember::BUSINESS_TYPE),
-                "membership_types" => $membershipType->toArray()
+                "membership_types" => $membershipType->toArray(),
+                "smef_clusters" => SmefCluster::all()->toArray()
             ],
             '_response_status' => [
                 "success" => true,
