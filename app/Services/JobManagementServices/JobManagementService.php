@@ -89,6 +89,7 @@ class JobManagementService
         $industryAssociationId = $request['industry_association_id'] ?? "";
         $instituteId = $request['institute_id'] ?? "";
         $organizationId = $request['organization_id'] ?? "";
+        $feedOnly = $request['feed_only'] ?? "";
         $youthOnly = $request['youth_only'] ?? "";
         $youthId = $request['youth_id'] ?? "";
         $jobLevel = $request['job_level'] ?? "";
@@ -233,8 +234,15 @@ class JobManagementService
         }
 
         /** If request from client side */
-        if ($isRequestFromClientSide) {
+        if ($isRequestFromClientSide && empty($type)) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
+            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
+            $jobInformationBuilder->active();
+        }
+
+        /** If request from youth feed */
+        if (!empty($feedOnly)) {
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime->subDays(30)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }

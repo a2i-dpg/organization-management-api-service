@@ -203,6 +203,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** Youth Feed statistics job data fetch */
         $router->get('youth-feed-statistics/{youthId}', ["as" => "courses.youth-feed-statistics", "uses" => "JobManagementController@youthFeedStatistics"]);
+
+        /** Fetch all recent jobs for youth feed API */
+        $router->get('youth-feed-jobs', ["as" => "service-to-service-call.youth-feed-jobs", "uses" => "JobManagementController@youthFeedJobs"]);
     });
 
 
