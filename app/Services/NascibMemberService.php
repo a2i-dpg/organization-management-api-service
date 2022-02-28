@@ -17,18 +17,14 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Monolog\Handler\ElasticaHandler;
 
 /**
  *
  */
 class NascibMemberService
 {
-
-
     public function registerNascib(Organization $organization, NascibMember $nascibMember, array $data): array
     {
-
         $orgData['organization_type_id'] = Organization::ORGANIZATION_TYPE_PRIVATE;
         $orgData['mobile'] = $data['entrepreneur_mobile'];
         $orgData['email'] = $data['entrepreneur_email'];
@@ -390,7 +386,7 @@ class NascibMemberService
                 }),
                 'nullable',
                 'integer',
-                'exist:smef_clusters,id,deleted_at,NULL'
+                'exists:smef_clusters,id,deleted_at,NULL'
             ],
             'is_under_of_association_or_chamber' => [
                 "required",
