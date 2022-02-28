@@ -405,7 +405,6 @@ class NascibMemberService
             ],
             'sector_id' => [
                 'required',
-                'integer',
                 Rule::in(array_keys(NascibMember::SECTOR))
             ],
             'other_sector_name' => [
