@@ -116,10 +116,6 @@ class JobManagementService
             'primary_job_information.archived_at',
             'primary_job_information.is_apply_online',
 
-            'interview_schedules.interview_address',
-            'interview_schedules.interview_scheduled_at',
-            'candidate_interviews.confirmation_status',
-
             'candidate_requirements.minimum_year_of_experience',
             'candidate_requirements.maximum_year_of_experience',
 
@@ -201,6 +197,7 @@ class JobManagementService
             $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
                 ->whereNull('applied_jobs.deleted_at');
         });
+
         $jobInformationBuilder->groupBy('primary_job_information.job_id');
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
@@ -257,14 +254,12 @@ class JobManagementService
 
             $jobInformationBuilder->addSelect('industry_association_member_landing_page_jobs.show_in_landing_page');
 
-
         }
 
-
+        $jobInformationBuilder->with('companyInfoVisibility');
         $jobInformationBuilder->with('additionalJobInformation');
         $jobInformationBuilder->with('additionalJobInformation.jobLocations');
         $jobInformationBuilder->with('additionalJobInformation.jobLevels');
-
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
             $jobInformationBuilder->whereHas('additionalJobInformation.jobLocations', function ($query) use ($locDistrictIds) {
@@ -286,11 +281,18 @@ class JobManagementService
         $jobInformationBuilder->with('candidateRequirement.skills');
 
         if (!empty($youthOnly) && !empty($youthId)) {
+            $jobInformationBuilder->addSelect('interview_schedules.interview_address');
+            $jobInformationBuilder->addSelect('interview_schedules.interview_scheduled_at');
+            $jobInformationBuilder->addSelect('candidate_interviews.confirmation_status');
+
             $jobInformationBuilder->where("applied_jobs.youth_id", $youthId);
-            $jobInformationBuilder->join('candidate_interviews', function ($join) {
-                $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id');
+
+            $jobInformationBuilder->leftJoin('candidate_interviews', function ($join) {
+                $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id')
+                    ->on('applied_jobs.current_recruitment_step_id', '=', 'candidate_interviews.recruitment_step_id');
             });
-            $jobInformationBuilder->join('interview_schedules', function ($join) {
+
+            $jobInformationBuilder->leftJoin('interview_schedules', function ($join) {
                 $join->on('candidate_interviews.interview_schedule_id', '=', 'interview_schedules.id');
             });
         }

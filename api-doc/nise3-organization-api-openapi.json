@@ -1590,7 +1590,157 @@
                 }
             }
         },
-
+        "/public/nascib-members/get-static-data": {
+            "get": {
+                "tags": ["Nascib"],
+                "summary": "Register a public nascib member statistics data",
+                "description": "API endpoint to Register a public nascib member statistics data. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/membership_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/membership_type_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example":{
+                                    "data": {
+                                        "form_fill_up_by": {
+                                            "1": "Form fill up by own",
+                                            "2": "Form fill up by UDC Entrepreneur",
+                                            "3": "Form fill up by Chamber or Association"
+                                        },
+                                        "proprietorship": {
+                                            "1": "Sole Proprietorship (একক মালিকানা)",
+                                            "2": "Partnership Proprietorship (অংশীদারি মালিকানা)",
+                                            "3": "Join Proprietorship (যৌথ মালিকানা)"
+                                        },
+                                        "trade_license_authority": {
+                                            "1": "City Corporation (সিটি কর্পোরেশন)",
+                                            "2": "Municipality (পৌরসভা)",
+                                            "3": "Union Council (ইউনিয়ন পরিষদ)"
+                                        },
+                                        "sector": {
+                                            "1": "পাটজাত",
+                                            "2": "চামড়া",
+                                            "3": "হস্তশিল্প",
+                                            "4": "ফ্যাশন",
+                                            "5": "হালকা প্রকৌশল",
+                                            "6": "পোশাক",
+                                            "7": "ডিজাইন",
+                                            "8": "কৃষি প্রক্রিয়াজাত",
+                                            "9": "আইটি",
+                                            "10": "হারবাল",
+                                            "11": "প্লাস্তিক",
+                                            "12": "সিনথেটিকস",
+                                            "13": "ইলেক্ট্রিক্যাল",
+                                            "14": "ইলেক্ট্রনিক",
+                                            "15": "লাইট ইঞ্জিনিয়ারিং",
+                                            "16": "জুয়েলারি",
+                                            "17": "হস্তশিল্প (বিভিন্ন প্রকার)",
+                                            "18": "খাদ্য ও পানীয়",
+                                            "1001": "অন্যন্য"
+                                        },
+                                        "registered_authority": {
+                                            "1": "জয়েন্ট-স্টক কোম্পানি",
+                                            "2": "সমবায় অধিদপ্তর",
+                                            "3": "এনজিও বিষয়ক ব্যুরো",
+                                            "4": "সমাজসেবা অধিদপ্তর",
+                                            "5": "মহিলা বিষয়ক অধিদপ্তর",
+                                            "6": "যুব উন্নয়ন অধিদপ্তর",
+                                            "7": "বিটিআরসি",
+                                            "8": "স্বাস্থ্য অধিদপ্তর",
+                                            "9": "বাংলাদেশ ক্ষুদ্র ও কুটির শিল্প কর্পোরেশন(বিসিক)"
+                                        },
+                                        "authorized_authority": {
+                                            "1": "কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর",
+                                            "2": "বাংলাদেশ পরিবেশ অধিদপ্তর",
+                                            "3": "বাংলাদেশ ফায়ার সার্ভিস ও সিভিল ডিফেন্স অধিদপ্তর",
+                                            "4": "আমদানি ও রপ্তানি প্রধান নিয়ন্ত্রকের অধিদপ্তর",
+                                            "5": "ঔষধ প্রশাসন অধিদপ্তর",
+                                            "6": "বাংলাদেশ এনার্জি রেগুলেটরি কমিশন",
+                                            "7": "বিস্ফোরক পরিদপ্তর",
+                                            "other_authority": "অন্যন্য"
+                                        },
+                                        "specialized_area": {
+                                            "1": "বাংলাদেশ রপ্তানি প্রক্রিয়াকরণ অঞ্চল (EPZ)",
+                                            "2": "বাংলাদেশ অর্থনৈতিক অঞ্চল (BEZA)",
+                                            "3": "বিসিক শিল্প নগরী",
+                                            "4": "বেসরকারি ইকোনমিক জোন"
+                                        },
+                                        "import_or_export_type": {
+                                            "1": "Direct",
+                                            "2": "InDirect"
+                                        },
+                                        "worker_type": {
+                                            "permanent_worker": "Permanent worker (স্থায়ী কর্মী)",
+                                            "temporary_worker": "Temporary worker (অস্থায়ী কর্মী)",
+                                            "seasonal_worker": "Seasonal worker (মৌসুমী কর্মী)"
+                                        },
+                                        "manpower_type": [
+                                            "male",
+                                            "female"
+                                        ],
+                                        "bank_account_type": {
+                                            "personal": "Personal account (ব্যক্তিগত হিসাব)",
+                                            "industry": "industry accounts (প্রতিষ্ঠানের হিসাব)"
+                                        },
+                                        "land_type": {
+                                            "1": "Own Land",
+                                            "2": "Rent"
+                                        },
+                                        "business_type": {
+                                            "1": "ম্যানুফ্যাকচারিং",
+                                            "2": "সার্ভিস",
+                                            "3": "ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)"
+                                        },
+                                        "membership_types": [
+                                            {
+                                                "id": 1,
+                                                "industry_association_id": 1,
+                                                "name": "অংশীদার",
+                                                "name_en": "Associate Member",
+                                                "fee": 1000,
+                                                "renewal_fee": 800,
+                                                "payment_nature": 2,
+                                                "payment_frequency": 4,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null
+                                            },
+                                            {
+                                                "id": 2,
+                                                "industry_association_id": 1,
+                                                "name": "সাধারণ",
+                                                "name_en": "General Member",
+                                                "fee": 1000,
+                                                "renewal_fee": 800,
+                                                "payment_nature": 2,
+                                                "payment_frequency": 4,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "OrganizationMember has been Created Successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -16189,6 +16339,14 @@
                 "required": false,
                 "schema": {
                     "type": "string"
+                }
+            },
+            "membership_type_id": {
+                "name": "membership_type_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "contactInfoId": {

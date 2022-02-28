@@ -85,10 +85,13 @@ class PrimaryJobInformation extends BaseModel
         2 => "Special Skilled"
     ];
 
+    public const RESUME_RECEIVING_OPTION_EMAIL=1;
+    public const RESUME_RECEIVING_OPTION_HARD_COPY=2;
+    public const RESUME_RECEIVING_OPTION_WALK_IN_INTERVIEW=3;
     public const RESUME_RECEIVING_OPTION = [
-        1 => "Email",
-        2 => "Hard Copy",
-        3 => "Walk in interview"
+        self::RESUME_RECEIVING_OPTION_EMAIL,
+        self::RESUME_RECEIVING_OPTION_HARD_COPY,
+        self::RESUME_RECEIVING_OPTION_WALK_IN_INTERVIEW,
     ];
 
     public const BOOLEAN_FLAG_TRUE = 1;
@@ -129,6 +132,11 @@ class PrimaryJobInformation extends BaseModel
     public function candidateRequirement(): HasOne
     {
         return $this->hasOne(CandidateRequirement::class, 'job_id', "job_id");
+    }
+
+    public function companyInfoVisibility(): HasOne
+    {
+        return $this->hasOne(CompanyInfoVisibility::class, 'job_id', "job_id");
     }
 
     /**publish or archive status */
