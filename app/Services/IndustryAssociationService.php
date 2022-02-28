@@ -396,11 +396,13 @@ class IndustryAssociationService
      * @param Organization $organization
      * @return array
      */
+    //TODO: Approved Membership
     public function industryAssociationMembershipApproval(array $data, Organization $organization): array
     {
         $status = 0;
         $message = 'Unprocessable Request';
-        if ($organization->industryAssociations->payment_status == BaseModel::PAYMENT_PENDING) {
+        $industryAssociationOrganization = $organization->industryAssociations();
+        if ($industryAssociationOrganization->firstOrFail()->pivot->payment_status == BaseModel::PAYMENT_PENDING) {
             $message = 'Payment is till now pending, so unable to process this request. Please complete payment.';
         } elseif ($organization->industryAssociations->payment_status == BaseModel::PAYMENT_SUCCESS) {
             $status = $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [

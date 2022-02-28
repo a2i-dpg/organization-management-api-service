@@ -16,6 +16,7 @@ use App\Services\CommonServices\CodeGenerateService;
 use App\Services\PaymentService\Library\SslCommerzNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Throwable;
@@ -37,6 +38,24 @@ class NascibMemberPaymentViaSslService
         $industryAssociationOrganization = $organization->industryAssociations()->firstOrFail()->pivot;
         $memberShipTypeId = $industryAssociationOrganization->membership_type_id;
         $paymentStatus = $industryAssociationOrganization->payment_status;
+
+        if ($paymentStatus != BaseModel::ROW_STATUS_ACTIVE) {
+            $message = $paymentStatus == BaseModel::ROW_STATUS_REJECTED ? "You are Rejected" : "You are not approved as a user";
+            return [
+                "status" => "fail",
+                "data" => [],
+                "message" => $message
+            ];
+        }
+
+        if ($paymentStatus == PaymentTransactionHistory::PAYMENT_SUCCESS && $applicationType = NascibMember::APPLICATION_TYPE_NEW) {
+            return [
+                "status" => "fail",
+                "data" => [],
+                "message" => "You have already completed your payment"
+            ];
+        }
+
         $memberShipType = MembershipType::findOrFail($memberShipTypeId);
         $applicationFee = $applicationType == NascibMember::APPLICATION_TYPE_RENEW ? $memberShipType->renewal_fee : $memberShipType->fee;
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationOrganization->industry_association_id);
@@ -96,8 +115,10 @@ class NascibMemberPaymentViaSslService
 
         $sslc = new SslCommerzNotification($paymentConfig);
 
-        # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
-        return $sslc->makePayment($postData, 'checkout', 'json');
+        /** initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )*/
+        $sslPayment = $sslc->makePayment($postData, 'checkout', 'json');
+        Log::channel('ssl_commerz')->info("sslPayment: " . json_encode($sslPayment));
+        return $sslPayment;
     }
 
     private function getPaymentConfig(int $id, int $paymentGateWayType)
@@ -123,15 +144,15 @@ class NascibMemberPaymentViaSslService
             ],
             "success_url" => [
                 "required",
-                "url"
+                "string"
             ],
             "failed_url" => [
                 "required",
-                "url"
+                "string"
             ],
             "cancel_url" => [
                 "required",
-                "url"
+                "string"
             ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
