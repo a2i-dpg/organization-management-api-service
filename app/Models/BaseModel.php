@@ -80,6 +80,7 @@ abstract class BaseModel extends Model
     public const INSTITUTE_USER_TYPE = 3;
     public const YOUTH_USER_TYPE = 4;
     public const INDUSTRY_ASSOCIATION_USER_TYPE = 5;
+    public const REGISTERED_TRAINING_ORGANIZATION_USER_TYPE = 6;
 
 
     /** Client Url End Point Type*/
