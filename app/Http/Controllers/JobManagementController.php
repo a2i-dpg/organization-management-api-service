@@ -213,9 +213,11 @@ class JobManagementController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function showInLandingPageStatusChange(Request $request): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $industryAssociationId = $request->input('industry_association_id');
         $filter = $this->jobManagementService->showInLandingPageValidator($request, $industryAssociationId)->validate();
         $this->jobManagementService->showInLandingPageStatusChange($filter, $industryAssociationId);
@@ -326,6 +328,7 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param string $jobId
      * @return JsonResponse
      * @throws ValidationException
@@ -349,6 +352,7 @@ class JobManagementController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
@@ -665,6 +669,7 @@ class JobManagementController extends Controller
      * @param Request $request
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getRecruitmentStepList(Request $request, string $jobId): JsonResponse
     {
@@ -816,6 +821,7 @@ class JobManagementController extends Controller
      * @param Request $request
      * @param int $stepId
      * @return JsonResponse
+     * @throws AuthorizationException
      * @throws ValidationException
      */
     public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
@@ -837,6 +843,13 @@ class JobManagementController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @param string $jobId
+     * @param int $status
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
     public function getCandidateList(Request $request, string $jobId, int $status = 0): JsonResponse
     {
         $this->authorize('view', JobManagement::class);
