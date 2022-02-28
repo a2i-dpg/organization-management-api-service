@@ -206,6 +206,8 @@ class JobManagementService
 
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
 
+        $jobInformationBuilder->selectRaw("SUM(2) as feed_item_type");
+
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
