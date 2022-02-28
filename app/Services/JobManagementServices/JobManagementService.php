@@ -233,7 +233,7 @@ class JobManagementService
         }
 
         /** If request from client side */
-        if ($isRequestFromClientSide) {
+        if ($isRequestFromClientSide && empty($type)) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
