@@ -25,7 +25,7 @@ class NascibMemberPaymentViaSslService
     /**
      * @throws Throwable
      */
-    public function paymentInit(int $organizationId, string $applicationType, int $paymentGatewayType)
+    public function paymentInit(array $requestData, int $organizationId, string $applicationType, int $paymentGatewayType)
     {
 
         /**Here you have to receive all the order data to initiate the payment.
@@ -92,6 +92,7 @@ class NascibMemberPaymentViaSslService
         $paymentConfig = $this->getPaymentConfig($industryAssociation->id, $paymentGatewayType);
 
         throw_if(empty($paymentConfig), new \Exception("The payment configuration is invalid"));
+        $paymentConfig = array_merge($paymentConfig, $requestData);
 
         $sslc = new SslCommerzNotification($paymentConfig);
 
@@ -119,6 +120,18 @@ class NascibMemberPaymentViaSslService
                 "required",
                 "integer",
                 Rule::in(array_values(PaymentTransactionHistory::PAYMENT_GATEWAYS))
+            ],
+            "success_url" => [
+                "required",
+                "url"
+            ],
+            "failed_url" => [
+                "required",
+                "url"
+            ],
+            "cancel_url" => [
+                "required",
+                "url"
             ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);

@@ -41,9 +41,18 @@ class NascibMemberPaymentController extends Controller
 
         throw_if((empty($payloadClaim['purpose']) && empty($payloadClaim['purpose_related_id'])), new \Exception("Customer identification key is invalid"));
 
-        $responseData = $this->nascibMemberPaymentViaSslService->paymentInit($payloadClaim['purpose_related_id'], $payloadClaim['purpose'], $validateData['payment_gateway_type']);
-        $httpStatusCode = ResponseAlias::HTTP_CREATED;
-        return Response::json(json_decode($responseData, true), $httpStatusCode);
+        $responseData = $this->nascibMemberPaymentViaSslService->paymentInit($validateData, $payloadClaim['purpose_related_id'], $payloadClaim['purpose'], $validateData['payment_gateway_type']);
+
+        $httpStatusCode = (bool)$responseData['status'] ? ResponseAlias::HTTP_CREATED : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
+
+        $response['data'] = $responseData['data'];
+        $response['_response_status'] = [
+            "success" => (bool)$responseData['status'],
+            "code" => $httpStatusCode,
+            "message" => $responseData['message'],
+            "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
+        ];
+        return Response::json($response, $httpStatusCode);
 
     }
 

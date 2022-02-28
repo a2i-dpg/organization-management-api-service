@@ -98,7 +98,7 @@ class NascibMember extends BaseModel
         self::TRADE_LICENSING_AUTHORITY_MUNICIPALITY => 'Municipality (পৌরসভা)',
         self::TRADE_LICENSING_AUTHORITY_UNION_COUNCIL => 'Union Council (ইউনিয়ন পরিষদ)',
     ];
-    const OTHER_SECTOR_KEY = 1001;
+    const OTHER_SECTOR_KEY = "other_sector";
     public const SECTOR = [
         1 => 'পাটজাত',
         2 => 'চামড়া',
