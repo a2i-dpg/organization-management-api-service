@@ -51,19 +51,85 @@ class NascibMemberController extends Controller
         $membershipType = MembershipType::all();
         $response = [
             'data' => [
-                "form_fill_up_by" => NascibMember::FORM_FILL_UP_LIST,
-                "proprietorship" => NascibMember::PROPRIETORSHIP_LIST,
-                "trade_license_authority" => NascibMember::TRADE_LICENSING_AUTHORITY,
-                "sector" => NascibMember::SECTOR,
-                "registered_authority" => NascibMember::REGISTERED_AUTHORITY,
-                "authorized_authority" => NascibMember::AUTHORIZED_AUTHORITY,
-                "specialized_area" => NascibMember::SPECIALIZED_AREA,
-                "import_or_export_type" => NascibMember::IMPORT_EXPORT_TYPE,
-                "worker_type" => NascibMember::WORKER_TYPE,
-                "manpower_type" => NascibMember::MANPOWER_TYPE,
-                "bank_account_type" => NascibMember::BANK_ACCOUNT_TYPE,
-                "land_type" => NascibMember::LAND_TYPE,
-                "business_type" => NascibMember::BUSINESS_TYPE,
+                "form_fill_up_by" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::FORM_FILL_UP_LIST), NascibMember::FORM_FILL_UP_LIST),
+
+                "proprietorship" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::PROPRIETORSHIP_LIST), NascibMember::PROPRIETORSHIP_LIST),
+                "trade_license_authority" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::TRADE_LICENSING_AUTHORITY), NascibMember::TRADE_LICENSING_AUTHORITY),
+                "sector" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::SECTOR), NascibMember::SECTOR),
+                "registered_authority" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::REGISTERED_AUTHORITY), NascibMember::REGISTERED_AUTHORITY),
+                "authorized_authority" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::AUTHORIZED_AUTHORITY), NascibMember::AUTHORIZED_AUTHORITY),
+                "specialized_area" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::SPECIALIZED_AREA), NascibMember::SPECIALIZED_AREA),
+                "import_or_export_type" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::IMPORT_EXPORT_TYPE), NascibMember::IMPORT_EXPORT_TYPE),
+                "worker_type" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::WORKER_TYPE), NascibMember::WORKER_TYPE),
+                "manpower_type" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::MANPOWER_TYPE), NascibMember::MANPOWER_TYPE),
+                "bank_account_type" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::BANK_ACCOUNT_TYPE), NascibMember::BANK_ACCOUNT_TYPE),
+                "land_type" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::LAND_TYPE), NascibMember::LAND_TYPE),
+                "business_type" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::BUSINESS_TYPE), NascibMember::BUSINESS_TYPE),
                 "membership_types" => $membershipType->toArray()
             ],
             '_response_status' => [

@@ -197,7 +197,7 @@ class SslCommerzNotification extends AbstractSslCommerz
      * @param string $pattern
      * @return false|mixed|string
      */
-    public function makePayment(array $requestData, $type = 'checkout', $pattern = 'json'): mixed
+    public function makePayment(array $requestData, string $type = 'checkout', string $pattern = 'json'): mixed
     {
         if (empty($requestData)) {
             return "Please provide a valid information list about transaction with transaction id, amount, success url, fail url, cancel url, store id and pass at least";
@@ -207,26 +207,17 @@ class SslCommerzNotification extends AbstractSslCommerz
 
         $this->setApiUrl($this->config['apiDomain'] . $this->config['apiUrl']['make_payment']);
 
-        // Set the required/additional params
+        /** Set the required/additional params */
         $this->setParams($requestData);
 
-        // Set the authentication information
+        /** Set the authentication information */
         $this->setAuthenticationInfo();
 
-        // Now, call the Gateway API
+        /** Now, call the Gateway API */
         $response = $this->callToApi($this->data, $header, $this->config['connect_from_localhost']);
 
-        $formattedResponse = $this->formatResponse($response, $type, $pattern); // Here we will define the response pattern
+        return $this->formatResponse($response, $type, $pattern);
 
-        if ($type == 'hosted') {
-            if (isset($formattedResponse['GatewayPageURL']) && $formattedResponse['GatewayPageURL'] != '') {
-                $this->redirect($formattedResponse['GatewayPageURL']);
-            } else {
-                return $formattedResponse['failedreason'];
-            }
-        } else {
-            return $formattedResponse;
-        }
     }
 
 

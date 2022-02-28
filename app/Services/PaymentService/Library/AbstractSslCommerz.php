@@ -1,5 +1,13 @@
 <?php
+
 namespace App\Services\PaymentService\Library;
+
+
+use App\Exceptions\HttpErrorException;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 abstract class AbstractSslCommerz implements SslCommerzInterface
 {
@@ -37,12 +45,7 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
         return $this->apiUrl;
     }
 
-    /**
-     * @param $data
-     * @param array $header
-     * @param bool $setLocalhost
-     * @return bool|string
-     */
+
     public function callToApi($data, $header = [], $setLocalhost = false)
     {
         $curl = curl_init();
@@ -70,11 +73,12 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
         $curlErrorNo = curl_errno($curl);
         curl_close($curl);
 
+        Log::info("SSL Curl Error:" . $err);
+
         if ($code == 200 & !($curlErrorNo)) {
             return $response;
         } else {
             return "FAILED TO CONNECT WITH SSLCOMMERZ API";
-            //return "cURL Error #:" . $err;
         }
     }
 
@@ -84,30 +88,31 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
      * @param string $pattern
      * @return false|mixed|string
      */
-    public function formatResponse($response, $type = 'checkout', $pattern = 'json')
+    public function formatResponse($response, $type = 'checkout', $pattern = 'json'): mixed
     {
         $sslcz = json_decode($response, true);
 
         if ($type != 'checkout') {
             return $sslcz;
         } else {
-            if (isset($sslcz['GatewayPageURL']) && $sslcz['GatewayPageURL'] != "") {
-                // this is important to show the popup, return or echo to send json response back
-                if($this->getApiUrl() != null && $this->getApiUrl() == 'https://securepay.sslcommerz.com') {
-                   $response = json_encode(['status' => 'SUCCESS', 'data' => $sslcz['GatewayPageURL'], 'logo' => $sslcz['storeLogo']]);
-                } else {
-                    $response = json_encode(['status' => 'success', 'data' => $sslcz['GatewayPageURL'], 'logo' => $sslcz['storeLogo']]);
-                }
+            if ($sslcz['status'] == 'SUCCESS') {
+                $response = [
+                    'status' => 'success',
+                    'data' => [
+                        "gateway_page_url" => $sslcz['GatewayPageURL'],
+                        "store_logo" => $sslcz['storeLogo']
+                    ],
+                    "message" => "Ssl Payment is successfully initialized"
+                ];
             } else {
-                $response = json_encode(['status' => 'fail', 'data' => null, 'message' => $sslcz['failedreason']]);
-            }
-
-            if ($pattern == 'json') {
-                return $response;
-            } else {
-                echo $response;
+                $response = [
+                    'status' => 'fail',
+                    'data' => [],
+                    'message' => $sslcz['failedreason']
+                ];
             }
         }
+        return $response;
     }
 
     /**

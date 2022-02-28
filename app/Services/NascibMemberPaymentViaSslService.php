@@ -15,13 +15,17 @@ use App\Models\PaymentTransactionHistory;
 use App\Services\CommonServices\CodeGenerateService;
 use App\Services\PaymentService\Library\SslCommerzNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Throwable;
 
 class NascibMemberPaymentViaSslService
 {
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function paymentInit($data, int $applicationType, int $paymentGateWayType)
+    public function paymentInit(array $requestData, int $organizationId, string $applicationType, int $paymentGatewayType)
     {
 
         /**Here you have to receive all the order data to initiate the payment.
@@ -29,7 +33,7 @@ class NascibMemberPaymentViaSslService
          * In orders table order uniq identity is "transaction_id","status" field contain status of the transaction,
          * "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
          */
-        $organization = Organization::findOrFail(1);
+        $organization = Organization::findOrFail($organizationId);
         $industryAssociationOrganization = $organization->industryAssociations()->firstOrFail()->pivot;
         $memberShipTypeId = $industryAssociationOrganization->membership_type_id;
         $paymentStatus = $industryAssociationOrganization->payment_status;
@@ -61,173 +65,75 @@ class NascibMemberPaymentViaSslService
         $postData['cus_city'] = $customerCity ?? "";
         $postData['cus_postcode'] = "";
         $postData['cus_add1'] = $organization->address;
-
+        $postData['cus_add2'] = "";
 
         # SHIPMENT INFORMATION
+        $postData['ship_name'] = "testnise81sk";
+        $postData['ship_add1'] = "New Eskaton Road";
+        $postData['ship_add2'] = "";
+        $postData['ship_city'] = "Dhaka";
+        $postData['ship_state'] = "Dhaka";
+        $postData['ship_postcode'] = "1000";
+        $postData['ship_phone'] = "01767111434";
+        $postData['ship_country'] = "Bangladesh";
+
         $postData['shipping_method'] = PaymentTransactionHistory::SSL_COMMERZ_SHIPPING_METHOD_NO;
         $postData['num_of_item'] = 1;
         $postData['product_name'] = $organization->title . " Membership Registration Fee";
         $postData['product_category'] = NascibMember::APPLICATION_TYPE[$applicationType];
         $postData['product_profile'] = PaymentTransactionHistory::SSL_COMMERZ_PRODUCT_PROFILE_NON_PHYSICAL_GOODS;
 
-        $paymentConfig = $this->getPaymentConfig($industryAssociation->id, $paymentGateWayType);
+        # OPTIONAL PARAMETERS
+        $postData['value_a'] = "ref001";
+        $postData['value_b'] = "ref002";
+        $postData['value_c'] = "ref003";
+        $postData['value_d'] = "ref004";
+
+        $paymentConfig = $this->getPaymentConfig($industryAssociation->id, $paymentGatewayType);
+
+        throw_if(empty($paymentConfig), new \Exception("The payment configuration is invalid"));
+        $paymentConfig = array_merge($paymentConfig, $requestData);
 
         $sslc = new SslCommerzNotification($paymentConfig);
+
         # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
         return $sslc->makePayment($postData, 'checkout', 'json');
     }
 
-    public function success(Request $request)
-    {
-        echo "Transaction is Successful";
-
-        $tran_id = $request->input('tran_id');
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-
-        $sslc = new SslCommerzNotification();
-
-        #Check order status in order tabel against the transaction id or order id.
-        $order_detials = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
-
-        if ($order_detials->status == 'Pending') {
-            $validation = $sslc->orderValidate($request->all(), $tran_id, $amount, $currency);
-
-            if ($validation == TRUE) {
-                /*
-                That means IPN did not work or IPN URL was not set in your merchant panel. Here you need to update order status
-                in order table as Processing or Complete.
-                Here you can also sent sms or email for successfull transaction to customer
-                */
-                $update_product = DB::table('orders')
-                    ->where('transaction_id', $tran_id)
-                    ->update(['status' => 'Processing']);
-
-                echo "<br >Transaction is successfully Completed";
-            } else {
-                /*
-                That means IPN did not work or IPN URL was not set in your merchant panel and Transation validation failed.
-                Here you need to update order status as Failed in order table.
-                */
-                $update_product = DB::table('orders')
-                    ->where('transaction_id', $tran_id)
-                    ->update(['status' => 'Failed']);
-                echo "validation Fail";
-            }
-        } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
-            /*
-             That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
-             */
-            echo "Transaction is successfully Completed";
-        } else {
-            #That means something wrong happened. You can redirect customer to your product page.
-            echo "Invalid Transaction";
-        }
-
-
-    }
-
-    public function fail(Request $request)
-    {
-        $tran_id = $request->input('tran_id');
-
-        $order_detials = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
-
-        if ($order_detials->status == 'Pending') {
-            $update_product = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->update(['status' => 'Failed']);
-            echo "Transaction is Falied";
-        } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
-            echo "Transaction is already Successful";
-        } else {
-            echo "Transaction is Invalid";
-        }
-
-    }
-
-    public function cancel(Request $request)
-    {
-        $tran_id = $request->input('tran_id');
-
-        $order_detials = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
-
-        if ($order_detials->status == 'Pending') {
-            $update_product = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->update(['status' => 'Canceled']);
-            echo "Transaction is Cancel";
-        } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
-            echo "Transaction is already Successful";
-        } else {
-            echo "Transaction is Invalid";
-        }
-
-
-    }
-
-    public function ipn(Request $request)
-    {
-        #Received all the payement information from the gateway
-        if ($request->input('tran_id')) #Check transation id is posted or not.
-        {
-
-            $tran_id = $request->input('tran_id');
-
-            #Check order status in order tabel against the transaction id or order id.
-            $order_details = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->select('transaction_id', 'status', 'currency', 'amount')->first();
-
-            if ($order_details->status == 'Pending') {
-                $sslc = new SslCommerzNotification();
-                $validation = $sslc->orderValidate($request->all(), $tran_id, $order_details->amount, $order_details->currency);
-                if ($validation == TRUE) {
-                    /*
-                    That means IPN worked. Here you need to update order status
-                    in order table as Processing or Complete.
-                    Here you can also sent sms or email for successful transaction to customer
-                    */
-                    $update_product = DB::table('orders')
-                        ->where('transaction_id', $tran_id)
-                        ->update(['status' => 'Processing']);
-
-                    echo "Transaction is successfully Completed";
-                } else {
-                    /*
-                    That means IPN worked, but Transation validation failed.
-                    Here you need to update order status as Failed in order table.
-                    */
-                    $update_product = DB::table('orders')
-                        ->where('transaction_id', $tran_id)
-                        ->update(['status' => 'Failed']);
-
-                    echo "validation Fail";
-                }
-
-            } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-
-                #That means Order status already updated. No need to udate database.
-
-                echo "Transaction is already successfully Completed";
-            } else {
-                #That means something wrong happened. You can redirect customer to your product page.
-
-                echo "Invalid Transaction";
-            }
-        } else {
-            echo "Invalid Data";
-        }
-    }
-
     private function getPaymentConfig(int $id, int $paymentGateWayType)
     {
-        $industryAssociationConfig=IndustryAssociationConfig::where('industry_association_id');
+        $industryAssociationConfig = IndustryAssociationConfig::where('industry_association_id', $id)
+            ->where("row_status", BaseModel::ROW_STATUS_ACTIVE)
+            ->firstOrFail();
+        $paymentGate = $industryAssociationConfig->payment_gateways;
+        $configKeyType = env('IS_SANDBOX', false) ? 'sandbox' : 'production';
+        return $paymentGate[$paymentGateWayType][$configKeyType] ?? [];
+    }
+
+    public function paymentInitValidate(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'payment_gateway_type.in' => 'Payment gateway type must be within ' . implode(array_values(PaymentTransactionHistory::PAYMENT_GATEWAYS)) . '. [30000]'
+        ];
+        $rules = [
+            "payment_gateway_type" => [
+                "required",
+                "integer",
+                Rule::in(array_values(PaymentTransactionHistory::PAYMENT_GATEWAYS))
+            ],
+            "success_url" => [
+                "required",
+                "url"
+            ],
+            "failed_url" => [
+                "required",
+                "url"
+            ],
+            "cancel_url" => [
+                "required",
+                "url"
+            ]
+        ];
+        return Validator::make($request->all(), $rules, $customMessage);
     }
 }
