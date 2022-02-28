@@ -40,6 +40,10 @@ return [
             'driver' => 'stack',
             'channels' => ['elastic_info_log'],
         ],
+        'ssl_commerz'=>[
+            'driver' => 'stack',
+            'channels' => ['elastic_info_log'],
+        ],
         'ek_pay' => [
             'driver' => 'stack',
             'channels' => ['elastic_info_log'],

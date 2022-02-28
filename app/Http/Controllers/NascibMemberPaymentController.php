@@ -43,11 +43,11 @@ class NascibMemberPaymentController extends Controller
 
         $responseData = $this->nascibMemberPaymentViaSslService->paymentInit($validateData, $payloadClaim['purpose_related_id'], $payloadClaim['purpose'], $validateData['payment_gateway_type']);
 
-        $httpStatusCode = (bool)$responseData['status'] ? ResponseAlias::HTTP_CREATED : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
+        $httpStatusCode = $responseData['status'] == 'success' ? ResponseAlias::HTTP_CREATED : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
 
         $response['data'] = $responseData['data'];
         $response['_response_status'] = [
-            "success" => (bool)$responseData['status'],
+            "success" => $responseData['status'] === 'success',
             "code" => $httpStatusCode,
             "message" => $responseData['message'],
             "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
@@ -58,6 +58,7 @@ class NascibMemberPaymentController extends Controller
 
     public function success(Request $request)
     {
+
         echo "Transaction is Successful";
 
     }
@@ -78,8 +79,9 @@ class NascibMemberPaymentController extends Controller
     public function ipn(Request $request)
     {
 
+        Log::debug("IPN", $request->all());
         $tran_id = $request->input('tran_id');
-        Log::info($tran_id);
+        Log::info("ipn-hit" . $tran_id);
     }
 
 

@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ExamDegreeSeeder::class,
             IndustryAssociationConfigSeeder::class,
             MembershipTypeSeeder::class,
+            SmefClusterSeeder::class,
 
             IndustryAssociationCodePessimisticLockingsTableSeeder::class,
             IndustryAssociationsTableSeeder::class,

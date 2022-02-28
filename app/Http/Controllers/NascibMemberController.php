@@ -149,6 +149,9 @@ class NascibMemberController extends Controller
         $organization = app(Organization::class);
 
         $validated = $this->nascibMemberService->validator($request)->validate();
+
+        $httpStatusCode = ResponseAlias::HTTP_CREATED;
+
         DB::beginTransaction();
         try {
             [$organization, $nascibMemberData] = $this->nascibMemberService->registerNascib($organization, $organizationMember, $validated);
@@ -167,14 +170,13 @@ class NascibMemberController extends Controller
                 'data' => $organization,
                 '_response_status' => [
                     "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
+                    "code" => $httpStatusCode,
                     "message" => "OrganizationMember has been Created Successfully",
                     "query_time" => $this->startTime->diffInSeconds(\Illuminate\Support\Carbon::now()),
                 ]
             ];
 
             DB::commit();
-            $httpStatusCode = ResponseAlias::HTTP_BAD_REQUEST;
 
         } catch (Throwable $e) {
             DB::rollBack();

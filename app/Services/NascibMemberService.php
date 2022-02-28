@@ -293,7 +293,7 @@ class NascibMemberService
                 "required",
                 BaseModel::MOBILE_REGEX
             ],
-            'entrepreneur_email' => 'required|max:191|email', //TODO: discuss with mahmud vai
+            'entrepreneur_email' => 'required|max:191|email',
             'entrepreneur_photo_path' => [
                 'required',
                 'string'
@@ -320,8 +320,8 @@ class NascibMemberService
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
-            'investment_amount' => 'required|numeric', //TODO: Have to clear the requirement
-            'current_total_asset' => 'nullable|numeric',//TODO: Have to clear the requirement
+            'investment_amount' => 'required|numeric',
+            'current_total_asset' => 'nullable|numeric',
 
             'is_registered_under_authority' => [
                 "required",
@@ -384,9 +384,13 @@ class NascibMemberService
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
-            'under_sme_cluster_id' => [ //TODO: sme_cluster add
-                'required',
-                'integer'
+            'under_sme_cluster_id' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->get('is_under_sme_cluster') == BaseModel::BOOLEAN_TRUE;
+                }),
+                'nullable',
+                'integer',
+                'exist:smef_clusters,id,deleted_at,NULL'
             ],
             'is_under_of_association_or_chamber' => [
                 "required",

@@ -40,6 +40,11 @@ return [
             'path' => storage_path('logs/saga-logs/' . date('Y/F/') . 'saga.log'),
             'level' => 'info'
         ],
+        'ssl_commerz' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/ssl_commerz.log'),
+            'level' => 'info',
+        ],
         'org_reg' => [
             'driver' => 'daily',
             'path' => storage_path('logs/org_reg.log'),
