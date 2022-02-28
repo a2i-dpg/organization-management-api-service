@@ -146,6 +146,7 @@ class NascibMemberController extends Controller
 
     public function openRegistration(Request $request): JsonResponse
     {
+
         $organizationMember = app(NascibMember::class);
         /** @var Organization $organization */
         $organization = app(Organization::class);
