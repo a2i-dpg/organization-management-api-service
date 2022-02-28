@@ -15,10 +15,10 @@ class AddAddtionalAttributeToIndustryAssociationOrganization extends Migration
     {
         Schema::table('industry_association_organization', function (Blueprint $table) {
             $table->unsignedTinyInteger('membership_type_id')->after('membership_id')->nullable();
-            $table->string('additional_info_model_name')->nullable();
-            $table->unsignedTinyInteger('payment_status')->comment('1=>Success, 2=>Pending, 3=>Cancel, 4=>Fail');
-            $table->date('payment_date')->nullable();
-            $table->date('member_ship_expire_date')->nullable();
+            $table->string('additional_info_model_name')->nullable()->after('membership_type_id');
+            $table->unsignedTinyInteger('payment_status')->comment('1=>Success, 2=>Pending, 3=>Cancel, 4=>Fail')->after('membership_type_id');
+            $table->date('payment_date')->nullable()->after('membership_type_id');
+            $table->date('member_ship_expire_date')->nullable()->after('membership_type_id');
 
         });
     }
