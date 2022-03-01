@@ -52,10 +52,10 @@ spec:
       containers:
         - name:  {{ .Chart.Name }}
             {{ if eq .Values.variables.APP_ENV "DEV" }}
-          image: "{{ .Values.variables.common.imageRepository }}:{{ .Values.variables.devBuildImageVersion  | default .Chart.AppVersion }}"
+          image: "{{ .Values.variables.imageRepository }}:{{ .Values.variables.devBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
             {{ if eq .Values.variables.APP_ENV "PRODUCTION" }}
-          image: "{{ .Values.variables.common.imageRepository }}:{{ .Values.variables.prodBuildImageVersion  | default .Chart.AppVersion }}"
+          image: "{{ .Values.variables.imageRepository }}:{{ .Values.variables.prodBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
           args:
             - service apache2 start && php /app/artisan queue:work --queue=cms.batch.calender.q
