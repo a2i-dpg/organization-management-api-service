@@ -14,7 +14,6 @@ spec:
   {{ if eq .Values.variables.APP_ENV "PRODUCTION" }}
   replicas: {{ .Values.variables.systemProd.replicaCount }}
   {{ end }}
-
   strategy:
     type: RollingUpdate
   template:
@@ -52,11 +51,11 @@ spec:
       {{end}}
       containers:
         - name:  {{ .Chart.Name }}
-          {{ if eq .Values.variables.APP_ENV "DEV" }}
-          image: "{{ .Values.variables.common.imageRepository }}:{{ .Values.variables.systemDev.imageAppVersion  | default .Chart.AppVersion }}"
+            {{ if eq .Values.variables.APP_ENV "DEV" }}
+          image: "{{ .Values.variables.common.imageRepository }}:{{ .Values.variables.devBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
             {{ if eq .Values.variables.APP_ENV "PRODUCTION" }}
-          image: "{{ .Values.variables.common.imageRepository }}:{{ .Values.variables.systemProd.imageAppVersion  | default .Chart.AppVersion }}"
+          image: "{{ .Values.variables.common.imageRepository }}:{{ .Values.variables.prodBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
           args:
             - service apache2 start && php /app/artisan queue:work --queue=cms.batch.calender.q
