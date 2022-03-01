@@ -113,8 +113,8 @@ class CreateNascibMembersTable extends Migration
 
             /**Upazila digital center information */
             $table->string('udc_name', 100)->nullable();
-            $table->string('udc_loc_district_id', 191)->nullable();
-            $table->string('udc_union_id', 191)->nullable();
+            $table->string('udc_loc_district', 191)->nullable();
+            $table->string('udc_union', 191)->nullable();
             $table->string('udc_code', 255)->nullable();
 
             /** Chamber or Association information */

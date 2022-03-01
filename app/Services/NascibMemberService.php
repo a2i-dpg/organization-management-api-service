@@ -578,12 +578,12 @@ class NascibMemberService
 
         if (!empty($request->get('form_fill_up_by')) && $request->get('form_fill_up_by') == NascibMember::FORM_FILL_UP_BY_UDC_ENTREPRENEUR) {
             $rules['udc_name'] = 'required|string|max: 100';
-            $rules['udc_loc_district_id'] = [
+            $rules['udc_loc_district'] = [
                 'nullable',
                 'integer',
-                'exists:loc_districts,id,deleted_at,NULL'
+                //'exists:loc_districts,id,deleted_at,NULL'
             ];
-            $rules['udc_union_id'] = [
+            $rules['udc_union'] = [
                 'required',
                 'integer',
                 //'exists:loc_unions,id,deleted_at,NULL'
@@ -615,7 +615,7 @@ class NascibMemberService
             $rules['chamber_or_association_union_id'] = [
                 'required',
                 'integer',
-                //'exists:loc_unions,id,deleted_at,NULL'
+                'exists:loc_unions,id,deleted_at,NULL'
             ];
             $rules['chamber_or_association_code'] = 'required|string|max: 255';
 
