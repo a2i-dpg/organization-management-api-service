@@ -1694,12 +1694,13 @@ class JobManagementService
     }
 
     /**
+     * @param Carbon $startTime
      * @return int
      */
-    public function getJobCount(): int
+    public function getJobCount(Carbon $startTime): int
     {
-        return PrimaryJobInformation::count('id');
 
+        return PrimaryJobInformation::where('published_at', '<=', $startTime)->count('id');
 
     }
 

@@ -1199,7 +1199,7 @@ class JobManagementController extends Controller
         if (!empty($requestData["skill_ids"])) {
             $requestData["skill_ids"] = is_array($requestData['skill_ids']) ? $requestData['skill_ids'] : explode(',', $requestData['skill_ids']);
         }
-        $totalJobCount = $this->jobManagementService->getJobCount();
+        $totalJobCount = $this->jobManagementService->getJobCount($this->startTime);
         $youthAppliedJobCount = $this->jobManagementService->getAppliedJobCount($youthId);
         $skillMatchingJobCount = 0;
         if (!empty($requestData["skill_ids"]) && is_array($requestData["skill_ids"]) && count($requestData["skill_ids"]) > 0) {
