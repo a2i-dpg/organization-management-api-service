@@ -1,7 +1,7 @@
 # NISE3 Industry And Industry Association API Service
 
 ```shell
-RELEASE = 'php artisan migrate:fresh --seed'
+RELEASE = 'php artisan migrate'
 ```
 
 ## Official Documentation

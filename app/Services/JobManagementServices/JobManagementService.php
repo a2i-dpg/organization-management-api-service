@@ -138,10 +138,6 @@ class JobManagementService
             $jobInformationBuilder->acl();
         }
 
-        if ($type != PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
-            $jobInformationBuilder->orderBy('primary_job_information.id', $order);
-        }
-
         if (is_numeric($industryAssociationId) && $isRequestFromClientSide) {
             $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
                 $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
@@ -206,6 +202,9 @@ class JobManagementService
 
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
 
+        $jobInformationBuilder->selectRaw("SUM(2) as feed_item_type");
+        $jobInformationBuilder->selectRaw("primary_job_information.published_at as feed_sort_date");
+
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
@@ -242,7 +241,7 @@ class JobManagementService
 
         /** If request from youth feed */
         if (!empty($feedOnly)) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>=', $startTime->subDays(30)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
@@ -268,6 +267,8 @@ class JobManagementService
         $jobInformationBuilder->with('additionalJobInformation');
         $jobInformationBuilder->with('additionalJobInformation.jobLocations');
         $jobInformationBuilder->with('additionalJobInformation.jobLevels');
+
+        $jobInformationBuilder->orderByDesc('primary_job_information.published_at');
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
             $jobInformationBuilder->whereHas('additionalJobInformation.jobLocations', function ($query) use ($locDistrictIds) {

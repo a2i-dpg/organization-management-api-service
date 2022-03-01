@@ -5,9 +5,9 @@
 
 variables:
 
-  devImageVersion: &dev_image "2.2.9"
+  devImageVersion: &dev_image "2.2.14"
 
-  productionImageVersion: &prod_image "2.2.11"
+  productionImageVersion: &prod_image "2.2.14"
 
 
   #auto scaling config
@@ -109,7 +109,7 @@ variables:
 
   PRODUCTION:
     APP_ENV: "local"
-    APP_DEBUG: "false"
+    APP_DEBUG: "true"
     APP_URL: &prodHost "nise3-org.default"
 
     DB_HOST: "db-service.default"
@@ -138,7 +138,7 @@ variables:
     WSO2_APIM_CLIENT_KEY: "_cjSdJTrsXe_0JpFgJl6ZggHXl0a"
     WSO2_APIM_CLIENT_SECRET: "fSlTTavyBqqWyRnfW51YctCbeWEa"
 
-    WSO2_IDP_BASE_URL: https://identity.nise.gov.bd
+    WSO2_IDP_BASE_URL: "https://identity.nise.gov.bd"
     WSO2_IDP_BASE_USER_URL: "https://identity.nise.gov.bd/scim2/Users"
     WSO2_IDP_USERNAME: "identity_admin"
     WSO2_IDP_PASSWORD: "7r7Z-GmZp-BkAf-kZWm"
