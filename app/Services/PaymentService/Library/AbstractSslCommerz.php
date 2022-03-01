@@ -83,31 +83,26 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
     }
 
     /**
-     * @param $response
+     * @param array $sslcz
      * @param string $type
      * @param string $pattern
-     * @return false|mixed|string
+     * @return array
      */
-    public function formatResponse($response, $type = 'checkout', $pattern = 'json'): mixed
+    public function formatResponse(array $sslcz, $type = 'checkout', $pattern = 'json'): array
     {
-        $sslcz = json_decode($response, true);
 
         if ($type != 'checkout') {
             return $sslcz;
         } else {
             if ($sslcz['status'] == 'SUCCESS') {
                 $response = [
+                    'gateway_page_url' => $sslcz['GatewayPageURL'],
                     'status' => 'success',
-                    'data' => [
-                        "gateway_page_url" => $sslcz['GatewayPageURL'],
-                        "store_logo" => $sslcz['storeLogo']
-                    ],
                     "message" => "Ssl Payment is successfully initialized"
                 ];
             } else {
                 $response = [
                     'status' => 'fail',
-                    'data' => [],
                     'message' => $sslcz['failedreason']
                 ];
             }

@@ -400,6 +400,11 @@ class IndustryAssociationService
     {
         $status = 0;
         $message = 'Unprocessable Request';
+
+        if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+            $message = 'You are not approved as organization member, so unable to process this request. Please complete the improvement process.';
+        }
+
         $industryAssociationOrganization = $organization->industryAssociations();
         $paymentStatusCheckData = $industryAssociationOrganization->firstOrFail()->pivot;
         if ($paymentStatusCheckData->additional_info_model_name && $paymentStatusCheckData->payment_status == BaseModel::PAYMENT_PENDING) {

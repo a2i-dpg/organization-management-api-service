@@ -195,9 +195,9 @@ class SslCommerzNotification extends AbstractSslCommerz
      * @param array $requestData
      * @param string $type
      * @param string $pattern
-     * @return false|mixed|string
+     * @return string|bool
      */
-    public function makePayment(array $requestData, string $type = 'checkout', string $pattern = 'json'): mixed
+    public function makePayment(array $requestData, string $type = 'checkout', string $pattern = 'json'): array
     {
         if (empty($requestData)) {
             return "Please provide a valid information list about transaction with transaction id, amount, success url, fail url, cancel url, store id and pass at least";
@@ -214,10 +214,9 @@ class SslCommerzNotification extends AbstractSslCommerz
         $this->setAuthenticationInfo();
 
         /** Now, call the Gateway API */
-        $response = $this->callToApi($this->data, $header, $this->config['connect_from_localhost']);
 
-        return $this->formatResponse($response, $type, $pattern);
-
+        $apiResponse = $this->callToApi($this->data, $header, $this->config['connect_from_localhost']);
+        return json_decode($apiResponse, true);
     }
 
 

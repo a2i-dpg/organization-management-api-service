@@ -30,14 +30,14 @@ class NascibMemberPaymentController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function payViaSsl(Request $request, string $customerIdentityKey): JsonResponse
+    public function payViaSsl(Request $request): JsonResponse
     {
         $validateData = $this->nascibMemberPaymentViaSslService->paymentInitValidate($request)->validate();
 
-        $isTokenValid = CodeGenerateService::verifyJwt($customerIdentityKey);
+        $isTokenValid = CodeGenerateService::verifyJwt($validateData['member_identity_key']);
         throw_if(!$isTokenValid, new \Exception("Customer identification key is invalid"));
 
-        $payloadClaim = CodeGenerateService::jwtPayloadClaims($customerIdentityKey);
+        $payloadClaim = CodeGenerateService::jwtPayloadClaims($validateData['member_identity_key']);
 
         throw_if((empty($payloadClaim['purpose']) && empty($payloadClaim['purpose_related_id'])), new \Exception("Customer identification key is invalid"));
 
@@ -45,7 +45,9 @@ class NascibMemberPaymentController extends Controller
 
         $httpStatusCode = $responseData['status'] == 'success' ? ResponseAlias::HTTP_CREATED : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
 
-        $response['data'] = $responseData['data'];
+        if (!empty($responseData['gateway_page_url'])) {
+            $response['gateway_page_url'] = $responseData['gateway_page_url'];
+        }
         $response['_response_status'] = [
             "success" => $responseData['status'] === 'success',
             "code" => $httpStatusCode,
@@ -58,25 +60,26 @@ class NascibMemberPaymentController extends Controller
 
     public function success(Request $request)
     {
-
-        echo "Transaction is Successful";
-
+        $this->nascibMemberPaymentViaSslService->successPayment($request);
     }
 
-    public function fail(Request $request)
+    public
+    function fail(Request $request)
     {
         $tran_id = $request->input('tran_id');
         echo "Transaction is already Successful in " . $tran_id;
 
     }
 
-    public function cancel(Request $request)
+    public
+    function cancel(Request $request)
     {
         $tran_id = $request->input('tran_id');
         echo "Transaction is already Successful" . $tran_id;
     }
 
-    public function ipn(Request $request)
+    public
+    function ipn(Request $request)
     {
 
         Log::debug("IPN", $request->all());

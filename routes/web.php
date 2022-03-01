@@ -288,7 +288,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
     $router->group(['prefix' => 'payment', 'as' => 'payment'], function () use ($router) {
 
-        $router->post("nascib-member-ship-pay-via-ssl/pay-now/{customerIdentityKey}", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+        $router->post("nascib-member-ship-pay-via-ssl/pay-now", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
         $router->post("nascib-member-ship-pay-via-ssl/success", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@success"]);
         $router->post("nascib-member-ship-pay-via-ssl/fail", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
         $router->post("nascib-member-ship-pay-via-ssl/cancel", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
@@ -301,8 +301,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 $router->get("jwt", function (\Illuminate\Http\Request $request) {
     $payload = [
-        "purpose" => "NEW_APPLICATION",
-        "purpose_related_id" => "40",
+        "purpose" => \App\Models\NascibMember::APPLICATION_TYPE_NEW,
+        "purpose_related_id" => "2",
     ];
     return \App\Services\CommonServices\CodeGenerateService::jwtToken($payload);
 });

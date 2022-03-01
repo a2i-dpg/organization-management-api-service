@@ -12,8 +12,12 @@ use App\Models\MembershipType;
 use App\Models\NascibMember;
 use App\Models\Organization;
 use App\Models\PaymentTransactionHistory;
+use App\Models\PaymentTransactionLog;
 use App\Services\CommonServices\CodeGenerateService;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use App\Services\PaymentService\Library\SslCommerzNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -39,19 +43,16 @@ class NascibMemberPaymentViaSslService
         $memberShipTypeId = $industryAssociationOrganization->membership_type_id;
         $paymentStatus = $industryAssociationOrganization->payment_status;
 
-        if ($paymentStatus != BaseModel::ROW_STATUS_ACTIVE) {
-            $message = $paymentStatus == BaseModel::ROW_STATUS_REJECTED ? "You are Rejected" : "You are not approved as a user";
+        if ($paymentStatus == BaseModel::ROW_STATUS_REJECTED) {
             return [
                 "status" => "fail",
-                "data" => [],
-                "message" => $message
+                "message" => "You are Rejected"
             ];
         }
 
         if ($paymentStatus == PaymentTransactionHistory::PAYMENT_SUCCESS && $applicationType = NascibMember::APPLICATION_TYPE_NEW) {
             return [
                 "status" => "fail",
-                "data" => [],
                 "message" => "You have already completed your payment"
             ];
         }
@@ -87,14 +88,14 @@ class NascibMemberPaymentViaSslService
         $postData['cus_add2'] = "";
 
         # SHIPMENT INFORMATION
-        $postData['ship_name'] = "testnise81sk";
-        $postData['ship_add1'] = "New Eskaton Road";
+        $postData['ship_name'] = $industryAssociation->title;
+        $postData['ship_add1'] = $industryAssociation->address;
         $postData['ship_add2'] = "";
-        $postData['ship_city'] = "Dhaka";
-        $postData['ship_state'] = "Dhaka";
-        $postData['ship_postcode'] = "1000";
-        $postData['ship_phone'] = "01767111434";
-        $postData['ship_country'] = "Bangladesh";
+        $postData['ship_city'] = LocDistrict::find($industryAssociation->loc_district_id)->title ?? "";
+        $postData['ship_state'] = LocDivision::find($industryAssociation->loc_division_id)->title ?? "";
+        $postData['ship_postcode'] = "";
+        $postData['ship_phone'] = $industryAssociation->mobile;
+        $postData['ship_country'] = $industryAssociation->country;
 
         $postData['shipping_method'] = PaymentTransactionHistory::SSL_COMMERZ_SHIPPING_METHOD_NO;
         $postData['num_of_item'] = 1;
@@ -103,10 +104,10 @@ class NascibMemberPaymentViaSslService
         $postData['product_profile'] = PaymentTransactionHistory::SSL_COMMERZ_PRODUCT_PROFILE_NON_PHYSICAL_GOODS;
 
         # OPTIONAL PARAMETERS
-        $postData['value_a'] = "ref001";
-        $postData['value_b'] = "ref002";
-        $postData['value_c'] = "ref003";
-        $postData['value_d'] = "ref004";
+        $postData['value_a'] = "";
+        $postData['value_b'] = "";
+        $postData['value_c'] = "";
+        $postData['value_d'] = "";
 
         $paymentConfig = $this->getPaymentConfig($industryAssociation->id, $paymentGatewayType);
 
@@ -115,13 +116,55 @@ class NascibMemberPaymentViaSslService
 
         $sslc = new SslCommerzNotification($paymentConfig);
 
-        /** initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )*/
-        $sslPayment = $sslc->makePayment($postData, 'checkout', 'json');
-        Log::channel('ssl_commerz')->info("sslPayment: " . json_encode($sslPayment));
-        return $sslPayment;
+        /** initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payment gateway here )*/
+        $sslPayment = $sslc->makePayment($postData);
+
+        Log::channel('ssl_commerz')->info("ssl-payment: " . json_encode($sslPayment));
+
+        /**
+         * @params postData
+         * @params industryAssociationOrganization id as payment purpose related id
+         * @params applicationType is either New Application or Renew Application
+         * @params paymentGatewayType is either SSL Commerz or Ekpay
+         */
+        $this->storePaymentLog($postData, $industryAssociationOrganization->id, $applicationType, $paymentGatewayType);
+
+        return $sslc->formatResponse($sslPayment);
     }
 
-    private function getPaymentConfig(int $id, int $paymentGateWayType)
+
+    /**
+     * @param array $payload
+     * @param int $purposeRelatedId
+     * @param string $paymentPurpose
+     * @param $paymentGatewayType
+     * @return void
+     */
+    public function storePaymentLog(array $payload, int $purposeRelatedId, string $paymentPurpose, $paymentGatewayType)
+    {
+        /** Invoice id is the invoice id */
+        $data['invoice'] = $payload['tran_id'];
+        $data['mer_trnx_id'] = $payload['tran_id'];
+        $data['payment_purpose_related_id'] = $purposeRelatedId;
+        $data['payment_purpose'] = $paymentPurpose;
+        $data['payment_gateway_type'] = $paymentGatewayType;
+        $data['trnx_currency'] = $payload['total_amount'];
+        $data['amount'] = $payload['currency'];
+        $data['request_payload'] = $payload;
+        $data['transaction_created_at'] = Carbon::now();
+
+        $paymentLog = new PaymentTransactionLog();
+        $paymentLog->fill($data);
+        $paymentLog->save();
+    }
+
+
+    /**
+     * @param int $id
+     * @param int $paymentGateWayType
+     * @return array
+     */
+    private function getPaymentConfig(int $id, int $paymentGateWayType): array
     {
         $industryAssociationConfig = IndustryAssociationConfig::where('industry_association_id', $id)
             ->where("row_status", BaseModel::ROW_STATUS_ACTIVE)
@@ -131,12 +174,20 @@ class NascibMemberPaymentViaSslService
         return $paymentGate[$paymentGateWayType][$configKeyType] ?? [];
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function paymentInitValidate(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'payment_gateway_type.in' => 'Payment gateway type must be within ' . implode(array_values(PaymentTransactionHistory::PAYMENT_GATEWAYS)) . '. [30000]'
         ];
         $rules = [
+            'member_identity_key' => [
+                "required",
+                "string"
+            ],
             "payment_gateway_type" => [
                 "required",
                 "integer",
@@ -156,5 +207,147 @@ class NascibMemberPaymentViaSslService
             ]
         ];
         return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function successPayment(Request $request): array
+    {
+        $tranId = $request->input('tran_id');
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $status = 0;
+        $message = "Invalid Transaction";
+        if ($tranId) {
+            $paymentLog = PaymentTransactionLog::where('mer_trnx_id', $tranId)
+                ->where("amount", $amount)
+                ->where("trnx_currency", $currency)
+                ->first();
+
+            Log::channel('ssl_commerz')->info("paymentLog: " . json_encode($paymentLog));
+
+            throw_if(empty($paymentLog), new \Exception('Your Requested Payload invalid'));
+
+            if ($paymentLog->status != PaymentTransactionHistory::PAYMENT_SUCCESS) {
+
+                $industryAssociationOrganization = DB::table('industry_association_organization')
+                    ->where('id', $paymentLog->payment_purpose_related_id)
+                    ->first();
+
+                Log::channel('ssl_commerz')->info("industryAssociationOrganization: " . json_encode($industryAssociationOrganization));
+
+                throw_if(empty($industryAssociationOrganization), new \Exception('Invalid Transaction'));
+
+                $config = $this->getPaymentConfig($industryAssociationOrganization->industry_association_id, $paymentLog->payment_gateway_type);
+
+                $sslc = new SslCommerzNotification($config);
+
+                $validation = $sslc->orderValidate($request->all(), $tranId, $amount, $currency);
+
+                if ($validation == TRUE) {
+                    $request->offsetSet('payment_status', BaseModel::PAYMENT_SUCCESS);
+                    $this->completePaymentHistoryStore($paymentLog, $request->all());
+
+                    $message = "Transaction is successfully Completed";
+                    $status = 1;
+                }
+
+            } else {
+                $message = "Transaction is successfully Completed";
+                $status = 1;
+            }
+        }
+        return [
+            $status,
+            $message
+        ];
+    }
+
+
+    public function failPayment(Request $request): bool
+    {
+        $tranId = $request->input('tran_id');
+        /** @var PaymentTransactionLog $paymentLog */
+        $paymentLog = PaymentTransactionLog::findOrFail('mer_trnx_id', $tranId);
+        $paymentLog->status = PaymentTransactionHistory::PAYMENT_FAIL;
+        $paymentLog->response_message = $request->all();
+        return $paymentLog->save();
+
+    }
+
+    public function cancelPayment(Request $request)
+    {
+        $tran_id = $request->input('tran_id');
+
+        $order_detials = DB::table('orders')
+            ->where('transaction_id', $tran_id)
+            ->select('transaction_id', 'status', 'currency', 'amount')->first();
+
+        if ($order_detials->status == 'Pending') {
+            $update_product = DB::table('orders')
+                ->where('transaction_id', $tran_id)
+                ->update(['status' => 'Canceled']);
+            echo "Transaction is Cancel";
+        } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
+            echo "Transaction is already Successful";
+        } else {
+            echo "Transaction is Invalid";
+        }
+
+
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function completePaymentHistoryStore(PaymentTransactionLog $paymentLog, array $responseData)
+    {
+        $paymentLog->response_message = $responseData;
+        $paymentLog->trnx_id = $responseData['bank_tran_id'];
+        $paymentLog->paid_amount = $responseData['amount'];
+        $paymentLog->status = $responseData['payment_status'];
+        $paymentLog->transaction_completed_at = Carbon::now();
+        $paymentLog->save();
+
+        if ($responseData['payment_status'] == PaymentTransactionHistory::PAYMENT_SUCCESS) {
+            $paymentHistoryPayload = $paymentLog->toArray();
+            $paymentHistoryPayload['customer_name'] = $paymentLog->request_payload['cus_name'];
+            $paymentHistoryPayload['customer_email'] = $paymentLog->request_payload['cus_email'];;
+            $paymentHistoryPayload['customer_mobile'] = $paymentLog->request_payload['cus_phone'];;
+            $paymentHistoryPayload['status'] = $responseData['payment_status'];
+            $paymentHistory = new PaymentTransactionHistory();
+            $paymentHistory->fill($paymentHistoryPayload);
+            $paymentHistory->save();
+            $paymentLog->payment_transaction_history_id = $paymentHistory->id;
+            $paymentLog->save();
+            $this->confirmationMailAndSmsSend($paymentHistory);
+        }
+
+    }
+
+
+    /**
+     * @throws Throwable
+     */
+    public function confirmationMailAndSmsSend(PaymentTransactionHistory $paymentHistory)
+    {
+        if (!empty($paymentHistory)) {
+            /** Mail send*/
+            $to = array($paymentHistory->customer_email);
+            $from = BaseModel::NISE3_FROM_EMAIL;
+            $subject = "Nascib Membership Registration";
+            $message = "Congratulation, You are successfully complete your registration. You are approved as an active user then you will be sing in.";
+            $messageBody = MailService::templateView($message);
+            $mailService = new MailService($to, $from, $subject, $messageBody);
+            $mailService->sendMail();
+
+            /** Sms send */
+            $recipient = $paymentHistory->customer_mobile;
+            $smsMessage = "Congratulation, You are successfully complete your registration";
+            $smsService = new SmsService();
+            $smsService->sendSms($recipient, $smsMessage);
+        }
+
     }
 }
