@@ -586,7 +586,7 @@ class NascibMemberService
             $rules['udc_union_id'] = [
                 'required',
                 'integer',
-                'exists:loc_unions,id,deleted_at,NULL'
+                //'exists:loc_unions,id,deleted_at,NULL'
             ];
 
             $rules['udc_code'] = 'required|string|max: 255';
@@ -615,7 +615,7 @@ class NascibMemberService
             $rules['chamber_or_association_union_id'] = [
                 'required',
                 'integer',
-                'exists:loc_unions,id,deleted_at,NULL'
+                //'exists:loc_unions,id,deleted_at,NULL'
             ];
             $rules['chamber_or_association_code'] = 'required|string|max: 255';
 
