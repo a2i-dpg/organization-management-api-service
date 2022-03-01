@@ -719,7 +719,7 @@ class IndustryAssociationService
                 "exists:skills,id,deleted_at,NULL"
             ],
             'logo' => [
-                'nullable',
+                'required',
                 'string',
             ],
             'row_status' => [
@@ -830,7 +830,7 @@ class IndustryAssociationService
                 "exists:skills,id,deleted_at,NULL"
             ],
             'logo' => [
-                'nullable',
+                'required',
                 'string',
             ],
             'contact_person_designation' => [
