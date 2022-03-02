@@ -19,19 +19,20 @@ use Laravel\Lumen\Auth\Authorizable;
  * @property string email
  * @property string mobile
  * @property string profile_pic
- * @property int $role_id
- * @property int $user_type
+ * @property int role_id
+ * @property int user_type
  * @property int organization_id
  * @property int industry_association_id
+ * @property int registered_training_organization_id
  * @property int institute_id
  * @property int loc_division_id
  * @property int loc_district_id
  * @property int loc_upazila_id
- * @property int $row_status
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Role $role
- * @property Collection $permissions
+ * @property int row_status
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Role role
+ * @property Collection permissions
  */
 class User extends BaseModel implements
     AuthenticatableContract,
@@ -87,6 +88,11 @@ class User extends BaseModel implements
     public function isInstituteUser(): bool
     {
         return $this->user_type == BaseModel::INSTITUTE_USER_TYPE && $this->institute_id;
+    }
+
+    public function isRtoUser(): bool
+    {
+        return $this->user_type == BaseModel::REGISTERED_TRAINING_ORGANIZATION_USER_TYPE && $this->registered_training_organization_id;
     }
 
 }
