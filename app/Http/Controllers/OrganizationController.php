@@ -495,6 +495,7 @@ class OrganizationController extends Controller
             ]));
         }
         DB::beginTransaction();
+        $httpStatus = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
         try {
             $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
             $this->organizationService->industryAssociationMembershipApproval($organization);
@@ -513,6 +514,8 @@ class OrganizationController extends Controller
                     $messageBody = app(NascibMemberService::class)->getMemberApprovedUserMailMessageBody($industryAssociationOrganization->toArray());
                 }
 
+                $httpStatus = ResponseAlias::HTTP_OK;
+
                 /** Mail send */
                 $to = array($organization->contact_person_email);
                 $from = BaseModel::NISE3_FROM_EMAIL;
@@ -527,8 +530,8 @@ class OrganizationController extends Controller
             }
             DB::commit();
             $response['_response_status'] = [
-                "success" => false,
-                "code" => ResponseAlias::HTTP_OK,
+                "success" => $httpStatus==ResponseAlias::HTTP_OK,
+                "code" => $httpStatus,
                 "message" => "organization approved successfully",
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
             ];
@@ -537,7 +540,7 @@ class OrganizationController extends Controller
             DB::rollBack();
             throw $e;
         }
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, $httpStatus);
     }
 
     /**
@@ -550,6 +553,7 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
+        $httpStatus = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
         try {
             $this->organizationService->organizationStatusChangeAfterRejection($organization);
             $this->organizationService->industryAssociationMembershipRejection($organization);
@@ -570,11 +574,12 @@ class OrganizationController extends Controller
                 $smsMessage = "You are rejected as a " . $organization->title . " user. You are not active user now";
                 $smsService = new SmsService();
                 $smsService->sendSms($recipient, $smsMessage);
+                $httpStatus = ResponseAlias::HTTP_OK;
             }
             DB::commit();
             $response['_response_status'] = [
-                "success" => false,
-                "code" => ResponseAlias::HTTP_OK,
+                "success" => $httpStatus==ResponseAlias::HTTP_OK,
+                "code" => $httpStatus,
                 "message" => "organization rejected successfully",
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
             ];
@@ -583,7 +588,7 @@ class OrganizationController extends Controller
             DB::rollBack();
             throw $e;
         }
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, $httpStatus);
     }
 
     /**
