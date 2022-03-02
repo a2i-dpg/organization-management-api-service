@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use App\Models\NascibMember;
+use App\Models\PaymentTransactionHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -360,7 +362,7 @@ class OrganizationService
      * @param int $id
      * @return Organization
      */
-    public function getOneOrganization(int $id): Organization
+    public function getOneOrganization(int $id): array
     {
         /** @var Organization|Builder $organizationBuilder */
         $organizationBuilder = Organization::select([
@@ -432,7 +434,25 @@ class OrganizationService
 
         $organizationBuilder->with(['subTrades.trade', 'industryAssociations']);
 
-        return $organizationBuilder->firstOrFail();
+        $organization = $organizationBuilder->firstOrFail()->toArray();
+
+
+        if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == NascibMember::class) {
+
+            if ($organization['industry_associations'][0]['pivot']['payment_status'] == PaymentTransactionHistory::PAYMENT_PENDING) {
+                /**
+                 * int $industryAssociationId,
+                 * string $applicationType
+                 */
+                $industryAssociationId = $organization['industry_associations'][0]['pivot']['industry_association_id'];
+                $applicationType = NascibMember::APPLICATION_TYPE_NEW;
+                $organization['additional_information']['payment_page_url'] = app(NascibMemberService::class)->getPaymentPageUrlForNascibPayment($industryAssociationId, $applicationType);
+            }
+
+            $nascibMember = NascibMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->firstOrFail()->toArray();
+            $organization['additional_information']['additional_info_model_data'] = $nascibMember;
+        }
+        return $organization;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\HttpErrorException;
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\IndustryAssociationConfig;
@@ -10,6 +11,7 @@ use App\Models\MembershipType;
 use App\Models\NascibMember;
 use App\Models\Organization;
 use App\Models\PaymentTransactionHistory;
+use App\Services\CommonServices\CodeGenerateService;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
@@ -20,6 +22,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 /**
  *
@@ -234,16 +237,39 @@ class NascibMemberService
 
     }
 
-    public function getMemberApprovedUserMailMessageBody(array $industryAssociationOrganization)
+    /**
+     * @throws Throwable
+     */
+    public function getMemberApprovedUserMailMessageBody(array $industryAssociationOrganization): string
     {
-        $industryAssociationId = $industryAssociationOrganization['id'];
+        $industryAssociationId = $industryAssociationOrganization['industry_association_id'];
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
         $membershipType = MembershipType::where('industry_association_id', $industryAssociationId)->firstOrFail();
-        $applicationFee=
+        $applicationFee = $membershipType->fee;
+        $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, NascibMember::APPLICATION_TYPE_NEW);
         $mailData = [
+            "industry_association_title" => $industryAssociation->title,
+            "application_fee" => $applicationFee,
+            "payment_gateway_url" => $paymentGatewayUrl
+        ];
+        return view('mail.nasib_member_user_approval_mail_template', compact('mailData'))->render();
+    }
 
+    /**
+     * @throws Throwable
+     */
+    public function getPaymentPageUrlForNascibPayment(int $industryAssociationId, string $applicationType): string
+    {
+        $jwtPayload = [
+            "purpose" => $applicationType,
+            "purpose_related_id" => $industryAssociationId,
         ];
 
+        $parameter = "industry_association_id=" . $industryAssociationId;
+
+        $baseUrl = "https://" . ServiceToServiceCall::getDomain($parameter) ?? "nise.gov.bd";
+
+        return $baseUrl . "/" . NascibMember::PAYMENT_GATEWAY_PAGE_URL_PREFIX . "/" . CodeGenerateService::jwtToken($jwtPayload);
     }
 
 

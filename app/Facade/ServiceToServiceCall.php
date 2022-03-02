@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getPermissionSubGroupsByTitle(string $permissionSubGroupTitle)
  * @method static array|mixed getCoreUserByUsername(string $username)
  * @method static array|mixed getYouthUserByUsername(string $username)
+ * @method static array|mixed getDomain(string $username)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler

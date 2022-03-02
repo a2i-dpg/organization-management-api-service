@@ -505,9 +505,10 @@ class OrganizationController extends Controller
                 $messageBody = MailService::templateView($mailMessage);
                 $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
                 $industryAssociationOrganization = $organization->industryAssociations->pivot->toArray();
+
                 if ($industryAssociationOrganization['additional_info_model_name'] == NascibMember::class) {
                     $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user, Your Payment detail is send your mail";
-                    $messageBody = app(NascibMemberService::class)->getMemberApprovedUserMailMessageBody($industryAssociationOrganization); //TODO: mail config
+                    $messageBody = app(NascibMemberService::class)->getMemberApprovedUserMailMessageBody($industryAssociationOrganization);
                 }
 
                 /** Mail send */
