@@ -179,6 +179,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         });
 
         $router->post('/organization-import-excel', ["as" => "organization.import.excel", "uses" => "OrganizationController@bulkStoreByExcel"]);
+        $router->get("nascib-member/payment/pay-via-ssl/payment-gateway-page-url", ["as" => "pay-via-ssl.payment-gateway-page-url", "uses" => "NascibMemberPaymentController@getPaymentGatewayPageUrl"]);
     });
 
     /** Service to service direct call without any authorization and authentication */
@@ -234,6 +235,14 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $router->get('nascib-members/get-static-data', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@nascibMemberStaticInfo']);
         });
 
+        $router->group(['prefix' => 'nascib-members/payment', 'as' => 'nascib-members.payment'], function () use ($router) {
+            $router->post("pay-via-ssl/pay-now", ["as" => "pay-via-ssl.pay-now", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+            $router->post("pay-via-ssl/success", ["as" => "pay-via-ssl.success", "uses" => "NascibMemberPaymentController@success"]);
+            $router->post("pay-via-ssl/fail", ["as" => "pay-via-ssl.fail", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+            $router->post("pay-via-ssl/cancel", ["as" => "pay-via-ssl.cancel", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+            $router->post("pay-via-ssl/ipn", ["as" => "pay-via-ssl.ipn", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+        });
+
         $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);
 
     });
@@ -286,15 +295,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('organization-unit-types-restore{id}', ['as' => 'organization-unit-types.restore', 'uses' => 'OrganizationUnitTypeController@restore']);
     $router->delete('organization-unit-types-force-delete/{id}', ['as' => 'organization-unit-types.force-delete', 'uses' => 'OrganizationUnitTypeController@forceDelete']);
 
-    $router->group(['prefix' => 'payment', 'as' => 'payment'], function () use ($router) {
-
-        $router->post("nascib-member-ship-pay-via-ssl/pay-now", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
-        $router->post("nascib-member-ship-pay-via-ssl/success", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@success"]);
-        $router->post("nascib-member-ship-pay-via-ssl/fail", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
-        $router->post("nascib-member-ship-pay-via-ssl/cancel", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
-        $router->post("nascib-member-ship-pay-via-ssl/ipn", ["as" => "nascib-member-ship-pay-via-ssl", "uses" => "NascibMemberPaymentController@payViaSsl"]);
-
-    });
 
 });
 

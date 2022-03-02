@@ -112,7 +112,7 @@ class NascibMemberPaymentViaSslService
         $paymentConfig = $this->getPaymentConfig($industryAssociation->id, $paymentGatewayType);
 
         throw_if(empty($paymentConfig), new \Exception("The payment configuration is invalid"));
-        $paymentConfig = array_merge($paymentConfig, $requestData);
+        $paymentConfig = array_merge($paymentConfig, $requestData['feed_uri']);
 
         $sslc = new SslCommerzNotification($paymentConfig);
 
@@ -333,15 +333,15 @@ class NascibMemberPaymentViaSslService
                 "integer",
                 Rule::in(array_values(PaymentTransactionHistory::PAYMENT_GATEWAYS))
             ],
-            "success_url" => [
+            "feed_uri.success_url" => [
                 "required",
                 "string"
             ],
-            "failed_url" => [
+            "feed_uri.failed_url" => [
                 "required",
                 "string"
             ],
-            "cancel_url" => [
+            "feed_uri.cancel_url" => [
                 "required",
                 "string"
             ]
