@@ -244,7 +244,7 @@ class NascibMemberService
     {
         $industryAssociationId = $industryAssociationOrganization['industry_association_id'];
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
-        $membershipType = MembershipType::where('industry_association_id', $industryAssociationId)->firstOrFail();
+        $membershipType = MembershipType::findOrFail($industryAssociationOrganization['membership_type_id'])->firstOrFail();
         $applicationFee = $membershipType->fee;
         $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, NascibMember::APPLICATION_TYPE_NEW);
         $mailData = [
