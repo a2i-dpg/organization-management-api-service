@@ -270,7 +270,7 @@ class NascibMemberService
         $parameter = "industry_association_id=" . $industryAssociationId;
 
         $baseUrl = "https://" . ServiceToServiceCall::getDomain($parameter) ?? "nise.gov.bd";
-        Log::info("BaseUrl".$baseUrl);
+        Log::info("BaseUrl".$baseUrl."parameter: ".$parameter);
         return $baseUrl . "/" . NascibMember::PAYMENT_GATEWAY_PAGE_URL_PREFIX . "/" . CodeGenerateService::jwtToken($jwtPayload);
     }
 
