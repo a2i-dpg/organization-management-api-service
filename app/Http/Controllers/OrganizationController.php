@@ -508,7 +508,6 @@ class OrganizationController extends Controller
                 $industryAssociationOrganization = $organization->industryAssociations();
                 $industryAssociationOrganization = $industryAssociationOrganization->firstOrFail()->pivot;
 
-
                 if (!empty($industryAssociationOrganization['additional_info_model_name']) && $industryAssociationOrganization['additional_info_model_name'] == NascibMember::class) {
                     $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user, Your Payment detail is send your mail";
                     $messageBody = app(NascibMemberService::class)->getMemberApprovedUserMailMessageBody($industryAssociationOrganization->toArray());
