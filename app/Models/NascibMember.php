@@ -201,6 +201,8 @@ class NascibMember extends BaseModel
         self::APPLICATION_TYPE_RENEW => "Renew Application"
     ];
 
+    public const PAYMENT_GATEWAY_PAGE_URL_PREFIX = "nascib-member-registration-payment-method";
+
     protected $casts = [
         'registered_authority' => 'array',
         'authorized_authority' => 'array',
