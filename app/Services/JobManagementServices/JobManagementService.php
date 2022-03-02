@@ -202,12 +202,12 @@ class JobManagementService
 
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
 
-        $jobInformationBuilder->selectRaw("SUM(2) as feed_item_type");
+        $jobInformationBuilder->selectRaw("2 as feed_item_type");
         $jobInformationBuilder->selectRaw("primary_job_information.published_at as feed_sort_date");
 
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->clone()->subDays(7)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
@@ -241,7 +241,7 @@ class JobManagementService
 
         /** If request from youth feed */
         if (!empty($feedOnly)) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>=', $startTime->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>=', $startTime->clone()->subDays(30)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
