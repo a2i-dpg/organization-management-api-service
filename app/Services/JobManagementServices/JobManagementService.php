@@ -207,7 +207,7 @@ class JobManagementService
 
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->clone()->subDays(7)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
@@ -241,7 +241,7 @@ class JobManagementService
 
         /** If request from youth feed */
         if (!empty($feedOnly)) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>=', $startTime->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>=', $startTime->clone()->subDays(30)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
