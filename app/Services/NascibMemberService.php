@@ -247,6 +247,7 @@ class NascibMemberService
         $membershipType = MembershipType::findOrFail($industryAssociationOrganization['membership_type_id'])->firstOrFail();
         $applicationFee = $membershipType->fee;
         $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, NascibMember::APPLICATION_TYPE_NEW);
+        Log::info("payment url".$paymentGatewayUrl);
         $mailData = [
             "message"=>"",
             "industry_association_title" => $industryAssociation->title,
@@ -269,7 +270,7 @@ class NascibMemberService
         $parameter = "industry_association_id=" . $industryAssociationId;
 
         $baseUrl = "https://" . ServiceToServiceCall::getDomain($parameter) ?? "nise.gov.bd";
-
+        Log::info("BaseUrl".$baseUrl);
         return $baseUrl . "/" . NascibMember::PAYMENT_GATEWAY_PAGE_URL_PREFIX . "/" . CodeGenerateService::jwtToken($jwtPayload);
     }
 
