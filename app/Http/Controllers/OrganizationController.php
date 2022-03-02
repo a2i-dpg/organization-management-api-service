@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
+use App\Models\NascibMember;
 use App\Services\CommonServices\CodeGenerateService;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
+use App\Services\NascibMemberService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -230,7 +232,7 @@ class OrganizationController extends Controller
 
             $this->organizationService->excelDataValidator($rows)->validate();
 
-            foreach ($rows as $rowData){
+            foreach ($rows as $rowData) {
                 $coreUser = ServiceToServiceCall::getCoreUserByUsername($rowData['contact_person_mobile']);
                 $youthUser = ServiceToServiceCall::getYouthUserByUsername($rowData['contact_person_mobile']);
 
@@ -499,18 +501,24 @@ class OrganizationController extends Controller
             $this->organizationService->organizationStatusChangeAfterApproval($organization);
 
             if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
+                $mailMessage = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
+                $messageBody = MailService::templateView($mailMessage);
+                $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
+                $industryAssociationOrganization = $organization->industryAssociations->pivot->toArray();
+                if ($industryAssociationOrganization['additional_info_model_name'] == NascibMember::class) {
+                    $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user, Your Payment detail is send your mail";
+                    $messageBody = app(NascibMemberService::class)->getMemberApprovedUserMailMessageBody($industryAssociationOrganization);
+                }
+
                 /** Mail send */
                 $to = array($organization->contact_person_email);
                 $from = BaseModel::NISE3_FROM_EMAIL;
                 $subject = "User Approval Information";
-                $message = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
-                $messageBody = MailService::templateView($message);
                 $mailService = new MailService($to, $from, $subject, $messageBody);
                 $mailService->sendMail();
 
                 /** Sms send */
                 $recipient = $organization->contact_person_mobile;
-                $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
                 $smsService = new SmsService();
                 $smsService->sendSms($recipient, $smsMessage);
             }

@@ -298,10 +298,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 });
 
-
+//TODO: Solve tomorrow
 $router->get("jwt", function (\Illuminate\Http\Request $request) {
     $payload = [
-        "purpose" => \App\Models\NascibMember::APPLICATION_TYPE_NEW,
+        "purpose" => \App\Models\NascibMember::APPLICATION_TYPE_RENEW,
         "purpose_related_id" => "2",
     ];
     return \App\Services\CommonServices\CodeGenerateService::jwtToken($payload);

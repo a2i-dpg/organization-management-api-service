@@ -9,6 +9,8 @@ use App\Models\MembershipType;
 use App\Models\Organization;
 use App\Models\NascibMember;
 use App\Models\SmefCluster;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use App\Services\NascibMemberService;
 use App\Services\OrganizationService;
 use Carbon\Carbon;
@@ -167,6 +169,23 @@ class NascibMemberController extends Controller
 
             if (!($createdRegisterUser && !empty($createdRegisterUser['_response_status']))) {
                 throw new RuntimeException('Creating User during  Organization/Industry Creation has been failed!', 500);
+            }
+
+            if ($organization) {
+                /** Mail send*/
+                $to = array($organization->contact_person_email);
+                $from = BaseModel::NISE3_FROM_EMAIL;
+                $subject = "Nascib Membership Registration";
+                $message = "Congratulation, You are successfully complete your registration. You are approved as an active user then you will be sing in.";
+                $messageBody = MailService::templateView($message);
+                $mailService = new MailService($to, $from, $subject, $messageBody);
+                $mailService->sendMail();
+
+                /** Sms send */
+                $recipient = $organization->contact_person_mobile;
+                $smsMessage = "Congratulation, You are successfully complete your registration";
+                $smsService = new SmsService();
+                $smsService->sendSms($recipient, $smsMessage);
             }
 
             $response = [

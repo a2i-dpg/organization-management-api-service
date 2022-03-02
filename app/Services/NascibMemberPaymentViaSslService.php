@@ -50,7 +50,7 @@ class NascibMemberPaymentViaSslService
             ];
         }
 
-        if ($paymentStatus == PaymentTransactionHistory::PAYMENT_SUCCESS && $applicationType = NascibMember::APPLICATION_TYPE_NEW) {
+        if ($paymentStatus == PaymentTransactionHistory::PAYMENT_SUCCESS && $applicationType == NascibMember::APPLICATION_TYPE_NEW) {
             return [
                 "status" => "fail",
                 "message" => "You have already completed your payment"
@@ -71,7 +71,7 @@ class NascibMemberPaymentViaSslService
 
         $postData = array();
         $postData['total_amount'] = $applicationFee; // You can't  pay less than 10
-        $postData['currency'] = "BDT";
+        $postData['currency'] = PaymentTransactionHistory::CURRENCY_BDT ?? "BDT";
         /** tran_id must be unique */
         $postData['tran_id'] = CodeGenerateService::getNewInvoiceCode($invoicePrefix, PaymentTransactionHistory::SSL_COMMERZ_INVOICE_SIZE);
 
@@ -134,6 +134,146 @@ class NascibMemberPaymentViaSslService
 
 
     /**
+     * @throws Throwable
+     */
+    public function successPayment(Request $request): array
+    {
+        $tranId = $request->input('tran_id');
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $status = 0;
+        $message = "Invalid Transaction";
+        if ($tranId) {
+            $paymentLog = PaymentTransactionLog::where('mer_trnx_id', $tranId)
+                ->where("amount", $amount)
+                ->where("trnx_currency", $currency)
+                ->first();
+
+            Log::channel('ssl_commerz')->info("paymentLog: " . json_encode($paymentLog));
+
+            throw_if(empty($paymentLog), new \Exception('Your Requested Payload invalid'));
+
+            if ($paymentLog->status != PaymentTransactionHistory::PAYMENT_SUCCESS) {
+
+
+                $industryAssociationOrganization = DB::table('industry_association_organization')
+                    ->where('id', $paymentLog->payment_purpose_related_id)
+                    ->first();
+
+                Log::channel('ssl_commerz')->info("industryAssociationOrganization: " . json_encode($industryAssociationOrganization));
+
+                throw_if(empty($industryAssociationOrganization), new \Exception('Invalid Transaction'));
+
+                $config = $this->getPaymentConfig($industryAssociationOrganization->industry_association_id, $paymentLog->payment_gateway_type);
+
+                $sslc = new SslCommerzNotification($config);
+
+                $validation = $sslc->orderValidate($request->all(), $tranId, $amount, $currency);
+
+                if ($validation == TRUE) {
+                    $request->offsetSet('payment_status', BaseModel::PAYMENT_SUCCESS);
+                    $this->completePaymentHistoryStore($paymentLog, $request->all());
+
+
+                    app(NascibMemberService::class)->updateMembershipExpireDate(
+                        $industryAssociationOrganization->industry_association_id,
+                        $industryAssociationOrganization->organization_id,
+                        $industryAssociationOrganization->membership_type_id
+                    );
+
+                    $message = "Transaction is successfully Completed";
+                    $status = 1;
+                }
+
+            } else {
+                $message = "Transaction is successfully Completed";
+                $status = 1;
+            }
+        }
+        return [
+            $status,
+            $message
+        ];
+    }
+
+
+    public function failPayment(Request $request): bool
+    {
+        $tranId = $request->input('tran_id');
+        /** @var PaymentTransactionLog $paymentLog */
+        $paymentLog = PaymentTransactionLog::findOrFail('mer_trnx_id', $tranId);
+        $paymentLog->status = PaymentTransactionHistory::PAYMENT_FAIL;
+        $paymentLog->response_message = $request->all();
+        return $paymentLog->save();
+
+    }
+
+    public function cancelPayment(Request $request): bool
+    {
+        $tranId = $request->input('tran_id');
+        /** @var PaymentTransactionLog $paymentLog */
+        $paymentLog = PaymentTransactionLog::findOrFail('mer_trnx_id', $tranId);
+        $paymentLog->status = PaymentTransactionHistory::PAYMENT_CANCEL;
+        $paymentLog->response_message = $request->all();
+        return $paymentLog->save();
+
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function completePaymentHistoryStore(PaymentTransactionLog $paymentLog, array $responseData)
+    {
+        $paymentLog->response_message = $responseData;
+        $paymentLog->trnx_id = $responseData['bank_tran_id'];
+        $paymentLog->paid_amount = $responseData['amount'];
+        $paymentLog->status = $responseData['payment_status'];
+        $paymentLog->transaction_completed_at = Carbon::now();
+        $paymentLog->save();
+
+        if ($responseData['payment_status'] == PaymentTransactionHistory::PAYMENT_SUCCESS) {
+            $paymentHistoryPayload = $paymentLog->toArray();
+            $paymentHistoryPayload['customer_name'] = $paymentLog->request_payload['cus_name'];
+            $paymentHistoryPayload['customer_email'] = $paymentLog->request_payload['cus_email'];;
+            $paymentHistoryPayload['customer_mobile'] = $paymentLog->request_payload['cus_phone'];;
+            $paymentHistoryPayload['status'] = $responseData['payment_status'];
+            $paymentHistory = new PaymentTransactionHistory();
+            $paymentHistory->fill($paymentHistoryPayload);
+            $paymentHistory->save();
+            $paymentLog->payment_transaction_history_id = $paymentHistory->id;
+            $paymentLog->save();
+            $this->confirmationMailAndSmsSend($paymentHistory);
+        }
+
+    }
+
+
+    /**
+     * @throws Throwable
+     */
+    public function confirmationMailAndSmsSend(PaymentTransactionHistory $paymentHistory)
+    {
+        if (!empty($paymentHistory)) {
+            /** Mail send*/
+            $to = array($paymentHistory->customer_email);
+            $from = BaseModel::NISE3_FROM_EMAIL;
+            $subject = "Nascib Membership Registration";
+            $message = "Congratulation, You are successfully complete your payment. You are  an active member.";
+            $messageBody = MailService::templateView($message);
+            $mailService = new MailService($to, $from, $subject, $messageBody);
+            $mailService->sendMail();
+
+            /** Sms send */
+            $recipient = $paymentHistory->customer_mobile;
+            $smsMessage = "Congratulation,  You are successfully complete your payment";
+            $smsService = new SmsService();
+            $smsService->sendSms($recipient, $smsMessage);
+        }
+
+    }
+
+
+    /**
      * @param array $payload
      * @param int $purposeRelatedId
      * @param string $paymentPurpose
@@ -148,8 +288,8 @@ class NascibMemberPaymentViaSslService
         $data['payment_purpose_related_id'] = $purposeRelatedId;
         $data['payment_purpose'] = $paymentPurpose;
         $data['payment_gateway_type'] = $paymentGatewayType;
-        $data['trnx_currency'] = $payload['total_amount'];
-        $data['amount'] = $payload['currency'];
+        $data['trnx_currency'] = $payload['currency'];
+        $data['amount'] = $payload['total_amount'];
         $data['request_payload'] = $payload;
         $data['transaction_created_at'] = Carbon::now();
 
@@ -209,145 +349,4 @@ class NascibMemberPaymentViaSslService
         return Validator::make($request->all(), $rules, $customMessage);
     }
 
-    /**
-     * @throws Throwable
-     */
-    public function successPayment(Request $request): array
-    {
-        $tranId = $request->input('tran_id');
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-        $status = 0;
-        $message = "Invalid Transaction";
-        if ($tranId) {
-            $paymentLog = PaymentTransactionLog::where('mer_trnx_id', $tranId)
-                ->where("amount", $amount)
-                ->where("trnx_currency", $currency)
-                ->first();
-
-            Log::channel('ssl_commerz')->info("paymentLog: " . json_encode($paymentLog));
-
-            throw_if(empty($paymentLog), new \Exception('Your Requested Payload invalid'));
-
-            if ($paymentLog->status != PaymentTransactionHistory::PAYMENT_SUCCESS) {
-
-                $industryAssociationOrganization = DB::table('industry_association_organization')
-                    ->where('id', $paymentLog->payment_purpose_related_id)
-                    ->first();
-
-                Log::channel('ssl_commerz')->info("industryAssociationOrganization: " . json_encode($industryAssociationOrganization));
-
-                throw_if(empty($industryAssociationOrganization), new \Exception('Invalid Transaction'));
-
-                $config = $this->getPaymentConfig($industryAssociationOrganization->industry_association_id, $paymentLog->payment_gateway_type);
-
-                $sslc = new SslCommerzNotification($config);
-
-                $validation = $sslc->orderValidate($request->all(), $tranId, $amount, $currency);
-
-                if ($validation == TRUE) {
-                    $request->offsetSet('payment_status', BaseModel::PAYMENT_SUCCESS);
-                    $this->completePaymentHistoryStore($paymentLog, $request->all());
-
-                    $message = "Transaction is successfully Completed";
-                    $status = 1;
-                }
-
-            } else {
-                $message = "Transaction is successfully Completed";
-                $status = 1;
-            }
-        }
-        return [
-            $status,
-            $message
-        ];
-    }
-
-
-    public function failPayment(Request $request): bool
-    {
-        $tranId = $request->input('tran_id');
-        /** @var PaymentTransactionLog $paymentLog */
-        $paymentLog = PaymentTransactionLog::findOrFail('mer_trnx_id', $tranId);
-        $paymentLog->status = PaymentTransactionHistory::PAYMENT_FAIL;
-        $paymentLog->response_message = $request->all();
-        return $paymentLog->save();
-
-    }
-
-    public function cancelPayment(Request $request)
-    {
-        $tran_id = $request->input('tran_id');
-
-        $order_detials = DB::table('orders')
-            ->where('transaction_id', $tran_id)
-            ->select('transaction_id', 'status', 'currency', 'amount')->first();
-
-        if ($order_detials->status == 'Pending') {
-            $update_product = DB::table('orders')
-                ->where('transaction_id', $tran_id)
-                ->update(['status' => 'Canceled']);
-            echo "Transaction is Cancel";
-        } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
-            echo "Transaction is already Successful";
-        } else {
-            echo "Transaction is Invalid";
-        }
-
-
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function completePaymentHistoryStore(PaymentTransactionLog $paymentLog, array $responseData)
-    {
-        $paymentLog->response_message = $responseData;
-        $paymentLog->trnx_id = $responseData['bank_tran_id'];
-        $paymentLog->paid_amount = $responseData['amount'];
-        $paymentLog->status = $responseData['payment_status'];
-        $paymentLog->transaction_completed_at = Carbon::now();
-        $paymentLog->save();
-
-        if ($responseData['payment_status'] == PaymentTransactionHistory::PAYMENT_SUCCESS) {
-            $paymentHistoryPayload = $paymentLog->toArray();
-            $paymentHistoryPayload['customer_name'] = $paymentLog->request_payload['cus_name'];
-            $paymentHistoryPayload['customer_email'] = $paymentLog->request_payload['cus_email'];;
-            $paymentHistoryPayload['customer_mobile'] = $paymentLog->request_payload['cus_phone'];;
-            $paymentHistoryPayload['status'] = $responseData['payment_status'];
-            $paymentHistory = new PaymentTransactionHistory();
-            $paymentHistory->fill($paymentHistoryPayload);
-            $paymentHistory->save();
-            $paymentLog->payment_transaction_history_id = $paymentHistory->id;
-            $paymentLog->save();
-            $this->confirmationMailAndSmsSend($paymentHistory);
-        }
-
-    }
-
-
-    /**
-     * @throws Throwable
-     */
-    public function confirmationMailAndSmsSend(PaymentTransactionHistory $paymentHistory)
-    {
-        if (!empty($paymentHistory)) {
-            /** Mail send*/
-            $to = array($paymentHistory->customer_email);
-            $from = BaseModel::NISE3_FROM_EMAIL;
-            $subject = "Nascib Membership Registration";
-            $message = "Congratulation, You are successfully complete your registration. You are approved as an active user then you will be sing in.";
-            $messageBody = MailService::templateView($message);
-            $mailService = new MailService($to, $from, $subject, $messageBody);
-            $mailService->sendMail();
-
-            /** Sms send */
-            $recipient = $paymentHistory->customer_mobile;
-            $smsMessage = "Congratulation, You are successfully complete your registration";
-            $smsService = new SmsService();
-            $smsService->sendSms($recipient, $smsMessage);
-        }
-
-    }
 }

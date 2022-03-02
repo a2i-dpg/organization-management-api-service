@@ -9,6 +9,9 @@ use App\Models\IndustryAssociationConfig;
 use App\Models\MembershipType;
 use App\Models\NascibMember;
 use App\Models\Organization;
+use App\Models\PaymentTransactionHistory;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
@@ -68,6 +71,17 @@ class NascibMemberService
         $organization = $organization->fresh();
         return $organization->industryAssociations()->firstOrFail()->pivot->id;
 
+    }
+
+    public function updateMembershipExpireDate(int $industryAssociationId, int $organizationId, int $membershipTypeId)
+    {
+        $organization = Organization::findOrFail($organizationId);
+
+        $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+            'payment_status' => BaseModel::PAYMENT_SUCCESS,
+            'payment_date' => Carbon::now()->format('Y-m-d'),
+            'member_ship_expire_date' => $this->getMembershipExpireDate($membershipTypeId)
+        ]);
     }
 
     private function getMembershipExpireDate(int $membershipTypeId)
@@ -217,6 +231,18 @@ class NascibMemberService
 
         Log::channel('idp_user')->info('Nascib-User-Payload: ' . json_encode($nascibUserPostField));
         return app(OrganizationService::class)->createOpenRegisterUser($nascibUserPostField);
+
+    }
+
+    public function getMemberApprovedUserMailMessageBody(array $industryAssociationOrganization)
+    {
+        $industryAssociationId = $industryAssociationOrganization['id'];
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $membershipType = MembershipType::where('industry_association_id', $industryAssociationId)->firstOrFail();
+        $applicationFee=
+        $mailData = [
+
+        ];
 
     }
 

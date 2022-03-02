@@ -31,6 +31,7 @@ class PaymentTransactionHistory extends BaseModel
 {
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SIMPLE;
 
+    public const CURRENCY_BDT = "BDT";
     /** Payment Status */
     public const PAYMENT_SUCCESS = 1;
     public const PAYMENT_PENDING = 2;
