@@ -248,6 +248,7 @@ class NascibMemberService
         $applicationFee = $membershipType->fee;
         $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, NascibMember::APPLICATION_TYPE_NEW);
         $mailData = [
+            "message"=>"",
             "industry_association_title" => $industryAssociation->title,
             "application_fee" => $applicationFee,
             "payment_gateway_url" => $paymentGatewayUrl

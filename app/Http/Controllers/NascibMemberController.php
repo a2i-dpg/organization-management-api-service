@@ -181,7 +181,7 @@ class NascibMemberController extends Controller
                 $to = array($organization->contact_person_email);
                 $from = BaseModel::NISE3_FROM_EMAIL;
                 $subject = "Nascib Membership Registration";
-                $message = "Congratulation, You are successfully complete your registration.<br> Your Username: " . $validated['entrepreneur_mobile'] . ",<br> Password:" . $validated['password'] . "<br> You are approved as an active user then you will be sing in.";
+                $message = "Congratulation, You are successfully complete your registration.<br> Your Username: " . $validated['entrepreneur_mobile'] . ",<br> Password:" . $validated['password'] . "<br> You are approved as an active user by admin then you will be sign in.";
                 $messageBody = MailService::templateView($message);
                 $mailService = new MailService($to, $from, $subject, $messageBody);
                 $mailService->sendMail();
