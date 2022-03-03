@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\IndustryAssociationConfig;
-use App\Models\MembershipType;
 use App\Models\PaymentTransactionHistory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
