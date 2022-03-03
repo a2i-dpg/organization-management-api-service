@@ -118,7 +118,7 @@ class NascibMemberPaymentViaSslService
         $postData['value_d'] = "";
 
         $paymentConfig = $this->getPaymentConfig($industryAssociation->id, $paymentGatewayType);
-        Log::channel('ssl_commerz')->info("ssl-config: " . json_encode($paymentConfig,JSON_PRETTY_PRINT));
+        Log::channel('ssl_commerz')->info("ssl-config: " . json_encode($paymentConfig, JSON_PRETTY_PRINT));
         throw_if(empty($paymentConfig), new \Exception("The payment configuration is invalid"));
         $paymentConfig = array_merge($paymentConfig, $requestData['feed_uri']);
 
@@ -146,6 +146,8 @@ class NascibMemberPaymentViaSslService
      */
     public function successPayment(Request $request): array
     {
+        Log::channel('ssl_commerz')->info("IPN RESPONSE: " . json_encode($request->all()));
+
         $tranId = $request->input('tran_id');
         $amount = $request->input('amount');
         $currency = $request->input('currency');
