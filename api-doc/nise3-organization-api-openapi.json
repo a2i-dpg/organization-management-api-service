@@ -15,28 +15,13 @@
             "url": "http://nise-industry.softbd/api/v1"
         },
         {
-            "url": "http://localhost:8002/api/v1"
-        },
-        {
-            "url": "https://org.bus-staging.softbdltd.com/api/v1"
-        },
-        {
-            "url": "https://org-phase1.nise.gov.bd/api/v1"
-        },
-        {
-            "url": "http://organization.local:8010/api/v1"
+            "url": "http://nise3-org.default/api/v1"
         },
         {
             "url": "http://localhost:8000/api/v1"
         },
         {
             "url": "http://localhost:8003/api/v1"
-        },
-        {
-            "url": "https://api.bus.softbd.xyz/org/api/v1"
-        },
-        {
-            "url": "http://nise3-organization.asm/api/v1"
         }
     ],
     "security": [
