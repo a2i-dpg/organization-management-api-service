@@ -434,7 +434,7 @@ class OrganizationService
 
         $organizationBuilder->with(['subTrades.trade', 'industryAssociations']);
 
-        return $organizationBuilder->firstOrFail()->toArray();
+        return $organizationBuilder->firstOrFail();
     }
 
     public function getNascibData(array &$organization)
