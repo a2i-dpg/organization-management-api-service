@@ -153,12 +153,19 @@ class NascibMemberController extends Controller
      */
     public function openRegistration(Request $request): JsonResponse
     {
-
         $organizationMember = app(NascibMember::class);
         /** @var Organization $organization */
         $organization = app(Organization::class);
 
         $validated = $this->nascibMemberService->validator($request)->validate();
+
+        if (!empty($validated['other_authority'])) {
+            $authorizedAuthority = $validated['authorized_authority'];
+            $validated['authorized_authority']=array_merge($authorizedAuthority, [$validated['other_authority']]);
+            unset($validated['other_authority']);
+        }
+
+
 
         $httpStatusCode = ResponseAlias::HTTP_CREATED;
 

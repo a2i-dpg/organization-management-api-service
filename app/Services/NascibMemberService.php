@@ -408,18 +408,12 @@ class NascibMemberService
                 'array',
             ],
             'authorized_authority.*.authority_type' => [
-                Rule::requiredIf(function () use ($request) {
-                    return !array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'));
-                }),
-                'nullable',
+                'required',
                 "integer",
                 Rule::in(array_keys(NascibMember::AUTHORIZED_AUTHORITY))
             ],
             'authorized_authority.*.registration_number' => [
-                Rule::requiredIf(function () use ($request) {
-                    return !array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'));
-                }),
-                'nullable',
+                'required',
                 "string"
             ],
             'have_specialized_area' => [
@@ -608,14 +602,18 @@ class NascibMemberService
             ],
 
         ];
-
         /** other Authority */
-        if (!empty($request->get('authorized_authority')) && is_array($request->get('authorized_authority')) && array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'))) {
-            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'authority_name'] = [
+        if (!empty($request->get('other_authority')) && is_array($request->get('other_authority'))) {
+            $rules['other_authority.' . 'authority_type'] = [
+                "required",
+                "string",
+                Rule::in([NascibMember::OTHER_AUTHORITY_KEY])
+            ];
+            $rules['other_authority.' . 'authority_name'] = [
                 "required",
                 "string"
             ];
-            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'registration_number'] = [
+            $rules['other_authority.' . 'registration_number'] = [
                 "required",
                 "string"
             ];
