@@ -29,6 +29,7 @@ use Throwable;
  */
 class NascibMemberService
 {
+
     public function registerNascib(Organization $organization, NascibMember $nascibMember, array $data): array
     {
         $orgData['organization_type_id'] = Organization::ORGANIZATION_TYPE_PRIVATE;

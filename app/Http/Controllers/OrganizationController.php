@@ -70,10 +70,14 @@ class OrganizationController extends Controller
      */
     public function read(Request $request, int $id): JsonResponse
     {
+
         $organization = $this->organizationService->getOneOrganization($id);
         $this->authorize('view', $organization);
+        if (!empty($organization)) {
+            $organization = $organization->toArray();
+        }
         $response = [
-            "data" => $organization,
+            "data" => $this->organizationService->getNascibData($organization),
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -530,7 +534,7 @@ class OrganizationController extends Controller
             }
             DB::commit();
             $response['_response_status'] = [
-                "success" => $httpStatus==ResponseAlias::HTTP_OK,
+                "success" => $httpStatus == ResponseAlias::HTTP_OK,
                 "code" => $httpStatus,
                 "message" => "organization approved successfully",
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
@@ -578,7 +582,7 @@ class OrganizationController extends Controller
             }
             DB::commit();
             $response['_response_status'] = [
-                "success" => $httpStatus==ResponseAlias::HTTP_OK,
+                "success" => $httpStatus == ResponseAlias::HTTP_OK,
                 "code" => $httpStatus,
                 "message" => "organization rejected successfully",
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),

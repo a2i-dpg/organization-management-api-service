@@ -362,7 +362,7 @@ class OrganizationService
      * @param int $id
      * @return Organization
      */
-    public function getOneOrganization(int $id): array
+    public function getOneOrganization(int $id): Organization
     {
         /** @var Organization|Builder $organizationBuilder */
         $organizationBuilder = Organization::select([
@@ -434,9 +434,11 @@ class OrganizationService
 
         $organizationBuilder->with(['subTrades.trade', 'industryAssociations']);
 
-        $organization = $organizationBuilder->firstOrFail()->toArray();
+        return $organizationBuilder->firstOrFail()->toArray();
+    }
 
-
+    public function getNascibData(array &$organization)
+    {
         if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == NascibMember::class) {
 
             if ($organization['industry_associations'][0]['pivot']['payment_status'] == PaymentTransactionHistory::PAYMENT_PENDING) {
@@ -455,10 +457,14 @@ class OrganizationService
                 $organization['additional_information']['payment_page_url'] = app(NascibMemberService::class)->getPaymentPageUrlForNascibPayment($industryAssociationId, $industryAssociationOrganizationId, $applicationType);
             }
 
-            $nascibMember = NascibMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->firstOrFail()->toArray();
-            $organization['additional_information']['additional_info_model_data'] = $nascibMember;
+            $nascibMember = NascibMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->first();
+            if (!empty($nascibMember)) {
+                $organization['additional_information']['additional_info_model_data'] = $nascibMember->toArray();
+            } else {
+                $organization['additional_information']['additional_info_model_data'] = [];
+            }
+
         }
-        return $organization;
     }
 
     /**
