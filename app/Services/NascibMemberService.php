@@ -243,13 +243,16 @@ class NascibMemberService
     public function getMemberApprovedUserMailMessageBody(array $industryAssociationOrganization): string
     {
         $industryAssociationId = $industryAssociationOrganization['industry_association_id'];
+        $industryAssociationOrganizationId = $industryAssociationOrganization['id'];
+
         $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
         $membershipType = MembershipType::findOrFail($industryAssociationOrganization['membership_type_id'])->firstOrFail();
         $applicationFee = $membershipType->fee;
-        $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, NascibMember::APPLICATION_TYPE_NEW);
-        Log::info("payment url".$paymentGatewayUrl);
+
+        $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, $industryAssociationOrganizationId, NascibMember::APPLICATION_TYPE_NEW);
+        Log::info("payment url" . $paymentGatewayUrl);
         $mailData = [
-            "message"=>"",
+            "message" => "",
             "industry_association_title" => $industryAssociation->title,
             "application_fee" => $applicationFee,
             "payment_gateway_url" => $paymentGatewayUrl
@@ -260,17 +263,17 @@ class NascibMemberService
     /**
      * @throws Throwable
      */
-    public function getPaymentPageUrlForNascibPayment(int $industryAssociationId, string $applicationType): string
+    public function getPaymentPageUrlForNascibPayment(int $industryAssociationId, int $industryAssociationOrganizationId, string $applicationType): string
     {
         $jwtPayload = [
             "purpose" => $applicationType,
-            "purpose_related_id" => $industryAssociationId,
+            "purpose_related_id" => $industryAssociationOrganizationId,
         ];
 
         $parameter = "industry_association_id=" . $industryAssociationId;
 
         $baseUrl = "https://" . ServiceToServiceCall::getDomain($parameter) ?? "nise.gov.bd";
-        Log::info("BaseUrl".$baseUrl."parameter: ".$parameter);
+        Log::info("BaseUrl" . $baseUrl . "parameter: " . $parameter);
         return $baseUrl . "/" . NascibMember::PAYMENT_GATEWAY_PAGE_URL_PREFIX . "/" . CodeGenerateService::jwtToken($jwtPayload);
     }
 

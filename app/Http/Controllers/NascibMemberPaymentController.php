@@ -52,6 +52,11 @@ class NascibMemberPaymentController extends Controller
             $payloadClaim = CodeGenerateService::jwtPayloadClaims($validateData['member_identity_key']);
 
             if (!empty($payloadClaim['purpose']) && !empty($payloadClaim['purpose_related_id']) && in_array($payloadClaim['purpose'], array_keys(NascibMember::APPLICATION_TYPE))) {
+
+                /**
+                 * purpose_related_id is industry_association_organization_id
+                 * purpose is either NEW APPLICATION OR RENEW APPLICATION
+                 */
                 $responseData = $this->nascibMemberPaymentViaSslService->paymentInit($validateData, $payloadClaim['purpose_related_id'], $payloadClaim['purpose'], $validateData['payment_gateway_type']);
 
                 $httpStatusCode = $responseData['status'] == 'success' ? ResponseAlias::HTTP_CREATED : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;

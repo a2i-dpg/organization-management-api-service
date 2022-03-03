@@ -18,6 +18,7 @@ use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use App\Services\PaymentService\Library\SslCommerzNotification;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +31,8 @@ class NascibMemberPaymentViaSslService
     /**
      * @throws Throwable
      */
-    public function paymentInit(array $requestData, int $organizationId, string $applicationType, int $paymentGatewayType)
+
+    public function paymentInit(array $requestData, int $industryAssociationOrganizationId, string $applicationType, int $paymentGatewayType)
     {
 
         /**Here you have to receive all the order data to initiate the payment.
@@ -38,9 +40,15 @@ class NascibMemberPaymentViaSslService
          * In orders table order uniq identity is "transaction_id","status" field contain status of the transaction,
          * "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
          */
-        $organization = Organization::findOrFail($organizationId);
-        $industryAssociationOrganization = $organization->industryAssociations()->firstOrFail()->pivot;
+
+        $industryAssociationOrganization = DB::table('industry_association_organization')->where('id', $industryAssociationOrganizationId)->first();
+
+        throw_if(empty($industryAssociationOrganization), new Exception("Row is not found in industry_association_organization table"));
+
+        $organization = Organization::findOrFail($industryAssociationOrganization->organization_id);
+
         $memberShipTypeId = $industryAssociationOrganization->membership_type_id;
+
         $paymentStatus = $industryAssociationOrganization->payment_status;
 
         if ($paymentStatus == BaseModel::ROW_STATUS_REJECTED) {

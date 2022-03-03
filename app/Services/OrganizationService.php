@@ -440,13 +440,19 @@ class OrganizationService
         if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == NascibMember::class) {
 
             if ($organization['industry_associations'][0]['pivot']['payment_status'] == PaymentTransactionHistory::PAYMENT_PENDING) {
-                /**
-                 * int $industryAssociationId,
-                 * string $applicationType
-                 */
+
+                $industryAssociationOrganizationId = $organization['industry_associations'][0]['pivot']['id'];
                 $industryAssociationId = $organization['industry_associations'][0]['pivot']['industry_association_id'];
                 $applicationType = NascibMember::APPLICATION_TYPE_NEW;
-                $organization['additional_information']['payment_page_url'] = app(NascibMemberService::class)->getPaymentPageUrlForNascibPayment($industryAssociationId, $applicationType);
+
+                /**
+                 * If you get Payment Page Url For NascibPayment, you have to send following parameters
+                 * $industryAssociationId,
+                 * $industryAssociationOrganizationId
+                 * $applicationType
+                 */
+
+                $organization['additional_information']['payment_page_url'] = app(NascibMemberService::class)->getPaymentPageUrlForNascibPayment($industryAssociationId, $industryAssociationOrganizationId, $applicationType);
             }
 
             $nascibMember = NascibMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->firstOrFail()->toArray();
