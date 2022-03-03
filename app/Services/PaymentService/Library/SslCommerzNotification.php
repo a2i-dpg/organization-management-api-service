@@ -2,6 +2,8 @@
 
 namespace App\Services\PaymentService\Library;
 
+use Illuminate\Support\Facades\Log;
+
 class SslCommerzNotification extends AbstractSslCommerz
 {
     protected array $data = [];
@@ -214,6 +216,11 @@ class SslCommerzNotification extends AbstractSslCommerz
         $this->setAuthenticationInfo();
 
         /** Now, call the Gateway API */
+        Log::channel('ssl_commerz')->info("Requested Payload Before Payment Making: " . json_encode([
+                $this->data,
+                $header,
+                $this->config['connect_from_localhost']
+            ], JSON_PRETTY_PRINT));
 
         $apiResponse = $this->callToApi($this->data, $header, $this->config['connect_from_localhost']);
         return json_decode($apiResponse, true);
