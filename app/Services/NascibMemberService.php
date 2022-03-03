@@ -615,7 +615,7 @@ class NascibMemberService
                 "required",
                 "string"
             ];
-            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'register_number'] = [
+            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'registration_number'] = [
                 "required",
                 "string"
             ];
