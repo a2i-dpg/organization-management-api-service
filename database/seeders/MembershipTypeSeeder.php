@@ -22,7 +22,7 @@ class MembershipTypeSeeder extends Seeder
          */
         $membershipTypes = [
             [
-                "industry_association_id" => 1,
+                "industry_association_id" => 2,
                 "name" => "অংশীদার",
                 "name_en" => "Associate Member",
                 "fee" => 1000,
@@ -31,7 +31,7 @@ class MembershipTypeSeeder extends Seeder
                 "payment_frequency" => MembershipType::PAYMENT_FREQUENCY_YEARLY_KEY
             ],
             [
-                "industry_association_id" => 1,
+                "industry_association_id" => 2,
                 "name" => "সাধারণ",
                 "name_en" => "General Member",
                 "fee" => 1000,
