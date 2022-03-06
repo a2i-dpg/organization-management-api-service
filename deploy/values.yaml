@@ -5,9 +5,9 @@
 
 variables:
 
-  devImageVersion: &dev_image "2.2.20"
+  devImageVersion: &dev_image "2.2.21"
 
-  productionImageVersion: &prod_image "2.2.20"
+  productionImageVersion: &prod_image "2.2.21"
 
 
   #auto scaling config
