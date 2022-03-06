@@ -93,8 +93,9 @@ class NascibMemberPaymentController extends Controller
     /**
      * @throws Throwable
      */
-    public function success(Request $request): JsonResponse
+    public function success(Request $request)
     {
+        return $request->all();
         DB::beginTransaction();
         try {
             [$status, $message] = $this->nascibMemberPaymentViaSslService->successPayment($request);
@@ -116,24 +117,16 @@ class NascibMemberPaymentController extends Controller
     /**
      * @throws Throwable
      */
-    public function ipn(Request $request): JsonResponse
+    public function ipn(Request $request)
     {
         DB::beginTransaction();
         try {
-            [$status, $message] = $this->nascibMemberPaymentViaSslService->successPayment($request);
-            $httpStatusCode = $status ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
-            $response['_response_status'] = [
-                "success" => (bool)$status,
-                "code" => $httpStatusCode,
-                "message" => $message,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-            ];
+            $this->nascibMemberPaymentViaSslService->ipnHandler($request);
             DB::commit();
         } catch (Throwable $exception) {
             DB::rollBack();
             throw $exception;
         }
-        return Response::json($response, $httpStatusCode);
     }
 
     /**

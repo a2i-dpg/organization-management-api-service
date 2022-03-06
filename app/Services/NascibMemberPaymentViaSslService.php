@@ -180,6 +180,7 @@ class NascibMemberPaymentViaSslService
 
                 $validation = $sslc->orderValidate($request->all(), $tranId, $amount, $currency);
 
+
                 if ($validation == TRUE) {
                     $request->offsetSet('payment_status', BaseModel::PAYMENT_SUCCESS);
                     $this->completePaymentHistoryStore($paymentLog, $request->all());
@@ -206,6 +207,71 @@ class NascibMemberPaymentViaSslService
         ];
     }
 
+    public function ipnHandler(Request $request)
+    {
+        Log::channel('ssl_commerz')->info("IPN RESPONSE: " . json_encode($request->all()));
+
+        $tranId = $request->input('tran_id');
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $status = 0;
+        $message = "Invalid Transaction";
+        if ($tranId) {
+            $paymentLog = PaymentTransactionLog::where('mer_trnx_id', $tranId)
+                ->where("amount", $amount)
+                ->where("trnx_currency", $currency)
+                ->first();
+
+            Log::channel('ssl_commerz')->info("paymentLog: " . json_encode($paymentLog));
+            if (!empty($paymentLog)) {
+
+                if ($paymentLog->status != PaymentTransactionHistory::PAYMENT_SUCCESS) {
+
+                    $industryAssociationOrganization = DB::table('industry_association_organization')
+                        ->where('id', $paymentLog->payment_purpose_related_id)
+                        ->first();
+
+                    Log::channel('ssl_commerz')->info("industryAssociationOrganization: " . json_encode($industryAssociationOrganization));
+
+                    if (!empty($industryAssociationOrganization)) {
+                        $config = $this->getPaymentConfig($industryAssociationOrganization->industry_association_id, $paymentLog->payment_gateway_type);
+
+                        $sslc = new SslCommerzNotification($config);
+
+                        $validation = $sslc->orderValidate($request->all(), $tranId, $amount, $currency);
+
+                        if ($validation == TRUE) {
+                            $request->offsetSet('payment_status', BaseModel::PAYMENT_SUCCESS);
+                            $this->completePaymentHistoryStore($paymentLog, $request->all());
+
+                            app(NascibMemberService::class)->updateMembershipExpireDate(
+                                $industryAssociationOrganization->industry_association_id,
+                                $industryAssociationOrganization->organization_id,
+                                $industryAssociationOrganization->membership_type_id
+                            );
+
+                            $message = "Transaction is successfully Completed";
+                            $status = 1;
+                        } else {
+                            $message = 'OrderValidate validation is false';
+                        }
+                    } else {
+                        $message = 'The row of IndustryAssociationOrganization is empty';
+                    }
+
+                } else {
+                    $message = "Transaction is successfully Completed";
+                    $status = 1;
+                }
+            } else {
+                $message = 'Your Requested Payload invalid, So The Model PaymentTransactionLog is empty';
+            }
+        }
+        Log::debug("IPN-DEBUG-LOG: ", [
+            "status" => $status,
+            "message" => $message
+        ]);
+    }
 
     public function failPayment(Request $request): bool
     {
