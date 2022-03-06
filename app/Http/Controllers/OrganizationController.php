@@ -333,6 +333,11 @@ class OrganizationController extends Controller
 
         $this->authorize('update', $organization);
 
+        if ($request->industry_association_id) {
+            $industryAssociations = array(['industry_association_id' => $request->industry_association_id, 'membership_id' => $request->membership_id]);
+            $request->offsetSet('industry_associations', $industryAssociations);
+        }
+
         $validated = $this->organizationService->validator($request, $id)->validate();
         $industrySubTrades = $validated['sub_trades'];
         $data = $this->organizationService->update($organization, $validated);
