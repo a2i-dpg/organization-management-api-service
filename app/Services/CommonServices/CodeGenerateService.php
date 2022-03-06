@@ -10,12 +10,16 @@ use App\Models\Organization;
 use Carbon\Carbon;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Types\Self_;
 use Throwable;
 use ReallySimpleJWT\Token;
 
 
 class CodeGenerateService
 {
+
+    const JWT_SECRETE = '!yc7Re75a$%)Rs$123*';
 
     /**
      * @throws Throwable
@@ -144,8 +148,9 @@ class CodeGenerateService
          * and one of the following special characters *&!@%^#$
          */
 
-        $secret = env('JWT_SECRET', '!yc7Re75a$%)Rs$123*');
-        $expireTime = env('JWT_EXPIRE', '86400');
+        $secret = self::JWT_SECRETE;
+        /** 7 days in second*/
+        $expireTime = 604800;
 
         throw_if(!is_numeric($expireTime), new \Exception("Expire time must be numeric"));
 
@@ -159,27 +164,31 @@ class CodeGenerateService
             'nbf' => $issuedAt->getTimestamp(),         // Not before
             'exp' => $expire,                           // Expire
         ];
+        Log::info("JWT:" . json_encode([
+                $secret,
+                $expireTime,
+            ]));
         $payload = array_merge($payload, $customPayload);
         return Token::customPayload($payload, $secret);
     }
 
     public static function verifyJwt(string $token): bool
     {
-        $secret = env('JWT_SECRET', '!yc7Re75a$%)Rs$123*');
+        $secret = self::JWT_SECRETE;
         return Token::validate($token, $secret);
     }
 
     /** Return the payload claims */
     public static function jwtPayloadClaims(string $token): array
     {
-        $secret = env('JWT_SECRET', '!yc7Re75a$%)Rs$123*');
+        $secret = self::JWT_SECRETE;
         return Token::getPayload($token, $secret);
     }
 
     /** Return the header claims */
     public static function jwtHeaderClaims(string $token): array
     {
-        $secret = env('JWT_SECRET', '!yc7Re75a$%)Rs$123*');
+        $secret = self::JWT_SECRETE;
         return Token::getHeader($token, $secret);
     }
 }
