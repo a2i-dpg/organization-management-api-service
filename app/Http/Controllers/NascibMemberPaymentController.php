@@ -93,9 +93,8 @@ class NascibMemberPaymentController extends Controller
     /**
      * @throws Throwable
      */
-    public function success(Request $request)
+    public function success(Request $request): JsonResponse
     {
-        return $request->all();
         DB::beginTransaction();
         try {
             [$status, $message] = $this->nascibMemberPaymentViaSslService->successPayment($request);
@@ -119,6 +118,7 @@ class NascibMemberPaymentController extends Controller
      */
     public function ipn(Request $request)
     {
+        Log::channel('ssl_commerz')->info("IPN RESPONSE: " . json_encode($request->all()));
         DB::beginTransaction();
         try {
             $this->nascibMemberPaymentViaSslService->ipnHandler($request);
