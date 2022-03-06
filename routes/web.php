@@ -238,9 +238,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->group(['prefix' => 'nascib-members/payment', 'as' => 'nascib-members.payment'], function () use ($router) {
             $router->post("pay-via-ssl/pay-now", ["as" => "pay-via-ssl.pay-now", "uses" => "NascibMemberPaymentController@payViaSsl"]);
             $router->post("pay-via-ssl/success", ["as" => "pay-via-ssl.success", "uses" => "NascibMemberPaymentController@success"]);
-            $router->post("pay-via-ssl/fail", ["as" => "pay-via-ssl.fail", "uses" => "NascibMemberPaymentController@payViaSsl"]);
-            $router->post("pay-via-ssl/cancel", ["as" => "pay-via-ssl.cancel", "uses" => "NascibMemberPaymentController@payViaSsl"]);
-            $router->post("pay-via-ssl/ipn", ["as" => "pay-via-ssl.ipn", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+            $router->post("pay-via-ssl/fail", ["as" => "pay-via-ssl.fail", "uses" => "NascibMemberPaymentController@fail"]);
+            $router->post("pay-via-ssl/cancel", ["as" => "pay-via-ssl.cancel", "uses" => "NascibMemberPaymentController@cancel"]);
+            $router->post("pay-via-ssl/ipn", ["as" => "pay-via-ssl.ipn", "uses" => "NascibMemberPaymentController@ipn"]);
         });
 
         $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);
