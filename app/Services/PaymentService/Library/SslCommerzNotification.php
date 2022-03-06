@@ -65,7 +65,6 @@ class SslCommerzNotification extends AbstractSslCommerz
                 $store_id = urlencode($this->getStoreId());
                 $store_passwd = urlencode($this->getStorePassword());
                 $requested_url = ($this->config['apiDomain'] . $this->config['apiUrl']['order_validate'] . "?val_id=" . $val_id . "&store_id=" . $store_id . "&store_passwd=" . $store_passwd . "&v=1&format=json");
-
                 $handle = curl_init();
                 curl_setopt($handle, CURLOPT_URL, $requested_url);
                 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
@@ -117,32 +116,35 @@ class SslCommerzNotification extends AbstractSslCommerz
                      * $validated_on = $result->validated_on;
                      * $gw_version = $result->gw_version;
                      */
-
+                    $validationStatus = false;
                     # GIVE SERVICE
                     if ($status == "VALID" || $status == "VALIDATED") {
                         if ($merchant_trans_currency == "BDT") {
                             if (trim($merchant_trans_id) == trim($tran_id) && (abs($merchant_trans_amount - $amount) < 1) && trim($merchant_trans_currency) == trim('BDT')) {
-                                return true;
+                                $validationStatus = true;
                             } else {
-                                # DATA TEMPERED
                                 $this->error = "Data has been tempered";
-                                return false;
                             }
                         } else {
                             //echo "trim($merchant_trans_id) == trim($tran_id) && ( abs($merchant_trans_amount-$currency_amount) < 1 ) && trim($merchant_trans_currency)==trim($currency_type)";
                             if (trim($merchant_trans_id) == trim($tran_id) && (abs($merchant_trans_amount - $currency_amount) < 1) && trim($merchant_trans_currency) == trim($currency_type)) {
-                                return true;
+                                $validationStatus = true;
                             } else {
                                 # DATA TEMPERED
                                 $this->error = "Data has been tempered";
-                                return false;
                             }
                         }
+
                     } else {
                         # FAILED TRANSACTION
                         $this->error = "Failed Transaction";
-                        return false;
                     }
+                    Log::info("ValidationError:" . json_encode([
+                            "validation_status" => $validationStatus,
+                            "error_message" => $this->error
+                        ]));
+
+                    return $validationStatus;
                 } else {
                     # Failed to connect with SSLCOMMERZ
                     $this->error = "Faile to connect with SSLCOMMERZ";
@@ -160,6 +162,7 @@ class SslCommerzNotification extends AbstractSslCommerz
         }
     }
 
+
     # FUNCTION TO CHECK HASH VALUE
     protected function SSLCOMMERZ_hash_verify($post_data, $store_passwd = ""): bool
     {
@@ -168,17 +171,16 @@ class SslCommerzNotification extends AbstractSslCommerz
                 "store_password" => $store_passwd
             ]));
 
-        if (isset($post_data) && isset($post_data['verify_sign']) && isset($post_data['verify_key'])) {
+        if (isset($_POST) && isset($_POST['verify_sign']) && isset($_POST['verify_key'])) {
             # NEW ARRAY DECLARED TO TAKE VALUE OF ALL POST
-            $pre_define_key = explode(',', $post_data['verify_key']);
 
-            Log::info("verify_key: " . json_encode($pre_define_key));
+            $pre_define_key = explode(',', $_POST['verify_key']);
 
             $new_data = array();
             if (!empty($pre_define_key)) {
                 foreach ($pre_define_key as $value) {
-                    if (isset($post_data[$value])) {
-                        $new_data[$value] = ($post_data[$value]);
+                    if (isset($_POST[$value])) {
+                        $new_data[$value] = ($_POST[$value]);
                     }
                 }
             }
@@ -192,27 +194,16 @@ class SslCommerzNotification extends AbstractSslCommerz
             foreach ($new_data as $key => $value) {
                 $hash_string .= $key . '=' . ($value) . '&';
             }
-
             $hash_string = rtrim($hash_string, '&');
 
-            Log::info("verify_key: " . json_encode([
-                    "hash_string" => $hash_string,
-                    "md5_hash_string" => md5($hash_string),
-                    "verify_sign" => $post_data['verify_sign']
-                ]));
-
-            if (md5($hash_string) == $post_data['verify_sign']) {
+            if (md5($hash_string) == $_POST['verify_sign']) {
 
                 return true;
 
             } else {
-                $this->error = "Verification signature not matched";
                 return false;
             }
-        } else {
-            $this->error = 'Required data mission. ex: verify_key, verify_sign';
-            return false;
-        }
+        } else return false;
     }
 
     /**

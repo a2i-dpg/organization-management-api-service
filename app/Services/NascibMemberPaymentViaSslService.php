@@ -275,7 +275,7 @@ class NascibMemberPaymentViaSslService
     {
         $tranId = $request->input('tran_id');
         /** @var PaymentTransactionLog $paymentLog */
-        $paymentLog = PaymentTransactionLog::findOrFail('mer_trnx_id', $tranId);
+        $paymentLog = PaymentTransactionLog::where('mer_trnx_id', $tranId)->firstOrFail();
         $paymentLog->status = PaymentTransactionHistory::PAYMENT_FAIL;
         $paymentLog->response_message = $request->all();
         return $paymentLog->save();
@@ -286,7 +286,7 @@ class NascibMemberPaymentViaSslService
     {
         $tranId = $request->input('tran_id');
         /** @var PaymentTransactionLog $paymentLog */
-        $paymentLog = PaymentTransactionLog::findOrFail('mer_trnx_id', $tranId);
+        $paymentLog = PaymentTransactionLog::where('mer_trnx_id', $tranId)->firstOrFail();
         $paymentLog->status = PaymentTransactionHistory::PAYMENT_CANCEL;
         $paymentLog->response_message = $request->all();
         return $paymentLog->save();
