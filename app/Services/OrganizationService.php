@@ -681,8 +681,8 @@ class OrganizationService
     public function updateIndustryAssociationMembership(Organization $organization, array $data)
     {
         foreach ($data['industry_associations'] as $row) {
-            $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-                'membership_id' => $data['membership_id'],
+            $organization->industryAssociations()->updateExistingPivot($row['industry_association_id'], [
+                'membership_id' => $row['membership_id'],
             ]);
         }
     }
