@@ -23,3 +23,5 @@ Softbd LTD
 ```shell
 php artisan queue:work --queue=organization.db.sync.q
 ```
+
+
