@@ -3,10 +3,18 @@
 namespace App\Services;
 
 use App\Exceptions\HttpErrorException;
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use App\Models\IndustryAssociationConfig;
+use App\Models\MembershipType;
 use App\Models\NascibMember;
 use App\Models\Organization;
+use App\Models\PaymentTransactionHistory;
+use App\Services\CommonServices\CodeGenerateService;
+use App\Services\CommonServices\MailService;
+use App\Services\CommonServices\SmsService;
+use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
@@ -14,6 +22,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 /**
  *
@@ -21,10 +30,8 @@ use Illuminate\Validation\Rule;
 class NascibMemberService
 {
 
-
-    public function registerNascib(Organization $organization, NascibMember $nascibMember, array $data): NascibMember
+    public function registerNascib(Organization $organization, NascibMember $nascibMember, array $data): array
     {
-
         $orgData['organization_type_id'] = Organization::ORGANIZATION_TYPE_PRIVATE;
         $orgData['mobile'] = $data['entrepreneur_mobile'];
         $orgData['email'] = $data['entrepreneur_email'];
@@ -35,7 +42,8 @@ class NascibMemberService
         $orgData['contact_person_designation'] = 'উদ্যোক্তা';
         $orgData['contact_person_designation_en'] = 'Entrepreneur';
         $orgData['payment_status'] = Organization::PAYMENT_PENDING;
-        $orgData['membership_id'] = 'NASCIF-' . time();  //TODO:membership id
+        $orgData['membership_id'] = $data['membership_id'];
+        $orgData['membership_type_id'] = $data['membership_type_id'];
 
         /**Model Name For Nascib Organization */
         $orgData['additional_info_model_name'] = NascibMember::class;
@@ -43,23 +51,104 @@ class NascibMemberService
         $organization->fill($data);
         $organization->save();
 
-        $this->attachToIndustryAssociation($organization, $data, true);
-
-        $data['organization_id'] = $organization->id;
+        $data['industry_association_organization_id'] = $this->attachToIndustryAssociation($organization, $data, true);
 
         $nascibMember->fill($data);
         $nascibMember->save();
 
-        return $nascibMember;
+        return [
+            $organization,
+            $nascibMember
+        ];
     }
 
     private function attachToIndustryAssociation(Organization $organization, array $data, bool $isOpenReg = false)
     {
+
         $organization->industryAssociations()->attach($data['industry_association_id'], [
             'membership_id' => $data['membership_id'],
+            'membership_type_id' => $data['membership_type_id'],
             'payment_status' => BaseModel::PAYMENT_PENDING,
+            'additional_info_model_name' => $data['additional_info_model_name'],
             'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
         ]);
+        $organization = $organization->fresh();
+        return $organization->industryAssociations()->firstOrFail()->pivot->id;
+
+    }
+
+    public function updateMembershipExpireDate(int $industryAssociationId, int $organizationId, int $membershipTypeId)
+    {
+        $organization = Organization::findOrFail($organizationId);
+
+        $organization->industryAssociations()->updateExistingPivot($industryAssociationId, [
+            'payment_status' => BaseModel::PAYMENT_SUCCESS,
+            'payment_date' => Carbon::now()->format('Y-m-d'),
+            'member_ship_expire_date' => $this->getMembershipExpireDate($membershipTypeId)
+        ]);
+    }
+
+    private function getMembershipExpireDate(int $membershipTypeId)
+    {
+        $memberShipExpirationDate = null;
+        $membershipType = MembershipType::where('membership_types.id', $membershipTypeId)
+            ->where('membership_types.row_status', BaseModel::ROW_STATUS_ACTIVE)
+            ->join('industry_association_configs', 'industry_association_configs.industry_association_id', 'membership_types.industry_association_id')
+            ->firstOrFail([
+                'membership_types.payment_nature',
+                'membership_types.payment_frequency',
+                'membership_types.industry_association_id',
+                'industry_association_configs.session_type'
+            ]);
+
+        if ($membershipType->payment_nature == MembershipType::PAYMENT_NATURE_SESSION_WISE_KEY) {
+            if ($membershipType->payment_frequency == MembershipType::PAYMENT_FREQUENCY_YEARLY_KEY) {
+                $memberShipExpirationDate = $this->getSessionalDate($membershipType->session_type);
+            }
+        } elseif ($membershipType->payment_nature == MembershipType::PAYMENT_NATURE_DATE_WISE_KEY) {
+            $memberShipExpirationDate = $this->getDateWiseDate($membershipType->payment_frequency);
+        }
+        Log::info($memberShipExpirationDate);
+        return $memberShipExpirationDate;
+    }
+
+    private function getSessionalDate(int $sessionType)
+    {
+        $memberShipExpirationDate = null;
+
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $sessionEndDate = config('nise3.payment_config.session_type_wise_expiration_date.' . $sessionType . '.end_date');
+        if ($sessionType == IndustryAssociationConfig::SESSION_TYPE_JUNE_JULY) {
+            if (Carbon::parse($currentDate)->lessThanOrEqualTo($sessionEndDate)) {
+                $memberShipExpirationDate = $sessionEndDate;
+            } else {
+                $memberShipExpirationDate = Carbon::make($currentDate)->addYear()->format('Y-m-d');
+            }
+        } elseif ($sessionType == IndustryAssociationConfig::SESSION_TYPE_JANUARY_DECEMBER) {
+            if (Carbon::parse($currentDate)->lessThanOrEqualTo($sessionEndDate)) {
+                $memberShipExpirationDate = $sessionEndDate;
+            } else {
+                $memberShipExpirationDate = Carbon::make($currentDate)->addYear()->format('Y-m-d');
+            }
+        }
+        return $memberShipExpirationDate;
+    }
+
+    private function getDateWiseDate(int $paymentFrequency): ?string
+    {
+        $memberShipExpirationDate = null;
+
+        if ($paymentFrequency == MembershipType::PAYMENT_FREQUENCY_MONTHLY_KEY) {
+            $memberShipExpirationDate = Carbon::now()->addMonth()->format('Y-m-d');
+        } elseif ($paymentFrequency == MembershipType::PAYMENT_FREQUENCY_QUARTERLY_KEY) {
+            $memberShipExpirationDate = Carbon::now()->addQuarter()->format('Y-m-d');
+        } elseif ($paymentFrequency == MembershipType::PAYMENT_FREQUENCY_HALF_YEARLY_KEY) {
+            $memberShipExpirationDate = Carbon::now()->addMonths(6)->format('Y-m-d');
+        } elseif ($paymentFrequency == MembershipType::PAYMENT_FREQUENCY_YEARLY_KEY) {
+            $memberShipExpirationDate = Carbon::now()->addYear()->format('Y-m-d');
+        }
+
+        return $memberShipExpirationDate;
     }
 
     /**
@@ -150,6 +239,47 @@ class NascibMemberService
     }
 
     /**
+     * @throws Throwable
+     */
+    public function getMemberApprovedUserMailMessageBody(array $industryAssociationOrganization): string
+    {
+        $industryAssociationId = $industryAssociationOrganization['industry_association_id'];
+        $industryAssociationOrganizationId = $industryAssociationOrganization['id'];
+
+        $industryAssociation = IndustryAssociation::findOrFail($industryAssociationId);
+        $membershipType = MembershipType::findOrFail($industryAssociationOrganization['membership_type_id'])->firstOrFail();
+        $applicationFee = $membershipType->fee;
+
+        $paymentGatewayUrl = $this->getPaymentPageUrlForNascibPayment($industryAssociationId, $industryAssociationOrganizationId, NascibMember::APPLICATION_TYPE_NEW);
+        Log::info("payment url" . $paymentGatewayUrl);
+        $mailData = [
+            "message" => "",
+            "industry_association_title" => $industryAssociation->title,
+            "application_fee" => $applicationFee,
+            "payment_gateway_url" => $paymentGatewayUrl
+        ];
+        return view('mail.nasib_member_user_approval_mail_template', compact('mailData'))->render();
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getPaymentPageUrlForNascibPayment(int $industryAssociationId, int $industryAssociationOrganizationId, string $applicationType): string
+    {
+        $jwtPayload = [
+            "purpose" => $applicationType,
+            "purpose_related_id" => $industryAssociationOrganizationId,
+        ];
+
+        $parameter = "industry_association_id=" . $industryAssociationId;
+
+        $baseUrl = "https://" . ServiceToServiceCall::getDomain($parameter) ?? "nise.gov.bd";
+        Log::info("BaseUrl" . $baseUrl . "parameter: " . $parameter);
+        return $baseUrl . "/" . NascibMember::PAYMENT_GATEWAY_PAGE_URL_PREFIX . "/" . CodeGenerateService::jwtToken($jwtPayload);
+    }
+
+
+    /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
@@ -168,13 +298,21 @@ class NascibMemberService
             ],
 
             'application_tracking_no' => 'nullable|string|max: 191',
-
+            'membership_type_id' => [
+                "required",
+                "integer",
+                "exists:membership_types,id"
+            ],
+            'membership_id' => [
+                "required",
+                "string",
+            ],
             'trade_license_no' => 'required|string|max:191|unique:nascib_members,trade_license_no',
             /** Same as industry */
             'title' => 'required|string|max:500',
             'title_en' => 'nullable|string|max:191',
             'address' => 'required|string|max:1200',
-            'address_en' => 'required|string|max:600',
+            'address_en' => 'nullable|string|max:600',
             'loc_division_id' => [
                 'required',
                 'integer',
@@ -209,7 +347,7 @@ class NascibMemberService
                 "required",
                 BaseModel::MOBILE_REGEX
             ],
-            'entrepreneur_email' => 'required|max:191|email', //TODO: discuss with mahmud vai
+            'entrepreneur_email' => 'required|max:191|email',
             'entrepreneur_photo_path' => [
                 'required',
                 'string'
@@ -236,8 +374,8 @@ class NascibMemberService
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
-            'investment_amount' => 'required|numeric', //TODO: Have to clear the requirement
-            'current_total_asset' => 'nullable|numeric',//TODO: Have to clear the requirement
+            'investment_amount' => 'required|numeric',
+            'current_total_asset' => 'nullable|numeric',
 
             'is_registered_under_authority' => [
                 "required",
@@ -271,18 +409,12 @@ class NascibMemberService
                 'array',
             ],
             'authorized_authority.*.authority_type' => [
-                Rule::requiredIf(function () use ($request) {
-                    return !array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'));
-                }),
-                'nullable',
+                'required',
                 "integer",
                 Rule::in(array_keys(NascibMember::AUTHORIZED_AUTHORITY))
             ],
             'authorized_authority.*.registration_number' => [
-                Rule::requiredIf(function () use ($request) {
-                    return !array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'));
-                }),
-                'nullable',
+                'required',
                 "string"
             ],
             'have_specialized_area' => [
@@ -300,9 +432,13 @@ class NascibMemberService
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
-            'under_sme_cluster_id' => [ //TODO: sme_cluster add
-                'required',
-                'integer'
+            'under_sme_cluster_id' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->get('is_under_sme_cluster') == BaseModel::BOOLEAN_TRUE;
+                }),
+                'nullable',
+                'integer',
+                'exists:smef_clusters,id,deleted_at,NULL'
             ],
             'is_under_of_association_or_chamber' => [
                 "required",
@@ -321,7 +457,6 @@ class NascibMemberService
             ],
             'sector_id' => [
                 'required',
-                'integer',
                 Rule::in(array_keys(NascibMember::SECTOR))
             ],
             'other_sector_name' => [
@@ -468,14 +603,18 @@ class NascibMemberService
             ],
 
         ];
-
         /** other Authority */
-        if (array_key_exists(NascibMember::OTHER_AUTHORITY_KEY, $request->get('authorized_authority'))) {
-            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'authority_name'] = [
+        if (!empty($request->get('other_authority')) && is_array($request->get('other_authority'))) {
+            $rules['other_authority.' . 'authority_type'] = [
+                "required",
+                "string",
+                Rule::in([NascibMember::OTHER_AUTHORITY_KEY])
+            ];
+            $rules['other_authority.' . 'authority_name'] = [
                 "required",
                 "string"
             ];
-            $rules['authorized_authority.' . NascibMember::OTHER_AUTHORITY_KEY . '.' . 'register_number'] = [
+            $rules['other_authority.' . 'registration_number'] = [
                 "required",
                 "string"
             ];
@@ -498,12 +637,12 @@ class NascibMemberService
             $rules['udc_loc_district'] = [
                 'nullable',
                 'integer',
-                'exists:loc_districts,id,deleted_at,NULL'
+                //'exists:loc_districts,id,deleted_at,NULL'
             ];
             $rules['udc_union'] = [
                 'required',
                 'integer',
-                'exists:loc_unions,id,deleted_at,NULL'
+                //'exists:loc_unions,id,deleted_at,NULL'
             ];
 
             $rules['udc_code'] = 'required|string|max: 255';

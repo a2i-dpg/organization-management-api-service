@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Exceptions\HttpErrorException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
+use App\Models\NascibMember;
+use App\Models\PaymentTransactionHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -435,6 +437,36 @@ class OrganizationService
         return $organizationBuilder->firstOrFail();
     }
 
+    public function getNascibData(array &$organization)
+    {
+        if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == NascibMember::class) {
+
+            if ($organization['industry_associations'][0]['pivot']['payment_status'] == PaymentTransactionHistory::PAYMENT_PENDING) {
+
+                $industryAssociationOrganizationId = $organization['industry_associations'][0]['pivot']['id'];
+                $industryAssociationId = $organization['industry_associations'][0]['pivot']['industry_association_id'];
+                $applicationType = NascibMember::APPLICATION_TYPE_NEW;
+
+                /**
+                 * If you get Payment Page Url For NascibPayment, you have to send following parameters
+                 * $industryAssociationId,
+                 * $industryAssociationOrganizationId
+                 * $applicationType
+                 */
+
+                $organization['additional_information']['payment_page_url'] = app(NascibMemberService::class)->getPaymentPageUrlForNascibPayment($industryAssociationId, $industryAssociationOrganizationId, $applicationType);
+            }
+
+            $nascibMember = NascibMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->first();
+            if (!empty($nascibMember)) {
+                $organization['additional_information']['additional_info_model_data'] = $nascibMember->toArray();
+            } else {
+                $organization['additional_information']['additional_info_model_data'] = [];
+            }
+
+        }
+    }
+
     /**
      * @param Request $request
      * @return array
@@ -621,7 +653,7 @@ class OrganizationService
             ])
             ->timeout(5)
             ->post($url, $userPostField)
-            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url) {
+            ->throw(static function (\Illuminate\Http\Client\Response $httpResponse, $httpException) use ($url, $userPostField) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
                 throw new HttpErrorException($httpResponse);
@@ -648,10 +680,11 @@ class OrganizationService
      */
     public function updateIndustryAssociationMembership(Organization $organization, array $data)
     {
-        $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
-            'membership_id' => $data['membership_id'],
-        ]);
-
+        foreach ($data['industry_associations'] as $row) {
+            $organization->industryAssociations()->updateExistingPivot($row['industry_association_id'], [
+                'membership_id' => $row['membership_id'],
+            ]);
+        }
     }
 
     /**

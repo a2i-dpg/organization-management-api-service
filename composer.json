@@ -1,14 +1,19 @@
 {
     "name": "laravel/lumen",
     "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "keywords": [
+        "framework",
+        "laravel",
+        "lumen"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": "^8.0",
         "ext-json": "*",
         "ext-pdo": "*",
-        "elasticsearch/elasticsearch": "^8.0",
+        "anis072/lumen-queue-rabbitmq": "^12.0",
+        "elasticsearch/elasticsearch": "^7.0",
         "felixkiss/uniquewith-validator": "^3.4",
         "flipbox/lumen-generator": "^8.2",
         "guzzlehttp/guzzle": "^7.3",
@@ -19,7 +24,8 @@
         "maatwebsite/excel": "^3.1",
         "phabloraylan/lumen-middleware-trim-or-convert-strings": "^1.0",
         "predis/predis": "~1.0",
-        "anis072/lumen-queue-rabbitmq": "^12.0"
+        "rbdwllr/reallysimplejwt": "^4.0",
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -400,9 +400,16 @@ class IndustryAssociationService
     {
         $status = 0;
         $message = 'Unprocessable Request';
-        if ($organization->industryAssociations->payment_status == BaseModel::PAYMENT_PENDING) {
+
+        if ($organization->row_status == BaseModel::ROW_STATUS_PENDING) {
+            $message = 'You are not approved as organization member, so unable to process this request. Please complete the improvement process.';
+        }
+
+        $industryAssociationOrganization = $organization->industryAssociations();
+        $paymentStatusCheckData = $industryAssociationOrganization->firstOrFail()->pivot;
+        if ($paymentStatusCheckData->additional_info_model_name && $paymentStatusCheckData->payment_status == BaseModel::PAYMENT_PENDING) {
             $message = 'Payment is till now pending, so unable to process this request. Please complete payment.';
-        } elseif ($organization->industryAssociations->payment_status == BaseModel::PAYMENT_SUCCESS) {
+        } else {
             $status = $organization->industryAssociations()->updateExistingPivot($data['industry_association_id'], [
                 'row_status' => BaseModel::ROW_STATUS_ACTIVE
             ]);
@@ -717,7 +724,7 @@ class IndustryAssociationService
                 "exists:skills,id,deleted_at,NULL"
             ],
             'logo' => [
-                'nullable',
+                'required',
                 'string',
             ],
             'row_status' => [
@@ -828,7 +835,7 @@ class IndustryAssociationService
                 "exists:skills,id,deleted_at,NULL"
             ],
             'logo' => [
-                'nullable',
+                'required',
                 'string',
             ],
             'contact_person_designation' => [

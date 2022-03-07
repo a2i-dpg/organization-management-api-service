@@ -15,28 +15,13 @@
             "url": "http://nise-industry.softbd/api/v1"
         },
         {
-            "url": "http://localhost:8002/api/v1"
-        },
-        {
-            "url": "https://org.bus-staging.softbdltd.com/api/v1"
-        },
-        {
-            "url": "https://org-phase1.nise.gov.bd/api/v1"
-        },
-        {
-            "url": "http://organization.local:8010/api/v1"
+            "url": "http://nise3-org.default/api/v1"
         },
         {
             "url": "http://localhost:8000/api/v1"
         },
         {
             "url": "http://localhost:8003/api/v1"
-        },
-        {
-            "url": "https://api.bus.softbd.xyz/org/api/v1"
-        },
-        {
-            "url": "http://nise3-organization.asm/api/v1"
         }
     ],
     "security": [
@@ -368,7 +353,6 @@
                 ]
             }
         },
-
         "/organization-registration": {
             "post": {
                 "summary": "Register Organization",
@@ -1458,10 +1442,191 @@
                 }
             }
         },
-
+        "/nascib-member/payment/pay-via-ssl/payment-gateway-page-url": {
+            "get": {
+                "tags": [
+                    "Nascib"
+                ],
+                "summary": "get payment-gateway-page-url",
+                "description": "get payment-gateway-page-url",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "payment_gateway_page_url": "payment-gateway-page-url",
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "payment-gateway-page-url",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/nascib-members/get-static-data": {
+            "get": {
+                "tags": [
+                    "Nascib"
+                ],
+                "summary": "Register a public nascib member statistics data",
+                "description": "API endpoint to Register a public nascib member statistics data. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/membership_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/membership_type_id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "form_fill_up_by": {
+                                            "1": "Form fill up by own",
+                                            "2": "Form fill up by UDC Entrepreneur",
+                                            "3": "Form fill up by Chamber or Association"
+                                        },
+                                        "proprietorship": {
+                                            "1": "Sole Proprietorship (একক মালিকানা)",
+                                            "2": "Partnership Proprietorship (অংশীদারি মালিকানা)",
+                                            "3": "Join Proprietorship (যৌথ মালিকানা)"
+                                        },
+                                        "trade_license_authority": {
+                                            "1": "City Corporation (সিটি কর্পোরেশন)",
+                                            "2": "Municipality (পৌরসভা)",
+                                            "3": "Union Council (ইউনিয়ন পরিষদ)"
+                                        },
+                                        "sector": {
+                                            "1": "পাটজাত",
+                                            "2": "চামড়া",
+                                            "3": "হস্তশিল্প",
+                                            "4": "ফ্যাশন",
+                                            "5": "হালকা প্রকৌশল",
+                                            "6": "পোশাক",
+                                            "7": "ডিজাইন",
+                                            "8": "কৃষি প্রক্রিয়াজাত",
+                                            "9": "আইটি",
+                                            "10": "হারবাল",
+                                            "11": "প্লাস্তিক",
+                                            "12": "সিনথেটিকস",
+                                            "13": "ইলেক্ট্রিক্যাল",
+                                            "14": "ইলেক্ট্রনিক",
+                                            "15": "লাইট ইঞ্জিনিয়ারিং",
+                                            "16": "জুয়েলারি",
+                                            "17": "হস্তশিল্প (বিভিন্ন প্রকার)",
+                                            "18": "খাদ্য ও পানীয়",
+                                            "1001": "অন্যন্য"
+                                        },
+                                        "registered_authority": {
+                                            "1": "জয়েন্ট-স্টক কোম্পানি",
+                                            "2": "সমবায় অধিদপ্তর",
+                                            "3": "এনজিও বিষয়ক ব্যুরো",
+                                            "4": "সমাজসেবা অধিদপ্তর",
+                                            "5": "মহিলা বিষয়ক অধিদপ্তর",
+                                            "6": "যুব উন্নয়ন অধিদপ্তর",
+                                            "7": "বিটিআরসি",
+                                            "8": "স্বাস্থ্য অধিদপ্তর",
+                                            "9": "বাংলাদেশ ক্ষুদ্র ও কুটির শিল্প কর্পোরেশন(বিসিক)"
+                                        },
+                                        "authorized_authority": {
+                                            "1": "কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর",
+                                            "2": "বাংলাদেশ পরিবেশ অধিদপ্তর",
+                                            "3": "বাংলাদেশ ফায়ার সার্ভিস ও সিভিল ডিফেন্স অধিদপ্তর",
+                                            "4": "আমদানি ও রপ্তানি প্রধান নিয়ন্ত্রকের অধিদপ্তর",
+                                            "5": "ঔষধ প্রশাসন অধিদপ্তর",
+                                            "6": "বাংলাদেশ এনার্জি রেগুলেটরি কমিশন",
+                                            "7": "বিস্ফোরক পরিদপ্তর",
+                                            "other_authority": "অন্যন্য"
+                                        },
+                                        "specialized_area": {
+                                            "1": "বাংলাদেশ রপ্তানি প্রক্রিয়াকরণ অঞ্চল (EPZ)",
+                                            "2": "বাংলাদেশ অর্থনৈতিক অঞ্চল (BEZA)",
+                                            "3": "বিসিক শিল্প নগরী",
+                                            "4": "বেসরকারি ইকোনমিক জোন"
+                                        },
+                                        "import_or_export_type": {
+                                            "1": "Direct",
+                                            "2": "InDirect"
+                                        },
+                                        "worker_type": {
+                                            "permanent_worker": "Permanent worker (স্থায়ী কর্মী)",
+                                            "temporary_worker": "Temporary worker (অস্থায়ী কর্মী)",
+                                            "seasonal_worker": "Seasonal worker (মৌসুমী কর্মী)"
+                                        },
+                                        "manpower_type": [
+                                            "male",
+                                            "female"
+                                        ],
+                                        "bank_account_type": {
+                                            "personal": "Personal account (ব্যক্তিগত হিসাব)",
+                                            "industry": "industry accounts (প্রতিষ্ঠানের হিসাব)"
+                                        },
+                                        "land_type": {
+                                            "1": "Own Land",
+                                            "2": "Rent"
+                                        },
+                                        "business_type": {
+                                            "1": "ম্যানুফ্যাকচারিং",
+                                            "2": "সার্ভিস",
+                                            "3": "ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)"
+                                        },
+                                        "membership_types": [
+                                            {
+                                                "id": 1,
+                                                "industry_association_id": 1,
+                                                "name": "অংশীদার",
+                                                "name_en": "Associate Member",
+                                                "fee": 1000,
+                                                "renewal_fee": 800,
+                                                "payment_nature": 2,
+                                                "payment_frequency": 4,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null
+                                            },
+                                            {
+                                                "id": 2,
+                                                "industry_association_id": 1,
+                                                "name": "সাধারণ",
+                                                "name_en": "General Member",
+                                                "fee": 1000,
+                                                "renewal_fee": 800,
+                                                "payment_nature": 2,
+                                                "payment_frequency": 4,
+                                                "row_status": 1,
+                                                "created_at": null,
+                                                "updated_at": null
+                                            }
+                                        ]
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "OrganizationMember has been Created Successfully",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/public/nascib-members/open-registration": {
             "post": {
-                "tags": ["Nascib"],
+                "tags": [
+                    "Nascib"
+                ],
                 "summary": "Register a nascib member",
                 "description": "API endpoint to Register a nascib member.A successful request response will show 200 HTTP status code",
                 "requestBody": {
@@ -1590,7 +1755,162 @@
                 }
             }
         },
-
+        "/public/nascib-members/payment/pay-via-ssl/pay-now": {
+            "post": {
+                "tags": [
+                    "Nascib"
+                ],
+                "summary": "Membership Payment Via SSL Commerz",
+                "description": "Membership Payment Via SSL Commerz",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NascibMembershipPayViaSSLC"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "gateway_page_url": "https://sandbox.sslcommerz.com/EasyCheckOut/testcde6d88a0a0b439068fab875dd2651ea225",
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 201,
+                                        "message": "Ssl Payment is successfully initialized",
+                                        "query_time": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/nascib-members/payment/pay-via-ssl/success": {
+            "post": {
+                "tags": [
+                    "Nascib"
+                ],
+                "summary": "Success Payment Via SSL Commerz",
+                "description": "Success Payment Via SSL Commerz",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "callback_response": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Payment is successfully completed",
+                                        "query_time": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/nascib-members/payment/pay-via-ssl/cancel": {
+            "post": {
+                "tags": [
+                    "Nascib"
+                ],
+                "summary": "Cancel Payment Via SSL Commerz",
+                "description": "Cancel Payment Via SSL Commerz",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "callback_response": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "Payment is  canceled",
+                                        "query_time": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public/nascib-members/payment/pay-via-ssl/fail": {
+            "post": {
+                "tags": [
+                    "Nascib"
+                ],
+                "summary": "Fail Payment Via SSL Commerz",
+                "description": "Fail Payment Via SSL Commerz",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "callback_response": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": false,
+                                        "code": 422,
+                                        "message": "Payment is fail",
+                                        "query_time": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/rank-types": {
             "get": {
                 "summary": "get_list",
@@ -8277,7 +8597,6 @@
                 }
             }
         },
-
         "/jobs/primary-job-information": {
             "post": {
                 "tags": [
@@ -9206,8 +9525,6 @@
                 }
             }
         },
-
-
         "/jobs/job-preview/{jobId}": {
             "get": {
                 "tags": [
@@ -9521,10 +9838,11 @@
                 }
             }
         },
-
         "/jobs/candidate/{applicationId}/reject": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Reject a job candidate from interview process",
                 "description": "API endpoint to Reject a job candidate from interview process. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -9577,7 +9895,9 @@
         },
         "/jobs/candidate/{applicationId}/shortlist": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Shortlist a candidate for interview",
                 "description": "API endpoint to Shortlist a candidate for interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -9630,7 +9950,9 @@
         },
         "/jobs/candidate/{applicationId}/interviewed": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Update interviewed candidate",
                 "description": "API endpoint to Update interviewed candidate. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -9680,7 +10002,9 @@
         },
         "/jobs/candidate/{applicationId}/remove": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Remove candidate to previous step",
                 "description": "API endpoint to Remove candidate to previous step. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -9725,7 +10049,9 @@
         },
         "/jobs/candidate/{applicationId}/restore": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Restore a rejected candidate",
                 "description": "API endpoint to Restore a rejected candidate. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -9770,7 +10096,9 @@
         },
         "/jobs/candidate/{applicationId}/hire-invite": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Hiring Invitation sent to a candidate",
                 "description": "API endpoint to Hiring Invitation sent to a candidate",
                 "parameters": [
@@ -9824,7 +10152,9 @@
         },
         "/jobs/candidate/{applicationId}/hired": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Hiring Invitation sent to a candidate",
                 "parameters": [
                     {
@@ -9868,7 +10198,9 @@
         },
         "/jobs/step-schedule/{scheduleId}/assign": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Schedule a candidate",
                 "parameters": [
                     {
@@ -9905,7 +10237,9 @@
         },
         "/jobs/step-schedule/{scheduleId}/unassign": {
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Deschedule a candidate",
                 "description": "API endpoint to Deschedule a candidate. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -9943,7 +10277,9 @@
         },
         "/jobs/recruitment-steps/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get recruitment step list by jobId",
                 "description": "API endpoint to Get recruitment step list by jobId.",
                 "parameters": [
@@ -10017,7 +10353,9 @@
         },
         "/jobs/recruitment-step/{stepId}/schedules": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get recruitment step schedules by jobId",
                 "description": "API endpoint to Get recruitment step schedules by stepId.",
                 "parameters": [
@@ -10056,10 +10394,11 @@
                 }
             }
         },
-
         "/jobs/candidates/all/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of candidates",
                 "description": "API endpoint to Get list of all candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10178,7 +10517,9 @@
         },
         "/jobs/candidates/applied/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of applied candidates",
                 "description": "API endpoint to Get list of all applied candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10297,7 +10638,9 @@
         },
         "/jobs/candidates/rejected/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of rejected candidates",
                 "description": "API endpoint to Get list of all rejected candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10319,7 +10662,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -10416,7 +10759,9 @@
         },
         "/jobs/candidates/shortlisted/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of shortlisted candidates",
                 "description": "API endpoint to Get list of all shortlisted candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10535,7 +10880,9 @@
         },
         "/jobs/candidates/interview-invited/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of interview-invited candidates",
                 "description": "API endpoint to Get list of all interview-invited candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10557,7 +10904,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -10654,7 +11001,9 @@
         },
         "/jobs/candidates/interviewed/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of interviewed candidates",
                 "description": "API endpoint to Get list of all interviewed candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10676,7 +11025,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -10773,7 +11122,9 @@
         },
         "/jobs/candidates/hire-invited/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of hire-invited candidates",
                 "description": "API endpoint to Get list of all hire-invited candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10795,7 +11146,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -10892,7 +11243,9 @@
         },
         "/jobs/candidates/hired/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get list of hired candidates",
                 "description": "API endpoint to Get list of all hired candidates. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -10914,7 +11267,7 @@
                         "description": "successful",
                         "content": {
                             "application/json": {
-                                "example":{
+                                "example": {
                                     "current_page": 1,
                                     "total_page": 1,
                                     "page_size": 10,
@@ -11009,10 +11362,11 @@
                 }
             }
         },
-
         "/jobs/recruitment-step": {
             "post": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Create a recruitment step a job interview",
                 "description": "API endpoint to Create a recruitment step a job interview. A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -11056,7 +11410,9 @@
         },
         "/jobs/recruitment-step/{stepId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get a recruitment step of a job interview",
                 "description": "API endpoint to Get a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11092,7 +11448,9 @@
                 }
             },
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Update a recruitment step of a job interview",
                 "description": "API endpoint to update a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11140,7 +11498,9 @@
                 }
             },
             "delete": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Delete a recruitment step of a job interview",
                 "description": "API endpoint to Delete a recruitment step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11170,7 +11530,9 @@
         },
         "/jobs/candidates/{jobId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get a recruitment step candidate list of a job interview",
                 "description": "Get a recruitment step candidate list of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11328,7 +11690,9 @@
         },
         "/jobs/step-schedule": {
             "post": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Create a recruitment step-schedule for a job interview",
                 "description": "API endpoint to Create a recruitment step-schedule for a job interview. A successful request response will show 201 HTTP status code",
                 "requestBody": {
@@ -11370,10 +11734,11 @@
                 }
             }
         },
-
         "/jobs/step-schedule/{scheduleId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get a step-schedule step of a job interview",
                 "description": "API endpoint to Get a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11410,7 +11775,9 @@
                 }
             },
             "put": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Update a step-schedule step of a job interview",
                 "description": "API endpoint to Update a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11456,7 +11823,9 @@
                 }
             },
             "delete": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Delete a step-schedule step of a job interview",
                 "description": "API endpoint to Delete a step-schedule step of a job interview. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11485,7 +11854,9 @@
         },
         "/jobs/candidate/{applicationId}": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get a Candidate Profile",
                 "description": "API endpoint to Get a Candidate Profile. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11610,7 +11981,9 @@
         },
         "/jobs/industry-association-member-jobs": {
             "get": {
-                "tags": ["Job Interview"],
+                "tags": [
+                    "Job Interview"
+                ],
                 "summary": "Get Industry Association Member Jobs",
                 "description": "API endpoint to Get Industry Association Member Jobs. A successful request response will show 201 HTTP status code",
                 "parameters": [
@@ -11811,7 +12184,6 @@
                 }
             }
         },
-
         "/area-of-business": {
             "get": {
                 "tags": [
@@ -11844,7 +12216,6 @@
                                             "created_at": null,
                                             "updated_at": null
                                         }
-
                                     ],
                                     "_response_status": {
                                         "success": true,
@@ -12577,7 +12948,6 @@
                 }
             }
         },
-
         "/hr-demand-youths/{hr_demand_institute_id}": {
             "get": {
                 "tags": [
@@ -13108,7 +13478,10 @@
                     },
                     "show_in_landing_page": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=> True 0=> False"
                     }
                 },
@@ -13118,13 +13491,42 @@
                     "show_in_landing_page"
                 ]
             },
+            "NascibMembershipPayViaSSLC": {
+                "type": "object",
+                "description": "Pay Via SSL Commerz",
+                "properties": {
+                    "payment_gateway_type": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "1=>EkPay  2=> SSL Commerz"
+                    },
+                    "member_identity_key": {
+                        "type": "string"
+                    },
+                    "feed_uri": {
+                        "type": "object",
+                        "example": {
+                            "success": "",
+                            "failed": "",
+                            "cancel": ""
+                        }
+                    }
+                }
+            },
             "NascibMemberRegister": {
                 "type": "object",
                 "description": "Register a nascib member",
                 "properties": {
                     "form_fill_up_by": {
                         "type": "integer",
-                        "enum": [1,2,3],
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
                         "description": "1=>Form fill up by own  2=> Form fill up by UDC Entrepreneur  3=>Form fill up by Chamber or Association"
                     },
                     "application_tracking_no": {
@@ -13168,7 +13570,10 @@
                     },
                     "entrepreneur_gender": {
                         "type": "integer",
-                        "enum": [ 1, 2 ]
+                        "enum": [
+                            1,
+                            2
+                        ]
                     },
                     "entrepreneur_date_of_birth": {
                         "type": "string",
@@ -13194,12 +13599,19 @@
                     },
                     "have_factory": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "is_proprietorship": {
                         "type": "integer",
-                        "enum": [1,2,3],
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
                         "description": "1=>Sole Proprietorship (একক মালিকানা) 2=>Partnership Proprietorship (অংশীদারি মালিকানা) 3=>Join Proprietorship (যৌথ মালিকানা)"
                     },
                     "date_of_establishment": {
@@ -13208,7 +13620,11 @@
                     },
                     "trade_licensing_authority": {
                         "type": "integer",
-                        "enum": [1,2,3],
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
                         "description": "1=>City Corporation (সিটি কর্পোরেশন) 2=>Municipality (পৌরসভা) 3=>Union Council (ইউনিয়ন পরিষদ)"
                     },
                     "trade_license_path": {
@@ -13219,7 +13635,10 @@
                     },
                     "have_tin": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "investment_amount": {
@@ -13230,7 +13649,10 @@
                     },
                     "is_registered_under_authority": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "registered_authority": {
@@ -13240,7 +13662,10 @@
                     },
                     "is_authorized_under_authority": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "authorized_authority": {
@@ -13250,7 +13675,10 @@
                     },
                     "have_specialized_area": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "specialized_area": {
@@ -13262,17 +13690,26 @@
                     },
                     "is_under_sme_cluster": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "under_sme_cluster_id": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "is_under_of_association_or_chamber": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "under_association_or_chamber_name": {
@@ -13284,7 +13721,26 @@
                     },
                     "sector_id": {
                         "type": "integer",
-                        "enum": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            13,
+                            14,
+                            15,
+                            16,
+                            17,
+                            18
+                        ],
                         "description": "  1 => 'পাটজাত',\n        2 => 'চামড়া',\n        3 => 'হস্তশিল্প',\n        4 => 'ফ্যাশন',\n        5 => 'হালকা প্রকৌশল',\n        6 => 'পোশাক',\n        7 => 'ডিজাইন',\n        8 => 'কৃষি প্রক্রিয়াজাত',\n        9 => 'আইটি',\n        10 => 'হারবাল',\n        11 => 'প্লাস্তিক',\n        12 => 'সিনথেটিকস',\n        13 => 'ইলেক্ট্রিক্যাল',\n        14 => 'ইলেক্ট্রনিক',\n        15 => 'লাইট ইঞ্জিনিয়ারিং',\n        16 => 'জুয়েলারি',\n        17 => 'হস্তশিল্প (বিভিন্ন প্রকার)',\n        18 => 'খাদ্য ও পানীয়',"
                     },
                     "other_sector_name": {
@@ -13296,7 +13752,11 @@
                     },
                     "business_type": {
                         "type": "integer",
-                        "enum": [1,2,3],
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
                         "description": " 1 => 'ম্যানুফ্যাকচারিং',\n        2 => 'সার্ভিস',\n        3 => 'ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)',"
                     },
                     "main_product_name": {
@@ -13313,7 +13773,10 @@
                     },
                     "is_import": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "import_type": {
@@ -13325,7 +13788,10 @@
                     },
                     "is_export": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "export_type": {
@@ -13345,7 +13811,10 @@
                     },
                     "have_bank_account": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "bank_account_type": {
@@ -13355,22 +13824,34 @@
                     },
                     "have_daily_accounting_system": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "use_computer": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "have_internet_connection": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "have_online_business": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     },
                     "industry_association_id": {
@@ -13407,7 +13888,6 @@
                         "type": "string",
                         "description": " Required when form_fill_up_by = Form fill up by UDC Entrepreneur\""
                     },
-
                     "chamber_or_association_name": {
                         "type": "string",
                         "description": "Required when form_fill_up_by = Form fill up by Chamber or Association"
@@ -13448,41 +13928,61 @@
                     },
                     "have_own_land": {
                         "type": "integer",
-                        "enum": [1,2],
+                        "enum": [
+                            1,
+                            2
+                        ],
                         "description": " 1 => 'Own Land', 2 => 'Rent' . Required when have_factory = True"
                     },
                     "have_office_or_showroom": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>True 0=>False"
                     }
-
-
-
-
-
-
-
                 },
                 "required": [
-                    "form_fill_up_by","title","address","loc_division_id","loc_district_id","entrepreneur_name",
-                    "entrepreneur_gender", "entrepreneur_date_of_birth","entrepreneur_educational_qualification",
-                    "entrepreneur_nid","entrepreneur_nid_file_path","entrepreneur_mobile","entrepreneur_photo_path",
-                    "have_factory","is_proprietorship","date_of_establishment","trade_licensing_authority",
-                    "trade_license_path","trade_license_last_renew_year","have_tin","investment_amount",
-                    "is_registered_under_authority","is_authorized_under_authority",
-                    "have_specialized_area","is_under_sme_cluster","under_sme_cluster_id",
-                    "is_under_of_association_or_chamber","sector_id","business_type","main_product_name",
-                    "main_material_description","is_import","have_bank_account","have_daily_accounting_system",
-                    "use_computer","have_internet_connection","have_online_business","industry_association_id",
+                    "form_fill_up_by",
+                    "title",
+                    "address",
+                    "loc_division_id",
+                    "loc_district_id",
+                    "entrepreneur_name",
+                    "entrepreneur_gender",
+                    "entrepreneur_date_of_birth",
+                    "entrepreneur_educational_qualification",
+                    "entrepreneur_nid",
+                    "entrepreneur_nid_file_path",
+                    "entrepreneur_mobile",
+                    "entrepreneur_photo_path",
+                    "have_factory",
+                    "is_proprietorship",
+                    "date_of_establishment",
+                    "trade_licensing_authority",
+                    "trade_license_path",
+                    "trade_license_last_renew_year",
+                    "have_tin",
+                    "investment_amount",
+                    "is_registered_under_authority",
+                    "is_authorized_under_authority",
+                    "have_specialized_area",
+                    "is_under_sme_cluster",
+                    "under_sme_cluster_id",
+                    "is_under_of_association_or_chamber",
+                    "sector_id",
+                    "business_type",
+                    "main_product_name",
+                    "main_material_description",
+                    "is_import",
+                    "have_bank_account",
+                    "have_daily_accounting_system",
+                    "use_computer",
+                    "have_internet_connection",
+                    "have_online_business",
+                    "industry_association_id",
                     "udc_name"
-
-
-
-
-
-
-
                 ]
             },
             "deschedule": {
@@ -13521,7 +14021,10 @@
                     "interview_invite_type": {
                         "type": "integer",
                         "enum": [
-                            1,2,3,4
+                            1,
+                            2,
+                            3,
+                            4
                         ],
                         "description": "  \"SMS\" => 1,\n        \"Email\" => 2,\n        \"SMS and Email\" => 3,\n        \"Other\" => 4,"
                     }
@@ -13572,7 +14075,12 @@
                 "properties": {
                     "hire_invite_type": {
                         "type": "integer",
-                        "enum": [1,2,3,4],
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
                         "description": "1=>SMS 2=>EMAIL 3=>SMS & EMAIL 4=>OTHERS"
                     }
                 }
@@ -13583,7 +14091,10 @@
                 "properties": {
                     "is_candidate_present": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "1=>YES 0=>NO"
                     },
                     "interview_score": {
@@ -13626,7 +14137,13 @@
                     },
                     "step_type": {
                         "type": "integer",
-                        "enum": [1,2,3,4,5],
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5
+                        ],
                         "description": "1=>Shortlist 2=>Written 3=>Interview 4=>Online Interview 5=>Others"
                     },
                     "is_interview_reschedule_allowed": {
@@ -14133,12 +14650,18 @@
                     },
                     "is_salary_compare_to_expected_salary": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "0=>False 1=>True"
                     },
                     "is_salary_alert_excessive_than_given_salary_range": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "0=>False 1=>True"
                     },
                     "salary_review": {
@@ -14167,7 +14690,10 @@
                     },
                     "is_other_benefits": {
                         "type": "integer",
-                        "enum": [1,0],
+                        "enum": [
+                            1,
+                            0
+                        ],
                         "description": "0=>False 1=>True"
                     },
                     "other_benefits": {
@@ -16043,7 +16569,11 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "enum": [1,2,3]
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
                 },
                 "description": "  1 => \"Entry\",\n        2 => \"Mid\",\n        3 => \"Top\""
             },
@@ -16061,7 +16591,10 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "enum": [1,0],
+                    "enum": [
+                        1,
+                        0
+                    ],
                     "description": "1=>YES 0=>NO"
                 }
             },
@@ -16071,7 +16604,10 @@
                 "required": false,
                 "schema": {
                     "type": "integer",
-                    "enum": [1,2]
+                    "enum": [
+                        1,
+                        2
+                    ]
                 },
                 "description": "1=> Cv Link 2=> Youth Id"
             },
@@ -16113,7 +16649,19 @@
                 "required": false,
                 "schema": {
                     "type": "string",
-                    "enum": ["all" , "not_viewed" , "viewed" , "rejected" , "qualified" , "shortlisted" , "scheduled" , "interviewed" , "hire_selected" , "hire_invited" , "hired"]
+                    "enum": [
+                        "all",
+                        "not_viewed",
+                        "viewed",
+                        "rejected",
+                        "qualified",
+                        "shortlisted",
+                        "scheduled",
+                        "interviewed",
+                        "hire_selected",
+                        "hire_invited",
+                        "hired"
+                    ]
                 }
             },
             "type": {
@@ -16189,6 +16737,14 @@
                 "required": false,
                 "schema": {
                     "type": "string"
+                }
+            },
+            "membership_type_id": {
+                "name": "membership_type_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
                 }
             },
             "contactInfoId": {
@@ -16548,7 +17104,15 @@
                 "schema": {
                     "type": "integer",
                     "enum": [
-                        1,2,3,4,5,6,7,8,9
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9
                     ],
                     "description": "1=>Applied 2=>Rejected 3=>Shortlisted 4=>Interview_scheduled 5=>Interview_invited 6=>Interviewed 7=>Hiring_Listed 8=>Hire_invited 9=>Hired"
                 }
@@ -16593,7 +17157,6 @@
                 "schema": {
                     "type": "array",
                     "items": {
-
                     }
                 },
                 "description": "Send job_sector_ids as comma seperated string.example:1,2,3"

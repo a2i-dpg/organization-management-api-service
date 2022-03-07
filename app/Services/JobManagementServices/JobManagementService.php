@@ -89,6 +89,7 @@ class JobManagementService
         $industryAssociationId = $request['industry_association_id'] ?? "";
         $instituteId = $request['institute_id'] ?? "";
         $organizationId = $request['organization_id'] ?? "";
+        $feedOnly = $request['feed_only'] ?? "";
         $youthOnly = $request['youth_only'] ?? "";
         $youthId = $request['youth_id'] ?? "";
         $jobLevel = $request['job_level'] ?? "";
@@ -137,12 +138,19 @@ class JobManagementService
             $jobInformationBuilder->acl();
         }
 
-        if ($type != PrimaryJobInformation::JOB_FILTER_TYPE_POPULAR) {
-            $jobInformationBuilder->orderBy('primary_job_information.id', $order);
-        }
-
         if (is_numeric($industryAssociationId) && $isRequestFromClientSide) {
-            $jobInformationBuilder->where('primary_job_information.industry_association_id', $industryAssociationId);
+            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
+                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
+                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
+                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page', PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE)
+                    ->whereNull('primary_job_information.industry_association_id');
+            });
+
+            $jobInformationBuilder->where(function ($jobInformationBuilder) use ($industryAssociationId) {
+                $jobInformationBuilder->orwhere('primary_job_information.industry_association_id', $industryAssociationId);
+                $jobInformationBuilder->orwhere('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId);
+            });
+
         }
 
         if (is_numeric($instituteId)) {
@@ -186,6 +194,7 @@ class JobManagementService
             $join->on('primary_job_information.job_id', '=', 'applied_jobs.job_id')
                 ->whereNull('applied_jobs.deleted_at');
         });
+
         $jobInformationBuilder->groupBy('primary_job_information.job_id');
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status>=0 THEN 1 ELSE 0 END ) as applications");
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN apply_status = ? THEN 1 ELSE 0 END) as shortlisted", [AppliedJob::APPLY_STATUS["Shortlisted"]]);
@@ -193,9 +202,12 @@ class JobManagementService
 
         $jobInformationBuilder->selectRaw("SUM(CASE WHEN youth_id = ? THEN 1 ELSE 0 END) as has_applied", [$youthId]);
 
+        $jobInformationBuilder->selectRaw("2 as feed_item_type");
+        $jobInformationBuilder->selectRaw("primary_job_information.published_at as feed_sort_date");
+
 
         if (!empty($type) && $type == PrimaryJobInformation::JOB_FILTER_TYPE_RECENT) {
-            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->subDays(7)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>', $startTime->clone()->subDays(7)->endOfDay());
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
         }
@@ -221,17 +233,17 @@ class JobManagementService
         }
 
         /** If request from client side */
-        if ($isRequestFromClientSide) {
+        if ($isRequestFromClientSide && empty($type)) {
             $jobInformationBuilder->whereDate('primary_job_information.published_at', '<=', $startTime);
             $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
             $jobInformationBuilder->active();
+        }
 
-            //TODO: check if the below part working with Public domain
-            $jobInformationBuilder->leftJoin('industry_association_member_landing_page_jobs', function ($join) use ($industryAssociationId) {
-                $join->on('primary_job_information.job_id', '=', 'industry_association_member_landing_page_jobs.job_id')
-                    ->where('industry_association_member_landing_page_jobs.industry_association_id', $industryAssociationId)
-                    ->where('industry_association_member_landing_page_jobs.show_in_landing_page',PrimaryJobInformation::SHOW_IN_LANDING_PAGE_TRUE);
-            });
+        /** If request from youth feed */
+        if (!empty($feedOnly)) {
+            $jobInformationBuilder->whereDate('primary_job_information.published_at', '>=', $startTime->clone()->subDays(30)->endOfDay());
+            $jobInformationBuilder->whereDate('primary_job_information.application_deadline', '>', $startTime);
+            $jobInformationBuilder->active();
         }
 
         if ($isIndustryAssociationMemberJobs) {
@@ -249,14 +261,14 @@ class JobManagementService
 
             $jobInformationBuilder->addSelect('industry_association_member_landing_page_jobs.show_in_landing_page');
 
-
         }
 
-
+        $jobInformationBuilder->with('companyInfoVisibility');
         $jobInformationBuilder->with('additionalJobInformation');
         $jobInformationBuilder->with('additionalJobInformation.jobLocations');
         $jobInformationBuilder->with('additionalJobInformation.jobLevels');
 
+        $jobInformationBuilder->orderByDesc('primary_job_information.published_at');
 
         if (is_array($locDistrictIds) && count($locDistrictIds) > 0) {
             $jobInformationBuilder->whereHas('additionalJobInformation.jobLocations', function ($query) use ($locDistrictIds) {
@@ -278,7 +290,20 @@ class JobManagementService
         $jobInformationBuilder->with('candidateRequirement.skills');
 
         if (!empty($youthOnly) && !empty($youthId)) {
+            $jobInformationBuilder->addSelect('interview_schedules.interview_address');
+            $jobInformationBuilder->addSelect('interview_schedules.interview_scheduled_at');
+            $jobInformationBuilder->addSelect('candidate_interviews.confirmation_status');
+
             $jobInformationBuilder->where("applied_jobs.youth_id", $youthId);
+
+            $jobInformationBuilder->leftJoin('candidate_interviews', function ($join) {
+                $join->on('applied_jobs.id', '=', 'candidate_interviews.applied_job_id')
+                    ->on('applied_jobs.current_recruitment_step_id', '=', 'candidate_interviews.recruitment_step_id');
+            });
+
+            $jobInformationBuilder->leftJoin('interview_schedules', function ($join) {
+                $join->on('candidate_interviews.interview_schedule_id', '=', 'interview_schedules.id');
+            });
         }
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
@@ -1180,7 +1205,7 @@ class JobManagementService
 
             if ($recruitmentStep->step_type != RecruitmentStep::STEP_TYPE_SHORTLIST) {
                 $recruitmentStep['interview_scheduled'] = $this->countStepInterviewScheduledCandidate($jobId, $recruitmentStep->id);
-                $recruitmentStep['interview_not_invited'] = $this-> countStepInterviewNotInvitedCandidate($jobId, $recruitmentStep->id);
+                $recruitmentStep['interview_not_invited'] = $this->countStepInterviewNotInvitedCandidate($jobId, $recruitmentStep->id);
                 $recruitmentStep['interview_invited'] = $this->countStepInterviewInvitedCandidate($jobId, $recruitmentStep->id);
                 $recruitmentStep['interviewed'] = $this->countStepInterviewedCandidate($jobId, $recruitmentStep->id);
                 $recruitmentStep['rejected'] = $this->countStepRejectedCandidate($jobId, $recruitmentStep->id);
@@ -1668,12 +1693,13 @@ class JobManagementService
     }
 
     /**
+     * @param Carbon $startTime
      * @return int
      */
-    public function getJobCount(): int
+    public function getJobCount(Carbon $startTime): int
     {
-        return PrimaryJobInformation::count('id');
 
+        return PrimaryJobInformation::where('published_at', '<=', $startTime)->count('id');
 
     }
 

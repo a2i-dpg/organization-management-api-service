@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
             EduBoardSeeder::class,
             EducationLevelSeeder::class,
             ExamDegreeSeeder::class,
+            IndustryAssociationConfigSeeder::class,
+            MembershipTypeSeeder::class,
+            SmefClusterSeeder::class,
 
             IndustryAssociationCodePessimisticLockingsTableSeeder::class,
             IndustryAssociationsTableSeeder::class,

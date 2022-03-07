@@ -1,28 +1,31 @@
 <?php
-namespace App\Services\SSLPaymentService\Library;
+
+namespace App\Services\PaymentService\Library;
+
+use Illuminate\Support\Facades\Log;
 
 class SslCommerzNotification extends AbstractSslCommerz
 {
-    protected $data = [];
-    protected $config = [];
+    protected array $data = [];
+    protected array $config = [];
 
     private $successUrl;
     private $cancelUrl;
     private $failedUrl;
     private $error;
+    private $ipnUrl;
 
     /**
      * SslCommerzNotification constructor.
      */
-    public function __construct()
+    public function __construct(array $config)
     {
-        $this->config = config('sslcommerz');
-
+        $this->config = $config;
         $this->setStoreId($this->config['apiCredentials']['store_id']);
         $this->setStorePassword($this->config['apiCredentials']['store_password']);
     }
 
-    public function orderValidate($post_data, $trx_id = '', $amount = 0, $currency = "BDT")
+    public function orderValidate($post_data, $trx_id = '', $amount = 0, $currency = "BDT"): bool|string
     {
         if ($post_data == '' && $trx_id == '' && !is_array($post_data)) {
             $this->error = "Please provide valid transaction ID and post request data";
@@ -40,8 +43,15 @@ class SslCommerzNotification extends AbstractSslCommerz
 
 
     # VALIDATE SSLCOMMERZ TRANSACTION
-    protected function validate($merchant_trans_id, $merchant_trans_amount, $merchant_trans_currency, $post_data)
+    protected function validate($merchant_trans_id, $merchant_trans_amount, $merchant_trans_currency, $post_data): bool
     {
+        Log::info("payment-validation-payload:" . json_encode([
+                "merchant_trans_id" => $merchant_trans_id,
+                "merchant_trans_amount" => $merchant_trans_amount,
+                "merchant_trans_currency" => $merchant_trans_currency,
+                "post_data" => $post_data
+            ]));
+
         # MERCHANT SYSTEM INFO
         if ($merchant_trans_id != "" && $merchant_trans_amount != 0) {
 
@@ -55,18 +65,17 @@ class SslCommerzNotification extends AbstractSslCommerz
                 $store_id = urlencode($this->getStoreId());
                 $store_passwd = urlencode($this->getStorePassword());
                 $requested_url = ($this->config['apiDomain'] . $this->config['apiUrl']['order_validate'] . "?val_id=" . $val_id . "&store_id=" . $store_id . "&store_passwd=" . $store_passwd . "&v=1&format=json");
-
                 $handle = curl_init();
                 curl_setopt($handle, CURLOPT_URL, $requested_url);
                 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
-                 if ($this->config['connect_from_localhost']) {
-                     curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 0);
-                     curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, 0);
-                 } else {
-                     curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2);
-                     curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, 2);
-                 }
+                if ($this->config['connect_from_localhost']) {
+                    curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 0);
+                    curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, 0);
+                } else {
+                    curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2);
+                    curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, 2);
+                }
 
 
                 $result = curl_exec($handle);
@@ -85,53 +94,57 @@ class SslCommerzNotification extends AbstractSslCommerz
 
                     # TRANSACTION INFO
                     $status = $result->status;
-                    $tran_date = $result->tran_date;
-                    $tran_id = $result->tran_id;
-                    $val_id = $result->val_id;
-                    $amount = $result->amount;
-                    $store_amount = $result->store_amount;
-                    $bank_tran_id = $result->bank_tran_id;
-                    $card_type = $result->card_type;
+                    //$tran_date = $result->tran_date??"";
+                    $tran_id = $result->tran_id ?? "";
+                    //$val_id = $result->val_id??"";
+                    $amount = $result->amount ?? "";
+                    //$store_amount = $result->store_amount;
+                    //$bank_tran_id = $result->bank_tran_id;
+                    //$card_type = $result->card_type;
                     $currency_type = $result->currency_type;
                     $currency_amount = $result->currency_amount;
-
-                    # ISSUER INFO
-                    $card_no = $result->card_no;
-                    $card_issuer = $result->card_issuer;
-                    $card_brand = $result->card_brand;
-                    $card_issuer_country = $result->card_issuer_country;
-                    $card_issuer_country_code = $result->card_issuer_country_code;
-
-                    # API AUTHENTICATION
-                    $APIConnect = $result->APIConnect;
-                    $validated_on = $result->validated_on;
-                    $gw_version = $result->gw_version;
-
+                    /**
+                     * # ISSUER INFO
+                     * $card_no = $result->card_no;
+                     * $card_issuer = $result->card_issuer;
+                     * $card_brand = $result->card_brand;
+                     * $card_issuer_country = $result->card_issuer_country;
+                     * $card_issuer_country_code = $result->card_issuer_country_code;
+                     *
+                     * # API AUTHENTICATION
+                     * $APIConnect = $result->APIConnect;
+                     * $validated_on = $result->validated_on;
+                     * $gw_version = $result->gw_version;
+                     */
+                    $validationStatus = false;
                     # GIVE SERVICE
                     if ($status == "VALID" || $status == "VALIDATED") {
                         if ($merchant_trans_currency == "BDT") {
                             if (trim($merchant_trans_id) == trim($tran_id) && (abs($merchant_trans_amount - $amount) < 1) && trim($merchant_trans_currency) == trim('BDT')) {
-                                return true;
+                                $validationStatus = true;
                             } else {
-                                # DATA TEMPERED
                                 $this->error = "Data has been tempered";
-                                return false;
                             }
                         } else {
                             //echo "trim($merchant_trans_id) == trim($tran_id) && ( abs($merchant_trans_amount-$currency_amount) < 1 ) && trim($merchant_trans_currency)==trim($currency_type)";
                             if (trim($merchant_trans_id) == trim($tran_id) && (abs($merchant_trans_amount - $currency_amount) < 1) && trim($merchant_trans_currency) == trim($currency_type)) {
-                                return true;
+                                $validationStatus = true;
                             } else {
                                 # DATA TEMPERED
                                 $this->error = "Data has been tempered";
-                                return false;
                             }
                         }
+
                     } else {
                         # FAILED TRANSACTION
                         $this->error = "Failed Transaction";
-                        return false;
                     }
+                    Log::info("ValidationError:" . json_encode([
+                            "validation_status" => $validationStatus,
+                            "error_message" => $this->error
+                        ]));
+
+                    return $validationStatus;
                 } else {
                     # Failed to connect with SSLCOMMERZ
                     $this->error = "Faile to connect with SSLCOMMERZ";
@@ -149,19 +162,26 @@ class SslCommerzNotification extends AbstractSslCommerz
         }
     }
 
+
     # FUNCTION TO CHECK HASH VALUE
-    protected function SSLCOMMERZ_hash_verify($post_data, $store_passwd = "")
+    protected function SSLCOMMERZ_hash_verify($post_data, $store_passwd = ""): bool
     {
-        if (isset($post_data) && isset($post_data['verify_sign']) && isset($post_data['verify_key'])) {
+        Log::info("SSLCOMMERZ_hash_verify:" . json_encode([
+                "post_data" => $post_data,
+                "store_password" => $store_passwd
+            ]));
+
+        if (isset($_POST) && isset($_POST['verify_sign']) && isset($_POST['verify_key'])) {
             # NEW ARRAY DECLARED TO TAKE VALUE OF ALL POST
-            $pre_define_key = explode(',', $post_data['verify_key']);
+
+            $pre_define_key = explode(',', $_POST['verify_key']);
 
             $new_data = array();
             if (!empty($pre_define_key)) {
                 foreach ($pre_define_key as $value) {
-//                    if (isset($post_data[$value])) {
-                        $new_data[$value] = ($post_data[$value]);
-//                    }
+                    if (isset($_POST[$value])) {
+                        $new_data[$value] = ($_POST[$value]);
+                    }
                 }
             }
             # ADD MD5 OF STORE PASSWORD
@@ -176,27 +196,23 @@ class SslCommerzNotification extends AbstractSslCommerz
             }
             $hash_string = rtrim($hash_string, '&');
 
-            if (md5($hash_string) == $post_data['verify_sign']) {
+            if (md5($hash_string) == $_POST['verify_sign']) {
 
                 return true;
 
             } else {
-                $this->error = "Verification signature not matched";
                 return false;
             }
-        } else {
-            $this->error = 'Required data mission. ex: verify_key, verify_sign';
-            return false;
-        }
+        } else return false;
     }
 
     /**
      * @param array $requestData
      * @param string $type
      * @param string $pattern
-     * @return false|mixed|string
+     * @return string|bool
      */
-    public function makePayment(array $requestData, $type = 'checkout', $pattern = 'json')
+    public function makePayment(array $requestData, string $type = 'checkout', string $pattern = 'json'): array
     {
         if (empty($requestData)) {
             return "Please provide a valid information list about transaction with transaction id, amount, success url, fail url, cancel url, store id and pass at least";
@@ -206,32 +222,19 @@ class SslCommerzNotification extends AbstractSslCommerz
 
         $this->setApiUrl($this->config['apiDomain'] . $this->config['apiUrl']['make_payment']);
 
-        // Set the required/additional params
+        /** Set the required/additional params */
         $this->setParams($requestData);
 
-        // Set the authentication information
+        /** Set the authentication information */
         $this->setAuthenticationInfo();
-
-        // Now, call the Gateway API
-        $response = $this->callToApi($this->data, $header, $this->config['connect_from_localhost']);
-
-        $formattedResponse = $this->formatResponse($response, $type, $pattern); // Here we will define the response pattern
-
-        if ($type == 'hosted') {
-            if (isset($formattedResponse['GatewayPageURL']) && $formattedResponse['GatewayPageURL'] != '') {
-                $this->redirect($formattedResponse['GatewayPageURL']);
-            } else {
-                return $formattedResponse['failedreason'];
-            }
-        } else {
-            return $formattedResponse;
-        }
+        $apiResponse = $this->callToApi($this->data, $header, $this->config['connect_from_localhost']);
+        return json_decode($apiResponse, true);
     }
 
 
     protected function setSuccessUrl()
     {
-        $this->successUrl = url('/') . $this->config['success_url'];
+        $this->successUrl = $this->config['success_url'];
     }
 
     protected function getSuccessUrl()
@@ -241,7 +244,7 @@ class SslCommerzNotification extends AbstractSslCommerz
 
     protected function setFailedUrl()
     {
-        $this->failedUrl = url('/') . $this->config['failed_url'];
+        $this->failedUrl = $this->config['failed_url'];
     }
 
     protected function getFailedUrl()
@@ -251,7 +254,7 @@ class SslCommerzNotification extends AbstractSslCommerz
 
     protected function setCancelUrl()
     {
-        $this->cancelUrl = url('/') . $this->config['cancel_url'];
+        $this->cancelUrl = $this->config['cancel_url'];
     }
 
     protected function getCancelUrl()
@@ -259,8 +262,19 @@ class SslCommerzNotification extends AbstractSslCommerz
         return $this->cancelUrl;
     }
 
+    protected function setIpnUrl()
+    {
+        $this->ipnUrl = $this->config['ipn_url'];
+    }
+
+    protected function getIpnUrl()
+    {
+        return $this->ipnUrl;
+    }
+
     public function setParams($requestData)
     {
+
         ##  Integration Required Parameters
         $this->setRequiredInfo($requestData);
 
@@ -277,7 +291,7 @@ class SslCommerzNotification extends AbstractSslCommerz
         $this->setAdditionalInfo($requestData);
     }
 
-    public function setAuthenticationInfo()
+    public function setAuthenticationInfo(): array
     {
         $this->data['store_id'] = $this->getStoreId();
         $this->data['store_passwd'] = $this->getStorePassword();
@@ -285,7 +299,7 @@ class SslCommerzNotification extends AbstractSslCommerz
         return $this->data;
     }
 
-    public function setRequiredInfo(array $info)
+    public function setRequiredInfo(array $info): array
     {
         $this->data['total_amount'] = $info['total_amount']; // decimal (10,2)	Mandatory - The amount which will process by SSLCommerz. It shall be decimal value (10,2). Example : 55.40. The transaction amount must be from 10.00 BDT to 500000.00 BDT
         $this->data['currency'] = $info['currency']; // string (3)	Mandatory - The currency type must be mentioned. It shall be three characters. Example : BDT, USD, EUR, SGD, INR, MYR, etc. If the transaction currency is not BDT, then it will be converted to BDT based on the current convert rate. Example : 1 USD = 82.22 BDT.
@@ -296,6 +310,7 @@ class SslCommerzNotification extends AbstractSslCommerz
         $this->setSuccessUrl();
         $this->setFailedUrl();
         $this->setCancelUrl();
+        $this->setIpnUrl();
 
         $this->data['success_url'] = $this->getSuccessUrl(); // string (255)	Mandatory - It is the callback URL of your website where user will redirect after successful payment (Length: 255)
         $this->data['fail_url'] = $this->getFailedUrl(); // string (255)	Mandatory - It is the callback URL of your website where user will redirect after any failure occure during payment (Length: 255)
@@ -309,7 +324,8 @@ class SslCommerzNotification extends AbstractSslCommerz
          * Important! Not mandatory, however better to use to avoid missing any payment notification - It is the Instant Payment Notification (IPN) URL of your website where SSLCOMMERZ will send the transaction's status (Length: 255).
          * The data will be communicated as SSLCOMMERZ Server to your Server. So, customer session will not work.
          * */
-        $this->data['ipn_url'] = (isset($info['ipn_url'])) ? $info['ipn_url'] : null;
+
+        $this->data['ipn_url'] = $this->getIpnUrl();
 
         /*
          * Type: string (30)
@@ -442,7 +458,7 @@ class SslCommerzNotification extends AbstractSslCommerz
         return $this->data;
     }
 
-    public function setAdditionalInfo(array $info)
+    public function setAdditionalInfo(array $info): array
     {
         $this->data['value_a'] = (isset($info['value_a'])) ? $info['value_a'] : null; // value_a [ string (255)	- Extra parameter to pass your meta data if it is needed. Not mandatory]
         $this->data['value_b'] = (isset($info['value_b'])) ? $info['value_b'] : null; // value_b [ string (255)	- Extra parameter to pass your meta data if it is needed. Not mandatory]

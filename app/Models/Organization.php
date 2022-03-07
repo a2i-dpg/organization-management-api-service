@@ -104,7 +104,9 @@ class Organization extends BaseModel
      */
     public function industryAssociations(): BelongsToMany
     {
-        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization', 'organization_id', 'industry_association_id')->withPivot('membership_id', 'row_status', 'payment_status', 'payment_date', 'renewal_date')->withTimestamps();
+        return $this->belongsToMany(IndustryAssociation::class, 'industry_association_organization', 'organization_id', 'industry_association_id')
+            ->withPivot('id', 'membership_id', 'row_status', 'payment_status', 'payment_date', 'membership_type_id','additional_info_model_name','member_ship_expire_date')
+            ->withTimestamps();
     }
 
     public function subTrades(): BelongsToMany

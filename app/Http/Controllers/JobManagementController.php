@@ -213,9 +213,11 @@ class JobManagementController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function showInLandingPageStatusChange(Request $request): JsonResponse
     {
+        $this->authorize('update', JobManagement::class);
         $industryAssociationId = $request->input('industry_association_id');
         $filter = $this->jobManagementService->showInLandingPageValidator($request, $industryAssociationId)->validate();
         $this->jobManagementService->showInLandingPageStatusChange($filter, $industryAssociationId);
@@ -326,6 +328,7 @@ class JobManagementController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param string $jobId
      * @return JsonResponse
      * @throws ValidationException
@@ -349,6 +352,7 @@ class JobManagementController extends Controller
     /**
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getMatchingCriteria(string $jobId): JsonResponse
     {
@@ -403,7 +407,9 @@ class JobManagementController extends Controller
         $respondData = $this->jobManagementService->updateAppliedJobRespond($validatedData);
 
         $response = [
-            "data" => $respondData,
+            "data" => [
+                'confirmation_status' => $respondData['confirmation_status']
+            ],
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -435,6 +441,20 @@ class JobManagementController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException|Throwable
+     */
+    public function youthFeedJobs(Request $request): JsonResponse
+    {
+        $validatedData = $this->jobManagementService->youthJobsValidator($request)->validate();
+        $validatedData["feed_only"] = "1";
+        $response = $this->jobManagementService->getJobList($validatedData, Carbon::now());
+
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -663,6 +683,7 @@ class JobManagementController extends Controller
      * @param Request $request
      * @param string $jobId
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function getRecruitmentStepList(Request $request, string $jobId): JsonResponse
     {
@@ -814,6 +835,7 @@ class JobManagementController extends Controller
      * @param Request $request
      * @param int $stepId
      * @return JsonResponse
+     * @throws AuthorizationException
      * @throws ValidationException
      */
     public function updateRecruitmentStep(Request $request, int $stepId): JsonResponse
@@ -835,6 +857,13 @@ class JobManagementController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @param string $jobId
+     * @param int $status
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
     public function getCandidateList(Request $request, string $jobId, int $status = 0): JsonResponse
     {
         $this->authorize('view', JobManagement::class);
@@ -1161,7 +1190,7 @@ class JobManagementController extends Controller
         if (!empty($requestData["skill_ids"])) {
             $requestData["skill_ids"] = is_array($requestData['skill_ids']) ? $requestData['skill_ids'] : explode(',', $requestData['skill_ids']);
         }
-        $totalJobCount = $this->jobManagementService->getJobCount();
+        $totalJobCount = $this->jobManagementService->getJobCount($this->startTime);
         $youthAppliedJobCount = $this->jobManagementService->getAppliedJobCount($youthId);
         $skillMatchingJobCount = 0;
         if (!empty($requestData["skill_ids"]) && is_array($requestData["skill_ids"]) && count($requestData["skill_ids"]) > 0) {

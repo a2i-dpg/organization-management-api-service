@@ -179,6 +179,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         });
 
         $router->post('/organization-import-excel', ["as" => "organization.import.excel", "uses" => "OrganizationController@bulkStoreByExcel"]);
+        $router->get("nascib-member/payment/pay-via-ssl/payment-gateway-page-url", ["as" => "pay-via-ssl.payment-gateway-page-url", "uses" => "NascibMemberPaymentController@getPaymentGatewayPageUrl"]);
     });
 
     /** Service to service direct call without any authorization and authentication */
@@ -203,6 +204,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         /** Youth Feed statistics job data fetch */
         $router->get('youth-feed-statistics/{youthId}', ["as" => "courses.youth-feed-statistics", "uses" => "JobManagementController@youthFeedStatistics"]);
+
+        /** Fetch all recent jobs for youth feed API */
+        $router->get('youth-feed-jobs', ["as" => "service-to-service-call.youth-feed-jobs", "uses" => "JobManagementController@youthFeedJobs"]);
     });
 
 
@@ -229,6 +233,14 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             /** Nascib Registration */
             $router->post('nascib-members/open-registration', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@openRegistration']);
             $router->get('nascib-members/get-static-data', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@nascibMemberStaticInfo']);
+        });
+
+        $router->group(['prefix' => 'nascib-members/payment', 'as' => 'nascib-members.payment'], function () use ($router) {
+            $router->post("pay-via-ssl/pay-now", ["as" => "pay-via-ssl.pay-now", "uses" => "NascibMemberPaymentController@payViaSsl"]);
+            $router->post("pay-via-ssl/success", ["as" => "pay-via-ssl.success", "uses" => "NascibMemberPaymentController@success"]);
+            $router->post("pay-via-ssl/fail", ["as" => "pay-via-ssl.fail", "uses" => "NascibMemberPaymentController@fail"]);
+            $router->post("pay-via-ssl/cancel", ["as" => "pay-via-ssl.cancel", "uses" => "NascibMemberPaymentController@cancel"]);
+            $router->post("pay-via-ssl/ipn", ["as" => "pay-via-ssl.ipn", "uses" => "NascibMemberPaymentController@ipn"]);
         });
 
         $router->get("nise-statistics", ["as" => "nise-statistics", "uses" => "StatisticsController@niseStatistics"]);
@@ -284,4 +296,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->delete('organization-unit-types-force-delete/{id}', ['as' => 'organization-unit-types.force-delete', 'uses' => 'OrganizationUnitTypeController@forceDelete']);
 
 
+});
+
+//TODO: Solve tomorrow
+$router->get("jwt", function (\Illuminate\Http\Request $request) {
+    $payload = [
+        "purpose" => \App\Models\NascibMember::APPLICATION_TYPE_RENEW,
+        "purpose_related_id" => "2",
+    ];
+    return \App\Services\CommonServices\CodeGenerateService::jwtToken($payload);
 });

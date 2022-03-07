@@ -1,5 +1,13 @@
 <?php
-namespace App\Services\SSLPaymentService\Library;
+
+namespace App\Services\PaymentService\Library;
+
+
+use App\Exceptions\HttpErrorException;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 abstract class AbstractSslCommerz implements SslCommerzInterface
 {
@@ -37,14 +45,15 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
         return $this->apiUrl;
     }
 
-    /**
-     * @param $data
-     * @param array $header
-     * @param bool $setLocalhost
-     * @return bool|string
-     */
+
     public function callToApi($data, $header = [], $setLocalhost = false)
     {
+        Log::channel('ssl_commerz')->info("Ssl-callToApi:" . json_encode([
+                "post_payload" => $data,
+                "header" => $header,
+                "setLocalhost" => $setLocalhost
+            ]));
+
         $curl = curl_init();
 
         if (!$setLocalhost) {
@@ -70,44 +79,46 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
         $curlErrorNo = curl_errno($curl);
         curl_close($curl);
 
+        Log::info("curl_getinfo:" . json_encode([
+                "response" => $response,
+                "err" => $err,
+                "curl_getinfo" => $code,
+                "curl_errno" => $curlErrorNo
+            ]));
+
         if ($code == 200 & !($curlErrorNo)) {
             return $response;
         } else {
             return "FAILED TO CONNECT WITH SSLCOMMERZ API";
-            //return "cURL Error #:" . $err;
         }
     }
 
     /**
-     * @param $response
+     * @param array $sslcz
      * @param string $type
      * @param string $pattern
-     * @return false|mixed|string
+     * @return array
      */
-    public function formatResponse($response, $type = 'checkout', $pattern = 'json')
+    public function formatResponse(array $sslcz, $type = 'checkout', $pattern = 'json'): array
     {
-        $sslcz = json_decode($response, true);
 
         if ($type != 'checkout') {
             return $sslcz;
         } else {
-            if (isset($sslcz['GatewayPageURL']) && $sslcz['GatewayPageURL'] != "") {
-                // this is important to show the popup, return or echo to send json response back
-                if($this->getApiUrl() != null && $this->getApiUrl() == 'https://securepay.sslcommerz.com') {
-                   $response = json_encode(['status' => 'SUCCESS', 'data' => $sslcz['GatewayPageURL'], 'logo' => $sslcz['storeLogo']]);
-                } else {
-                    $response = json_encode(['status' => 'success', 'data' => $sslcz['GatewayPageURL'], 'logo' => $sslcz['storeLogo']]);
-                }
+            if ($sslcz['status'] == 'SUCCESS') {
+                $response = [
+                    'gateway_page_url' => $sslcz['GatewayPageURL'],
+                    'status' => 'success',
+                    "message" => "Ssl Payment is successfully initialized"
+                ];
             } else {
-                $response = json_encode(['status' => 'fail', 'data' => null, 'message' => $sslcz['failedreason']]);
-            }
-
-            if ($pattern == 'json') {
-                return $response;
-            } else {
-                echo $response;
+                $response = [
+                    'status' => 'fail',
+                    'message' => $sslcz['failedreason']
+                ];
             }
         }
+        return $response;
     }
 
     /**

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
+use App\Models\NascibMember;
 use App\Services\CommonServices\CodeGenerateService;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
+use App\Services\NascibMemberService;
 use App\Services\OrganizationService;
 use App\Models\Organization;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -68,8 +70,13 @@ class OrganizationController extends Controller
      */
     public function read(Request $request, int $id): JsonResponse
     {
+
         $organization = $this->organizationService->getOneOrganization($id);
         $this->authorize('view', $organization);
+        if (!empty($organization)) {
+            $organization = $organization->toArray();
+            $this->organizationService->getNascibData($organization);
+        }
         $response = [
             "data" => $organization,
             "_response_status" => [
@@ -230,7 +237,7 @@ class OrganizationController extends Controller
 
             $this->organizationService->excelDataValidator($rows)->validate();
 
-            foreach ($rows as $rowData){
+            foreach ($rows as $rowData) {
                 $coreUser = ServiceToServiceCall::getCoreUserByUsername($rowData['contact_person_mobile']);
                 $youthUser = ServiceToServiceCall::getYouthUserByUsername($rowData['contact_person_mobile']);
 
@@ -325,6 +332,11 @@ class OrganizationController extends Controller
         $organization = Organization::findOrFail($id);
 
         $this->authorize('update', $organization);
+
+        if ($request->industry_association_id) {
+            $industryAssociations = array(['industry_association_id' => $request->industry_association_id, 'membership_id' => $request->membership_id]);
+            $request->offsetSet('industry_associations', $industryAssociations);
+        }
 
         $validated = $this->organizationService->validator($request, $id)->validate();
         $industrySubTrades = $validated['sub_trades'];
@@ -493,31 +505,43 @@ class OrganizationController extends Controller
             ]));
         }
         DB::beginTransaction();
+        $httpStatus = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
         try {
             $userApproval = $this->organizationService->organizationUserApproval($request, $organization);
             $this->organizationService->industryAssociationMembershipApproval($organization);
             $this->organizationService->organizationStatusChangeAfterApproval($organization);
 
             if (isset($userApproval['_response_status']['success']) && $userApproval['_response_status']['success']) {
+                $mailMessage = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
+                $messageBody = MailService::templateView($mailMessage);
+                $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
+
+                $industryAssociationOrganization = $organization->industryAssociations();
+                $industryAssociationOrganization = $industryAssociationOrganization->firstOrFail()->pivot;
+
+                if (!empty($industryAssociationOrganization['additional_info_model_name']) && $industryAssociationOrganization['additional_info_model_name'] == NascibMember::class) {
+                    $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user, Your Payment detail is send your mail";
+                    $messageBody = app(NascibMemberService::class)->getMemberApprovedUserMailMessageBody($industryAssociationOrganization->toArray());
+                }
+
+                $httpStatus = ResponseAlias::HTTP_OK;
+
                 /** Mail send */
                 $to = array($organization->contact_person_email);
                 $from = BaseModel::NISE3_FROM_EMAIL;
                 $subject = "User Approval Information";
-                $message = "Congratulation, You are  approved as a " . $organization->title . " user. You are now active user";
-                $messageBody = MailService::templateView($message);
                 $mailService = new MailService($to, $from, $subject, $messageBody);
                 $mailService->sendMail();
 
                 /** Sms send */
                 $recipient = $organization->contact_person_mobile;
-                $smsMessage = "Congratulation, You are approved as a " . $organization->title . " user";
                 $smsService = new SmsService();
                 $smsService->sendSms($recipient, $smsMessage);
             }
             DB::commit();
             $response['_response_status'] = [
-                "success" => false,
-                "code" => ResponseAlias::HTTP_OK,
+                "success" => $httpStatus == ResponseAlias::HTTP_OK,
+                "code" => $httpStatus,
                 "message" => "organization approved successfully",
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
             ];
@@ -526,7 +550,7 @@ class OrganizationController extends Controller
             DB::rollBack();
             throw $e;
         }
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, $httpStatus);
     }
 
     /**
@@ -539,6 +563,7 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findOrFail($organizationId);
         DB::beginTransaction();
+        $httpStatus = ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
         try {
             $this->organizationService->organizationStatusChangeAfterRejection($organization);
             $this->organizationService->industryAssociationMembershipRejection($organization);
@@ -559,11 +584,12 @@ class OrganizationController extends Controller
                 $smsMessage = "You are rejected as a " . $organization->title . " user. You are not active user now";
                 $smsService = new SmsService();
                 $smsService->sendSms($recipient, $smsMessage);
+                $httpStatus = ResponseAlias::HTTP_OK;
             }
             DB::commit();
             $response['_response_status'] = [
-                "success" => false,
-                "code" => ResponseAlias::HTTP_OK,
+                "success" => $httpStatus == ResponseAlias::HTTP_OK,
+                "code" => $httpStatus,
                 "message" => "organization rejected successfully",
                 "query_time" => $this->startTime->diffInSeconds(\Carbon\Carbon::now()),
             ];
@@ -572,7 +598,7 @@ class OrganizationController extends Controller
             DB::rollBack();
             throw $e;
         }
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response, $httpStatus);
     }
 
     /**

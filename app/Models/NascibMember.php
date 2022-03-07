@@ -98,7 +98,7 @@ class NascibMember extends BaseModel
         self::TRADE_LICENSING_AUTHORITY_MUNICIPALITY => 'Municipality (পৌরসভা)',
         self::TRADE_LICENSING_AUTHORITY_UNION_COUNCIL => 'Union Council (ইউনিয়ন পরিষদ)',
     ];
-    const OTHER_SECTOR_KEY = 1001;
+    const OTHER_SECTOR_KEY = "other_sector";
     public const SECTOR = [
         1 => 'পাটজাত',
         2 => 'চামড়া',
@@ -194,6 +194,14 @@ class NascibMember extends BaseModel
         1 => 'হ্যাঁ',
     ];
 
+    public const APPLICATION_TYPE_NEW = "NEW_APPLICATION";
+    public const APPLICATION_TYPE_RENEW = "RENEW_APPLICATION";
+    public const APPLICATION_TYPE = [
+        self::APPLICATION_TYPE_NEW => "New Application",
+        self::APPLICATION_TYPE_RENEW => "Renew Application"
+    ];
+
+    public const PAYMENT_GATEWAY_PAGE_URL_PREFIX = "member-registration-payment-method";
 
     protected $casts = [
         'registered_authority' => 'array',
