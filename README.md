@@ -6,7 +6,7 @@ RELEASE = 'php artisan migrate'
 
 ## Official Documentation
 
-N/A Yet
+N/A YET
 
 ## Contributing
 
