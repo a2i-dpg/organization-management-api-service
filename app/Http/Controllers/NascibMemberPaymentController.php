@@ -116,24 +116,17 @@ class NascibMemberPaymentController extends Controller
     /**
      * @throws Throwable
      */
-    public function ipn(Request $request): JsonResponse
+    public function ipn(Request $request)
     {
+        Log::channel('ssl_commerz')->info("IPN RESPONSE: " . json_encode($request->all()));
         DB::beginTransaction();
         try {
-            [$status, $message] = $this->nascibMemberPaymentViaSslService->successPayment($request);
-            $httpStatusCode = $status ? ResponseAlias::HTTP_OK : ResponseAlias::HTTP_UNPROCESSABLE_ENTITY;
-            $response['_response_status'] = [
-                "success" => (bool)$status,
-                "code" => $httpStatusCode,
-                "message" => $message,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
-            ];
+            $this->nascibMemberPaymentViaSslService->ipnHandler($request);
             DB::commit();
         } catch (Throwable $exception) {
             DB::rollBack();
             throw $exception;
         }
-        return Response::json($response, $httpStatusCode);
     }
 
     /**

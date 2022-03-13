@@ -48,6 +48,12 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
 
     public function callToApi($data, $header = [], $setLocalhost = false)
     {
+        Log::channel('ssl_commerz')->info("Ssl-callToApi:" . json_encode([
+                "post_payload" => $data,
+                "header" => $header,
+                "setLocalhost" => $setLocalhost
+            ]));
+
         $curl = curl_init();
 
         if (!$setLocalhost) {
@@ -73,7 +79,12 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
         $curlErrorNo = curl_errno($curl);
         curl_close($curl);
 
-        Log::info("SSL Curl Error:" . $err);
+        Log::info("curl_getinfo:" . json_encode([
+                "response" => $response,
+                "err" => $err,
+                "curl_getinfo" => $code,
+                "curl_errno" => $curlErrorNo
+            ]));
 
         if ($code == 200 & !($curlErrorNo)) {
             return $response;

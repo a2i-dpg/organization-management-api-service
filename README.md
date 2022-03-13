@@ -6,7 +6,7 @@ RELEASE = 'php artisan migrate'
 
 ## Official Documentation
 
-N/A Yet
+N/A YET
 
 ## Contributing
 
@@ -23,3 +23,5 @@ Softbd LTD
 ```shell
 php artisan queue:work --queue=organization.db.sync.q
 ```
+
+
