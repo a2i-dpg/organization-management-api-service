@@ -9,6 +9,7 @@ use App\Models\MembershipType;
 use App\Models\Organization;
 use App\Models\NascibMember;
 use App\Models\SmefCluster;
+use App\Services\CommonServices\CodeGenerateService;
 use App\Services\CommonServices\MailService;
 use App\Services\CommonServices\SmsService;
 use App\Services\NascibMemberService;
@@ -171,6 +172,7 @@ class NascibMemberController extends Controller
 
         DB::beginTransaction();
         try {
+            $validated['code']=CodeGenerateService::getIndustryCode();
             [$organization, $nascibMemberData] = $this->nascibMemberService->registerNascib($organization, $organizationMember, $validated);
             $validated['organization_id'] = $organization->id;
             $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;
