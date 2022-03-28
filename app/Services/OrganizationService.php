@@ -288,6 +288,8 @@ class OrganizationService
                 'organizations.domain',
                 'organizations.fax_no',
                 'organizations.mobile',
+                'organizations.mobile_numbers',
+                'organizations.phone_numbers',
                 'organizations.email',
                 'organizations.contact_person_name',
                 'organizations.contact_person_name_en',
@@ -377,6 +379,8 @@ class OrganizationService
             'organizations.domain',
             'organizations.fax_no',
             'organizations.mobile',
+            'organizations.mobile_numbers',
+            'organizations.phone_numbers',
             'organizations.email',
             'organizations.contact_person_name',
             'organizations.contact_person_name_en',
@@ -934,6 +938,12 @@ class OrganizationService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+        if (!empty($data['phone_numbers'])) {
+            $data["phone_numbers"] = isset($data['phone_numbers']) && is_array($data['phone_numbers']) ? $data['phone_numbers'] : explode(',', $data['phone_numbers']);
+        }
+        if (!empty($data['mobile_numbers'])) {
+            $data["mobile_numbers"] = isset($data['mobile_numbers']) && is_array($data['mobile_numbers']) ? $data['mobile_numbers'] : explode(',', $data['mobile_numbers']);
+        }
         if (!empty($data["sub_trades"])) {
             $data["sub_trades"] = is_array($data['sub_trades']) ? $data['sub_trades'] : explode(',', $data['sub_trades']);
         }
@@ -969,6 +979,23 @@ class OrganizationService
                 'required',
                 'int',
                 'distinct',
+            ],
+            'mobile_numbers' => [
+                'nullable',
+                'array'
+            ],
+            'mobile_numbers.*' => [
+                'nullable',
+                'string',
+                BaseModel::MOBILE_REGEX
+            ],
+            'phone_numbers' => [
+                'nullable',
+                'array'
+            ],
+            'phone_numbers.*' => [
+                'nullable',
+                'string',
             ],
             'industry_associations.*.membership_id' => [
                 'string',
@@ -1022,7 +1049,7 @@ class OrganizationService
             ],
             "google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             'address' => [
                 'required',
@@ -1242,7 +1269,7 @@ class OrganizationService
             ],
             "*.google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             '*.address' => [
                 'required',
