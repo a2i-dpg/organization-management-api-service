@@ -658,9 +658,6 @@ class IndustryAssociationService
                 'string',
                 BaseModel::MOBILE_REGEX
             ],
-
-
-
             'phone_numbers' => [
                 'nullable',
                 'array'

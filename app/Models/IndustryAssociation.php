@@ -50,6 +50,11 @@ class IndustryAssociation extends BaseModel
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
 
+    protected $casts = [
+        'phone_numbers' => 'array',
+        'mobile_numbers' => 'array',
+    ];
+
 
     public const ROW_STATUS_ACTIVE = 1;
     public const ROW_STATUS_INACTIVE = 0;
@@ -81,10 +86,6 @@ class IndustryAssociation extends BaseModel
     public const INDUSTRY_ASSOCIATION_CODE_PREFIX = "INA";
     public const INDUSTRY_ASSOCIATION_CODE_SIZE = 9;
 
-    protected $casts = [
-        'phone_numbers' => 'array',
-        'mobile_numbers' => 'array',
-    ];
 
     /**
      * @return BelongsToMany

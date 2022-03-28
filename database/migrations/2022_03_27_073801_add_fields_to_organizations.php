@@ -14,8 +14,8 @@ class AddFieldsToOrganizations extends Migration
     public function up()
     {
         Schema::table('organizations', function (Blueprint $table) {
-            $table->string('phone_numbers', 400)->nullable();
-            $table->string('mobile_numbers', 400)->nullable();
+            $table->string('phone_numbers', 400)->after('mobile')->nullable();
+            $table->string('mobile_numbers', 400)->after('phone_numbers')->nullable();
         });
     }
 
