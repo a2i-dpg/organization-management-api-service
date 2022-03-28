@@ -1045,7 +1045,7 @@ class OrganizationService
             ],
             "google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             'address' => [
                 'required',
@@ -1265,7 +1265,7 @@ class OrganizationService
             ],
             "*.google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             '*.address' => [
                 'required',

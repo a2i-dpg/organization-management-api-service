@@ -563,12 +563,16 @@ class IndustryAssociationService
             $request->offsetSet('skills', $skillIds);
         }
 
-        if (!empty($data['phone_numbers'])) {
-            $data["phone_numbers"] = isset($data['phone_numbers']) && is_array($data['phone_numbers']) ? $data['phone_numbers'] : explode(',', $data['phone_numbers']);
+        if (!empty($request->offsetGet('phone_numbers'))) {
+            $phoneNumber = is_array($request->offsetGet('phone_numbers')) ? $request->offsetGet('phone_numbers') : explode(',', $request->offsetGet('phone_numbers'));
+            $request->offsetSet('phone_numbers', $phoneNumber);
         }
-        if (!empty($data['mobile_numbers'])) {
-            $data["mobile_numbers"] = isset($data['mobile_numbers']) && is_array($data['mobile_numbers']) ? $data['mobile_numbers'] : explode(',', $data['mobile_numbers']);
+        if (!empty($request->offsetGet('mobile_numbers'))) {
+            $mobileNumber = is_array($request->offsetGet('mobile_numbers')) ? $request->offsetGet('mobile_numbers') : explode(',', $request->offsetGet('mobile_numbers'));
+            $request->offsetSet('mobile_numbers', $mobileNumber);
         }
+
+
 
         $rules = [
             'trade_id' => [
@@ -620,7 +624,7 @@ class IndustryAssociationService
             ],
             "google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             'address' => [
                 'nullable',
@@ -811,7 +815,7 @@ class IndustryAssociationService
             ],
             "google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             'address' => [
                 'nullable',

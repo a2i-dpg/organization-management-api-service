@@ -29,7 +29,7 @@ class CreateIndustryAssociationsTable extends Migration
 
             $table->string('location_latitude', 50)->nullable();
             $table->string('location_longitude', 50)->nullable();
-            $table->text('google_map_src')->nullable();
+            $table->text('')->nullable();
 
 
             $table->string('address', 1200)->nullable();
