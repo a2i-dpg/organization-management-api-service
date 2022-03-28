@@ -16344,6 +16344,20 @@
                         "minimum": 2,
                         "description": "organization address"
                     },
+                    "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01376728953"
+                        }
+                    },
+                    "mobile_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01276128953"
+                        }
+                    },
                     "logo": {
                         "type": "string"
                     },
@@ -16484,6 +16498,20 @@
                     "description": {
                         "type": "string",
                         "description": "Details about the organization"
+                    },
+                    "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01376728953"
+                        }
+                    },
+                    "mobile_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01276128953"
+                        }
                     },
                     "skills": {
                         "type": "array",

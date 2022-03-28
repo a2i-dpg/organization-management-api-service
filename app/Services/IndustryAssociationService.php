@@ -772,6 +772,12 @@ class IndustryAssociationService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+        if (!empty($data['phone_numbers'])) {
+            $data["phone_numbers"] = isset($data['phone_numbers']) && is_array($data['phone_numbers']) ? $data['phone_numbers'] : explode(',', $data['phone_numbers']);
+        }
+        if (!empty($data['mobile_numbers'])) {
+            $data["mobile_numbers"] = isset($data['mobile_numbers']) && is_array($data['mobile_numbers']) ? $data['mobile_numbers'] : explode(',', $data['mobile_numbers']);
+        }
 
         if (!empty($request->offsetGet('skills'))) {
             $skillIds = is_array($request->offsetGet('skills')) ? $request->offsetGet('skills') : explode(',', $request->offsetGet('skills'));
@@ -865,6 +871,23 @@ class IndustryAssociationService
                 "required",
                 "int",
                 "exists:skills,id,deleted_at,NULL"
+            ],
+            'mobile_numbers' => [
+                'nullable',
+                'array'
+            ],
+            'mobile_numbers.*' => [
+                'nullable',
+                'string',
+                BaseModel::MOBILE_REGEX
+            ],
+            'phone_numbers' => [
+                'nullable',
+                'array'
+            ],
+            'phone_numbers.*' => [
+                'nullable',
+                'string',
             ],
             'logo' => [
                 'required',
