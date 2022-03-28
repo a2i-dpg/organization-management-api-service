@@ -32,6 +32,7 @@ class CreateIndustryAssociationsTable extends Migration
             $table->text('google_map_src')->nullable();
 
 
+
             $table->string('address', 1200)->nullable();
             $table->string('address_en', 600)->nullable();
             $table->char("country", 3)->default("BD")->comment('ISO Country Code');

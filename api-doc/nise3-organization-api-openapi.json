@@ -12,6 +12,9 @@
     },
     "servers": [
         {
+            "url": "http://localhost:8002/api/v1"
+        },
+        {
             "url": "http://nise-industry.softbd/api/v1"
         },
         {
@@ -15746,6 +15749,20 @@
                     "mobile": {
                         "type": "string"
                     },
+                    "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01376728953"
+                        }
+                    },
+                    "mobile_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01276128953"
+                        }
+                    },
                     "email": {
                         "type": "string",
                         "minimum": 2
@@ -16160,6 +16177,20 @@
                     "phone_code": {
                         "type": "string",
                         "readOnly": true
+                    },
+                    "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01376728953"
+                        }
+                    },
+                    "mobile_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "01276128953"
+                        }
                     },
                     "mobile": {
                         "type": "string",

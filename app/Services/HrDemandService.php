@@ -152,7 +152,7 @@ class HrDemandService
         $createdHrDemands = [];
         foreach ($data['hr_demands'] as $hrDemand) {
             $payload = [
-                'industry_association_id' => $data['industry_association_id'],
+                'industry_association_id' => $data['industry_association_id'] ?? "",
                 'organization_id' => $data['organization_id'],
                 'requirement' => $hrDemand['requirement'],
                 'end_date' => $hrDemand['end_date'],
@@ -435,7 +435,7 @@ class HrDemandService
         ];
         $rules = [
             'industry_association_id' => [
-                'required',
+                'nullable',
                 'int',
                 'exists:industry_associations,id,deleted_at,NULL'
             ],

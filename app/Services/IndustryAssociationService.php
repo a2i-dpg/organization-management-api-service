@@ -73,6 +73,8 @@ class IndustryAssociationService
             'industry_associations.country',
             'industry_associations.phone_code',
             'industry_associations.mobile',
+            'industry_associations.mobile_numbers',
+            'industry_associations.phone_numbers',
             'industry_associations.email',
             'industry_associations.fax_no',
             'industry_associations.trade_number',
@@ -184,6 +186,8 @@ class IndustryAssociationService
             'industry_associations.country',
             'industry_associations.phone_code',
             'industry_associations.mobile',
+            'industry_associations.mobile_numbers',
+            'industry_associations.phone_numbers',
             'industry_associations.email',
             'industry_associations.fax_no',
             'industry_associations.trade_number',
@@ -563,6 +567,17 @@ class IndustryAssociationService
             $request->offsetSet('skills', $skillIds);
         }
 
+        if (!empty($request->offsetGet('phone_numbers'))) {
+            $phoneNumber = is_array($request->offsetGet('phone_numbers')) ? $request->offsetGet('phone_numbers') : explode(',', $request->offsetGet('phone_numbers'));
+            $request->offsetSet('phone_numbers', $phoneNumber);
+        }
+        if (!empty($request->offsetGet('mobile_numbers'))) {
+            $mobileNumber = is_array($request->offsetGet('mobile_numbers')) ? $request->offsetGet('mobile_numbers') : explode(',', $request->offsetGet('mobile_numbers'));
+            $request->offsetSet('mobile_numbers', $mobileNumber);
+        }
+
+
+
         $rules = [
             'trade_id' => [
                 'required',
@@ -613,7 +628,7 @@ class IndustryAssociationService
             ],
             "google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             'address' => [
                 'nullable',
@@ -633,6 +648,23 @@ class IndustryAssociationService
             'mobile' => [
                 'required',
                 BaseModel::MOBILE_REGEX,
+            ],
+            'mobile_numbers' => [
+                'nullable',
+                'array'
+            ],
+            'mobile_numbers.*' => [
+                'nullable',
+                'string',
+                BaseModel::MOBILE_REGEX
+            ],
+            'phone_numbers' => [
+                'nullable',
+                'array'
+            ],
+            'phone_numbers.*' => [
+                'nullable',
+                'string',
             ],
             'email' => [
                 'required',
@@ -784,7 +816,7 @@ class IndustryAssociationService
             ],
             "google_map_src" => [
                 'nullable',
-                'integer',
+                'string',
             ],
             'address' => [
                 'nullable',

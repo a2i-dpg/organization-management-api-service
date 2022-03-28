@@ -44,7 +44,10 @@ class Organization extends BaseModel
      * @var string[]
      */
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_SOFT_DELETE;
-
+    protected $casts = [
+        'phone_numbers' => 'array',
+        'mobile_numbers' => 'array',
+    ];
 
     public const ROW_STATUSES = [
         self::ROW_STATUS_INACTIVE,
