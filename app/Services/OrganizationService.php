@@ -317,11 +317,11 @@ class OrganizationService
                 $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
                     ->where('industry_association_organization.industry_association_id', $industryAssociationId)
                     ->where(function ($subQuery) {
-                        $subQuery->whereNull("industry_association_organization.payment_status")
+                        $subQuery->where("industry_association_organization.payment_status",BaseModel::PAYMENT_NOT_APPLICABLE)
                             ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
                     })
                     ->orWhere(function ($subQuery) {
-                        $subQuery->whereNotNull("industry_association_organization.payment_status")
+                        $subQuery->where("industry_association_organization.payment_status",'!=',BaseModel::PAYMENT_NOT_APPLICABLE)
                             ->where('industry_association_organization.payment_status', BaseModel::PAYMENT_SUCCESS);
                     });
             });

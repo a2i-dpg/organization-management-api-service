@@ -40,6 +40,7 @@ abstract class BaseModel extends Model
     ];
 
     /** Payment Status */
+    public const PAYMENT_NOT_APPLICABLE = 0;
     public const PAYMENT_SUCCESS = 1;
     public const PAYMENT_PENDING = 2;
     public const PAYMENT_CANCEL = 3;
