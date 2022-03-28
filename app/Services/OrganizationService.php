@@ -7,6 +7,7 @@ use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\NascibMember;
 use App\Models\PaymentTransactionHistory;
+use App\Models\SmefMember;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
@@ -437,7 +438,7 @@ class OrganizationService
         return $organizationBuilder->firstOrFail();
     }
 
-    public function getNascibData(array &$organization)
+    public function getAdditionalModelData(array &$organization)
     {
         if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == NascibMember::class) {
 
@@ -460,6 +461,15 @@ class OrganizationService
             $nascibMember = NascibMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->first();
             if (!empty($nascibMember)) {
                 $organization['additional_information']['additional_info_model_data'] = $nascibMember->toArray();
+            } else {
+                $organization['additional_information']['additional_info_model_data'] = [];
+            }
+
+        }
+        else if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == SmefMember::class) {
+            $smefMember = SmefMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->first();
+            if (!empty($smefMember)) {
+                $organization['additional_information']['additional_info_model_data'] = $smefMember->toArray();
             } else {
                 $organization['additional_information']['additional_info_model_data'] = [];
             }

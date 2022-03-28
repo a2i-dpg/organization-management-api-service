@@ -75,7 +75,7 @@ class OrganizationController extends Controller
         $this->authorize('view', $organization);
         if (!empty($organization)) {
             $organization = $organization->toArray();
-            $this->organizationService->getNascibData($organization);
+            $this->organizationService->getAdditionalModelData($organization);
         }
         $response = [
             "data" => $organization,

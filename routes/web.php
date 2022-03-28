@@ -180,6 +180,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         $router->post('/organization-import-excel', ["as" => "organization.import.excel", "uses" => "OrganizationController@bulkStoreByExcel"]);
         $router->get("nascib-member/payment/pay-via-ssl/payment-gateway-page-url", ["as" => "pay-via-ssl.payment-gateway-page-url", "uses" => "NascibMemberPaymentController@getPaymentGatewayPageUrl"]);
+
     });
 
     /** Service to service direct call without any authorization and authentication */
@@ -233,6 +234,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             /** Nascib Registration */
             $router->post('nascib-members/open-registration', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@openRegistration']);
             $router->get('nascib-members/get-static-data', ['as' => 'nascib-members.open-registration', 'uses' => 'NascibMemberController@nascibMemberStaticInfo']);
+
+            /** Smef Registration */
+            $router->post('smef-members/open-registration', ['as' => 'smef-members.open-registration', 'uses' => 'SmefMemberController@openRegistration']);
+            $router->get('smef-members/get-static-data', ['as' => 'smef-members.open-registration', 'uses' => 'SmefMemberController@smefMemberStaticInfo']);
+
         });
 
         $router->group(['prefix' => 'nascib-members/payment', 'as' => 'nascib-members.payment'], function () use ($router) {
