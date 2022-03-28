@@ -316,7 +316,14 @@ class OrganizationService
             $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
                 $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
                     ->where('industry_association_organization.industry_association_id', $industryAssociationId)
-                    ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+                    ->where(function ($subQuery) {
+                        $subQuery->whereNull("industry_association_organization.payment_status")
+                            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
+                    })
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->whereNotNull("industry_association_organization.payment_status")
+                            ->where('industry_association_organization.payment_status', BaseModel::PAYMENT_SUCCESS);
+                    });
             });
         }
 
@@ -469,8 +476,7 @@ class OrganizationService
                 $organization['additional_information']['additional_info_model_data'] = [];
             }
 
-        }
-        else if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == SmefMember::class) {
+        } else if (!empty($organization['industry_associations'][0]['pivot']['additional_info_model_name']) && $organization['industry_associations'][0]['pivot']['additional_info_model_name'] == SmefMember::class) {
             $smefMember = SmefMember::where('industry_association_organization_id', $organization['industry_associations'][0]['pivot']['id'])->first();
             if (!empty($smefMember)) {
                 $organization['additional_information']['additional_info_model_data'] = $smefMember->toArray();
