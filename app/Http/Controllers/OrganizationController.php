@@ -97,7 +97,10 @@ class OrganizationController extends Controller
     public function organizationDetails(Request $request, int $id): JsonResponse
     {
         $organization = $this->organizationService->getOneOrganization($id);
-
+        if (!empty($organization)) {
+            $organization = $organization->toArray();
+            $this->organizationService->getAdditionalModelData($organization);
+        }
         $response = [
             "data" => $organization,
             "_response_status" => [
