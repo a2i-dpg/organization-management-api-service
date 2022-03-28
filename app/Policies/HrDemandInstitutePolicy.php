@@ -17,7 +17,7 @@ class HrDemandInstitutePolicy
      */
     public function viewAny(User $authUser): bool
     {
-        return $authUser->hasPermission('view_any_institute_hr_demand') || $authUser->hasPermission('view_institute_hr_demands');
+        return $authUser->hasPermission(['view_any_institute_hr_demand', 'view_institute_hr_demands']);
     }
 
     /**
