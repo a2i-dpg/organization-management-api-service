@@ -21,11 +21,13 @@ class SmefMember extends Model
     public const FORM_FILL_UP_BY_OWN = 1;
     public const FORM_FILL_UP_BY_UDC_ENTREPRENEUR = 2;
     public const FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION = 3;
+    public const FORM_FILL_UP_BY_SMEF_CLUSTER = 4;
 
     public const FORM_FILL_UP_LIST = [
-        self::FORM_FILL_UP_BY_OWN => "Form fill up by own",
-        self::FORM_FILL_UP_BY_UDC_ENTREPRENEUR => "Form fill up by UDC Entrepreneur",
-        self::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION => "Form fill up by Chamber or Association"
+        self::FORM_FILL_UP_BY_OWN => "Fill up by Self(আপনার নিজের মাধ্যমে)",
+        self::FORM_FILL_UP_BY_UDC_ENTREPRENEUR => "Fill up by UDC",
+        self::FORM_FILL_UP_BY_SMEF_CLUSTER => "Fill up by Smef Cluster(এসএমই ক্লাস্টার)",
+        self::FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION => "Fill up by Chamber or Association (চেম্বার/অ্যাসোসিয়েশন)"
     ];
 
     public const STATUS_INITIAL_STATE = 0;

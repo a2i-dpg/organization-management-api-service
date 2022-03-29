@@ -455,19 +455,19 @@ class SmefMemberService
             ];
         }
 
-        if (!empty($request->get('form_fill_up_by')) && $request->get('form_fill_up_by') == SmefMember::FORM_FILL_UP_BY_UDC_ENTREPRENEUR) {
-            $rules['udc_name'] = 'required|string|max: 100';
-            $rules['udc_loc_district'] = [
+        if (!empty($request->get('form_fill_up_by')) && $request->get('form_fill_up_by') == SmefMember::FORM_FILL_UP_BY_SMEF_CLUSTER) {
+            $rules['smef_cluster_name'] = 'required|string|max: 100';
+            $rules['smef_cluster_loc_district_id'] = [
                 'required',
                 'integer',
                 'exists:loc_districts,id,deleted_at,NULL'
             ];
-            $rules['udc_union'] = [
+            $rules['smef_cluster_union_id'] = [
                 'required',
                 'integer',
                 'exists:loc_unions,id,deleted_at,NULL'
             ];
-            $rules['udc_code'] = 'required|string|max: 255';
+            $rules['smef_cluster_code'] = 'required|string|max: 255';
 
             /** info_provider  information */
             $rules['info_provider_name'] = 'required|string|max:100';

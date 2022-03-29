@@ -16,7 +16,7 @@ class CreateSmefMembersTable extends Migration
         Schema::create('smef_members', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('form_fill_up_by')
-                ->comment('1 -> FORM_FILL_UP_BY_OWN, 2 -> FORM_FILL_UP_BY_UDC_ENTREPRENEUR, 3 -> FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION, 4-> FORM_FILL_UP_BY_SME_CLUSTER');
+                ->comment('1 -> FORM_FILL_UP_BY_OWN, 2-> FORM_FILL_UP_BY_SME_CLUSTER 3-> FORM_FILL_UP_BY_CHAMBER_OR_ASSOCIATION');
             /** Industry information */
             $table->unsignedMediumInteger('industry_association_organization_id')->nullable();
             $table->string('application_tracking_no', 191)->nullable();
@@ -112,10 +112,10 @@ class CreateSmefMembersTable extends Migration
             $table->string('info_collector_mobile', 100)->nullable();
 
             /**Upazila digital center information */
-            $table->string('udc_name', 100)->nullable();
-            $table->string('udc_loc_district', 191)->nullable();
-            $table->string('udc_union', 191)->nullable();
-            $table->string('udc_code', 255)->nullable();
+            $table->string('smef_cluster_name', 100)->nullable();
+            $table->string('smef_cluster_loc_district_id', 191)->nullable();
+            $table->string('smef_cluster_union_id', 191)->nullable();
+            $table->string('smef_cluster_code', 255)->nullable();
 
             /** Chamber or Association information */
             $table->string('chamber_or_association_name', 100)->nullable();
