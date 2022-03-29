@@ -14213,9 +14213,6 @@
                         ],
                         "description": "1=>Form fill up by own  2=> Form fill up by UDC Entrepreneur  3=>Form fill up by Chamber or Association"
                     },
-                    "application_tracking_no": {
-                        "type": "string"
-                    },
                     "title": {
                         "type": "string"
                     },
@@ -14241,9 +14238,6 @@
                         "description": "Must exist in loc_upazilas table"
                     },
                     "domain": {
-                        "type": "string"
-                    },
-                    "identification_no": {
                         "type": "string"
                     },
                     "entrepreneur_name": {
