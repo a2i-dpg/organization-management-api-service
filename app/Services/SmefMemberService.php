@@ -41,9 +41,7 @@ class SmefMemberService
         $orgData['contact_person_email'] = $data['entrepreneur_email'];
         $orgData['contact_person_designation'] = 'উদ্যোক্তা';
         $orgData['contact_person_designation_en'] = 'Entrepreneur';
-        $orgData['payment_status'] = Organization::PAYMENT_PENDING;
-        $orgData['membership_id'] = $data['membership_id'];
-        $orgData['membership_type_id'] = $data['membership_type_id'];
+        $orgData['membership_id'] = $data['code']."SMEF".time();
 
         /**Model Name For Smef Organization */
         $orgData['additional_info_model_name'] = SmefMember::class;
@@ -67,8 +65,6 @@ class SmefMemberService
 
         $organization->industryAssociations()->attach($data['industry_association_id'], [
             'membership_id' => $data['membership_id'],
-            'membership_type_id' => $data['membership_type_id'],
-            'payment_status' => BaseModel::PAYMENT_PENDING,
             'additional_info_model_name' => $data['additional_info_model_name'],
             'row_status' => $isOpenReg ? BaseModel::ROW_STATUS_PENDING : BaseModel::ROW_STATUS_ACTIVE
         ]);
@@ -136,17 +132,7 @@ class SmefMemberService
                 'int',
                 Rule::in(array_keys(SmefMember::FORM_FILL_UP_LIST))
             ],
-
             'application_tracking_no' => 'nullable|string|max: 191',
-            'membership_type_id' => [
-                "required",
-                "integer",
-                "exists:membership_types,id"
-            ],
-            'membership_id' => [
-                "required",
-                "string",
-            ],
             'trade_license_no' => 'required|string|max:191|unique:smef_members,trade_license_no',
             /** Same as industry */
             'title' => 'required|string|max:500',
@@ -170,9 +156,6 @@ class SmefMemberService
             ],
             'domain' => 'nullable|string|max:255',
             /** end */
-
-            'identification_no' => 'nullable|string|max:191',
-
             'entrepreneur_name' => 'required|string|max: 100',
             'entrepreneur_name_en' => 'nullable|string|max: 100',
             'entrepreneur_gender' => 'required|int|digits_between: 1,2',
@@ -475,25 +458,24 @@ class SmefMemberService
         if (!empty($request->get('form_fill_up_by')) && $request->get('form_fill_up_by') == SmefMember::FORM_FILL_UP_BY_UDC_ENTREPRENEUR) {
             $rules['udc_name'] = 'required|string|max: 100';
             $rules['udc_loc_district'] = [
-                'nullable',
+                'required',
                 'integer',
-                //'exists:loc_districts,id,deleted_at,NULL'
+                'exists:loc_districts,id,deleted_at,NULL'
             ];
             $rules['udc_union'] = [
                 'required',
                 'integer',
-                //'exists:loc_unions,id,deleted_at,NULL'
+                'exists:loc_unions,id,deleted_at,NULL'
             ];
-
             $rules['udc_code'] = 'required|string|max: 255';
 
             /** info_provider  information */
-            $rules['info_provider_name'] = 'nullable|string|max:100';
+            $rules['info_provider_name'] = 'required|string|max:100';
             $rules['info_provider_mobile'] = [
                 "required",
                 BaseModel::MOBILE_REGEX
             ];
-            $rules['info_collector_name'] = 'nullable|string|max:100';
+            $rules['info_collector_name'] = 'required|string|max:100';
             $rules['info_collector_mobile'] = [
                 "required",
                 BaseModel::MOBILE_REGEX
@@ -516,12 +498,12 @@ class SmefMemberService
             $rules['chamber_or_association_code'] = 'required|string|max: 255';
 
             /** info_provider  information */
-            $rules['info_provider_name'] = 'nullable|string|max:100';
+            $rules['info_provider_name'] = 'required|string|max:100';
             $rules['info_provider_mobile'] = [
                 "required",
                 BaseModel::MOBILE_REGEX
             ];
-            $rules['info_collector_name'] = 'nullable|string|max:100';
+            $rules['info_collector_name'] = 'required|string|max:100';
             $rules['info_collector_mobile'] = [
                 "required",
                 BaseModel::MOBILE_REGEX
@@ -533,17 +515,17 @@ class SmefMemberService
             $rules["factory_address"] = "required|string|max:1200";
             $rules["factory_address_en"] = "nullable|string|max:800";
             $rules['factory_loc_division_id'] = [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_divisions,id,deleted_at,NULL'
             ];
             $rules['factory_loc_district_id'] = [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_districts,id,deleted_at,NULL'
             ];
             $rules['factory_loc_upazila_id'] = [
-                'nullable',
+                'required',
                 'integer',
                 'exists:loc_upazilas,id,deleted_at,NULL'
             ];
