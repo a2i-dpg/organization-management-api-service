@@ -90,6 +90,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("industry-association-dashboard-statistics", ["as" => "industry-association-dashboard-statistics", "uses" => "IndustryAssociationController@industryAssociationDashboardStatistics"]);
         //$router->get("industry-association-members/{industryId}", ["as" => "industry-association-member-details", "uses" => "IndustryAssociationController@industryAssociationMemberDetails"]);
 
+        $router->get("organization-dashboard-statistics", ["as" => "organization-dashboard-statistics", "uses" => "OrganizationController@organizationDashboardStatistics"]);
 
         /** job management routes */
         $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
