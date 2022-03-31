@@ -7545,11 +7545,12 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "organizations": 2,
                                         "employed": 2,
                                         "unemployed": 0,
                                         "vacancies": 50,
-                                        "trending_skills": 3
+                                        "trending_skills": 3,
+                                        "hr_demanded": 5,
+                                        "hr_demand_provided": 1
                                     },
                                     "_response_status": {
                                         "success": true,
