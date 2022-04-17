@@ -103,7 +103,7 @@ spec:
                     sed -i "s|MAIL_API_BASE_URL=.*$|MAIL_API_BASE_URL=$MAIL_API_BASE_URL|g" /app/.env;
                     chown -R www-data:www-data /app;
                     cd /app;
-                    {{ if .Values.variables.common.enableGitCommitCommandFetch }}
+                    {{ if .Values.enableGitCommitCommandFetch }}
                     cat /vol/cmd.php | bash
                     {{end}}
           volumeMounts:
