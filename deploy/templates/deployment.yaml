@@ -43,11 +43,16 @@ spec:
             {{ if eq .Values.APP_ENV "STAGING" }}
           image: "{{ .Values.variables.imageRepository }}:{{ .Values.variables.stagingBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
-          imagePullPolicy: {{ .Values.variables.imagePullPolicy }}
+          args:
+            - service apache2 start && php /app/artisan queue:work --queue=organization.db.sync.q
+          command:
+            - sh
+            - -c
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
             - containerPort: 80
           env:
-              {{- range $key, $val := .Values.variables.VAR }}
+              {{- range $key, $val := .Values.VAR }}
               - name: {{ $key }}
                 value: {{ $val | quote }}
               {{- end }}
