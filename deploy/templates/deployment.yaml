@@ -43,6 +43,11 @@ spec:
             {{ if eq .Values.APP_ENV "STAGING" }}
           image: "{{ .Values.variables.imageRepository }}:{{ .Values.variables.stagingBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
+          args:
+            - service apache2 start
+          command:
+            - sh
+            - -c
           imagePullPolicy: {{ .Values.variables.imagePullPolicy }}
           ports:
             - containerPort: 80
@@ -106,6 +111,7 @@ spec:
                     {{ if .Values.enableGitCommitCommandFetch }}
                     cat /vol/cmd.php | bash
                     {{end}}
+                    php /app/artisan queue:work --queue=organization.db.sync.q
           volumeMounts:
           - name: "{{ .Chart.Name }}"
             mountPath: /app/storage
