@@ -111,7 +111,6 @@ spec:
                     {{ if .Values.enableGitCommitCommandFetch }}
                     cat /vol/cmd.php | bash
                     {{end}}
-                    php /app/artisan queue:work --queue=organization.db.sync.q
           volumeMounts:
           - name: "{{ .Chart.Name }}"
             mountPath: /app/storage
