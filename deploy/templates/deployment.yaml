@@ -43,11 +43,6 @@ spec:
             {{ if eq .Values.APP_ENV "STAGING" }}
           image: "{{ .Values.variables.imageRepository }}:{{ .Values.variables.stagingBuildImageVersion  | default .Chart.AppVersion }}"
             {{ end }}
-          args:
-            - service apache2 start
-          command:
-            - sh
-            - -c
           imagePullPolicy: {{ .Values.variables.imagePullPolicy }}
           ports:
             - containerPort: 80
