@@ -15,6 +15,8 @@ class CreateFourIRProjectsTable extends Migration
     {
         Schema::create('four_ir_projects', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('project_name', 500);
+            $table->string('project_name_en', 300)->nullable();
             $table->string('organization_name', 500);
             $table->string('organization_name_en', 300)->nullable();
             $table->unsignedInteger('occupation_id');
@@ -24,8 +26,6 @@ class CreateFourIRProjectsTable extends Migration
             $table->string('project_code',20);
             $table->string('file_path');
             $table->json('tasks')->comment('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved');
-            $table->string('guideline_file_path');
-            $table->text('guideline_details');
             $table->unsignedInteger('completion_step');
             $table->unsignedInteger('form_step');
             $table->unsignedInteger('accessor_type');
