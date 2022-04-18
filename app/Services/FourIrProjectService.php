@@ -4,7 +4,7 @@
 namespace App\Services;
 
 use App\Models\BaseModel;
-use App\Models\FourIrProject;
+use App\Models\FourIRProject;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -39,7 +39,7 @@ class FourIrProjectService
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $fourIrProjectBuilder */
-        $fourIrProjectBuilder = FourIrProject::select(
+        $fourIrProjectBuilder = FourIRProject::select(
             [
                 'four_ir_projects.id',
                 'four_ir_projects.project_name',
@@ -114,12 +114,12 @@ class FourIrProjectService
 
     /**
      * @param int $id
-     * @return FourIrProject
+     * @return FourIRProject
      */
-    public function getOneFourIrProject(int $id): FourIrProject
+    public function getOneFourIrProject(int $id): FourIRProject
     {
-        /** @var FourIrProject|Builder $fourIrProjectBuilder */
-        $fourIrProjectBuilder = FourIrProject::select(
+        /** @var FourIRProject|Builder $fourIrProjectBuilder */
+        $fourIrProjectBuilder = FourIRProject::select(
             [
                 'four_ir_projects.id',
                 'four_ir_projects.project_name',
@@ -151,26 +151,26 @@ class FourIrProjectService
 
     /**
      * @param array $data
-     * @return FourIrProject
+     * @return FourIRProject
      */
-    public function store(array $data): FourIrProject
+    public function store(array $data): FourIRProject
     {
-        $data['project_code'] = Uuid::uuid4();
-        $data['completion_step'] = FourIrProject::COMPLETION_STEP_ONE;
-        $data['form_step'] = FourIrProject::FORM_STEP_PROJECT_INITIATION;
+        $data['project_code'] = Uuid::uuid4()->toString();
+        $data['completion_step'] = FourIRProject::COMPLETION_STEP_ONE;
+        $data['form_step'] = FourIRProject::FORM_STEP_PROJECT_INITIATION;
 
-        $fourIrProject = new FourIrProject();
+        $fourIrProject = new FourIRProject();
         $fourIrProject->fill($data);
         $fourIrProject->save();
         return $fourIrProject;
     }
 
     /**
-     * @param FourIrProject $fourIrProject
+     * @param FourIRProject $fourIrProject
      * @param array $data
-     * @return FourIrProject
+     * @return FourIRProject
      */
-    public function update(FourIrProject $fourIrProject, array $data): FourIrProject
+    public function update(FourIRProject $fourIrProject, array $data): FourIRProject
     {
         $fourIrProject->fill($data);
         $fourIrProject->save();
@@ -178,10 +178,10 @@ class FourIrProjectService
     }
 
     /**
-     * @param FourIrProject $fourIrProject
+     * @param FourIRProject $fourIrProject
      * @return bool
      */
-    public function destroy(FourIrProject $fourIrProject): bool
+    public function destroy(FourIRProject $fourIrProject): bool
     {
         return $fourIrProject->delete();
     }

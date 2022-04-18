@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIrProject;
-use App\Services\FourIrProjectService;
+use App\Models\FourIRProject;
+use App\Services\FourIRProjectService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -15,15 +15,15 @@ use Throwable;
 
 class FourIRProjectController extends Controller
 {
-    public FourIrProjectService $fourIrProjectService;
+    public FourIRProjectService $fourIrProjectService;
     private Carbon $startTime;
 
     /**
-     * FourIrProjectController constructor.
+     * FourIRProjectController constructor.
      *
-     * @param FourIrProjectService $fourIrProjectService
+     * @param FourIRProjectService $fourIrProjectService
      */
-    public function __construct(FourIrProjectService $fourIrProjectService)
+    public function __construct(FourIRProjectService $fourIrProjectService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectService = $fourIrProjectService;
@@ -38,10 +38,10 @@ class FourIRProjectController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIrProject::class);
+//        $this->authorize('viewAny', FourIRProject::class);
 
         $filter = $this->fourIrProjectService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectService->getFourIrProjectList($filter, $this->startTime);
+        $response = $this->fourIrProjectService->getFourIRProjectList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -51,7 +51,7 @@ class FourIRProjectController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProject = $this->fourIrProjectService->getOneFourIrProject($id);
+        $fourIrProject = $this->fourIrProjectService->getOneFourIRProject($id);
 //        $this->authorize('view', $fourIrProject);
         $response = [
             "data" => $fourIrProject,
@@ -73,7 +73,7 @@ class FourIRProjectController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIrProject::class);
+//        $this->authorize('create', FourIRProject::class);
 
         $validated = $this->fourIrProjectService->validator($request)->validate();
         $data = $this->fourIrProjectService->store($validated);
@@ -101,7 +101,7 @@ class FourIRProjectController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProject = FourIrProject::findOrFail($id);
+        $fourIrProject = FourIRProject::findOrFail($id);
 //        $this->authorize('update', $fourIrProject);
 
         $validated = $this->fourIrProjectService->validator($request, $id)->validate();
@@ -130,7 +130,7 @@ class FourIRProjectController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProject = FourIrProject::findOrFail($id);
+        $fourIrProject = FourIRProject::findOrFail($id);
 //        $this->authorize('delete', $fourIrProject);
         $this->fourIrProjectService->destroy($fourIrProject);
         $response = [
