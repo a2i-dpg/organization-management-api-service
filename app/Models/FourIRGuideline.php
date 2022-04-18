@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FourIRGuideline extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = ['id'];
 
-    use SoftDeletes;
+    protected $table = ['four_ir_guidelines'];
 }
