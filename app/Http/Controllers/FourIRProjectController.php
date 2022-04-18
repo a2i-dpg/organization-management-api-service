@@ -53,7 +53,7 @@ class FourIRProjectController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $rank = $this->fourIrProjectService->getOneRank($id);
+        $rank = $this->fourIrProjectService->getOneGuideline($id);
         $this->authorize('view', $rank);
         $response = [
             "data" => $rank,
