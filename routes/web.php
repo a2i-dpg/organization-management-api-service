@@ -150,7 +150,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
              * FourIR Project APIS
              **/
             $router->group(["prefix" => "4ir-projects", "as" => "4ir-projects"], function () use ($customRouter) {
-                $customRouter()->resourceRoute('4ir-project-guidelines', 'FourIRGuidelineController')->render();
+                $customRouter()->resourceRoute('/', 'FourIRProjectController')->render();
+                $customRouter()->resourceRoute('/guidelines', 'FourIRGuidelineController')->render();
             });
 
 
