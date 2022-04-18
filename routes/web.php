@@ -93,7 +93,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("organization-dashboard-statistics", ["as" => "organization-dashboard-statistics", "uses" => "OrganizationController@organizationDashboardStatistics"]);
 
         /** job management routes */
-        $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
+        $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($customRouter, $router) {
             $router->get('/', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
             $router->get('industry-association-member-jobs', ["as" => "industry-association-members-job-list", "uses" => "JobManagementController@getIndustryAssociationMembersJobList"]);
             $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
@@ -143,6 +143,16 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->put('/{applicationId}/hire-invite', ["as" => "candidate-update.hire-invite", "uses" => "JobManagementController@hireInviteCandidate"]);
                 $router->put('/{applicationId}/hired', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
             });
+
+
+
+            /**
+             * FourIR Project APIS
+             **/
+            $router->group(["prefix" => "4ir-projects", "as" => "4ir-projects"], function () use ($customRouter) {
+                $customRouter()->resourceRoute('4ir-project-guidelines', 'FourIRGuidelineController')->render();
+            });
+
 
 
             /**recruitment step routes **/

@@ -5,6 +5,8 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRGuideline;
+use App\Models\FourIRProject;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -16,37 +18,43 @@ use Illuminate\Validation\Rule;
  */
 class FourIRGuidelineService
 {
+
+    /**
+     * @param int $id
+     * @return FourIRGuideline
+     */
+    public function getOneGuideline(int $id): FourIRGuideline
+    {
+        /** @var FourIRGuideline|Builder $fourIrGuidelineBuilder */
+        $fourIrGuidelineBuilder = FourIRGuideline::select(
+            [
+                'four_ir_guidelines.id',
+                'four_ir_guidelines.four_ir_project_id',
+                'four_ir_guidelines.guideline_file_path',
+                'four_ir_guidelines.guideline_details',
+                'four_ir_guidelines.row_status',
+                'four_ir_guidelines.created_by',
+                'four_ir_guidelines.updated_by',
+                'four_ir_guidelines.created_at',
+                'four_ir_guidelines.updated_at',
+            ]
+        );
+
+        $fourIrGuidelineBuilder->where('four_ir_guidelines.id', '=', $id);
+
+        return $fourIrGuidelineBuilder->firstOrFail();
+    }
+
+
     /**
      * @param array $data
      * @return FourIRGuideline
      */
     public function store(array $data): FourIRGuideline
     {
-        $guideline = FourIRGuideline::firstOrNew($data);
-        $guideline->save();
-        return $guideline;
+        return FourIRGuideline::updateOrCreate($data);
     }
 
-    /**
-     * @param FourIRGuideline $guideline
-     * @param array $data
-     * @return FourIRGuideline
-     */
-    public function update(FourIRGuideline $guideline, array $data): FourIRGuideline
-    {
-        $guideline->fill($data);
-        $guideline->save();
-        return $guideline;
-    }
-
-    /**
-     * @param FourIRGuideline $guideline
-     * @return bool
-     */
-    public function destroy(FourIRGuideline $guideline): bool
-    {
-        return $guideline->delete();
-    }
 
     /**
      * @param Request $request
