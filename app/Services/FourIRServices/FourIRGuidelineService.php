@@ -68,14 +68,21 @@ class FourIRGuidelineService
         ];
         $rules = [
             'four_ir_project_id' => [
+                'required',
                 'integer',
                 'exists:four_ir_projects,id,deleted_at,NULL',
             ],
             'guideline_file_path' => [
+                Rule::requiredIf(function () use ($request) {
+                    return empty($request->input('guideline_details'));
+                }),
                 'nullable',
                 'string'
             ],
             'guideline_details' => [
+                Rule::requiredIf(function () use($request) {
+                    return empty($request->input('guideline_file_path'));
+                }),
                 'nullable',
                 'string'
             ],
