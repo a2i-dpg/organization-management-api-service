@@ -144,18 +144,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->put('/{applicationId}/hired', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
             });
 
-
-
-            /**
-             * FourIR Project APIS
-             **/
-            $router->group(["prefix" => "4ir-projects", "as" => "4ir-projects"], function () use ($customRouter) {
-                $customRouter()->resourceRoute('/', 'FourIRProjectController')->render();
-                $customRouter()->resourceRoute('/guidelines', 'FourIRGuidelineController')->render();
-            });
-
-
-
             /**recruitment step routes **/
             $router->get('recruitment-step/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
             $router->post('recruitment-step', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
@@ -181,6 +169,16 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->get('hired/{jobId}', ["as" => "hired", "uses" => "JobManagementController@getHiredCandidateList"]);
             });
         });
+
+
+        /**
+         * FourIR Project APIS
+         **/
+        $router->group(["prefix" => "4ir", "as" => "4ir"], function () use ($customRouter) {
+            $customRouter()->resourceRoute('/projects', 'FourIRProjectController')->render();
+            $customRouter()->resourceRoute('/guidelines', 'FourIRGuidelineController')->render();
+        });
+
 
         /** Provide suggestions in drop downs */
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {
