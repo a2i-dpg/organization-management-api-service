@@ -28,7 +28,7 @@ class CreateFourIRProjectsTable extends Migration
             $table->json('tasks')->comment('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved');
             $table->unsignedInteger('completion_step');
             $table->unsignedInteger('form_step');
-            $table->unsignedInteger('accessor_type');
+            $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();

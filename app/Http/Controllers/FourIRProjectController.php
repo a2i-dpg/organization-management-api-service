@@ -42,7 +42,7 @@ class FourIRProjectController extends Controller
         $this->authorize('viewAny', FourIrProject::class);
 
         $filter = $this->fourIrProjectService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectService->getRankList($filter, $this->startTime);
+        $response = $this->fourIrProjectService->getFourIrProjectList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -53,10 +53,10 @@ class FourIRProjectController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $rank = $this->fourIrProjectService->getOneRank($id);
-        $this->authorize('view', $rank);
+        $fourIrProject = $this->fourIrProjectService->getOneFourIrProject($id);
+        $this->authorize('view', $fourIrProject);
         $response = [
-            "data" => $rank,
+            "data" => $fourIrProject,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -104,11 +104,11 @@ class FourIRProjectController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $rank = FourIrProject::findOrFail($id);
-        $this->authorize('update', $rank);
+        $fourIrProject = FourIrProject::findOrFail($id);
+        $this->authorize('update', $fourIrProject);
 
         $validated = $this->fourIrProjectService->validator($request, $id)->validate();
-        $data = $this->fourIrProjectService->update($rank, $validated);
+        $data = $this->fourIrProjectService->update($fourIrProject, $validated);
 
         $response = [
             'data' => $data,
@@ -133,9 +133,9 @@ class FourIRProjectController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $rank = FourIrProject::findOrFail($id);
-        $this->authorize('delete', $rank);
-        $this->fourIrProjectService->destroy($rank);
+        $fourIrProject = FourIrProject::findOrFail($id);
+        $this->authorize('delete', $fourIrProject);
+        $this->fourIrProjectService->destroy($fourIrProject);
         $response = [
             '_response_status' => [
                 "success" => true,
