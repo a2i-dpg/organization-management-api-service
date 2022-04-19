@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRProject;
-use App\Services\FourIRServices\FourIRProjectService;
+use App\Services\FourIRServices\FourIrProjectService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -15,15 +15,15 @@ use Throwable;
 
 class FourIRProjectController extends Controller
 {
-    public FourIRProjectService $fourIrProjectService;
+    public FourIrProjectService $fourIrProjectService;
     private Carbon $startTime;
 
     /**
      * FourIRProjectController constructor.
      *
-     * @param FourIRProjectService $fourIrProjectService
+     * @param FourIrProjectService $fourIrProjectService
      */
-    public function __construct(FourIRProjectService $fourIrProjectService)
+    public function __construct(FourIrProjectService $fourIrProjectService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectService = $fourIrProjectService;
