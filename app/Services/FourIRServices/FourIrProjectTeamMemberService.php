@@ -213,11 +213,12 @@ class FourIrProjectTeamMemberService
                 'string',
                 'max:15',
                 'min:6',
-                Rule::unique('four_ir_project_team_members', 'phone_number')
+                Rule::unique('four_ir_project_team_members')
                     ->ignore($id)
-                    ->where(function (\Illuminate\Database\Query\Builder $query) {
-                        return $query->whereNull('deleted_at');
-                    }),
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use($request) {
+                        return $query->where('team_type',$request->input('team_type'))
+                              ->whereNull('deleted_at');
+                }),
             ],
             'role' => [
                 'required',
