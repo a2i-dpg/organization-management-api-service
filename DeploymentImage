@@ -3,7 +3,6 @@ FROM oberd/php-8.1-apache
 
 WORKDIR /app
 COPY . /app
-
 #RUN rm composer.lock
 RUN php composer.phar install --ignore-platform-reqs
 
