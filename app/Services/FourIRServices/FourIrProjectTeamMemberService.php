@@ -4,7 +4,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIrProject;
+use App\Models\FourIRGuideline;
 use App\Models\FourIRProjectTeamMember;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,8 +12,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 
 /**
@@ -171,6 +171,7 @@ class FourIrProjectTeamMemberService
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
+     * @throws Throwable
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
@@ -180,11 +181,28 @@ class FourIrProjectTeamMemberService
         $rules = [
             'four_ir_project_id' => [
                 'required',
-                'int'
+                'int',
+                'exists:four_ir_projects,id,deleted_at,NULL'
             ],
             'team_type' => [
                 'required',
-                'int'
+                'int',
+                Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
+                function ($attr, $value, $failed) use ($request) {
+                    if($value == FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE){
+                        $guideline = FourIRGuideline::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+                        if(empty($guideline)){
+                            $failed('Complete Guideline step first.[24000]');
+                        }
+                    } else if($value == FourIRProjectTeamMember::MENTORING_TEAM_TYPE) {
+                        $implementingTeam = FourIRProjectTeamMember::where('four_ir_project_id', $request->input('four_ir_project_id'))
+                            ->where('team_type', FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE)
+                            ->first();
+                        if(empty($implementingTeam)){
+                            $failed('Complete Implementing step first.[24000]');
+                        }
+                    }
+                }
             ],
             'email' => [
                 'required',
@@ -194,7 +212,12 @@ class FourIrProjectTeamMemberService
                 'required',
                 'string',
                 'max:15',
-                'min:6'
+                'min:6',
+                Rule::unique('four_ir_project_team_members', 'phone_number')
+                    ->ignore($id)
+                    ->where(function (\Illuminate\Database\Query\Builder $query) {
+                        return $query->whereNull('deleted_at');
+                    }),
             ],
             'role' => [
                 'required',
