@@ -135,7 +135,7 @@ class FourIRProjectTeamMemberController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrProjectTeamMember = FourIRProjectTeamMember::findOrFail($id);
-        $this->authorize('delete', $fourIrProjectTeamMember);
+//        $this->authorize('delete', $fourIrProjectTeamMember);
         $this->fourIrProjectTeamMemberService->destroy($fourIrProjectTeamMember);
         $response = [
             '_response_status' => [
