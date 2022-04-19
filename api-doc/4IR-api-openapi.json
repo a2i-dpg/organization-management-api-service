@@ -1,0 +1,76 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "4IR Management (Industry & Industry Association API Service)",
+        "description": " 'It is a Industry & Industry Association api service For 4IR Module' ",
+        "termsOfService": "",
+        "contact": {},
+        "license": {
+            "name": "MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8002/api/v1"
+        },
+        {
+            "url": "http://nise-industry.softbd/api/v1"
+        },
+        {
+            "url": "http://nise3-org.default/api/v1"
+        },
+        {
+            "url": "http://localhost:8000/api/v1"
+        },
+        {
+            "url": "http://localhost:8003/api/v1"
+        }
+    ],
+    "security": [
+        {
+            "User-Token": []
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Industry & Industry Association Service Information",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "service_name": "NISE-3 Organization Management API Service",
+                                    "service_version": "V1",
+                                    "lumen_version": "Lumen (8.2.4) (Laravel Components ^8.0)",
+                                    "module_list": [
+                                        "OrganizationType",
+                                        "Organization",
+                                        "RankType",
+                                        "Rank",
+                                        "Service",
+                                        "JobSector",
+                                        "Occupation",
+                                        "OrganizationUnitType",
+                                        "OrganizationUnit",
+                                        "organizationUnitService",
+                                        "HumanResource",
+                                        "HumanResourceTemplate"
+                                    ],
+                                    "description": [
+                                        "It is a organization management api service that manages services related to organization"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "APi info"
+                ]
+            }
+        }
+    }
+}
