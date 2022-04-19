@@ -73,6 +73,7 @@ class FourIRProjectTeamMemberController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ValidationException
+     * @throws Throwable
      */
     function store(Request $request): JsonResponse
     {
@@ -105,7 +106,7 @@ class FourIRProjectTeamMemberController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectTeamMember = FourIRProjectTeamMember::findOrFail($id);
-        $this->authorize('update', $fourIrProjectTeamMember);
+//        $this->authorize('update', $fourIrProjectTeamMember);
 
         $validated = $this->fourIrProjectTeamMemberService->validator($request, $id)->validate();
         $data = $this->fourIrProjectTeamMemberService->update($fourIrProjectTeamMember, $validated);

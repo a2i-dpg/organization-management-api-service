@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FourIRProjectTeamMember extends BaseModel
 {
 
-    use softDeletes;
+    use softDeletes, CreatedUpdatedBy;
 
     protected $guarded = ['id'];
 
