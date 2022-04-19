@@ -20,7 +20,9 @@ class CreateFourIRProjectCsTable extends Migration
             $table->string('level',300);
             $table->string('approved_by',300);
             $table->string('developer_organization_name',300);
+            $table->string('developer_organization_name_en',300)->nullable();
             $table->string('sector_name',200);
+            $table->string('sector_name_en',200)->nullable();
             $table->string('supported_by',200);
             $table->text('comment');
             $table->string('file_path');

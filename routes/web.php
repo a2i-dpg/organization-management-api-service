@@ -178,6 +178,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $customRouter()->resourceRoute('/projects', 'FourIRProjectController')->render();
             $customRouter()->resourceRoute('/guidelines', 'FourIRGuidelineController')->render();
             $customRouter()->resourceRoute('/team-members', 'FourIRProjectTeamMemberController')->render();
+            $customRouter()->resourceRoute('/project-cs', 'FourIRProjectCsController')->render();
         });
 
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRProject;
-use App\Services\FourIRProjectService;
+use App\Services\FourIRServices\FourIRProjectService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
