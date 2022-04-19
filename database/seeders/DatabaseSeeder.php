@@ -37,7 +37,9 @@ class DatabaseSeeder extends Seeder
 
             IndustryAssociationCodePessimisticLockingsTableSeeder::class,
             IndustryAssociationsTableSeeder::class,
-            IndustryCodePessimisticLockingsTableSeeder::class
+            IndustryCodePessimisticLockingsTableSeeder::class,
+
+            FourIROccupationSeeder::class
 
         ]);
     }
