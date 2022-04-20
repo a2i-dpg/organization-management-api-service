@@ -26,6 +26,8 @@ class CreateFourIRProjectCsTable extends Migration
             $table->string('supported_by',200);
             $table->text('comment');
             $table->string('file_path');
+            $table->string('accessor_type', 100);
+            $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

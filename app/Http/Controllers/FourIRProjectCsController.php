@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
-use App\Services\FourIRServices\FourIrProjectService;
+use App\Models\FourIRProjectCs;
+use App\Services\FourIRServices\FourIRProjectCsService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -11,21 +11,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Throwable;
 
 class FourIRProjectCsController extends Controller
 {
-    public FourIRProjectService $fourIrProjectService;
+    public FourIRProjectCsService $fourIrProjectCsService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectController constructor.
+     * FourIRProjectCsController constructor.
      *
-     * @param FourIRProjectService $fourIrProjectService
+     * @param FourIRProjectCsService $fourIrProjectCsService
      */
-    public function __construct(FourIRProjectService $fourIrProjectService)
+    public function __construct(FourIRProjectCsService $fourIrProjectCsService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIrProjectService = $fourIrProjectService;
+        $this->fourIrProjectCsService = $fourIrProjectCsService;
     }
 
     /**
@@ -37,10 +38,10 @@ class FourIRProjectCsController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProject::class);
+//        $this->authorize('viewAny', FourIRProjectCs::class);
 
-        $filter = $this->fourIrProjectService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectService->getFourIRProjectList($filter, $this->startTime);
+        $filter = $this->fourIrProjectCsService->filterValidator($request)->validate();
+        $response = $this->fourIrProjectCsService->getFourIRProjectCsList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -50,10 +51,10 @@ class FourIRProjectCsController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProject = $this->fourIrProjectService->getOneFourIRProject($id);
-//        $this->authorize('view', $fourIrProject);
+        $fourIrProjectCs = $this->fourIrProjectCsService->getOneFourIRProjectCs($id);
+//        $this->authorize('view', $fourIrProjectCs);
         $response = [
-            "data" => $fourIrProject,
+            "data" => $fourIrProjectCs,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -72,17 +73,17 @@ class FourIRProjectCsController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProject::class);
+//        $this->authorize('create', FourIRProjectCs::class);
 
-        $validated = $this->fourIrProjectService->validator($request)->validate();
-        $data = $this->fourIrProjectService->store($validated);
+        $validated = $this->fourIrProjectCsService->validator($request)->validate();
+        $data = $this->fourIrProjectCsService->store($validated);
 
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project added successfully",
+                "message" => "Four Ir Project cs added successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -100,18 +101,18 @@ class FourIRProjectCsController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProject = FourIRProject::findOrFail($id);
-//        $this->authorize('update', $fourIrProject);
+        $fourIrProjectCs = FourIRProjectCs::findOrFail($id);
+//        $this->authorize('update', $fourIrProjectCs);
 
-        $validated = $this->fourIrProjectService->validator($request, $id)->validate();
-        $data = $this->fourIrProjectService->update($fourIrProject, $validated);
+        $validated = $this->fourIrProjectCsService->validator($request, $id)->validate();
+        $data = $this->fourIrProjectCsService->update($fourIrProjectCs, $validated);
 
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project updated successfully",
+                "message" => "Four Ir Project cs updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -129,14 +130,14 @@ class FourIRProjectCsController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProject = FourIRProject::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
-        $this->fourIrProjectService->destroy($fourIrProject);
+        $fourIrProjectCs = FourIRProjectCs::findOrFail($id);
+//        $this->authorize('delete', $fourIrProjectCs);
+        $this->fourIrProjectCsService->destroy($fourIrProjectCs);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project deleted successfully",
+                "message" => "Four Ir Project cs deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

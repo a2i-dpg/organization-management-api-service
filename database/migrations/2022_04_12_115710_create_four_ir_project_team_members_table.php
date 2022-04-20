@@ -21,6 +21,8 @@ class CreateFourIRProjectTeamMembersTable extends Migration
             $table->string('role',200);
             $table->string('designation',191);
             $table->unsignedTinyInteger('team_type')->comment('1=> implementing team, 2=> mentoring team');
+            $table->string('accessor_type', 100);
+            $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
