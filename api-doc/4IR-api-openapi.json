@@ -693,6 +693,50 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "FourIR"
+                ],
+                "summary": "Insert a 4IR Project Cells",
+                "description": "API endpoint to Insert a Project Cells. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_project_cell"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/4ir/4ir-project-cells/{fourIrProjectCellId}": {
@@ -754,7 +798,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_team-member"
+                                "$ref": "#/components/schemas/4ir_project_cell"
                             }
                         }
                     }
@@ -956,11 +1000,32 @@
             "4ir_project_cell": {
                 "type": "object",
                 "properties": {
-                    "title": {
+                    "four_ir_project_id": {
+                        "type": "integer"
+                    },
+                    "name": {
                         "type": "string"
                     },
-                    "title_en": {
+                    "address": {
                         "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone_code": {
+                        "type": "string"
+                    },
+                    "mobile_number": {
+                        "type": "string"
+                    },
+                    "designation": {
+                        "type": "string"
+                    },
+                    "accessor_type": {
+                        "type": "string"
+                    },
+                    "accessor_id": {
+                        "type": "integer"
                     },
                     "row_status": {
                         "type": "integer",
@@ -972,7 +1037,7 @@
                     }
                 },
                 "required": [
-                    "title"
+                    "name","address","email","mobile_number","designation","accessor_type","accessor_id","four_ir_project_id"
                 ]
             },
             "contact_person_designation": {

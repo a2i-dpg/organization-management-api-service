@@ -159,6 +159,10 @@ class FourIrProjectCellService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
+            'four_ir_project_id'=>[
+                'required',
+                'int'
+            ],
             'name' => [
                 'required',
                 'string'
