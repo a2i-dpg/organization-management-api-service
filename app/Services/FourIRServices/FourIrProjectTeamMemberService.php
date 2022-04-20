@@ -184,6 +184,14 @@ class FourIrProjectTeamMemberService
                 'int',
                 'exists:four_ir_projects,id,deleted_at,NULL'
             ],
+            'accessor_type' => [
+                'required',
+                'string'
+            ],
+            'accessor_id' => [
+                'required',
+                'int'
+            ],
             'team_type' => [
                 'required',
                 'int',
