@@ -24,7 +24,7 @@ class CreateFourIRProjectCsTable extends Migration
             $table->string('sector_name',200);
             $table->string('sector_name_en',200)->nullable();
             $table->string('supported_by',200);
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->string('file_path');
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');

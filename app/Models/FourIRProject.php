@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\CreatedUpdatedBy;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Type\Decimal;
 
@@ -34,7 +34,7 @@ use Ramsey\Uuid\Type\Decimal;
  */
 class FourIRProject extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, CreatedUpdatedBy;
 
     protected $table = 'four_ir_projects';
 

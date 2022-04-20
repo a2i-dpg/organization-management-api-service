@@ -5,14 +5,16 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRProjectCs;
+use App\Models\FourIRProjectTnaFormat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 
 /**
@@ -75,10 +77,10 @@ class FourIRProjectCsService
         }
 
         if (!empty($sectorName)) {
-            $fourIrProjectCsBuilder->where('four_ir_project_cs.organization_name', 'like', '%' . $sectorName . '%');
+            $fourIrProjectCsBuilder->where('four_ir_project_cs.sector_name', 'like', '%' . $sectorName . '%');
         }
         if (!empty($sectorNameEn)) {
-            $fourIrProjectCsBuilder->where('four_ir_project_cs.organization_name_en', 'like', '%' . $sectorNameEn . '%');
+            $fourIrProjectCsBuilder->where('four_ir_project_cs.sector_name_en', 'like', '%' . $sectorNameEn . '%');
         }
 
         if (is_numeric($rowStatus)) {
@@ -119,21 +121,17 @@ class FourIRProjectCsService
         $fourIrProjectCsBuilder = FourIRProjectCs::select(
             [
                 'four_ir_project_cs.id',
-                'four_ir_project_cs.project_name',
-                'four_ir_project_cs.project_name_en',
-                'four_ir_project_cs.organization_name',
-                'four_ir_project_cs.organization_name_en',
-                'four_ir_project_cs.occupation_id',
-                'four_ir_project_cs.details',
-                'four_ir_project_cs.start_date',
-                'four_ir_project_cs.budget',
-                'four_ir_project_cs.project_code',
+                'four_ir_project_cs.four_ir_project_id',
+                'four_ir_project_cs.experts',
+                'four_ir_project_cs.level',
+                'four_ir_project_cs.approved_by',
+                'four_ir_project_cs.developer_organization_name',
+                'four_ir_project_cs.developer_organization_name_en',
+                'four_ir_project_cs.sector_name',
+                'four_ir_project_cs.sector_name_en',
+                'four_ir_project_cs.supported_by',
+                'four_ir_project_cs.comment',
                 'four_ir_project_cs.file_path',
-                'four_ir_project_cs.tasks',
-                'four_ir_project_cs.completion_step',
-                'four_ir_project_cs.form_step',
-                'four_ir_project_cs.accessor_type',
-                'four_ir_project_cs.accessor_id',
                 'four_ir_project_cs.row_status',
                 'four_ir_project_cs.created_by',
                 'four_ir_project_cs.updated_by',
@@ -152,48 +150,58 @@ class FourIRProjectCsService
      */
     public function store(array $data): FourIRProjectCs
     {
-        $data['project_code'] = Uuid::uuid4()->toString();
-        $data['completion_step'] = FourIRProjectCs::COMPLETION_STEP_ONE;
-        $data['form_step'] = FourIRProjectCs::FORM_STEP_PROJECT_INITIATION;
-
-        $fourIrProject = new FourIRProjectCs();
-        $fourIrProject->fill($data);
-        $fourIrProject->save();
-        return $fourIrProject;
+        $fourIrProjectCs = new FourIRProjectCs();
+        $fourIrProjectCs->fill($data);
+        $fourIrProjectCs->save();
+        return $fourIrProjectCs;
     }
 
     /**
-     * @param FourIRProjectCs $fourIrProject
+     * @param FourIRProjectCs $fourIrProjectCs
      * @param array $data
      * @return FourIRProjectCs
      */
-    public function update(FourIRProjectCs $fourIrProject, array $data): FourIRProjectCs
+    public function update(FourIRProjectCs $fourIrProjectCs, array $data): FourIRProjectCs
     {
-        $fourIrProject->fill($data);
-        $fourIrProject->save();
-        return $fourIrProject;
+        $fourIrProjectCs->fill($data);
+        $fourIrProjectCs->save();
+        return $fourIrProjectCs;
     }
 
     /**
-     * @param FourIRProjectCs $fourIrProject
+     * @param FourIRProjectCs $fourIrProjectCs
      * @return bool
      */
-    public function destroy(FourIRProjectCs $fourIrProject): bool
+    public function destroy(FourIRProjectCs $fourIrProjectCs): bool
     {
-        return $fourIrProject->delete();
+        return $fourIrProjectCs->delete();
     }
 
     /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
+     * @throws Throwable
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+
+        if(!empty($request->input('four_ir_project_id'))){
+            $tnaReport = FourIRProjectTnaFormat::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+            throw_if(empty($tnaReport), ValidationException::withMessages([
+                "First complete Four IR Project Tna Format!"
+            ]));
+        }
+
         $rules = [
+            'four_ir_project_id' => [
+                'required',
+                'integer',
+                'exists:four_ir_projects,id,deleted_at,NULL',
+            ],
             'accessor_type' => [
                 'required',
                 'string'
@@ -202,61 +210,64 @@ class FourIRProjectCsService
                 'required',
                 'int'
             ],
-            'project_name' => [
+            'experts' => [
                 'required',
                 'string',
-                'max:600',
+                'max:400',
                 'min:2'
             ],
-            'project_name_en' => [
+            'level' => [
+                'required',
+                'string',
+                'max:300',
+                'min:2'
+            ],
+            'approved_by' => [
+                'required',
+                'string',
+                'max:300',
+                'min:2'
+            ],
+            'developer_organization_name' => [
+                'required',
+                'string',
+                'max:300',
+                'min:2'
+            ],
+            'developer_organization_name_en' => [
                 'nullable',
                 'string',
                 'max:300',
                 'min:2'
             ],
-            'organization_name' => [
+            'sector_name' => [
                 'required',
                 'string',
-                'max:600',
+                'max:300',
                 'min:2'
             ],
-            'organization_name_en' => [
+            'sector_name_en' => [
                 'nullable',
                 'string',
                 'max:300',
                 'min:2'
             ],
-            'occupation_id' => [
+            'supported_by' => [
                 'required',
-                'int',
-                'exists:occupations,id,deleted_at,NULL'
+                'string',
+                'max:200',
+                'min:2'
             ],
-            'details' => [
+            'comment' => [
                 'nullable',
                 'string',
-                'max:1000'
-            ],
-            'start_date' => [
-                'required',
-                'date_format:Y-m-d'
-            ],
-            'budget' => [
-                'required',
-                'numeric'
+                'max:1000',
+                'min:2'
             ],
             'file_path' => [
                 'required',
                 'string',
                 'max:500',
-            ],
-            'tasks' => [
-                'required',
-                'array',
-                'min:1'
-            ],
-            'tasks.*' => [
-                'required',
-                'int'
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
@@ -283,10 +294,11 @@ class FourIRProjectCsService
         }
 
         return Validator::make($request->all(), [
-            'project_name' => 'nullable|max:600|min:2',
-            'project_name_en' => 'nullable|max:300|min:2',
-            'organization_name' => 'nullable|max:600|min:2',
-            'organization_name_en' => 'nullable|max:300|min:2',
+            'four_ir_project_id' => 'required|int',
+            'developer_organization_name' => 'nullable|max:300|min:2',
+            'developer_organization_name_en' => 'nullable|max:300|min:2',
+            'sector_name' => 'nullable|max:200|min:2',
+            'sector_name_en' => 'nullable|max:200|min:2',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
