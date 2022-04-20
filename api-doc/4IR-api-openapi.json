@@ -33,7 +33,7 @@
         }
     ],
     "paths": {
-        "/4ir/4ir-occupations": {
+        "/4ir/occupations": {
             "get": {
                 "tags": [
                     "FourIR"
@@ -70,7 +70,7 @@
                 }
             }
         },
-        "/4ir/4ir-occupations/{fourIrOccupationId}": {
+        "/4ir/occupations/{fourIrOccupationId}": {
             "get": {
                 "tags": [
                     "FourIR"
@@ -621,7 +621,7 @@
                 }
             }
         },
-        "/4ir/4ir-project-cells": {
+        "/4ir/project-cells": {
             "get": {
                 "tags": [
                     "FourIR"
@@ -739,7 +739,248 @@
                 }
             }
         },
-        "/4ir/4ir-project-cells/{fourIrProjectCellId}": {
+        "/4ir/project-cells/{fourIrProjectCellId}": {
+            "get": {
+                "tags": [
+                    "FourIR"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                    }
+                ],
+                "summary": "4IR Project Cells",
+                "responses": {
+                    "200": {
+                        "description": "Get a Project Cells",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "name": "meme",
+                                        "address": "gfhgf",
+                                        "email": "gfhfh@gmail.com",
+                                        "phone_code": "880",
+                                        "mobile_number": "01720588884",
+                                        "designation": "fdgfd",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-20T08:22:54.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            "put": {
+                "tags": [
+                    "FourIR"
+                ],
+                "summary": "Update a 4IR Project Cells",
+                "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_project_cell"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR"
+                ],
+                "summary": "Delete a 4IR Project Cell",
+                "description": "API endpoint to delete a 4IR Project Cell. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Project Cell deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/4ir/team-members": {
+            "get": {
+                "tags": [
+                    "FourIR"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrTeamMemberName"
+                    }
+                ],
+                "summary": "Get all 4IR Team Members ",
+                "responses": {
+                    "200": {
+                        "description": "Get all Team Members",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "fghgfh",
+                                            "address": "gfhgf",
+                                            "email": "gfhfh@gmail.com",
+                                            "phone_code": "880",
+                                            "mobile_number": "01720588884",
+                                            "designation": "fdgfd",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": null,
+                                            "updated_at": null
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "meme",
+                                            "address": "gfhgf",
+                                            "email": "gfhfh@gmail.com",
+                                            "phone_code": "880",
+                                            "mobile_number": "01720588884",
+                                            "designation": "fdgfd",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-20T08:22:54.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "meme",
+                                            "address": "gfhgf",
+                                            "email": "gfhfh@gmail.com",
+                                            "phone_code": "880",
+                                            "mobile_number": "01720588884",
+                                            "designation": "fdgfd",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2022-04-20T08:20:49.000000Z",
+                                            "updated_at": "2022-04-20T08:20:49.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR"
+                ],
+                "summary": "Insert a 4IR Project Cells",
+                "description": "API endpoint to Insert a Project Cells. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_project_cell"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/4ir/team-members/{fourIrProjectCellId}": {
             "get": {
                 "tags": [
                     "FourIR"
@@ -1776,6 +2017,15 @@
                 }
             },
             "fourIrProjectCellName": {
+                "name": "fourIrProjectCellName",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "name"
+                }
+            },
+            "fourIrTeamMemberName": {
                 "name": "fourIrProjectCellName",
                 "in": "query",
                 "required": false,

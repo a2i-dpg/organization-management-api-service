@@ -6,6 +6,7 @@ namespace App\Services\FourIRServices;
 use App\Models\BaseModel;
 use App\Models\FourIRProject;
 use App\Models\FourIRProjectCell;
+use App\Models\FourIRProjectTeamMember;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -161,7 +162,16 @@ class FourIrProjectCellService
         $rules = [
             'four_ir_project_id'=>[
                 'required',
-                'int'
+                'int',
+                Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
+                function ($attr, $value, $failed) use ($request) {
+                    $mentoringTeam = FourIRProjectTeamMember::where('four_ir_project_id', $request->input('four_ir_project_id'))
+                        ->where('team_type', FourIRProjectTeamMember::MENTORING_TEAM_TYPE)
+                        ->first();
+                        if(empty($mentoringTeam)){
+                            $failed('Complete Mentoring step first.[24000]');
+                        }
+                }
             ],
             'name' => [
                 'required',
@@ -225,10 +235,8 @@ class FourIrProjectCellService
         }
 
         return Validator::make($request->all(), [
-            'project_name' => 'nullable|max:600|min:2',
-            'project_name_en' => 'nullable|max:300|min:2',
-            'organization_name' => 'nullable|max:600|min:2',
-            'organization_name_en' => 'nullable|max:300|min:2',
+            'project_name'=>'nullable|string',
+            'four_ir_project_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
