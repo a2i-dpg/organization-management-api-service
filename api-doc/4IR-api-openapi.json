@@ -463,164 +463,6 @@
                 }
             }
         },
-        "/4ir/team-members": {
-            "get": {
-                "tags": [
-                    "FourIR Team Members"
-                ],
-                "summary": "Get all 4IR Occupation Service ",
-                "responses": {
-                    "200": {
-                        "description": "Get all occupations",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 2,
-                                            "title_en": "welcome",
-                                            "title": "me",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2022-04-19T07:19:20.000000Z",
-                                            "updated_at": "2022-04-19T07:19:20.000000Z"
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        },
-        "/4ir/team-members/{fourIrTeamMembersId}": {
-            "get": {
-                "tags": [
-                    "FourIR Team Members"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrTeamMembersId"
-                    }
-                ],
-                "summary": "4IR Occupation Service ",
-                "responses": {
-                    "200": {
-                        "description": "Get all occupations",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 2,
-                                            "title_en": "welcome",
-                                            "title": "me",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": "2022-04-19T07:19:20.000000Z",
-                                            "updated_at": "2022-04-19T07:19:20.000000Z"
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-            },
-            "put": {
-                "tags": [
-                    "FourIR"
-                ],
-                "summary": "Update a 4IR Occupation",
-                "description": "API endpoint to update a 4IR Occupation. A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrTeamMembersId"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_team-member"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 2,
-                                        "title": "meme",
-                                        "title_en": "welcome",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": null,
-                                        "created_at": "2022-04-19T07:19:20.000000Z",
-                                        "updated_at": "2022-04-19T08:45:15.000000Z",
-                                        "deleted_at": null
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4Ir updated updated successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "FourIR"
-                ],
-                "summary": "Delete a 4IR Occupation",
-                "description": "API endpoint to delete a 4IR Occupation. A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrTeamMembersId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4IR Occupation deleted successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/4ir/project-cells": {
             "get": {
                 "tags": [
@@ -939,13 +781,13 @@
                 "tags": [
                     "FourIR Team Members"
                 ],
-                "summary": "Insert a 4IR Project Cells",
-                "description": "API endpoint to Insert a Project Cells. A successful request response will show 200 HTTP status code",
+                "summary": "Insert a 4IR Team Members",
+                "description": "API endpoint to Insert a Team Members. A successful request response will show 200 HTTP status code",
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_project_cell"
+                                "$ref": "#/components/schemas/4ir_team-member"
                             }
                         }
                     }
@@ -980,20 +822,20 @@
                 }
             }
         },
-        "/4ir/team-members/{fourIrProjectCellId}": {
+        "/4ir/team-members/{fourIrTeamMembersId}": {
             "get": {
                 "tags": [
                     "FourIR Team Members"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrTeamMembersId"
                     }
                 ],
-                "summary": "4IR Project Cells",
+                "summary": "4IR Team Members",
                 "responses": {
                     "200": {
-                        "description": "Get a Project Cells",
+                        "description": "Get a Team Members",
                         "content": {
                             "application/json": {
                                 "example": {
@@ -1026,20 +868,20 @@
             },
             "put": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
-                "summary": "Update a 4IR Project Cells",
-                "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
+                "summary": "Update a 4IR Team Members",
+                "description": "API endpoint to update a Team Members. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrTeamMembersId"
                     }
                 ],
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_project_cell"
+                                "$ref": "#/components/schemas/4ir_team-member"
                             }
                         }
                     }
@@ -1064,7 +906,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Team Members updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1075,13 +917,13 @@
             },
             "delete": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
-                "summary": "Delete a 4IR Project Cell",
-                "description": "API endpoint to delete a 4IR Project Cell. A successful request response will show 200 HTTP status code",
+                "summary": "Delete a 4IR Team Members",
+                "description": "API endpoint to delete a 4IR Team Members. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrTeamMembersId"
                     }
                 ],
                 "responses": {
@@ -1093,7 +935,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4IR Project Cell deleted successfully.",
+                                        "message": "4IR Team Members deleted successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1219,10 +1061,28 @@
             "4ir_team-member": {
                 "type": "object",
                 "properties": {
-                    "title": {
+                    "four_ir_project_id": {
+                        "type": "integer"
+                    },
+                    "accessor_type": {
                         "type": "string"
                     },
-                    "title_en": {
+                    "accessor_id": {
+                        "type": "integer"
+                    },
+                    "team_type": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "designation": {
                         "type": "string"
                     },
                     "row_status": {
@@ -1235,7 +1095,7 @@
                     }
                 },
                 "required": [
-                    "title"
+                   "four_ir_project_id","title","accessor_type","accessor_id","team_type","email","phone_number","role","designation"
                 ]
             },
             "4ir_project_cell": {
