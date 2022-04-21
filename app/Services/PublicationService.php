@@ -32,7 +32,6 @@ class PublicationService
         $pageSize = $request['page_size'] ?? "";
         $searchText = $request['search_text'] ?? "";
         $author = $request['author'] ?? "";
-        $authorEn = $request['author_en'] ?? "";
         $IndustryAssociationId = $request['industry_association_id'] ?? "";
         $order = $request['order'] ?? "ASC";
         $rowStatus = $request['row_status'] ?? "";
@@ -72,11 +71,12 @@ class PublicationService
         if (is_numeric($IndustryAssociationId)) {
             $publicationBuilder->where('publications.industry_association_id', $IndustryAssociationId);
         }
+
         if (!empty($author)) {
-            $publicationBuilder->where('publications.author', 'like', '%' . $author . '%');
-        }
-        if (!empty($authorEn)) {
-            $publicationBuilder->where('publications.author_en', 'like', '%' . $authorEn . '%');
+            $publicationBuilder->where(function ($builder) use ($author) {
+                $builder->orwhere('publications.author', 'like', '%' . $author . '%');
+                $builder->orwhere('publications.author_en', 'like', '%' . $author . '%');
+            });
         }
 
         if (!empty($searchText)) {
@@ -262,10 +262,9 @@ class PublicationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:600|min:2',
-            'author' => 'nullable|max:600|min:2',
-            'author_en' => 'nullable|max:600|min:2',
+            'title_en' => 'nullable|string',
+            'title' => 'nullable|string',
+            'author' => 'nullable|string',
             'industry_association_id' => 'nullable|integer',
             'search_text' => 'nullable|string',
             'page' => 'nullable|integer|gt:0',
