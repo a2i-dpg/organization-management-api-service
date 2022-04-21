@@ -301,7 +301,7 @@
                                             "project_name_en": "fdgfd",
                                             "organization_name": "fdgfd",
                                             "organization_name_en": "fdgfd",
-                                            "occupation_id": 1,
+                                            "four_ir_occupation_id": 1,
                                             "start_date": "0000-00-00",
                                             "budget": "0.00",
                                             "project_code": "",
@@ -354,7 +354,7 @@
                                         "project_name_en": "fdgfd",
                                         "organization_name": "fdgfd",
                                         "organization_name_en": "fdgfd",
-                                        "occupation_id": 1,
+                                        "four_ir_occupation_id": 1,
                                         "details": "ghgfh",
                                         "start_date": "0000-00-00",
                                         "budget": "0.00",
@@ -1181,7 +1181,7 @@
                     "organization_name_en": {
                         "type": "string"
                     },
-                    "occupation_id": {
+                    "four_ir_occupation_id": {
                         "type": "integer"
                     },
                     "details": {
@@ -1213,7 +1213,7 @@
                     }
                 },
                 "required": [
-                    "accessor_id","project_name","organization_name","occupation_id","tasks","file_path","budget","start_date"
+                    "accessor_id","project_name","organization_name","four_ir_occupation_id","tasks","file_path","budget","start_date"
                 ]
             },
             "4ir_team-member": {

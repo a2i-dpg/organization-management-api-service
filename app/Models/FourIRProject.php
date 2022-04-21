@@ -15,7 +15,7 @@ use Ramsey\Uuid\Type\Decimal;
  * @property string project_name_en
  * @property string organization_name
  * @property string organization_name_en
- * @property int occupation_id
+ * @property int four_ir_occupation_id
  * @property string details
  * @property Carbon start_date
  * @property Decimal budget
