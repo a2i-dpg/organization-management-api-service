@@ -214,7 +214,7 @@ class FourIrProjectTeamMemberService
             ],
             'email' => [
                 'required',
-                'string'
+                'email'
             ],
             'phone_number' => [
                 'required',
