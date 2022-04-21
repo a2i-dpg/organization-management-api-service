@@ -36,7 +36,7 @@
         "/4ir/occupations": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Occupation"
                 ],
                 "summary": "Get all 4IR Occupation Service ",
                 "responses": {
@@ -73,7 +73,7 @@
         "/4ir/occupations/{fourIrOccupationId}": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Occupation"
                 ],
                 "parameters": [
                     {
@@ -114,7 +114,7 @@
             },
             "put": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Occupation"
                 ],
                 "summary": "Update a 4IR Occupation",
                 "description": "API endpoint to update a 4IR Occupation. A successful request response will show 200 HTTP status code",
@@ -163,7 +163,7 @@
             },
             "delete": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Occupation"
                 ],
                 "summary": "Delete a 4IR Occupation",
                 "description": "API endpoint to delete a 4IR Occupation. A successful request response will show 200 HTTP status code",
@@ -194,7 +194,7 @@
         "/4ir/guidelines/{fourIrGuidelinesId}": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Guideline"
                 ],
                 "parameters": [
                     {
@@ -234,7 +234,7 @@
             },
             "post": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Guideline"
                 ],
                 "summary": "Update a 4IR Guidelines",
                 "description": "API endpoint to update a 4IR Guidelines. A successful request response will show 200 HTTP status code",
@@ -285,7 +285,7 @@
         "/4ir/projects": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Projects"
                 ],
                 "summary": "Get all 4IR projects Service ",
                 "responses": {
@@ -334,7 +334,7 @@
         "/4ir/projects/{fourIrProjectsId}": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Projects"
                 ],
                 "parameters": [
                     {
@@ -386,7 +386,7 @@
             },
             "put": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Projects"
                 ],
                 "summary": "Update a 4IR Occupation",
                 "description": "API endpoint to update a 4IR Occupation. A successful request response will show 200 HTTP status code",
@@ -435,7 +435,7 @@
             },
             "delete": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Projects"
                 ],
                 "summary": "Delete a 4IR projects",
                 "description": "API endpoint to delete a 4IR projects. A successful request response will show 200 HTTP status code",
@@ -466,7 +466,7 @@
         "/4ir/team-members": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
                 "summary": "Get all 4IR Occupation Service ",
                 "responses": {
@@ -503,7 +503,7 @@
         "/4ir/team-members/{fourIrTeamMembersId}": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
                 "parameters": [
                     {
@@ -624,7 +624,7 @@
         "/4ir/project-cells": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Project Cells"
                 ],
                 "parameters": [
                     {
@@ -696,7 +696,7 @@
             },
             "post": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Project Cells"
                 ],
                 "summary": "Insert a 4IR Project Cells",
                 "description": "API endpoint to Insert a Project Cells. A successful request response will show 200 HTTP status code",
@@ -742,7 +742,7 @@
         "/4ir/project-cells/{fourIrProjectCellId}": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Project Cells"
                 ],
                 "parameters": [
                     {
@@ -785,7 +785,7 @@
             },
             "put": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Project Cells"
                 ],
                 "summary": "Update a 4IR Project Cells",
                 "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
@@ -834,7 +834,7 @@
             },
             "delete": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Project Cells"
                 ],
                 "summary": "Delete a 4IR Project Cell",
                 "description": "API endpoint to delete a 4IR Project Cell. A successful request response will show 200 HTTP status code",
@@ -865,7 +865,7 @@
         "/4ir/team-members": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
                 "parameters": [
                     {
@@ -937,7 +937,7 @@
             },
             "post": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
                 "summary": "Insert a 4IR Project Cells",
                 "description": "API endpoint to Insert a Project Cells. A successful request response will show 200 HTTP status code",
@@ -983,7 +983,7 @@
         "/4ir/team-members/{fourIrProjectCellId}": {
             "get": {
                 "tags": [
-                    "FourIR"
+                    "FourIR Team Members"
                 ],
                 "parameters": [
                     {
