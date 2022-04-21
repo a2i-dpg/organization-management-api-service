@@ -46,7 +46,7 @@ class FourIrProjectService
                 'four_ir_projects.project_name_en',
                 'four_ir_projects.organization_name',
                 'four_ir_projects.organization_name_en',
-                'four_ir_projects.occupation_id',
+                'four_ir_projects.four_ir_occupation_id',
                 'four_ir_projects.start_date',
                 'four_ir_projects.budget',
                 'four_ir_projects.project_code',
@@ -126,7 +126,7 @@ class FourIrProjectService
                 'four_ir_projects.project_name_en',
                 'four_ir_projects.organization_name',
                 'four_ir_projects.organization_name_en',
-                'four_ir_projects.occupation_id',
+                'four_ir_projects.four_ir_occupation_id',
                 'four_ir_projects.details',
                 'four_ir_projects.start_date',
                 'four_ir_projects.budget',
@@ -229,7 +229,7 @@ class FourIrProjectService
                 'max:300',
                 'min:2'
             ],
-            'occupation_id' => [
+            'four_ir_occupation_id' => [
                 'required',
                 'int',
                 'exists:occupations,id,deleted_at,NULL'

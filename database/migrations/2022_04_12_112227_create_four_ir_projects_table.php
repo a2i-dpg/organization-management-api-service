@@ -19,7 +19,7 @@ class CreateFourIRProjectsTable extends Migration
             $table->string('project_name_en', 300)->nullable();
             $table->string('organization_name', 500);
             $table->string('organization_name_en', 300)->nullable();
-            $table->unsignedInteger('occupation_id');
+            $table->unsignedInteger('four_ir_occupation_id');
             $table->text('details')->nullable();
             $table->date('start_date');
             $table->decimal('budget')->default(0);
