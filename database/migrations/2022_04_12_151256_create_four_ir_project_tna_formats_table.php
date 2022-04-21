@@ -22,6 +22,8 @@ class CreateFourIRProjectTnaFormatsTable extends Migration
             $table->date('end_date');
             $table->string('venue');
             $table->string('file_path');
+            $table->string('accessor_type', 100);
+            $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
