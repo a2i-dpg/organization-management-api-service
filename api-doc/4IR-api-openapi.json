@@ -581,14 +581,14 @@
                 }
             }
         },
-        "/4ir/project-cells/{fourIrProjectCellId}": {
+        "/4ir/project-cells/{fourIrProjectCellsId}": {
             "get": {
                 "tags": [
                     "FourIR Project Cells"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrProjectCellsId"
                     }
                 ],
                 "summary": "4IR Project Cells",
@@ -633,7 +633,7 @@
                 "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrProjectCellsId"
                     }
                 ],
                 "requestBody": {
@@ -682,7 +682,7 @@
                 "description": "API endpoint to delete a 4IR Project Cell. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrProjectCellsId"
                     }
                 ],
                 "responses": {
@@ -944,6 +944,476 @@
                     }
                 }
             }
+        },
+        "/4ir/tna-format": {
+            "get": {
+                "tags": [
+                    "FourIR Project Tna Format"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_format_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_format_workshop"
+                    },
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_format_venue"
+                    }
+                ],
+                "summary": "Get all 4IR Project Tna Format",
+                "responses": {
+                    "200": {
+                        "description": "Get all Project Tna Format",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "four_ir_project_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "four_ir_project_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": 14,
+                                            "updated_by": 14,
+                                            "created_at": "2022-04-21T07:18:19.000000Z",
+                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Project Tna Format"
+                ],
+                "summary": "Insert a 4IR Project Tna Format",
+                "description": "API endpoint to Insert a Project Tna Format. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_tna_format"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_project_id": 1,
+                                        "workshop_name": "ttthjkjhkttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "file_path": "gfhgf",
+                                        "created_by": 14,
+                                        "updated_by": 14,
+                                        "updated_at": "2022-04-21T07:28:49.000000Z",
+                                        "created_at": "2022-04-21T07:28:49.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/4ir/tna-format/{fourIrProjectTnaFormatId}": {
+            "get": {
+                "tags": [
+                    "FourIR Project Tna Format"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
+                    }
+                ],
+                "summary": "4IR Project Tna Format",
+                "responses": {
+                    "200": {
+                        "description": "Get a Project Tna Format",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "four_ir_project_id": 1,
+                                        "workshop_name": "tttttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "venue": "",
+                                        "file_path": "gfhgf",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            "put": {
+                "tags": [
+                    "FourIR Project Tna Format"
+                ],
+                "summary": "Update a 4IR Project Tna Format",
+                "description": "API endpoint to update a Project Tna Format. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_tna_format"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR Project Tna Format"
+                ],
+                "summary": "Delete a 4IR Project Tna Format",
+                "description": "API endpoint to delete a 4IR Project Tna Format. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Project Cell deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/4ir/project-curriculums": {
+            "get": {
+                "tags": [
+                    "FourIR Project Curriculum"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_id"
+                    }
+                ],
+                "summary": "Get all 4IR Project Curriculum",
+                "responses": {
+                    "200": {
+                        "description": "Get all Project Curriculum",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "four_ir_project_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "four_ir_project_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": 14,
+                                            "updated_by": 14,
+                                            "created_at": "2022-04-21T07:18:19.000000Z",
+                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Project Curriculum"
+                ],
+                "summary": "Insert a 4IR Project Curriculum",
+                "description": "API endpoint to Insert a Project Curriculum. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_project_id": 1,
+                                        "workshop_name": "ttthjkjhkttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "file_path": "gfhgf",
+                                        "created_by": 14,
+                                        "updated_by": 14,
+                                        "updated_at": "2022-04-21T07:28:49.000000Z",
+                                        "created_at": "2022-04-21T07:28:49.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Curriculum added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/4ir/project-curriculums/{fourIrProjectCurriculumId}": {
+            "get": {
+                "tags": [
+                    "FourIR Project Curriculum"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectCurriculumId"
+                    }
+                ],
+                "summary": "4IR Project Curriculum",
+                "responses": {
+                    "200": {
+                        "description": "Get a Project Curriculum",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "four_ir_project_id": 1,
+                                        "workshop_name": "tttttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "venue": "",
+                                        "file_path": "gfhgf",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            "put": {
+                "tags": [
+                    "FourIR Project Curriculum"
+                ],
+                "summary": "Update a 4IR Project Curriculum",
+                "description": "API endpoint to update a Project Curriculum. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectCurriculumId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Curriculum updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR Project Curriculum"
+                ],
+                "summary": "Delete a 4IR Project Curriculum",
+                "description": "API endpoint to delete a 4IR Project Curriculum. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrProjectCurriculumId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Project Curriculum deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1095,7 +1565,7 @@
                     }
                 },
                 "required": [
-                   "four_ir_project_id","title","accessor_type","accessor_id","team_type","email","phone_number","role","designation"
+                    "four_ir_project_id","title","accessor_type","accessor_id","team_type","email","phone_number","role","designation"
                 ]
             },
             "4ir_project_cell": {
@@ -1141,720 +1611,75 @@
                     "name","address","email","mobile_number","designation","accessor_type","accessor_id","four_ir_project_id"
                 ]
             },
-            "contact_person_designation": {
-                "name": "contact_person_designation",
-                "in": "query",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "example": "Co-ordinator"
-                }
-            },
-            "contact_person_designation_en": {
-                "name": "contact_person_designation_en",
-                "in": "query",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "example": "Co-ordinator"
-                }
-            },
-            "exam_type_id": {
-                "name": "exam_type_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "page": {
-                "name": "page",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "limit": {
-                "in": "query",
-                "name": "limit",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "page_size": {
-                "in": "query",
-                "name": "page_size",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "institute_id": {
-                "in": "query",
-                "required": true,
-                "name": "institute_id",
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "institute_id_path": {
-                "in": "path",
-                "required": true,
-                "name": "instituteId",
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "institute_type_id": {
-                "in": "query",
-                "required": true,
-                "name": "institute_type_id",
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-
-            "order": {
-                "name": "order",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "asc",
-                        "desc"
-                    ]
-                }
-            },
-            "title_en": {
-                "in": "query",
-                "name": "title_en",
-                "required": true,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "title_en_optional": {
-                "in": "query",
-                "name": "title_en",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "question_type": {
-                "in": "query",
-                "name": "question_type",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "address": {
-                "name": "address",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "title": {
-                "in": "query",
-                "required": true,
-                "name": "title",
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "rpl_level_id": {
-                "in": "query",
-                "required": true,
-                "name": "rpl_level_id",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rpl_occupation_id": {
-                "in": "query",
-                "required": true,
-                "name": "rpl_occupation_id",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "institute_id_optional": {
-                "in": "query",
-                "required": false,
-                "name": "institute_id",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-
-            "title_optional": {
-                "in": "query",
-                "required": false,
-                "name": "title",
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "trainer_name_en": {
-                "in": "query",
-                "name": "trainer_name_en",
-                "required": false,
-                "schema": {
-                    "type": "string",
-                    "example": "Miladul Islam"
-                }
-            },
-            "trainer_name_en_optional": {
-                "in": "query",
-                "name": "trainer_name_en",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "trainer_name": {
-                "in": "query",
-                "name": "trainer_name",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "example": "মিলাদুল ইসলাম"
-                }
-            },
-            "trainer_name_optional": {
-                "in": "query",
-                "name": "trainer_name",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "row_status": {
-                "name": "row_status",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer",
-                    "enum": [
-                        0,
-                        1
-                    ],
-                    "example": 1
-                }
-            },
-            "institute_row_status": {
-                "name": "row_status",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer",
-                    "enum": [
-                        0,
-                        1,
-                        2,
-                        3
-                    ]
-                },
-                "description": "0 => Inactive, 1 => Approved, 2 => Pending, 3 => Rejected"
-            },
-            "row_status_optional": {
-                "name": "row_status",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer",
-                    "enum": [
-                        0,
-                        1
-                    ]
-                }
-            },
-            "location_latitude": {
-                "name": "location_latitude",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "location_longitude": {
-                "name": "location_longitude",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "divisionId": {
-                "name": "divisionId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "division_id": {
-                "name": "division_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "districtId": {
-                "name": "districtId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "district_id": {
-                "name": "district_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "upazilaId": {
-                "name": "upazilaId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "permission_sub_group_id": {
-                "name": "permission_sub_group_id",
-                "in": "query",
-                "required": true,
-                "schema": {
-                    "type": "integer",
-                    "example": 3
-                }
-            },
-            "upazila_id": {
-                "name": "upazila_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "assessment_id": {
-                "name": "assessment_id",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "branch_id": {
-                "name": "branch_id",
-                "required": true,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "subject_id": {
-                "name": "subject_id",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "subjectId": {
-                "name": "subjectId",
-                "required": true,
-                "in": "path",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "examTypeId": {
-                "name": "examTypeId",
-                "required": true,
-                "in": "path",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "purpose_name": {
-                "name": "purpose_name",
-                "required": true,
-                "in": "query",
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "youth_id": {
-                "name": "youthId",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "youthId": {
-                "name": "youthId",
-                "required": true,
-                "in": "path",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-
-            "examId": {
-                "name": "examId",
-                "required": true,
-                "in": "path",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "examQuestionBankId": {
-                "name": "examQuestionBankId",
-                "required": true,
-                "in": "path",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "branch_id_optional": {
-                "name": "branch_id",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "training_center_id": {
-                "name": "training_center_id",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "training_center_id_optional": {
-                "name": "training_center_id",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "code": {
-                "name": "code",
-                "in": "query",
-                "required": true,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "code_optional": {
-                "name": "code",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            "description": {
-                "name": "description",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string",
-                    "example": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-                }
-            },
-            "description_en": {
-                "name": "description_en",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string",
-                    "example": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-                }
-            },
-            "program_id": {
-                "name": "program_id",
-                "required": true,
-                "in": "query",
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "program_id_optional": {
-                "name": "program_id",
-                "required": false,
-                "in": "query",
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "course_id": {
-                "name": "course_id",
-                "in": "query",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "course_id_optional": {
-                "name": "course_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "google_map_src": {
-                "name": "google_map_src",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string",
-                    "example": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.0091394560964!2d90.39435221429686!3d23.747053494822595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8afbdaffc95%3A0x54b18b7fdceb2abd!2sSOFTBD%20Ltd.!5e0!3m2!1sen!2sbd!4v1631430371902!5m2!1sen!2sbd"
-                }
-            },
-            "dynamic_form_field": {
-                "name": "dynamic_form_field",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "string",
-                    "example": {
-                        "ethnic_group_info": [
-                            true,
-                            false
+            "4ir_tna_format": {
+                "type": "object",
+                "properties": {
+                    "four_ir_project_id": {
+                        "type": "integer"
+                    },
+                    "workshop_name": {
+                        "type": "string"
+                    },
+                    "skill_required": {
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "accessor_type": {
+                        "type": "string"
+                    },
+                    "accessor_id": {
+                        "type": "integer"
+                    },
+                    "file_path": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
                         ],
-                        "freedom_fighter_info": [
-                            true,
-                            false
-                        ],
-                        "disability_info": [
-                            true,
-                            false
-                        ],
-                        "ssc_passing_info": [
-                            true,
-                            false
-                        ],
-                        "hsc_passing_status": [
-                            true,
-                            false
-                        ],
-                        "honors_passing_info": [
-                            true,
-                            false
-                        ],
-                        "masters_passing_info": [
-                            true,
-                            false
-                        ],
-                        "occupation_info": [
-                            true,
-                            false
-                        ],
-                        "guardian_info": [
-                            true,
-                            false
-                        ]
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
                     }
-                }
+                },
+                "required": [
+                    "four_ir_project_id","workshop_name","skill_required","start_date","end_date","accessor_type","file_path","accessor_id"
+                ]
             },
-            "rplLevelId": {
-                "name": "rplLevelId",
-                "in": "path",
-                "description": "rplLevelId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rplOccupationId": {
-                "name": "rplOccupationId",
-                "in": "path",
-                "description": "rplOccupationId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rplSectorId": {
-                "name": "rplSectorId",
-                "in": "path",
-                "description": "rplSectorId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rplSectorId_q": {
-                "name": "rpl_sector_id",
-                "in": "query",
-                "description": "rplSectorId",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "assessmentQuestionSetId": {
-                "name": "assessmentQuestionSetId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "batchId": {
-                "name": "batchId",
-                "in": "path",
-                "description": "trainer id",
-                "required": true,
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "rto_batch_id": {
-                "name": "rto_batch_id",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rtoBatchId": {
-                "name": "rtoBatchId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rtoId": {
-                "name": "rtoId",
-                "in": "path",
-                "description": "rtoId",
-                "required": true,
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "assessmentId": {
-                "name": "assessmentId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "questionBankId": {
-                "name": "questionBankId",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "rplApplicationId": {
-                "name": "rplApplicationId",
-                "in": "path",
-                "description": "rplApplicationId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "instituteId": {
-                "name": "instituteId",
-                "in": "path",
-                "description": "instituteId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "progressId": {
-                "name": "progressId",
-                "in": "path",
-                "description": "instituteId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "IncomeExpenditureId": {
-                "name": "IncomeExpenditureId",
-                "in": "path",
-                "description": "IncomeExpenditureId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "CombineProgressId": {
-                "name": "CombineProgressId",
-                "in": "path",
-                "description": "CombineProgressId",
-                "required": true,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            "courseId": {
-                "name": "courseId",
-                "in": "path",
-                "description": "course id to get training centers with batches",
-                "required": true,
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "courseEnrollmentId": {
-                "name": "id",
-                "in": "path",
-                "description": "course id to get training centers with batches",
-                "required": true,
-                "schema": {
-                    "type": "integer",
-                    "example": "1"
-                }
-            },
-            "active": {
-                "name": "active",
-                "in": "query",
-                "description": "get all active batches",
-                "schema": {
-                    "type": "boolean",
-                    "example": true
-                }
-            },
-            "upcoming": {
-                "name": "upcoming",
-                "in": "query",
-                "description": "get all upcoming batches",
-                "schema": {
-                    "type": "boolean",
-                    "example": true
-                }
+            "4ir_curriculum": {
+                "type": "object",
+                "properties": {
+                    "four_ir_project_id": {
+                        "type": "integer"
+                    },
+                    "accessor_type": {
+                        "type": "string"
+                    },
+                    "accessor_id": {
+                        "type": "integer"
+                    },
+                    "file_path": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_project_id","accessor_type","file_path","accessor_id"
+                ]
             }
         },
         "parameters": {
@@ -1867,7 +1692,61 @@
                     "example": "1"
                 }
             },
-            "fourIrProjectCellId": {
+            "fourIrProjectTnaFormatId": {
+                "name": "fourIrProjectTnaFormatId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrProjectCurriculumId": {
+                "name": "fourIrProjectCurriculumId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "four_ir_project_curricukum_id": {
+                "name": "four_ir_project_curricukum_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "four_ir_project_format_id": {
+                "name": "four_ir_project_format_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "four_ir_project_format_workshop": {
+                "name": "four_ir_project_format_workshop",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "name"
+                }
+            },
+            "four_ir_project_format_venue": {
+                "name": "four_ir_project_format_venue",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "dhaka"
+                }
+            },
+            "fourIrProjectCellsId": {
                 "name": "fourIrProjectCellsId",
                 "in": "path",
                 "required": true,
@@ -1908,7 +1787,16 @@
                 "in": "path",
                 "required": true,
                 "schema": {
-                    "type": "string",
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "four_ir_project_id": {
+                "name": "four_ir_project_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
                     "example": "1"
                 }
             },
