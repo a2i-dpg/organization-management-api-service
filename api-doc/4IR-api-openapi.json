@@ -211,7 +211,7 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_project_id": 1,
-                                        "guideline_file_path": "fgh",
+                                        "file_path": "fgh",
                                         "guideline_details": "fghfg",
                                         "row_status": 1,
                                         "created_by": null,
@@ -1453,7 +1453,7 @@
                     "four_ir_project_id": {
                         "type": "integer"
                     },
-                    "guideline_file_path": {
+                    "file_path": {
                         "type": "string"
                     },
                     "guideline_details": {

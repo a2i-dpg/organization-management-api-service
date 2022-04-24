@@ -30,7 +30,7 @@ class FourIRGuidelineService
             [
                 'four_ir_guidelines.id',
                 'four_ir_guidelines.four_ir_project_id',
-                'four_ir_guidelines.guideline_file_path',
+                'four_ir_guidelines.file_path',
                 'four_ir_guidelines.guideline_details',
                 'four_ir_guidelines.row_status',
                 'four_ir_guidelines.created_by',
@@ -80,7 +80,7 @@ class FourIRGuidelineService
                 'required',
                 'int'
             ],
-            'guideline_file_path' => [
+            'file_path' => [
                 Rule::requiredIf(function () use ($request) {
                     return empty($request->input('guideline_details'));
                 }),
@@ -89,7 +89,7 @@ class FourIRGuidelineService
             ],
             'guideline_details' => [
                 Rule::requiredIf(function () use($request) {
-                    return empty($request->input('guideline_file_path'));
+                    return empty($request->input('file_path'));
                 }),
                 'nullable',
                 'string'

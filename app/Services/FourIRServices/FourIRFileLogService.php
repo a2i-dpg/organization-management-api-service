@@ -18,7 +18,9 @@ class FourIRFileLogService
      */
     public function storeFileLog(array $data)
     {
-        $this->store($data);
+        if(!empty($data['file_path'])){
+            $this->store($data);
+        }
     }
 
     /**
@@ -28,7 +30,7 @@ class FourIRFileLogService
      */
     public function updateFileLog(string $filePath, array $data)
     {
-        if($filePath != $data['file_path']){
+        if(!empty($data['file_path']) && $filePath != $data['file_path']){
             $this->store($data);
         }
     }

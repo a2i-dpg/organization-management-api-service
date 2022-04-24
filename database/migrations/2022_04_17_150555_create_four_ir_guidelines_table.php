@@ -16,7 +16,7 @@ class CreateFourIRGuidelinesTable extends Migration
         Schema::create('four_ir_guidelines', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('four_ir_project_id');
-            $table->string('guideline_file_path')->nullable();
+            $table->string('file_path')->nullable();
             $table->text('guideline_details')->nullable();
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
