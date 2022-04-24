@@ -5,15 +5,6 @@ namespace App\Services\FourIRServices;
 use App\Models\BaseModel;
 use App\Models\FourIRFileLog;
 use App\Models\FourIRProject;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Response;
-
 
 /**
  * Class FourIRFileLogService
@@ -25,11 +16,32 @@ class FourIRFileLogService
      * @param array $data
      * @return void
      */
-    public function storeLog(array $data)
+    public function storeFileLog(array $data)
+    {
+        $this->store($data);
+    }
+
+    /**
+     * @param string $filePath
+     * @param array $data
+     * @return void
+     */
+    public function updateFileLog(string $filePath, array $data)
+    {
+        if($filePath != $data['file_path']){
+            $this->store($data);
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    private function store(array $data)
     {
         $fourIrFileLog = new FourIRFileLog();
         $fourIrFileLog->fill([
-            'four_ir_project_id' => $data['four_ir_project_id'],
+            'four_ir_project_id' => $data['id'],
             'file_path' => $data['file_path'],
             'module_type' => FourIRProject::FILE_LOG_PROJECT_INITIATION_STEP,
             'accessor_type' => $data['accessor_type'],

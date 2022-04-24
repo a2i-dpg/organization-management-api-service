@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -74,24 +75,31 @@ class FourIRProjectController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Throwable
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProject::class);
-
+        // $this->authorize('create', FourIRProject::class);
         $validated = $this->fourIrProjectService->validator($request)->validate();
-        $data = $this->fourIrProjectService->store($validated);
-        $this->fourIRFileLogService->storeLog($data->toArray());
+        try {
+            DB::beginTransaction();
+            $data = $this->fourIrProjectService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray());
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Project added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -103,24 +111,33 @@ class FourIRProjectController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProject = FourIRProject::findOrFail($id);
-//        $this->authorize('update', $fourIrProject);
-
+        // $this->authorize('update', $fourIrProject);
         $validated = $this->fourIrProjectService->validator($request, $id)->validate();
-        $data = $this->fourIrProjectService->update($fourIrProject, $validated);
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrProject['file_path'];
+            $data = $this->fourIrProjectService->update($fourIrProject, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray());
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Project updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
