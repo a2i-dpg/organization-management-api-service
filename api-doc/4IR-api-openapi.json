@@ -945,7 +945,7 @@
                 }
             }
         },
-        "/4ir/tna-format": {
+        "/4ir/tna-formats": {
             "get": {
                 "tags": [
                     "FourIR Project Tna Format"
@@ -1059,7 +1059,7 @@
                 }
             }
         },
-        "/4ir/tna-format/{fourIrProjectTnaFormatId}": {
+        "/4ir/tna-formats/{fourIrProjectTnaFormatId}": {
             "get": {
                 "tags": [
                     "FourIR Project Tna Format"
