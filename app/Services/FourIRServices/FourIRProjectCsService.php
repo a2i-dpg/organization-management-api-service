@@ -192,7 +192,7 @@ class FourIRProjectCsService
         if(!empty($request->input('four_ir_project_id'))){
             $tnaReport = FourIRProjectTnaFormat::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
-                "First complete Four IR Project Tna Format!"
+                "four_ir_project_id" => "First complete Four IR Project Tna Format!"
             ]));
         }
 

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRProject;
 use App\Models\FourIRProjectCs;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRProjectCsService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -16,17 +19,20 @@ use Throwable;
 class FourIRProjectCsController extends Controller
 {
     public FourIRProjectCsService $fourIrProjectCsService;
+    public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRProjectCsController constructor.
      *
      * @param FourIRProjectCsService $fourIrProjectCsService
+     * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRProjectCsService $fourIrProjectCsService)
+    public function __construct(FourIRProjectCsService $fourIrProjectCsService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectCsService = $fourIrProjectCsService;
+        $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
     /**
@@ -70,23 +76,31 @@ class FourIRProjectCsController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Throwable
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProjectCs::class);
-
+        //$this->authorize('create', FourIRProjectCs::class);
         $validated = $this->fourIrProjectCsService->validator($request)->validate();
-        $data = $this->fourIrProjectCsService->store($validated);
+        try {
+            DB::beginTransaction();
+            $data = $this->fourIrProjectCsService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_CS_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project cs added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Project cs added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -98,24 +112,33 @@ class FourIRProjectCsController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectCs = FourIRProjectCs::findOrFail($id);
-//        $this->authorize('update', $fourIrProjectCs);
-
+        //$this->authorize('update', $fourIrProjectCs);
         $validated = $this->fourIrProjectCsService->validator($request, $id)->validate();
-        $data = $this->fourIrProjectCsService->update($fourIrProjectCs, $validated);
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrProjectCs['file_path'];
+            $data = $this->fourIrProjectCsService->update($fourIrProjectCs, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_CS_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project cs updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Project cs updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
