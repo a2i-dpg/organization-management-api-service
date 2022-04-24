@@ -4,6 +4,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
+use App\Models\FourIRFileLog;
 use App\Models\FourIRProject;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;

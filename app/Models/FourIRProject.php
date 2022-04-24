@@ -50,4 +50,13 @@ class FourIRProject extends BaseModel
 
     public const FORM_STEP_PROJECT_INITIATION = 1;
     public const FORM_STEP_GUIDELINE = 2;
+
+    public const FILE_LOG_PROJECT_INITIATION_STEP = 1;
+    public const FILE_LOG_PROJECT_GUIDELINE_STEP = 2;
+    public const FILE_LOG_TNA_STEP = 3;
+    public const FILE_LOG_PROJECT_CS_STEP = 4;
+    public const FILE_LOG_PROJECT_CURRICULUM_STEP = 5;
+    public const FILE_LOG_CBLM_STEP = 6;
+    public const FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP = 7;
+    public const FILE_LOG_TOT_STEP = 8;
 }

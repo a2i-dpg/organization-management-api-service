@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRProject;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIrProjectService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -16,17 +17,20 @@ use Throwable;
 class FourIRProjectController extends Controller
 {
     public FourIrProjectService $fourIrProjectService;
+    public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRProjectController constructor.
      *
      * @param FourIrProjectService $fourIrProjectService
+     * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIrProjectService $fourIrProjectService)
+    public function __construct(FourIrProjectService $fourIrProjectService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectService = $fourIrProjectService;
+        $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
     /**
@@ -77,6 +81,7 @@ class FourIRProjectController extends Controller
 
         $validated = $this->fourIrProjectService->validator($request)->validate();
         $data = $this->fourIrProjectService->store($validated);
+        $this->fourIRFileLogService->storeLog($data->toArray());
 
         $response = [
             'data' => $data,
