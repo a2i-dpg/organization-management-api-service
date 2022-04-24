@@ -52,11 +52,21 @@ class Authenticate
             /** @var User $authUser */
             $authUser = Auth::user();
             if ($authUser && $authUser->isOrganizationUser()) {
+
                 $request->offsetSet('organization_id', $authUser->organization_id);
+                $request->offsetSet('accessor_type', BaseModel::ACCESSOR_TYPE_ORGANIZATION);
+                $request->offsetSet('accessor_id', $authUser->organization_id);
+
             } elseif ($authUser && $authUser->isIndustryAssociationUser()) {
+
                 $request->offsetSet('industry_association_id', $authUser->industry_association_id);
+                $request->offsetSet('accessor_type', BaseModel::ACCESSOR_TYPE_INDUSTRY_ASSOCIATION);
+                $request->offsetSet('accessor_id', $authUser->industry_association_id);
+
             } elseif ($authUser && $authUser->isInstituteUser()) {
                 $request->offsetSet('institute_id', $authUser->institute_id);
+                $request->offsetSet('accessor_type', BaseModel::ACCESSOR_TYPE_INSTITUTE);
+                $request->offsetSet('accessor_id', $authUser->institute_id);
             }
         }
 

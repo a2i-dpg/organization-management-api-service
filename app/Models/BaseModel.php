@@ -153,4 +153,7 @@ abstract class BaseModel extends Model
         "JobPreview" => 7,
     ];
 
+    public const ACCESSOR_TYPE_INSTITUTE = "INSTITUTE";
+    public const ACCESSOR_TYPE_INDUSTRY_ASSOCIATION = "INDUSTRY_ASSOCIATION";
+    public const ACCESSOR_TYPE_ORGANIZATION = "ORGANIZATION";
 }
