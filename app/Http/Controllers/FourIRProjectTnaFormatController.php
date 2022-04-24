@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRProject;
 use App\Models\FourIRProjectTnaFormat;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRProjectTnaFormatService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -16,17 +19,20 @@ use Throwable;
 class FourIRProjectTnaFormatController extends Controller
 {
     public FourIRProjectTnaFormatService $FourIRProjectTnaFormatService;
+    public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRProjectTnaFormatController constructor.
      *
      * @param FourIRProjectTnaFormatService $FourIRProjectTnaFormatService
+     * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRProjectTnaFormatService $FourIRProjectTnaFormatService)
+    public function __construct(FourIRProjectTnaFormatService $FourIRProjectTnaFormatService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->FourIRProjectTnaFormatService = $FourIRProjectTnaFormatService;
+        $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
     /**
@@ -70,23 +76,31 @@ class FourIRProjectTnaFormatController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Throwable
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProjectCell::class);
-
+        //$this->authorize('create', FourIRProjectCell::class);
         $validated = $this->FourIRProjectTnaFormatService->validator($request)->validate();
-        $data = $this->FourIRProjectTnaFormatService->store($validated);
+        try {
+            DB::beginTransaction();
+            $data = $this->FourIRProjectTnaFormatService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_TNA_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project Tna Formate Added added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Project Tna Format added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -96,24 +110,33 @@ class FourIRProjectTnaFormatController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Throwable
      */
 
     public function update(Request $request, int $id): JsonResponse
     {
-
         $fourIrProjectTnaFormat = FourIRProjectTnaFormat::findOrFail($id);
         $validated = $this->FourIRProjectTnaFormatService->validator($request, $id)->validate();
-        $data = $this->FourIRProjectTnaFormatService->update($fourIrProjectTnaFormat, $validated);
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrProjectTnaFormat['file_path'];
+            $data = $this->FourIRProjectTnaFormatService->update($fourIrProjectTnaFormat, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_TNA_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project Tna Format updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Project Tna Format updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }

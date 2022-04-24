@@ -174,9 +174,9 @@ class FourIRProjectTnaFormatService
             'four_ir_project_id'=>[
                 'required',
                 'int',
-                Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
+                'exists:four_ir_projects,id,deleted_at,NULL',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRProjectCell::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+                    $mentoringTeam = FourIRProjectCell::where('four_ir_project_id', $value)->first();
                     if(empty($mentoringTeam)){
                         $failed('Complete Project Cell step first.[24000]');
                     }

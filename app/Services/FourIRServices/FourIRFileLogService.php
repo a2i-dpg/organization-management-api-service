@@ -14,38 +14,41 @@ class FourIRFileLogService
 {
     /**
      * @param array $data
+     * @param string $step
      * @return void
      */
-    public function storeFileLog(array $data)
+    public function storeFileLog(array $data, string $step)
     {
         if(!empty($data['file_path'])){
-            $this->store($data);
+            $this->store($data, $step);
         }
     }
 
     /**
      * @param string $filePath
      * @param array $data
+     * @param string $step
      * @return void
      */
-    public function updateFileLog(string $filePath, array $data)
+    public function updateFileLog(string $filePath, array $data, string $step)
     {
         if(!empty($data['file_path']) && $filePath != $data['file_path']){
-            $this->store($data);
+            $this->store($data, $step);
         }
     }
 
     /**
      * @param array $data
+     * @param string $step
      * @return void
      */
-    private function store(array $data)
+    private function store(array $data, string $step)
     {
         $fourIrFileLog = new FourIRFileLog();
         $fourIrFileLog->fill([
             'four_ir_project_id' => $data['id'],
             'file_path' => $data['file_path'],
-            'module_type' => FourIRProject::FILE_LOG_PROJECT_INITIATION_STEP,
+            'module_type' => $step,
             'accessor_type' => $data['accessor_type'],
             'accessor_id' => $data['accessor_id'],
             'row_status' => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE

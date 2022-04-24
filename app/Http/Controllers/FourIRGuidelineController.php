@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRProject;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRGuidelineService;
 use Carbon\Carbon;
@@ -69,7 +70,7 @@ class FourIRGuidelineController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIRGuidelineService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray());
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_GUIDELINE_STEP);
 
             DB::commit();
             $response = [
