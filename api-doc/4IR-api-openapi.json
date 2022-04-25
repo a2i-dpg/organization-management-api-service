@@ -104,7 +104,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Occupation updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -196,7 +196,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Occupation updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -384,7 +384,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_project"
+                                "$ref": "#/components/schemas/4ir_projects"
                             }
                         }
                     }
@@ -1653,7 +1653,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","title","accessor_type","accessor_id","team_type","email","phone_number","role","designation"
+                    "four_ir_project_id","title","team_type","email","phone_number","role","designation"
                 ]
             },
             "4ir_project_cell": {
@@ -1696,7 +1696,7 @@
                     }
                 },
                 "required": [
-                    "name","address","email","mobile_number","designation","accessor_type","accessor_id","four_ir_project_id"
+                    "name","address","email","mobile_number","designation","four_ir_project_id"
                 ]
             },
             "4ir_resource": {
@@ -1721,7 +1721,7 @@
                     "four_ir_project_id"
                 ]
             },
-            "4ir_project": {
+            "4ir_projects": {
                 "type": "object",
                 "properties": {
                     "project_name": {
@@ -1743,7 +1743,8 @@
                         "type": "string"
                     },
                     "start_date": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "date"
                     },
                     "budget": {
                         "type": "integer"
@@ -1779,7 +1780,7 @@
                     }
                 },
                 "required": [
-                    "project_name","organization_name","four_ir_occupation_id","details"
+                    "project_name","organization_name","four_ir_occupation_id","start_date","project_code","file_path","tasks","completion_step","form_step"
                 ]
             },
             "4ir_tna_format": {
@@ -1821,7 +1822,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","workshop_name","skill_required","start_date","end_date","accessor_type","file_path","accessor_id"
+                    "four_ir_project_id","workshop_name","skill_required","start_date","end_date","file_path"
                 ]
             },
             "4ir_curriculum": {
@@ -1849,7 +1850,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","accessor_type","file_path","accessor_id"
+                    "four_ir_project_id","file_path"
                 ]
             }
         },
