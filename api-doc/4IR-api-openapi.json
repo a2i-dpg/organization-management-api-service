@@ -1756,7 +1756,10 @@
                         "type": "string"
                     },
                     "tasks": {
-                        "type": "string"
+                        "type": "string",
+
+                            "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
+
                     },
                     "completion_step": {
                         "type": "string"
