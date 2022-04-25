@@ -98,8 +98,14 @@ class FourIROccupationService
         /** @var FourIROccupation|Builder $fourIrOccupationBuilder */
         $fourIrOccupationBuilder = FourIROccupation::select(
             [
-                'four_ir_occupations.title',
+                'four_ir_occupations.id',
                 'four_ir_occupations.title_en',
+                'four_ir_occupations.title',
+                'four_ir_occupations.row_status',
+                'four_ir_occupations.created_by',
+                'four_ir_occupations.updated_by',
+                'four_ir_occupations.created_at',
+                'four_ir_occupations.updated_at'
             ]
         );
 
