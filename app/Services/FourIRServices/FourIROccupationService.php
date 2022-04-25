@@ -50,21 +50,17 @@ class FourIROccupationService
             ]
         );
 
-
         $fourIROccupationBuilder->orderBy('four_ir_occupations.id', $order);
 
-
         if (is_numeric($rowStatus)) {
-            $fourIROccupationBuilder->where('ranks.row_status', $rowStatus);
+            $fourIROccupationBuilder->where('four_ir_occupations.row_status', $rowStatus);
         }
         if (!empty($titleEn)) {
-            $fourIROccupationBuilder->where('ranks.title_en', 'like', '%' . $titleEn . '%');
+            $fourIROccupationBuilder->where('four_ir_occupations.title_en', 'like', '%' . $titleEn . '%');
         }
         if (!empty($title)) {
-            $fourIROccupationBuilder->where('ranks.title', 'like', '%' . $title . '%');
+            $fourIROccupationBuilder->where('four_ir_occupations.title', 'like', '%' . $title . '%');
         }
-
-
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
