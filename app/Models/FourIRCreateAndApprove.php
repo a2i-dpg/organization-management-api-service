@@ -13,5 +13,4 @@ class FourIRCreateAndApprove extends BaseModel
 
     protected $table = 'four_ir_create_and_approve';
 
-    public const FILE_LOG_PROJECT_RESOURCE_STEP = 4;
 }

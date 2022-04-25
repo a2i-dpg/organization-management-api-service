@@ -13,5 +13,4 @@ class FourIRResource extends BaseModel
 
     protected $table = 'four_ir_resources';
 
-    public const FILE_LOG_PROJECT_RESOURCE_STEP = 4;
 }
