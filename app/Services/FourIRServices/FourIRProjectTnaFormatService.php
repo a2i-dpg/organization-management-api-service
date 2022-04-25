@@ -133,31 +133,31 @@ class FourIRProjectTnaFormatService
     public function store(array $data): FourIRProjectTnaFormat
     {
 
-        $FourIRProjectTnaFormat = new FourIRProjectTnaFormat();
-        $FourIRProjectTnaFormat->fill($data);
-        $FourIRProjectTnaFormat->save();
-        return $FourIRProjectTnaFormat;
+        $fourIRProjectTnaFormat = new FourIRProjectTnaFormat();
+        $fourIRProjectTnaFormat->fill($data);
+        $fourIRProjectTnaFormat->save();
+        return $fourIRProjectTnaFormat;
     }
 
     /**
-     * @param FourIRProjectTnaFormat $FourIRProjectTnaFormat
+     * @param FourIRProjectTnaFormat $fourIRProjectTnaFormat
      * @param array $data
      * @return FourIRProjectTnaFormat
      */
-    public function update(FourIRProjectTnaFormat $FourIRProjectTnaFormat, array $data): FourIRProjectTnaFormat
+    public function update(FourIRProjectTnaFormat $fourIRProjectTnaFormat, array $data): FourIRProjectTnaFormat
     {
-        $FourIRProjectTnaFormat->fill($data);
-        $FourIRProjectTnaFormat->save();
-        return $FourIRProjectTnaFormat;
+        $fourIRProjectTnaFormat->fill($data);
+        $fourIRProjectTnaFormat->save();
+        return $fourIRProjectTnaFormat;
     }
 
     /**
-     * @param FourIRProjectTnaFormat $FourIRProjectTnaFormat
+     * @param FourIRProjectTnaFormat $fourIRProjectTnaFormat
      * @return bool
      */
-    public function destroy(FourIRProjectTnaFormat $FourIRProjectTnaFormat): bool
+    public function destroy(FourIRProjectTnaFormat $fourIRProjectTnaFormat): bool
     {
-        return $FourIRProjectTnaFormat->delete();
+        return $fourIRProjectTnaFormat->delete();
     }
 
     /**

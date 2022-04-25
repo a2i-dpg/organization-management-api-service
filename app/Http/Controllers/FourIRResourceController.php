@@ -82,7 +82,7 @@ class FourIRResourceController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIRResourceService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_GUIDELINE_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
 
             DB::commit();
             $response = [
@@ -91,6 +91,35 @@ class FourIRResourceController extends Controller
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
                     "message" => "Four Ir Guideline added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $fourIrResource = FourIRResource::findOrFail($id);
+        //$this->authorize('update', $fourIrProjectCs);
+        $validated = $this->fourIRResourceService->validator($request, $id)->validate();
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrResource['file_path'];
+            $data = $this->fourIRResourceService->update($fourIrResource, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Project cs updated successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
