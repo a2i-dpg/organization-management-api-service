@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRProject;
+use App\Models\FourIRCblm;
 use App\Services\FourIRServices\FourIRFileLogService;
-use App\Services\FourIRServices\FourIrProjectService;
+use App\Services\FourIRServices\FourIRCblmService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -15,22 +16,22 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRProjectController extends Controller
+class FourIRCblmController extends Controller
 {
-    public FourIrProjectService $fourIrProjectService;
+    public FourIRCblmService $fourIrCblmService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectController constructor.
+     * FourIRCblmController constructor.
      *
-     * @param FourIrProjectService $fourIrProjectService
+     * @param FourIRCblmService $fourIrCblmService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIrProjectService $fourIrProjectService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRCblmService $fourIrCblmService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIrProjectService = $fourIrProjectService;
+        $this->fourIrCblmService = $fourIrCblmService;
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
@@ -43,10 +44,10 @@ class FourIRProjectController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProject::class);
+//        $this->authorize('viewAny', FourIRCblm::class);
 
-        $filter = $this->fourIrProjectService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectService->getFourIRProjectList($filter, $this->startTime);
+        $filter = $this->fourIrCblmService->filterValidator($request)->validate();
+        $response = $this->fourIrCblmService->getFourIRCblmList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -56,10 +57,10 @@ class FourIRProjectController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProject = $this->fourIrProjectService->getOneFourIRProject($id);
-//        $this->authorize('view', $fourIrProject);
+        $fourIrCblm = $this->fourIrCblmService->getOneFourIRCblm($id);
+//        $this->authorize('view', $fourIrCblm);
         $response = [
-            "data" => $fourIrProject,
+            "data" => $fourIrCblm,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -79,12 +80,12 @@ class FourIRProjectController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIRProject::class);
-        $validated = $this->fourIrProjectService->validator($request)->validate();
+        //$this->authorize('create', FourIRCblm::class);
+        $validated = $this->fourIrCblmService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->fourIrProjectService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_INITIATION_STEP);
+            $data = $this->fourIrCblmService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_CBLM_STEP);
 
             DB::commit();
             $response = [
@@ -92,7 +93,7 @@ class FourIRProjectController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Project added successfully",
+                    "message" => "Four Ir Cblm added successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -115,14 +116,14 @@ class FourIRProjectController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProject = FourIRProject::findOrFail($id);
-        // $this->authorize('update', $fourIrProject);
-        $validated = $this->fourIrProjectService->validator($request, $id)->validate();
+        $fourIrCblm = FourIRCblm::findOrFail($id);
+        //$this->authorize('update', $fourIrCblm);
+        $validated = $this->fourIrCblmService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
-            $filePath = $fourIrProject['file_path'];
-            $data = $this->fourIrProjectService->update($fourIrProject, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_INITIATION_STEP);
+            $filePath = $fourIrCblm['file_path'];
+            $data = $this->fourIrCblmService->update($fourIrCblm, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_CBLM_STEP);
 
             DB::commit();
             $response = [
@@ -130,7 +131,7 @@ class FourIRProjectController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Project updated successfully",
+                    "message" => "Four Ir Cblm updated successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -152,14 +153,14 @@ class FourIRProjectController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProject = FourIRProject::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
-        $this->fourIrProjectService->destroy($fourIrProject);
+        $fourIrCblm = FourIRCblm::findOrFail($id);
+//        $this->authorize('delete', $fourIrCblm);
+        $this->fourIrCblmService->destroy($fourIrCblm);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project deleted successfully",
+                "message" => "Four Ir Cblm deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

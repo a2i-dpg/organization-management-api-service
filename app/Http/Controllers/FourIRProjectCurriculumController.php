@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRProject;
 use App\Models\FourIRProjectCurriculum;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRProjectCurriculumService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -16,17 +19,20 @@ use Throwable;
 class FourIRProjectCurriculumController extends Controller
 {
     public FourIRProjectCurriculumService $fourIrProjectCurriculumService;
+    public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectController constructor.
+     * FourIRProjectCurriculumController constructor.
      *
      * @param FourIRProjectCurriculumService $fourIrProjectCurriculumService
+     * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRProjectCurriculumService $fourIrProjectCurriculumService)
+    public function __construct(FourIRProjectCurriculumService $fourIrProjectCurriculumService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectCurriculumService = $fourIrProjectCurriculumService;
+        $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
     /**
@@ -70,23 +76,31 @@ class FourIRProjectCurriculumController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws Throwable
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProjectCurriculum::class);
-
+        //$this->authorize('create', FourIRProjectCurriculum::class);
         $validated = $this->fourIrProjectCurriculumService->validator($request)->validate();
-        $data = $this->fourIrProjectCurriculumService->store($validated);
+        try {
+            DB::beginTransaction();
+            $data = $this->fourIrProjectCurriculumService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_CURRICULUM_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project curriculum added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Project curriculum added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -98,24 +112,33 @@ class FourIRProjectCurriculumController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectCurriculum = FourIRProjectCurriculum::findOrFail($id);
-//        $this->authorize('update', $fourIrProjectCurriculum);
-
+        //$this->authorize('update', $fourIrProjectCurriculum);
         $validated = $this->fourIrProjectCurriculumService->validator($request, $id)->validate();
-        $data = $this->fourIrProjectCurriculumService->update($fourIrProjectCurriculum, $validated);
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrProjectCurriculum['file_path'];
+            $data = $this->fourIrProjectCurriculumService->update($fourIrProjectCurriculum, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_CURRICULUM_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project curriculum updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Project curriculum updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
