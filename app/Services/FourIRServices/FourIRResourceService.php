@@ -4,6 +4,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
+use App\Models\FourIRCreateAndApprove;
 use App\Models\FourIRProject;
 use App\Models\FourIRResource;
 use Carbon\Carbon;
@@ -105,10 +106,24 @@ class FourIRResourceService
      */
     public function store(array $data): FourIRResource
     {
-        return FourIRResource::updateOrCreate($data);
+        $fourIrResource = new FourIRResource();
+        $fourIrResource->fill($data);
+        $fourIrResource->save();
+        return $fourIrResource;
     }
 
+    /**
+     * @param FourIRResource $fourIrResource
+     * @param array $data
+     * @return FourIRResource
+     */
 
+    public function update(FourIRResource $fourIrResource, array $data): FourIRResource
+    {
+        $fourIrResource->fill($data);
+        $fourIrResource->save();
+        return $fourIrResource;
+    }
     /**
      * @param Request $request
      * @param int|null $id
@@ -119,11 +134,18 @@ class FourIRResourceService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+
+        if(!empty($request->input('four_ir_project_id'))){
+            $tnaReport = FourIRCreateAndApprove::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+            throw_if(empty($tnaReport), ValidationException::withMessages([
+                "four_ir_project_id" => "First complete Four IR  Tna Format!"
+            ]));
+        }
         $rules = [
             'four_ir_project_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_resources,id,deleted_at,NULL',
+                'exists:four_ir_projects,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -134,9 +156,7 @@ class FourIRResourceService
                 'int'
             ],
             'file_path' => [
-                Rule::requiredIf(function () use ($request) {
-                    return empty($request->input('guideline_details'));
-                }),
+                'required',
                 'nullable',
                 'string'
             ],
