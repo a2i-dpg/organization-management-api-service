@@ -52,7 +52,12 @@ class FourIRGuidelineService
      */
     public function store(array $data): FourIRGuideline
     {
-        return FourIRGuideline::updateOrCreate($data);
+        if(!empty($data['file_path'])){
+            $data['guideline_details'] =  null;
+        }else {
+            $data['file_path'] = null;
+        }
+        return FourIRGuideline::updateOrCreate(['four_ir_project_id' => $data['four_ir_project_id']], $data);
     }
 
 
@@ -64,7 +69,9 @@ class FourIRGuidelineService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]',
+            'file_path.required' => 'At least file path or details should be filled up. [50000]',
+            'guideline_details.required' => 'At least file path or details should be filled up. [50000]',
         ];
         $rules = [
             'four_ir_project_id' => [
