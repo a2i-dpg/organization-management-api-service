@@ -19,7 +19,7 @@ class FourIROccupationController extends Controller
     /**
      * @var FourIROccupationService
      */
-    public FourIROccupationService $FourIROccupationService;
+    public FourIROccupationService $fourIROccupationService;
 
     /**
      * @var Carbon
@@ -29,12 +29,12 @@ class FourIROccupationController extends Controller
     /**
      * FourIROccupationController constructor.
      *
-     * @param FourIROccupationService $FourIROccupationService
+     * @param FourIROccupationService $fourIROccupationService
      */
-    public function __construct(FourIROccupationService $FourIROccupationService)
+    public function __construct(FourIROccupationService $fourIROccupationService)
     {
         $this->startTime = Carbon::now();
-        $this->FourIROccupationService = $FourIROccupationService;
+        $this->fourIROccupationService = $fourIROccupationService;
     }
 
     /**
@@ -48,8 +48,8 @@ class FourIROccupationController extends Controller
     {
 //        $this->authorize('viewAny', FourIRProject::class);
 
-        $filter = $this->FourIROccupationService->filterValidator($request)->validate();
-        $response = $this->FourIROccupationService->getFourIROccupationList($filter, $this->startTime);
+        $filter = $this->fourIROccupationService->filterValidator($request)->validate();
+        $response = $this->fourIROccupationService->getFourIROccupationList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -59,7 +59,7 @@ class FourIROccupationController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrOccupation = $this->FourIROccupationService->getOneFourIROccupation($id);
+        $fourIrOccupation = $this->fourIROccupationService->getOneFourIROccupation($id);
 //        $this->authorize('view', $fourIrOccupation);
         $response = [
             "data" => $fourIrOccupation,
@@ -83,8 +83,8 @@ class FourIROccupationController extends Controller
     {
 
 
-        $validated = $this->FourIROccupationService->validator($request)->validate();
-        $data = $this->FourIROccupationService->store($validated);
+        $validated = $this->fourIROccupationService->validator($request)->validate();
+        $data = $this->fourIROccupationService->store($validated);
 
         $response = [
             'data' => $data,
@@ -112,8 +112,8 @@ class FourIROccupationController extends Controller
         $fourIrOccupation = FourIROccupation::findOrFail($id);
 //        $this->authorize('update', $fourIrOccupation);
 
-        $validated = $this->FourIROccupationService->validator($request, $id)->validate();
-        $data = $this->FourIROccupationService->update($fourIrOccupation, $validated);
+        $validated = $this->fourIROccupationService->validator($request, $id)->validate();
+        $data = $this->fourIROccupationService->update($fourIrOccupation, $validated);
 
         $response = [
             'data' => $data,
@@ -140,7 +140,7 @@ class FourIROccupationController extends Controller
     {
         $fourIrOccupation = FourIROccupation::findOrFail($id);
 //        $this->authorize('delete', $fourIrOccupation);
-        $this->FourIROccupationService->destroy($fourIrOccupation);
+        $this->fourIROccupationService->destroy($fourIrOccupation);
         $response = [
             '_response_status' => [
                 "success" => true,
