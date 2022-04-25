@@ -190,6 +190,10 @@ class FourIRProjectTnaFormatService
                 'required',
                 'string'
             ],
+             'venue' => [
+               'required',
+               'string'
+                ],
             'start_date' => [
                 'required',
                 'date_format:Y-m-d'
