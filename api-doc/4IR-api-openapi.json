@@ -68,6 +68,50 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Occupation"
+                ],
+                "summary": "Insert a 4IR FourIR Occupation",
+                "description": "API endpoint to Insert a FourIR Occupation. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_resource"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/4ir/occupations/{fourIrOccupationId}": {
@@ -326,6 +370,50 @@
                                 }
                             }
 
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Projects"
+                ],
+                "summary": "Insert a 4IR FourIR Projects",
+                "description": "API endpoint to Insert a FourIR Projects. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_project"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "meme",
+                                        "title_en": "welcome",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-04-19T07:19:20.000000Z",
+                                        "updated_at": "2022-04-19T08:45:15.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir updated updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1609,6 +1697,89 @@
                 },
                 "required": [
                     "name","address","email","mobile_number","designation","accessor_type","accessor_id","four_ir_project_id"
+                ]
+            },
+            "4ir_resource": {
+                "type": "object",
+                "properties": {
+                    "four_ir_project_id": {
+                        "type": "integer"
+                    },
+                    "file_path": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_project_id"
+                ]
+            },
+            "4ir_project": {
+                "type": "object",
+                "properties": {
+                    "project_name": {
+                        "type": "string"
+                    },
+                    "project_name_en": {
+                        "type": "string"
+                    },
+                    "organization_name": {
+                        "type": "string"
+                    },
+                    "organization_name_en": {
+                        "type": "string"
+                    },
+                    "four_ir_occupation_id": {
+                        "type": "integer"
+                    },
+                    "details": {
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "type": "string"
+                    },
+                    "budget": {
+                        "type": "integer"
+                    },
+                    "project_code": {
+                        "type": "string"
+                    },
+                    "file_path": {
+                        "type": "string"
+                    },
+                    "tasks": {
+                        "type": "string"
+                    },
+                    "completion_step": {
+                        "type": "string"
+                    },
+                    "form_step": {
+                        "type": "string"
+                    },
+                    "accessor_type": {
+                        "type": "string"
+                    },
+                    "accessor_id": {
+                        "type": "integer"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "project_name","organization_name","four_ir_occupation_id","details"
                 ]
             },
             "4ir_tna_format": {

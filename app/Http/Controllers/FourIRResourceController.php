@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRProject;
 use App\Models\FourIRResource;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRResourceService;
@@ -17,21 +18,32 @@ use Throwable;
 
 class FourIRResourceController extends Controller
 {
-    public FourIRResourceService $fourIRGuidelineService;
+
+    public FourIRResourceService $fourIRResourceService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRResourceController constructor.
      *
-     * @param FourIRResourceService $fourIRGuidelineService
+     * @param FourIRResourceService $fourIRResourceService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRResourceService $fourIRGuidelineService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRResourceService $fourIRResourceService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIRGuidelineService = $fourIRGuidelineService;
+        $this->fourIRResourceService = $fourIRResourceService;
         $this->fourIRFileLogService = $fourIRFileLogService;
+    }
+
+
+    public function getList(Request $request): JsonResponse
+    {
+//        $this->authorize('viewAny', FourIRProject::class);
+
+        $filter = $this->fourIRResourceService->filterValidator($request)->validate();
+        $response = $this->fourIRResourceService->getFourIRResourceList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -41,7 +53,7 @@ class FourIRResourceController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $guideline = $this->fourIRGuidelineService->getOneGuideline($id);
+        $guideline = $this->fourIRResourceService->getOneResource($id);
         // $this->authorize('view', $rank);
         $response = [
             "data" => $guideline,
@@ -66,11 +78,11 @@ class FourIRResourceController extends Controller
     function store(Request $request): JsonResponse
     {
         //$this->authorize('create', FourIRGuideline::class);
-        $validated = $this->fourIRGuidelineService->validator($request)->validate();
+        $validated = $this->fourIRResourceService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->fourIRGuidelineService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRResource::FILE_LOG_PROJECT_GUIDELINE_STEP);
+            $data = $this->fourIRResourceService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_GUIDELINE_STEP);
 
             DB::commit();
             $response = [
@@ -89,4 +101,6 @@ class FourIRResourceController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
+
+
 }

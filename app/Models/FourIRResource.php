@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class FourIRGuideline extends BaseModel
+class FourIRResource extends BaseModel
 {
     use SoftDeletes, CreatedUpdatedBy;
 
