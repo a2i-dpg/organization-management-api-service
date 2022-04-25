@@ -138,7 +138,7 @@ class FourIRResourceService
         if(!empty($request->input('four_ir_project_id'))){
             $tnaReport = FourIRCreateAndApprove::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR  Tna Format!"
+                "four_ir_project_id" => "First complete Four IR  Create And Approve !"
             ]));
         }
         $rules = [
