@@ -1389,7 +1389,7 @@
                         "$ref": "#/components/parameters/fourIrProjectCurriculumId"
                     }
                 ],
-                "summary": "4IR Project Curriculum",
+                "summary": "Get a 4IR Project Curriculum",
                 "responses": {
                     "200": {
                         "description": "Get a Project Curriculum",
@@ -1399,11 +1399,6 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_project_id": 1,
-                                        "workshop_name": "tttttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "venue": "",
                                         "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
@@ -1450,17 +1445,17 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "data": {
-                                        "id": 2,
-                                        "title": "meme",
-                                        "title_en": "welcome",
+                                    "data": [
+                                        {
+                                        "four_ir_project_id": 1,
+                                        "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
-                                        "updated_by": null,
-                                        "created_at": "2022-04-19T07:19:20.000000Z",
-                                        "updated_at": "2022-04-19T08:45:15.000000Z",
-                                        "deleted_at": null
-                                    },
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    }
+                                    ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
