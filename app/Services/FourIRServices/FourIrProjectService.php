@@ -249,9 +249,9 @@ class FourIrProjectService
                 'numeric'
             ],
             'file_path' => [
-                'required',
+                'nullable',
                 'string',
-                'max:500',
+                'max:300',
             ],
             'tasks' => [
                 'required',
