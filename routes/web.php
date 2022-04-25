@@ -185,6 +185,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
             $customRouter()->resourceRoute('/tna-formats', 'FourIRProjectTnaFormatController')->render();
             $customRouter()->resourceRoute('/cblms', 'FourIRCblmController')->render();
             $customRouter()->resourceRoute('/resources', 'FourIRResourceController')->render();
+            $customRouter()->resourceRoute('/tots', 'FourIRProjectTotController')->render();
         });
 
 
