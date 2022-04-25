@@ -111,7 +111,7 @@ class FourIRProjectCurriculumService
      * @param array $data
      * @return FourIRProjectCurriculum
      */
-    public function store(array $data): FourIRProjectCurriculum
+    public function storeOrUpdate(array $data): FourIRProjectCurriculum
     {
         return FourIRProjectCurriculum::updateOrCreate(['four_ir_project_id' => $data['four_ir_project_id']], $data);
     }

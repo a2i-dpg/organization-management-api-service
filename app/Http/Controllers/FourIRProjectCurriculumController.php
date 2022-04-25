@@ -68,7 +68,7 @@ class FourIRProjectCurriculumController extends Controller
         $validated = $this->fourIrProjectCurriculumService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->fourIrProjectCurriculumService->store($validated);
+            $data = $this->fourIrProjectCurriculumService->storeOrUpdate($validated);
             $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_CURRICULUM_STEP);
 
             DB::commit();

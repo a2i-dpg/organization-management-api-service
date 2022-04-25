@@ -55,4 +55,27 @@ class FourIRFileLogService
         ]);
         $fourIrFileLog->save();
     }
+
+    /**
+     * If you want to store file only when a new file path is given for a module of a project
+     *
+     * @param array $data
+     * @param string $step
+     * @return void
+     */
+    public function storeOrUpdateFileLog(array $data, string $step)
+    {
+        FourIRFileLog::updateOrCreate(
+            [
+                'four_ir_project_id' => $data['four_ir_project_id'],
+                'file_path' => $data['file_path'],
+                'module_type' => $step
+            ],
+            [
+                'accessor_type' => $data['accessor_type'],
+                'accessor_id' => $data['accessor_id'],
+                'row_status' => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
+            ]
+        );
+    }
 }
