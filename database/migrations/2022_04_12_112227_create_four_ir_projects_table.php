@@ -24,7 +24,7 @@ class CreateFourIRProjectsTable extends Migration
             $table->date('start_date');
             $table->decimal('budget')->default(0);
             $table->string('project_code',20);
-            $table->string('file_path');
+            $table->string('file_path', 300)->nullable();
             $table->json('tasks')->comment('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved');
             $table->unsignedInteger('completion_step');
             $table->unsignedInteger('form_step');

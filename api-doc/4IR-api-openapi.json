@@ -1798,6 +1798,9 @@
                     "skill_required": {
                         "type": "string"
                     },
+                    "venue": {
+                        "type": "string"
+                    },
                     "start_date": {
                         "type": "string",
                         "format": "date"
@@ -1825,7 +1828,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","workshop_name","skill_required","start_date","end_date","file_path"
+                    "four_ir_project_id","workshop_name","skill_required","start_date","end_date","file_path","venue"
                 ]
             },
             "4ir_curriculum": {

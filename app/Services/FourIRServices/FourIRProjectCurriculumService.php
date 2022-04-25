@@ -6,7 +6,6 @@ namespace App\Services\FourIRServices;
 use App\Models\BaseModel;
 use App\Models\FourIRProjectCs;
 use App\Models\FourIRProjectCurriculum;
-use App\Models\FourIRProjectTnaFormat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -114,31 +113,7 @@ class FourIRProjectCurriculumService
      */
     public function store(array $data): FourIRProjectCurriculum
     {
-        $fourIrProjectCurriculum = new FourIRProjectCurriculum();
-        $fourIrProjectCurriculum->fill($data);
-        $fourIrProjectCurriculum->save();
-        return $fourIrProjectCurriculum;
-    }
-
-    /**
-     * @param FourIRProjectCurriculum $fourIrProjectCurriculum
-     * @param array $data
-     * @return FourIRProjectCurriculum
-     */
-    public function update(FourIRProjectCurriculum $fourIrProjectCurriculum, array $data): FourIRProjectCurriculum
-    {
-        $fourIrProjectCurriculum->fill($data);
-        $fourIrProjectCurriculum->save();
-        return $fourIrProjectCurriculum;
-    }
-
-    /**
-     * @param FourIRProjectCurriculum $fourIrProjectCurriculum
-     * @return bool
-     */
-    public function destroy(FourIRProjectCurriculum $fourIrProjectCurriculum): bool
-    {
-        return $fourIrProjectCurriculum->delete();
+        return FourIRProjectCurriculum::updateOrCreate(['four_ir_project_id' => $data['four_ir_project_id']], $data);
     }
 
     /**
