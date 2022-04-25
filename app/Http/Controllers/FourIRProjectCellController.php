@@ -15,18 +15,18 @@ use Throwable;
 
 class FourIRProjectCellController extends Controller
 {
-    public FourIRProjectCellService $FourIRProjectCellService;
+    public FourIRProjectCellService $fourIRProjectCellService;
     private Carbon $startTime;
 
     /**
      * FourIRProjectCellController constructor.
      *
-     * @param FourIRProjectCellService $FourIRProjectCellService
+     * @param FourIRProjectCellService $fourIRProjectCellService
      */
-    public function __construct(FourIRProjectCellService $FourIRProjectCellService)
+    public function __construct(FourIRProjectCellService $fourIRProjectCellService)
     {
         $this->startTime = Carbon::now();
-        $this->FourIRProjectCellService = $FourIRProjectCellService;
+        $this->fourIRProjectCellService = $fourIRProjectCellService;
     }
 
     /**
@@ -40,8 +40,8 @@ class FourIRProjectCellController extends Controller
     {
 //        $this->authorize('viewAny', FourIRProjectCell::class);
 
-        $filter = $this->FourIRProjectCellService->filterValidator($request)->validate();
-        $response = $this->FourIRProjectCellService->getFourIRProjectCellList($filter, $this->startTime);
+        $filter = $this->fourIRProjectCellService->filterValidator($request)->validate();
+        $response = $this->fourIRProjectCellService->getFourIRProjectCellList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -51,7 +51,7 @@ class FourIRProjectCellController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProjectCell = $this->FourIRProjectCellService->getOneFourIRProjectCell($id);
+        $fourIrProjectCell = $this->fourIRProjectCellService->getOneFourIRProjectCell($id);
 //        $this->authorize('view', $fourIrProject);
         $response = [
             "data" => $fourIrProjectCell,
@@ -75,8 +75,8 @@ class FourIRProjectCellController extends Controller
     {
 //        $this->authorize('create', FourIRProjectCell::class);
 
-        $validated = $this->FourIRProjectCellService->validator($request)->validate();
-        $data = $this->FourIRProjectCellService->store($validated);
+        $validated = $this->fourIRProjectCellService->validator($request)->validate();
+        $data = $this->fourIRProjectCellService->store($validated);
 
         $response = [
             'data' => $data,
@@ -104,8 +104,8 @@ class FourIRProjectCellController extends Controller
         $fourIrProjectCell = FourIRProjectCell::findOrFail($id);
 //        $this->authorize('update', $fourIrProject);
 
-        $validated = $this->FourIRProjectCellService->validator($request, $id)->validate();
-        $data = $this->FourIRProjectCellService->update($fourIrProjectCell, $validated);
+        $validated = $this->fourIRProjectCellService->validator($request, $id)->validate();
+        $data = $this->fourIRProjectCellService->update($fourIrProjectCell, $validated);
 
         $response = [
             'data' => $data,
@@ -132,7 +132,7 @@ class FourIRProjectCellController extends Controller
     {
         $fourIrProjectCell = FourIRProjectCell::findOrFail($id);
 //        $this->authorize('delete', $fourIrProject);
-        $this->FourIRProjectCellService->destroy($fourIrProjectCell);
+        $this->fourIRProjectCellService->destroy($fourIrProjectCell);
         $response = [
             '_response_status' => [
                 "success" => true,

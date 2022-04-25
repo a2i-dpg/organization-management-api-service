@@ -18,20 +18,20 @@ use Throwable;
 
 class FourIRProjectTnaFormatController extends Controller
 {
-    public FourIRProjectTnaFormatService $FourIRProjectTnaFormatService;
+    public FourIRProjectTnaFormatService $fourIRProjectTnaFormatService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRProjectTnaFormatController constructor.
      *
-     * @param FourIRProjectTnaFormatService $FourIRProjectTnaFormatService
+     * @param FourIRProjectTnaFormatService $fourIRProjectTnaFormatService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRProjectTnaFormatService $FourIRProjectTnaFormatService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRProjectTnaFormatService $fourIRProjectTnaFormatService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
-        $this->FourIRProjectTnaFormatService = $FourIRProjectTnaFormatService;
+        $this->fourIRProjectTnaFormatService = $fourIRProjectTnaFormatService;
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
@@ -46,8 +46,8 @@ class FourIRProjectTnaFormatController extends Controller
     {
 //        $this->authorize('viewAny', FourIRProjectCell::class);
 
-        $filter = $this->FourIRProjectTnaFormatService->filterValidator($request)->validate();
-        $response = $this->FourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
+        $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
+        $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -57,7 +57,7 @@ class FourIRProjectTnaFormatController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProjectCell = $this->FourIRProjectTnaFormatService->getOneFourIrProjectTnaFormat($id);
+        $fourIrProjectCell = $this->fourIRProjectTnaFormatService->getOneFourIrProjectTnaFormat($id);
 //        $this->authorize('view', $fourIrProject);
         $response = [
             "data" => $fourIrProjectCell,
@@ -81,10 +81,10 @@ class FourIRProjectTnaFormatController extends Controller
     function store(Request $request): JsonResponse
     {
         //$this->authorize('create', FourIRProjectCell::class);
-        $validated = $this->FourIRProjectTnaFormatService->validator($request)->validate();
+        $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->FourIRProjectTnaFormatService->store($validated);
+            $data = $this->fourIRProjectTnaFormatService->store($validated);
             $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_TNA_STEP);
 
             DB::commit();
@@ -116,11 +116,11 @@ class FourIRProjectTnaFormatController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectTnaFormat = FourIRProjectTnaFormat::findOrFail($id);
-        $validated = $this->FourIRProjectTnaFormatService->validator($request, $id)->validate();
+        $validated = $this->fourIRProjectTnaFormatService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
             $filePath = $fourIrProjectTnaFormat['file_path'];
-            $data = $this->FourIRProjectTnaFormatService->update($fourIrProjectTnaFormat, $validated);
+            $data = $this->fourIRProjectTnaFormatService->update($fourIrProjectTnaFormat, $validated);
             $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_TNA_STEP);
 
             DB::commit();
@@ -153,7 +153,7 @@ class FourIRProjectTnaFormatController extends Controller
     {
         $fourIrProjectCell = FourIRProjectTnaFormat::findOrFail($id);
 //        $this->authorize('delete', $fourIrProject);
-        $this->FourIRProjectTnaFormatService->destroy($fourIrProjectCell);
+        $this->fourIRProjectTnaFormatService->destroy($fourIrProjectCell);
         $response = [
             '_response_status' => [
                 "success" => true,
