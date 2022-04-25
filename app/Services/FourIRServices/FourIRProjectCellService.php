@@ -18,10 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 /**
- * Class RankService
+ * Class FourIRProjectCellService
  * @package App\Services
  */
-class FourIrProjectCellService
+class FourIRProjectCellService
 {
     /**
      * @param array $request
@@ -163,7 +163,6 @@ class FourIrProjectCellService
             'four_ir_project_id'=>[
                 'required',
                 'int',
-                Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
                 function ($attr, $value, $failed) use ($request) {
                     $mentoringTeam = FourIRProjectTeamMember::where('four_ir_project_id', $request->input('four_ir_project_id'))
                         ->where('team_type', FourIRProjectTeamMember::MENTORING_TEAM_TYPE)
@@ -171,7 +170,8 @@ class FourIrProjectCellService
                         if(empty($mentoringTeam)){
                             $failed('Complete Mentoring step first.[24000]');
                         }
-                }
+                        },
+                'exists:four_ir_projects,id,deleted_at,NULL',
             ],
             'name' => [
                 'required',
