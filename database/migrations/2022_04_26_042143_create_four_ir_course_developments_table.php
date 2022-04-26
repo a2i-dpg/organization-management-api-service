@@ -17,8 +17,10 @@ class CreateFourIRCourseDevelopmentsTable extends Migration
             $table->id();
             $table->unsignedInteger('four_ir_project_id');
             $table->string('accessor_type', 100);
-            $table->text('training_center_details')->nullable();
-            $table->text('training_details')->nullable();
+            $table->text('training_center_details');
+            $table->text('training_center_details_en')->nullable();
+            $table->text('training_details');
+            $table->text('training_details_en')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->date('training_launch_date');
