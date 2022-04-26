@@ -44,6 +44,8 @@ class FourIrProjectTeamMemberService
             [
                 'four_ir_project_team_members.id',
                 'four_ir_project_team_members.four_ir_project_id',
+                'four_ir_project_team_members.name',
+                'four_ir_project_team_members.name_en',
                 'four_ir_project_team_members.email',
                 'four_ir_project_team_members.phone_number',
                 'four_ir_project_team_members.role',
@@ -117,6 +119,8 @@ class FourIrProjectTeamMemberService
             [
                 'four_ir_project_team_members.id',
                 'four_ir_project_team_members.four_ir_project_id',
+                'four_ir_project_team_members.name',
+                'four_ir_project_team_members.name_en',
                 'four_ir_project_team_members.email',
                 'four_ir_project_team_members.phone_number',
                 'four_ir_project_team_members.role',
@@ -211,6 +215,14 @@ class FourIrProjectTeamMemberService
                         }
                     }
                 }
+            ],
+            'name' => [
+                'required',
+                'string'
+            ],
+            'name_en' => [
+                'nullable',
+                'string'
             ],
             'email' => [
                 'required',

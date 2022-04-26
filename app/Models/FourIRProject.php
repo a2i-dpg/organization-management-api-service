@@ -59,4 +59,5 @@ class FourIRProject extends BaseModel
     public const FILE_LOG_CBLM_STEP = 6;
     public const FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP = 7;
     public const FILE_LOG_TOT_STEP = 8;
+    public const FILE_LOG_ASSESSMENT_STEP = 9;
 }

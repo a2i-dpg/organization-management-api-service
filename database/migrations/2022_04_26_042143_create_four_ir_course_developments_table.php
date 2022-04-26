@@ -17,6 +17,7 @@ class CreateFourIRCourseDevelopmentsTable extends Migration
             $table->id();
             $table->unsignedInteger('four_ir_project_id');
             $table->string('accessor_type', 100);
+            $table->unsignedInteger('accessor_id');
             $table->text('training_center_details');
             $table->text('training_center_details_en')->nullable();
             $table->text('training_details');
@@ -24,7 +25,6 @@ class CreateFourIRCourseDevelopmentsTable extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->date('training_launch_date');
-            $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
