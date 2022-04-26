@@ -5,7 +5,6 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRCreateAndApprove;
-use App\Models\FourIRProject;
 use App\Models\FourIRResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +12,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 
 /**
@@ -25,7 +26,6 @@ class FourIRResourceService
 
     public function getFourIRResourceList(array $request, Carbon $startTime): array
     {
-
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -43,7 +43,7 @@ class FourIRResourceService
                 'four_ir_resources.created_at',
                 'four_ir_resources.updated_at',
             ]
-        );
+        )->acl();
 
         $fourIrResourceBuilder->orderBy('four_ir_resources.id', $order);
 
@@ -74,6 +74,7 @@ class FourIRResourceService
 
         return $response;
     }
+
     /**
      * @param int $id
      * @return FourIRResource
@@ -95,7 +96,6 @@ class FourIRResourceService
         );
 
         $fourIrResourceBuilder->where('four_ir_resources.id', '=', $id);
-
         return $fourIrResourceBuilder->firstOrFail();
     }
 
@@ -124,10 +124,12 @@ class FourIRResourceService
         $fourIrResource->save();
         return $fourIrResource;
     }
+
     /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
+     * @throws Throwable
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
@@ -135,7 +137,7 @@ class FourIRResourceService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($request->input('four_ir_project_id'))){
+        if (!empty($request->input('four_ir_project_id'))) {
             $createAndApprove = FourIRCreateAndApprove::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
             throw_if(empty($createAndApprove), ValidationException::withMessages([
                 "four_ir_project_id" => "First complete Four IR  Create And Approve !"
@@ -170,6 +172,11 @@ class FourIRResourceService
         ];
         return Validator::make($request->all(), $rules, $customMessage);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
@@ -199,4 +206,12 @@ class FourIRResourceService
         ], $customMessage);
     }
 
+    /**
+     * @param FourIRResource $fourIRResource
+     * @return bool
+     */
+    public function destroy(FourIRResource $fourIRResource): bool
+    {
+        return $fourIRResource->delete();
+    }
 }
