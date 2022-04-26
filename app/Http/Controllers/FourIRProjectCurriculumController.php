@@ -36,22 +36,6 @@ class FourIRProjectCurriculumController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function getList(Request $request): JsonResponse
-    {
-//        $this->authorize('viewAny', FourIRProjectCurriculum::class);
-
-        $filter = $this->fourIrProjectCurriculumService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectCurriculumService->getFourIRProjectCurriculumList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-    /**
      * @param int $id
      * @return JsonResponse
      */
@@ -84,7 +68,7 @@ class FourIRProjectCurriculumController extends Controller
         $validated = $this->fourIrProjectCurriculumService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->fourIrProjectCurriculumService->store($validated);
+            $data = $this->fourIrProjectCurriculumService->storeOrUpdate($validated);
             $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_CURRICULUM_STEP);
 
             DB::commit();
