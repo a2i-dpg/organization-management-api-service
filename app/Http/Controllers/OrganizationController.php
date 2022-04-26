@@ -763,4 +763,27 @@ class OrganizationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function organizationDashboardStatistics(Request $request): JsonResponse
+    {
+        $organizationId = $request->input('organization_id');
+        $organization = Organization::findOrFail($organizationId);
+
+        $dashboardStatistics = $this->organizationService->getOrganizationDashboardStatistics($organization);
+
+        $response = [
+            "data" => $dashboardStatistics,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+
 }
