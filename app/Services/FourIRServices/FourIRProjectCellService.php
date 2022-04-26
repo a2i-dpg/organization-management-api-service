@@ -61,7 +61,7 @@ class FourIRProjectCellService
             $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
         }
         if (!empty($name)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_project_id', 'like', '%' . $name . '%');
+            $fourIrProjectCellBuilder->where('four_ir_project_cells.name', 'like', '%' . $name . '%');
         }
         if (is_numeric($rowStatus)) {
             $fourIrProjectCellBuilder->where('four_ir_project_cells.row_status', $rowStatus);
