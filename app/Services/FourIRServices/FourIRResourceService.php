@@ -26,6 +26,7 @@ class FourIRResourceService
 
     public function getFourIRResourceList(array $request, Carbon $startTime): array
     {
+        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -47,6 +48,9 @@ class FourIRResourceService
 
         $fourIrResourceBuilder->orderBy('four_ir_resources.id', $order);
 
+        if (is_numeric($fourIrProjectId)) {
+            $fourIrResourceBuilder->where('four_ir_resources.four_ir_project_id', $fourIrProjectId);
+        }
         if (is_numeric($rowStatus)) {
             $fourIrResourceBuilder->where('four_ir_resources.row_status', $rowStatus);
         }

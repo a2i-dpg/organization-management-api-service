@@ -1611,7 +1611,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCurriculumId"
+                        "$ref": "#/components/parameters/fourIrResourceId"
                     }
                 ],
                 "summary": "Get a 4IR Resource Management",
@@ -1701,7 +1701,7 @@
                 "description": "API endpoint to delete a Resource Management. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCurriculumId"
+                        "$ref": "#/components/parameters/fourIrResourceId"
                     }
                 ],
                 "responses": {
@@ -1907,28 +1907,6 @@
                     "name","address","email","mobile_number","designation","four_ir_project_id"
                 ]
             },
-            "4ir_resource": {
-                "type": "object",
-                "properties": {
-                    "four_ir_project_id": {
-                        "type": "integer"
-                    },
-                    "file_path": {
-                        "type": "string"
-                    },
-                    "row_status": {
-                        "type": "integer",
-                        "enum": [
-                            1,
-                            2
-                        ],
-                        "description": "Required when updating. 1=>Active 2=>Inactive"
-                    }
-                },
-                "required": [
-                    "four_ir_project_id"
-                ]
-            },
             "4ir_projects": {
                 "type": "object",
                 "properties": {
@@ -2081,6 +2059,15 @@
             },
             "fourIrProjectTnaFormatId": {
                 "name": "fourIrProjectTnaFormatId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrResourceId": {
+                "name": "fourIrResourceId",
                 "in": "path",
                 "required": true,
                 "schema": {
