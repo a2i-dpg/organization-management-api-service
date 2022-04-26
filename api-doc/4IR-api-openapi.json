@@ -1944,12 +1944,6 @@
                             "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
 
                     },
-                    "completion_step": {
-                        "type": "string"
-                    },
-                    "form_step": {
-                        "type": "string"
-                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -1960,7 +1954,7 @@
                     }
                 },
                 "required": [
-                    "project_name","organization_name","four_ir_occupation_id","start_date","tasks","completion_step","form_step"
+                    "project_name","organization_name","four_ir_occupation_id","start_date","tasks"
                 ]
             },
             "4ir_tna_format": {
