@@ -31,6 +31,7 @@ class FourIRProjectCellService
     public function getFourIrProjectCellList(array $request, Carbon $startTime): array
     {
         $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $name = $request['name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -58,6 +59,9 @@ class FourIRProjectCellService
 
         if (!empty($fourIrProjectId)) {
             $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
+        }
+        if (!empty($name)) {
+            $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_project_id', 'like', '%' . $name . '%');
         }
         if (is_numeric($rowStatus)) {
             $fourIrProjectCellBuilder->where('four_ir_project_cells.row_status', $rowStatus);
@@ -236,6 +240,7 @@ class FourIRProjectCellService
 
         return Validator::make($request->all(), [
             'four_ir_project_id' => 'required|int',
+            'name' => 'nullable|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
