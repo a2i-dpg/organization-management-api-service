@@ -38,7 +38,7 @@
                 "tags": [
                     "FourIR Occupation"
                 ],
-                "summary": "Get all 4IR Occupation Service ",
+                "summary": "Get all 4IR Occupation",
                 "responses": {
                     "200": {
                         "description": "Get all occupations",
@@ -73,7 +73,7 @@
                 "tags": [
                     "FourIR Occupation"
                 ],
-                "summary": "Insert a 4IR FourIR Occupation",
+                "summary": "Insert a FourIR Occupation",
                 "description": "API endpoint to Insert a FourIR Occupation. A successful request response will show 200 HTTP status code",
                 "requestBody": {
                     "content": {
@@ -124,7 +124,7 @@
                         "$ref": "#/components/parameters/fourIrOccupationId"
                     }
                 ],
-                "summary": "4IR Occupation Service ",
+                "summary": "Get a 4IR Occupation",
                 "responses": {
                     "200": {
                         "description": "Get a single occupations",
@@ -331,7 +331,7 @@
                 "tags": [
                     "FourIR Projects"
                 ],
-                "summary": "Get all 4IR projects Service ",
+                "summary": "Get all 4IR projects",
                 "responses": {
                     "200": {
                         "description": "Get all projects",
@@ -409,7 +409,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Projects updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -429,7 +429,7 @@
                         "$ref": "#/components/parameters/fourIrProjectsId"
                     }
                 ],
-                "summary": "4IR Projects Service ",
+                "summary": "4IR Projects",
                 "responses": {
                     "200": {
                         "description": "Get all Projects",
@@ -512,7 +512,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir project updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -659,7 +659,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Project Cells updated  successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -753,7 +753,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Project Cell updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -900,7 +900,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Team Members updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1137,7 +1137,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Tna Format updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1157,7 +1157,7 @@
                         "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
                     }
                 ],
-                "summary": "4IR Project Tna Format",
+                "summary": "Get a 4IR Project Tna Format",
                 "responses": {
                     "200": {
                         "description": "Get a Project Tna Format",
@@ -1232,7 +1232,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir updated updated successfully.",
+                                        "message": "4Ir Tna Format updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1261,7 +1261,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4IR Project Cell deleted successfully.",
+                                        "message": "4IR Tna Format deleted successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1389,7 +1389,7 @@
                         "$ref": "#/components/parameters/fourIrProjectCurriculumId"
                     }
                 ],
-                "summary": "4IR Project Curriculum",
+                "summary": "Get a 4IR Project Curriculum",
                 "responses": {
                     "200": {
                         "description": "Get a Project Curriculum",
@@ -1399,11 +1399,6 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_project_id": 1,
-                                        "workshop_name": "tttttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "venue": "",
                                         "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
@@ -1450,17 +1445,17 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "data": {
-                                        "id": 2,
-                                        "title": "meme",
-                                        "title_en": "welcome",
+                                    "data": [
+                                        {
+                                        "four_ir_project_id": 1,
+                                        "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
-                                        "updated_by": null,
-                                        "created_at": "2022-04-19T07:19:20.000000Z",
-                                        "updated_at": "2022-04-19T08:45:15.000000Z",
-                                        "deleted_at": null
-                                    },
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    }
+                                    ],
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -1563,12 +1558,6 @@
             "4ir_project": {
                 "type": "object",
                 "properties": {
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
-                        "type": "integer"
-                    },
                     "project_name": {
                         "type": "string"
                     },
@@ -1613,7 +1602,7 @@
                     }
                 },
                 "required": [
-                    "accessor_id","project_name","organization_name","four_ir_occupation_id","tasks","file_path","budget","start_date"
+                    "project_name","organization_name","four_ir_occupation_id","tasks","budget","start_date"
                 ]
             },
             "4ir_team-member": {
@@ -1680,12 +1669,6 @@
                     "designation": {
                         "type": "string"
                     },
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
-                        "type": "integer"
-                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -1749,9 +1732,6 @@
                     "budget": {
                         "type": "integer"
                     },
-                    "project_code": {
-                        "type": "string"
-                    },
                     "file_path": {
                         "type": "string"
                     },
@@ -1767,12 +1747,6 @@
                     "form_step": {
                         "type": "string"
                     },
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
-                        "type": "integer"
-                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -1783,7 +1757,7 @@
                     }
                 },
                 "required": [
-                    "project_name","organization_name","four_ir_occupation_id","start_date","project_code","file_path","tasks","completion_step","form_step"
+                    "project_name","organization_name","four_ir_occupation_id","start_date","tasks","completion_step","form_step"
                 ]
             },
             "4ir_tna_format": {
@@ -1809,12 +1783,6 @@
                         "type": "string",
                         "format": "date"
                     },
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
-                        "type": "integer"
-                    },
                     "file_path": {
                         "type": "string"
                     },
@@ -1835,12 +1803,6 @@
                 "type": "object",
                 "properties": {
                     "four_ir_project_id": {
-                        "type": "integer"
-                    },
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
                         "type": "integer"
                     },
                     "file_path": {
