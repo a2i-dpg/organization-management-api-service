@@ -33,7 +33,7 @@
         }
     ],
     "paths": {
-        "/4ir/occupations": {
+        "/4ir-occupations": {
             "get": {
                 "tags": [
                     "FourIR Occupation"
@@ -114,7 +114,7 @@
                 }
             }
         },
-        "/4ir/occupations/{fourIrOccupationId}": {
+        "/4ir-occupations/{fourIrOccupationId}": {
             "get": {
                 "tags": [
                     "FourIR Occupation"
@@ -799,7 +799,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrTeamMemberName"
+                        "$ref": "#/components/parameters/four_ir_project_id"
                     }
                 ],
                 "summary": "Get all 4IR Team Members ",
@@ -1039,6 +1039,9 @@
                     "FourIR Project Tna Format"
                 ],
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_id"
+                    },
                     {
                         "$ref": "#/components/parameters/four_ir_project_format_id"
                     },
@@ -1447,14 +1450,14 @@
                                 "example": {
                                     "data": [
                                         {
-                                        "four_ir_project_id": 1,
-                                        "file_path": "gfhgf",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
-                                    }
+                                            "four_ir_project_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
                                     ],
                                     "_response_status": {
                                         "success": true,
@@ -1505,7 +1508,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectsId"
+                        "$ref": "#/components/parameters/four_ir_project_id"
                     }
                 ],
                 "summary": "Get FourIR Resource Management List",
@@ -1941,7 +1944,7 @@
                     "tasks": {
                         "type": "string",
 
-                            "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
+                        "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
 
                     },
                     "row_status": {
