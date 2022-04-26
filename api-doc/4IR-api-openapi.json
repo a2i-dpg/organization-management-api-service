@@ -1839,14 +1839,9 @@
                     "four_ir_project_id": {
                         "type": "integer"
                     },
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
-                        "type": "integer"
-                    },
                     "team_type": {
-                        "type": "integer"
+                        "type": "integer",
+                        "description": "('1=> implementing team, 2=> mentoring team')"
                     },
                     "email": {
                         "type": "string"
