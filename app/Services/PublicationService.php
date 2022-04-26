@@ -30,12 +30,11 @@ class PublicationService
         $titleEn = $request['title_en'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
+        $searchText = $request['search_text'] ?? "";
         $author = $request['author'] ?? "";
-        $authorEn = $request['author_en'] ?? "";
         $IndustryAssociationId = $request['industry_association_id'] ?? "";
         $order = $request['order'] ?? "ASC";
         $rowStatus = $request['row_status'] ?? "";
-
 
 
         /** @var Builder $publicationBuilder */
@@ -72,12 +71,21 @@ class PublicationService
         if (is_numeric($IndustryAssociationId)) {
             $publicationBuilder->where('publications.industry_association_id', $IndustryAssociationId);
         }
+
         if (!empty($author)) {
-            $publicationBuilder->where('publications.author', 'like', '%' . $author . '%');
+            $publicationBuilder->where(function ($builder) use ($author) {
+                $builder->orwhere('publications.author', 'like', '%' . $author . '%');
+                $builder->orwhere('publications.author_en', 'like', '%' . $author . '%');
+            });
         }
-        if (!empty($authorEn)) {
-            $publicationBuilder->where('publications.author_en', 'like', '%' . $authorEn . '%');
+
+        if (!empty($searchText)) {
+            $publicationBuilder->where(function ($builder) use ($searchText) {
+                $builder->orwhere('publications.title', 'like', '%' . $searchText . '%');
+                $builder->orwhere('publications.title_en', 'like', '%' . $searchText . '%');
+            });
         }
+
 
         /** @var Collection $publications */
 
@@ -254,11 +262,11 @@ class PublicationService
         }
 
         return Validator::make($request->all(), [
-            'title_en' => 'nullable|max:300|min:2',
-            'title' => 'nullable|max:600|min:2',
-            'author' => 'nullable|max:600|min:2',
-            'author_en' => 'nullable|max:600|min:2',
-            'industry_association_id'=>'nullable|integer',
+            'title_en' => 'nullable|string',
+            'title' => 'nullable|string',
+            'author' => 'nullable|string',
+            'industry_association_id' => 'nullable|integer',
+            'search_text' => 'nullable|string',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
@@ -269,7 +277,7 @@ class PublicationService
             'row_status' => [
                 "nullable",
                 "integer",
-                Rule::in(BaseModel::ROW_STATUS_ACTIVE,BaseModel::ROW_STATUS_INACTIVE),
+                Rule::in(BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE),
             ],
         ], $customMessage);
     }
