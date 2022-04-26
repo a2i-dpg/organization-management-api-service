@@ -33,7 +33,7 @@
         }
     ],
     "paths": {
-        "/4ir/occupations": {
+        "/4ir-occupations": {
             "get": {
                 "tags": [
                     "FourIR Occupation"
@@ -114,7 +114,7 @@
                 }
             }
         },
-        "/4ir/occupations/{fourIrOccupationId}": {
+        "/4ir-occupations/{fourIrOccupationId}": {
             "get": {
                 "tags": [
                     "FourIR Occupation"
@@ -558,7 +558,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellName"
+                        "$ref": "#/components/parameters/four_ir_project_id"
                     }
                 ],
                 "summary": "Get all 4IR Project Cells ",
@@ -669,14 +669,14 @@
                 }
             }
         },
-        "/project-cells/{fourIrProjectCellsId}": {
+        "/project-cells/{fourIrProjectCellId}": {
             "get": {
                 "tags": [
                     "FourIR Project Cells"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellsId"
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
                     }
                 ],
                 "summary": "4IR Project Cells",
@@ -721,7 +721,7 @@
                 "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellsId"
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
                     }
                 ],
                 "requestBody": {
@@ -770,7 +770,7 @@
                 "description": "API endpoint to delete a 4IR Project Cell. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellsId"
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
                     }
                 ],
                 "responses": {
@@ -799,7 +799,10 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrTeamMemberName"
+                        "$ref": "#/components/parameters/four_ir_project_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/name"
                     }
                 ],
                 "summary": "Get all 4IR Team Members ",
@@ -1039,6 +1042,9 @@
                     "FourIR Project Tna Format"
                 ],
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_id"
+                    },
                     {
                         "$ref": "#/components/parameters/four_ir_project_format_id"
                     },
@@ -1447,14 +1453,14 @@
                                 "example": {
                                     "data": [
                                         {
-                                        "four_ir_project_id": 1,
-                                        "file_path": "gfhgf",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
-                                    }
+                                            "four_ir_project_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
                                     ],
                                     "_response_status": {
                                         "success": true,
@@ -1505,7 +1511,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectsId"
+                        "$ref": "#/components/parameters/four_ir_project_id"
                     }
                 ],
                 "summary": "Get FourIR Resource Management List",
@@ -1836,14 +1842,9 @@
                     "four_ir_project_id": {
                         "type": "integer"
                     },
-                    "accessor_type": {
-                        "type": "string"
-                    },
-                    "accessor_id": {
-                        "type": "integer"
-                    },
                     "team_type": {
-                        "type": "integer"
+                        "type": "integer",
+                        "description": "('1=> implementing team, 2=> mentoring team')"
                     },
                     "email": {
                         "type": "string"
@@ -1941,7 +1942,7 @@
                     "tasks": {
                         "type": "string",
 
-                            "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
+                        "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
 
                     },
                     "row_status": {
@@ -2105,8 +2106,8 @@
                     "example": "dhaka"
                 }
             },
-            "fourIrProjectCellsId": {
-                "name": "fourIrProjectCellsId",
+            "fourIrProjectCellId": {
+                "name": "fourIrProjectCellId",
                 "in": "path",
                 "required": true,
                 "schema": {
@@ -2159,8 +2160,26 @@
                     "example": "1"
                 }
             },
+            "four_ir_project_id_op": {
+                "name": "four_ir_project_id",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
             "four_ir_project_id": {
                 "name": "four_ir_project_id",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "name": {
+                "name": "name",
                 "in": "query",
                 "required": false,
                 "schema": {
