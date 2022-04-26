@@ -66,7 +66,6 @@ class FourIRCourseDevelopmentController extends Controller
     function store(Request $request): JsonResponse
     {
         $validated = $this->fourIRCourseDevelopmentService->validator($request)->validate();
-
         $data = $this->fourIRCourseDevelopmentService->store($validated);
 
         $response = [
@@ -116,13 +115,13 @@ class FourIRCourseDevelopmentController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProjectTot = FourIRProjectTot::findOrFail($id);
-        $this->fourIRTotProjectService->destroy($fourIrProjectTot);
+        $fourIrCourseDevelopment = FourIRCourseDevelopment::findOrFail($id);
+        $this->fourIRCourseDevelopmentService->destroy($fourIrCourseDevelopment);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project TOT deleted successfully",
+                "message" => "Four Ir Course Development deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

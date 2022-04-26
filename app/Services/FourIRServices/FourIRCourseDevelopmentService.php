@@ -114,14 +114,12 @@ class FourIRCourseDevelopmentService
         return $fourIrCourseDevelopmentBuilder->firstOrFail();
     }
 
-    /**
-     * @param array $data
-     * @return FourIRCourseDevelopment
-     */
+
     public function store(array $data): FourIRCourseDevelopment
     {
-        $fourIRCourseDevelopment = app(FourIRCourseDevelopment::class);
+        $fourIRCourseDevelopment = app()->make(FourIRCourseDevelopment::class);
         $fourIRCourseDevelopment->fill($data);
+        $fourIRCourseDevelopment->save();
         return $fourIRCourseDevelopment;
 
     }
@@ -134,7 +132,17 @@ class FourIRCourseDevelopmentService
     public function update(FourIRCourseDevelopment $fourIRCourseDevelopment, array $data): FourIRCourseDevelopment
     {
         $fourIRCourseDevelopment->fill($data);
+        $fourIRCourseDevelopment->save();
         return $fourIRCourseDevelopment;
+    }
+
+    /**
+     * @param FourIRCourseDevelopment $fourIRCourseDevelopment
+     * @return bool
+     */
+    public function destroy(FourIRCourseDevelopment $fourIRCourseDevelopment): bool
+    {
+        return $fourIRCourseDevelopment->delete();
     }
 
     /**
@@ -152,7 +160,7 @@ class FourIRCourseDevelopmentService
         if (!empty($request->input('four_ir_project_id'))) {
             $enrollmentApproval = FourIREnrollmentApproval::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
             throw_if(empty($enrollmentApproval), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Project Resource Management!"
+                "four_ir_project_id" => "First complete Four IR Enrollment Approval"
             ]));
         }
         $rules = [
@@ -187,15 +195,15 @@ class FourIRCourseDevelopmentService
             ],
             'start_date' => [
                 'required',
-                'date',
+                'date-format:Y-m-d',
             ],
             'end_date' => [
                 'required',
-                'date',
+                'date-format:Y-m-d',
             ],
             'training_launch_date' => [
                 'required',
-                'date',
+                'date-format:Y-m-d',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
