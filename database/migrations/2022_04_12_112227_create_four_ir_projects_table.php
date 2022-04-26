@@ -11,7 +11,7 @@ class CreateFourIRProjectsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('four_ir_projects', function (Blueprint $table) {
             $table->increments('id');

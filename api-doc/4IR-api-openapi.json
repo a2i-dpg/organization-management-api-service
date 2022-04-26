@@ -558,7 +558,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellName"
+                        "$ref": "#/components/parameters/four_ir_project_id"
                     }
                 ],
                 "summary": "Get all 4IR Project Cells ",
@@ -669,14 +669,14 @@
                 }
             }
         },
-        "/project-cells/{fourIrProjectCellsId}": {
+        "/project-cells/{fourIrProjectCellId}": {
             "get": {
                 "tags": [
                     "FourIR Project Cells"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellsId"
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
                     }
                 ],
                 "summary": "4IR Project Cells",
@@ -721,7 +721,7 @@
                 "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellsId"
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
                     }
                 ],
                 "requestBody": {
@@ -770,7 +770,7 @@
                 "description": "API endpoint to delete a 4IR Project Cell. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellsId"
+                        "$ref": "#/components/parameters/fourIrProjectCellId"
                     }
                 ],
                 "responses": {
@@ -2105,8 +2105,8 @@
                     "example": "dhaka"
                 }
             },
-            "fourIrProjectCellsId": {
-                "name": "fourIrProjectCellsId",
+            "fourIrProjectCellId": {
+                "name": "fourIrProjectCellId",
                 "in": "path",
                 "required": true,
                 "schema": {
@@ -2159,10 +2159,19 @@
                     "example": "1"
                 }
             },
-            "four_ir_project_id": {
+            "four_ir_project_id_op": {
                 "name": "four_ir_project_id",
                 "in": "query",
                 "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "four_ir_project_id": {
+                "name": "four_ir_project_id",
+                "in": "query",
+                "required": true,
                 "schema": {
                     "type": "integer",
                     "example": "1"
