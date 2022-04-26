@@ -25,12 +25,12 @@ class FourIRFileLogService
     }
 
     /**
-     * @param string $filePath
+     * @param string|null $filePath
      * @param array $data
      * @param string $step
      * @return void
      */
-    public function updateFileLog(string $filePath, array $data, string $step)
+    public function updateFileLog(string|null $filePath, array $data, string $step)
     {
         if(!empty($data['file_path']) && $filePath != $data['file_path']){
             $this->store($data, $step);
