@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRProject;
-use App\Models\FourIRProjectTot;
+use App\Models\FourIRAssessment;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRAssessmentService;
 use Carbon\Carbon;
@@ -42,7 +42,7 @@ class FourIRAssessmentController extends Controller
     {
 
         $filter = $this->fourIRAssessmentService->filterValidator($request)->validate();
-        $response = $this->fourIRAssessmentService->getFourIrProjectTOtList($filter, $this->startTime);
+        $response = $this->fourIRAssessmentService->getFourIrAssessmentList($filter, $this->startTime);
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -52,9 +52,9 @@ class FourIRAssessmentController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIRTot = $this->fourIRAssessmentService->getOneFourIrProjectCs($id);
+        $fourIRAssessment = $this->fourIRAssessmentService->getOneFourIrAssessment($id);
         $response = [
-            "data" => $fourIRTot,
+            "data" => $fourIRAssessment,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -77,7 +77,7 @@ class FourIRAssessmentController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIRAssessmentService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_TOT_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_ASSESSMENT_STEP);
 
             DB::commit();
             $response = [
@@ -85,7 +85,7 @@ class FourIRAssessmentController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Project TOT  added successfully",
+                    "message" => "Four Ir Assessment  added successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -108,13 +108,13 @@ class FourIRAssessmentController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrAssessment = FourIRProjectTot::findOrFail($id);
+        $fourIrAssessment = FourIRAssessment::findOrFail($id);
         $validated = $this->fourIRAssessmentService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
             $filePath = $fourIrAssessment['file_path'];
             $data = $this->fourIRAssessmentService->update($fourIrAssessment, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_TOT_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_ASSESSMENT_STEP);
 
             DB::commit();
             $response = [
@@ -122,7 +122,7 @@ class FourIRAssessmentController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Project TOT updated successfully",
+                    "message" => "Four Ir Assessment updated successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -141,13 +141,13 @@ class FourIRAssessmentController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrAssessment = FourIRProjectTot::findOrFail($id);
+        $fourIrAssessment = FourIRAssessment::findOrFail($id);
         $this->fourIRAssessmentService->destroy($fourIrAssessment);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project TOT deleted successfully",
+                "message" => "Four Ir Assessment deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

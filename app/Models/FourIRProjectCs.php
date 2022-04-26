@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\Scopes\ScopeAcl;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FourIRProjectCs extends BaseModel
 {
-    use SoftDeletes, CreatedUpdatedBy;
+    use SoftDeletes, ScopeAcl, ScopeRowStatusTrait, CreatedUpdatedBy;
 
     protected $table = 'four_ir_project_cs';
 

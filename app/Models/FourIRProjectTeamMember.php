@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\Scopes\ScopeAcl;
+use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FourIRProjectTeamMember extends BaseModel
 {
 
-    use softDeletes, CreatedUpdatedBy;
+    use softDeletes, ScopeAcl, ScopeRowStatusTrait, CreatedUpdatedBy;
 
     protected $guarded = ['id'];
 
