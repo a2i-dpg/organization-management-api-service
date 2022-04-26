@@ -1728,6 +1728,217 @@
                     }
                 }
             }
+        },
+        "/showcasing": {
+            "get": {
+                "tags": [
+                    "FourIR Showcasing"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_project_id"
+                    }
+                ],
+                "summary": "Get FourIR Showcasing List",
+                "responses": {
+                    "200": {
+                        "description": "Get FourIR Showcasing List",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "occupation_name": "dfgdf",
+                                            "occupation_name_en": "fdgfd",
+                                            "date": "2004-09-09",
+                                            "start_time": null,
+                                            "end_time": null,
+                                            "venue": "hfghf",
+                                            "venue_en": "fghfgh",
+                                            "invite_others": "fghgfh",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": null,
+                                            "updated_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Showcasing"
+                ],
+                "summary": "Insert a FourIR Showcasing",
+                "description": "API endpoint to Insert a FourIR Showcasing. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_showcasing"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_project_id": 1,
+                                        "accessor_type": "INSTRUCTOR",
+                                        "accessor_id": 1,
+                                        "file_path": "new",
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "updated_at": "2022-04-26T04:36:12.000000Z",
+                                        "created_at": "2022-04-26T04:36:12.000000Z",
+                                        "id": 4
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Resource Management added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/showcasing/{fourIrShowcasingId}": {
+            "get": {
+                "tags": [
+                    "FourIR Showcasing"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrResourceId"
+                    }
+                ],
+                "summary": "Get a 4IR Resource Management",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR Resource Management",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "four_ir_project_id": 1,
+                                        "file_path": "gfhgf",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            "put": {
+                "tags": [
+                    "FourIR Showcasing"
+                ],
+                "summary": "Update a 4IR Resource Management",
+                "description": "API endpoint to update a 4IR Resource Management. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrResourceId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_resource"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "four_ir_project_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Resource Management successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR Showcasing"
+                ],
+                "summary": "Delete a 4IR Resource Management",
+                "description": "API endpoint to delete a Resource Management. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrResourceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Resource Management successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1846,6 +2057,12 @@
                         "type": "integer",
                         "description": "('1=> implementing team, 2=> mentoring team')"
                     },
+                    "name": {
+                        "type": "string"
+                    },
+                    "name_en": {
+                        "type": "string"
+                    },
                     "email": {
                         "type": "string"
                     },
@@ -1868,7 +2085,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","title","team_type","email","phone_number","role","designation"
+                    "four_ir_project_id","title","team_type","email","phone_number","role","designation","name"
                 ]
             },
             "4ir_project_cell": {
@@ -2039,6 +2256,49 @@
                 },
                 "required": [
                     "four_ir_project_id","file_path"
+                ]
+            },
+            "4ir_showcasing": {
+                "type": "object",
+                "properties": {
+                    "four_ir_project_id": {
+                        "type": "integer"
+                    },
+                    "occupation_name": {
+                        "type": "string"
+                    },
+                    "occupation_name_en": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string"
+                    },
+                    "start_time": {
+                        "type": "string"
+                    },
+                    "end_time": {
+                        "type": "string"
+                    },
+                    "venue": {
+                        "type": "string"
+                    },
+                    "venue_en": {
+                        "type": "string"
+                    },
+                    "invite_others": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_project_id","occupation_name","date","venue","invite_others"
                 ]
             }
         },
