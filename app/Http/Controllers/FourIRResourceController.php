@@ -18,7 +18,6 @@ use Throwable;
 
 class FourIRResourceController extends Controller
 {
-
     public FourIRResourceService $fourIRResourceService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
@@ -37,6 +36,11 @@ class FourIRResourceController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
     public function getList(Request $request): JsonResponse
     {
 //        $this->authorize('viewAny', FourIRProject::class);
@@ -46,10 +50,10 @@ class FourIRResourceController extends Controller
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
+
     /**
      * @param int $id
      * @return JsonResponse
-     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
@@ -65,6 +69,7 @@ class FourIRResourceController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -102,6 +107,14 @@ class FourIRResourceController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws Throwable
+     * @throws ValidationException
+     */
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrResource = FourIRResource::findOrFail($id);
@@ -129,6 +142,26 @@ class FourIRResourceController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $fourIRResource = FourIRResource::findOrFail($id);
+        $this->fourIRResourceService->destroy($fourIRResource);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Four Ir Resource Management deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
 

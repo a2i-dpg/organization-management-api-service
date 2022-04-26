@@ -11,6 +11,6 @@ class FourIRCreateAndApprove extends BaseModel
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_NON_SOFT_DELETE;
 
-    protected $table = 'four_ir_create_and_approve';
+    protected $table = 'four_ir_create_and_approves';
 
 }
