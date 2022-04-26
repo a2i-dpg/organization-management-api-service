@@ -174,19 +174,19 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /**
          * FourIR Project APIS
          **/
-        $router->group(["prefix" => "4ir", "as" => "4ir"], function () use ($customRouter) {
-            $customRouter()->resourceRoute('/projects', 'FourIRProjectController')->render();
-            $customRouter()->resourceRoute('/guidelines', 'FourIRGuidelineController')->render();
-            $customRouter()->resourceRoute('/team-members', 'FourIRProjectTeamMemberController')->render();
-            $customRouter()->resourceRoute('/occupations', 'FourIROccupationController')->render();
-            $customRouter()->resourceRoute('/project-cells', 'FourIRProjectCellController')->render();
-            $customRouter()->resourceRoute('/project-cs', 'FourIRProjectCsController')->render();
-            $customRouter()->resourceRoute('/project-curriculums', 'FourIRProjectCurriculumController')->render();
-            $customRouter()->resourceRoute('/tna-formats', 'FourIRProjectTnaFormatController')->render();
-            $customRouter()->resourceRoute('/cblms', 'FourIRCblmController')->render();
-            $customRouter()->resourceRoute('/resources', 'FourIRResourceController')->render();
-            $customRouter()->resourceRoute('/tots', 'FourIRProjectTotController')->render();
-        });
+        $customRouter()->resourceRoute('projects', 'FourIRProjectController')->render();
+        $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
+        $customRouter()->resourceRoute('team-members', 'FourIRProjectTeamMemberController')->render();
+        $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
+        $customRouter()->resourceRoute('project-cells', 'FourIRProjectCellController')->render();
+        $customRouter()->resourceRoute('project-cs', 'FourIRProjectCsController')->render();
+        $customRouter()->resourceRoute('project-curriculums', 'FourIRProjectCurriculumController')->render();
+        $customRouter()->resourceRoute('tna-formats', 'FourIRProjectTnaFormatController')->render();
+        $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
+        $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
+        $customRouter()->resourceRoute('tots', 'FourIRProjectTotController')->render();
+        $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
+        $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
 
 
         /** Provide suggestions in drop downs */

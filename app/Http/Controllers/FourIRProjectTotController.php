@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRProject;
 use App\Models\FourIRProjectTot;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRTotProjectService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -20,6 +22,10 @@ class FourIRProjectTotController extends Controller
 
     private Carbon $startTime;
 
+    /**
+     * @param FourIRTotProjectService $fourIRTotProjectService
+     * @param FourIRFileLogService $fourIRFileLogService
+     */
     public function __construct(FourIRTotProjectService $fourIRTotProjectService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
@@ -27,7 +33,11 @@ class FourIRProjectTotController extends Controller
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
-
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Throwable|ValidationException
+     */
     public function getList(Request $request): JsonResponse
     {
 
@@ -36,7 +46,10 @@ class FourIRProjectTotController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
     public function read(int $id): JsonResponse
     {
         $fourIRTot = $this->fourIRTotProjectService->getOneFourIrProjectCs($id);
@@ -60,44 +73,63 @@ class FourIRProjectTotController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-
         $validated = $this->fourIRTotProjectService->validator($request)->validate();
-        $data = $this->fourIRTotProjectService->store($validated);
+        try {
+            DB::beginTransaction();
+            $data = $this->fourIRTotProjectService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_TOT_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project TOT  added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Project TOT  added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * Update the specified resource in storage
+     *
      * @param Request $request
      * @param int $id
      * @return JsonResponse
+     * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectTot = FourIRProjectTot::findOrFail($id);
         $validated = $this->fourIRTotProjectService->validator($request, $id)->validate();
-        $data = $this->fourIRTotProjectService->update($fourIrProjectTot, $validated);
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrProjectTot['file_path'];
+            $data = $this->fourIRTotProjectService->update($fourIrProjectTot, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_TOT_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project TOT updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Project TOT updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -121,5 +153,4 @@ class FourIRProjectTotController extends Controller
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
-
 }
