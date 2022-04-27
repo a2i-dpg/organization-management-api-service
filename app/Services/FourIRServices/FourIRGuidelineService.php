@@ -5,11 +5,13 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRGuideline;
-use App\Models\FourIRInitiative;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -18,6 +20,61 @@ use Illuminate\Validation\Rule;
  */
 class FourIRGuidelineService
 {
+    /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getFourIRGuidelineList(array $request, Carbon $startTime): array
+    {
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+        /** @var Builder $fourIrGuidelineBuilder */
+        $fourIrGuidelineBuilder = FourIRGuideline::select(
+            [
+                'four_ir_guidelines.id',
+                'four_ir_guidelines.file_path',
+                'four_ir_guidelines.guideline_details',
+                'four_ir_guidelines.row_status',
+                'four_ir_guidelines.created_by',
+                'four_ir_guidelines.updated_by',
+                'four_ir_guidelines.created_at',
+                'four_ir_guidelines.updated_at',
+            ]
+        )->acl();
+
+        $fourIrGuidelineBuilder->orderBy('four_ir_guidelines.id', $order);
+
+        if (is_numeric($rowStatus)) {
+            $fourIrGuidelineBuilder->where('four_ir_guidelines.row_status', $rowStatus);
+        }
+
+        /** @var Collection $fourIrTaglines */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $fourIrTaglines = $fourIrGuidelineBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrTaglines->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $fourIrTaglines = $fourIrGuidelineBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $fourIrTaglines->toArray()['data'] ?? $fourIrTaglines->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
 
     /**
      * @param int $id
@@ -29,7 +86,6 @@ class FourIRGuidelineService
         $fourIrGuidelineBuilder = FourIRGuideline::select(
             [
                 'four_ir_guidelines.id',
-                'four_ir_guidelines.four_ir_initiative_id',
                 'four_ir_guidelines.file_path',
                 'four_ir_guidelines.guideline_details',
                 'four_ir_guidelines.row_status',
@@ -52,14 +108,32 @@ class FourIRGuidelineService
      */
     public function store(array $data): FourIRGuideline
     {
-        if(!empty($data['file_path'])){
-            $data['guideline_details'] =  null;
-        }else {
-            $data['file_path'] = null;
-        }
-        return FourIRGuideline::updateOrCreate(['four_ir_initiative_id' => $data['four_ir_initiative_id']], $data);
+        $fourIrGuideline = new FourIRGuideline();
+        $fourIrGuideline->fill($data);
+        $fourIrGuideline->save();
+        return $fourIrGuideline;
     }
 
+    /**
+     * @param FourIRGuideline $fourIrGuideline
+     * @param array $data
+     * @return FourIRGuideline
+     */
+    public function update(FourIRGuideline $fourIrGuideline, array $data): FourIRGuideline
+    {
+        $fourIrGuideline->fill($data);
+        $fourIrGuideline->save();
+        return $fourIrGuideline;
+    }
+
+    /**
+     * @param FourIRGuideline $fourIrGuideline
+     * @return bool
+     */
+    public function destroy(FourIRGuideline $fourIrGuideline): bool
+    {
+        return $fourIrGuideline->delete();
+    }
 
     /**
      * @param Request $request
@@ -74,19 +148,6 @@ class FourIRGuidelineService
             'guideline_details.required' => 'At least file path or details should be filled up. [50000]',
         ];
         $rules = [
-            'four_ir_initiative_id' => [
-                'required',
-                'integer',
-                'exists:four_ir_initiatives,id,deleted_at,NULL',
-            ],
-            'accessor_type' => [
-                'required',
-                'string'
-            ],
-            'accessor_id' => [
-                'required',
-                'int'
-            ],
             'file_path' => [
                 Rule::requiredIf(function () use ($request) {
                     return empty($request->input('guideline_details'));
@@ -110,5 +171,39 @@ class FourIRGuidelineService
             'updated_by' => ['nullable', 'integer'],
         ];
         return Validator::make($request->all(), $rules, $customMessage);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        return Validator::make($request->all(), [
+            'name' => 'nullable|max:600|min:2',
+            'name_en' => 'nullable|max:300|min:2',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'start_date' => 'nullable|date',
+            'order' => [
+                'nullable',
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

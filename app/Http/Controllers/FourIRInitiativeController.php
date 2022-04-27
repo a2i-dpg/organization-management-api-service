@@ -84,7 +84,7 @@ class FourIRInitiativeController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIrProjectService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_INITIATION_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
             $response = [
@@ -123,7 +123,7 @@ class FourIRInitiativeController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrProject['file_path'];
             $data = $this->fourIrProjectService->update($fourIrProject, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_INITIATION_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
             $response = [
