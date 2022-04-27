@@ -3,18 +3,17 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRProjectCs;
-use App\Models\FourIRProjectTot;
-use App\Models\FourIRResource;
+use App\Models\FourIRAssessment;
+use App\Models\FourIRCourseDevelopment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Collection\Collection;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class FourIRAssessmentService
 {
@@ -24,55 +23,80 @@ class FourIRAssessmentService
      * @param Carbon $startTime
      * @return array
      */
-    public function getFourIrProjectTOtList(array $request, Carbon $startTime): array
+    public function getFourIrAssessmentList(array $request, Carbon $startTime): array
     {
         $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $courseName = $request['course_name'] ?? "";
+        $examineName = $request['examine_name'] ?? "";
+        $examinerName = $request['examiner_name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
-        /** @var Builder $fourIrProjectTotBuilder */
-        $fourIrProjectTotBuilder = FourIRProjectTot::select([
-            'four_ir_project_tots.id',
-            'four_ir_project_tots.four_ir_project_id',
-            'four_ir_project_tots.accessor_type',
-            'four_ir_project_tots.accessor_id',
-            'four_ir_project_tots.participants',
-            'four_ir_project_tots.master_trainer',
-            'four_ir_project_tots.date',
-            'four_ir_project_tots.venue',
-            'four_ir_project_tots.file_path',
-            'four_ir_project_tots.row_status',
-            'four_ir_project_tots.created_by',
-            'four_ir_project_tots.updated_by',
-            'four_ir_project_tots.created_at',
-            'four_ir_project_tots.updated_at'
+        /** @var Builder $fourIrAssessmentBuilder */
+        $fourIrAssessmentBuilder = FourIRAssessment::select([
+            'four_ir_assessments.id',
+            'four_ir_assessments.four_ir_project_id',
+            'four_ir_assessments.course_name',
+            'four_ir_assessments.course_name_en',
+            'four_ir_assessments.examine_name',
+            'four_ir_assessments.examine_name_en',
+            'four_ir_assessments.examiner_name',
+            'four_ir_assessments.examiner_name_en',
+            'four_ir_assessments.file_path',
+            'four_ir_assessments.accessor_type',
+            'four_ir_assessments.accessor_id',
+            'four_ir_assessments.row_status',
+            'four_ir_assessments.created_by',
+            'four_ir_assessments.updated_by',
+            'four_ir_assessments.created_at',
+            'four_ir_assessments.updated_at'
         ])->acl();
-        $fourIrProjectTotBuilder->orderBy('four_ir_project_tots.id', $order);
+        $fourIrAssessmentBuilder->orderBy('four_ir_assessments.id', $order);
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrProjectTotBuilder->where('four_ir_project_tots.four_ir_project_id', $fourIrProjectId);
-        }
-        if (is_numeric($rowStatus)) {
-            $fourIrProjectTotBuilder->where('four_ir_project_tots.row_status', $rowStatus);
+            $fourIrAssessmentBuilder->where('four_ir_assessments.four_ir_project_id', $fourIrProjectId);
         }
 
-        /** @var  Collection $fourIrProjectTots */
+        if (!empty($courseName)) {
+            $fourIrAssessmentBuilder->where(function ($builder) use ($courseName) {
+                $builder->where('four_ir_assessments.course_name', 'like', '%' . $courseName . '%');
+                $builder->orWhere('four_ir_assessments.course_name_en', 'like', '%' . $courseName . '%');
+            });
+        }
+        if (!empty($examineName)) {
+            $fourIrAssessmentBuilder->where(function ($builder) use ($examineName) {
+                $builder->where('four_ir_assessments.examine_name', 'like', '%' . $examineName . '%');
+                $builder->orWhere('four_ir_assessments.examine_name_en', 'like', '%' . $examineName . '%');
+            });
+        }
+        if (!empty($examinerName)) {
+            $fourIrAssessmentBuilder->where(function ($builder) use ($examinerName) {
+                $builder->where('four_ir_assessments.examiner_name', 'like', '%' . $examinerName . '%');
+                $builder->orWhere('four_ir_assessments.examiner_name_en', 'like', '%' . $examinerName . '%');
+            });
+        }
+
+        if (is_numeric($rowStatus)) {
+            $fourIrAssessmentBuilder->where('four_ir_assessments.row_status', $rowStatus);
+        }
+
+        /** @var  Collection $fourIrAssessments */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrProjectTots = $fourIrProjectTotBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjectTots->toArray();
+            $fourIrAssessments = $fourIrAssessmentBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrAssessments->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $fourIrProjectTots = $fourIrProjectTotBuilder->get();
+            $fourIrAssessments = $fourIrAssessmentBuilder->get();
         }
 
         $response['order'] = $order;
-        $response['data'] = $fourIrProjectTots->toArray()['data'] ?? $fourIrProjectTots->toArray();
+        $response['data'] = $fourIrAssessments->toArray()['data'] ?? $fourIrAssessments->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -80,73 +104,75 @@ class FourIRAssessmentService
         ];
 
         return $response;
-
     }
-
-
 
     /**
      * @param int $id
-     * @return FourIRProjectTot
+     * @return FourIRAssessment
      */
-    public function getOneFourIrProjectCs(int $id): FourIRProjectTot
+    public function getOneFourIrAssessment(int $id): FourIRAssessment
     {
-        /** @var FourIRProjectTot|Builder $fourIrProjectTotBuilder */
-        $fourIrProjectTotBuilder = FourIRProjectTot::select([
-            'four_ir_project_tots.id',
-            'four_ir_project_tots.four_ir_project_id',
-            'four_ir_project_tots.accessor_type',
-            'four_ir_project_tots.accessor_id',
-            'four_ir_project_tots.participants',
-            'four_ir_project_tots.master_trainer',
-            'four_ir_project_tots.date',
-            'four_ir_project_tots.venue',
-            'four_ir_project_tots.file_path',
-            'four_ir_project_tots.row_status',
-            'four_ir_project_tots.created_by',
-            'four_ir_project_tots.updated_by',
-            'four_ir_project_tots.created_at',
-            'four_ir_project_tots.updated_at'
+        /** @var FourIRAssessment|Builder $fourIrAssessmentBuilder */
+        $fourIrAssessmentBuilder = FourIRAssessment::select([
+            'four_ir_assessments.id',
+            'four_ir_assessments.four_ir_project_id',
+            'four_ir_assessments.course_name',
+            'four_ir_assessments.course_name_en',
+            'four_ir_assessments.examine_name',
+            'four_ir_assessments.examine_name_en',
+            'four_ir_assessments.examiner_name',
+            'four_ir_assessments.examiner_name_en',
+            'four_ir_assessments.file_path',
+            'four_ir_assessments.accessor_type',
+            'four_ir_assessments.accessor_id',
+            'four_ir_assessments.row_status',
+            'four_ir_assessments.created_by',
+            'four_ir_assessments.updated_by',
+            'four_ir_assessments.created_at',
+            'four_ir_assessments.updated_at'
         ]);
-        $fourIrProjectTotBuilder->where('four_ir_project_tots.id', '=', $id);
+        $fourIrAssessmentBuilder->where('four_ir_assessments.id', '=', $id);
 
-        return $fourIrProjectTotBuilder->firstOrFail();
+        return $fourIrAssessmentBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProjectTot
+     * @return FourIRAssessment
      */
-    public function store(array $data): FourIRProjectTot
+    public function store(array $data): FourIRAssessment
     {
-        $fourIrProjectTOt = app(FourIRProjectTot::class);
-        $fourIrProjectTOt->fill($data);
-        $fourIrProjectTOt->save();
-        return $fourIrProjectTOt;
+        $fourIrAssessment = app(FourIRAssessment::class);
+        $fourIrAssessment->fill($data);
+        $fourIrAssessment->save();
+        return $fourIrAssessment;
     }
 
     /**
-     * @param FourIRProjectTot $fourIRProjectTot
+     * @param FourIRAssessment $fourIRAssessment
      * @param array $data
-     * @return FourIRProjectTot
+     * @return FourIRAssessment
      */
-    public function update(FourIRProjectTot $fourIRProjectTot, array $data): FourIRProjectTot
+    public function update(FourIRAssessment $fourIRAssessment, array $data): FourIRAssessment
     {
-        $fourIRProjectTot->fill($data);
-        $fourIRProjectTot->save();
-        return $fourIRProjectTot;
+        $fourIRAssessment->fill($data);
+        $fourIRAssessment->save();
+        return $fourIRAssessment;
     }
 
 
     /**
-     * @param FourIRProjectTot $fourIRProjectTot
+     * @param FourIRAssessment $fourIRAssessment
      * @return bool
      */
-    public function destroy(FourIRProjectTot $fourIRProjectTot): bool
+    public function destroy(FourIRAssessment $fourIRAssessment): bool
     {
-        return $fourIRProjectTot->delete();
+        return $fourIRAssessment->delete();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
@@ -154,9 +180,9 @@ class FourIRAssessmentService
         ];
 
         if (!empty($request->input('four_ir_project_id'))) {
-            $tnaReport = FourIRResource::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+            $tnaReport = FourIRCourseDevelopment::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Project Resource Management!"
+                "four_ir_project_id" => "First complete Four IR Course development!"
             ]));
         }
 
@@ -174,25 +200,35 @@ class FourIRAssessmentService
                 'required',
                 'int'
             ],
-            'participants' => [
+            'course_name' => [
                 'required',
                 'string',
+                'max:200'
             ],
-            'master_trainer' => [
-                'required',
-                'string',
-                'max:350',
-                'min:2'
-            ],
-            'date' => [
-                'required',
-                'date',
-            ],
-            'venue' => [
+            'course_name_en' => [
                 'nullable',
                 'string',
-                'max:500',
-                'min:2',
+                'max:200'
+            ],
+            'examine_name' => [
+                'required',
+                'string',
+                'max:200'
+            ],
+            'examine_name_en' => [
+                'nullable',
+                'string',
+                'max:200'
+            ],
+            'examiner_name' => [
+                'required',
+                'string',
+                'max:200'
+            ],
+            'examiner_name_en' => [
+                'nullable',
+                'string',
+                'max:200'
             ],
             'file_path' => [
                 'nullable',
@@ -225,6 +261,9 @@ class FourIRAssessmentService
 
         return Validator::make($request->all(), [
             'four_ir_project_id' => 'required|int',
+            'course_name' => 'nullable',
+            'examine_name' => 'nullable',
+            'examiner_name' => 'nullable',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'date' => 'nullable|date',

@@ -4,80 +4,80 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRProject;
-use App\Models\FourIRProjectCell;
-use App\Models\FourIRProjectTeamMember;
+use App\Models\FourIRJobPlacementStatus;
+use App\Models\FourIRShowcasing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 
 
 /**
- * Class FourIRProjectCellService
+ * Class FourIRShowcasingService
  * @package App\Services
  */
-class FourIRProjectCellService
+class FourIRShowcasingService
 {
     /**
      * @param array $request
      * @param Carbon $startTime
      * @return array
      */
-    public function getFourIrProjectCellList(array $request, Carbon $startTime): array
+    public function getFourShowcasingList(array $request, Carbon $startTime): array
     {
         $fourIrProjectId = $request['four_ir_project_id'] ?? "";
-        $name = $request['name'] ?? "";
+        $occupationName = $request['occupation_name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $fourIrProjectCellBuilder */
-        $fourIrProjectCellBuilder = FourIRProjectCell::select(
+        $fourIrShowcasingBuilder = FourIRShowcasing::select(
             [
-                'four_ir_project_cells.id',
-                'four_ir_project_cells.name',
-                'four_ir_project_cells.address',
-                'four_ir_project_cells.email',
-                'four_ir_project_cells.phone_code',
-                'four_ir_project_cells.mobile_number',
-                'four_ir_project_cells.designation',
-                'four_ir_project_cells.row_status',
-                'four_ir_project_cells.created_by',
-                'four_ir_project_cells.updated_by',
-                'four_ir_project_cells.created_at',
-                'four_ir_project_cells.updated_at'
+                'four_ir_showcasings.id',
+                'four_ir_showcasings.occupation_name',
+                'four_ir_showcasings.occupation_name_en',
+                'four_ir_showcasings.date',
+                'four_ir_showcasings.start_time',
+                'four_ir_showcasings.end_time',
+                'four_ir_showcasings.venue',
+                'four_ir_showcasings.venue_en',
+                'four_ir_showcasings.invite_others',
+                'four_ir_showcasings.row_status',
+                'four_ir_showcasings.created_by',
+                'four_ir_showcasings.updated_by',
+                'four_ir_showcasings.created_at',
+                'four_ir_showcasings.updated_at'
             ]
         )->acl();
 
-        $fourIrProjectCellBuilder->orderBy('four_ir_project_cells.id', $order);
+        $fourIrShowcasingBuilder->orderBy('four_ir_showcasings.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
+            $fourIrShowcasingBuilder->where('four_ir_showcasings.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
         }
-        if (!empty($name)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.name', 'like', '%' . $name . '%');
+        if (!empty($occupationName)) {
+            $fourIrShowcasingBuilder->where('four_ir_showcasings.occupation_name', 'like', '%' . $occupationName . '%');
         }
         if (is_numeric($rowStatus)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.row_status', $rowStatus);
+            $fourIrShowcasingBuilder->where('four_ir_showcasings.row_status', $rowStatus);
         }
 
         /** @var Collection $fourIrProjects */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrProjects = $fourIrProjectCellBuilder->paginate($pageSize);
+            $fourIrProjects = $fourIrShowcasingBuilder->paginate($pageSize);
             $paginateData = (object)$fourIrProjects->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $fourIrProjects = $fourIrProjectCellBuilder->get();
+            $fourIrProjects = $fourIrShowcasingBuilder->get();
         }
 
         $response['order'] = $order;
@@ -93,64 +93,66 @@ class FourIRProjectCellService
 
     /**
      * @param int $id
-     * @return FourIRProjectCell
+     * @return FourIRShowcasing
      */
-    public function getOneFourIrProjectCell(int $id): FourIRProjectCell
+    public function getOneFourIrShowcasing(int $id): FourIRShowcasing
     {
-        /** @var FourIRProjectCell|Builder $fourIrProjectCellBuilder */
-        $fourIrProjectCellBuilder = FourIRProjectCell::select(
+        /** @var FourIRShowcasing|Builder $fourIrShowcasingBuilder */
+        $fourIrShowcasingBuilder = FourIRShowcasing::select(
             [
-                'four_ir_project_cells.id',
-                'four_ir_project_cells.name',
-                'four_ir_project_cells.address',
-                'four_ir_project_cells.email',
-                'four_ir_project_cells.phone_code',
-                'four_ir_project_cells.mobile_number',
-                'four_ir_project_cells.designation',
-                'four_ir_project_cells.row_status',
-                'four_ir_project_cells.created_by',
-                'four_ir_project_cells.updated_by',
-                'four_ir_project_cells.created_at',
-                'four_ir_project_cells.updated_at'
+                'four_ir_showcasings.id',
+                'four_ir_showcasings.occupation_name',
+                'four_ir_showcasings.occupation_name_en',
+                'four_ir_showcasings.date',
+                'four_ir_showcasings.start_time',
+                'four_ir_showcasings.end_time',
+                'four_ir_showcasings.venue',
+                'four_ir_showcasings.venue_en',
+                'four_ir_showcasings.invite_others',
+                'four_ir_showcasings.row_status',
+                'four_ir_showcasings.created_by',
+                'four_ir_showcasings.updated_by',
+                'four_ir_showcasings.created_at',
+                'four_ir_showcasings.updated_at'
             ]
         );
-        $fourIrProjectCellBuilder->where('four_ir_project_cells.id', '=', $id);
+        $fourIrShowcasingBuilder->where('four_ir_showcasings.id', '=', $id);
 
-        return $fourIrProjectCellBuilder->firstOrFail();
+        return $fourIrShowcasingBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProjectCell
+     * @return FourIRShowcasing
      */
-    public function store(array $data): FourIRProjectCell
+    public function store(array $data): FourIRShowcasing
     {
 
-        $fourIrProjectCell = new FourIRProjectCell();
-        $fourIrProjectCell->fill($data);
-        $fourIrProjectCell->save();
-        return $fourIrProjectCell;
+        $fourIrShowcasing = new FourIRShowcasing();
+        $fourIrShowcasing->fill($data);
+        $fourIrShowcasing->save();
+        return $fourIrShowcasing;
     }
 
     /**
-     * @param FourIRProjectCell $fourIrProjectCell
+     * @param FourIRShowcasing $fourIrShowcasing
      * @param array $data
-     * @return FourIRProjectCell
+     * @return FourIRShowcasing
      */
-    public function update(FourIRProjectCell $fourIrProjectCell, array $data): FourIRProjectCell
+    public function update(FourIRShowcasing $fourIrShowcasing, array $data): FourIRShowcasing
     {
-        $fourIrProjectCell->fill($data);
-        $fourIrProjectCell->save();
-        return $fourIrProjectCell;
+        $fourIrShowcasing->fill($data);
+        $fourIrShowcasing->save();
+        return $fourIrShowcasing;
     }
 
     /**
-     * @param FourIRProjectCell $fourIrProjectCell
+     * @param FourIRShowcasing $fourIrShowcasing
      * @return bool
      */
-    public function destroy(FourIRProjectCell $fourIrProjectCell): bool
+    public function destroy(FourIRShowcasing $fourIrShowcasing): bool
     {
-        return $fourIrProjectCell->delete();
+        return $fourIrShowcasing->delete();
     }
 
     /**
@@ -168,41 +170,43 @@ class FourIRProjectCellService
                 'required',
                 'int',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRProjectTeamMember::where('four_ir_project_id', $request->input('four_ir_project_id'))
-                        ->where('team_type', FourIRProjectTeamMember::MENTORING_TEAM_TYPE)
+                    $mentoringTeam = FourIRJobPlacementStatus::where('four_ir_project_id', $request->input('four_ir_project_id'))
                         ->first();
-                        if(empty($mentoringTeam)){
-                            $failed('Complete Mentoring step first.[24000]');
-                        }
-                        },
+                    if(empty($mentoringTeam)){
+                        $failed('Complete Mentoring step first.[24000]');
+                    }
+                },
                 'exists:four_ir_projects,id,deleted_at,NULL',
             ],
-            'name' => [
+            'occupation_name' => [
                 'required',
                 'string'
             ],
-            'address' => [
-                'required',
-                'string'
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max: 320'
-            ],
-            'phone_code' => [
+            'occupation_name_en' => [
                 'nullable',
-                'string',
-                'max: 3',
-                'min:2'
+                'string'
             ],
-            'mobile_number' => [
+            'date' => [
                 'required',
-                'string',
-                'max: 20',
-                BaseModel::MOBILE_REGEX,
+                'date_format:Y-m-d'
             ],
-            'designation' => [
+            'start_time' => [
+                'nullable',
+                'date_format:H:i:s'
+            ],
+            'end_time' => [
+                'nullable',
+                'date_format:H:i:s'
+            ],
+            'venue' => [
+                'required',
+                'string'
+            ],
+            'venue_en' => [
+                'nullable',
+                'string'
+            ],
+            'invite_others' => [
                 'required',
                 'string'
             ],
@@ -240,7 +244,6 @@ class FourIRProjectCellService
 
         return Validator::make($request->all(), [
             'four_ir_project_id' => 'required|int',
-            'name' => 'nullable|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
