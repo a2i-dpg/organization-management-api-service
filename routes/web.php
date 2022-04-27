@@ -186,6 +186,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
         $customRouter()->resourceRoute('tots', 'FourIRProjectTotController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
+        $customRouter()->resourceRoute('course-developments', 'FourIRCourseDevelopmentController')->render();
 
 
         /** Provide suggestions in drop downs */
