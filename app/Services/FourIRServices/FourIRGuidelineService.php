@@ -5,7 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRGuideline;
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +29,7 @@ class FourIRGuidelineService
         $fourIrGuidelineBuilder = FourIRGuideline::select(
             [
                 'four_ir_guidelines.id',
-                'four_ir_guidelines.four_ir_project_id',
+                'four_ir_guidelines.four_ir_initiative_id',
                 'four_ir_guidelines.file_path',
                 'four_ir_guidelines.guideline_details',
                 'four_ir_guidelines.row_status',
@@ -57,7 +57,7 @@ class FourIRGuidelineService
         }else {
             $data['file_path'] = null;
         }
-        return FourIRGuideline::updateOrCreate(['four_ir_project_id' => $data['four_ir_project_id']], $data);
+        return FourIRGuideline::updateOrCreate(['four_ir_initiative_id' => $data['four_ir_initiative_id']], $data);
     }
 
 
@@ -74,10 +74,10 @@ class FourIRGuidelineService
             'guideline_details.required' => 'At least file path or details should be filled up. [50000]',
         ];
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',

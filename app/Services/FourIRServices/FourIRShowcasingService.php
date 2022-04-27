@@ -28,7 +28,7 @@ class FourIRShowcasingService
      */
     public function getFourShowcasingList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $occupationName = $request['occupation_name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
@@ -58,7 +58,7 @@ class FourIRShowcasingService
         $fourIrShowcasingBuilder->orderBy('four_ir_showcasings.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrShowcasingBuilder->where('four_ir_showcasings.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
+            $fourIrShowcasingBuilder->where('four_ir_showcasings.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
         }
         if (!empty($occupationName)) {
             $fourIrShowcasingBuilder->where('four_ir_showcasings.occupation_name', 'like', '%' . $occupationName . '%');
@@ -166,17 +166,17 @@ class FourIRShowcasingService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
-            'four_ir_project_id'=>[
+            'four_ir_initiative_id'=>[
                 'required',
                 'int',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRJobPlacementStatus::where('four_ir_project_id', $request->input('four_ir_project_id'))
+                    $mentoringTeam = FourIRJobPlacementStatus::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
                         ->first();
                     if(empty($mentoringTeam)){
                         $failed('Complete Mentoring step first.[24000]');
                     }
                 },
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'occupation_name' => [
                 'required',
@@ -243,7 +243,7 @@ class FourIRShowcasingService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',

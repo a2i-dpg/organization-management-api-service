@@ -4,7 +4,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRProjectCell;
 use App\Models\FourIRProjectTeamMember;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,7 +30,7 @@ class FourIRProjectCellService
      */
     public function getFourIrProjectCellList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $name = $request['name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
@@ -58,7 +58,7 @@ class FourIRProjectCellService
         $fourIrProjectCellBuilder->orderBy('four_ir_project_cells.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
+            $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
         }
         if (!empty($name)) {
             $fourIrProjectCellBuilder->where('four_ir_project_cells.name', 'like', '%' . $name . '%');
@@ -164,18 +164,18 @@ class FourIRProjectCellService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
-            'four_ir_project_id'=>[
+            'four_ir_initiative_id'=>[
                 'required',
                 'int',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRProjectTeamMember::where('four_ir_project_id', $request->input('four_ir_project_id'))
+                    $mentoringTeam = FourIRProjectTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
                         ->where('team_type', FourIRProjectTeamMember::MENTORING_TEAM_TYPE)
                         ->first();
                         if(empty($mentoringTeam)){
                             $failed('Complete Mentoring step first.[24000]');
                         }
                         },
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'name' => [
                 'required',
@@ -239,7 +239,7 @@ class FourIRProjectCellService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'name' => 'nullable|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',

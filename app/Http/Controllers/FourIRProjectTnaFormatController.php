@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRProjectTnaFormat;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRProjectTnaFormatService;
@@ -85,7 +85,7 @@ class FourIRProjectTnaFormatController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIRProjectTnaFormatService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_TNA_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_TNA_STEP);
 
             DB::commit();
             $response = [
@@ -121,7 +121,7 @@ class FourIRProjectTnaFormatController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrProjectTnaFormat['file_path'];
             $data = $this->fourIRProjectTnaFormatService->update($fourIrProjectTnaFormat, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_TNA_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_TNA_STEP);
 
             DB::commit();
             $response = [

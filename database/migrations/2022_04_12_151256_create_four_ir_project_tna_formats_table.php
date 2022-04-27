@@ -15,7 +15,7 @@ class CreateFourIRProjectTnaFormatsTable extends Migration
     {
         Schema::create('four_ir_project_tna_formats', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_project_id');
+            $table->unsignedInteger('four_ir_initiative_id');
             $table->string('workshop_name');
             $table->string('skill_required');
             $table->date('start_date');

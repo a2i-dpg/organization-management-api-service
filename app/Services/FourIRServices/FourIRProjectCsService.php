@@ -30,7 +30,7 @@ class FourIRProjectCsService
      */
     public function getFourIrProjectCsList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $developerOrganizationName = $request['developer_organization_name'] ?? "";
         $developerOrganizationNameEn = $request['developer_organization_name_en'] ?? "";
         $sectorName = $request['sector_name'] ?? "";
@@ -44,7 +44,7 @@ class FourIRProjectCsService
         $fourIrProjectCsBuilder = FourIRProjectCs::select(
             [
                 'four_ir_project_cs.id',
-                'four_ir_project_cs.four_ir_project_id',
+                'four_ir_project_cs.four_ir_initiative_id',
                 'four_ir_project_cs.experts',
                 'four_ir_project_cs.level',
                 'four_ir_project_cs.approved_by',
@@ -66,7 +66,7 @@ class FourIRProjectCsService
         $fourIrProjectCsBuilder->orderBy('four_ir_project_cs.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectCsBuilder->where('four_ir_project_cs.four_ir_project_id', $fourIrProjectId);
+            $fourIrProjectCsBuilder->where('four_ir_project_cs.four_ir_initiative_id', $fourIrProjectId);
         }
 
         if (!empty($developerOrganizationName)) {
@@ -121,7 +121,7 @@ class FourIRProjectCsService
         $fourIrProjectCsBuilder = FourIRProjectCs::select(
             [
                 'four_ir_project_cs.id',
-                'four_ir_project_cs.four_ir_project_id',
+                'four_ir_project_cs.four_ir_initiative_id',
                 'four_ir_project_cs.experts',
                 'four_ir_project_cs.level',
                 'four_ir_project_cs.approved_by',
@@ -189,18 +189,18 @@ class FourIRProjectCsService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($request->input('four_ir_project_id'))){
-            $tnaReport = FourIRProjectTnaFormat::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if(!empty($request->input('four_ir_initiative_id'))){
+            $tnaReport = FourIRProjectTnaFormat::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Project Tna Format!"
+                "four_ir_initiative_id" => "First complete Four IR Project Tna Format!"
             ]));
         }
 
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -294,7 +294,7 @@ class FourIRProjectCsService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'developer_organization_name' => 'nullable|max:300|min:2',
             'developer_organization_name_en' => 'nullable|max:300|min:2',
             'sector_name' => 'nullable|max:200|min:2',

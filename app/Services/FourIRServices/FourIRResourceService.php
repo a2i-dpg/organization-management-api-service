@@ -26,7 +26,7 @@ class FourIRResourceService
 
     public function getFourIRResourceList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -36,7 +36,7 @@ class FourIRResourceService
         $fourIrResourceBuilder = FourIRResource::select(
             [
                 'four_ir_resources.id',
-                'four_ir_resources.four_ir_project_id',
+                'four_ir_resources.four_ir_initiative_id',
                 'four_ir_resources.file_path',
                 'four_ir_resources.row_status',
                 'four_ir_resources.created_by',
@@ -49,7 +49,7 @@ class FourIRResourceService
         $fourIrResourceBuilder->orderBy('four_ir_resources.id', $order);
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrResourceBuilder->where('four_ir_resources.four_ir_project_id', $fourIrProjectId);
+            $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrProjectId);
         }
         if (is_numeric($rowStatus)) {
             $fourIrResourceBuilder->where('four_ir_resources.row_status', $rowStatus);
@@ -89,7 +89,7 @@ class FourIRResourceService
         $fourIrResourceBuilder = FourIRResource::select(
             [
                 'four_ir_resources.id',
-                'four_ir_resources.four_ir_project_id',
+                'four_ir_resources.four_ir_initiative_id',
                 'four_ir_resources.file_path',
                 'four_ir_resources.row_status',
                 'four_ir_resources.created_by',
@@ -141,17 +141,17 @@ class FourIRResourceService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request->input('four_ir_project_id'))) {
-            $createAndApprove = FourIRCreateAndApprove::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if (!empty($request->input('four_ir_initiative_id'))) {
+            $createAndApprove = FourIRCreateAndApprove::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($createAndApprove), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR  Create And Approve !"
+                "four_ir_initiative_id" => "First complete Four IR  Create And Approve !"
             ]));
         }
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -193,7 +193,7 @@ class FourIRResourceService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',

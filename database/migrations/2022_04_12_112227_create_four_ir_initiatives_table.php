@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIRProjectsTable extends Migration
+class CreateFourIRInitiativesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateFourIRProjectsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('four_ir_projects', function (Blueprint $table) {
+        Schema::create('four_ir_initiatives', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('four_ir_tagline_id');
             $table->string('project_name', 500);
             $table->string('project_name_en', 300)->nullable();
             $table->string('organization_name', 500);
@@ -45,6 +46,6 @@ class CreateFourIRProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('four_ir_projects');
+        Schema::dropIfExists('four_ir_initiatives');
     }
 }

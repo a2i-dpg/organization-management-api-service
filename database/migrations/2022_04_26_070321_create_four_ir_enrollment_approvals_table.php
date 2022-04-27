@@ -15,7 +15,7 @@ class CreateFourIREnrollmentApprovalsTable extends Migration
     {
         Schema::create('four_ir_enrollment_approvals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('four_ir_project_id');
+            $table->unsignedInteger('four_ir_initiative_id');
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

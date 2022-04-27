@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRCblm;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRCblmService;
@@ -85,7 +85,7 @@ class FourIRCblmController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIrCblmService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_CBLM_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_CBLM_STEP);
 
             DB::commit();
             $response = [
@@ -123,7 +123,7 @@ class FourIRCblmController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrCblm['file_path'];
             $data = $this->fourIrCblmService->update($fourIrCblm, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_CBLM_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_CBLM_STEP);
 
             DB::commit();
             $response = [

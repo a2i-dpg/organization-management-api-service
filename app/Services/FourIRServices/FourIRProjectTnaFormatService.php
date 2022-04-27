@@ -30,7 +30,7 @@ class FourIRProjectTnaFormatService
      */
     public function getFourIrProjectTnaFormatList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'];
+        $fourIrProjectId = $request['four_ir_initiative_id'];
         $workshopName = $request['workshop_name'] ?? "";
         $venue = $request['venue'] ?? "";
         $paginate = $request['page'] ?? "";
@@ -42,7 +42,7 @@ class FourIRProjectTnaFormatService
         $fourIrProjectTnaFormatBuilder = FourIRProjectTnaFormat::select(
             [
                 'four_ir_project_tna_formats.id',
-                'four_ir_project_tna_formats.four_ir_project_id',
+                'four_ir_project_tna_formats.four_ir_initiative_id',
                 'four_ir_project_tna_formats.workshop_name',
                 'four_ir_project_tna_formats.skill_required',
                 'four_ir_project_tna_formats.start_date',
@@ -60,7 +60,7 @@ class FourIRProjectTnaFormatService
         $fourIrProjectTnaFormatBuilder->orderBy('four_ir_project_tna_formats.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.four_ir_project_id', 'like', '%' . $fourIrProjectId . '%');
+            $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
         }
         if (!empty($workshopName)) {
             $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.workshop_name', 'like', '%' . $workshopName . '%');
@@ -107,7 +107,7 @@ class FourIRProjectTnaFormatService
         $fourIrProjectTnaFormatBuilder = FourIRProjectTnaFormat::select(
             [
                 'four_ir_project_tna_formats.id',
-                'four_ir_project_tna_formats.four_ir_project_id',
+                'four_ir_project_tna_formats.four_ir_initiative_id',
                 'four_ir_project_tna_formats.workshop_name',
                 'four_ir_project_tna_formats.skill_required',
                 'four_ir_project_tna_formats.start_date',
@@ -171,12 +171,12 @@ class FourIRProjectTnaFormatService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
-            'four_ir_project_id'=>[
+            'four_ir_initiative_id'=>[
                 'required',
                 'int',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRProjectCell::where('four_ir_project_id', $value)->first();
+                    $mentoringTeam = FourIRProjectCell::where('four_ir_initiative_id', $value)->first();
                     if(empty($mentoringTeam)){
                         $failed('Complete Project Cell step first.[24000]');
                     }
@@ -239,7 +239,7 @@ class FourIRProjectTnaFormatService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id'=>'required|int',
+            'four_ir_initiative_id'=>'required|int',
             'workshop_name' => 'nullable|string',
             'venue' => 'nullable|string',
             'page' => 'nullable|integer|gt:0',

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Type\Decimal;
 
 /**
- * App\Models\FourIRProject
+ * App\Models\FourIRInitiative
  *
  * @property int id
  * @property string project_name
@@ -32,11 +32,11 @@ use Ramsey\Uuid\Type\Decimal;
  * @property Carbon created_at
  * @property Carbon updated_at
  */
-class FourIRProject extends BaseModel
+class FourIRInitiative extends BaseModel
 {
     use SoftDeletes, CreatedUpdatedBy;
 
-    protected $table = 'four_ir_projects';
+    protected $table = 'four_ir_initiatives';
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_NON_SOFT_DELETE;
 

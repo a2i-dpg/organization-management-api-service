@@ -254,7 +254,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "file_path": "fgh",
                                         "guideline_details": "fghfg",
                                         "row_status": 1,
@@ -558,7 +558,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/four_ir_project_id"
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
                     }
                 ],
                 "summary": "Get all 4IR Project Cells ",
@@ -799,7 +799,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/four_ir_project_id"
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
                     },
                     {
                         "$ref": "#/components/parameters/name"
@@ -1043,7 +1043,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/four_ir_project_id"
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
                     },
                     {
                         "$ref": "#/components/parameters/four_ir_project_format_id"
@@ -1065,7 +1065,7 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "workshop_name": "tttttttgfh",
                                             "skill_required": "ggf",
                                             "start_date": "2020-11-11",
@@ -1080,7 +1080,7 @@
                                         },
                                         {
                                             "id": 4,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "workshop_name": "tttttttgfh",
                                             "skill_required": "ggf",
                                             "start_date": "2020-11-11",
@@ -1128,7 +1128,7 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "workshop_name": "ttthjkjhkttttgfh",
                                         "skill_required": "ggf",
                                         "start_date": "2020-11-11",
@@ -1172,7 +1172,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "workshop_name": "tttttttgfh",
                                         "skill_required": "ggf",
                                         "start_date": "2020-11-11",
@@ -1284,7 +1284,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/four_ir_project_id"
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
                     }
                 ],
                 "summary": "Get all 4IR Project Curriculum",
@@ -1297,7 +1297,7 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "workshop_name": "tttttttgfh",
                                             "skill_required": "ggf",
                                             "start_date": "2020-11-11",
@@ -1312,7 +1312,7 @@
                                         },
                                         {
                                             "id": 4,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "workshop_name": "tttttttgfh",
                                             "skill_required": "ggf",
                                             "start_date": "2020-11-11",
@@ -1360,7 +1360,7 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "workshop_name": "ttthjkjhkttttgfh",
                                         "skill_required": "ggf",
                                         "start_date": "2020-11-11",
@@ -1404,7 +1404,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
@@ -1453,7 +1453,7 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "file_path": "gfhgf",
                                             "row_status": 1,
                                             "created_by": null,
@@ -1511,7 +1511,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/four_ir_project_id"
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
                     }
                 ],
                 "summary": "Get FourIR Resource Management List",
@@ -1524,7 +1524,7 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "file_path": "gfhfgh",
                                             "row_status": 1,
                                             "created_by": null,
@@ -1534,7 +1534,7 @@
                                         },
                                         {
                                             "id": 2,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "file_path": "fghfghfghfgh",
                                             "row_status": 1,
                                             "created_by": 1,
@@ -1544,7 +1544,7 @@
                                         },
                                         {
                                             "id": 3,
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "file_path": "new add",
                                             "row_status": 1,
                                             "created_by": 1,
@@ -1587,7 +1587,7 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "accessor_type": "INSTRUCTOR",
                                         "accessor_id": 1,
                                         "file_path": "new",
@@ -1629,7 +1629,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
@@ -1678,7 +1678,7 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "file_path": "gfhgf",
                                             "row_status": 1,
                                             "created_by": null,
@@ -1736,7 +1736,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/four_ir_project_id"
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
                     }
                 ],
                 "summary": "Get FourIR Showcasing List",
@@ -1798,7 +1798,7 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "accessor_type": "INSTRUCTOR",
                                         "accessor_id": 1,
                                         "file_path": "new",
@@ -1840,7 +1840,7 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_project_id": 1,
+                                        "four_ir_initiative_id": 1,
                                         "file_path": "gfhgf",
                                         "row_status": 1,
                                         "created_by": null,
@@ -1889,7 +1889,7 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "four_ir_project_id": 1,
+                                            "four_ir_initiative_id": 1,
                                             "file_path": "gfhgf",
                                             "row_status": 1,
                                             "created_by": null,
@@ -1975,7 +1975,7 @@
             "4ir_guideline": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "file_path": {
@@ -1994,7 +1994,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id"
+                    "four_ir_initiative_id"
                 ]
             },
             "4ir_project": {
@@ -2050,7 +2050,7 @@
             "4ir_team-member": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "team_type": {
@@ -2085,13 +2085,13 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","title","team_type","email","phone_number","role","designation","name"
+                    "four_ir_initiative_id","title","team_type","email","phone_number","role","designation","name"
                 ]
             },
             "4ir_project_cell": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "name": {
@@ -2122,7 +2122,7 @@
                     }
                 },
                 "required": [
-                    "name","address","email","mobile_number","designation","four_ir_project_id"
+                    "name","address","email","mobile_number","designation","four_ir_initiative_id"
                 ]
             },
             "4ir_projects": {
@@ -2178,7 +2178,7 @@
             "4ir_tna_format": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "workshop_name": {
@@ -2211,13 +2211,13 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","workshop_name","skill_required","start_date","end_date","file_path","venue"
+                    "four_ir_initiative_id","workshop_name","skill_required","start_date","end_date","file_path","venue"
                 ]
             },
             "4ir_curriculum": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "file_path": {
@@ -2233,13 +2233,13 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","file_path"
+                    "four_ir_initiative_id","file_path"
                 ]
             },
             "4ir_resource": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "file_path": {
@@ -2255,13 +2255,13 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","file_path"
+                    "four_ir_initiative_id","file_path"
                 ]
             },
             "4ir_showcasing": {
                 "type": "object",
                 "properties": {
-                    "four_ir_project_id": {
+                    "four_ir_initiative_id": {
                         "type": "integer"
                     },
                     "occupation_name": {
@@ -2298,7 +2298,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_project_id","occupation_name","date","venue","invite_others"
+                    "four_ir_initiative_id","occupation_name","date","venue","invite_others"
                 ]
             }
         },
@@ -2421,7 +2421,7 @@
                 }
             },
             "four_ir_project_id_op": {
-                "name": "four_ir_project_id",
+                "name": "four_ir_initiative_id",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -2429,8 +2429,8 @@
                     "example": "1"
                 }
             },
-            "four_ir_project_id": {
-                "name": "four_ir_project_id",
+            "four_ir_initiative_id": {
+                "name": "four_ir_initiative_id",
                 "in": "query",
                 "required": true,
                 "schema": {

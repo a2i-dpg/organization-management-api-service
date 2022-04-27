@@ -15,7 +15,7 @@ class CreateFourIrFileLogsTable extends Migration
     {
         Schema::create('four_ir_file_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_project_id');
+            $table->unsignedInteger('four_ir_initiative_id');
             $table->string('file_path');
             $table->unsignedInteger('module_type')->comment('1=> Project initiation, 2 => Project guideline, 3 => Tna report, 4 => Project cs, 5 => Project curriculum, 6 => CBLM, 7 => Project resource management, 8 => ToT');
             $table->string('accessor_type', 100);

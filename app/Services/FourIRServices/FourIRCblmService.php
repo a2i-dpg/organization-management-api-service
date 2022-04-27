@@ -30,7 +30,7 @@ class FourIRCblmService
      */
     public function getFourIrCblmList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -40,7 +40,7 @@ class FourIRCblmService
         $fourIrCblmBuilder = FourIRCblm::select(
             [
                 'four_ir_cblm.id',
-                'four_ir_cblm.four_ir_project_id',
+                'four_ir_cblm.four_ir_initiative_id',
                 'four_ir_cblm.file_path',
                 'four_ir_cblm.row_status',
                 'four_ir_cblm.created_by',
@@ -53,7 +53,7 @@ class FourIRCblmService
         $fourIrCblmBuilder->orderBy('four_ir_cblm.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrCblmBuilder->where('four_ir_cblm.four_ir_project_id', $fourIrProjectId);
+            $fourIrCblmBuilder->where('four_ir_cblm.four_ir_initiative_id', $fourIrProjectId);
         }
 
         if (is_numeric($rowStatus)) {
@@ -94,7 +94,7 @@ class FourIRCblmService
         $fourIrCblmBuilder = FourIRCblm::select(
             [
                 'four_ir_cblm.id',
-                'four_ir_cblm.four_ir_project_id',
+                'four_ir_cblm.four_ir_initiative_id',
                 'four_ir_cblm.file_path',
                 'four_ir_cblm.row_status',
                 'four_ir_cblm.created_by',
@@ -153,18 +153,18 @@ class FourIRCblmService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($request->input('four_ir_project_id'))){
-            $curriculum = FourIRProjectCurriculum::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if(!empty($request->input('four_ir_initiative_id'))){
+            $curriculum = FourIRProjectCurriculum::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($curriculum), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Project Curriculum!"
+                "four_ir_initiative_id" => "First complete Four IR Project Curriculum!"
             ]));
         }
 
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -204,7 +204,7 @@ class FourIRCblmService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
