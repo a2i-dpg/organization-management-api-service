@@ -25,7 +25,7 @@ class FourIRAssessmentService
      */
     public function getFourIrAssessmentList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $courseName = $request['course_name'] ?? "";
         $examineName = $request['examine_name'] ?? "";
         $examinerName = $request['examiner_name'] ?? "";
@@ -37,7 +37,7 @@ class FourIRAssessmentService
         /** @var Builder $fourIrAssessmentBuilder */
         $fourIrAssessmentBuilder = FourIRAssessment::select([
             'four_ir_assessments.id',
-            'four_ir_assessments.four_ir_project_id',
+            'four_ir_assessments.four_ir_initiative_id',
             'four_ir_assessments.course_name',
             'four_ir_assessments.course_name_en',
             'four_ir_assessments.examine_name',
@@ -56,7 +56,7 @@ class FourIRAssessmentService
         $fourIrAssessmentBuilder->orderBy('four_ir_assessments.id', $order);
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrAssessmentBuilder->where('four_ir_assessments.four_ir_project_id', $fourIrProjectId);
+            $fourIrAssessmentBuilder->where('four_ir_assessments.four_ir_initiative_id', $fourIrProjectId);
         }
 
         if (!empty($courseName)) {
@@ -115,7 +115,7 @@ class FourIRAssessmentService
         /** @var FourIRAssessment|Builder $fourIrAssessmentBuilder */
         $fourIrAssessmentBuilder = FourIRAssessment::select([
             'four_ir_assessments.id',
-            'four_ir_assessments.four_ir_project_id',
+            'four_ir_assessments.four_ir_initiative_id',
             'four_ir_assessments.course_name',
             'four_ir_assessments.course_name_en',
             'four_ir_assessments.examine_name',
@@ -179,18 +179,18 @@ class FourIRAssessmentService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request->input('four_ir_project_id'))) {
-            $tnaReport = FourIRCourseDevelopment::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if (!empty($request->input('four_ir_initiative_id'))) {
+            $tnaReport = FourIRCourseDevelopment::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Course development!"
+                "four_ir_initiative_id" => "First complete Four IR Course development!"
             ]));
         }
 
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -260,7 +260,7 @@ class FourIRAssessmentService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'course_name' => 'nullable',
             'examine_name' => 'nullable',
             'examiner_name' => 'nullable',

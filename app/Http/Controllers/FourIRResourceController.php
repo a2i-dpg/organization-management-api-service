@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRResource;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRResourceService;
@@ -43,7 +43,7 @@ class FourIRResourceController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProject::class);
+//        $this->authorize('viewAny', FourIRInitiative::class);
 
         $filter = $this->fourIRResourceService->filterValidator($request)->validate();
         $response = $this->fourIRResourceService->getFourIRResourceList($filter, $this->startTime);
@@ -87,7 +87,7 @@ class FourIRResourceController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIRResourceService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
 
             DB::commit();
             $response = [
@@ -124,7 +124,7 @@ class FourIRResourceController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrResource['file_path'];
             $data = $this->fourIRResourceService->update($fourIrResource, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
 
             DB::commit();
             $response = [

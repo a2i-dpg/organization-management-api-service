@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRProjectCurriculum;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRProjectCurriculumService;
@@ -69,7 +69,7 @@ class FourIRProjectCurriculumController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIrProjectCurriculumService->storeOrUpdate($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_CURRICULUM_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_CURRICULUM_STEP);
 
             DB::commit();
             $response = [

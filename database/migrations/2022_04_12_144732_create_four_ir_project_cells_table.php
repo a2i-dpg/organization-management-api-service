@@ -15,7 +15,7 @@ class CreateFourIRProjectCellsTable extends Migration
     {
         Schema::create('four_ir_project_cells', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_project_id');
+            $table->unsignedInteger('four_ir_initiative_id');
             $table->string('name');
             $table->string('address');
             $table->string('email', 191);

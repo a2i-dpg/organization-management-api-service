@@ -39,7 +39,7 @@ class FourIRProjectCurriculumService
         $fourIrProjectCurriculumBuilder = FourIRProjectCurriculum::select(
             [
                 'four_ir_project_curriculums.id',
-                'four_ir_project_curriculums.four_ir_project_id',
+                'four_ir_project_curriculums.four_ir_initiative_id',
                 'four_ir_project_curriculums.file_path',
                 'four_ir_project_curriculums.accessor_type',
                 'four_ir_project_curriculums.accessor_id',
@@ -91,7 +91,7 @@ class FourIRProjectCurriculumService
         $fourIrProjectCurriculumBuilder = FourIRProjectCurriculum::select(
             [
                 'four_ir_project_curriculums.id',
-                'four_ir_project_curriculums.four_ir_project_id',
+                'four_ir_project_curriculums.four_ir_initiative_id',
                 'four_ir_project_curriculums.file_path',
                 'four_ir_project_curriculums.accessor_type',
                 'four_ir_project_curriculums.accessor_id',
@@ -113,7 +113,7 @@ class FourIRProjectCurriculumService
      */
     public function storeOrUpdate(array $data): FourIRProjectCurriculum
     {
-        return FourIRProjectCurriculum::updateOrCreate(['four_ir_project_id' => $data['four_ir_project_id']], $data);
+        return FourIRProjectCurriculum::updateOrCreate(['four_ir_initiative_id' => $data['four_ir_initiative_id']], $data);
     }
 
     /**
@@ -128,18 +128,18 @@ class FourIRProjectCurriculumService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($request->input('four_ir_project_id'))){
-            $projectCS = FourIRProjectCs::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if(!empty($request->input('four_ir_initiative_id'))){
+            $projectCS = FourIRProjectCs::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($projectCS), ValidationException::withMessages([
                 "First complete Four IR Project CS!"
             ]));
         }
 
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -179,7 +179,7 @@ class FourIRProjectCurriculumService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',

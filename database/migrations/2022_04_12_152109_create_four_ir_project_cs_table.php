@@ -15,7 +15,7 @@ class CreateFourIRProjectCsTable extends Migration
     {
         Schema::create('four_ir_project_cs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_project_id');
+            $table->unsignedInteger('four_ir_initiative_id');
             $table->string('experts',400);
             $table->string('level',300);
             $table->string('approved_by',300);

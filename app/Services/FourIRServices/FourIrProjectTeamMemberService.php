@@ -3,6 +3,7 @@
 
 namespace App\Services\FourIRServices;
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\FourIRGuideline;
 use App\Models\FourIRProjectTeamMember;
@@ -29,7 +30,7 @@ class FourIrProjectTeamMemberService
      */
     public function getFourIrProjectTeamMemberList(array $request, Carbon $startTime): array
     {
-        $fourIRProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIRProjectId = $request['four_ir_initiative_id'] ?? "";
         $email = $request['email'] ?? "";
         $phoneNumber = $request['phone_number'] ?? "";
         $role = $request['role'] ?? "";
@@ -43,7 +44,8 @@ class FourIrProjectTeamMemberService
         $fourIrProjectTeamMemberBuilder = FourIRProjectTeamMember::select(
             [
                 'four_ir_project_team_members.id',
-                'four_ir_project_team_members.four_ir_project_id',
+                'four_ir_project_team_members.four_ir_initiative_id',
+                'four_ir_project_team_members.user_id',
                 'four_ir_project_team_members.name',
                 'four_ir_project_team_members.name_en',
                 'four_ir_project_team_members.email',
@@ -62,7 +64,7 @@ class FourIrProjectTeamMemberService
         $fourIrProjectTeamMemberBuilder->orderBy('four_ir_project_team_members.id', $order);
 
         if (!empty($fourIRProjectId)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.four_ir_project_id', $fourIRProjectId);
+            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.four_ir_initiative_id', $fourIRProjectId);
         }
         if (!empty($email)) {
             $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.email', 'like', '%' . $email . '%');
@@ -118,7 +120,8 @@ class FourIrProjectTeamMemberService
         $fourIrProjectTeamMemberBuilder = FourIRProjectTeamMember::select(
             [
                 'four_ir_project_team_members.id',
-                'four_ir_project_team_members.four_ir_project_id',
+                'four_ir_project_team_members.four_ir_initiative_id',
+                'four_ir_project_team_members.user_id',
                 'four_ir_project_team_members.name',
                 'four_ir_project_team_members.name_en',
                 'four_ir_project_team_members.email',
@@ -144,10 +147,35 @@ class FourIrProjectTeamMemberService
      */
     public function store(array $data): FourIRProjectTeamMember
     {
+        $userData = $this->createPayloadToStoreUser($data);
+        $data['user_id'] = $userData['id'];
+
         $fourIrProjectTeamMember = app()->make(FourIRProjectTeamMember::class);
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
+
         return $fourIrProjectTeamMember;
+
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function createPayloadToStoreUser(array $data): array
+    {
+        $payload = [
+            "user_type" => BaseModel::FOUR_IR_USER_TYPE,
+            "username" => $data['phone_number'],
+            "name" => $data['name'],
+            "name_en" => $data['name_en'] ?? "",
+            "email" => $data['email'],
+            "mobile" => $data['phone_number'],
+            "password" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD,
+            "password_confirmation" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD
+        ];
+
+        return ServiceToServiceCall::createFourIrUser($payload);
     }
 
     /**
@@ -183,10 +211,10 @@ class FourIrProjectTeamMemberService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'int',
-                'exists:four_ir_projects,id,deleted_at,NULL'
+                'exists:four_ir_initiatives,id,deleted_at,NULL'
             ],
             'accessor_type' => [
                 'required',
@@ -202,12 +230,12 @@ class FourIrProjectTeamMemberService
                 Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
                 function ($attr, $value, $failed) use ($request) {
                     if($value == FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE){
-                        $guideline = FourIRGuideline::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+                        $guideline = FourIRGuideline::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
                         if(empty($guideline)){
                             $failed('Complete Guideline step first.[24000]');
                         }
                     } else if($value == FourIRProjectTeamMember::MENTORING_TEAM_TYPE) {
-                        $implementingTeam = FourIRProjectTeamMember::where('four_ir_project_id', $request->input('four_ir_project_id'))
+                        $implementingTeam = FourIRProjectTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
                             ->where('team_type', FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE)
                             ->first();
                         if(empty($implementingTeam)){
@@ -277,7 +305,7 @@ class FourIrProjectTeamMemberService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'email' => 'nullable',
             'phone_number' => 'nullable',
             'role' => 'nullable',

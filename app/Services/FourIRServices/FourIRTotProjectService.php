@@ -26,7 +26,7 @@ class FourIRTotProjectService
      */
     public function getFourIrProjectTOtList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -35,7 +35,7 @@ class FourIRTotProjectService
         /** @var Builder $fourIrProjectTotBuilder */
         $fourIrProjectTotBuilder = FourIRProjectTot::select([
             'four_ir_project_tots.id',
-            'four_ir_project_tots.four_ir_project_id',
+            'four_ir_project_tots.four_ir_initiative_id',
             'four_ir_project_tots.accessor_type',
             'four_ir_project_tots.accessor_id',
             'four_ir_project_tots.participants',
@@ -52,7 +52,7 @@ class FourIRTotProjectService
         $fourIrProjectTotBuilder->orderBy('four_ir_project_tots.id', $order);
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrProjectTotBuilder->where('four_ir_project_tots.four_ir_project_id', $fourIrProjectId);
+            $fourIrProjectTotBuilder->where('four_ir_project_tots.four_ir_initiative_id', $fourIrProjectId);
         }
         if (is_numeric($rowStatus)) {
             $fourIrProjectTotBuilder->where('four_ir_project_tots.row_status', $rowStatus);
@@ -94,7 +94,7 @@ class FourIRTotProjectService
         /** @var FourIRProjectTot|Builder $fourIrProjectTotBuilder */
         $fourIrProjectTotBuilder = FourIRProjectTot::select([
             'four_ir_project_tots.id',
-            'four_ir_project_tots.four_ir_project_id',
+            'four_ir_project_tots.four_ir_initiative_id',
             'four_ir_project_tots.accessor_type',
             'four_ir_project_tots.accessor_id',
             'four_ir_project_tots.participants',
@@ -153,18 +153,18 @@ class FourIRTotProjectService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request->input('four_ir_project_id'))) {
-            $tnaReport = FourIRResource::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if (!empty($request->input('four_ir_initiative_id'))) {
+            $tnaReport = FourIRResource::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Project Resource Management!"
+                "four_ir_initiative_id" => "First complete Four IR Project Resource Management!"
             ]));
         }
 
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -224,7 +224,7 @@ class FourIRTotProjectService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'date' => 'nullable|date',

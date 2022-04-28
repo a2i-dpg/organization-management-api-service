@@ -5,7 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRFileLog;
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class RankService
  * @package App\Services
  */
-class FourIrProjectService
+class FourIrInitiativeService
 {
     /**
      * @param array $request
@@ -40,53 +40,54 @@ class FourIrProjectService
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $fourIrProjectBuilder */
-        $fourIrProjectBuilder = FourIRProject::select(
+        $fourIrProjectBuilder = FourIRInitiative::select(
             [
-                'four_ir_projects.id',
-                'four_ir_projects.project_name',
-                'four_ir_projects.project_name_en',
-                'four_ir_projects.organization_name',
-                'four_ir_projects.organization_name_en',
-                'four_ir_projects.four_ir_occupation_id',
-                'four_ir_projects.start_date',
-                'four_ir_projects.budget',
-                'four_ir_projects.project_code',
-                'four_ir_projects.file_path',
-                'four_ir_projects.tasks',
-                'four_ir_projects.completion_step',
-                'four_ir_projects.form_step',
-                'four_ir_projects.accessor_type',
-                'four_ir_projects.accessor_id',
-                'four_ir_projects.row_status',
-                'four_ir_projects.created_by',
-                'four_ir_projects.updated_by',
-                'four_ir_projects.created_at',
-                'four_ir_projects.updated_at'
+                'four_ir_initiatives.id',
+                'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_initiatives.project_name',
+                'four_ir_initiatives.project_name_en',
+                'four_ir_initiatives.organization_name',
+                'four_ir_initiatives.organization_name_en',
+                'four_ir_initiatives.four_ir_occupation_id',
+                'four_ir_initiatives.start_date',
+                'four_ir_initiatives.budget',
+                'four_ir_initiatives.project_code',
+                'four_ir_initiatives.file_path',
+                'four_ir_initiatives.tasks',
+                'four_ir_initiatives.completion_step',
+                'four_ir_initiatives.form_step',
+                'four_ir_initiatives.accessor_type',
+                'four_ir_initiatives.accessor_id',
+                'four_ir_initiatives.row_status',
+                'four_ir_initiatives.created_by',
+                'four_ir_initiatives.updated_by',
+                'four_ir_initiatives.created_at',
+                'four_ir_initiatives.updated_at'
             ]
         )->acl();
 
-        $fourIrProjectBuilder->orderBy('four_ir_projects.id', $order);
+        $fourIrProjectBuilder->orderBy('four_ir_initiatives.id', $order);
 
         if (!empty($projectName)) {
-            $fourIrProjectBuilder->where('four_ir_projects.project_name', 'like', '%' . $projectName . '%');
+            $fourIrProjectBuilder->where('four_ir_initiatives.project_name', 'like', '%' . $projectName . '%');
         }
         if (!empty($projectNameEn)) {
-            $fourIrProjectBuilder->where('four_ir_projects.project_name_en', 'like', '%' . $projectNameEn . '%');
+            $fourIrProjectBuilder->where('four_ir_initiatives.project_name_en', 'like', '%' . $projectNameEn . '%');
         }
 
         if (!empty($organizationName)) {
-            $fourIrProjectBuilder->where('four_ir_projects.organization_name', 'like', '%' . $organizationName . '%');
+            $fourIrProjectBuilder->where('four_ir_initiatives.organization_name', 'like', '%' . $organizationName . '%');
         }
         if (!empty($organizationNameEn)) {
-            $fourIrProjectBuilder->where('four_ir_projects.organization_name_en', 'like', '%' . $organizationNameEn . '%');
+            $fourIrProjectBuilder->where('four_ir_initiatives.organization_name_en', 'like', '%' . $organizationNameEn . '%');
         }
 
         if (!empty($startDate)) {
-            $fourIrProjectBuilder->whereDate('four_ir_projects.organization_id', $startDate);
+            $fourIrProjectBuilder->whereDate('four_ir_initiatives.organization_id', $startDate);
         }
 
         if (is_numeric($rowStatus)) {
-            $fourIrProjectBuilder->where('four_ir_projects.row_status', $rowStatus);
+            $fourIrProjectBuilder->where('four_ir_initiatives.row_status', $rowStatus);
         }
 
         /** @var Collection $fourIrProjects */
@@ -115,63 +116,64 @@ class FourIrProjectService
 
     /**
      * @param int $id
-     * @return FourIRProject
+     * @return FourIRInitiative
      */
-    public function getOneFourIrProject(int $id): FourIRProject
+    public function getOneFourIrProject(int $id): FourIRInitiative
     {
-        /** @var FourIRProject|Builder $fourIrProjectBuilder */
-        $fourIrProjectBuilder = FourIRProject::select(
+        /** @var FourIRInitiative|Builder $fourIrProjectBuilder */
+        $fourIrProjectBuilder = FourIRInitiative::select(
             [
-                'four_ir_projects.id',
-                'four_ir_projects.project_name',
-                'four_ir_projects.project_name_en',
-                'four_ir_projects.organization_name',
-                'four_ir_projects.organization_name_en',
-                'four_ir_projects.four_ir_occupation_id',
-                'four_ir_projects.details',
-                'four_ir_projects.start_date',
-                'four_ir_projects.budget',
-                'four_ir_projects.project_code',
-                'four_ir_projects.file_path',
-                'four_ir_projects.tasks',
-                'four_ir_projects.completion_step',
-                'four_ir_projects.form_step',
-                'four_ir_projects.accessor_type',
-                'four_ir_projects.accessor_id',
-                'four_ir_projects.row_status',
-                'four_ir_projects.created_by',
-                'four_ir_projects.updated_by',
-                'four_ir_projects.created_at',
-                'four_ir_projects.updated_at'
+                'four_ir_initiatives.id',
+                'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_initiatives.project_name',
+                'four_ir_initiatives.project_name_en',
+                'four_ir_initiatives.organization_name',
+                'four_ir_initiatives.organization_name_en',
+                'four_ir_initiatives.four_ir_occupation_id',
+                'four_ir_initiatives.details',
+                'four_ir_initiatives.start_date',
+                'four_ir_initiatives.budget',
+                'four_ir_initiatives.project_code',
+                'four_ir_initiatives.file_path',
+                'four_ir_initiatives.tasks',
+                'four_ir_initiatives.completion_step',
+                'four_ir_initiatives.form_step',
+                'four_ir_initiatives.accessor_type',
+                'four_ir_initiatives.accessor_id',
+                'four_ir_initiatives.row_status',
+                'four_ir_initiatives.created_by',
+                'four_ir_initiatives.updated_by',
+                'four_ir_initiatives.created_at',
+                'four_ir_initiatives.updated_at'
             ]
         );
-        $fourIrProjectBuilder->where('four_ir_projects.id', '=', $id);
+        $fourIrProjectBuilder->where('four_ir_initiatives.id', '=', $id);
 
         return $fourIrProjectBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProject
+     * @return FourIRInitiative
      */
-    public function store(array $data): FourIRProject
+    public function store(array $data): FourIRInitiative
     {
         $data['project_code'] = Uuid::uuid4()->toString();
-        $data['completion_step'] = FourIRProject::COMPLETION_STEP_ONE;
-        $data['form_step'] = FourIRProject::FORM_STEP_PROJECT_INITIATION;
+        $data['completion_step'] = FourIRInitiative::COMPLETION_STEP_ONE;
+        $data['form_step'] = FourIRInitiative::FORM_STEP_PROJECT_INITIATION;
 
-        $fourIrProject = new FourIRProject();
+        $fourIrProject = new FourIRInitiative();
         $fourIrProject->fill($data);
         $fourIrProject->save();
         return $fourIrProject;
     }
 
     /**
-     * @param FourIRProject $fourIrProject
+     * @param FourIRInitiative $fourIrProject
      * @param array $data
-     * @return FourIRProject
+     * @return FourIRInitiative
      */
-    public function update(FourIRProject $fourIrProject, array $data): FourIRProject
+    public function update(FourIRInitiative $fourIrProject, array $data): FourIRInitiative
     {
         $fourIrProject->fill($data);
         $fourIrProject->save();
@@ -179,10 +181,10 @@ class FourIrProjectService
     }
 
     /**
-     * @param FourIRProject $fourIrProject
+     * @param FourIRInitiative $fourIrProject
      * @return bool
      */
-    public function destroy(FourIRProject $fourIrProject): bool
+    public function destroy(FourIRInitiative $fourIrProject): bool
     {
         return $fourIrProject->delete();
     }
@@ -205,6 +207,14 @@ class FourIrProjectService
             'accessor_id' => [
                 'required',
                 'int'
+            ],
+            'four_ir_tagline_id' => [
+                Rule::requiredIf(function () use ($id) {
+                    return is_null($id);
+                }),
+                'nullable',
+                'int',
+                'exists:four_ir_taglines,id,deleted_at,NULL'
             ],
             'project_name' => [
                 'required',
@@ -287,6 +297,7 @@ class FourIrProjectService
         }
 
         return Validator::make($request->all(), [
+            'four_ir_tagline_id' => 'required|int',
             'project_name' => 'nullable|max:600|min:2',
             'project_name_en' => 'nullable|max:300|min:2',
             'organization_name' => 'nullable|max:600|min:2',

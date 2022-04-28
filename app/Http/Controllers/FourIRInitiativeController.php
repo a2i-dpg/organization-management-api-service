@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIRFileLogService;
-use App\Services\FourIRServices\FourIrProjectService;
+use App\Services\FourIRServices\FourIrInitiativeService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -15,19 +15,19 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRProjectController extends Controller
+class FourIRInitiativeController extends Controller
 {
-    public FourIrProjectService $fourIrProjectService;
+    public FourIrInitiativeService $fourIrProjectService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectController constructor.
+     * FourIRInitiativeController constructor.
      *
-     * @param FourIrProjectService $fourIrProjectService
+     * @param FourIrInitiativeService $fourIrProjectService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIrProjectService $fourIrProjectService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIrInitiativeService $fourIrProjectService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectService = $fourIrProjectService;
@@ -43,7 +43,7 @@ class FourIRProjectController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProject::class);
+//        $this->authorize('viewAny', FourIRInitiative::class);
 
         $filter = $this->fourIrProjectService->filterValidator($request)->validate();
         $response = $this->fourIrProjectService->getFourIRProjectList($filter, $this->startTime);
@@ -79,12 +79,12 @@ class FourIRProjectController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIRProject::class);
+        // $this->authorize('create', FourIRInitiative::class);
         $validated = $this->fourIrProjectService->validator($request)->validate();
         try {
             DB::beginTransaction();
             $data = $this->fourIrProjectService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_INITIATION_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
             $response = [
@@ -106,6 +106,7 @@ class FourIRProjectController extends Controller
 
     /**
      * Update the specified resource in storage
+     *
      * @param Request $request
      * @param int $id
      * @return JsonResponse
@@ -115,14 +116,14 @@ class FourIRProjectController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProject = FourIRProject::findOrFail($id);
+        $fourIrProject = FourIRInitiative::findOrFail($id);
         // $this->authorize('update', $fourIrProject);
         $validated = $this->fourIrProjectService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
             $filePath = $fourIrProject['file_path'];
             $data = $this->fourIrProjectService->update($fourIrProject, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_INITIATION_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
             $response = [
@@ -152,7 +153,7 @@ class FourIRProjectController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProject = FourIRProject::findOrFail($id);
+        $fourIrProject = FourIRInitiative::findOrFail($id);
 //        $this->authorize('delete', $fourIrProject);
         $this->fourIrProjectService->destroy($fourIrProject);
         $response = [

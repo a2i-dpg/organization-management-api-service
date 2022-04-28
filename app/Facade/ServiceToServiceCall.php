@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getCoreUserByUsername(string $username)
  * @method static array|mixed getYouthUserByUsername(string $username)
  * @method static array|mixed getDomain(string $username)
+ * @method static array|mixed createFourIrUser(array $payload)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler

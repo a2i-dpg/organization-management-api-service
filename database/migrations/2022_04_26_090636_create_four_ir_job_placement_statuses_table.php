@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIrFileLogsTable extends Migration
+class CreateFourIRJobPlacementStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateFourIrFileLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('four_ir_file_logs', function (Blueprint $table) {
+        Schema::create('four_ir_job_placement_statuses', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_initiative_id');
-            $table->string('file_path');
-            $table->unsignedInteger('module_type')->comment('1=> Initiative, 2 => Project guideline, 3 => Tna report, 4 => Project cs, 5 => Project curriculum, 6 => CBLM, 7 => Project resource management, 8 => ToT');
+            $table->unsignedInteger('four_ir_project_id');
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
@@ -35,6 +33,6 @@ class CreateFourIrFileLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('four_ir_file_logs');
+        Schema::dropIfExists('four_ir_job_placement_statuses');
     }
 }

@@ -21,7 +21,7 @@ class FourIRCourseDevelopmentService
 {
     public function getFourIRCourseDevelopmentList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_project_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -31,7 +31,7 @@ class FourIRCourseDevelopmentService
         /** @var FourIRCourseDevelopment|Builder $fourIrCourseDevelopmentBuilder */
         $fourIrCourseDevelopmentBuilder = FourIRCourseDevelopment::select([
             'four_ir_course_developments.id',
-            'four_ir_course_developments.four_ir_project_id',
+            'four_ir_course_developments.four_ir_initiative_id',
             'four_ir_course_developments.accessor_type',
             'four_ir_course_developments.accessor_id',
             'four_ir_course_developments.training_center_details',
@@ -51,7 +51,7 @@ class FourIRCourseDevelopmentService
         $fourIrCourseDevelopmentBuilder->orderBy('four_ir_course_developments.id', $order);
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrCourseDevelopmentBuilder->where('four_ir_course_developments.four_ir_project_id', $fourIrProjectId);
+            $fourIrCourseDevelopmentBuilder->where('four_ir_course_developments.four_ir_initiative_id', $fourIrProjectId);
         }
         if (is_numeric($rowStatus)) {
             $fourIrCourseDevelopmentBuilder->where('four_ir_course_developments.row_status', $rowStatus);
@@ -92,7 +92,7 @@ class FourIRCourseDevelopmentService
         /** @var FourIRCourseDevelopment|Builder $fourIrCourseDevelopmentBuilder */
         $fourIrCourseDevelopmentBuilder = FourIRCourseDevelopment::select([
             'four_ir_course_developments.id',
-            'four_ir_course_developments.four_ir_project_id',
+            'four_ir_course_developments.four_ir_initiative_id',
             'four_ir_course_developments.accessor_type',
             'four_ir_course_developments.accessor_id',
             'four_ir_course_developments.training_center_details',
@@ -157,17 +157,17 @@ class FourIRCourseDevelopmentService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if (!empty($request->input('four_ir_project_id'))) {
-            $enrollmentApproval = FourIREnrollmentApproval::where('four_ir_project_id', $request->input('four_ir_project_id'))->first();
+        if (!empty($request->input('four_ir_initiative_id'))) {
+            $enrollmentApproval = FourIREnrollmentApproval::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($enrollmentApproval), ValidationException::withMessages([
-                "four_ir_project_id" => "First complete Four IR Enrollment Approval"
+                "four_ir_initiative_id" => "First complete Four IR Enrollment Approval"
             ]));
         }
         $rules = [
-            'four_ir_project_id' => [
+            'four_ir_initiative_id' => [
                 'required',
                 'integer',
-                'exists:four_ir_projects,id,deleted_at,NULL',
+                'exists:four_ir_initiatives,id,deleted_at,NULL',
             ],
             'accessor_type' => [
                 'required',
@@ -232,7 +232,7 @@ class FourIRCourseDevelopmentService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_project_id' => 'required|int',
+            'four_ir_initiative_id' => 'required|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'date' => 'nullable|date',

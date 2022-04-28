@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRProjectCs;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRProjectCsService;
@@ -85,7 +85,7 @@ class FourIRProjectCsController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIrProjectCsService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_PROJECT_CS_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_CS_STEP);
 
             DB::commit();
             $response = [
@@ -123,7 +123,7 @@ class FourIRProjectCsController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrProjectCs['file_path'];
             $data = $this->fourIrProjectCsService->update($fourIrProjectCs, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_PROJECT_CS_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_CS_STEP);
 
             DB::commit();
             $response = [
