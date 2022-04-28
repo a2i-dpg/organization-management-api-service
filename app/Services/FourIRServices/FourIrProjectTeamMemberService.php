@@ -3,6 +3,7 @@
 
 namespace App\Services\FourIRServices;
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\FourIRGuideline;
 use App\Models\FourIRProjectTeamMember;
@@ -44,6 +45,7 @@ class FourIrProjectTeamMemberService
             [
                 'four_ir_project_team_members.id',
                 'four_ir_project_team_members.four_ir_initiative_id',
+                'four_ir_project_team_members.user_id',
                 'four_ir_project_team_members.name',
                 'four_ir_project_team_members.name_en',
                 'four_ir_project_team_members.email',
@@ -119,6 +121,7 @@ class FourIrProjectTeamMemberService
             [
                 'four_ir_project_team_members.id',
                 'four_ir_project_team_members.four_ir_initiative_id',
+                'four_ir_project_team_members.user_id',
                 'four_ir_project_team_members.name',
                 'four_ir_project_team_members.name_en',
                 'four_ir_project_team_members.email',
@@ -144,10 +147,35 @@ class FourIrProjectTeamMemberService
      */
     public function store(array $data): FourIRProjectTeamMember
     {
+        $userData = $this->createPayloadToStoreUser($data);
+        $data['user_id'] = $userData['id'];
+
         $fourIrProjectTeamMember = app()->make(FourIRProjectTeamMember::class);
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
+
         return $fourIrProjectTeamMember;
+
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function createPayloadToStoreUser(array $data): array
+    {
+        $payload = [
+            "user_type" => BaseModel::FOUR_IR_USER_TYPE,
+            "username" => $data['phone_number'],
+            "name" => $data['name'],
+            "name_en" => $data['name_en'] ?? "",
+            "email" => $data['email'],
+            "mobile" => $data['phone_number'],
+            "password" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD,
+            "password_confirmation" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD
+        ];
+
+        return ServiceToServiceCall::createFourIrUser($payload);
     }
 
     /**

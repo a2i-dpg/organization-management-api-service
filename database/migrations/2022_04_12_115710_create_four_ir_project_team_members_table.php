@@ -16,6 +16,7 @@ class CreateFourIRProjectTeamMembersTable extends Migration
         Schema::create('four_ir_project_team_members', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('four_ir_initiative_id');
+            $table->unsignedInteger('user_id');
             $table->string('name',200);
             $table->string('name_en',200)->nullable();
             $table->string('email',191);

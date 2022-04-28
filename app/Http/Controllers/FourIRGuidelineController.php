@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRTagline;
+use App\Models\FourIRGuideline;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRGuidelineService;
 use Carbon\Carbon;
@@ -42,7 +42,7 @@ class FourIRGuidelineController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRTagline::class);
+        //$this->authorize('viewAny', FourIRGuideline::class);
 
         $filter = $this->fourIRGuidelineService->filterValidator($request)->validate();
         $response = $this->fourIRGuidelineService->getFourIRGuidelineList($filter, $this->startTime);
@@ -107,7 +107,7 @@ class FourIRGuidelineController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrGuideline = FourIRTagline::findOrFail($id);
+        $fourIrGuideline = FourIRGuideline::findOrFail($id);
         // $this->authorize('update', $fourIrGuideline);
         $validated = $this->fourIRGuidelineService->validator($request, $id)->validate();
         $data = $this->fourIRGuidelineService->update($fourIrGuideline, $validated);
@@ -134,7 +134,7 @@ class FourIRGuidelineController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrGuideline = FourIRTagline::findOrFail($id);
+        $fourIrGuideline = FourIRGuideline::findOrFail($id);
 //        $this->authorize('delete', $fourIrGuideline);
         $this->fourIRGuidelineService->destroy($fourIrGuideline);
         $response = [
