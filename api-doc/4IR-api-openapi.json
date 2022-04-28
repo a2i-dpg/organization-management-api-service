@@ -455,35 +455,25 @@
 
             }
         },
-        "/projects": {
+        "/taglines": {
             "get": {
                 "tags": [
-                    "FourIR Projects"
+                    "FourIR Tagline"
                 ],
-                "summary": "Get all 4IR projects",
+                "summary": "Get all 4IR taglines",
                 "responses": {
                     "200": {
-                        "description": "Get all projects",
+                        "description": "Get all taglines",
                         "content": {
                             "application/json": {
                                 "example": {
                                     "data": [
                                         {
                                             "id": 1,
-                                            "project_name": "gfdg",
-                                            "project_name_en": "fdgfd",
-                                            "organization_name": "fdgfd",
-                                            "organization_name_en": "fdgfd",
-                                            "four_ir_occupation_id": 1,
-                                            "start_date": "0000-00-00",
-                                            "budget": "0.00",
-                                            "project_code": "",
-                                            "file_path": "",
-                                            "tasks": null,
-                                            "completion_step": 0,
-                                            "form_step": 0,
-                                            "accessor_type": "",
-                                            "accessor_id": 0,
+                                            "name": "tags",
+                                            "name_en": "dsf",
+                                            "accessor_type": "INSTRUCTOR",
+                                            "accessor_id": 3,
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
@@ -505,15 +495,15 @@
             },
             "post": {
                 "tags": [
-                    "FourIR Projects"
+                    "FourIR Tagline"
                 ],
-                "summary": "Insert a 4IR FourIR Projects",
-                "description": "API endpoint to Insert a FourIR Projects. A successful request response will show 200 HTTP status code",
+                "summary": "Insert a 4IR FourIR Taglines",
+                "description": "API endpoint to Insert a FourIR Taglines. A successful request response will show 200 HTTP status code",
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_projects"
+                                "$ref": "#/components/schemas/4ir_taglines"
                             }
                         }
                     }
@@ -538,7 +528,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir Projects updated successfully.",
+                                        "message": "4Ir Taglines updated successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -548,40 +538,29 @@
                 }
             }
         },
-        "/projects/{fourIrProjectsId}": {
+        "/taglines/{fourIrTaglineId}": {
             "get": {
                 "tags": [
-                    "FourIR Projects"
+                    "FourIR Tagline"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectsId"
+                        "$ref": "#/components/parameters/fourIrTaglineId"
                     }
                 ],
-                "summary": "4IR Projects",
+                "summary": "4IR Tagline",
                 "responses": {
                     "200": {
-                        "description": "Get all Projects",
+                        "description": "Get all Tagline",
                         "content": {
                             "application/json": {
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "project_name": "gfdg",
-                                        "project_name_en": "fdgfd",
-                                        "organization_name": "fdgfd",
-                                        "organization_name_en": "fdgfd",
-                                        "four_ir_occupation_id": 1,
-                                        "details": "ghgfh",
-                                        "start_date": "0000-00-00",
-                                        "budget": "0.00",
-                                        "project_code": "",
-                                        "file_path": "",
-                                        "tasks": null,
-                                        "completion_step": 0,
-                                        "form_step": 0,
-                                        "accessor_type": "",
-                                        "accessor_id": 0,
+                                        "name": "tags",
+                                        "name_en": "dsf",
+                                        "accessor_type": "INSTRUCTOR",
+                                        "accessor_id": 3,
                                         "row_status": 1,
                                         "created_by": null,
                                         "updated_by": null,
@@ -603,20 +582,20 @@
             },
             "put": {
                 "tags": [
-                    "FourIR Projects"
+                    "FourIR Tagline"
                 ],
-                "summary": "Update a 4IR Occupation",
-                "description": "API endpoint to update a 4IR Occupation. A successful request response will show 200 HTTP status code",
+                "summary": "Update a 4IR Tagline",
+                "description": "API endpoint to update a 4IR Tagline. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectsId"
+                        "$ref": "#/components/parameters/fourIrTaglineId"
                     }
                 ],
                 "requestBody": {
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_project"
+                                "$ref": "#/components/schemas/4ir_taglines"
                             }
                         }
                     }
@@ -652,13 +631,13 @@
             },
             "delete": {
                 "tags": [
-                    "FourIR Projects"
+                    "FourIR Tagline"
                 ],
-                "summary": "Delete a 4IR projects",
-                "description": "API endpoint to delete a 4IR projects. A successful request response will show 200 HTTP status code",
+                "summary": "Delete a 4IR Tagline",
+                "description": "API endpoint to delete a 4IR Tagline. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectsId"
+                        "$ref": "#/components/parameters/fourIrTaglineId"
                     }
                 ],
                 "responses": {
@@ -670,7 +649,7 @@
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4IR projects deleted successfully.",
+                                        "message": "4IR Tagline deleted successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -2254,42 +2233,14 @@
                     "name","address","email","mobile_number","designation","four_ir_initiative_id"
                 ]
             },
-            "4ir_projects": {
+            "4ir_taglines": {
                 "type": "object",
                 "properties": {
-                    "project_name": {
+                    "name": {
                         "type": "string"
                     },
-                    "project_name_en": {
+                    "name_en": {
                         "type": "string"
-                    },
-                    "organization_name": {
-                        "type": "string"
-                    },
-                    "organization_name_en": {
-                        "type": "string"
-                    },
-                    "four_ir_occupation_id": {
-                        "type": "integer"
-                    },
-                    "details": {
-                        "type": "string"
-                    },
-                    "start_date": {
-                        "type": "string",
-                        "format": "date"
-                    },
-                    "budget": {
-                        "type": "integer"
-                    },
-                    "file_path": {
-                        "type": "string"
-                    },
-                    "tasks": {
-                        "type": "string",
-
-                        "description":"('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved')"
-
                     },
                     "row_status": {
                         "type": "integer",
@@ -2301,7 +2252,7 @@
                     }
                 },
                 "required": [
-                    "project_name","organization_name","four_ir_occupation_id","start_date","tasks"
+                    "name"
                 ]
             },
             "4ir_tna_format": {
@@ -2531,8 +2482,8 @@
                     "example": "1"
                 }
             },
-            "fourIrProjectsId": {
-                "name": "fourIrProjectsId",
+            "fourIrTaglineId": {
+                "name": "fourIrTaglineId",
                 "in": "path",
                 "required": true,
                 "schema": {
