@@ -229,18 +229,14 @@ class ServiceToServiceCallHandler
      */
     public function createFourIrUser(array $payload): mixed
     {
-        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'create-four-ir-user';
-
-        $userPostField = [
-            "payload" => $payload
-        ];
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/create-four-ir-user';
 
         $userData = Http::withOptions([
             'verify' => config('nise3.should_ssl_verify'),
             'debug' => config('nise3.http_debug')
         ])
             ->timeout(5)
-            ->post($url, $userPostField)
+            ->post($url, $payload)
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());

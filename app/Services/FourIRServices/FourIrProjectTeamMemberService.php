@@ -172,7 +172,8 @@ class FourIrProjectTeamMemberService
             "email" => $data['email'],
             "mobile" => $data['phone_number'],
             "password" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD,
-            "password_confirmation" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD
+            "password_confirmation" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD,
+            "row_status" => BaseModel::ROW_STATUS_INACTIVE
         ];
 
         return ServiceToServiceCall::createFourIrUser($payload);
@@ -228,7 +229,7 @@ class FourIrProjectTeamMemberService
                 'required',
                 'int',
                 Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
-                function ($attr, $value, $failed) use ($request) {
+/*                function ($attr, $value, $failed) use ($request) {
                     if($value == FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE){
                         $guideline = FourIRGuideline::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
                         if(empty($guideline)){
@@ -242,7 +243,7 @@ class FourIrProjectTeamMemberService
                             $failed('Complete Implementing step first.[24000]');
                         }
                     }
-                }
+                }*/
             ],
             'name' => [
                 'required',
