@@ -167,7 +167,7 @@ class FourIRProjectCellService
                 'int',
                 function ($attr, $value, $failed) use ($request) {
                     $mentoringTeam = FourIRInitiativeTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
-                        ->where('team_type', FourIRInitiativeTeamMember::MENTORING_TEAM_TYPE)
+                        ->where('team_type', FourIRInitiativeTeamMember::EXPERT_TEAM_TYPE)
                         ->first();
                         if(empty($mentoringTeam)){
                             $failed('Complete Mentoring step first.[24000]');

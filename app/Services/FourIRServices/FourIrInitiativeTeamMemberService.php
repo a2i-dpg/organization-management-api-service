@@ -234,7 +234,7 @@ class FourIrInitiativeTeamMemberService
                         if(empty($guideline)){
                             $failed('Complete Guideline step first.[24000]');
                         }
-                    } else if($value == FourIRInitiativeTeamMember::MENTORING_TEAM_TYPE) {
+                    } else if($value == FourIRInitiativeTeamMember::EXPERT_TEAM_TYPE) {
                         $implementingTeam = FourIRInitiativeTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
                             ->where('team_type', FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE)
                             ->first();
