@@ -27,6 +27,7 @@ class FourIRGuidelineService
      */
     public function getFourIRGuidelineList(array $request, Carbon $startTime): array
     {
+        $name = $request['name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -36,17 +37,30 @@ class FourIRGuidelineService
         $fourIrGuidelineBuilder = FourIRGuideline::select(
             [
                 'four_ir_guidelines.id',
+                'four_ir_guidelines.name',
+                'four_ir_guidelines.name_en',
+                'four_ir_guidelines.four_ir_occupation_id',
+                'four_ir_occupations.title as occupation_title',
+                'four_ir_occupations.title_en as occupation_title_en',
                 'four_ir_guidelines.file_path',
-                'four_ir_guidelines.guideline_details',
                 'four_ir_guidelines.row_status',
                 'four_ir_guidelines.created_by',
                 'four_ir_guidelines.updated_by',
                 'four_ir_guidelines.created_at',
-                'four_ir_guidelines.updated_at',
+                'four_ir_guidelines.updated_at'
             ]
-        )->acl();
+        );
+
+        $fourIrGuidelineBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_guidelines.four_ir_occupation_id');
 
         $fourIrGuidelineBuilder->orderBy('four_ir_guidelines.id', $order);
+
+        if (!empty($name)) {
+            $fourIrGuidelineBuilder->where(function ($builder) use ($name){
+                $builder->where('four_ir_guidelines.name', 'like', '%' . $name . '%');
+                $builder->orWhere('four_ir_guidelines.name_en', 'like', '%' . $name . '%');
+            });
+        }
 
         if (is_numeric($rowStatus)) {
             $fourIrGuidelineBuilder->where('four_ir_guidelines.row_status', $rowStatus);
@@ -86,15 +100,21 @@ class FourIRGuidelineService
         $fourIrGuidelineBuilder = FourIRGuideline::select(
             [
                 'four_ir_guidelines.id',
+                'four_ir_guidelines.name',
+                'four_ir_guidelines.name_en',
+                'four_ir_guidelines.four_ir_occupation_id',
+                'four_ir_occupations.title as occupation_title',
+                'four_ir_occupations.title_en as occupation_title_en',
                 'four_ir_guidelines.file_path',
-                'four_ir_guidelines.guideline_details',
                 'four_ir_guidelines.row_status',
                 'four_ir_guidelines.created_by',
                 'four_ir_guidelines.updated_by',
                 'four_ir_guidelines.created_at',
-                'four_ir_guidelines.updated_at',
+                'four_ir_guidelines.updated_at'
             ]
         );
+
+        $fourIrGuidelineBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_guidelines.four_ir_occupation_id');
 
         $fourIrGuidelineBuilder->where('four_ir_guidelines.id', '=', $id);
 
@@ -143,23 +163,24 @@ class FourIRGuidelineService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $customMessage = [
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]',
-            'file_path.required' => 'At least file path or details should be filled up. [50000]',
-            'guideline_details.required' => 'At least file path or details should be filled up. [50000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
-            'file_path' => [
-                Rule::requiredIf(function () use ($request) {
-                    return empty($request->input('guideline_details'));
-                }),
+            'name' => [
+                'required',
+                'string'
+            ],
+            'name_en' => [
                 'nullable',
                 'string'
             ],
-            'guideline_details' => [
-                Rule::requiredIf(function () use($request) {
-                    return empty($request->input('file_path'));
-                }),
-                'nullable',
+            'four_ir_occupation_id' => [
+                'required',
+                'int',
+                'exists:four_ir_occupations,id,deleted_at,NULL'
+            ],
+            'file_path' => [
+                'required',
                 'string'
             ],
             'row_status' => [
@@ -189,8 +210,7 @@ class FourIRGuidelineService
         }
 
         return Validator::make($request->all(), [
-            'name' => 'nullable|max:600|min:2',
-            'name_en' => 'nullable|max:300|min:2',
+            'name' => 'nullable|max:600',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
