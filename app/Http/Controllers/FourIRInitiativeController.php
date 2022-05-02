@@ -17,20 +17,20 @@ use Throwable;
 
 class FourIRInitiativeController extends Controller
 {
-    public FourIrInitiativeService $fourIrProjectService;
+    public FourIrInitiativeService $fourIrInitiativeService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRInitiativeController constructor.
      *
-     * @param FourIrInitiativeService $fourIrProjectService
+     * @param FourIrInitiativeService $fourIrInitiativeService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIrInitiativeService $fourIrProjectService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIrInitiativeService $fourIrInitiativeService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIrProjectService = $fourIrProjectService;
+        $this->fourIrInitiativeService = $fourIrInitiativeService;
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
@@ -45,8 +45,8 @@ class FourIRInitiativeController extends Controller
     {
 //        $this->authorize('viewAny', FourIRInitiative::class);
 
-        $filter = $this->fourIrProjectService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectService->getFourIRProjectList($filter, $this->startTime);
+        $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
+        $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -56,10 +56,10 @@ class FourIRInitiativeController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProject = $this->fourIrProjectService->getOneFourIRProject($id);
-//        $this->authorize('view', $fourIrProject);
+        $fourIrInitiative = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
+//        $this->authorize('view', $fourIrInitiative);
         $response = [
-            "data" => $fourIrProject,
+            "data" => $fourIrInitiative,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -80,10 +80,10 @@ class FourIRInitiativeController extends Controller
     function store(Request $request): JsonResponse
     {
         // $this->authorize('create', FourIRInitiative::class);
-        $validated = $this->fourIrProjectService->validator($request)->validate();
+        $validated = $this->fourIrInitiativeService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->fourIrProjectService->store($validated);
+            $data = $this->fourIrInitiativeService->store($validated);
             $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
@@ -92,7 +92,7 @@ class FourIRInitiativeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Project added successfully",
+                    "message" => "Four Ir Initiative added successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -116,13 +116,13 @@ class FourIRInitiativeController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProject = FourIRInitiative::findOrFail($id);
-        // $this->authorize('update', $fourIrProject);
-        $validated = $this->fourIrProjectService->validator($request, $id)->validate();
+        $fourIrInitiative = FourIRInitiative::findOrFail($id);
+        // $this->authorize('update', $fourIrInitiative);
+        $validated = $this->fourIrInitiativeService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
-            $filePath = $fourIrProject['file_path'];
-            $data = $this->fourIrProjectService->update($fourIrProject, $validated);
+            $filePath = $fourIrInitiative['file_path'];
+            $data = $this->fourIrInitiativeService->update($fourIrInitiative, $validated);
             $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
@@ -131,7 +131,7 @@ class FourIRInitiativeController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Project updated successfully",
+                    "message" => "Four Ir Initiative updated successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -153,14 +153,14 @@ class FourIRInitiativeController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProject = FourIRInitiative::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
-        $this->fourIrProjectService->destroy($fourIrProject);
+        $fourIrInitiative = FourIRInitiative::findOrFail($id);
+//        $this->authorize('delete', $fourIrInitiative);
+        $this->fourIrInitiativeService->destroy($fourIrInitiative);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project deleted successfully",
+                "message" => "Four Ir Initiative deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

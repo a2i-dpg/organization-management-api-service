@@ -27,35 +27,37 @@ class FourIrInitiativeService
      * @param Carbon $startTime
      * @return array
      */
-    public function getFourIrProjectList(array $request, Carbon $startTime): array
+    public function getFourIrInitiativeList(array $request, Carbon $startTime): array
     {
-        $projectName = $request['project_name'] ?? "";
-        $projectNameEn = $request['project_name_en'] ?? "";
+        $initiativeName = $request['name'] ?? "";
         $organizationName = $request['organization_name'] ?? "";
-        $organizationNameEn = $request['organization_name_en'] ?? "";
         $startDate = $request['start_date'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
-        /** @var Builder $fourIrProjectBuilder */
-        $fourIrProjectBuilder = FourIRInitiative::select(
+        /** @var Builder $fourIrInitiativeBuilder */
+        $fourIrInitiativeBuilder = FourIRInitiative::select(
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
-                'four_ir_initiatives.project_name',
-                'four_ir_initiatives.project_name_en',
+                'four_ir_initiatives.name',
+                'four_ir_initiatives.name_en',
                 'four_ir_initiatives.organization_name',
                 'four_ir_initiatives.organization_name_en',
-                'four_ir_initiatives.four_ir_occupation_id',
-                'four_ir_initiatives.start_date',
                 'four_ir_initiatives.budget',
-                'four_ir_initiatives.project_code',
+                'four_ir_initiatives.designation',
+                'four_ir_initiatives.four_ir_occupation_id',
+                'four_ir_occupations.title as occupation_title',
+                'four_ir_occupations.title_en as occupation_title_en',
+                'four_ir_initiatives.start_date',
+                'four_ir_initiatives.end_date',
                 'four_ir_initiatives.file_path',
                 'four_ir_initiatives.tasks',
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
+                'four_ir_initiatives.initiative_code',
                 'four_ir_initiatives.accessor_type',
                 'four_ir_initiatives.accessor_id',
                 'four_ir_initiatives.row_status',
@@ -66,45 +68,47 @@ class FourIrInitiativeService
             ]
         )->acl();
 
-        $fourIrProjectBuilder->orderBy('four_ir_initiatives.id', $order);
+        $fourIrInitiativeBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_initiatives.four_ir_occupation_id');
 
-        if (!empty($projectName)) {
-            $fourIrProjectBuilder->where('four_ir_initiatives.project_name', 'like', '%' . $projectName . '%');
-        }
-        if (!empty($projectNameEn)) {
-            $fourIrProjectBuilder->where('four_ir_initiatives.project_name_en', 'like', '%' . $projectNameEn . '%');
+        if (!empty($initiativeName)) {
+            $fourIrInitiativeBuilder->where(function ($builder) use ($initiativeName){
+                $builder->where('four_ir_initiatives.name', 'like', '%' . $initiativeName . '%');
+                $builder->orWhere('four_ir_initiatives.name_en', 'like', '%' . $initiativeName . '%');
+            });
         }
 
         if (!empty($organizationName)) {
-            $fourIrProjectBuilder->where('four_ir_initiatives.organization_name', 'like', '%' . $organizationName . '%');
-        }
-        if (!empty($organizationNameEn)) {
-            $fourIrProjectBuilder->where('four_ir_initiatives.organization_name_en', 'like', '%' . $organizationNameEn . '%');
+            $fourIrInitiativeBuilder->where(function ($builder) use ($organizationName){
+                $builder->where('four_ir_initiatives.organization_name', 'like', '%' . $organizationName . '%');
+                $builder->orWhere('four_ir_initiatives.organization_name_en', 'like', '%' . $organizationName . '%');
+            });
         }
 
         if (!empty($startDate)) {
-            $fourIrProjectBuilder->whereDate('four_ir_initiatives.organization_id', $startDate);
+            $fourIrInitiativeBuilder->whereDate('four_ir_initiatives.start_date', $startDate);
         }
+
+        $fourIrInitiativeBuilder->orderBy('four_ir_initiatives.id', $order);
 
         if (is_numeric($rowStatus)) {
-            $fourIrProjectBuilder->where('four_ir_initiatives.row_status', $rowStatus);
+            $fourIrInitiativeBuilder->where('four_ir_initiatives.row_status', $rowStatus);
         }
 
-        /** @var Collection $fourIrProjects */
+        /** @var Collection $fourIrInitiatives */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrProjects = $fourIrProjectBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjects->toArray();
+            $fourIrInitiatives = $fourIrInitiativeBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrInitiatives->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $fourIrProjects = $fourIrProjectBuilder->get();
+            $fourIrInitiatives = $fourIrInitiativeBuilder->get();
         }
 
         $response['order'] = $order;
-        $response['data'] = $fourIrProjects->toArray()['data'] ?? $fourIrProjects->toArray();
+        $response['data'] = $fourIrInitiatives->toArray()['data'] ?? $fourIrInitiatives->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -118,26 +122,30 @@ class FourIrInitiativeService
      * @param int $id
      * @return FourIRInitiative
      */
-    public function getOneFourIrProject(int $id): FourIRInitiative
+    public function getOneFourIrInitiative(int $id): FourIRInitiative
     {
-        /** @var FourIRInitiative|Builder $fourIrProjectBuilder */
-        $fourIrProjectBuilder = FourIRInitiative::select(
+        /** @var FourIRInitiative|Builder $fourIrInitiativeBuilder */
+        $fourIrInitiativeBuilder = FourIRInitiative::select(
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
-                'four_ir_initiatives.project_name',
-                'four_ir_initiatives.project_name_en',
+                'four_ir_initiatives.name',
+                'four_ir_initiatives.name_en',
                 'four_ir_initiatives.organization_name',
                 'four_ir_initiatives.organization_name_en',
-                'four_ir_initiatives.four_ir_occupation_id',
-                'four_ir_initiatives.details',
-                'four_ir_initiatives.start_date',
                 'four_ir_initiatives.budget',
-                'four_ir_initiatives.project_code',
+                'four_ir_initiatives.designation',
+                'four_ir_initiatives.four_ir_occupation_id',
+                'four_ir_occupations.title as occupation_title',
+                'four_ir_occupations.title_en as occupation_title_en',
+                'four_ir_initiatives.start_date',
+                'four_ir_initiatives.end_date',
+                'four_ir_initiatives.details',
                 'four_ir_initiatives.file_path',
                 'four_ir_initiatives.tasks',
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
+                'four_ir_initiatives.initiative_code',
                 'four_ir_initiatives.accessor_type',
                 'four_ir_initiatives.accessor_id',
                 'four_ir_initiatives.row_status',
@@ -147,9 +155,11 @@ class FourIrInitiativeService
                 'four_ir_initiatives.updated_at'
             ]
         );
-        $fourIrProjectBuilder->where('four_ir_initiatives.id', '=', $id);
+        $fourIrInitiativeBuilder->where('four_ir_initiatives.id', '=', $id);
 
-        return $fourIrProjectBuilder->firstOrFail();
+        $fourIrInitiativeBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_initiatives.four_ir_occupation_id');
+
+        return $fourIrInitiativeBuilder->firstOrFail();
     }
 
     /**
@@ -158,35 +168,35 @@ class FourIrInitiativeService
      */
     public function store(array $data): FourIRInitiative
     {
-        $data['project_code'] = Uuid::uuid4()->toString();
+        $data['initiative_code'] = Uuid::uuid4()->toString();
         $data['completion_step'] = FourIRInitiative::COMPLETION_STEP_ONE;
         $data['form_step'] = FourIRInitiative::FORM_STEP_PROJECT_INITIATION;
 
-        $fourIrProject = new FourIRInitiative();
-        $fourIrProject->fill($data);
-        $fourIrProject->save();
-        return $fourIrProject;
+        $fourIrInitiative = new FourIRInitiative();
+        $fourIrInitiative->fill($data);
+        $fourIrInitiative->save();
+        return $fourIrInitiative;
     }
 
     /**
-     * @param FourIRInitiative $fourIrProject
+     * @param FourIRInitiative $fourIrInitiative
      * @param array $data
      * @return FourIRInitiative
      */
-    public function update(FourIRInitiative $fourIrProject, array $data): FourIRInitiative
+    public function update(FourIRInitiative $fourIrInitiative, array $data): FourIRInitiative
     {
-        $fourIrProject->fill($data);
-        $fourIrProject->save();
-        return $fourIrProject;
+        $fourIrInitiative->fill($data);
+        $fourIrInitiative->save();
+        return $fourIrInitiative;
     }
 
     /**
-     * @param FourIRInitiative $fourIrProject
+     * @param FourIRInitiative $fourIrInitiative
      * @return bool
      */
-    public function destroy(FourIRInitiative $fourIrProject): bool
+    public function destroy(FourIRInitiative $fourIrInitiative): bool
     {
-        return $fourIrProject->delete();
+        return $fourIrInitiative->delete();
     }
 
     /**
@@ -209,20 +219,17 @@ class FourIrInitiativeService
                 'int'
             ],
             'four_ir_tagline_id' => [
-                Rule::requiredIf(function () use ($id) {
-                    return is_null($id);
-                }),
-                'nullable',
+                'required',
                 'int',
                 'exists:four_ir_taglines,id,deleted_at,NULL'
             ],
-            'project_name' => [
+            'name' => [
                 'required',
                 'string',
                 'max:600',
                 'min:2'
             ],
-            'project_name_en' => [
+            'name_en' => [
                 'nullable',
                 'string',
                 'max:300',
@@ -240,23 +247,33 @@ class FourIrInitiativeService
                 'max:300',
                 'min:2'
             ],
+            'budget' => [
+                'required',
+                'numeric'
+            ],
+            'designation' => [
+                'required',
+                'string',
+                'max:300'
+            ],
             'four_ir_occupation_id' => [
                 'required',
                 'int',
-                'exists:occupations,id,deleted_at,NULL'
-            ],
-            'details' => [
-                'nullable',
-                'string',
-                'max:1000'
+                'exists:four_ir_occupations,id,deleted_at,NULL'
             ],
             'start_date' => [
                 'required',
                 'date_format:Y-m-d'
             ],
-            'budget' => [
+            'end_date' => [
                 'required',
-                'numeric'
+                'date_format:Y-m-d',
+                'after:start_date'
+            ],
+            'details' => [
+                'nullable',
+                'string',
+                'max:1000'
             ],
             'file_path' => [
                 'nullable',
@@ -298,10 +315,8 @@ class FourIrInitiativeService
 
         return Validator::make($request->all(), [
             'four_ir_tagline_id' => 'required|int',
-            'project_name' => 'nullable|max:600|min:2',
-            'project_name_en' => 'nullable|max:300|min:2',
+            'name' => 'nullable|max:600|min:2',
             'organization_name' => 'nullable|max:600|min:2',
-            'organization_name_en' => 'nullable|max:300|min:2',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',

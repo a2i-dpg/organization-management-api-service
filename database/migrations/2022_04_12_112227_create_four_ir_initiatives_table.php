@@ -16,19 +16,23 @@ class CreateFourIRInitiativesTable extends Migration
         Schema::create('four_ir_initiatives', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('four_ir_tagline_id');
-            $table->string('project_name', 500);
-            $table->string('project_name_en', 300)->nullable();
+            $table->string('name', 500);
+            $table->string('name_en', 300)->nullable();
             $table->string('organization_name', 500);
             $table->string('organization_name_en', 300)->nullable();
-            $table->unsignedInteger('four_ir_occupation_id');
-            $table->text('details')->nullable();
-            $table->date('start_date');
             $table->decimal('budget')->default(0);
-            $table->string('project_code',20);
+            $table->string('designation', 300);
+            $table->unsignedInteger('four_ir_occupation_id');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->text('details')->nullable();
             $table->string('file_path', 300)->nullable();
             $table->json('tasks')->comment('1=> Roadmap Finalized, 2=>Projects reviewed by Secretary of relevant Ministries, 3=>Projects Approved');
+
             $table->unsignedInteger('completion_step');
             $table->unsignedInteger('form_step');
+
+            $table->string('initiative_code',20);
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

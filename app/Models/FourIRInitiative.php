@@ -11,15 +11,15 @@ use Ramsey\Uuid\Type\Decimal;
  * App\Models\FourIRInitiative
  *
  * @property int id
- * @property string project_name
- * @property string project_name_en
+ * @property string name
+ * @property string name_en
  * @property string organization_name
  * @property string organization_name_en
  * @property int four_ir_occupation_id
  * @property string details
  * @property Carbon start_date
  * @property Decimal budget
- * @property string project_code
+ * @property string initiative_code
  * @property string file_path
  * @property array tasks
  * @property int completion_step
