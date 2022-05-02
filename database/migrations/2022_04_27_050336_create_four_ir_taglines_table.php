@@ -17,6 +17,7 @@ class CreateFourIrTaglinesTable extends Migration
             $table->increments('id');
             $table->string('name', 500);
             $table->string('name_en', 300)->nullable();
+            $table->date('start_date');
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

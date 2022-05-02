@@ -39,6 +39,7 @@ class FourIrTaglineService
                 'four_ir_taglines.id',
                 'four_ir_taglines.name',
                 'four_ir_taglines.name_en',
+                'four_ir_taglines.start_date',
                 'four_ir_taglines.accessor_type',
                 'four_ir_taglines.accessor_id',
                 'four_ir_taglines.row_status',
@@ -54,7 +55,7 @@ class FourIrTaglineService
         if (!empty($name)) {
             $fourIrTaglineBuilder->where(function ($builder) use($name){
                 $builder->where('four_ir_taglines.name', 'like', '%' . $name . '%');
-                $builder->where('four_ir_taglines.name_en', 'like', '%' . $name . '%');
+                $builder->orWhere('four_ir_taglines.name_en', 'like', '%' . $name . '%');
             });
         }
 
@@ -98,6 +99,7 @@ class FourIrTaglineService
                 'four_ir_taglines.id',
                 'four_ir_taglines.name',
                 'four_ir_taglines.name_en',
+                'four_ir_taglines.start_date',
                 'four_ir_taglines.accessor_type',
                 'four_ir_taglines.accessor_id',
                 'four_ir_taglines.row_status',
@@ -176,6 +178,10 @@ class FourIrTaglineService
                 'max:300',
                 'min:2'
             ],
+            'start_date' => [
+                'required',
+                'date-format:Y-m-d'
+            ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'nullable',
@@ -202,7 +208,6 @@ class FourIrTaglineService
 
         return Validator::make($request->all(), [
             'name' => 'nullable|max:600|min:2',
-            'name_en' => 'nullable|max:300|min:2',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
