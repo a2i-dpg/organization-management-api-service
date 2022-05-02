@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProjectTeamMember;
-use App\Services\FourIRServices\FourIrProjectTeamMemberService;
+use App\Models\FourIRInitiativeTeamMember;
+use App\Services\FourIRServices\FourIrInitiativeTeamMemberService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -13,17 +13,17 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRProjectTeamMemberController extends Controller
+class FourIRInitiativeTeamMemberController extends Controller
 {
-    public FourIrProjectTeamMemberService $fourIrProjectTeamMemberService;
+    public FourIrInitiativeTeamMemberService $fourIrProjectTeamMemberService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectTeamMemberController constructor.
+     * FourIRInitiativeTeamMemberController constructor.
      *
-     * @param FourIrProjectTeamMemberService $fourIrProjectTeamMemberService
+     * @param FourIrInitiativeTeamMemberService $fourIrProjectTeamMemberService
      */
-    public function __construct(FourIrProjectTeamMemberService $fourIrProjectTeamMemberService)
+    public function __construct(FourIrInitiativeTeamMemberService $fourIrProjectTeamMemberService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrProjectTeamMemberService = $fourIrProjectTeamMemberService;
@@ -39,7 +39,7 @@ class FourIRProjectTeamMemberController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRProjectTeamMember::class);
+        //$this->authorize('viewAny', FourIRInitiativeTeamMember::class);
 
         $filter = $this->fourIrProjectTeamMemberService->filterValidator($request)->validate();
         $response = $this->fourIrProjectTeamMemberService->getFourIrProjectTeamMemberList($filter, $this->startTime);
@@ -77,7 +77,7 @@ class FourIRProjectTeamMemberController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-       // $this->authorize('create', FourIRProjectTeamMember::class);
+       // $this->authorize('create', FourIRInitiativeTeamMember::class);
 
         $validated = $this->fourIrProjectTeamMemberService->validator($request)->validate();
         $data = $this->fourIrProjectTeamMemberService->store($validated);
@@ -105,8 +105,8 @@ class FourIRProjectTeamMemberController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProjectTeamMember = FourIRProjectTeamMember::findOrFail($id);
-//        $this->authorize('update', $fourIrProjectTeamMember);
+        $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
+        //$this->authorize('update', $fourIrProjectTeamMember);
 
         $validated = $this->fourIrProjectTeamMemberService->validator($request, $id)->validate();
         $data = $this->fourIrProjectTeamMemberService->update($fourIrProjectTeamMember, $validated);
@@ -134,8 +134,8 @@ class FourIRProjectTeamMemberController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProjectTeamMember = FourIRProjectTeamMember::findOrFail($id);
-//        $this->authorize('delete', $fourIrProjectTeamMember);
+        $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
+        //$this->authorize('delete', $fourIrProjectTeamMember);
         $this->fourIrProjectTeamMemberService->destroy($fourIrProjectTeamMember);
         $response = [
             '_response_status' => [

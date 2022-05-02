@@ -177,7 +177,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('taglines', 'FourIRTaglineController')->render();
         $customRouter()->resourceRoute('initiatives', 'FourIRInitiativeController')->render();
         $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
-        $customRouter()->resourceRoute('team-members', 'FourIRProjectTeamMemberController')->render();
+        $customRouter()->resourceRoute('team-members', 'FourIRInitiativeTeamMemberController')->render();
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('project-cells', 'FourIRProjectCellController')->render();
         $customRouter()->resourceRoute('project-cs', 'FourIRProjectCsController')->render();

@@ -5,8 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
-use App\Models\FourIRGuideline;
-use App\Models\FourIRProjectTeamMember;
+use App\Models\FourIRInitiativeTeamMember;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -18,10 +17,10 @@ use Throwable;
 
 
 /**
- * Class FourIrProjectTeamMemberService
+ * Class FourIrInitiativeTeamMemberService
  * @package App\Services\FourIRServices
  */
-class FourIrProjectTeamMemberService
+class FourIrInitiativeTeamMemberService
 {
     /**
      * @param array $request
@@ -41,49 +40,49 @@ class FourIrProjectTeamMemberService
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $fourIrProjectTeamMemberBuilder */
-        $fourIrProjectTeamMemberBuilder = FourIRProjectTeamMember::select(
+        $fourIrProjectTeamMemberBuilder = FourIRInitiativeTeamMember::select(
             [
-                'four_ir_project_team_members.id',
-                'four_ir_project_team_members.four_ir_initiative_id',
-                'four_ir_project_team_members.user_id',
-                'four_ir_project_team_members.name',
-                'four_ir_project_team_members.name_en',
-                'four_ir_project_team_members.email',
-                'four_ir_project_team_members.phone_number',
-                'four_ir_project_team_members.role',
-                'four_ir_project_team_members.designation',
-                'four_ir_project_team_members.team_type',
-                'four_ir_project_team_members.row_status',
-                'four_ir_project_team_members.created_by',
-                'four_ir_project_team_members.updated_by',
-                'four_ir_project_team_members.created_at',
-                'four_ir_project_team_members.updated_at'
+                'four_ir_initiative_team_members.id',
+                'four_ir_initiative_team_members.four_ir_initiative_id',
+                'four_ir_initiative_team_members.user_id',
+                'four_ir_initiative_team_members.name',
+                'four_ir_initiative_team_members.name_en',
+                'four_ir_initiative_team_members.email',
+                'four_ir_initiative_team_members.phone_number',
+                'four_ir_initiative_team_members.role',
+                'four_ir_initiative_team_members.designation',
+                'four_ir_initiative_team_members.team_type',
+                'four_ir_initiative_team_members.row_status',
+                'four_ir_initiative_team_members.created_by',
+                'four_ir_initiative_team_members.updated_by',
+                'four_ir_initiative_team_members.created_at',
+                'four_ir_initiative_team_members.updated_at'
             ]
         )->acl();
 
-        $fourIrProjectTeamMemberBuilder->orderBy('four_ir_project_team_members.id', $order);
+        $fourIrProjectTeamMemberBuilder->orderBy('four_ir_initiative_team_members.id', $order);
 
         if (!empty($fourIRProjectId)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.four_ir_initiative_id', $fourIRProjectId);
+            $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.four_ir_initiative_id', $fourIRProjectId);
         }
         if (!empty($email)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.email', 'like', '%' . $email . '%');
+            $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.email', 'like', '%' . $email . '%');
         }
 
         if (!empty($phoneNumber)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.phone_number', 'like', '%' . $phoneNumber . '%');
+            $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.phone_number', 'like', '%' . $phoneNumber . '%');
         }
 
         if (!empty($role)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.role', 'like', '%' . $role . '%');
+            $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.role', 'like', '%' . $role . '%');
         }
 
         if (!empty($designation)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.designation', 'like', '%' . $designation . '%');
+            $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.designation', 'like', '%' . $designation . '%');
         }
 
         if (is_numeric($rowStatus)) {
-            $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.row_status', $rowStatus);
+            $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.row_status', $rowStatus);
         }
 
         /** @var Collection $fourIrProjectTeamMembers */
@@ -112,45 +111,45 @@ class FourIrProjectTeamMemberService
 
     /**
      * @param int $id
-     * @return FourIRProjectTeamMember
+     * @return FourIRInitiativeTeamMember
      */
-    public function getOneFourIrProjectTeamMember(int $id): FourIRProjectTeamMember
+    public function getOneFourIrProjectTeamMember(int $id): FourIRInitiativeTeamMember
     {
-        /** @var FourIRProjectTeamMember|Builder $fourIrProjectTeamMemberBuilder */
-        $fourIrProjectTeamMemberBuilder = FourIRProjectTeamMember::select(
+        /** @var FourIRInitiativeTeamMember|Builder $fourIrProjectTeamMemberBuilder */
+        $fourIrProjectTeamMemberBuilder = FourIRInitiativeTeamMember::select(
             [
-                'four_ir_project_team_members.id',
-                'four_ir_project_team_members.four_ir_initiative_id',
-                'four_ir_project_team_members.user_id',
-                'four_ir_project_team_members.name',
-                'four_ir_project_team_members.name_en',
-                'four_ir_project_team_members.email',
-                'four_ir_project_team_members.phone_number',
-                'four_ir_project_team_members.role',
-                'four_ir_project_team_members.designation',
-                'four_ir_project_team_members.team_type',
-                'four_ir_project_team_members.row_status',
-                'four_ir_project_team_members.created_by',
-                'four_ir_project_team_members.updated_by',
-                'four_ir_project_team_members.created_at',
-                'four_ir_project_team_members.updated_at'
+                'four_ir_initiative_team_members.id',
+                'four_ir_initiative_team_members.four_ir_initiative_id',
+                'four_ir_initiative_team_members.user_id',
+                'four_ir_initiative_team_members.name',
+                'four_ir_initiative_team_members.name_en',
+                'four_ir_initiative_team_members.email',
+                'four_ir_initiative_team_members.phone_number',
+                'four_ir_initiative_team_members.role',
+                'four_ir_initiative_team_members.designation',
+                'four_ir_initiative_team_members.team_type',
+                'four_ir_initiative_team_members.row_status',
+                'four_ir_initiative_team_members.created_by',
+                'four_ir_initiative_team_members.updated_by',
+                'four_ir_initiative_team_members.created_at',
+                'four_ir_initiative_team_members.updated_at'
             ]
         );
-        $fourIrProjectTeamMemberBuilder->where('four_ir_project_team_members.id', $id);
+        $fourIrProjectTeamMemberBuilder->where('four_ir_initiative_team_members.id', $id);
 
         return $fourIrProjectTeamMemberBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProjectTeamMember
+     * @return FourIRInitiativeTeamMember
      */
-    public function store(array $data): FourIRProjectTeamMember
+    public function store(array $data): FourIRInitiativeTeamMember
     {
         $userData = $this->createPayloadToStoreUser($data);
         $data['user_id'] = $userData['id'];
 
-        $fourIrProjectTeamMember = app()->make(FourIRProjectTeamMember::class);
+        $fourIrProjectTeamMember = app()->make(FourIRInitiativeTeamMember::class);
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
 
@@ -180,11 +179,11 @@ class FourIrProjectTeamMemberService
     }
 
     /**
-     * @param FourIRProjectTeamMember $fourIrProjectTeamMember
+     * @param FourIRInitiativeTeamMember $fourIrProjectTeamMember
      * @param array $data
-     * @return FourIRProjectTeamMember
+     * @return FourIRInitiativeTeamMember
      */
-    public function update(FourIRProjectTeamMember $fourIrProjectTeamMember, array $data): FourIRProjectTeamMember
+    public function update(FourIRInitiativeTeamMember $fourIrProjectTeamMember, array $data): FourIRInitiativeTeamMember
     {
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
@@ -192,10 +191,10 @@ class FourIrProjectTeamMemberService
     }
 
     /**
-     * @param FourIRProjectTeamMember $fourIrProjectTeamMember
+     * @param FourIRInitiativeTeamMember $fourIrProjectTeamMember
      * @return bool
      */
-    public function destroy(FourIRProjectTeamMember $fourIrProjectTeamMember): bool
+    public function destroy(FourIRInitiativeTeamMember $fourIrProjectTeamMember): bool
     {
         return $fourIrProjectTeamMember->delete();
     }
@@ -228,16 +227,16 @@ class FourIrProjectTeamMemberService
             'team_type' => [
                 'required',
                 'int',
-                Rule::in(FourIRProjectTeamMember::TEAM_TYPES),
+                Rule::in(FourIRInitiativeTeamMember::TEAM_TYPES),
 /*                function ($attr, $value, $failed) use ($request) {
-                    if($value == FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE){
+                    if($value == FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE){
                         $guideline = FourIRGuideline::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
                         if(empty($guideline)){
                             $failed('Complete Guideline step first.[24000]');
                         }
-                    } else if($value == FourIRProjectTeamMember::MENTORING_TEAM_TYPE) {
-                        $implementingTeam = FourIRProjectTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
-                            ->where('team_type', FourIRProjectTeamMember::IMPLEMENTING_TEAM_TYPE)
+                    } else if($value == FourIRInitiativeTeamMember::MENTORING_TEAM_TYPE) {
+                        $implementingTeam = FourIRInitiativeTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
+                            ->where('team_type', FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE)
                             ->first();
                         if(empty($implementingTeam)){
                             $failed('Complete Implementing step first.[24000]');
@@ -262,7 +261,7 @@ class FourIrProjectTeamMemberService
                 'string',
                 'max:15',
                 'min:6',
-                Rule::unique('four_ir_project_team_members')
+                Rule::unique('four_ir_initiative_team_members')
                     ->ignore($id)
                     ->where(function (\Illuminate\Database\Query\Builder $query) use($request) {
                         return $query->where('team_type',$request->input('team_type'))

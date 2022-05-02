@@ -4,16 +4,14 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRInitiative;
 use App\Models\FourIRProjectCell;
-use App\Models\FourIRProjectTeamMember;
+use App\Models\FourIRInitiativeTeamMember;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -168,8 +166,8 @@ class FourIRProjectCellService
                 'required',
                 'int',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRProjectTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
-                        ->where('team_type', FourIRProjectTeamMember::MENTORING_TEAM_TYPE)
+                    $mentoringTeam = FourIRInitiativeTeamMember::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))
+                        ->where('team_type', FourIRInitiativeTeamMember::MENTORING_TEAM_TYPE)
                         ->first();
                         if(empty($mentoringTeam)){
                             $failed('Complete Mentoring step first.[24000]');
