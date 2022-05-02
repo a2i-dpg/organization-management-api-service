@@ -190,6 +190,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
 
+        /**
+         * Four IR Excel imports
+         */
+        $router->post('/four-ir-initiatives-import-excel', ["as" => "four.ir.initiatives.import.excel", "uses" => "FourIRInitiativeController@bulkStoreByExcel"]);
+
 
         /** Provide suggestions in drop downs */
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {

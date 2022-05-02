@@ -332,4 +332,110 @@ class FourIrInitiativeService
             ],
         ], $customMessage);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function excelImportValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+        $rules = [
+            'file' => 'required|mimes:xlsx, csv, xls',
+            'four_ir_tagline_id' => [
+                'required',
+                'int',
+                'exists:four_ir_taglines,id,deleted_at,NULL'
+            ],
+        ];
+        return Validator::make($data, $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $excelData
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function excelDataValidator(Request $request, array $excelData): \Illuminate\Contracts\Validation\Validator
+    {
+        /** $excelData owns an array. So use * as prefix */
+        $rules = [
+            '*.name' => [
+                'required',
+                'string',
+                'max:600',
+                'min:2'
+            ],
+            '*.name_en' => [
+                'nullable',
+                'string',
+                'max:300',
+                'min:2'
+            ],
+            '*.organization_name' => [
+                'required',
+                'string',
+                'max:600',
+                'min:2'
+            ],
+            '*.organization_name_en' => [
+                'nullable',
+                'string',
+                'max:300',
+                'min:2'
+            ],
+            '*.budget' => [
+                'required',
+                'numeric'
+            ],
+            '*.designation' => [
+                'required',
+                'string',
+                'max:300'
+            ],
+            '*.four_ir_occupation_id' => [
+                'required',
+                'int',
+                'exists:four_ir_occupations,id,deleted_at,NULL',
+                Rule::unique('four_ir_initiatives', 'four_ir_occupation_id')
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($request){
+                        return $query->where('four_ir_tagline_id', $request->input('four_ir_tagline_id'))
+                                     ->whereNull('deleted_at');
+                    }),
+                'distinct'
+            ],
+            '*.start_date' => [
+                'required',
+                'date_format:Y-m-d'
+            ],
+            '*.end_date' => [
+                'required',
+                'date_format:Y-m-d',
+                'after:start_date'
+            ],
+            '*.details' => [
+                'nullable',
+                'string',
+                'max:1000'
+            ],
+            '*.file_path' => [
+                'nullable',
+                'string',
+                'max:300',
+            ],
+            '*.task' => [
+                'required',
+                'array'
+            ],
+            '*.task.*' => [
+                'required',
+                'int'
+            ],
+            '*.row_status' => [
+                'required',
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ]
+        ];
+        return Validator::make($excelData, $rules);
+    }
 }

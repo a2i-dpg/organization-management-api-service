@@ -60,4 +60,13 @@ class FourIRInitiative extends BaseModel
     public const FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP = 7;
     public const FILE_LOG_TOT_STEP = 8;
     public const FILE_LOG_ASSESSMENT_STEP = 9;
+
+    public const TASK_ROADMAP_FINALIZED = 1;
+    public const TASK_PROJECT_REVIEWED_BY_SECRETARY_OF_RELEVANT_MINISTRIES = 2;
+    public const TASK_PROJECT_APPROVED = 3;
+    public const TASKS = [
+        'Roadmap finalized' => self::TASK_ROADMAP_FINALIZED,
+        'Project reviewed by secretary of relevant ministries' => self::TASK_PROJECT_REVIEWED_BY_SECRETARY_OF_RELEVANT_MINISTRIES,
+        'Project approved' => self::TASK_PROJECT_APPROVED,
+    ];
 }

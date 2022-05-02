@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\FourIrInitiativesImport;
 use App\Models\FourIRInitiative;
+use App\Models\FourIROccupation;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIrInitiativeService;
 use Carbon\Carbon;
@@ -10,8 +12,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
@@ -165,5 +169,63 @@ class FourIRInitiativeController extends Controller
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * Store organizations as bulk.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Throwable
+     */
+    public function bulkStoreByExcel(Request $request): JsonResponse
+    {
+        //$fourIrInitiative = app(FourIRInitiative::class);
+        //$this->authorize('create', $fourIrInitiative);
+
+        $this->fourIrInitiativeService->excelImportValidator($request)->validate();
+
+        $file = $request->file('file');
+        $excelData = Excel::toCollection(new FourIrInitiativesImport(), $file)->toArray();
+
+        if (!empty($excelData) && !empty($excelData[0])) {
+            $rows = $excelData[0];
+
+            $this->fourIrInitiativeService->excelDataValidator($request, $rows)->validate();
+            $errorOccurOccupations = [];
+
+            foreach ($rows as $rowData) {
+                DB::beginTransaction();
+                try {
+                    $rowData['accessor_type'] = $request->input('accessor_type');
+                    $rowData['accessor_id'] = $request->input('accessor_id');
+                    $rowData['four_ir_tagline_id'] = $request->input('four_ir_tagline_id');
+
+                    $data = $this->fourIrInitiativeService->store($rowData);
+                    $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
+
+                    DB::commit();
+                } catch (Throwable $e){
+                    Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
+                    DB::rollBack();
+                    $fourIrOccupation = FourIROccupation::find($rowData['four_ir_occupation_id']);
+                    $errorOccurOccupations[] = $fourIrOccupation['title'];
+                }
+            }
+        }
+
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Four IR initiatives Created Successfully"
+            ]
+        ];
+
+        if (!empty($errorOccurOccupations)) {
+            $response['_response_status']['error_occur_occupations'] = $errorOccurOccupations;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 }
