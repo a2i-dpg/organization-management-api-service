@@ -190,6 +190,8 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
 
+        $router->put('/set-team-launching-date', ["as" => "set.team.launching.date", "uses" => "FourIRInitiativeTeamMemberController@setTeamLaunchingDate"]);
+
         /**
          * Four IR Excel imports
          */

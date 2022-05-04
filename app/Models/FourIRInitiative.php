@@ -69,4 +69,7 @@ class FourIRInitiative extends BaseModel
         'Project reviewed by secretary of relevant ministries' => self::TASK_PROJECT_REVIEWED_BY_SECRETARY_OF_RELEVANT_MINISTRIES,
         'Project approved' => self::TASK_PROJECT_APPROVED,
     ];
+
+    public const SKILL_PROVIDE_FALSE = 0;
+    public const SKILL_PROVIDE_TRUE = 1;
 }

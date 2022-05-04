@@ -42,7 +42,7 @@ class FourIRInitiativeTeamMemberController extends Controller
         //$this->authorize('viewAny', FourIRInitiativeTeamMember::class);
 
         $filter = $this->fourIrProjectTeamMemberService->filterValidator($request)->validate();
-        $response = $this->fourIrProjectTeamMemberService->getFourIrProjectTeamMemberList($filter, $this->startTime);
+        $response = $this->fourIrProjectTeamMemberService->getFourIrInitiativeTeamMemberList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -53,7 +53,7 @@ class FourIRInitiativeTeamMemberController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProjectTeamMember = $this->fourIrProjectTeamMemberService->getOneFourIrProjectTeamMember($id);
+        $fourIrProjectTeamMember = $this->fourIrProjectTeamMemberService->getOneFourIrInitiativeTeamMember($id);
         //$this->authorize('view', $fourIrProjectTeamMember);
         $response = [
             "data" => $fourIrProjectTeamMember,
@@ -87,7 +87,7 @@ class FourIRInitiativeTeamMemberController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project Team Member added successfully",
+                "message" => "Four Ir Initiative Team Member added successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -116,7 +116,7 @@ class FourIRInitiativeTeamMemberController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project Team Member updated successfully",
+                "message" => "Four Ir Initiative Team Member updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -141,10 +141,35 @@ class FourIRInitiativeTeamMemberController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project Team Member deleted successfully",
+                "message" => "Four Ir Initiative Team Member deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * update the specified resource from storage
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function setTeamLaunchingDate(Request $request): JsonResponse
+    {
+        $validated = $this->fourIrProjectTeamMemberService->teamLaunchingDateValidator($request)->validate();
+        $data = $this->fourIrProjectTeamMemberService->addTeamLaunchingDate($validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Four Ir Team launching date updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 }

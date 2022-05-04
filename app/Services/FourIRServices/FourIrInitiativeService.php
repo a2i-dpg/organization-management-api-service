@@ -42,6 +42,9 @@ class FourIrInitiativeService
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_initiatives.is_skill_provide',
+                'four_ir_initiatives.implementing_team_launching_date',
+                'four_ir_initiatives.expert_team_launching_date',
                 'four_ir_initiatives.name',
                 'four_ir_initiatives.name_en',
                 'four_ir_initiatives.organization_name',
@@ -129,6 +132,9 @@ class FourIrInitiativeService
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_initiatives.is_skill_provide',
+                'four_ir_initiatives.implementing_team_launching_date',
+                'four_ir_initiatives.expert_team_launching_date',
                 'four_ir_initiatives.name',
                 'four_ir_initiatives.name_en',
                 'four_ir_initiatives.organization_name',
@@ -222,6 +228,11 @@ class FourIrInitiativeService
                 'required',
                 'int',
                 'exists:four_ir_taglines,id,deleted_at,NULL'
+            ],
+            'is_skill_provide' => [
+                'required',
+                'int',
+                Rule::in(FourIRInitiative::SKILL_PROVIDE_FALSE, FourIRInitiative::SKILL_PROVIDE_TRUE)
             ],
             'name' => [
                 'required',
@@ -371,6 +382,11 @@ class FourIrInitiativeService
                 'string',
                 'max:300',
                 'min:2'
+            ],
+            '*.is_skill_provide' => [
+                'required',
+                'int',
+                Rule::in(FourIRInitiative::SKILL_PROVIDE_FALSE, FourIRInitiative::SKILL_PROVIDE_TRUE)
             ],
             '*.organization_name' => [
                 'required',
