@@ -4,7 +4,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRProjectCell;
+use App\Models\FourIRInitiativeCell;
 use App\Models\FourIRInitiativeTeamMember;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,70 +16,70 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 /**
- * Class FourIRProjectCellService
+ * Class FourIRInitiativeCellService
  * @package App\Services
  */
-class FourIRProjectCellService
+class FourIRInitiativeCellService
 {
     /**
      * @param array $request
      * @param Carbon $startTime
      * @return array
      */
-    public function getFourIrProjectCellList(array $request, Carbon $startTime): array
+    public function getFourIrInitiativeCellList(array $request, Carbon $startTime): array
     {
-        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
+        $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $name = $request['name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
-        /** @var Builder $fourIrProjectCellBuilder */
-        $fourIrProjectCellBuilder = FourIRProjectCell::select(
+        /** @var Builder $fourIrInitiativeCellBuilder */
+        $fourIrInitiativeCellBuilder = FourIRInitiativeCell::select(
             [
-                'four_ir_project_cells.id',
-                'four_ir_project_cells.name',
-                'four_ir_project_cells.address',
-                'four_ir_project_cells.email',
-                'four_ir_project_cells.phone_code',
-                'four_ir_project_cells.mobile_number',
-                'four_ir_project_cells.designation',
-                'four_ir_project_cells.row_status',
-                'four_ir_project_cells.created_by',
-                'four_ir_project_cells.updated_by',
-                'four_ir_project_cells.created_at',
-                'four_ir_project_cells.updated_at'
+                'four_ir_initiative_cells.id',
+                'four_ir_initiative_cells.name',
+                'four_ir_initiative_cells.address',
+                'four_ir_initiative_cells.email',
+                'four_ir_initiative_cells.phone_code',
+                'four_ir_initiative_cells.mobile_number',
+                'four_ir_initiative_cells.designation',
+                'four_ir_initiative_cells.row_status',
+                'four_ir_initiative_cells.created_by',
+                'four_ir_initiative_cells.updated_by',
+                'four_ir_initiative_cells.created_at',
+                'four_ir_initiative_cells.updated_at'
             ]
         )->acl();
 
-        $fourIrProjectCellBuilder->orderBy('four_ir_project_cells.id', $order);
+        $fourIrInitiativeCellBuilder->orderBy('four_ir_initiative_cells.id', $order);
 
-        if (!empty($fourIrProjectId)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
+        if (!empty($fourIrInitiativeId)) {
+            $fourIrInitiativeCellBuilder->where('four_ir_initiative_cells.four_ir_initiative_id', 'like', '%' . $fourIrInitiativeId . '%');
         }
         if (!empty($name)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.name', 'like', '%' . $name . '%');
+            $fourIrInitiativeCellBuilder->where('four_ir_initiative_cells.name', 'like', '%' . $name . '%');
         }
         if (is_numeric($rowStatus)) {
-            $fourIrProjectCellBuilder->where('four_ir_project_cells.row_status', $rowStatus);
+            $fourIrInitiativeCellBuilder->where('four_ir_initiative_cells.row_status', $rowStatus);
         }
 
-        /** @var Collection $fourIrProjects */
+        /** @var Collection $fourIrInitiatives */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrProjects = $fourIrProjectCellBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjects->toArray();
+            $fourIrInitiatives = $fourIrInitiativeCellBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrInitiatives->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $fourIrProjects = $fourIrProjectCellBuilder->get();
+            $fourIrInitiatives = $fourIrInitiativeCellBuilder->get();
         }
 
         $response['order'] = $order;
-        $response['data'] = $fourIrProjects->toArray()['data'] ?? $fourIrProjects->toArray();
+        $response['data'] = $fourIrInitiatives->toArray()['data'] ?? $fourIrInitiatives->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -91,64 +91,63 @@ class FourIRProjectCellService
 
     /**
      * @param int $id
-     * @return FourIRProjectCell
+     * @return FourIRInitiativeCell
      */
-    public function getOneFourIrProjectCell(int $id): FourIRProjectCell
+    public function getOneFourIrInitiativeCell(int $id): FourIRInitiativeCell
     {
-        /** @var FourIRProjectCell|Builder $fourIrProjectCellBuilder */
-        $fourIrProjectCellBuilder = FourIRProjectCell::select(
+        /** @var FourIRInitiativeCell|Builder $fourIrInitiativeCellBuilder */
+        $fourIrInitiativeCellBuilder = FourIRInitiativeCell::select(
             [
-                'four_ir_project_cells.id',
-                'four_ir_project_cells.name',
-                'four_ir_project_cells.address',
-                'four_ir_project_cells.email',
-                'four_ir_project_cells.phone_code',
-                'four_ir_project_cells.mobile_number',
-                'four_ir_project_cells.designation',
-                'four_ir_project_cells.row_status',
-                'four_ir_project_cells.created_by',
-                'four_ir_project_cells.updated_by',
-                'four_ir_project_cells.created_at',
-                'four_ir_project_cells.updated_at'
+                'four_ir_initiative_cells.id',
+                'four_ir_initiative_cells.name',
+                'four_ir_initiative_cells.address',
+                'four_ir_initiative_cells.email',
+                'four_ir_initiative_cells.phone_code',
+                'four_ir_initiative_cells.mobile_number',
+                'four_ir_initiative_cells.designation',
+                'four_ir_initiative_cells.row_status',
+                'four_ir_initiative_cells.created_by',
+                'four_ir_initiative_cells.updated_by',
+                'four_ir_initiative_cells.created_at',
+                'four_ir_initiative_cells.updated_at'
             ]
         );
-        $fourIrProjectCellBuilder->where('four_ir_project_cells.id', '=', $id);
+        $fourIrInitiativeCellBuilder->where('four_ir_initiative_cells.id', '=', $id);
 
-        return $fourIrProjectCellBuilder->firstOrFail();
+        return $fourIrInitiativeCellBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProjectCell
+     * @return FourIRInitiativeCell
      */
-    public function store(array $data): FourIRProjectCell
+    public function store(array $data): FourIRInitiativeCell
     {
-
-        $fourIrProjectCell = new FourIRProjectCell();
-        $fourIrProjectCell->fill($data);
-        $fourIrProjectCell->save();
-        return $fourIrProjectCell;
+        $fourIrInitiativeCell = new FourIRInitiativeCell();
+        $fourIrInitiativeCell->fill($data);
+        $fourIrInitiativeCell->save();
+        return $fourIrInitiativeCell;
     }
 
     /**
-     * @param FourIRProjectCell $fourIrProjectCell
+     * @param FourIRInitiativeCell $fourIrInitiativeCell
      * @param array $data
-     * @return FourIRProjectCell
+     * @return FourIRInitiativeCell
      */
-    public function update(FourIRProjectCell $fourIrProjectCell, array $data): FourIRProjectCell
+    public function update(FourIRInitiativeCell $fourIrInitiativeCell, array $data): FourIRInitiativeCell
     {
-        $fourIrProjectCell->fill($data);
-        $fourIrProjectCell->save();
-        return $fourIrProjectCell;
+        $fourIrInitiativeCell->fill($data);
+        $fourIrInitiativeCell->save();
+        return $fourIrInitiativeCell;
     }
 
     /**
-     * @param FourIRProjectCell $fourIrProjectCell
+     * @param FourIRInitiativeCell $fourIrInitiativeCell
      * @return bool
      */
-    public function destroy(FourIRProjectCell $fourIrProjectCell): bool
+    public function destroy(FourIRInitiativeCell $fourIrInitiativeCell): bool
     {
-        return $fourIrProjectCell->delete();
+        return $fourIrInitiativeCell->delete();
     }
 
     /**

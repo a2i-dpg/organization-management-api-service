@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProjectCell;
-use App\Services\FourIRServices\FourIRProjectCellService;
+use App\Models\FourIRInitiativeCell;
+use App\Services\FourIRServices\FourIRInitiativeCellService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -13,20 +13,20 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRProjectCellController extends Controller
+class FourIRInitiativeCellController extends Controller
 {
-    public FourIRProjectCellService $fourIRProjectCellService;
+    public FourIRInitiativeCellService $fourIRInitiativeCellService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectCellController constructor.
+     * FourIRInitiativeCellController constructor.
      *
-     * @param FourIRProjectCellService $fourIRProjectCellService
+     * @param FourIRInitiativeCellService $fourIRInitiativeCellService
      */
-    public function __construct(FourIRProjectCellService $fourIRProjectCellService)
+    public function __construct(FourIRInitiativeCellService $fourIRInitiativeCellService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIRProjectCellService = $fourIRProjectCellService;
+        $this->fourIRInitiativeCellService = $fourIRInitiativeCellService;
     }
 
     /**
@@ -38,10 +38,10 @@ class FourIRProjectCellController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProjectCell::class);
+        //$this->authorize('viewAny', FourIRInitiativeCell::class);
 
-        $filter = $this->fourIRProjectCellService->filterValidator($request)->validate();
-        $response = $this->fourIRProjectCellService->getFourIRProjectCellList($filter, $this->startTime);
+        $filter = $this->fourIRInitiativeCellService->filterValidator($request)->validate();
+        $response = $this->fourIRInitiativeCellService->getFourIRInitiativeCellList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -51,10 +51,10 @@ class FourIRProjectCellController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProjectCell = $this->fourIRProjectCellService->getOneFourIRProjectCell($id);
-//        $this->authorize('view', $fourIrProject);
+        $fourIrInitiativeCell = $this->fourIRInitiativeCellService->getOneFourIRInitiativeCell($id);
+//        $this->authorize('view', $fourIrInitiative);
         $response = [
-            "data" => $fourIrProjectCell,
+            "data" => $fourIrInitiativeCell,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -73,17 +73,17 @@ class FourIRProjectCellController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProjectCell::class);
+//        $this->authorize('create', FourIRInitiativeCell::class);
 
-        $validated = $this->fourIRProjectCellService->validator($request)->validate();
-        $data = $this->fourIRProjectCellService->store($validated);
+        $validated = $this->fourIRInitiativeCellService->validator($request)->validate();
+        $data = $this->fourIRInitiativeCellService->store($validated);
 
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project added successfully",
+                "message" => "Four Ir Initiative cell added successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -101,18 +101,18 @@ class FourIRProjectCellController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProjectCell = FourIRProjectCell::findOrFail($id);
-//        $this->authorize('update', $fourIrProject);
+        $fourIrInitiativeCell = FourIRInitiativeCell::findOrFail($id);
+//        $this->authorize('update', $fourIrInitiative);
 
-        $validated = $this->fourIRProjectCellService->validator($request, $id)->validate();
-        $data = $this->fourIRProjectCellService->update($fourIrProjectCell, $validated);
+        $validated = $this->fourIRInitiativeCellService->validator($request, $id)->validate();
+        $data = $this->fourIRInitiativeCellService->update($fourIrInitiativeCell, $validated);
 
         $response = [
             'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project updated successfully",
+                "message" => "Four Ir Initiative cell updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -130,14 +130,14 @@ class FourIRProjectCellController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProjectCell = FourIRProjectCell::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
-        $this->fourIRProjectCellService->destroy($fourIrProjectCell);
+        $fourIrInitiativeCell = FourIRInitiativeCell::findOrFail($id);
+//        $this->authorize('delete', $fourIrInitiative);
+        $this->fourIRInitiativeCellService->destroy($fourIrInitiativeCell);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project deleted successfully",
+                "message" => "Four Ir Initiative cell deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

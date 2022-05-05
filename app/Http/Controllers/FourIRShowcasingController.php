@@ -19,7 +19,7 @@ class FourIRShowcasingController extends Controller
     private Carbon $startTime;
 
     /**
-     * FourIRProjectCellController constructor.
+     * FourIRShowcasingController constructor.
      *
      * @param FourIRShowcasingService $fourIRShowcasingService
      */
@@ -38,7 +38,7 @@ class FourIRShowcasingController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProjectCell::class);
+//        $this->authorize('viewAny', FourIRShowcasing::class);
 
         $filter = $this->fourIRShowcasingService->filterValidator($request)->validate();
         $response = $this->fourIRShowcasingService->getFourShowcasingList($filter, $this->startTime);
@@ -73,7 +73,7 @@ class FourIRShowcasingController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProjectCell::class);
+//        $this->authorize('create', FourIRShowcasing::class);
 
         $validated = $this->fourIRShowcasingService->validator($request)->validate();
         $data = $this->fourIRShowcasingService->store($validated);

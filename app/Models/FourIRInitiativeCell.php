@@ -8,11 +8,11 @@ use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class FourIRProjectCell extends BaseModel
+class FourIRInitiativeCell extends BaseModel
 {
     use SoftDeletes, ScopeAcl, ScopeRowStatusTrait, CreatedUpdatedBy;
 
-    protected  $table ="four_ir_project_cells";
+    protected  $table ="four_ir_initiative_cells";
 
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_NON_SOFT_DELETE;
 }

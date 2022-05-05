@@ -44,7 +44,7 @@ class FourIRProjectTnaFormatController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProjectCell::class);
+//        $this->authorize('viewAny', FourIRInitiativeCell::class);
 
         $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
         $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
@@ -80,7 +80,7 @@ class FourIRProjectTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('create', FourIRProjectCell::class);
+        //$this->authorize('create', FourIRInitiativeCell::class);
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
         try {
             DB::beginTransaction();

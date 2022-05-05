@@ -4,7 +4,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRProjectCell;
+use App\Models\FourIRInitiativeCell;
 use App\Models\FourIRProjectTnaFormat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -174,7 +174,7 @@ class FourIRProjectTnaFormatService
                 'int',
                 'exists:four_ir_initiatives,id,deleted_at,NULL',
                 function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRProjectCell::where('four_ir_initiative_id', $value)->first();
+                    $mentoringTeam = FourIRInitiativeCell::where('four_ir_initiative_id', $value)->first();
                     if(empty($mentoringTeam)){
                         $failed('Complete Project Cell step first.[24000]');
                     }
