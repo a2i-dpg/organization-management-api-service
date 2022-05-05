@@ -16,12 +16,14 @@ class CreateFourIRInitiativeCellsTable extends Migration
         Schema::create('four_ir_initiative_cells', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('four_ir_initiative_id');
-            $table->string('name');
-            $table->string('address');
+            $table->string('name', 300);
+            $table->string('name_en', 300)->nullable();
+            $table->string('address', 500);
+            $table->string('address_en', 500)->nullable();
             $table->string('email', 191);
             $table->char("phone_code", 5)->default("880")->comment('Country Code for Phone number');
             $table->string('mobile_number', 15);
-            $table->string('designation');
+            $table->string('designation', 150);
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

@@ -19,6 +19,7 @@ class CreateFourIRInitiativesTable extends Migration
             $table->unsignedTinyInteger('is_skill_provide')->default(0)->comment('0 => not provide, 1 => provide');
             $table->date('implementing_team_launching_date')->nullable();
             $table->date('expert_team_launching_date')->nullable();
+            $table->date('cell_launching_date')->nullable();
             $table->string('name', 500);
             $table->string('name_en', 300)->nullable();
             $table->string('organization_name', 500);
