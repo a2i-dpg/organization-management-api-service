@@ -5,7 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRInitiativeCell;
-use App\Models\FourIRProjectTnaFormat;
+use App\Models\FourIRInitiativeTnaFormat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -16,10 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 /**
- * Class FourIRProjectTnaFormatService
+ * Class FourIRInitiativeTnaFormatService
  * @package App\Services
  */
-class FourIRProjectTnaFormatService
+class FourIRInitiativeTnaFormatService
 {
     /**
      * @param array $request
@@ -37,38 +37,38 @@ class FourIRProjectTnaFormatService
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $FourIRProjectTnaFormatBuilder */
-        $fourIrProjectTnaFormatBuilder = FourIRProjectTnaFormat::select(
+        $fourIrProjectTnaFormatBuilder = FourIRInitiativeTnaFormat::select(
             [
-                'four_ir_project_tna_formats.id',
-                'four_ir_project_tna_formats.four_ir_initiative_id',
-                'four_ir_project_tna_formats.workshop_name',
-                'four_ir_project_tna_formats.skill_required',
-                'four_ir_project_tna_formats.start_date',
-                'four_ir_project_tna_formats.end_date',
-                'four_ir_project_tna_formats.venue',
-                'four_ir_project_tna_formats.file_path',
-                'four_ir_project_tna_formats.row_status',
-                'four_ir_project_tna_formats.created_by',
-                'four_ir_project_tna_formats.updated_by',
-                'four_ir_project_tna_formats.created_at',
-                'four_ir_project_tna_formats.updated_at'
+                'four_ir_initiative_tna_formats.id',
+                'four_ir_initiative_tna_formats.four_ir_initiative_id',
+                'four_ir_initiative_tna_formats.workshop_name',
+                'four_ir_initiative_tna_formats.skill_required',
+                'four_ir_initiative_tna_formats.start_date',
+                'four_ir_initiative_tna_formats.end_date',
+                'four_ir_initiative_tna_formats.venue',
+                'four_ir_initiative_tna_formats.file_path',
+                'four_ir_initiative_tna_formats.row_status',
+                'four_ir_initiative_tna_formats.created_by',
+                'four_ir_initiative_tna_formats.updated_by',
+                'four_ir_initiative_tna_formats.created_at',
+                'four_ir_initiative_tna_formats.updated_at'
             ]
         );
 
-        $fourIrProjectTnaFormatBuilder->orderBy('four_ir_project_tna_formats.id', $order);
+        $fourIrProjectTnaFormatBuilder->orderBy('four_ir_initiative_tna_formats.id', $order);
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
+            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
         }
         if (!empty($workshopName)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.workshop_name', 'like', '%' . $workshopName . '%');
+            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.workshop_name', 'like', '%' . $workshopName . '%');
         }
         if (!empty($venue)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.venue', 'like', '%' . $venue . '%');
+            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.venue', 'like', '%' . $venue . '%');
         }
 
         if (is_numeric($rowStatus)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.row_status', $rowStatus);
+            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.row_status', $rowStatus);
         }
 
         /** @var Collection $fourIrProjects */
@@ -97,52 +97,52 @@ class FourIRProjectTnaFormatService
 
     /**
      * @param int $id
-     * @return FourIRProjectTnaFormat
+     * @return FourIRInitiativeTnaFormat
      */
-    public function getOneFourIrProjectTnaFormat(int $id): FourIRProjectTnaFormat
+    public function getOneFourIrProjectTnaFormat(int $id): FourIRInitiativeTnaFormat
     {
-        /** @var FourIRProjectTnaFormat|Builder $fourIrProjectTnaFormatBuilder */
-        $fourIrProjectTnaFormatBuilder = FourIRProjectTnaFormat::select(
+        /** @var FourIRInitiativeTnaFormat|Builder $fourIrProjectTnaFormatBuilder */
+        $fourIrProjectTnaFormatBuilder = FourIRInitiativeTnaFormat::select(
             [
-                'four_ir_project_tna_formats.id',
-                'four_ir_project_tna_formats.four_ir_initiative_id',
-                'four_ir_project_tna_formats.workshop_name',
-                'four_ir_project_tna_formats.skill_required',
-                'four_ir_project_tna_formats.start_date',
-                'four_ir_project_tna_formats.end_date',
-                'four_ir_project_tna_formats.venue',
-                'four_ir_project_tna_formats.file_path',
-                'four_ir_project_tna_formats.row_status',
-                'four_ir_project_tna_formats.created_by',
-                'four_ir_project_tna_formats.updated_by',
-                'four_ir_project_tna_formats.created_at',
-                'four_ir_project_tna_formats.updated_at'
+                'four_ir_initiative_tna_formats.id',
+                'four_ir_initiative_tna_formats.four_ir_initiative_id',
+                'four_ir_initiative_tna_formats.workshop_name',
+                'four_ir_initiative_tna_formats.skill_required',
+                'four_ir_initiative_tna_formats.start_date',
+                'four_ir_initiative_tna_formats.end_date',
+                'four_ir_initiative_tna_formats.venue',
+                'four_ir_initiative_tna_formats.file_path',
+                'four_ir_initiative_tna_formats.row_status',
+                'four_ir_initiative_tna_formats.created_by',
+                'four_ir_initiative_tna_formats.updated_by',
+                'four_ir_initiative_tna_formats.created_at',
+                'four_ir_initiative_tna_formats.updated_at'
             ]
         );
-        $fourIrProjectTnaFormatBuilder->where('four_ir_project_tna_formats.id', '=', $id);
+        $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.id', '=', $id);
 
         return $fourIrProjectTnaFormatBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProjectTnaFormat
+     * @return FourIRInitiativeTnaFormat
      */
-    public function store(array $data): FourIRProjectTnaFormat
+    public function store(array $data): FourIRInitiativeTnaFormat
     {
 
-        $fourIRProjectTnaFormat = new FourIRProjectTnaFormat();
+        $fourIRProjectTnaFormat = new FourIRInitiativeTnaFormat();
         $fourIRProjectTnaFormat->fill($data);
         $fourIRProjectTnaFormat->save();
         return $fourIRProjectTnaFormat;
     }
 
     /**
-     * @param FourIRProjectTnaFormat $fourIRProjectTnaFormat
+     * @param FourIRInitiativeTnaFormat $fourIRProjectTnaFormat
      * @param array $data
-     * @return FourIRProjectTnaFormat
+     * @return FourIRInitiativeTnaFormat
      */
-    public function update(FourIRProjectTnaFormat $fourIRProjectTnaFormat, array $data): FourIRProjectTnaFormat
+    public function update(FourIRInitiativeTnaFormat $fourIRProjectTnaFormat, array $data): FourIRInitiativeTnaFormat
     {
         $fourIRProjectTnaFormat->fill($data);
         $fourIRProjectTnaFormat->save();
@@ -150,10 +150,10 @@ class FourIRProjectTnaFormatService
     }
 
     /**
-     * @param FourIRProjectTnaFormat $fourIRProjectTnaFormat
+     * @param FourIRInitiativeTnaFormat $fourIRProjectTnaFormat
      * @return bool
      */
-    public function destroy(FourIRProjectTnaFormat $fourIRProjectTnaFormat): bool
+    public function destroy(FourIRInitiativeTnaFormat $fourIRProjectTnaFormat): bool
     {
         return $fourIRProjectTnaFormat->delete();
     }

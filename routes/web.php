@@ -182,7 +182,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('project-cells', 'FourIRInitiativeCellController')->render();
         $customRouter()->resourceRoute('project-cs', 'FourIRProjectCsController')->render();
         $customRouter()->resourceRoute('project-curriculums', 'FourIRProjectCurriculumController')->render();
-        $customRouter()->resourceRoute('tna-formats', 'FourIRProjectTnaFormatController')->render();
+        $customRouter()->resourceRoute('tna-formats', 'FourIRInitiativeTnaFormatController')->render();
         $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
         $customRouter()->resourceRoute('tots', 'FourIRProjectTotController')->render();

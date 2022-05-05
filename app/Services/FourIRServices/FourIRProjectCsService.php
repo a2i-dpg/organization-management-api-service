@@ -5,7 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRProjectCs;
-use App\Models\FourIRProjectTnaFormat;
+use App\Models\FourIRInitiativeTnaFormat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -190,7 +190,7 @@ class FourIRProjectCsService
         ];
 
         if(!empty($request->input('four_ir_initiative_id'))){
-            $tnaReport = FourIRProjectTnaFormat::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
+            $tnaReport = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $request->input('four_ir_initiative_id'))->first();
             throw_if(empty($tnaReport), ValidationException::withMessages([
                 "four_ir_initiative_id" => "First complete Four IR Project Tna Format!"
             ]));

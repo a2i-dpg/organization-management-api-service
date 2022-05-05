@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRInitiative;
-use App\Models\FourIRProjectTnaFormat;
+use App\Models\FourIRInitiativeTnaFormat;
 use App\Services\FourIRServices\FourIRFileLogService;
-use App\Services\FourIRServices\FourIRProjectTnaFormatService;
+use App\Services\FourIRServices\FourIRInitiativeTnaFormatService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -16,19 +16,19 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRProjectTnaFormatController extends Controller
+class FourIRInitiativeTnaFormatController extends Controller
 {
-    public FourIRProjectTnaFormatService $fourIRProjectTnaFormatService;
+    public FourIRInitiativeTnaFormatService $fourIRProjectTnaFormatService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectTnaFormatController constructor.
+     * FourIRInitiativeTnaFormatController constructor.
      *
-     * @param FourIRProjectTnaFormatService $fourIRProjectTnaFormatService
+     * @param FourIRInitiativeTnaFormatService $fourIRProjectTnaFormatService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRProjectTnaFormatService $fourIRProjectTnaFormatService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRInitiativeTnaFormatService $fourIRProjectTnaFormatService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIRProjectTnaFormatService = $fourIRProjectTnaFormatService;
@@ -115,7 +115,7 @@ class FourIRProjectTnaFormatController extends Controller
 
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProjectTnaFormat = FourIRProjectTnaFormat::findOrFail($id);
+        $fourIrProjectTnaFormat = FourIRInitiativeTnaFormat::findOrFail($id);
         $validated = $this->fourIRProjectTnaFormatService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
@@ -151,7 +151,7 @@ class FourIRProjectTnaFormatController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProjectCell = FourIRProjectTnaFormat::findOrFail($id);
+        $fourIrProjectCell = FourIRInitiativeTnaFormat::findOrFail($id);
 //        $this->authorize('delete', $fourIrProject);
         $this->fourIRProjectTnaFormatService->destroy($fourIrProjectCell);
         $response = [
