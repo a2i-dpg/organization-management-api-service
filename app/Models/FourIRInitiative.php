@@ -53,7 +53,7 @@ class FourIRInitiative extends BaseModel
     public const COMPLETION_STEP_SEVEN = 7;
     public const COMPLETION_STEP_EIGHT = 8;
     public const COMPLETION_STEP_NINE = 9;
-    public const COMPLETION_STEP_TEN = 10;
+    public const COMPLETION_STEP_FOURTEEN = 14;
 
     public const FORM_STEP_PROJECT_INITIATION = 1;
     public const FORM_STEP_IMPLEMENTING_TEAM = 2;
@@ -66,8 +66,8 @@ class FourIRInitiative extends BaseModel
     public const FORM_STEP_RESOURCE_MANAGEMENT = 9;
     public const FORM_STEP_TOT = 10;
     public const FORM_STEP_CREATE_APPROVE_COURSE = 11;
-    public const FORM_STEP_ENROLLMENT_APPROVAL = 12;
-    public const FORM_STEP_SKILL_DEVELOPMENT = 13;
+    public const FORM_STEP_EMPLOYMENT = 12;
+    public const FORM_STEP_SHOWCASING = 13;
 
     public const FILE_LOG_INITIATIVE_STEP = 1;
     public const FILE_LOG_TNA_STEP = 2;
