@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIRInitiativeTotsTable extends Migration
+class CreateFourIrInitiativeTotOrganizersParticipantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateFourIRInitiativeTotsTable extends Migration
      */
     public function up()
     {
-        Schema::create('four_ir_initiative_tots', function (Blueprint $table) {
+        Schema::create('four_ir_initiative_tot_organizers_participants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('four_ir_initiative_id');
-            $table->string('master_trainer_name', 350);
-            $table->string('master_trainer_name_en', 350)->nullable();
-            $table->string('master_trainer_mobile', 15);
-            $table->string('master_trainer_address', 500);
-            $table->string('master_trainer_address_en', 500)->nullable();
-            $table->string('master_trainer_email', 500);
+            $table->unsignedInteger('four_ir_initiative_tot_id');
+            $table->unsignedTinyInteger('type')->comment("1 => Organizer, 2 => co-organizer, 3 => participant");
+            $table->string('name', 350);
+            $table->string('name_en', 350)->nullable();
+            $table->string('mobile', 15);
+            $table->string('address', 500);
+            $table->string('address_en', 500)->nullable();
+            $table->string('email', 500);
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
@@ -39,6 +40,6 @@ class CreateFourIRInitiativeTotsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('four_i_r_project_tots');
+        Schema::dropIfExists('four_ir_initiative_tot_organizers_participants');
     }
 }

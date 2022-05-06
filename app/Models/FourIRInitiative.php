@@ -64,6 +64,10 @@ class FourIRInitiative extends BaseModel
     public const FORM_STEP_CURRICULUM = 7;
     public const FORM_STEP_CBLM = 8;
     public const FORM_STEP_RESOURCE_MANAGEMENT = 9;
+    public const FORM_STEP_TOT = 10;
+    public const FORM_STEP_CREATE_APPROVE_COURSE = 11;
+    public const FORM_STEP_ENROLLMENT_APPROVAL = 12;
+    public const FORM_STEP_SKILL_DEVELOPMENT = 13;
 
     public const FILE_LOG_INITIATIVE_STEP = 1;
     public const FILE_LOG_TNA_STEP = 2;

@@ -168,29 +168,8 @@ class FourIRResourceService
      */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
-        $customMessage = [
-            'order.in' => 'Order must be within ASC or DESC.[30000]',
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
-        ];
-
-        if ($request->filled('order')) {
-            $request->offsetSet('order', strtoupper($request->get('order')));
-        }
-
         return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int',
-            'page' => 'nullable|integer|gt:0',
-            'page_size' => 'nullable|integer|gt:0',
-            'order' => [
-                'nullable',
-                'string',
-                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
-            ],
-            'row_status' => [
-                'nullable',
-                "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
-            ],
-        ], $customMessage);
+            'four_ir_initiative_id' => 'required|int'
+        ]);
     }
 }

@@ -35,9 +35,6 @@ class FourIRInitiativeTnaFormatService
     public function getFourIrProjectTnaFormatList(array $request, Carbon $startTime): array
     {
         $fourIrProjectId = $request['four_ir_initiative_id'];
-        $paginate = $request['page'] ?? "";
-        $pageSize = $request['page_size'] ?? "";
-        $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $FourIRProjectTnaFormatBuilder */
@@ -61,7 +58,7 @@ class FourIRInitiativeTnaFormatService
                 'four_ir_initiative_tna_formats.created_at',
                 'four_ir_initiative_tna_formats.updated_at'
             ]
-        )->acl();
+        );
 
         $fourIrProjectTnaFormatBuilder->orderBy('four_ir_initiative_tna_formats.id', $order);
 
@@ -71,22 +68,8 @@ class FourIRInitiativeTnaFormatService
             $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
         }
 
-        if (is_numeric($rowStatus)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.row_status', $rowStatus);
-        }
-
         /** @var Collection $fourIrProjects */
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
-            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrProjects = $fourIrProjectTnaFormatBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjects->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
-        } else {
-            $fourIrProjects = $fourIrProjectTnaFormatBuilder->get();
-        }
+        $fourIrProjects = $fourIrProjectTnaFormatBuilder->get();
 
         $response['order'] = $order;
         $response['data'] = $fourIrProjects->toArray()['data'] ?? $fourIrProjects->toArray();
@@ -373,31 +356,9 @@ class FourIRInitiativeTnaFormatService
      */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
-        $customMessage = [
-            'order.in' => 'Order must be within ASC or DESC.[30000]',
-            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
-        ];
-
-        if ($request->filled('order')) {
-            $request->offsetSet('order', strtoupper($request->get('order')));
-        }
-
         return Validator::make($request->all(), [
-            'four_ir_initiative_id'=>'required|int',
-            'page' => 'nullable|integer|gt:0',
-            'page_size' => 'nullable|integer|gt:0',
-            'start_date' => 'nullable|date',
-            'order' => [
-                'nullable',
-                'string',
-                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
-            ],
-            'row_status' => [
-                'nullable',
-                "integer",
-                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
-            ],
-        ], $customMessage);
+            'four_ir_initiative_id'=>'required|int'
+        ]);
     }
 
     /**

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRInitiative;
+use App\Imports\FourIrTotParticipantsImport;
 use App\Models\FourIRInitiativeTot;
-use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRTotInitiativeService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -12,25 +11,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
 class FourIRInitiativeTotController extends Controller
 {
-    public FourIRTotInitiativeService $fourIRTotProjectService;
-    public FourIRFileLogService $fourIRFileLogService;
+    public FourIRTotInitiativeService $fourIRTotInitiativeService;
 
     private Carbon $startTime;
 
     /**
-     * @param FourIRTotInitiativeService $fourIRTotProjectService
-     * @param FourIRFileLogService $fourIRFileLogService
+     * @param FourIRTotInitiativeService $fourIRTotInitiativeService
      */
-    public function __construct(FourIRTotInitiativeService $fourIRTotProjectService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRTotInitiativeService $fourIRTotInitiativeService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIRTotProjectService = $fourIRTotProjectService;
-        $this->fourIRFileLogService = $fourIRFileLogService;
+        $this->fourIRTotInitiativeService = $fourIRTotInitiativeService;
     }
 
     /**
@@ -40,21 +37,10 @@ class FourIRInitiativeTotController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-
-        $filter = $this->fourIRTotProjectService->filterValidator($request)->validate();
-        $response = $this->fourIRTotProjectService->getFourIrProjectTOtList($filter, $this->startTime);
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function read(int $id): JsonResponse
-    {
-        $fourIRTot = $this->fourIRTotProjectService->getOneFourIrProjectCs($id);
+        $filter = $this->fourIRTotInitiativeService->filterValidator($request)->validate();
+        $fourIrTot = $this->fourIRTotInitiativeService->getFourIrProjectTOtList($filter, $this->startTime);
         $response = [
-            "data" => $fourIRTot,
+            "data" => $fourIrTot,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -73,19 +59,28 @@ class FourIRInitiativeTotController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $validated = $this->fourIRTotProjectService->validator($request)->validate();
+        $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
+
+        $file = $request->file('participants_file');
+        $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
+
+        $excelRows = null;
+        if (!empty($excelData) && !empty($excelData[0])) {
+            $excelRows = $excelData[0];
+            $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+        }
+
         try {
             DB::beginTransaction();
-            $data = $this->fourIRTotProjectService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_TOT_STEP);
+            $fourIrTot = $this->fourIRTotInitiativeService->store($validated, $excelRows);
 
             DB::commit();
             $response = [
-                'data' => $data,
+                'data' => $fourIrTot,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Project TOT  added successfully",
+                    "message" => "Four Ir Initiative TOT  added successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -108,21 +103,31 @@ class FourIRInitiativeTotController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProjectTot = FourIRInitiativeTot::findOrFail($id);
-        $validated = $this->fourIRTotProjectService->validator($request, $id)->validate();
+        $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+
+        $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
+
+        $file = $request->file('participants_file');
+        $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
+
+        $excelRows = null;
+        if (!empty($excelData) && !empty($excelData[0])) {
+            $excelRows = $excelData[0];
+            $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+        }
+
         try {
             DB::beginTransaction();
-            $filePath = $fourIrProjectTot['file_path'];
-            $data = $this->fourIRTotProjectService->update($fourIrProjectTot, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_TOT_STEP);
+            $this->fourIRTotInitiativeService->deletePreviousOrganizerParticipantsForUpdate($fourIrInitiativeTot);
+            $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
 
             DB::commit();
             $response = [
-                'data' => $data,
+                'data' => $fourIrTot,
                 '_response_status' => [
                     "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Project TOT updated successfully",
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Initiative TOT update successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -132,25 +137,5 @@ class FourIRInitiativeTotController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Remove the specified resource from storage
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $fourIrProjectTot = FourIRInitiativeTot::findOrFail($id);
-        $this->fourIRTotProjectService->destroy($fourIrProjectTot);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project TOT deleted successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
