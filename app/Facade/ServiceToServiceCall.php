@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed updateFourIrCourse(array $payload, int $courseId)
  * @method static array|mixed approveFourIrCourse(int $courseId)
  * @method static array|mixed getCourseEnrolledYouths(array $payload)
+ * @method static array|mixed getCourseBatches(array $payload)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler
