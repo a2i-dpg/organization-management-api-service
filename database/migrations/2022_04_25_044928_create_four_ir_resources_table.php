@@ -16,6 +16,9 @@ class CreateFourIrResourcesTable extends Migration
         Schema::create('four_ir_resources', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('four_ir_initiative_id');
+            $table->unsignedTinyInteger('approval_status')->default(0)->comment("0 => No, 1 => Yes");
+            $table->unsignedTinyInteger('budget_approval_status')->default(0)->comment("0 => No, 1 => Yes");
+            $table->decimal('given_budget')->default(0);
             $table->string('file_path')->nullable();
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
