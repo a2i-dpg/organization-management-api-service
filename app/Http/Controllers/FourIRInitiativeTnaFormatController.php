@@ -7,7 +7,6 @@ use App\Models\FourIRInitiativeTnaFormat;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRInitiativeTnaFormatService;
 use Carbon\Carbon;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,29 +43,10 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRInitiativeCell::class);
+        //$this->authorize('viewAny', FourIRInitiativeCell::class);
 
         $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
         $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function read(int $id): JsonResponse
-    {
-        $fourIrProjectCell = $this->fourIRProjectTnaFormatService->getOneFourIrProjectTnaFormat($id);
-//        $this->authorize('view', $fourIrProject);
-        $response = [
-            "data" => $fourIrProjectCell,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
@@ -80,20 +60,45 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('create', FourIRInitiativeCell::class);
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
+
         try {
             DB::beginTransaction();
-            $data = $this->fourIRProjectTnaFormatService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_TNA_STEP);
+            $this->fourIRProjectTnaFormatService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_TNA_STEP);
+
+            $workshopFile = !empty($validated['workshop_method_workshop_numbers']) ? $request->file('workshop_method_file') : null;
+            $fgdFile = !empty($validated['fgd_workshop_numbers']) ? $request->file('fgd_workshop_file') : null;
+            $industryVisitFile = !empty($validated['industry_visit_workshop_numbers']) ? $request->file('industry_visit_file') : null;
+            $desktopResearchFile = !empty($validated['desktop_research_workshop_numbers']) ? $request->file('desktop_research_file') : null;
+            $existingReportFile = !empty($validated['existing_report_review_workshop_numbers']) ? $request->file('existing_report_review_file') : null;
+            $otherWorkshopFile = !empty($validated['others_workshop_numbers']) ? $request->file('others_file') : null;
+
+            if(!empty($workshopFile)){
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopFile, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+            }
+            if(!empty($fgdFile)){
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdFile, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+            }
+            if(!empty($industryVisitFile)){
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitFile, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+            }
+            if(!empty($desktopResearchFile)){
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchFile, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+            }
+            if(!empty($existingReportFile)){
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportFile, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+            }
+            if(!empty($otherWorkshopFile)){
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherWorkshopFile, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+            }
 
             DB::commit();
             $response = [
-                'data' => $data,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Project Tna Format added successfully",
+                    "message" => "Four Ir Initiative Tna Format methods added successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -106,30 +111,79 @@ class FourIRInitiativeTnaFormatController extends Controller
     }
 
     /**
+     * Update a newly created resource in storage.
+     *
      * @param Request $request
-     * @param int $id
      * @return JsonResponse
      * @throws ValidationException
      * @throws Throwable
      */
-
-    public function update(Request $request, int $id): JsonResponse
+    function update(Request $request): JsonResponse
     {
-        $fourIrProjectTnaFormat = FourIRInitiativeTnaFormat::findOrFail($id);
-        $validated = $this->fourIRProjectTnaFormatService->validator($request, $id)->validate();
+        $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
+        $fourIrInitiative = FourIRInitiative::findOrFail($validated['four_ir_initiative_id']);
+
         try {
             DB::beginTransaction();
-            $filePath = $fourIrProjectTnaFormat['file_path'];
-            $data = $this->fourIRProjectTnaFormatService->update($fourIrProjectTnaFormat, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_TNA_STEP);
+            $filePath = $fourIrInitiative['tna_file_path'];
+            $this->fourIRProjectTnaFormatService->update($fourIrInitiative, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_TNA_STEP);
+
+            $workshopFile = !empty($validated['workshop_method_workshop_numbers']) ? $request->file('workshop_method_file') : null;
+            $fgdFile = !empty($validated['fgd_workshop_numbers']) ? $request->file('fgd_workshop_file') : null;
+            $industryVisitFile = !empty($validated['industry_visit_workshop_numbers']) ? $request->file('industry_visit_file') : null;
+            $desktopResearchFile = !empty($validated['desktop_research_workshop_numbers']) ? $request->file('desktop_research_file') : null;
+            $existingReportFile = !empty($validated['existing_report_review_workshop_numbers']) ? $request->file('existing_report_review_file') : null;
+            $otherWorkshopFile = !empty($validated['others_workshop_numbers']) ? $request->file('others_file') : null;
+
+            if(!empty($workshopFile)){
+                $this->fourIRProjectTnaFormatService->deleteMethodDataForUpdate($validated, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopFile, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+            } else {
+                $this->fourIRProjectTnaFormatService->deleteTnaFormatDataForUpdate($validated, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+            }
+
+            if(!empty($fgdFile)){
+                $this->fourIRProjectTnaFormatService->deleteMethodDataForUpdate($validated, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdFile, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+            } else {
+                $this->fourIRProjectTnaFormatService->deleteTnaFormatDataForUpdate($validated, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+            }
+
+            if(!empty($industryVisitFile)){
+                $this->fourIRProjectTnaFormatService->deleteMethodDataForUpdate($validated, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitFile, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+            } else {
+                $this->fourIRProjectTnaFormatService->deleteTnaFormatDataForUpdate($validated, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+            }
+
+            if(!empty($desktopResearchFile)){
+                $this->fourIRProjectTnaFormatService->deleteMethodDataForUpdate($validated, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchFile, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+            } else {
+                $this->fourIRProjectTnaFormatService->deleteTnaFormatDataForUpdate($validated, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+            }
+
+            if(!empty($existingReportFile)){
+                $this->fourIRProjectTnaFormatService->deleteMethodDataForUpdate($validated, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportFile, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+            } else {
+                $this->fourIRProjectTnaFormatService->deleteTnaFormatDataForUpdate($validated, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+            }
+
+            if(!empty($otherWorkshopFile)){
+                $this->fourIRProjectTnaFormatService->deleteMethodDataForUpdate($validated, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherWorkshopFile, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+            } else {
+                $this->fourIRProjectTnaFormatService->deleteTnaFormatDataForUpdate($validated, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+            }
 
             DB::commit();
             $response = [
-                'data' => $data,
                 '_response_status' => [
                     "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Project Tna Format updated successfully",
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Initiative Tna Format methods updated successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -139,29 +193,5 @@ class FourIRInitiativeTnaFormatController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Remove the specified resource from storage
-     *
-     * @param int $id
-     * @return JsonResponse
-     * @throws AuthorizationException
-     * @throws Throwable
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $fourIrProjectCell = FourIRInitiativeTnaFormat::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
-        $this->fourIRProjectTnaFormatService->destroy($fourIrProjectCell);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Tna deleted successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }

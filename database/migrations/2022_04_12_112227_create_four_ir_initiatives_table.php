@@ -20,6 +20,7 @@ class CreateFourIRInitiativesTable extends Migration
             $table->date('implementing_team_launching_date')->nullable();
             $table->date('expert_team_launching_date')->nullable();
             $table->date('cell_launching_date')->nullable();
+            $table->date('tna_file_path')->nullable();
             $table->string('name', 500);
             $table->string('name_en', 300)->nullable();
             $table->string('organization_name', 500);

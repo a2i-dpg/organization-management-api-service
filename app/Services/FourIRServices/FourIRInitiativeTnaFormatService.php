@@ -3,15 +3,21 @@
 
 namespace App\Services\FourIRServices;
 
+use App\Imports\FourIrTnaMethodsImport;
 use App\Models\BaseModel;
-use App\Models\FourIRInitiativeCell;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTnaFormat;
+use App\Models\FourIRTnaFormatMethod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -29,8 +35,6 @@ class FourIRInitiativeTnaFormatService
     public function getFourIrProjectTnaFormatList(array $request, Carbon $startTime): array
     {
         $fourIrProjectId = $request['four_ir_initiative_id'];
-        $workshopName = $request['workshop_name'] ?? "";
-        $venue = $request['venue'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -41,30 +45,30 @@ class FourIRInitiativeTnaFormatService
             [
                 'four_ir_initiative_tna_formats.id',
                 'four_ir_initiative_tna_formats.four_ir_initiative_id',
-                'four_ir_initiative_tna_formats.workshop_name',
-                'four_ir_initiative_tna_formats.skill_required',
-                'four_ir_initiative_tna_formats.start_date',
-                'four_ir_initiative_tna_formats.end_date',
-                'four_ir_initiative_tna_formats.venue',
-                'four_ir_initiative_tna_formats.file_path',
+                'four_ir_initiative_tna_formats.method_type',
+                'four_ir_initiative_tna_formats.workshop_numbers',
+
+                'four_ir_initiatives.name as initiative_name',
+                'four_ir_initiatives.name_en as initiative_name_en',
+                'four_ir_initiatives.tna_file_path',
+                'four_ir_initiatives.is_skill_provide',
+                'four_ir_initiatives.completion_step',
+                'four_ir_initiatives.form_step',
+
                 'four_ir_initiative_tna_formats.row_status',
                 'four_ir_initiative_tna_formats.created_by',
                 'four_ir_initiative_tna_formats.updated_by',
                 'four_ir_initiative_tna_formats.created_at',
                 'four_ir_initiative_tna_formats.updated_at'
             ]
-        );
+        )->acl();
 
         $fourIrProjectTnaFormatBuilder->orderBy('four_ir_initiative_tna_formats.id', $order);
 
+        $fourIrProjectTnaFormatBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tna_formats.four_ir_initiative_id');
+
         if (!empty($fourIrProjectId)) {
             $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
-        }
-        if (!empty($workshopName)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.workshop_name', 'like', '%' . $workshopName . '%');
-        }
-        if (!empty($venue)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.venue', 'like', '%' . $venue . '%');
         }
 
         if (is_numeric($rowStatus)) {
@@ -96,66 +100,119 @@ class FourIRInitiativeTnaFormatService
     }
 
     /**
-     * @param int $id
-     * @return FourIRInitiativeTnaFormat
+     * @param array $data
+     * @return void
      */
-    public function getOneFourIrProjectTnaFormat(int $id): FourIRInitiativeTnaFormat
+    public function store(array $data)
     {
-        /** @var FourIRInitiativeTnaFormat|Builder $fourIrProjectTnaFormatBuilder */
-        $fourIrProjectTnaFormatBuilder = FourIRInitiativeTnaFormat::select(
-            [
-                'four_ir_initiative_tna_formats.id',
-                'four_ir_initiative_tna_formats.four_ir_initiative_id',
-                'four_ir_initiative_tna_formats.workshop_name',
-                'four_ir_initiative_tna_formats.skill_required',
-                'four_ir_initiative_tna_formats.start_date',
-                'four_ir_initiative_tna_formats.end_date',
-                'four_ir_initiative_tna_formats.venue',
-                'four_ir_initiative_tna_formats.file_path',
-                'four_ir_initiative_tna_formats.row_status',
-                'four_ir_initiative_tna_formats.created_by',
-                'four_ir_initiative_tna_formats.updated_by',
-                'four_ir_initiative_tna_formats.created_at',
-                'four_ir_initiative_tna_formats.updated_at'
-            ]
-        );
-        $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.id', '=', $id);
-
-        return $fourIrProjectTnaFormatBuilder->firstOrFail();
+        if(!empty($data['file_path'])){
+            $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
+            $fourIrInitiative->fill([
+                'tna_file_path' => $data['file_path']
+            ]);
+            $fourIrInitiative->save();
+        }
     }
 
     /**
      * @param array $data
-     * @return FourIRInitiativeTnaFormat
+     * @param $file
+     * @param int $tnaMethod
+     * @return void
+     * @throws ValidationException
      */
-    public function store(array $data): FourIRInitiativeTnaFormat
+    public function tnaFormatMethodStore(array $data, $file, int $tnaMethod): void
     {
+        $excelData = Excel::toCollection(new FourIrTnaMethodsImport(), $file)->toArray();
+        if (!empty($excelData) && !empty($excelData[0])) {
+            $rows = $excelData[0];
+            $this->excelDataValidator($data, $rows)->validate();
 
-        $fourIRProjectTnaFormat = new FourIRInitiativeTnaFormat();
-        $fourIRProjectTnaFormat->fill($data);
-        $fourIRProjectTnaFormat->save();
-        return $fourIRProjectTnaFormat;
+            /** First, Create TNA format */
+            $tnaFormat = new FourIRInitiativeTnaFormat();
+            $tnaFormat->fill([
+                "four_ir_initiative_id" => $data['four_ir_initiative_id'],
+                "method_type" => $tnaMethod,
+                "workshop_numbers" => $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]],
+                "accessor_type" => $data['accessor_type'],
+                "accessor_id" => $data['accessor_id'],
+                "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
+            ]);
+            $tnaFormat->save();
+
+            /** Now create TNA format methods from Excel rows */
+            foreach ($rows as $rowData) {
+                DB::beginTransaction();
+                try {
+                    $rowData['four_ir_initiative_tna_format_id'] = $tnaFormat->id;
+
+                    $fourIRTnaFormatMethod = new FourIRTnaFormatMethod();
+                    $fourIRTnaFormatMethod->fill($rowData);
+                    $fourIRTnaFormatMethod->save();
+
+                    DB::commit();
+                } catch (\Throwable $e) {
+                    Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
+                    DB::rollBack();
+                }
+            }
+        }
     }
 
     /**
-     * @param FourIRInitiativeTnaFormat $fourIRProjectTnaFormat
      * @param array $data
-     * @return FourIRInitiativeTnaFormat
+     * @param int $tnaMethod
+     * @return void
      */
-    public function update(FourIRInitiativeTnaFormat $fourIRProjectTnaFormat, array $data): FourIRInitiativeTnaFormat
+    public function deleteMethodDataForUpdate(array $data, int $tnaMethod): void
     {
-        $fourIRProjectTnaFormat->fill($data);
-        $fourIRProjectTnaFormat->save();
-        return $fourIRProjectTnaFormat;
+        $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
+            ->where('method_type', $tnaMethod)
+            ->first();
+        if(!empty($tnaFormat)){
+            $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
+            foreach ($tnaFormatMethods as $method){
+                $method->delete();
+            }
+        }
     }
 
     /**
-     * @param FourIRInitiativeTnaFormat $fourIRProjectTnaFormat
-     * @return bool
+     * @param array $data
+     * @param int $tnaMethod
+     * @return void
      */
-    public function destroy(FourIRInitiativeTnaFormat $fourIRProjectTnaFormat): bool
+    public function deleteTnaFormatDataForUpdate(array $data, int $tnaMethod): void
     {
-        return $fourIRProjectTnaFormat->delete();
+        $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
+            ->where('method_type', $tnaMethod)
+            ->first();
+        if(!empty($tnaFormat)){
+            /** Delete Method all data for the Tna Format */
+            $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
+            foreach ($tnaFormatMethods as $method){
+                $method->delete();
+            }
+
+            /** Now delete Tna Format */
+            $tnaFormat->delete();
+        }
+    }
+
+
+    /**
+     * @param FourIRInitiative $fourIrInitiative
+     * @param array $data
+     * @return void
+     */
+    public function update(FourIRInitiative $fourIrInitiative, array $data): void
+    {
+        if(!empty($data['file_path'])){
+            $fourIrInitiative->fill([
+                'tna_file_path' => $data['file_path']
+            ]);
+            $fourIrInitiative->save();
+        }
     }
 
     /**
@@ -165,6 +222,7 @@ class FourIRInitiativeTnaFormatService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -172,39 +230,104 @@ class FourIRInitiativeTnaFormatService
             'four_ir_initiative_id'=>[
                 'required',
                 'int',
-                'exists:four_ir_initiatives,id,deleted_at,NULL',
-                function ($attr, $value, $failed) use ($request) {
-                    $mentoringTeam = FourIRInitiativeCell::where('four_ir_initiative_id', $value)->first();
-                    if(empty($mentoringTeam)){
-                        $failed('Complete Project Cell step first.[24000]');
-                    }
-                }
+                'exists:four_ir_initiatives,id,deleted_at,NULL'
             ],
-            'workshop_name' => [
-                'required',
+
+            'workshop_method_workshop_numbers' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['workshop_method_file']);
+                }),
+                'nullable',
+                'int'
+            ],
+            'workshop_method_file' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['workshop_method_workshop_numbers']);
+                }),
+                'nullable',
+                'mimes:xlsx, csv, xls'
+            ],
+
+            'fgd_workshop_numbers' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['fgd_workshop_file']);
+                }),
+                'nullable',
+                'int'
+            ],
+            'fgd_workshop_file' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['fgd_workshop_numbers']);
+                }),
+                'nullable',
+                'mimes:xlsx, csv, xls'
+            ],
+
+            'industry_visit_workshop_numbers' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['industry_visit_file']);
+                }),
+                'nullable',
+                'int'
+            ],
+            'industry_visit_file' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['industry_visit_workshop_numbers']);
+                }),
+                'nullable',
+                'mimes:xlsx, csv, xls'
+            ],
+
+            'desktop_research_workshop_numbers' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['desktop_research_file']);
+                }),
+                'nullable',
+                'int'
+            ],
+            'desktop_research_file' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['desktop_research_workshop_numbers']);
+                }),
+                'nullable',
+                'mimes:xlsx, csv, xls'
+            ],
+
+            'existing_report_review_workshop_numbers' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['existing_report_review_file']);
+                }),
+                'nullable',
+                'int'
+            ],
+            'existing_report_review_file' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['existing_report_review_workshop_numbers']);
+                }),
+                'nullable',
+                'mimes:xlsx, csv, xls'
+            ],
+
+            'others_workshop_numbers' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['others_file']);
+                }),
+                'nullable',
+                'int'
+            ],
+            'others_file' => [
+                Rule::requiredIf(function () use ($data) {
+                    return !empty($data['others_workshop_numbers']);
+                }),
+                'nullable',
+                'mimes:xlsx, csv, xls'
+            ],
+
+            'file_path' => [
+                'nullable',
                 'string'
-            ],
-            'skill_required' => [
-                'required',
-                'string'
-            ],
-             'venue' => [
-               'required',
-               'string'
-                ],
-            'start_date' => [
-                'required',
-                'date_format:Y-m-d'
-            ],
-            'end_date' => [
-                'required',
-                'date_format:Y-m-d'
             ],
             'accessor_type' => [
-                'required',
-                'string'
-            ],
-            'file_path' => [
                 'required',
                 'string'
             ],
@@ -238,8 +361,6 @@ class FourIRInitiativeTnaFormatService
 
         return Validator::make($request->all(), [
             'four_ir_initiative_id'=>'required|int',
-            'workshop_name' => 'nullable|string',
-            'venue' => 'nullable|string',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'start_date' => 'nullable|date',
@@ -254,5 +375,45 @@ class FourIRInitiativeTnaFormatService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ], $customMessage);
+    }
+
+    /**
+     * @param array $data
+     * @param array $excelData
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function excelDataValidator(array $data, array $excelData): \Illuminate\Contracts\Validation\Validator
+    {
+        /** $excelData owns an array. So use * as prefix */
+        $rules = [
+            '*.name' => [
+                'required',
+                'string',
+                'max:600',
+                'min:2'
+            ],
+            '*.name_en' => [
+                'nullable',
+                'string',
+                'max:300',
+                'min:2'
+            ],
+            '*.start_date' => [
+                'required',
+                'date-format:Y-m-d'
+            ],
+            '*.end_date' => [
+                'required',
+                'date-format:Y-m-d',
+                'after:start_date'
+            ],
+            '*.venue' => [
+                'required',
+                'string',
+                'max:600',
+                'min:2'
+            ],
+        ];
+        return Validator::make($data, $rules);
     }
 }

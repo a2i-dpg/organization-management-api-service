@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIRInitiativeTnaFormatsTable extends Migration
+class CreateFourIrTnaFormatMethodsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateFourIRInitiativeTnaFormatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('four_ir_initiative_tna_formats', function (Blueprint $table) {
+        Schema::create('four_ir_tna_format_methods', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_initiative_id');
-            $table->unsignedInteger('method_type')->comment("1 => workshop, 2 => FGD workshop, 3 => Industry visit, 4 => Desktop research, 5 => Existing report review, 6 => others");
-            $table->unsignedInteger('workshop_numbers')->default(0);
-            $table->string('accessor_type', 100);
-            $table->unsignedInteger('accessor_id');
+            $table->unsignedInteger('four_ir_initiative_tna_format_id');
+            $table->string('name', 300);
+            $table->string('name_en', 300)->nullable();
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('venue', 500);
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
@@ -35,6 +36,6 @@ class CreateFourIRInitiativeTnaFormatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('four_ir_initiative_tna_formats');
+        Schema::dropIfExists('four_ir_tna_format_methods');
     }
 }
