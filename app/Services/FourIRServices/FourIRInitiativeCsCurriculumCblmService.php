@@ -186,8 +186,8 @@ class FourIRInitiativeCsCurriculumCblmService
         if(!empty($data['four_ir_initiative_id']) && !empty($data['type'])){
             $fourIrInitiative = FourIRInitiative::findOrFail('four_ir_initiative_id');
 
-            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_TRUE, ValidationException::withMessages([
-                "This form step is not allowed as the initiative was set for Skill Provider!"
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
+                "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
 
             if($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS){

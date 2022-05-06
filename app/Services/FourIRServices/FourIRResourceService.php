@@ -4,12 +4,14 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 
@@ -69,6 +71,22 @@ class FourIRResourceService
     public function store(array $data, FourIRResource|null $fourIRResource): FourIRResource
     {
         if(empty($fourIRResource)) {
+            /** Update initiative stepper */
+            $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
+
+            $payload = [];
+
+            if($initiative->form_step < FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT){
+                $payload['form_step'] = FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT;
+            }
+            if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SEVEN){
+                $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_SEVEN;
+            }
+
+            $initiative->fill($payload);
+            $initiative->save();
+
+            /** Create new instance to store */
             $fourIRResource = new FourIRResource();
         }
         $fourIRResource->fill($data);
@@ -88,6 +106,18 @@ class FourIRResourceService
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+
+        if(!empty($data['four_ir_initiative_id']) && !empty($data['type'])){
+            $fourIrInitiative = FourIRInitiative::findOrFail('four_ir_initiative_id');
+
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
+                "This form step is not allowed as the initiative was set for Not Skill Provider!"
+            ]));
+
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_CBLM, ValidationException::withMessages([
+                'Complete CBLM step first.[24000]'
+            ]));
+        }
 
         $rules = [
             'four_ir_initiative_id' => [
