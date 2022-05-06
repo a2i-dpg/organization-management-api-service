@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getYouthUserByUsername(string $username)
  * @method static array|mixed getDomain(string $username)
  * @method static array|mixed createFourIrUser(array $payload)
+ * @method static array|mixed getFourIrCourseList(array $payload)
+ * @method static array|mixed getFourIrCourseByCourseId(int $courseId)
+ * @method static array|mixed createFourIrCourse(array $payload)
+ * @method static array|mixed updateFourIrCourse(array $payload, int $courseId)
+ * @method static array|mixed approveFourIrCourse(int $courseId)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler
