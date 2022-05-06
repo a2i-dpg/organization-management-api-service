@@ -3,7 +3,7 @@
 namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
-use App\Models\FourIRProjectTot;
+use App\Models\FourIRInitiativeTot;
 use App\Models\FourIRResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Ramsey\Collection\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
-class FourIRTotProjectService
+class FourIRTotInitiativeService
 {
 
     /**
@@ -31,29 +31,29 @@ class FourIRTotProjectService
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $fourIrProjectTotBuilder */
-        $fourIrProjectTotBuilder = FourIRProjectTot::select([
-            'four_ir_project_tots.id',
-            'four_ir_project_tots.four_ir_initiative_id',
-            'four_ir_project_tots.accessor_type',
-            'four_ir_project_tots.accessor_id',
-            'four_ir_project_tots.participants',
-            'four_ir_project_tots.master_trainer',
-            'four_ir_project_tots.date',
-            'four_ir_project_tots.venue',
-            'four_ir_project_tots.file_path',
-            'four_ir_project_tots.row_status',
-            'four_ir_project_tots.created_by',
-            'four_ir_project_tots.updated_by',
-            'four_ir_project_tots.created_at',
-            'four_ir_project_tots.updated_at'
+        $fourIrProjectTotBuilder = FourIRInitiativeTot::select([
+            'four_ir_initiative_tots.id',
+            'four_ir_initiative_tots.four_ir_initiative_id',
+            'four_ir_initiative_tots.accessor_type',
+            'four_ir_initiative_tots.accessor_id',
+            'four_ir_initiative_tots.participants',
+            'four_ir_initiative_tots.master_trainer',
+            'four_ir_initiative_tots.date',
+            'four_ir_initiative_tots.venue',
+            'four_ir_initiative_tots.file_path',
+            'four_ir_initiative_tots.row_status',
+            'four_ir_initiative_tots.created_by',
+            'four_ir_initiative_tots.updated_by',
+            'four_ir_initiative_tots.created_at',
+            'four_ir_initiative_tots.updated_at'
         ])->acl();
-        $fourIrProjectTotBuilder->orderBy('four_ir_project_tots.id', $order);
+        $fourIrProjectTotBuilder->orderBy('four_ir_initiative_tots.id', $order);
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrProjectTotBuilder->where('four_ir_project_tots.four_ir_initiative_id', $fourIrProjectId);
+            $fourIrProjectTotBuilder->where('four_ir_initiative_tots.four_ir_initiative_id', $fourIrProjectId);
         }
         if (is_numeric($rowStatus)) {
-            $fourIrProjectTotBuilder->where('four_ir_project_tots.row_status', $rowStatus);
+            $fourIrProjectTotBuilder->where('four_ir_initiative_tots.row_status', $rowStatus);
         }
 
         /** @var  Collection $fourIrProjectTots */
@@ -85,50 +85,50 @@ class FourIRTotProjectService
 
     /**
      * @param int $id
-     * @return FourIRProjectTot
+     * @return FourIRInitiativeTot
      */
-    public function getOneFourIrProjectCs(int $id): FourIRProjectTot
+    public function getOneFourIrProjectCs(int $id): FourIRInitiativeTot
     {
-        /** @var FourIRProjectTot|Builder $fourIrProjectTotBuilder */
-        $fourIrProjectTotBuilder = FourIRProjectTot::select([
-            'four_ir_project_tots.id',
-            'four_ir_project_tots.four_ir_initiative_id',
-            'four_ir_project_tots.accessor_type',
-            'four_ir_project_tots.accessor_id',
-            'four_ir_project_tots.participants',
-            'four_ir_project_tots.master_trainer',
-            'four_ir_project_tots.date',
-            'four_ir_project_tots.venue',
-            'four_ir_project_tots.file_path',
-            'four_ir_project_tots.row_status',
-            'four_ir_project_tots.created_by',
-            'four_ir_project_tots.updated_by',
-            'four_ir_project_tots.created_at',
-            'four_ir_project_tots.updated_at'
+        /** @var FourIRInitiativeTot|Builder $fourIrProjectTotBuilder */
+        $fourIrProjectTotBuilder = FourIRInitiativeTot::select([
+            'four_ir_initiative_tots.id',
+            'four_ir_initiative_tots.four_ir_initiative_id',
+            'four_ir_initiative_tots.accessor_type',
+            'four_ir_initiative_tots.accessor_id',
+            'four_ir_initiative_tots.participants',
+            'four_ir_initiative_tots.master_trainer',
+            'four_ir_initiative_tots.date',
+            'four_ir_initiative_tots.venue',
+            'four_ir_initiative_tots.file_path',
+            'four_ir_initiative_tots.row_status',
+            'four_ir_initiative_tots.created_by',
+            'four_ir_initiative_tots.updated_by',
+            'four_ir_initiative_tots.created_at',
+            'four_ir_initiative_tots.updated_at'
         ]);
-        $fourIrProjectTotBuilder->where('four_ir_project_tots.id', '=', $id);
+        $fourIrProjectTotBuilder->where('four_ir_initiative_tots.id', '=', $id);
 
         return $fourIrProjectTotBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRProjectTot
+     * @return FourIRInitiativeTot
      */
-    public function store(array $data): FourIRProjectTot
+    public function store(array $data): FourIRInitiativeTot
     {
-        $fourIrProjectTOt = app(FourIRProjectTot::class);
+        $fourIrProjectTOt = app(FourIRInitiativeTot::class);
         $fourIrProjectTOt->fill($data);
         $fourIrProjectTOt->save();
         return $fourIrProjectTOt;
     }
 
     /**
-     * @param FourIRProjectTot $fourIRProjectTot
+     * @param FourIRInitiativeTot $fourIRProjectTot
      * @param array $data
-     * @return FourIRProjectTot
+     * @return FourIRInitiativeTot
      */
-    public function update(FourIRProjectTot $fourIRProjectTot, array $data): FourIRProjectTot
+    public function update(FourIRInitiativeTot $fourIRProjectTot, array $data): FourIRInitiativeTot
     {
         $fourIRProjectTot->fill($data);
         $fourIRProjectTot->save();
@@ -137,10 +137,10 @@ class FourIRTotProjectService
 
 
     /**
-     * @param FourIRProjectTot $fourIRProjectTot
+     * @param FourIRInitiativeTot $fourIRProjectTot
      * @return bool
      */
-    public function destroy(FourIRProjectTot $fourIRProjectTot): bool
+    public function destroy(FourIRInitiativeTot $fourIRProjectTot): bool
     {
         return $fourIRProjectTot->delete();
     }

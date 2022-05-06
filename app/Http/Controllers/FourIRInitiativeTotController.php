@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRInitiative;
-use App\Models\FourIRProjectTot;
+use App\Models\FourIRInitiativeTot;
 use App\Services\FourIRServices\FourIRFileLogService;
-use App\Services\FourIRServices\FourIRTotProjectService;
+use App\Services\FourIRServices\FourIRTotInitiativeService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,18 +15,18 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRProjectTotController extends Controller
+class FourIRInitiativeTotController extends Controller
 {
-    public FourIRTotProjectService $fourIRTotProjectService;
+    public FourIRTotInitiativeService $fourIRTotProjectService;
     public FourIRFileLogService $fourIRFileLogService;
 
     private Carbon $startTime;
 
     /**
-     * @param FourIRTotProjectService $fourIRTotProjectService
+     * @param FourIRTotInitiativeService $fourIRTotProjectService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRTotProjectService $fourIRTotProjectService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRTotInitiativeService $fourIRTotProjectService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIRTotProjectService = $fourIRTotProjectService;
@@ -108,7 +108,7 @@ class FourIRProjectTotController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProjectTot = FourIRProjectTot::findOrFail($id);
+        $fourIrProjectTot = FourIRInitiativeTot::findOrFail($id);
         $validated = $this->fourIRTotProjectService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
@@ -141,7 +141,7 @@ class FourIRProjectTotController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProjectTot = FourIRProjectTot::findOrFail($id);
+        $fourIrProjectTot = FourIRInitiativeTot::findOrFail($id);
         $this->fourIRTotProjectService->destroy($fourIrProjectTot);
         $response = [
             '_response_status' => [

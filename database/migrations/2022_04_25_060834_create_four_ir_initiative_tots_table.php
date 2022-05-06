@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIRProjectTotsTable extends Migration
+class CreateFourIRInitiativeTotsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFourIRProjectTotsTable extends Migration
      */
     public function up()
     {
-        Schema::create('four_ir_project_tots', function (Blueprint $table) {
+        Schema::create('four_ir_initiative_tots', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('four_ir_initiative_id');
             $table->string('accessor_type', 100);
