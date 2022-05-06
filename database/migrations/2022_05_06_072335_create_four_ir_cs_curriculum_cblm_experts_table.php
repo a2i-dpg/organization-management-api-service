@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIRProjectCsTable extends Migration
+class CreateFourIrCsCurriculumCblmExpertsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class CreateFourIRProjectCsTable extends Migration
      */
     public function up()
     {
-        Schema::create('four_ir_project_cs', function (Blueprint $table) {
+        Schema::create('four_ir_cs_curriculum_cblm_experts', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_initiative_id');
-            $table->string('experts',400);
-            $table->string('level',300);
-            $table->string('approved_by',300);
-            $table->string('developer_organization_name',300);
-            $table->string('developer_organization_name_en',300)->nullable();
-            $table->string('sector_name',200);
-            $table->string('sector_name_en',200)->nullable();
-            $table->string('supported_by',200);
-            $table->text('comment')->nullable();
-            $table->string('file_path');
+            $table->unsignedInteger('four_ir_initiative_cs_curriculum_cblm_id');
+            $table->string('name', 100);
+            $table->string('name_en', 100)->nullable();
+            $table->string('designation', 100);
+            $table->string('organization', 100);
+            $table->string('organization_en', 100)->nullable();
+            $table->string('mobile', 15);
+            $table->string('email', 100);
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
@@ -43,6 +40,6 @@ class CreateFourIRProjectCsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('four_ir_project_cs');
+        Schema::dropIfExists('four_ir_cs_curriculum_cblm_experts');
     }
 }

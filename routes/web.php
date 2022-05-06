@@ -179,9 +179,9 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
         $customRouter()->resourceRoute('team-members', 'FourIRInitiativeTeamMemberController')->render();
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
-        $customRouter()->resourceRoute('project-cells', 'FourIRInitiativeCellController')->render();
-        $customRouter()->resourceRoute('project-cs', 'FourIRProjectCsController')->render();
-        $customRouter()->resourceRoute('project-curriculums', 'FourIRProjectCurriculumController')->render();
+        $customRouter()->resourceRoute('initiative-cells', 'FourIRInitiativeCellController')->render();
+        $customRouter()->resourceRoute('initiative-cs', 'FourIRInitiativeCsCurriculumCblmController')->render();
+        $customRouter()->resourceRoute('initiative-curriculums', 'FourIRProjectCurriculumController')->render();
         $customRouter()->resourceRoute('tna-formats', 'FourIRInitiativeTnaFormatController')->render();
         $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();

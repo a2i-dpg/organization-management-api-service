@@ -47,6 +47,13 @@ class FourIRInitiative extends BaseModel
     public const COMPLETION_STEP_ONE = 1;
     public const COMPLETION_STEP_TWO = 2;
     public const COMPLETION_STEP_THREE = 3;
+    public const COMPLETION_STEP_FOUR = 4;
+    public const COMPLETION_STEP_FIVE = 5;
+    public const COMPLETION_STEP_SIX = 6;
+    public const COMPLETION_STEP_SEVEN = 7;
+    public const COMPLETION_STEP_EIGHT = 8;
+    public const COMPLETION_STEP_NINE = 9;
+    public const COMPLETION_STEP_TEN = 10;
 
     public const FORM_STEP_PROJECT_INITIATION = 1;
     public const FORM_STEP_IMPLEMENTING_TEAM = 2;
@@ -59,14 +66,13 @@ class FourIRInitiative extends BaseModel
     public const FORM_STEP_RESOURCE_MANAGEMENT = 9;
 
     public const FILE_LOG_INITIATIVE_STEP = 1;
-    public const FILE_LOG_PROJECT_GUIDELINE_STEP = 2;
-    public const FILE_LOG_TNA_STEP = 3;
-    public const FILE_LOG_PROJECT_CS_STEP = 4;
-    public const FILE_LOG_PROJECT_CURRICULUM_STEP = 5;
-    public const FILE_LOG_CBLM_STEP = 6;
-    public const FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP = 7;
-    public const FILE_LOG_TOT_STEP = 8;
-    public const FILE_LOG_ASSESSMENT_STEP = 9;
+    public const FILE_LOG_TNA_STEP = 2;
+    public const FILE_LOG_PROJECT_CS_STEP = 3;
+    public const FILE_LOG_PROJECT_CURRICULUM_STEP = 4;
+    public const FILE_LOG_CBLM_STEP = 5;
+    public const FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP = 6;
+    public const FILE_LOG_TOT_STEP = 7;
+    public const FILE_LOG_ASSESSMENT_STEP = 8;
 
     public const TASK_ROADMAP_FINALIZED = 1;
     public const TASK_PROJECT_REVIEWED_BY_SECRETARY_OF_RELEVANT_MINISTRIES = 2;
