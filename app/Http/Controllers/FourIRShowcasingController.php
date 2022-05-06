@@ -69,7 +69,7 @@ class FourIRShowcasingController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     function store(Request $request): JsonResponse
     {
@@ -83,7 +83,7 @@ class FourIRShowcasingController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project added successfully",
+                "message" => "Four Ir Showcasing added successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -97,7 +97,7 @@ class FourIRShowcasingController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -112,7 +112,7 @@ class FourIRShowcasingController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project updated successfully",
+                "message" => "Four Ir Showcasing updated successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
@@ -137,7 +137,7 @@ class FourIRShowcasingController extends Controller
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project deleted successfully",
+                "message" => "Four Ir Showcasing deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
