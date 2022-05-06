@@ -69,7 +69,7 @@ class FourIRInitiativeCellController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     function store(Request $request): JsonResponse
     {
@@ -142,5 +142,31 @@ class FourIRInitiativeCellController extends Controller
             ]
         ];
         return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * update the specified resource from storage
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     * @throws Throwable
+     */
+    public function setTeamLaunchingDate(Request $request): JsonResponse
+    {
+        $validated = $this->fourIRInitiativeCellService->cellLaunchingDateValidator($request)->validate();
+        $data = $this->fourIRInitiativeCellService->addCellLaunchingDate($validated);
+
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Four Ir Team launching date updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 }

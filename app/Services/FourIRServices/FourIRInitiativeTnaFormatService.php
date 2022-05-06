@@ -107,9 +107,19 @@ class FourIRInitiativeTnaFormatService
     {
         if(!empty($data['file_path'])){
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-            $fourIrInitiative->fill([
-                'tna_file_path' => $data['file_path']
-            ]);
+
+            $payload = [];
+            $payload['tna_file_path'] = $data['file_path'];
+
+            if($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA){
+                $payload['form_step'] = FourIRInitiative::FORM_STEP_TNA;
+            }
+
+            if($fourIrInitiative->completion_step < FourIRInitiative::COMPLETION_STEP_THREE){
+                $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_THREE;
+            }
+
+            $fourIrInitiative->fill($payload);
             $fourIrInitiative->save();
         }
     }
@@ -219,9 +229,22 @@ class FourIRInitiativeTnaFormatService
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
+     * @throws \Throwable
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        if(!empty($data['four_ir_initiative_id'])){
+            $fourIrInitiative = FourIRInitiative::findOrFail('four_ir_initiative_id');
+
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
+                "This form step is not allowed as the initiative was set for Not Skill Provider!"
+            ]));
+
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_EXPERT_TEAM, ValidationException::withMessages([
+                'Complete Expert team step first.[24000]'
+            ]));
+        }
+
         $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
