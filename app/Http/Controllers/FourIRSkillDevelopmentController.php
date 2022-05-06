@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIRCourseDevelopment;
-use App\Services\FourIRServices\FourIRCourseDevelopmentService;
+use App\Services\FourIRServices\FourIRSkillDevelopmentService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,13 +12,13 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRCourseDevelopmentController extends Controller
+class FourIRSkillDevelopmentController extends Controller
 {
-    public FourIRCourseDevelopmentService $fourIRCourseDevelopmentService;
+    public FourIRSkillDevelopmentService $fourIRCourseDevelopmentService;
     private Carbon $startTime;
 
 
-    public function __construct(FourIRCourseDevelopmentService $fourIRCourseDevelopmentService)
+    public function __construct(FourIRSkillDevelopmentService $fourIRCourseDevelopmentService)
     {
         $this->startTime = Carbon::now();
         $this->fourIRCourseDevelopmentService = $fourIRCourseDevelopmentService;

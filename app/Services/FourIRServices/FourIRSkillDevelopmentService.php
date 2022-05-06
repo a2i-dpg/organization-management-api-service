@@ -17,7 +17,7 @@ use Ramsey\Collection\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class FourIRCourseDevelopmentService
+class FourIRSkillDevelopmentService
 {
     public function getFourIRCourseDevelopmentList(array $request, Carbon $startTime): array
     {

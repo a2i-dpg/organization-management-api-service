@@ -186,7 +186,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
         $customRouter()->resourceRoute('tots', 'FourIRInitiativeTotController')->render();
-        $customRouter()->resourceRoute('course-developments', 'FourIRCourseDevelopmentController')->render();
+        $customRouter()->resourceRoute('course-developments', 'FourIRSkillDevelopmentController')->render();
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
         $customRouter()->resourceRoute('create-approve-course', 'FourIRCreateApproveCourseController')->render();
