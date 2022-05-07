@@ -19,6 +19,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 
 /**
@@ -83,28 +84,27 @@ class FourIRInitiativeTnaFormatService
     }
 
     /**
+     * @param FourIRInitiative $fourIrInitiative
      * @param array $data
      * @return void
      */
-    public function store(array $data)
+    public function store(FourIRInitiative $fourIrInitiative, array $data)
     {
+        $payload = [];
         if(!empty($data['file_path'])){
-            $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
-            $payload = [];
             $payload['tna_file_path'] = $data['file_path'];
-
-            if($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA){
-                $payload['form_step'] = FourIRInitiative::FORM_STEP_TNA;
-            }
-
-            if($fourIrInitiative->completion_step < FourIRInitiative::COMPLETION_STEP_THREE){
-                $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_THREE;
-            }
-
-            $fourIrInitiative->fill($payload);
-            $fourIrInitiative->save();
         }
+
+        if($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA){
+            $payload['form_step'] = FourIRInitiative::FORM_STEP_TNA;
+        }
+
+        if($fourIrInitiative->completion_step < FourIRInitiative::COMPLETION_STEP_THREE){
+            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_THREE;
+        }
+
+        $fourIrInitiative->fill($payload);
+        $fourIrInitiative->save();
     }
 
     /**
@@ -119,19 +119,30 @@ class FourIRInitiativeTnaFormatService
         $excelData = Excel::toCollection(new FourIrTnaMethodsImport(), $file)->toArray();
         if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
-            $this->excelDataValidator($data, $rows)->validate();
+            $this->excelDataValidator($rows, $tnaMethod)->validate();
 
-            /** First, Create TNA format */
-            $tnaFormat = new FourIRInitiativeTnaFormat();
-            $tnaFormat->fill([
-                "four_ir_initiative_id" => $data['four_ir_initiative_id'],
-                "method_type" => $tnaMethod,
-                "workshop_numbers" => $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]],
-                "accessor_type" => $data['accessor_type'],
-                "accessor_id" => $data['accessor_id'],
-                "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
-            ]);
-            $tnaFormat->save();
+            $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
+                ->where('method_type', $tnaMethod)
+                ->first();
+            if(empty($tnaFormat)){
+                /** First, Create TNA format */
+                $tnaFormat = new FourIRInitiativeTnaFormat();
+                $tnaFormat->fill([
+                    "four_ir_initiative_id" => $data['four_ir_initiative_id'],
+                    "method_type" => $tnaMethod,
+                    "workshop_numbers" => $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]],
+                    "accessor_type" => $data['accessor_type'],
+                    "accessor_id" => $data['accessor_id'],
+                    "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
+                ]);
+                $tnaFormat->save();
+            } else {
+                /** Delete all previous methods data */
+                $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
+                foreach ($tnaFormatMethods as $method){
+                    $method->delete();
+                }
+            }
 
             /** Now create TNA format methods from Excel rows */
             foreach ($rows as $rowData) {
@@ -144,7 +155,7 @@ class FourIRInitiativeTnaFormatService
                     $fourIRTnaFormatMethod->save();
 
                     DB::commit();
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
                     DB::rollBack();
                 }
@@ -152,67 +163,12 @@ class FourIRInitiativeTnaFormatService
         }
     }
 
-    /**
-     * @param array $data
-     * @param int $tnaMethod
-     * @return void
-     */
-    public function deleteMethodDataForUpdate(array $data, int $tnaMethod): void
-    {
-        $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
-            ->where('method_type', $tnaMethod)
-            ->first();
-        if(!empty($tnaFormat)){
-            $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
-            foreach ($tnaFormatMethods as $method){
-                $method->delete();
-            }
-        }
-    }
-
-    /**
-     * @param array $data
-     * @param int $tnaMethod
-     * @return void
-     */
-    public function deleteTnaFormatDataForUpdate(array $data, int $tnaMethod): void
-    {
-        $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
-            ->where('method_type', $tnaMethod)
-            ->first();
-        if(!empty($tnaFormat)){
-            /** Delete Method all data for the Tna Format */
-            $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
-            foreach ($tnaFormatMethods as $method){
-                $method->delete();
-            }
-
-            /** Now delete Tna Format */
-            $tnaFormat->delete();
-        }
-    }
-
-
-    /**
-     * @param FourIRInitiative $fourIrInitiative
-     * @param array $data
-     * @return void
-     */
-    public function update(FourIRInitiative $fourIrInitiative, array $data): void
-    {
-        if(!empty($data['file_path'])){
-            $fourIrInitiative->fill([
-                'tna_file_path' => $data['file_path']
-            ]);
-            $fourIrInitiative->save();
-        }
-    }
 
     /**
      * @param Request $request
      * @param int|null $id
      * @return \Illuminate\Contracts\Validation\Validator
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
@@ -362,25 +318,29 @@ class FourIRInitiativeTnaFormatService
     }
 
     /**
-     * @param array $data
      * @param array $excelData
+     * @param int $tnaMethod
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function excelDataValidator(array $data, array $excelData): \Illuminate\Contracts\Validation\Validator
+    public function excelDataValidator(array $excelData, int $tnaMethod): \Illuminate\Contracts\Validation\Validator
     {
+        $fileKeyName = FourIRInitiativeTnaFormat::TNA_METHODS_FILE_KEYS[$tnaMethod];
+        $customMessage = [
+            'required' => 'This field of ' . $fileKeyName . ' is required.[50000]',
+            'string' => 'This field of ' . $fileKeyName . ' must be a string.[60000]',
+            'date_format' => 'This field of ' . $fileKeyName . ' does not match the format Y-m-d.[16000]',
+            'after' => 'This field of ' . $fileKeyName . ' must after its start_date.[3000]',
+        ];
+
         /** $excelData owns an array. So use * as prefix */
         $rules = [
             '*.name' => [
                 'required',
-                'string',
-                'max:600',
-                'min:2'
+                'string'
             ],
             '*.name_en' => [
                 'nullable',
-                'string',
-                'max:300',
-                'min:2'
+                'string'
             ],
             '*.start_date' => [
                 'required',
@@ -389,15 +349,13 @@ class FourIRInitiativeTnaFormatService
             '*.end_date' => [
                 'required',
                 'date-format:Y-m-d',
-                'after:start_date'
+                'after:*.start_date'
             ],
             '*.venue' => [
                 'required',
                 'string',
-                'max:600',
-                'min:2'
             ],
         ];
-        return Validator::make($data, $rules);
+        return Validator::make($excelData, $rules, $customMessage);
     }
 }

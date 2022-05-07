@@ -32,4 +32,12 @@ class FourIRInitiativeTnaFormat extends BaseModel
         self::EXISTING_REPORT_VIEW_TNA_METHOD => "existing_report_review_workshop_numbers",
         self::OTHERS_TNA_METHOD => "others_workshop_numbers",
     ];
+    public const TNA_METHODS_FILE_KEYS = [
+        self::WORKSHOP_TNA_METHOD => "workshop_method_file",
+        self::FGD_WORKSHOP_TNA_METHOD => "fgd_workshop_file",
+        self::INDUSTRY_VISIT_TNA_METHOD => "industry_visit_file",
+        self::DESKTOP_RESEARCH_TNA_METHOD => "desktop_research_file",
+        self::EXISTING_REPORT_VIEW_TNA_METHOD => "existing_report_review_file",
+        self::OTHERS_TNA_METHOD => "others_file",
+    ];
 }
