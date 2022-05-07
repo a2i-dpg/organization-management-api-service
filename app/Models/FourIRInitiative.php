@@ -80,8 +80,7 @@ class FourIRInitiative extends BaseModel
     public const FILE_LOG_PROJECT_CURRICULUM_STEP = 4;
     public const FILE_LOG_CBLM_STEP = 5;
     public const FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP = 6;
-    public const FILE_LOG_TOT_STEP = 7;
-    public const FILE_LOG_ASSESSMENT_STEP = 8;
+    public const FILE_LOG_SHOWCASING_STEP = 7;
 
     public const TASK_ROADMAP_FINALIZED = 1;
     public const TASK_PROJECT_REVIEWED_BY_SECRETARY_OF_RELEVANT_MINISTRIES = 2;

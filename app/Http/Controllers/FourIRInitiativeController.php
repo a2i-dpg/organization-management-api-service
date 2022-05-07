@@ -88,7 +88,9 @@ class FourIRInitiativeController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIrInitiativeService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
+
+            $validated['four_ir_initiative_id'] = $data->id;
+            $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
             $response = [
@@ -127,7 +129,9 @@ class FourIRInitiativeController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrInitiative['file_path'];
             $data = $this->fourIrInitiativeService->update($fourIrInitiative, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
+
+            $validated['four_ir_initiative_id'] = $data->id;
+            $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
             DB::commit();
             $response = [

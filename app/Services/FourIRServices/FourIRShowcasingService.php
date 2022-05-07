@@ -57,6 +57,7 @@ class FourIRShowcasingService
                 'four_ir_showcasings.start_time',
                 'four_ir_showcasings.end_time',
                 'four_ir_showcasings.event_description',
+                'four_ir_showcasings.file_path',
                 'four_ir_showcasings.row_status',
                 'four_ir_showcasings.created_by',
                 'four_ir_showcasings.updated_by',
@@ -134,6 +135,7 @@ class FourIRShowcasingService
                 'four_ir_showcasings.start_time',
                 'four_ir_showcasings.end_time',
                 'four_ir_showcasings.event_description',
+                'four_ir_showcasings.file_path',
                 'four_ir_showcasings.row_status',
                 'four_ir_showcasings.created_by',
                 'four_ir_showcasings.updated_by',
@@ -257,13 +259,18 @@ class FourIRShowcasingService
             ],
             'start_time' => [
                 'required',
-                'date_format:H:i:s'
+                'date-format:Y-m-d'
             ],
             'end_time' => [
                 'required',
-                'date_format:H:i:s'
+                'date-format:Y-m-d',
+                'after:start_time'
             ],
             'event_description' => [
+                'nullable',
+                'string'
+            ],
+            'file_path' => [
                 'nullable',
                 'string'
             ],
