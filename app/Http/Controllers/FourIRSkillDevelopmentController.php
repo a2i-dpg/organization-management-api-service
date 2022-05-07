@@ -14,12 +14,10 @@ use Throwable;
 class FourIRSkillDevelopmentController extends Controller
 {
     public FourIRSkillDevelopmentService $fourIRCourseDevelopmentService;
-    private Carbon $startTime;
 
 
     public function __construct(FourIRSkillDevelopmentService $fourIRCourseDevelopmentService)
     {
-        $this->startTime = Carbon::now();
         $this->fourIRCourseDevelopmentService = $fourIRCourseDevelopmentService;
     }
 
@@ -30,7 +28,6 @@ class FourIRSkillDevelopmentController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-
         $filter = $this->fourIRCourseDevelopmentService->filterValidator($request)->validate();
         $response = $this->fourIRCourseDevelopmentService->getFourIRCourseDevelopmentList($filter);
         return Response::json($response, ResponseAlias::HTTP_OK);

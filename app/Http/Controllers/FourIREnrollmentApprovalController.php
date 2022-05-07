@@ -15,7 +15,6 @@ class FourIREnrollmentApprovalController extends Controller
 {
     public FourIREnrollmentApprovalService $fourIrInitiativeService;
     public FourIRFileLogService $fourIRFileLogService;
-    private Carbon $startTime;
 
     /**
      * FourIRInitiativeController constructor.
@@ -25,7 +24,6 @@ class FourIREnrollmentApprovalController extends Controller
      */
     public function __construct(FourIREnrollmentApprovalService $fourIrInitiativeService, FourIRFileLogService $fourIRFileLogService)
     {
-        $this->startTime = Carbon::now();
         $this->fourIrInitiativeService = $fourIrInitiativeService;
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
