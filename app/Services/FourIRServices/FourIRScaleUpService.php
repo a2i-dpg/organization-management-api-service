@@ -5,7 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRInitiative;
-use App\Models\FourIRShowcasing;
+use App\Models\FourIRScaleUp;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -18,10 +18,10 @@ use Throwable;
 
 
 /**
- * Class FourIRShowcasingService
+ * Class FourIRScaleUpService
  * @package App\Services
  */
-class FourIRShowcasingService
+class FourIRScaleUpService
 {
     /**
      * @param array $request
@@ -31,17 +31,17 @@ class FourIRShowcasingService
     public function getFourShowcasingList(array $request, Carbon $startTime): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
-        $organizationName = $request['organization_name'] ?? "";
+        $projectName = $request['project_name'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
 
         /** @var Builder $fourIrProjectCellBuilder */
-        $fourIrShowcasingBuilder = FourIRShowcasing::select(
+        $fourIrScaleUpBuilder = FourIRScaleUp::select(
             [
-                'four_ir_showcasings.id',
-                'four_ir_showcasings.four_ir_initiative_id',
+                'four_ir_scale_ups.id',
+                'four_ir_scale_ups.four_ir_initiative_id',
 
                 'four_ir_initiatives.name as initiative_name',
                 'four_ir_initiatives.name_en as initiative_name_en',
@@ -49,56 +49,59 @@ class FourIRShowcasingService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_showcasings.organization_name',
-                'four_ir_showcasings.organization_name_en',
-                'four_ir_showcasings.invite_other_organization',
-                'four_ir_showcasings.invite_other_organization_en',
-                'four_ir_showcasings.venue',
-                'four_ir_showcasings.start_time',
-                'four_ir_showcasings.end_time',
-                'four_ir_showcasings.event_description',
-                'four_ir_showcasings.row_status',
-                'four_ir_showcasings.created_by',
-                'four_ir_showcasings.updated_by',
-                'four_ir_showcasings.created_at',
-                'four_ir_showcasings.updated_at'
+                'four_ir_scale_ups.project_name',
+                'four_ir_scale_ups.project_name_en',
+                'four_ir_scale_ups.previous_budget',
+                'four_ir_scale_ups.implement_timeline',
+                'four_ir_scale_ups.implement_area',
+                'four_ir_scale_ups.project_documents',
+                'four_ir_scale_ups.tentitive_budget',
+                'four_ir_scale_ups.beneficiary_target',
+                'four_ir_scale_ups.description',
+                'four_ir_scale_ups.accessor_type',
+                'four_ir_scale_ups.accessor_id',
+                'four_ir_scale_ups.row_status',
+                'four_ir_scale_ups.created_by',
+                'four_ir_scale_ups.updated_by',
+                'four_ir_scale_ups.created_at',
+                'four_ir_scale_ups.updated_at'
             ]
         )->acl();
 
-        $fourIrShowcasingBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_showcasings.four_ir_initiative_id');
+        $fourIrScaleUpBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_scale_ups.four_ir_initiative_id');
 
-        $fourIrShowcasingBuilder->orderBy('four_ir_showcasings.id', $order);
+        $fourIrScaleUpBuilder->orderBy('four_ir_scale_ups.id', $order);
 
         if(!empty($fourIrInitiativeId)){
-            $fourIrShowcasingBuilder->where('four_ir_showcasings.four_ir_initiative_id', $fourIrInitiativeId);
+            $fourIrScaleUpBuilder->where('four_ir_scale_ups.four_ir_initiative_id', $fourIrInitiativeId);
         }
 
-        if (!empty($organizationName)) {
-            $fourIrShowcasingBuilder->where(function ($builder) use ($organizationName){
-                $builder->where('four_ir_showcasings.organization_name', 'like', '%' . $organizationName . '%');
-                $builder->orWhere('four_ir_showcasings.organization_name_en', 'like', '%' . $organizationName . '%');
+        if (!empty($projectName)) {
+            $fourIrScaleUpBuilder->where(function ($builder) use ($projectName){
+                $builder->where('four_ir_scale_ups.project_name', 'like', '%' . $projectName . '%');
+                $builder->orWhere('four_ir_scale_ups.project_name_en', 'like', '%' . $projectName . '%');
             });
         }
 
         if (is_numeric($rowStatus)) {
-            $fourIrShowcasingBuilder->where('four_ir_showcasings.row_status', $rowStatus);
+            $fourIrScaleUpBuilder->where('four_ir_scale_ups.row_status', $rowStatus);
         }
 
-        /** @var Collection $fourIrShowcasings */
+        /** @var Collection $fourIrScaleUps */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrShowcasings = $fourIrShowcasingBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrShowcasings->toArray();
+            $fourIrScaleUps = $fourIrScaleUpBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrScaleUps->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
             $response['total'] = $paginateData->total;
         } else {
-            $fourIrShowcasings = $fourIrShowcasingBuilder->get();
+            $fourIrScaleUps = $fourIrScaleUpBuilder->get();
         }
 
         $response['order'] = $order;
-        $response['data'] = $fourIrShowcasings->toArray()['data'] ?? $fourIrShowcasings->toArray();
+        $response['data'] = $fourIrScaleUps->toArray()['data'] ?? $fourIrScaleUps->toArray();
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -110,15 +113,15 @@ class FourIRShowcasingService
 
     /**
      * @param int $id
-     * @return FourIRShowcasing
+     * @return FourIRScaleUp
      */
-    public function getOneFourIrShowcasing(int $id): FourIRShowcasing
+    public function getOneFourIrShowcasing(int $id): FourIRScaleUp
     {
-        /** @var FourIRShowcasing|Builder $fourIrShowcasingBuilder */
-        $fourIrShowcasingBuilder = FourIRShowcasing::select(
+        /** @var FourIRScaleUp|Builder $fourIrScaleUpBuilder */
+        $fourIrScaleUpBuilder = FourIRScaleUp::select(
             [
-                'four_ir_showcasings.id',
-                'four_ir_showcasings.four_ir_initiative_id',
+                'four_ir_scale_ups.id',
+                'four_ir_scale_ups.four_ir_initiative_id',
 
                 'four_ir_initiatives.name as initiative_name',
                 'four_ir_initiatives.name_en as initiative_name_en',
@@ -126,75 +129,78 @@ class FourIRShowcasingService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_showcasings.organization_name',
-                'four_ir_showcasings.organization_name_en',
-                'four_ir_showcasings.invite_other_organization',
-                'four_ir_showcasings.invite_other_organization_en',
-                'four_ir_showcasings.venue',
-                'four_ir_showcasings.start_time',
-                'four_ir_showcasings.end_time',
-                'four_ir_showcasings.event_description',
-                'four_ir_showcasings.row_status',
-                'four_ir_showcasings.created_by',
-                'four_ir_showcasings.updated_by',
-                'four_ir_showcasings.created_at',
-                'four_ir_showcasings.updated_at'
+                'four_ir_scale_ups.project_name',
+                'four_ir_scale_ups.project_name_en',
+                'four_ir_scale_ups.previous_budget',
+                'four_ir_scale_ups.implement_timeline',
+                'four_ir_scale_ups.implement_area',
+                'four_ir_scale_ups.project_documents',
+                'four_ir_scale_ups.tentitive_budget',
+                'four_ir_scale_ups.beneficiary_target',
+                'four_ir_scale_ups.description',
+                'four_ir_scale_ups.accessor_type',
+                'four_ir_scale_ups.accessor_id',
+                'four_ir_scale_ups.row_status',
+                'four_ir_scale_ups.created_by',
+                'four_ir_scale_ups.updated_by',
+                'four_ir_scale_ups.created_at',
+                'four_ir_scale_ups.updated_at'
             ]
         );
-        $fourIrShowcasingBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_showcasings.four_ir_initiative_id');
+        $fourIrScaleUpBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_scale_ups.four_ir_initiative_id');
 
-        $fourIrShowcasingBuilder->where('four_ir_showcasings.id', '=', $id);
+        $fourIrScaleUpBuilder->where('four_ir_scale_ups.id', '=', $id);
 
-        return $fourIrShowcasingBuilder->firstOrFail();
+        return $fourIrScaleUpBuilder->firstOrFail();
     }
 
     /**
      * @param array $data
-     * @return FourIRShowcasing
+     * @return FourIRScaleUp
      */
-    public function store(array $data): FourIRShowcasing
+    public function store(array $data): FourIRScaleUp
     {
         /** Update form step & completion step first */
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
         $payload = [];
 
-        if($initiative->form_step < FourIRInitiative::FORM_STEP_SHOWCASING){
-            $payload['form_step'] = FourIRInitiative::FORM_STEP_SHOWCASING;
+        if($initiative->form_step < FourIRInitiative::FORM_STEP_SCALE_UP){
+            $payload['form_step'] = FourIRInitiative::FORM_STEP_SCALE_UP;
         }
-        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIFTEEN){
-            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FIFTEEN;
+        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SEVENTEEN){
+            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_SEVENTEEN;
         }
 
         $initiative->fill($payload);
         $initiative->save();
 
         /** Now store showcasing */
-        $fourIrShowcasing = new FourIRShowcasing();
-        $fourIrShowcasing->fill($data);
-        $fourIrShowcasing->save();
-        return $fourIrShowcasing;
+        $fourIrScaleUp = new FourIRScaleUp();
+        $fourIrScaleUp->fill($data);
+        $fourIrScaleUp->save();
+        return $fourIrScaleUp;
     }
 
     /**
-     * @param FourIRShowcasing $fourIrShowcasing
+     * @param FourIRScaleUp $fourIrScaleUp
      * @param array $data
-     * @return FourIRShowcasing
+     * @return FourIRScaleUp
      */
-    public function update(FourIRShowcasing $fourIrShowcasing, array $data): FourIRShowcasing
+    public function update(FourIRScaleUp $fourIrScaleUp, array $data): FourIRScaleUp
     {
-        $fourIrShowcasing->fill($data);
-        $fourIrShowcasing->save();
-        return $fourIrShowcasing;
+        $fourIrScaleUp->fill($data);
+        $fourIrScaleUp->save();
+        return $fourIrScaleUp;
     }
 
     /**
-     * @param FourIRShowcasing $fourIrShowcasing
+     * @param FourIRScaleUp $fourIrScaleUp
      * @return bool
      */
-    public function destroy(FourIRShowcasing $fourIrShowcasing): bool
+    public function destroy(FourIRScaleUp $fourIrScaleUp): bool
     {
-        return $fourIrShowcasing->delete();
+        return $fourIrScaleUp->delete();
     }
 
     /**
@@ -216,8 +222,8 @@ class FourIRShowcasingService
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
 
-            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_EMPLOYMENT, ValidationException::withMessages([
-                'Complete Employment step first.[24000]'
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_PROJECT_ANALYSIS, ValidationException::withMessages([
+                'Complete Project Analysis step first.[24000]'
             ]));
         }
 
@@ -235,35 +241,39 @@ class FourIRShowcasingService
                 'required',
                 'int'
             ],
-            'organization_name' => [
+            'project_name' => [
                 'required',
                 'string'
             ],
-            'organization_name_en' => [
+            'project_name_en' => [
                 'nullable',
                 'string'
             ],
-            'invite_other_organization' => [
+            'previous_budget' => [
+                'required',
+                'numeric'
+            ],
+            'implement_timeline' => [
                 'required',
                 'string'
             ],
-            'invite_other_organization_en' => [
-                'nullable',
-                'string'
-            ],
-            'venue' => [
+            'implement_area' => [
                 'required',
                 'string'
             ],
-            'start_time' => [
+            'project_documents' => [
                 'required',
-                'date_format:H:i:s'
+                'string'
             ],
-            'end_time' => [
+            'tentitive_budget' => [
                 'required',
-                'date_format:H:i:s'
+                'numeric'
             ],
-            'event_description' => [
+            'beneficiary_target' => [
+                'required',
+                'string'
+            ],
+            'description' => [
                 'nullable',
                 'string'
             ],
@@ -293,7 +303,7 @@ class FourIRShowcasingService
 
         return Validator::make($request->all(), [
             'four_ir_initiative_id' => 'required|int',
-            'organization_name' => 'nullable|string',
+            'project_name' => 'nullable|string',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
