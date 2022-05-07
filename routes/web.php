@@ -185,13 +185,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('initiative-cblms', 'FourIRInitiativeCblmController')->render();
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
         $customRouter()->resourceRoute('tots', 'FourIRInitiativeTotController')->render();
+        $customRouter()->resourceRoute('create-approve-courses', 'FourIRCreateApproveCourseController')->render();
 
 
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('course-developments', 'FourIRSkillDevelopmentController')->render();
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
-        $customRouter()->resourceRoute('create-approve-course', 'FourIRCreateApproveCourseController')->render();
         $customRouter()->resourceRoute('enrollment-approvals', 'FourIREnrollmentApprovalController')->render();
 
         $router->put('/set-team-launching-date', ["as" => "set.team.launching.date", "uses" => "FourIRInitiativeTeamMemberController@setTeamLaunchingDate"]);

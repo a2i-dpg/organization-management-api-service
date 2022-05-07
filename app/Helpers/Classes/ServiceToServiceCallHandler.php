@@ -325,7 +325,7 @@ class ServiceToServiceCallHandler
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
                 throw new HttpErrorException($httpResponse);
             })
-            ->json('data');
+            ->json();
     }
 
     /**
@@ -348,7 +348,7 @@ class ServiceToServiceCallHandler
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
                 throw new HttpErrorException($httpResponse);
             })
-            ->json('data');
+            ->json();
     }
 
     /**

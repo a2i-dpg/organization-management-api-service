@@ -25,14 +25,20 @@ class FourIRCreateApproveCourseService
      */
     public function getFourIrInitiativeList(array $request): array
     {
-        $courseList = ServiceToServiceCall::getFourIrCourseList($request);
-        foreach ($courseList as $course){
+        $response = ServiceToServiceCall::getFourIrCourseList($request);
+
+        $courseList = $response['data'];
+
+        foreach ($courseList as &$course){
             $fourIrInitiative = FourIRInitiative::find($course['four_ir_initiative_id']);
             $course['is_skill_provide'] = $fourIrInitiative->is_skill_provide;
             $course['completion_step'] = $fourIrInitiative->completion_step;
             $course['form_step'] = $fourIrInitiative->form_step;
         }
-        return $courseList;
+
+        $response['data'] = $courseList;
+
+        return $response;
     }
 
     /**
@@ -41,14 +47,18 @@ class FourIRCreateApproveCourseService
      */
     public function getOneFourIrInitiative(int $id): array
     {
-        $course = ServiceToServiceCall::getFourIrCourseByCourseId($id);
+        $response = ServiceToServiceCall::getFourIrCourseByCourseId($id);
+
+        $course = $response['data'];
 
         $fourIrInitiative = FourIRInitiative::find($course['four_ir_initiative_id']);
         $course['is_skill_provide'] = $fourIrInitiative->is_skill_provide;
         $course['completion_step'] = $fourIrInitiative->completion_step;
         $course['form_step'] = $fourIrInitiative->form_step;
 
-        return $course;
+        $response['data'] = $course;
+
+        return $response;
     }
 
     /**

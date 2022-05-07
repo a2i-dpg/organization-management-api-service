@@ -55,17 +55,8 @@ class FourIRCreateApproveCourseController extends Controller
     public function read(int $id): JsonResponse
     {
         /** This $id must be course_id of institute service course table */
-        $fourIrInitiative = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
+        $response = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
         //$this->authorize('view', $fourIrInitiative);
-
-        $response = [
-            "data" => $fourIrInitiative,
-            "_response_status" => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
