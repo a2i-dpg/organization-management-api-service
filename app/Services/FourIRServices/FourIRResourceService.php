@@ -21,15 +21,12 @@ use Throwable;
  */
 class FourIRResourceService
 {
-
     /**
-     * @param array $request
+     * @param int $fourIrInitiativeId
      * @return Model|Builder
      */
-    public function getFourIRResourceList(array $request): Builder|Model
+    public function getOneFourIRResource(int $fourIrInitiativeId): Builder|Model
     {
-        $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
-
         /** @var Builder $fourIrResourceBuilder */
         $fourIrResourceBuilder = FourIRResource::select(
             [
@@ -56,9 +53,7 @@ class FourIRResourceService
 
         $fourIrResourceBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_resources.four_ir_initiative_id');
 
-        if (is_numeric($fourIrInitiativeId)) {
-            $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrInitiativeId);
-        }
+        $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrInitiativeId);
 
         return $fourIrResourceBuilder->firstOrFail();
     }
@@ -161,16 +156,5 @@ class FourIRResourceService
             'updated_by' => ['nullable', 'integer'],
         ];
         return Validator::make($data, $rules, $customMessage);
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
-    {
-        return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int'
-        ]);
     }
 }

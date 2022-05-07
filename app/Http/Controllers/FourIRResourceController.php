@@ -37,16 +37,19 @@ class FourIRResourceController extends Controller
 
 
     /**
-     * @param Request $request
+     * Only one resource_management can be for an initiative. That's why only single read API is here.
+     * Provide Initiative id as the path parameter of this API
+     *
+     * @param int $id
      * @return JsonResponse
-     * @throws ValidationException
      */
-    public function getList(Request $request): JsonResponse
+    public function read(int $id): JsonResponse
     {
+        /** Here $id is the ID of FourIrInitiative */
+
         //$this->authorize('viewAny', FourIRInitiative::class);
 
-        $filter = $this->fourIRResourceService->filterValidator($request)->validate();
-        $fourIrResource = $this->fourIRResourceService->getFourIRResourceList($filter, $this->startTime);
+        $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
         $response = [
             "data" => $fourIrResource,
             "_response_status" => [
