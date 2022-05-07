@@ -174,9 +174,11 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /**
          * FourIR Project APIS
          **/
+        $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
         $customRouter()->resourceRoute('taglines', 'FourIRTaglineController')->render();
         $customRouter()->resourceRoute('initiatives', 'FourIRInitiativeController')->render();
-        $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
+
+
         $customRouter()->resourceRoute('team-members', 'FourIRInitiativeTeamMemberController')->render();
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('initiative-cells', 'FourIRInitiativeCellController')->render();

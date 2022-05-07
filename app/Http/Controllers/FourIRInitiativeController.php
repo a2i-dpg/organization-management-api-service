@@ -206,7 +206,11 @@ class FourIRInitiativeController extends Controller
                     $rowData['four_ir_tagline_id'] = $request->input('four_ir_tagline_id');
 
                     $data = $this->fourIrInitiativeService->store($rowData);
-                    $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
+
+                    /** Store file path for versioning */
+                    $initiativeData = $data->toArray();
+                    $initiativeData['four_ir_initiative_id'] = $initiativeData['id'];
+                    $this->fourIRFileLogService->storeFileLog($initiativeData, FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
                     DB::commit();
                 } catch (Throwable $e){
