@@ -108,61 +108,71 @@ class FourIRInitiativeTnaFormatService
     }
 
     /**
-     * @param array $data
      * @param $file
      * @param int $tnaMethod
-     * @return void
+     * @return array|null
      * @throws ValidationException
      */
-    public function tnaFormatMethodStore(array $data, $file, int $tnaMethod): void
+    public function excelDataValidate($file, int $tnaMethod): null|array
     {
         $excelData = Excel::toCollection(new FourIrTnaMethodsImport(), $file)->toArray();
+        $rows = null;
         if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
             $this->excelDataValidator($rows, $tnaMethod)->validate();
+        }
+        return $rows;
+    }
 
-            $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
-                ->where('method_type', $tnaMethod)
-                ->first();
-            if(empty($tnaFormat)){
-                /** First, Create TNA format */
-                $tnaFormat = new FourIRInitiativeTnaFormat();
-                $tnaFormat->fill([
-                    "four_ir_initiative_id" => $data['four_ir_initiative_id'],
-                    "method_type" => $tnaMethod,
-                    "workshop_numbers" => $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]],
-                    "accessor_type" => $data['accessor_type'],
-                    "accessor_id" => $data['accessor_id'],
-                    "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
-                ]);
-                $tnaFormat->save();
-            } else {
-                /** Delete all previous methods data */
-                $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
-                foreach ($tnaFormatMethods as $method){
-                    $method->delete();
-                }
+    /**
+     * @param array $data
+     * @param array $rows
+     * @param int $tnaMethod
+     * @return void
+     */
+    public function tnaFormatMethodStore(array $data, array $rows, int $tnaMethod): void
+    {
+        $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
+            ->where('method_type', $tnaMethod)
+            ->first();
+
+        if(empty($tnaFormat)){
+            /** First, Create TNA format */
+            $tnaFormat = new FourIRInitiativeTnaFormat();
+            $tnaFormat->fill([
+                "four_ir_initiative_id" => $data['four_ir_initiative_id'],
+                "method_type" => $tnaMethod,
+                "workshop_numbers" => $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]],
+                "accessor_type" => $data['accessor_type'],
+                "accessor_id" => $data['accessor_id'],
+                "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
+            ]);
+            $tnaFormat->save();
+        } else {
+            /** Delete all previous methods data */
+            $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
+            foreach ($tnaFormatMethods as $method){
+                $method->delete();
             }
+        }
 
-            /** Now create TNA format methods from Excel rows */
-            foreach ($rows as $rowData) {
-                DB::beginTransaction();
-                try {
-                    $rowData['four_ir_initiative_tna_format_id'] = $tnaFormat->id;
+        /** Now create TNA format methods from Excel rows */
+        foreach ($rows as $rowData) {
+            DB::beginTransaction();
+            try {
+                $rowData['four_ir_initiative_tna_format_id'] = $tnaFormat->id;
 
-                    $fourIRTnaFormatMethod = new FourIRTnaFormatMethod();
-                    $fourIRTnaFormatMethod->fill($rowData);
-                    $fourIRTnaFormatMethod->save();
+                $fourIRTnaFormatMethod = new FourIRTnaFormatMethod();
+                $fourIRTnaFormatMethod->fill($rowData);
+                $fourIRTnaFormatMethod->save();
 
-                    DB::commit();
-                } catch (Throwable $e) {
-                    Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
-                    DB::rollBack();
-                }
+                DB::commit();
+            } catch (Throwable $e) {
+                Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
+                DB::rollBack();
             }
         }
     }
-
 
     /**
      * @param Request $request
@@ -172,8 +182,10 @@ class FourIRInitiativeTnaFormatService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
+
         if(!empty($data['four_ir_initiative_id'])){
-            $fourIrInitiative = FourIRInitiative::findOrFail('four_ir_initiative_id');
+            $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
@@ -184,7 +196,6 @@ class FourIRInitiativeTnaFormatService
             ]));
         }
 
-        $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -322,7 +333,7 @@ class FourIRInitiativeTnaFormatService
      * @param int $tnaMethod
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function excelDataValidator(array $excelData, int $tnaMethod): \Illuminate\Contracts\Validation\Validator
+    private function excelDataValidator(array $excelData, int $tnaMethod): \Illuminate\Contracts\Validation\Validator
     {
         $fileKeyName = FourIRInitiativeTnaFormat::TNA_METHODS_FILE_KEYS[$tnaMethod];
         $customMessage = [

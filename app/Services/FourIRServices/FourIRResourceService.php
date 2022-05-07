@@ -103,12 +103,13 @@ class FourIRResourceService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($data['four_ir_initiative_id']) && !empty($data['type'])){
-            $fourIrInitiative = FourIRInitiative::findOrFail('four_ir_initiative_id');
+        if(!empty($data['four_ir_initiative_id'])){
+            $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
@@ -159,7 +160,7 @@ class FourIRResourceService
             'created_by' => ['nullable', 'integer'],
             'updated_by' => ['nullable', 'integer'],
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**
