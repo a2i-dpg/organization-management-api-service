@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRInitiative;
+use App\Models\FourIREmployment;
 use App\Services\FourIRServices\FourIrEmploymentService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -39,7 +39,7 @@ class FourIREmploymentController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRInitiative::class);
+//        $this->authorize('viewAny', FourIREmployment::class);
 
         $filter = $this->fourIrEmploymentService->filterValidator($request)->validate();
         $response = $this->fourIrEmploymentService->getFourIRInitiativeList($filter, $this->startTime);
@@ -75,7 +75,7 @@ class FourIREmploymentController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIRInitiative::class);
+        // $this->authorize('create', FourIREmployment::class);
         $validated = $this->fourIrEmploymentService->validator($request)->validate();
         try {
             DB::beginTransaction();
@@ -111,7 +111,7 @@ class FourIREmploymentController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrEmployment = FourIRInitiative::findOrFail($id);
+        $fourIrEmployment = FourIREmployment::findOrFail($id);
         // $this->authorize('update', $fourIrEmployment);
         $validated = $this->fourIrEmploymentService->validator($request, $id)->validate();
         $data = $this->fourIrEmploymentService->update($fourIrEmployment, $validated);
@@ -138,7 +138,7 @@ class FourIREmploymentController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrEmployment = FourIRInitiative::findOrFail($id);
+        $fourIrEmployment = FourIREmployment::findOrFail($id);
 //        $this->authorize('delete', $fourIrEmployment);
         $this->fourIrEmploymentService->destroy($fourIrEmployment);
         $response = [

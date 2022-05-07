@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRShowcasing;
+use App\Models\FourIRScaleUp;
 use App\Services\FourIRServices\FourIRScaleUpService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -38,7 +38,7 @@ class FourIRScaleUpController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRShowcasing::class);
+//        $this->authorize('viewAny', FourIRScaleUp::class);
 
         $filter = $this->fourIRScaleUpService->filterValidator($request)->validate();
         $response = $this->fourIRScaleUpService->getFourShowcasingList($filter, $this->startTime);
@@ -73,7 +73,7 @@ class FourIRScaleUpController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRShowcasing::class);
+//        $this->authorize('create', FourIRScaleUp::class);
 
         $validated = $this->fourIRScaleUpService->validator($request)->validate();
         $data = $this->fourIRScaleUpService->store($validated);
@@ -101,7 +101,7 @@ class FourIRScaleUpController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrScaleUp = FourIRShowcasing::findOrFail($id);
+        $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
 //        $this->authorize('update', $fourIrProject);
 
         $validated = $this->fourIRScaleUpService->validator($request, $id)->validate();
@@ -130,7 +130,7 @@ class FourIRScaleUpController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrScaleUp = FourIRShowcasing::findOrFail($id);
+        $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
 //        $this->authorize('delete', $fourIrProject);
         $this->fourIRScaleUpService->destroy($fourIrScaleUp);
         $response = [

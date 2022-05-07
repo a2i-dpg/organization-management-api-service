@@ -289,7 +289,7 @@ class FourIRInitiativeAnalysisService
                 'string'
             ],
             'team_file' => [
-                'required',
+                'nullable',
                 'mimes:xlsx, csv, xls'
             ],
             'row_status' => [

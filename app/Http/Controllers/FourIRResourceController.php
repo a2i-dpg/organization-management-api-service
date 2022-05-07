@@ -77,12 +77,13 @@ class FourIRResourceController extends Controller
         try {
             DB::beginTransaction();
             $fourIrResource = FourIRResource::where('four_ir_initiative_id', $validated['four_ir_initiative_id'])->first();
+            $filePath = $fourIrResource->file_path;
             $data = $this->fourIRResourceService->store($validated, $fourIrResource);
 
             if(empty($fourIrResource)){
                 $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
             } else {
-                $this->fourIRFileLogService->updateFileLog($fourIrResource->file_path, $validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+                $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
             }
 
             DB::commit();

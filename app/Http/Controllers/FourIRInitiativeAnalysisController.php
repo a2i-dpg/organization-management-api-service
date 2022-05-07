@@ -82,13 +82,15 @@ class FourIRInitiativeAnalysisController extends Controller
     {
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 
-        $file = $request->file('team_file');
-        $excelData = Excel::toCollection(new FourIrInitiativeAnalysisTeamImport(), $file)->toArray();
-
         $excelRows = null;
-        if (!empty($excelData) && !empty($excelData[0])) {
-            $excelRows = $excelData[0];
-            $this->fourIRInitiativeAnalysisService->excelDataValidator($excelRows)->validate();
+        if(!empty($request->file('team_file'))){
+            $file = $request->file('team_file');
+            $excelData = Excel::toCollection(new FourIrInitiativeAnalysisTeamImport(), $file)->toArray();
+
+            if (!empty($excelData) && !empty($excelData[0])) {
+                $excelRows = $excelData[0];
+                $this->fourIRInitiativeAnalysisService->excelDataValidator($excelRows)->validate();
+            }
         }
 
         try {
@@ -129,20 +131,23 @@ class FourIRInitiativeAnalysisController extends Controller
 
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 
-        $file = $request->file('team_file');
-        $excelData = Excel::toCollection(new FourIrInitiativeAnalysisTeamImport(), $file)->toArray();
-
         $excelRows = null;
-        if (!empty($excelData) && !empty($excelData[0])) {
-            $excelRows = $excelData[0];
-            $this->fourIRInitiativeAnalysisService->excelDataValidator($excelRows)->validate();
+        if(!empty($request->file('team_file'))){
+            $file = $request->file('team_file');
+            $excelData = Excel::toCollection(new FourIrInitiativeAnalysisTeamImport(), $file)->toArray();
+
+            if (!empty($excelData) && !empty($excelData[0])) {
+                $excelRows = $excelData[0];
+                $this->fourIRInitiativeAnalysisService->excelDataValidator($excelRows)->validate();
+            }
         }
 
         try {
             DB::beginTransaction();
+            $filePath = $fourIrInitiativeAnalysis->file_path;
             $this->fourIRInitiativeAnalysisService->deletePreviousResearchTeamForUpdate($fourIrInitiativeAnalysis);
             $fourIrTot = $this->fourIRInitiativeAnalysisService->update($fourIrInitiativeAnalysis, $validated, $excelRows);
-            $this->fourIRFileLogService->updateFileLog($fourIrInitiativeAnalysis->file_path, $validated, FourIRInitiative::FILE_LOG_INITIATIVE_ANALYSIS_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_INITIATIVE_ANALYSIS_STEP);
 
             DB::commit();
             $response = [
