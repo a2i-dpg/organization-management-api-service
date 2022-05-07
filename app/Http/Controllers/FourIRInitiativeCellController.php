@@ -97,7 +97,7 @@ class FourIRInitiativeCellController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
