@@ -8,11 +8,12 @@ use App\Models\FourIRInitiativeTot;
 use App\Models\FourIRInitiativeTotOrganizersParticipant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class FourIRTotInitiativeService
@@ -21,14 +22,19 @@ class FourIRTotInitiativeService
     /**
      * @param array $request
      * @param Carbon $startTime
-     * @return Model|Builder
+     * @return array
      */
-    public function getFourIrProjectTOtList(array $request, Carbon $startTime): Builder|Model
+    public function getFourIrProjectTOtList(array $request, Carbon $startTime): array
     {
         $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
+        $masterTrainerName = $request['master_trainer_name'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
 
-        /** @var Builder $fourIrProjectTotBuilder */
-        $fourIrProjectTotBuilder = FourIRInitiativeTot::select([
+        /** @var Builder $fourIrInitiativeTotBuilder */
+        $fourIrInitiativeTotBuilder = FourIRInitiativeTot::select([
             'four_ir_initiative_tots.id',
             'four_ir_initiative_tots.four_ir_initiative_id',
 
@@ -38,29 +44,104 @@ class FourIRTotInitiativeService
             'four_ir_initiatives.completion_step',
             'four_ir_initiatives.form_step',
 
+            'four_ir_initiative_tots.master_trainer_name',
+            'four_ir_initiative_tots.master_trainer_name_en',
+            'four_ir_initiative_tots.master_trainer_mobile',
+            'four_ir_initiative_tots.master_trainer_address',
+            'four_ir_initiative_tots.master_trainer_address_en',
+            'four_ir_initiative_tots.master_trainer_email',
             'four_ir_initiative_tots.accessor_type',
             'four_ir_initiative_tots.accessor_id',
-            'four_ir_initiative_tots.participants',
-            'four_ir_initiative_tots.master_trainer',
-            'four_ir_initiative_tots.date',
-            'four_ir_initiative_tots.venue',
-            'four_ir_initiative_tots.file_path',
             'four_ir_initiative_tots.row_status',
             'four_ir_initiative_tots.created_by',
             'four_ir_initiative_tots.updated_by',
             'four_ir_initiative_tots.created_at',
             'four_ir_initiative_tots.updated_at'
-        ]);
+        ])->acl();
 
-        $fourIrProjectTotBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tots.four_ir_initiative_id');
-
-        $fourIrProjectTotBuilder->with('organizerParticipants');
+        $fourIrInitiativeTotBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tots.four_ir_initiative_id');
 
         if (is_numeric($fourIrProjectId)) {
-            $fourIrProjectTotBuilder->where('four_ir_initiative_tots.four_ir_initiative_id', $fourIrProjectId);
+            $fourIrInitiativeTotBuilder->where('four_ir_initiative_tots.four_ir_initiative_id', $fourIrProjectId);
         }
 
-        return $fourIrProjectTotBuilder->firstOrFail();
+        if (!empty($masterTrainerName)) {
+            $fourIrInitiativeTotBuilder->where(function ($builder) use ($masterTrainerName){
+                $builder->where('four_ir_initiative_tots.master_trainer_name', 'like', '%' . $masterTrainerName . '%');
+                $builder->orWhere('four_ir_initiative_tots.master_trainer_name_en', 'like', '%' . $masterTrainerName . '%');
+            });
+        }
+
+        if (is_numeric($rowStatus)) {
+            $fourIrInitiativeTotBuilder->where('four_ir_initiative_tots.row_status', $rowStatus);
+        }
+
+        $fourIrInitiativeTotBuilder->orderBy('four_ir_initiative_tots.id', $order);
+
+        /** @var Collection $fourIrInitiativeTots */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $fourIrInitiativeTots = $fourIrInitiativeTotBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrInitiativeTots->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $fourIrInitiativeTots = $fourIrInitiativeTotBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $fourIrInitiativeTots->toArray()['data'] ?? $fourIrInitiativeTots->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param int $id
+     * @return FourIRInitiativeTot
+     */
+    public function getOneFourIrInitiativeAnalysis(int $id): FourIRInitiativeTot
+    {
+        /** @var FourIRInitiativeTot|Builder $fourIrInitiativeTotBuilder */
+        $fourIrInitiativeTotBuilder = FourIRInitiativeTot::select(
+            [
+                'four_ir_initiative_tots.id',
+                'four_ir_initiative_tots.four_ir_initiative_id',
+
+                'four_ir_initiatives.name as initiative_name',
+                'four_ir_initiatives.name_en as initiative_name_en',
+                'four_ir_initiatives.is_skill_provide',
+                'four_ir_initiatives.completion_step',
+                'four_ir_initiatives.form_step',
+
+                'four_ir_initiative_tots.master_trainer_name',
+                'four_ir_initiative_tots.master_trainer_name_en',
+                'four_ir_initiative_tots.master_trainer_mobile',
+                'four_ir_initiative_tots.master_trainer_address',
+                'four_ir_initiative_tots.master_trainer_address_en',
+                'four_ir_initiative_tots.master_trainer_email',
+                'four_ir_initiative_tots.accessor_type',
+                'four_ir_initiative_tots.accessor_id',
+                'four_ir_initiative_tots.row_status',
+                'four_ir_initiative_tots.created_by',
+                'four_ir_initiative_tots.updated_by',
+                'four_ir_initiative_tots.created_at',
+                'four_ir_initiative_tots.updated_at'
+            ]
+        );
+        $fourIrInitiativeTotBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tots.four_ir_initiative_id');
+
+        $fourIrInitiativeTotBuilder->with('organizerParticipants');
+
+        $fourIrInitiativeTotBuilder->where('four_ir_initiative_tots.id', '=', $id);
+
+        return $fourIrInitiativeTotBuilder->firstOrFail();
     }
 
 
@@ -345,8 +426,30 @@ class FourIRTotInitiativeService
      */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
         return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int'
-        ]);
+            'four_ir_initiative_id' => 'required|int',
+            'master_trainer_name' => 'nullable|string',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'order' => [
+                'nullable',
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

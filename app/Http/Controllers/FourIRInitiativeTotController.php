@@ -38,16 +38,27 @@ class FourIRInitiativeTotController extends Controller
     public function getList(Request $request): JsonResponse
     {
         $filter = $this->fourIRTotInitiativeService->filterValidator($request)->validate();
-        $fourIrTot = $this->fourIRTotInitiativeService->getFourIrProjectTOtList($filter, $this->startTime);
+        $response = $this->fourIRTotInitiativeService->getFourIrProjectTOtList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function read(int $id): JsonResponse
+    {
+        $fourIrInitiativeAnalysis = $this->fourIRTotInitiativeService->getOneFourIrInitiativeAnalysis($id);
+//        $this->authorize('view', $fourIrProject);
         $response = [
-            "data" => $fourIrTot,
+            "data" => $fourIrInitiativeAnalysis,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
 
     /**
