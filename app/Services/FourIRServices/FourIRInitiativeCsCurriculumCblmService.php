@@ -7,11 +7,15 @@ use App\Models\BaseModel;
 use App\Models\FourIrCsCurriculumCblmExpert;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeCsCurriculumCblm;
+use App\Models\FourIRInitiativeTot;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 
@@ -23,13 +27,99 @@ class FourIRInitiativeCsCurriculumCblmService
 {
     /**
      * @param array $request
-     * @return FourIRInitiativeCsCurriculumCblm
+     * @param Carbon $startTime
+     * @return array
      */
-    public function getOneFourIrProjectCs(array $request): FourIRInitiativeCsCurriculumCblm
+    public function getFourIRInitiativeCsCurriculumCblmList(array $request, Carbon $startTime): array
     {
-        $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
+        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
+        $organizationName = $request['organization_name'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
 
-        /** @var FourIRInitiativeCsCurriculumCblm|Builder $fourIrInitiativeCsCurriculumCblmBuilder */
+        /** @var Builder $fourIrInitiativeCsCurriculumCblmBuilder */
+        $fourIrInitiativeCsCurriculumCblmBuilder = FourIRInitiativeCsCurriculumCblm::select([
+            'four_ir_initiative_cs_curriculum_cblm.id',
+            'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id',
+            'four_ir_initiative_cs_curriculum_cblm.type',
+
+            'four_ir_initiatives.name as initiative_name',
+            'four_ir_initiatives.name_en as initiative_name_en',
+            'four_ir_initiatives.is_skill_provide',
+            'four_ir_initiatives.completion_step',
+            'four_ir_initiatives.form_step',
+
+            'four_ir_initiative_cs_curriculum_cblm.level_from',
+            'four_ir_initiative_cs_curriculum_cblm.level_to',
+            'four_ir_initiative_cs_curriculum_cblm.approved_by',
+            'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
+            'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
+            'four_ir_initiative_cs_curriculum_cblm.sector_name',
+            'four_ir_initiative_cs_curriculum_cblm.supported_organization_name',
+            'four_ir_initiative_cs_curriculum_cblm.supported_organization_name_en',
+            'four_ir_initiative_cs_curriculum_cblm.file_path',
+            'four_ir_initiative_cs_curriculum_cblm.comments',
+            'four_ir_initiative_cs_curriculum_cblm.row_status',
+            'four_ir_initiative_cs_curriculum_cblm.created_by',
+            'four_ir_initiative_cs_curriculum_cblm.updated_by',
+            'four_ir_initiative_cs_curriculum_cblm.created_at',
+            'four_ir_initiative_cs_curriculum_cblm.updated_at'
+        ])->acl();
+
+        $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id');
+
+        if (is_numeric($fourIrProjectId)) {
+            $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id', $fourIrProjectId);
+        }
+
+        if (!empty($organizationName)) {
+            $fourIrInitiativeCsCurriculumCblmBuilder->where(function ($builder) use ($organizationName) {
+                $builder->where('four_ir_initiative_cs_curriculum_cblm.developed_organization_name', 'like', '%' . $organizationName . '%');
+                $builder->orWhere('four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en', 'like', '%' . $organizationName . '%');
+                $builder->orWhere('four_ir_initiative_cs_curriculum_cblm.supported_organization_name', 'like', '%' . $organizationName . '%');
+                $builder->orWhere('four_ir_initiative_cs_curriculum_cblm.supported_organization_name_en', 'like', '%' . $organizationName . '%');
+            });
+        }
+
+        if (is_numeric($rowStatus)) {
+            $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.row_status', $rowStatus);
+        }
+
+        $fourIrInitiativeCsCurriculumCblmBuilder->orderBy('four_ir_initiative_cs_curriculum_cblm.id', $order);
+
+        /** @var Collection $fourIrInitiativeCsCurriculumCblms */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $fourIrInitiativeCsCurriculumCblms = $fourIrInitiativeCsCurriculumCblmBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrInitiativeCsCurriculumCblms->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $fourIrInitiativeCsCurriculumCblms = $fourIrInitiativeCsCurriculumCblmBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $fourIrInitiativeCsCurriculumCblms->toArray()['data'] ?? $fourIrInitiativeCsCurriculumCblms->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
+     * @param int $id
+     * @return FourIRInitiativeTot
+     */
+    public function getOneFourIRInitiativeCsCurriculumCblm(int $id): FourIRInitiativeTot
+    {
+        /** @var FourIRInitiativeTot|Builder $fourIrInitiativeCsCurriculumCblmBuilder */
         $fourIrInitiativeCsCurriculumCblmBuilder = FourIRInitiativeCsCurriculumCblm::select(
             [
                 'four_ir_initiative_cs_curriculum_cblm.id',
@@ -59,14 +149,11 @@ class FourIRInitiativeCsCurriculumCblmService
                 'four_ir_initiative_cs_curriculum_cblm.updated_at'
             ]
         );
-
         $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id');
 
-        if (!empty($fourIrInitiativeId)) {
-            $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id', $fourIrInitiativeId);
-        }
-
         $fourIrInitiativeCsCurriculumCblmBuilder->with('csCurriculumCblmExperts');
+
+        $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.id', '=', $id);
 
         return $fourIrInitiativeCsCurriculumCblmBuilder->firstOrFail();
     }
@@ -88,7 +175,7 @@ class FourIRInitiativeCsCurriculumCblmService
         /** Now store CsCurriculumCblm Experts */
         $experts = $data['experts'];
 
-        foreach ($experts as $expert){
+        foreach ($experts as $expert) {
             $expert['four_ir_initiative_cs_curriculum_cblm_id'] = $fourIrInitiativeCsCurriculumCblm->id;
             $expert['accessor_type'] = $fourIrInitiativeCsCurriculumCblm->accessor_type;
             $expert['accessor_id'] = $fourIrInitiativeCsCurriculumCblm->accessor_id;
@@ -105,30 +192,31 @@ class FourIRInitiativeCsCurriculumCblmService
      * @param array $data
      * @return void
      */
-    private function updateInitiativeStepper(array $data){
+    private function updateInitiativeStepper(array $data)
+    {
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
         $payload = [];
 
-        if($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS){
-            if($initiative->form_step < FourIRInitiative::FORM_STEP_CS){
+        if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS) {
+            if ($initiative->form_step < FourIRInitiative::FORM_STEP_CS) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_CS;
             }
-            if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FOUR){
+            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FOUR) {
                 $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FOUR;
             }
-        } else if($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM){
-            if($initiative->form_step < FourIRInitiative::FORM_STEP_CURRICULUM){
+        } else if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM) {
+            if ($initiative->form_step < FourIRInitiative::FORM_STEP_CURRICULUM) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_CURRICULUM;
             }
-            if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIVE){
+            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIVE) {
                 $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FIVE;
             }
         } else {
-            if($initiative->form_step < FourIRInitiative::FORM_STEP_CBLM){
+            if ($initiative->form_step < FourIRInitiative::FORM_STEP_CBLM) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_CBLM;
             }
-            if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SIX){
+            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SIX) {
                 $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_SIX;
             }
         }
@@ -149,15 +237,15 @@ class FourIRInitiativeCsCurriculumCblmService
 
         /** First delete all previous experts */
         $fourIrInitiativeCsCurriculumCblmExperts = FourIrCsCurriculumCblmExpert::where('four_ir_initiative_cs_curriculum_cblm_id', $fourIrInitiativeCsCurriculumCblm->id)
-                ->get();
-        foreach ($fourIrInitiativeCsCurriculumCblmExperts as $expert){
+            ->get();
+        foreach ($fourIrInitiativeCsCurriculumCblmExperts as $expert) {
             $expert->delete();
         }
 
         /** Now insert new experts */
         $experts = $data['experts'];
 
-        foreach ($experts as $expert){
+        foreach ($experts as $expert) {
             $expert['four_ir_initiative_cs_curriculum_cblm_id'] = $fourIrInitiativeCsCurriculumCblm->id;
             $expert['accessor_type'] = $fourIrInitiativeCsCurriculumCblm->accessor_type;
             $expert['accessor_id'] = $fourIrInitiativeCsCurriculumCblm->accessor_id;
@@ -183,18 +271,18 @@ class FourIRInitiativeCsCurriculumCblmService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($data['four_ir_initiative_id']) && !empty($data['type'])){
+        if (!empty($data['four_ir_initiative_id']) && !empty($data['type'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail('four_ir_initiative_id');
 
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
 
-            if($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS){
+            if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS) {
                 throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA, ValidationException::withMessages([
                     'Complete Tna report step first.[24000]'
                 ]));
-            } else if($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM){
+            } else if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM) {
                 throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_CS, ValidationException::withMessages([
                     'Complete CS step first.[24000]'
                 ]));
@@ -336,8 +424,30 @@ class FourIRInitiativeCsCurriculumCblmService
      */
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
         return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int'
-        ]);
+            'four_ir_initiative_id' => 'required|int',
+            'organization_name' => 'nullable|string',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'order' => [
+                'nullable',
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }

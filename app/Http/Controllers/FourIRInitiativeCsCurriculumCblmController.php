@@ -43,10 +43,21 @@ class FourIRInitiativeCsCurriculumCblmController extends Controller
     public function getList(Request $request): JsonResponse
     {
         $filter = $this->fourIrInitiativeCsCurriculumCblmService->filterValidator($request)->validate();
-        $fourIrInitiativeCsCurriculumCblm = $this->fourIrInitiativeCsCurriculumCblmService->getOneFourIRProjectCs($filter);
-//        $this->authorize('view', $fourIrInitiativeCsCurriculumCblm);
+        $response = $this->fourIrInitiativeCsCurriculumCblmService->getFourIRInitiativeCsCurriculumCblmList($filter, $this->startTime);
+
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function read(int $id): JsonResponse
+    {
+        $fourIrInitiativeAnalysis = $this->fourIrInitiativeCsCurriculumCblmService->getOneFourIRInitiativeCsCurriculumCblm($id);
+//        $this->authorize('view', $fourIrProject);
         $response = [
-            "data" => $fourIrInitiativeCsCurriculumCblm,
+            "data" => $fourIrInitiativeAnalysis,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
