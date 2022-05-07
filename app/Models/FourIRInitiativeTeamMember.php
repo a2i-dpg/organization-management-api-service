@@ -7,6 +7,9 @@ use App\Traits\Scopes\ScopeAcl;
 use App\Traits\Scopes\ScopeRowStatusTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $user_id
+ */
 class FourIRInitiativeTeamMember extends BaseModel
 {
 

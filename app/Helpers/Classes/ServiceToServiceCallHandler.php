@@ -250,6 +250,60 @@ class ServiceToServiceCallHandler
     }
 
     /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function updateFourIrUser(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/update-four-ir-user';
+
+        $userData = Http::withOptions([
+            'verify' => config('nise3.should_ssl_verify'),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->put($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+
+        Log::info("userInfo:" . json_encode($userData));
+
+        return $userData;
+    }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function deleteFourIrUser(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/delete-four-ir-user';
+
+        $userData = Http::withOptions([
+            'verify' => config('nise3.should_ssl_verify'),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->delete($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+
+        Log::info("userInfo:" . json_encode($userData));
+
+        return $userData;
+    }
+
+    /**
      * @param array $filterData
      * @return mixed
      * @throws RequestException

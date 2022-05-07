@@ -200,7 +200,7 @@ class FourIrInitiativeTeamMemberService
             "mobile" => $data['phone_number'],
             "password" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD,
             "password_confirmation" => BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD,
-            "row_status" => BaseModel::ROW_STATUS_INACTIVE
+            "row_status" => BaseModel::ROW_STATUS_ACTIVE
         ];
 
         return ServiceToServiceCall::createFourIrUser($payload);
@@ -213,9 +213,35 @@ class FourIrInitiativeTeamMemberService
      */
     public function update(FourIRInitiativeTeamMember $fourIrProjectTeamMember, array $data): FourIRInitiativeTeamMember
     {
+        /** Username can't be updated */
+        if(!empty($data['phone_number'])){
+            unset($data['phone_number']);
+        }
+
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
+
+        $this->payloadToUpdateCoreUser($fourIrProjectTeamMember, $data);
+
         return $fourIrProjectTeamMember;
+    }
+
+    /**
+     * @param FourIRInitiativeTeamMember $fourIrProjectTeamMember
+     * @param array $data
+     * @return void
+     */
+    private function payloadToUpdateCoreUser(FourIRInitiativeTeamMember $fourIrProjectTeamMember, array $data): void
+    {
+        $payload = [
+            "user_id" => $fourIrProjectTeamMember->user_id,
+            "name" => $data['name'],
+            "name_en" => $data['name_en'] ?? "",
+            "email" => $data['email'],
+            "row_status" => BaseModel::ROW_STATUS_INACTIVE
+        ];
+
+        ServiceToServiceCall::updateFourIrUser($payload);
     }
 
     /**
@@ -224,6 +250,9 @@ class FourIrInitiativeTeamMemberService
      */
     public function destroy(FourIRInitiativeTeamMember $fourIrProjectTeamMember): bool
     {
+        /** Core service user delete */
+        ServiceToServiceCall::deleteFourIrUser($fourIrProjectTeamMember->toArray());
+
         return $fourIrProjectTeamMember->delete();
     }
 

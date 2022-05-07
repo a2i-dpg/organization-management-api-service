@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -102,6 +103,7 @@ class FourIRInitiativeTeamMemberController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -109,7 +111,15 @@ class FourIRInitiativeTeamMemberController extends Controller
         //$this->authorize('update', $fourIrProjectTeamMember);
 
         $validated = $this->fourIrProjectTeamMemberService->validator($request, $id)->validate();
-        $data = $this->fourIrProjectTeamMemberService->update($fourIrProjectTeamMember, $validated);
+        try {
+            DB::beginTransaction();
+
+            $data = $this->fourIrProjectTeamMemberService->update($fourIrProjectTeamMember, $validated);
+            DB::commit();
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         $response = [
             'data' => $data,
@@ -136,7 +146,16 @@ class FourIRInitiativeTeamMemberController extends Controller
     {
         $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
         //$this->authorize('delete', $fourIrProjectTeamMember);
-        $this->fourIrProjectTeamMemberService->destroy($fourIrProjectTeamMember);
+        try {
+            DB::beginTransaction();
+
+            $this->fourIrProjectTeamMemberService->destroy($fourIrProjectTeamMember);
+            DB::commit();
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
+
         $response = [
             '_response_status' => [
                 "success" => true,

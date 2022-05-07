@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getYouthUserByUsername(string $username)
  * @method static array|mixed getDomain(string $username)
  * @method static array|mixed createFourIrUser(array $payload)
+ * @method static array|mixed updateFourIrUser(array $payload)
+ * @method static array|mixed deleteFourIrUser(array $payload)
  * @method static array|mixed getFourIrCourseList(array $payload)
  * @method static array|mixed getFourIrCourseByCourseId(int $courseId)
  * @method static array|mixed createFourIrCourse(array $payload)
