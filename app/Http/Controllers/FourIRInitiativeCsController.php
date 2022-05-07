@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeCsCurriculumCblm;
 use App\Services\FourIRServices\FourIRFileLogService;
-use App\Services\FourIRServices\FourIRInitiativeCsCurriculumCblmService;
+use App\Services\FourIRServices\FourIRInitiativeCsService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -16,19 +16,19 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
-class FourIRInitiativeCsCurriculumCblmController extends Controller
+class FourIRInitiativeCsController extends Controller
 {
-    public FourIRInitiativeCsCurriculumCblmService $fourIrInitiativeCsCurriculumCblmService;
+    public FourIRInitiativeCsService $fourIrInitiativeCsCurriculumCblmService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
-     * FourIRInitiativeCsCurriculumCblmController constructor.
+     * FourIRInitiativeCsController constructor.
      *
-     * @param FourIRInitiativeCsCurriculumCblmService $fourIrInitiativeCsCurriculumCblmService
+     * @param FourIRInitiativeCsService $fourIrInitiativeCsCurriculumCblmService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRInitiativeCsCurriculumCblmService $fourIrInitiativeCsCurriculumCblmService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRInitiativeCsService $fourIrInitiativeCsCurriculumCblmService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIrInitiativeCsCurriculumCblmService = $fourIrInitiativeCsCurriculumCblmService;
@@ -83,13 +83,7 @@ class FourIRInitiativeCsCurriculumCblmController extends Controller
             DB::beginTransaction();
             $data = $this->fourIrInitiativeCsCurriculumCblmService->store($validated);
 
-            if($validated['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS){
-                $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_PROJECT_CS_STEP);
-            } else if($validated['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM){
-                $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_PROJECT_CURRICULUM_STEP);
-            } else {
-                $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_CBLM_STEP);
-            }
+            $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_PROJECT_CS_STEP);
 
             DB::commit();
             $response = [

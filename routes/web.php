@@ -180,7 +180,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('team-members', 'FourIRInitiativeTeamMemberController')->render();
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('initiative-cells', 'FourIRInitiativeCellController')->render();
-        $customRouter()->resourceRoute('initiative-cs', 'FourIRInitiativeCsCurriculumCblmController')->render();
+        $customRouter()->resourceRoute('initiative-cs', 'FourIRInitiativeCsController')->render();
         $customRouter()->resourceRoute('initiative-curriculums', 'FourIRProjectCurriculumController')->render();
         $customRouter()->resourceRoute('tna-formats', 'FourIRInitiativeTnaFormatController')->render();
         $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();

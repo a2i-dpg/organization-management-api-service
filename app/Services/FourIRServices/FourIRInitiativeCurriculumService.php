@@ -20,10 +20,10 @@ use Throwable;
 
 
 /**
- * Class RankService
+ * Class FourIRInitiativeCurriculumService
  * @package App\Services
  */
-class FourIRInitiativeCsCurriculumCblmService
+class FourIRInitiativeCurriculumService
 {
     /**
      * @param array $request
@@ -51,8 +51,6 @@ class FourIRInitiativeCsCurriculumCblmService
             'four_ir_initiatives.completion_step',
             'four_ir_initiatives.form_step',
 
-            'four_ir_initiative_cs_curriculum_cblm.level_from',
-            'four_ir_initiative_cs_curriculum_cblm.level_to',
             'four_ir_initiative_cs_curriculum_cblm.approved_by',
             'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
             'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
@@ -69,6 +67,8 @@ class FourIRInitiativeCsCurriculumCblmService
         ])->acl();
 
         $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id');
+
+        $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.type', FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM);
 
         if (is_numeric($fourIrProjectId)) {
             $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id', $fourIrProjectId);
@@ -132,8 +132,6 @@ class FourIRInitiativeCsCurriculumCblmService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_initiative_cs_curriculum_cblm.level_from',
-                'four_ir_initiative_cs_curriculum_cblm.level_to',
                 'four_ir_initiative_cs_curriculum_cblm.approved_by',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
@@ -168,6 +166,7 @@ class FourIRInitiativeCsCurriculumCblmService
         $this->updateInitiativeStepper($data);
 
         /** Create CsCurriculumCblm */
+        $data['type'] = FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM;
         $fourIrInitiativeCsCurriculumCblm = new FourIRInitiativeCsCurriculumCblm();
         $fourIrInitiativeCsCurriculumCblm->fill($data);
         $fourIrInitiativeCsCurriculumCblm->save();
@@ -198,27 +197,11 @@ class FourIRInitiativeCsCurriculumCblmService
 
         $payload = [];
 
-        if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS) {
-            if ($initiative->form_step < FourIRInitiative::FORM_STEP_CS) {
-                $payload['form_step'] = FourIRInitiative::FORM_STEP_CS;
-            }
-            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FOUR) {
-                $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FOUR;
-            }
-        } else if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM) {
-            if ($initiative->form_step < FourIRInitiative::FORM_STEP_CURRICULUM) {
-                $payload['form_step'] = FourIRInitiative::FORM_STEP_CURRICULUM;
-            }
-            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIVE) {
-                $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FIVE;
-            }
-        } else {
-            if ($initiative->form_step < FourIRInitiative::FORM_STEP_CBLM) {
-                $payload['form_step'] = FourIRInitiative::FORM_STEP_CBLM;
-            }
-            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SIX) {
-                $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_SIX;
-            }
+        if ($initiative->form_step < FourIRInitiative::FORM_STEP_CURRICULUM) {
+            $payload['form_step'] = FourIRInitiative::FORM_STEP_CURRICULUM;
+        }
+        if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIVE) {
+            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FIVE;
         }
 
         $initiative->fill($payload);
@@ -278,19 +261,9 @@ class FourIRInitiativeCsCurriculumCblmService
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
 
-            if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS) {
-                throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA, ValidationException::withMessages([
-                    'Complete Tna report step first.[24000]'
-                ]));
-            } else if ($data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CURRICULUM) {
-                throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_CS, ValidationException::withMessages([
-                    'Complete CS step first.[24000]'
-                ]));
-            } else {
-                throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_CURRICULUM, ValidationException::withMessages([
-                    'Complete Curriculum step first.[24000]'
-                ]));
-            }
+            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_CS, ValidationException::withMessages([
+                'Complete CS step first.[24000]'
+            ]));
         }
 
         $rules = [
@@ -306,11 +279,6 @@ class FourIRInitiativeCsCurriculumCblmService
             'accessor_id' => [
                 'required',
                 'int'
-            ],
-            'type' => [
-                'required',
-                'int',
-                Rule::in(FourIRInitiativeCsCurriculumCblm::TYPES)
             ],
 
             'experts' => [
@@ -347,22 +315,6 @@ class FourIRInitiativeCsCurriculumCblmService
                 'email',
             ],
 
-            'level_from' => [
-                Rule::requiredIf(function () use ($data) {
-                    return $data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS;
-                }),
-                'nullable',
-                'int',
-                Rule::in(FourIRInitiativeCsCurriculumCblm::LEVELS)
-            ],
-            'level_to' => [
-                Rule::requiredIf(function () use ($data) {
-                    return $data['type'] == FourIRInitiativeCsCurriculumCblm::TYPE_CS;
-                }),
-                'nullable',
-                'int',
-                Rule::in(FourIRInitiativeCsCurriculumCblm::LEVELS)
-            ],
             'approved_by' => [
                 'required',
                 'int',
