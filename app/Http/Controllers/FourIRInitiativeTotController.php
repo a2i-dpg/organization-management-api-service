@@ -72,13 +72,15 @@ class FourIRInitiativeTotController extends Controller
     {
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
 
-        $file = $request->file('participants_file');
-        $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
-
         $excelRows = null;
-        if (!empty($excelData) && !empty($excelData[0])) {
-            $excelRows = $excelData[0];
-            $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+        if(!empty($request->file('participants_file'))){
+            $file = $request->file('participants_file');
+            $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
+
+            if (!empty($excelData) && !empty($excelData[0])) {
+                $excelRows = $excelData[0];
+                $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+            }
         }
 
         try {
@@ -118,13 +120,15 @@ class FourIRInitiativeTotController extends Controller
 
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
 
-        $file = $request->file('participants_file');
-        $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
-
         $excelRows = null;
-        if (!empty($excelData) && !empty($excelData[0])) {
-            $excelRows = $excelData[0];
-            $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+        if(!empty($request->file('participants_file'))){
+            $file = $request->file('participants_file');
+            $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
+
+            if (!empty($excelData) && !empty($excelData[0])) {
+                $excelRows = $excelData[0];
+                $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+            }
         }
 
         try {

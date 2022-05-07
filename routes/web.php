@@ -184,10 +184,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('initiative-curriculums', 'FourIRInitiativeCurriculumController')->render();
         $customRouter()->resourceRoute('initiative-cblms', 'FourIRInitiativeCblmController')->render();
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
+        $customRouter()->resourceRoute('tots', 'FourIRInitiativeTotController')->render();
 
 
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
-        $customRouter()->resourceRoute('tots', 'FourIRInitiativeTotController')->render();
         $customRouter()->resourceRoute('course-developments', 'FourIRSkillDevelopmentController')->render();
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();

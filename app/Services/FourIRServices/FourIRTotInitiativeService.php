@@ -207,7 +207,7 @@ class FourIRTotInitiativeService
         $fourIrProjectTOt->fill($data);
         $fourIrProjectTOt->save();
 
-        $organizers = $data['organizers'];
+        $organizers = $data['organizers'] ?? [];
         foreach ($organizers as $organizer) {
             $organizer['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
             $organizer['type'] = FourIRInitiativeTot::TYPE_ORGANIZER;
@@ -219,7 +219,7 @@ class FourIRTotInitiativeService
             $fourIrTotOrganizerParticipant->save();
         }
 
-        $coOrganizers = $data['co_organizers'];
+        $coOrganizers = $data['co_organizers'] ?? [];
         foreach ($coOrganizers as $coOrganizer) {
             $coOrganizer['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
             $coOrganizer['type'] = FourIRInitiativeTot::TYPE_CO_ORGANIZER;
@@ -318,6 +318,10 @@ class FourIRTotInitiativeService
                 'array',
                 'min:1'
             ],
+            'organizers.*' => [
+                'required',
+                'array'
+            ],
             'organizers.*.name' => [
                 'required',
                 'string'
@@ -348,6 +352,10 @@ class FourIRTotInitiativeService
                 'array',
                 'min:1'
             ],
+            'co_organizers.*' => [
+                'required',
+                'array'
+            ],
             'co_organizers.*.name' => [
                 'required',
                 'string'
@@ -373,7 +381,7 @@ class FourIRTotInitiativeService
                 'email',
             ],
             'participants_file' => [
-                'required',
+                'nullable',
                 'mimes:xlsx, csv, xls'
             ],
             'row_status' => [
