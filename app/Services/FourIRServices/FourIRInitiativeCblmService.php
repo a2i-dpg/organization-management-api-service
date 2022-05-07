@@ -179,9 +179,9 @@ class FourIRInitiativeCblmService
             $expert['accessor_type'] = $fourIrInitiativeCsCurriculumCblm->accessor_type;
             $expert['accessor_id'] = $fourIrInitiativeCsCurriculumCblm->accessor_id;
 
-            $fourIrInitiativeCsCurriculumCblm = new FourIrCsCurriculumCblmExpert();
-            $fourIrInitiativeCsCurriculumCblm->fill($expert);
-            $fourIrInitiativeCsCurriculumCblm->save();
+            $fourIrInitiativeCsCurriculumCblmExpert = new FourIrCsCurriculumCblmExpert();
+            $fourIrInitiativeCsCurriculumCblmExpert->fill($expert);
+            $fourIrInitiativeCsCurriculumCblmExpert->save();
         }
 
         return $fourIrInitiativeCsCurriculumCblm;
@@ -233,9 +233,9 @@ class FourIRInitiativeCblmService
             $expert['accessor_type'] = $fourIrInitiativeCsCurriculumCblm->accessor_type;
             $expert['accessor_id'] = $fourIrInitiativeCsCurriculumCblm->accessor_id;
 
-            $fourIrInitiativeCsCurriculumCblm = new FourIrCsCurriculumCblmExpert();
-            $fourIrInitiativeCsCurriculumCblm->fill($expert);
-            $fourIrInitiativeCsCurriculumCblm->save();
+            $fourIrInitiativeCsCurriculumCblmExpert = new FourIrCsCurriculumCblmExpert();
+            $fourIrInitiativeCsCurriculumCblmExpert->fill($expert);
+            $fourIrInitiativeCsCurriculumCblmExpert->save();
         }
 
         return $fourIrInitiativeCsCurriculumCblm;
@@ -285,6 +285,10 @@ class FourIRInitiativeCblmService
                 'required',
                 'array',
                 'min:1'
+            ],
+            'experts.*' => [
+                'required',
+                'array'
             ],
             'experts.*.name' => [
                 'required',

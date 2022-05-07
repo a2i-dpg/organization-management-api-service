@@ -180,13 +180,13 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('team-members', 'FourIRInitiativeTeamMemberController')->render();
         $customRouter()->resourceRoute('initiative-cells', 'FourIRInitiativeCellController')->render();
         $customRouter()->resourceRoute('tna-formats', 'FourIRInitiativeTnaFormatController')->render();
+        $customRouter()->resourceRoute('initiative-cs', 'FourIRInitiativeCsController')->render();
+        $customRouter()->resourceRoute('initiative-curriculums', 'FourIRInitiativeCurriculumController')->render();
+        $customRouter()->resourceRoute('initiative-cblms', 'FourIRInitiativeCblmController')->render();
+        $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
 
 
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
-        $customRouter()->resourceRoute('initiative-cs', 'FourIRInitiativeCsController')->render();
-        $customRouter()->resourceRoute('initiative-curriculums', 'FourIRProjectCurriculumController')->render();
-        $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
-        $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
         $customRouter()->resourceRoute('tots', 'FourIRInitiativeTotController')->render();
         $customRouter()->resourceRoute('course-developments', 'FourIRSkillDevelopmentController')->render();
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
