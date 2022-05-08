@@ -212,9 +212,13 @@ class FourIrInitiativeService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
+        $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
+        if (!empty($data['tasks'])) {
+            $data["tasks"] = isset($data['tasks']) && is_array($data['tasks']) ? $data['tasks'] : explode(',', $data['tasks']);
+        }
         $rules = [
             'accessor_type' => [
                 'required',
@@ -306,7 +310,7 @@ class FourIrInitiativeService
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ],
         ];
-        return Validator::make($request->all(), $rules, $customMessage);
+        return Validator::make($data, $rules, $customMessage);
     }
 
     /**
