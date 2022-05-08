@@ -2513,6 +2513,215 @@
                     }
                 }
             }
+        },
+        "/initiative-cs": {
+            "get": {
+                "tags": [
+                    "FourIR Cs"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
+                    }
+                ],
+                "summary": "Get FourIR Cs List",
+                "responses": {
+                    "200": {
+                        "description": "Get FourIR Cs List",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "occupation_name": "dfgdf",
+                                            "occupation_name_en": "fdgfd",
+                                            "date": "2004-09-09",
+                                            "start_time": null,
+                                            "end_time": null,
+                                            "venue": "hfghf",
+                                            "venue_en": "fghfgh",
+                                            "invite_others": "fghgfh",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": null,
+                                            "updated_at": null
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Cs"
+                ],
+                "summary": "Insert a FourIR Cs",
+                "description": "API endpoint to Insert a FourIR Cs. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_showcasing"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_initiative_id": 1,
+                                        "accessor_type": "INSTRUCTOR",
+                                        "accessor_id": 1,
+                                        "file_path": "new",
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "updated_at": "2022-04-26T04:36:12.000000Z",
+                                        "created_at": "2022-04-26T04:36:12.000000Z",
+                                        "id": 4
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Resource Management added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/initiative-cs/{fourIrAssessmentId}": {
+            "get": {
+                "tags": [
+                    "FourIR Cs"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrAssessmentId"
+                    }
+                ],
+                "summary": "Get a 4IR Cs",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR Cs",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "four_ir_initiative_id": 1,
+                                        "file_path": "gfhgf",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "FourIR Cs"
+                ],
+                "summary": "Update a 4IR Cs",
+                "description": "API endpoint to update a Cs. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrAssessmentId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_resource"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "four_ir_initiative_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Cs Updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR Cs"
+                ],
+                "summary": "Delete a 4IR Cs",
+                "description": "API endpoint to delete a Cs. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrAssessmentId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Cs Deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2579,6 +2788,21 @@
                     },
                     "is_skill_provide": {
                         "type": "integer"
+                    },
+                    "implementing_team_launching_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "expert_team_launching_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "cell_launching_date":{
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "tna_file_path": {
+                        "type": "string"
                     },
                     "name": {
                         "type": "string"
@@ -2753,22 +2977,41 @@
                     "four_ir_initiative_id": {
                         "type": "integer"
                     },
-                    "workshop_name": {
+                    "workshop_method_workshop_numbers": {
+                        "type": "integer"
+                    },
+                    "workshop_method_file": {
                         "type": "string"
                     },
-                    "skill_required": {
+                    "fgd_workshop_numbers": {
+                        "type": "integer"
+                    },
+                    "fgd_workshop_file": {
                         "type": "string"
                     },
-                    "venue": {
+                    "industry_visit_workshop_numbers": {
+                        "type": "integer"
+                    },
+                    "industry_visit_file": {
                         "type": "string"
                     },
-                    "start_date": {
-                        "type": "string",
-                        "format": "date"
+                    "desktop_research_workshop_numbers": {
+                        "type": "integer"
                     },
-                    "end_date": {
-                        "type": "string",
-                        "format": "date"
+                    "desktop_research_file": {
+                        "type": "string"
+                    },
+                    "existing_report_review_workshop_numbers": {
+                        "type": "integer"
+                    },
+                    "existing_report_review_file": {
+                        "type": "string"
+                    },
+                    "others_workshop_numbers": {
+                        "type": "integer"
+                    },
+                    "others_file": {
+                        "type": "string"
                     },
                     "file_path": {
                         "type": "string"
@@ -2783,7 +3026,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","workshop_name","skill_required","start_date","end_date","file_path","venue"
+                    "four_ir_initiative_id"
                 ]
             },
             "4ir_curriculum": {
