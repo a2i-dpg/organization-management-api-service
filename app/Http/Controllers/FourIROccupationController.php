@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIROccupation;
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIROccupationService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -46,7 +46,7 @@ class FourIROccupationController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProject::class);
+//        $this->authorize('viewAny', FourIRInitiative::class);
 
         $filter = $this->fourIROccupationService->filterValidator($request)->validate();
         $response = $this->fourIROccupationService->getFourIROccupationList($filter, $this->startTime);

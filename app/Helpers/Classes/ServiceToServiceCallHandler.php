@@ -221,4 +221,251 @@ class ServiceToServiceCallHandler
         Log::info("domain: " . $domain);
         return $domain;
     }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function createFourIrUser(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/create-four-ir-user';
+
+        $userData = Http::withOptions([
+            'verify' => config('nise3.should_ssl_verify'),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->post($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+
+        Log::info("userInfo:" . json_encode($userData));
+
+        return $userData;
+    }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function updateFourIrUser(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/update-four-ir-user';
+
+        $userData = Http::withOptions([
+            'verify' => config('nise3.should_ssl_verify'),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->put($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+
+        Log::info("userInfo:" . json_encode($userData));
+
+        return $userData;
+    }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function deleteFourIrUser(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::CORE_CLIENT_URL_TYPE) . 'service-to-service-call/delete-four-ir-user';
+
+        $userData = Http::withOptions([
+            'verify' => config('nise3.should_ssl_verify'),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->delete($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+
+        Log::info("userInfo:" . json_encode($userData));
+
+        return $userData;
+    }
+
+    /**
+     * @param array $filterData
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getFourIrCourseList(array $filterData): mixed
+    {
+        $filterData['is_four_ir'] = BaseModel::BOOLEAN_TRUE;
+
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/get-four-ir-course-list';
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(5)
+            ->get($url, $filterData)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
+
+    /**
+     * @param int $courseId
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getFourIrCourseByCourseId(int $courseId): mixed
+    {
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/get-four-ir-course/' . $courseId;
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(5)
+            ->get($url)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function createFourIrCourse(array $payload): mixed
+    {
+        $payload['row_status'] = BaseModel::ROW_STATUS_INACTIVE;
+
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/create-four-ir-course';
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(5)
+            ->post($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
+
+    /**
+     * @param array $payload
+     * @param int $courseId
+     * @return mixed
+     * @throws RequestException
+     */
+    public function updateFourIrCourse(array $payload, int $courseId): mixed
+    {
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/update-four-ir-course/' . $courseId;
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(5)
+            ->put($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
+
+    /**
+     * @param int $courseId
+     * @return mixed
+     * @throws RequestException
+     */
+    public function approveFourIrCourse(int $courseId): mixed
+    {
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/approve-four-ir-course/' . $courseId;
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(5)
+            ->put($url)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getCourseEnrolledYouths(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/get-four-ir-course-enrolled-youths';
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->get($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
+
+    /**
+     * @param array $payload
+     * @return mixed
+     * @throws RequestException
+     */
+    public function getCourseBatches(array $payload): mixed
+    {
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/get-four-ir-course-batches';
+
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug')
+        ])
+            ->timeout(5)
+            ->get($url, $payload)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json();
+    }
 }

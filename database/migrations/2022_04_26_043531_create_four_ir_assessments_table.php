@@ -15,7 +15,7 @@ class CreateFourIrAssessmentsTable extends Migration
     {
         Schema::create('four_ir_assessments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('four_ir_project_id');
+            $table->unsignedInteger('four_ir_initiative_id');
             $table->string('course_name', 300);
             $table->string('course_name_en', 300)->nullable();
             $table->string('examine_name', 300);

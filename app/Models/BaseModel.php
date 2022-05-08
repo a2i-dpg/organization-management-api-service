@@ -82,6 +82,7 @@ abstract class BaseModel extends Model
     public const YOUTH_USER_TYPE = 4;
     public const INDUSTRY_ASSOCIATION_USER_TYPE = 5;
     public const REGISTERED_TRAINING_ORGANIZATION_USER_TYPE = 6;
+    public const FOUR_IR_USER_TYPE = 7;
 
 
     /** Client Url End Point Type*/
@@ -156,4 +157,20 @@ abstract class BaseModel extends Model
     public const ACCESSOR_TYPE_INSTITUTE = "INSTITUTE";
     public const ACCESSOR_TYPE_INDUSTRY_ASSOCIATION = "INDUSTRY_ASSOCIATION";
     public const ACCESSOR_TYPE_ORGANIZATION = "ORGANIZATION";
+
+    const COURSE_LEVEL_BEGINNER = 1;
+    const COURSE_LEVEL_INTERMEDIATE = 2;
+    const COURSE_LEVEL_EXPERT = 3;
+    const COURSE_LEVELS = [
+        self::COURSE_LEVEL_BEGINNER,
+        self::COURSE_LEVEL_INTERMEDIATE,
+        self::COURSE_LEVEL_EXPERT
+    ];
+
+    const COURSE_LANGUAGE_MEDIUM_BENGALI = 1;
+    const COURSE_LANGUAGE_MEDIUM_ENGLISH = 2;
+    const COURSE_LANGUAGE_MEDIUMS = [
+        self::COURSE_LANGUAGE_MEDIUM_BENGALI,
+        self::COURSE_LANGUAGE_MEDIUM_ENGLISH,
+    ];
 }

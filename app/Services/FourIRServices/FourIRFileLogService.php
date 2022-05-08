@@ -4,7 +4,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRFileLog;
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 
 /**
  * Class FourIRFileLogService
@@ -46,7 +46,7 @@ class FourIRFileLogService
     {
         $fourIrFileLog = new FourIRFileLog();
         $fourIrFileLog->fill([
-            'four_ir_project_id' => $data['id'],
+            'four_ir_initiative_id' => $data['four_ir_initiative_id'],
             'file_path' => $data['file_path'],
             'module_type' => $step,
             'accessor_type' => $data['accessor_type'],
@@ -67,7 +67,7 @@ class FourIRFileLogService
     {
         FourIRFileLog::updateOrCreate(
             [
-                'four_ir_project_id' => $data['four_ir_project_id'],
+                'four_ir_initiative_id' => $data['four_ir_initiative_id'],
                 'file_path' => $data['file_path'],
                 'module_type' => $step
             ],

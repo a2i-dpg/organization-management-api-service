@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRInitiative;
 use App\Models\FourIRShowcasing;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRShowcasingService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -16,17 +19,20 @@ use Throwable;
 class FourIRShowcasingController extends Controller
 {
     public FourIRShowcasingService $fourIRShowcasingService;
+    public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
-     * FourIRProjectCellController constructor.
+     * FourIRShowcasingController constructor.
      *
      * @param FourIRShowcasingService $fourIRShowcasingService
+     * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRShowcasingService $fourIRShowcasingService)
+    public function __construct(FourIRShowcasingService $fourIRShowcasingService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
         $this->fourIRShowcasingService = $fourIRShowcasingService;
+        $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
     /**
@@ -38,7 +44,7 @@ class FourIRShowcasingController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRProjectCell::class);
+//        $this->authorize('viewAny', FourIRShowcasing::class);
 
         $filter = $this->fourIRShowcasingService->filterValidator($request)->validate();
         $response = $this->fourIRShowcasingService->getFourShowcasingList($filter, $this->startTime);
@@ -51,10 +57,10 @@ class FourIRShowcasingController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrProjectCell = $this->fourIRShowcasingService->getOneFourIrShowcasing($id);
+        $fourIrShowcasing = $this->fourIRShowcasingService->getOneFourIrShowcasing($id);
 //        $this->authorize('view', $fourIrProject);
         $response = [
-            "data" => $fourIrProjectCell,
+            "data" => $fourIrShowcasing,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -69,24 +75,32 @@ class FourIRShowcasingController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRProjectCell::class);
+        //$this->authorize('create', FourIRShowcasing::class);
 
         $validated = $this->fourIRShowcasingService->validator($request)->validate();
-        $data = $this->fourIRShowcasingService->store($validated);
+        try {
+            DB::beginTransaction();
+            $data = $this->fourIRShowcasingService->store($validated);
+            $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_CREATED,
-                "message" => "Four Ir Project added successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Showcasing added successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -97,25 +111,35 @@ class FourIRShowcasingController extends Controller
      * @param int $id
      * @return JsonResponse
      * @throws AuthorizationException
-     * @throws ValidationException
+     * @throws ValidationException|Throwable
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $fourIrProjectCell = FourIRShowcasing::findOrFail($id);
-//        $this->authorize('update', $fourIrProject);
+        $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
+        //$this->authorize('update', $fourIrProject);
 
         $validated = $this->fourIRShowcasingService->validator($request, $id)->validate();
-        $data = $this->fourIRShowcasingService->update($fourIrProjectCell, $validated);
+        try {
+            DB::beginTransaction();
+            $filePath = $fourIrShowcasing['file_path'];
 
-        $response = [
-            'data' => $data,
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project updated successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
+            $data = $this->fourIRShowcasingService->update($fourIrShowcasing, $validated);
+            $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
+
+            DB::commit();
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Showcasing updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -130,14 +154,15 @@ class FourIRShowcasingController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $fourIrProjectCell = FourIRShowcasing::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
-        $this->fourIRShowcasingService->destroy($fourIrProjectCell);
+        $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
+        //$this->authorize('delete', $fourIrProject);
+
+        $this->fourIRShowcasingService->destroy($fourIrShowcasing);
         $response = [
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Project deleted successfully",
+                "message" => "Four Ir Showcasing deleted successfully",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];

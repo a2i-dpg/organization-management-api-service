@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRProject;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRAssessment;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRAssessmentService;
@@ -77,7 +77,7 @@ class FourIRAssessmentController extends Controller
         try {
             DB::beginTransaction();
             $data = $this->fourIRAssessmentService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRProject::FILE_LOG_ASSESSMENT_STEP);
+            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_ASSESSMENT_STEP);
 
             DB::commit();
             $response = [
@@ -114,7 +114,7 @@ class FourIRAssessmentController extends Controller
             DB::beginTransaction();
             $filePath = $fourIrAssessment['file_path'];
             $data = $this->fourIRAssessmentService->update($fourIrAssessment, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRProject::FILE_LOG_ASSESSMENT_STEP);
+            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_ASSESSMENT_STEP);
 
             DB::commit();
             $response = [
