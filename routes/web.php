@@ -174,21 +174,35 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         /**
          * FourIR Project APIS
          **/
+        $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
         $customRouter()->resourceRoute('taglines', 'FourIRTaglineController')->render();
         $customRouter()->resourceRoute('initiatives', 'FourIRInitiativeController')->render();
-        $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
-        $customRouter()->resourceRoute('team-members', 'FourIRProjectTeamMemberController')->render();
-        $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
-        $customRouter()->resourceRoute('project-cells', 'FourIRProjectCellController')->render();
-        $customRouter()->resourceRoute('project-cs', 'FourIRProjectCsController')->render();
-        $customRouter()->resourceRoute('project-curriculums', 'FourIRProjectCurriculumController')->render();
-        $customRouter()->resourceRoute('tna-formats', 'FourIRProjectTnaFormatController')->render();
-        $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
+        $customRouter()->resourceRoute('team-members', 'FourIRInitiativeTeamMemberController')->render();
+        $customRouter()->resourceRoute('initiative-cells', 'FourIRInitiativeCellController')->render();
+        $customRouter()->resourceRoute('tna-formats', 'FourIRInitiativeTnaFormatController')->render();
+        $customRouter()->resourceRoute('initiative-cs', 'FourIRInitiativeCsController')->render();
+        $customRouter()->resourceRoute('initiative-curriculums', 'FourIRInitiativeCurriculumController')->render();
+        $customRouter()->resourceRoute('initiative-cblms', 'FourIRInitiativeCblmController')->render();
         $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
-        $customRouter()->resourceRoute('tots', 'FourIRProjectTotController')->render();
-        $customRouter()->resourceRoute('course-developments', 'FourIRCourseDevelopmentController')->render();
+        $customRouter()->resourceRoute('tots', 'FourIRInitiativeTotController')->render();
+        $customRouter()->resourceRoute('create-approve-courses', 'FourIRCreateApproveCourseController')->render();
+        $customRouter()->resourceRoute('employments', 'FourIREmploymentController')->render();
         $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
+        $customRouter()->resourceRoute('initiative-analysis', 'FourIRInitiativeAnalysisController')->render();
+        $customRouter()->resourceRoute('scale-up', 'FourIRScaleUpController')->render();
+        $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
+
+        $router->put('/set-team-launching-date', ["as" => "set.team.launching.date", "uses" => "FourIRInitiativeTeamMemberController@setTeamLaunchingDate"]);
+        $router->put('/set-cell-launching-date', ["as" => "set.cell.launching.date", "uses" => "FourIRInitiativeCellController@setTeamLaunchingDate"]);
+        $router->put('/approve-four-ir-course/{id}', ["as" => "approve.four.ir.course", "uses" => "FourIRCreateApproveCourseController@approveFourIrCourse"]);
+        $router->get('/get-4ir-course-enrolled-youths', ["as" => "get.4ir.course.enrolled.youths", "uses" => "FourIREnrollmentApprovalController@getList"]);
+        $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
+
+        /**
+         * Four IR Excel imports
+         */
+        $router->post('/four-ir-initiatives-import-excel', ["as" => "four.ir.initiatives.import.excel", "uses" => "FourIRInitiativeController@bulkStoreByExcel"]);
 
 
         /** Provide suggestions in drop downs */

@@ -15,15 +15,16 @@ class CreateFourIrShowcasingsTable extends Migration
     {
         Schema::create('four_ir_showcasings', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('four_ir_project_id');
-            $table->string('occupation_name', 100);
-            $table->string('occupation_name_en', 100)->nullable();
-            $table->date('date');
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
+            $table->unsignedInteger('four_ir_initiative_id');
+            $table->string('organization_name', 100);
+            $table->string('organization_name_en', 100)->nullable();
+            $table->string('invite_other_organization', 400);
+            $table->string('invite_other_organization_en', 400)->nullable();
             $table->string('venue', 100);
-            $table->string('venue_en', 100)->nullable();
-            $table->string('invite_others', 100);
+            $table->date('start_time');
+            $table->date('end_time');
+            $table->text('event_description')->nullable();
+            $table->string('file_path', 200)->nullable();
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

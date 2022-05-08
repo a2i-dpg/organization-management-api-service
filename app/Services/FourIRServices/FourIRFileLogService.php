@@ -46,7 +46,7 @@ class FourIRFileLogService
     {
         $fourIrFileLog = new FourIRFileLog();
         $fourIrFileLog->fill([
-            'four_ir_initiative_id' => $data['id'],
+            'four_ir_initiative_id' => $data['four_ir_initiative_id'],
             'file_path' => $data['file_path'],
             'module_type' => $step,
             'accessor_type' => $data['accessor_type'],

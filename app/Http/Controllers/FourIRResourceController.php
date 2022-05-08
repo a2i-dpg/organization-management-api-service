@@ -37,39 +37,29 @@ class FourIRResourceController extends Controller
 
 
     /**
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function getList(Request $request): JsonResponse
-    {
-//        $this->authorize('viewAny', FourIRInitiative::class);
-
-        $filter = $this->fourIRResourceService->filterValidator($request)->validate();
-        $response = $this->fourIRResourceService->getFourIRResourceList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
-    }
-
-
-    /**
+     * Only one resource_management can be for an initiative. That's why only single read API is here.
+     * Provide Initiative id as the path parameter of this API
+     *
      * @param int $id
      * @return JsonResponse
      */
     public function read(int $id): JsonResponse
     {
-        $guideline = $this->fourIRResourceService->getOneResource($id);
-        // $this->authorize('view', $rank);
+        /** Here $id is the ID of FourIrInitiative */
+
+        //$this->authorize('viewAny', FourIRInitiative::class);
+
+        $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
         $response = [
-            "data" => $guideline,
+            "data" => $fourIrResource,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        return Response::json($response,ResponseAlias::HTTP_OK);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -86,8 +76,15 @@ class FourIRResourceController extends Controller
         $validated = $this->fourIRResourceService->validator($request)->validate();
         try {
             DB::beginTransaction();
-            $data = $this->fourIRResourceService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+            $fourIrResource = FourIRResource::where('four_ir_initiative_id', $validated['four_ir_initiative_id'])->first();
+            $filePath = $fourIrResource->file_path;
+            $data = $this->fourIRResourceService->store($validated, $fourIrResource);
+
+            if(empty($fourIrResource)){
+                $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+            } else {
+                $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+            }
 
             DB::commit();
             $response = [
@@ -95,7 +92,7 @@ class FourIRResourceController extends Controller
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Guideline added successfully",
+                    "message" => "Four Ir Resource added successfully",
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
@@ -106,63 +103,4 @@ class FourIRResourceController extends Controller
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
-
-
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     * @throws Throwable
-     * @throws ValidationException
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $fourIrResource = FourIRResource::findOrFail($id);
-        //$this->authorize('update', $fourIrProjectCs);
-        $validated = $this->fourIRResourceService->validator($request, $id)->validate();
-        try {
-            DB::beginTransaction();
-            $filePath = $fourIrResource['file_path'];
-            $data = $this->fourIRResourceService->update($fourIrResource, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
-
-            DB::commit();
-            $response = [
-                'data' => $data,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Project cs updated successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e){
-            DB::rollBack();
-            throw $e;
-        }
-
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $fourIRResource = FourIRResource::findOrFail($id);
-        $this->fourIRResourceService->destroy($fourIRResource);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Resource Management deleted successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
-
-
 }
