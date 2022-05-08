@@ -1518,130 +1518,6 @@
                 }
             }
         },
-        "/tna-formats/{fourIrProjectTnaFormatId}": {
-            "get": {
-                "tags": [
-                    "FourIR Project Tna Format"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
-                    }
-                ],
-                "summary": "Get a 4IR Project Tna Format",
-                "responses": {
-                    "200": {
-                        "description": "Get a Project Tna Format",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "four_ir_initiative_id": 1,
-                                        "workshop_name": "tttttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "venue": "",
-                                        "file_path": "gfhgf",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-            },
-            "put": {
-                "tags": [
-                    "FourIR Project Tna Format"
-                ],
-                "summary": "Update a 4IR Project Tna Format",
-                "description": "API endpoint to update a Project Tna Format. A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_tna_format"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 2,
-                                        "title": "meme",
-                                        "title_en": "welcome",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": null,
-                                        "created_at": "2022-04-19T07:19:20.000000Z",
-                                        "updated_at": "2022-04-19T08:45:15.000000Z",
-                                        "deleted_at": null
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4Ir Tna Format updated successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "FourIR Project Tna Format"
-                ],
-                "summary": "Delete a 4IR Project Tna Format",
-                "description": "API endpoint to delete a 4IR Project Tna Format. A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrProjectTnaFormatId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4IR Tna Format deleted successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/project-curriculums": {
             "get": {
                 "tags": [
@@ -3145,8 +3021,8 @@
                     "example": "1"
                 }
             },
-            "fourIrProjectTnaFormatId": {
-                "name": "fourIrProjectTnaFormatId",
+            "fourIrTnaFormatId": {
+                "name": "fourIrTnaFormatId",
                 "in": "path",
                 "required": true,
                 "schema": {
