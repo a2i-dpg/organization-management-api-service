@@ -115,9 +115,9 @@ class FourIRInitiativeCblmService
 
     /**
      * @param int $id
-     * @return FourIRInitiativeTot
+     * @return FourIRInitiativeCsCurriculumCblm
      */
-    public function getOneFourIRInitiativeCsCurriculumCblm(int $id): FourIRInitiativeTot
+    public function getOneFourIRInitiativeCsCurriculumCblm(int $id): FourIRInitiativeCsCurriculumCblm
     {
         /** @var FourIRInitiativeTot|Builder $fourIrInitiativeCsCurriculumCblmBuilder */
         $fourIrInitiativeCsCurriculumCblmBuilder = FourIRInitiativeCsCurriculumCblm::select(

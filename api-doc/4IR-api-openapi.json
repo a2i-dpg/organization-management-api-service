@@ -1196,14 +1196,14 @@
                 }
             }
         },
-        "/initiative-cs/{fourIrAssessmentId}": {
+        "/initiative-cs/{fourIrInitiativeCsId}": {
             "get": {
                 "tags": [
                     "FourIR Cs"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrAssessmentId"
+                        "$ref": "#/components/parameters/fourIrInitiativeCsId"
                     }
                 ],
                 "summary": "Get a 4IR Cs",
@@ -1242,14 +1242,43 @@
                 "description": "API endpoint to update a Cs. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrAssessmentId"
+                        "$ref": "#/components/parameters/fourIrInitiativeCsId"
                     }
                 ],
                 "requestBody": {
                     "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_cs"
+                            },
+                            "examples": {
+                                "WITH JSON DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id":1,
+                                        "experts":[{
+                                            "name": "string",
+                                            "name_en": "string",
+                                            "designation": "string",
+                                            "organization": "string",
+                                            "organization_en": "string",
+                                            "mobile": "01720588884",
+                                            "email": "string@gmail.com"
+                                        }],
+                                        "level_from":"2",
+                                        "level_to":"3",
+                                        "approved_by":1,
+                                        "developed_organization_name":"hjgh",
+                                        "sector_name": "fhyfg",
+                                        "supported_organization_name":"fghfg"
+                                    }
+                                }
+                            }
+                        },
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_resource"
+                                "$ref": "#/components/schemas/4ir_cs"
                             }
                         }
                     }
@@ -1291,7 +1320,7 @@
                 "description": "API endpoint to delete a Cs. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrAssessmentId"
+                        "$ref": "#/components/parameters/fourIrInitiativeCsId"
                     }
                 ],
                 "responses": {
@@ -1382,6 +1411,35 @@
                 "description": "API endpoint to Insert a Initiation Curriculum. A successful request response will show 200 HTTP status code",
                 "requestBody": {
                     "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            },
+                            "examples": {
+                                "WITH JSON DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id":1,
+                                        "experts":[{
+                                            "name": "string",
+                                            "name_en": "string",
+                                            "designation": "string",
+                                            "organization": "string",
+                                            "organization_en": "string",
+                                            "mobile": "01720588884",
+                                            "email": "string@gmail.com"
+                                        }],
+                                        "level_from":"2",
+                                        "level_to":"3",
+                                        "approved_by":1,
+                                        "developed_organization_name":"hjgh",
+                                        "sector_name": "fhyfg",
+                                        "supported_organization_name":"fghfg"
+                                    }
+                                }
+                            }
+                        },
                         "application/x-www-form-urlencoded": {
                             "schema": {
                                 "$ref": "#/components/schemas/4ir_curriculum"
@@ -1474,6 +1532,35 @@
                 ],
                 "requestBody": {
                     "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            },
+                            "examples": {
+                                "WITH JSON DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id":1,
+                                        "experts":[{
+                                            "name": "string",
+                                            "name_en": "string",
+                                            "designation": "string",
+                                            "organization": "string",
+                                            "organization_en": "string",
+                                            "mobile": "01720588884",
+                                            "email": "string@gmail.com"
+                                        }],
+                                        "level_from":"2",
+                                        "level_to":"3",
+                                        "approved_by":1,
+                                        "developed_organization_name":"hjgh",
+                                        "sector_name": "fhyfg",
+                                        "supported_organization_name":"fghfg"
+                                    }
+                                }
+                            }
+                        },
                         "application/x-www-form-urlencoded": {
                             "schema": {
                                 "$ref": "#/components/schemas/4ir_curriculum"
@@ -1531,6 +1618,291 @@
                                         "success": true,
                                         "code": 200,
                                         "message": "4IR InitiationCurriculum deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/initiative-cblms": {
+            "get": {
+                "tags": [
+                    "FourIR  CBLM"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
+                    }
+                ],
+                "summary": "Get all 4IR CBLM",
+                "responses": {
+                    "200": {
+                        "description": "Get all CBLM",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "four_ir_initiative_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "four_ir_initiative_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": 14,
+                                            "updated_by": 14,
+                                            "created_at": "2022-04-21T07:18:19.000000Z",
+                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR  CBLM"
+                ],
+                "summary": "Insert a 4IR CBLM",
+                "description": "API endpoint to Insert a CBLM. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            },
+                            "examples": {
+                                "WITH JSON DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id":1,
+                                        "experts":[{
+                                            "name": "string",
+                                            "name_en": "string",
+                                            "designation": "string",
+                                            "organization": "string",
+                                            "organization_en": "string",
+                                            "mobile": "01720588884",
+                                            "email": "string@gmail.com"
+                                        }],
+                                        "level_from":"2",
+                                        "level_to":"3",
+                                        "approved_by":1,
+                                        "developed_organization_name":"hjgh",
+                                        "sector_name": "fhyfg",
+                                        "supported_organization_name":"fghfg"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_initiative_id": 1,
+                                        "workshop_name": "ttthjkjhkttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "file_path": "gfhgf",
+                                        "created_by": 14,
+                                        "updated_by": 14,
+                                        "updated_at": "2022-04-21T07:28:49.000000Z",
+                                        "created_at": "2022-04-21T07:28:49.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir CBLM added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/initiative-cblms/{fourIrCblmId}": {
+            "get": {
+                "tags": [
+                    "FourIR  CBLM"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrCblmId"
+                    }
+                ],
+                "summary": "Get a 4IR CBLM",
+                "responses": {
+                    "200": {
+                        "description": "Get a CBLM",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "four_ir_initiative_id": 1,
+                                        "file_path": "gfhgf",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            "put": {
+                "tags": [
+                    "FourIR  CBLM"
+                ],
+                "summary": "Update a 4IR Initiation CBLM",
+                "description": "API endpoint to update a  CBLM. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrCblmId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            },
+                            "examples": {
+                                "WITH JSON DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id":1,
+                                        "experts":[{
+                                            "name": "string",
+                                            "name_en": "string",
+                                            "designation": "string",
+                                            "organization": "string",
+                                            "organization_en": "string",
+                                            "mobile": "01720588884",
+                                            "email": "string@gmail.com"
+                                        }],
+                                        "level_from":"2",
+                                        "level_to":"3",
+                                        "approved_by":1,
+                                        "developed_organization_name":"hjgh",
+                                        "sector_name": "fhyfg",
+                                        "supported_organization_name":"fghfg"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "four_ir_initiative_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir CBLM updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR  CBLM"
+                ],
+                "summary": "Delete a 4IR Initiation CBLM",
+                "description": "API endpoint to delete a 4IR Initiation CBLM. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrCblmId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR CBLM deleted successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -2942,27 +3314,31 @@
                     "four_ir_initiative_id"
                 ]
             },
-            "4ir_curriculum": {
+            "4ir_curriculum":  {
                 "type": "object",
-                "properties": {
-                    "four_ir_initiative_id": {
-                        "type": "integer"
-                    },
-                    "file_path": {
+                "properties":{
+                    "name": {
                         "type": "string"
                     },
-                    "row_status": {
-                        "type": "integer",
-                        "enum": [
-                            1,
-                            2
-                        ],
-                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    "name_en": {
+                        "type" : "string"
+                    },
+                    "designation" : {
+                        "type" : "string"
+                    },
+                    "organization": {
+                        "type": "string"
+                    },
+                    "organization_en": {
+                        "type": "string"
+                    },
+                    "mobile": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
                     }
-                },
-                "required": [
-                    "four_ir_initiative_id","file_path"
-                ]
+                }
             },
             "4ir_resource": {
                 "type": "object",
@@ -3038,7 +3414,7 @@
                     "experts": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/4ir_cs_experts"
+                            "$ref": "#/components/schemas/4ir_experts"
                         }
                     },
                     "level_from": {
@@ -3085,7 +3461,7 @@
                     "four_ir_initiative_id","experts","level_from","level_to","approved_by","developed_organization_name","sector_name","supported_organization_name"
                 ]
             },
-            "4ir_cs_experts": {
+            "4ir_experts": {
                 "type": "object",
                 "properties":{
                     "name": {
@@ -3151,6 +3527,15 @@
             },
             "fourIrInitiativeCurriculumId": {
                 "name": "fourIrInitiativeCurriculumId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrCblmId": {
+                "name": "fourIrCblmId",
                 "in": "path",
                 "required": true,
                 "schema": {
@@ -3250,6 +3635,15 @@
             },
             "fourIrAssessmentId": {
                 "name": "fourIrAssessmentId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrInitiativeCsId": {
+                "name": "fourIrInitiativeCsId",
                 "in": "path",
                 "required": true,
                 "schema": {
