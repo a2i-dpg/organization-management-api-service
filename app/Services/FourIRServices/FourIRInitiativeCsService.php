@@ -254,6 +254,9 @@ class FourIRInitiativeCsService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+        if (!empty($data['experts'])) {
+            $data["experts"] = isset($data['experts']) && is_array($data['experts']) ? $data['experts'] : explode(',', $data['experts']);
+        }
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
@@ -264,7 +267,6 @@ class FourIRInitiativeCsService
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
-
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA, ValidationException::withMessages([
                 'Complete Tna report step first.[24000]'
             ]));
