@@ -223,6 +223,7 @@ class NascibMember extends BaseModel
         'export_type' => 'array',
         'import_type' => 'array',
         'bank_account_type' => 'array',
+        'business_type_services' => 'array'
     ];
 
 }

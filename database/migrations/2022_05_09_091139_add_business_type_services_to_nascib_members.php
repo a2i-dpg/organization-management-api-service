@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldBusinessTypeServiceIdToNascibMembers extends Migration
+class AddBusinessTypeServicesToNascibMembers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddFieldBusinessTypeServiceIdToNascibMembers extends Migration
     public function up()
     {
         Schema::table('nascib_members', function (Blueprint $table) {
-            $table->unsignedInteger("business_type_service_id")->after("business_type");
+            $table->json("business_type_services")->after("business_type");
         });
     }
 
@@ -26,7 +26,7 @@ class AddFieldBusinessTypeServiceIdToNascibMembers extends Migration
     public function down()
     {
         Schema::table('nascib_members', function (Blueprint $table) {
-            $table->dropColumn('business_type_service_id');
+            $table->dropColumn('business_type_services');
         });
     }
 }
