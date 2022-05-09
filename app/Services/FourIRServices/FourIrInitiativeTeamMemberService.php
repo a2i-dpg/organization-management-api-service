@@ -386,6 +386,7 @@ class FourIrInitiativeTeamMemberService
 
         return Validator::make($request->all(), [
             'four_ir_initiative_id' => 'required|int',
+            "team_type"=>'nullable|int',
             'email' => 'nullable',
             'phone_number' => 'nullable',
             'role' => 'nullable',
