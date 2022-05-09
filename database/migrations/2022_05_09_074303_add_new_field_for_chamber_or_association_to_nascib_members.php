@@ -27,7 +27,8 @@ class AddNewFieldForChamberOrAssociationToNascibMembers extends Migration
     public function down()
     {
         Schema::table('nascib_members', function (Blueprint $table) {
-            $table->dropColumn(['chamber_or_association_membership_id', 'chamber_or_association_last_membership_renewal_date']);
+            $table->dropColumn('chamber_or_association_membership_id');
+            $table->dropColumn('chamber_or_association_last_membership_renewal_date');
         });
     }
 }

@@ -599,10 +599,12 @@ class NascibMemberService
                 'max:5000'
             ];
         } else {
-            $rules['business_type_service_id'] = [
+            $rules['business_type_services'] = [
                 "required",
-                "integer",
-                'exists:nascib_business_type_services,id'
+                "array"
+            ];
+            $rules['business_type_services.*'] = [
+                "required"
             ];
         }
         /** other Authority */
