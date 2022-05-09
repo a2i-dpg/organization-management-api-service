@@ -144,6 +144,16 @@ class NascibMember extends BaseModel
         self::OTHER_AUTHORITY_KEY => 'অন্যন্য'
     ];
 
+    public const FACTORY_CATEGORIES = [
+        1 => "কুটির শিল্প (র্সবােচ্চ জনবল ১৫)",
+        2 => "মাইক্রো শিল্প-(ম্যানুফেকচারিং- ১৬-৩০ জন বা তার চেয়েকম সংখ্যক শ্রমিক)",
+        3 => "মাইক্রো শিল্প-(সেবা- সর্বোচ্চ১৫ জন)",
+        4 => "ক্ষুদ্রশিল্প-(ম্যানুফেকচারিং- ৩১-১২০জন)",
+        5 => "ক্ষুদ্র শিল্প-(সবো-  ১৬-৫০জন )",
+        6 => "মাঝারি শিল্প- (ম্যানুফেকচারিং- ১২১-৩০০ জন (তৈরী পোষাক র্সবােচ্চ ১০০০ জন))",
+        7 => "মাঝারি শিল্প- (সেবা- ৫১-১২০ জন)"
+    ];
+
     public const SPECIALIZED_AREA = [
         1 => 'বাংলাদেশ রপ্তানি প্রক্রিয়াকরণ অঞ্চল (EPZ)',
         2 => 'বাংলাদেশ অর্থনৈতিক অঞ্চল (BEZA)',
@@ -182,11 +192,13 @@ class NascibMember extends BaseModel
         1 => 'Own Land',
         2 => 'Rent'
     ];
-
+    public const BUSINESS_TYPE_MANUFACTURING = 1;
+    public const BUSINESS_TYPE_SERVICE = 2;
+    public const BUSINESS_TYPE_TRADING = 3;
     public const BUSINESS_TYPE = [
-        1 => 'ম্যানুফ্যাকচারিং',
-        2 => 'সার্ভিস',
-        3 => 'ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)',
+        self::BUSINESS_TYPE_MANUFACTURING => 'ম্যানুফ্যাকচারিং',
+        self::BUSINESS_TYPE_SERVICE => 'সার্ভিস',
+        self::BUSINESS_TYPE_TRADING => 'ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)',
     ];
 
     public const YES_NO = [
@@ -197,8 +209,8 @@ class NascibMember extends BaseModel
     public const APPLICATION_TYPE_NEW = "NEW_APPLICATION";
     public const APPLICATION_TYPE_RENEW = "RENEW_APPLICATION";
     public const APPLICATION_TYPE = [
-        self::APPLICATION_TYPE_NEW => "New Application",
-        self::APPLICATION_TYPE_RENEW => "Renew Application"
+        self::APPLICATION_TYPE_NEW => "নতুন",
+        self::APPLICATION_TYPE_RENEW => "নবায়ন"
     ];
 
     public const PAYMENT_GATEWAY_PAGE_URL_PREFIX = "member-registration-payment-method";
