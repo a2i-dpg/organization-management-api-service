@@ -1130,6 +1130,35 @@
                 "description": "API endpoint to Insert a FourIR Cs. A successful request response will show 200 HTTP status code",
                 "requestBody": {
                     "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_cs"
+                            },
+                            "examples": {
+                                "WITH JSON DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id":1,
+                                        "experts":[{
+                                            "name": "string",
+                                            "name_en": "string",
+                                            "designation": "string",
+                                            "organization": "string",
+                                            "organization_en": "string",
+                                            "mobile": "01720588884",
+                                            "email": "string@gmail.com"
+                                        }],
+                                        "level_from":"2",
+                                        "level_to":"3",
+                                        "approved_by":1,
+                                        "developed_organization_name":"hjgh",
+                                        "sector_name": "fhyfg",
+                                        "supported_organization_name":"fghfg"
+                                    }
+                                }
+                            }
+                        },
                         "application/x-www-form-urlencoded": {
                             "schema": {
                                 "$ref": "#/components/schemas/4ir_cs"
