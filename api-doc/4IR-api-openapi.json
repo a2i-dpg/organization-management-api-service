@@ -3008,45 +3008,41 @@
                     },
                     "experts": {
                         "type": "array",
-                        "properties": {
-                            "items": {
-                                "name": {
-                                    "type": "string"
-                                },
-                                "name_en": {
-                                    "type" : "string"
-                                },
-                                "designation" : {
-                                    "type" : "string"
-                                },
-                                "organization": {
-                                    "type": "string"
-                                }
-                            }
+                        "items": {
+                            "$ref": "#/components/schemas/4ir_cs_experts"
                         }
+                    },
+                    "level_from": {
+                        "type": "integer"
+                    },
+                    "level_to": {
+                        "type": "integer"
+                    },
+                    "approved_by": {
+                        "type": "integer"
+                    },
+                    "developed_organization_name": {
+                        "type": "string"
+                    },
+                    "developed_organization_name_en": {
+                        "type": "string"
+                    },
+                    "sector_name": {
+                        "type": "string"
+                    },
+                    "supported_organization_name": {
+                        "type": "string"
+                    },
+                    "supported_organization_name_en": {
+                        "type": "string"
+                    },
+                    "file_path": {
+                        "type": "string"
+                    },
+                    "comments": {
+                        "type": "string"
+                    },
 
-                    },
-                    "occupation_name_en": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "type": "string"
-                    },
-                    "start_time": {
-                        "type": "string"
-                    },
-                    "end_time": {
-                        "type": "string"
-                    },
-                    "venue": {
-                        "type": "string"
-                    },
-                    "venue_en": {
-                        "type": "string"
-                    },
-                    "invite_others": {
-                        "type": "string"
-                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -3057,8 +3053,34 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","occupation_name","date","venue","invite_others"
+                    "four_ir_initiative_id","experts","level_from","level_to","approved_by","developed_organization_name","sector_name","supported_organization_name"
                 ]
+            },
+            "4ir_cs_experts": {
+                "type": "object",
+                "properties":{
+                    "name": {
+                        "type": "string"
+                    },
+                    "name_en": {
+                        "type" : "string"
+                    },
+                    "designation" : {
+                        "type" : "string"
+                    },
+                    "organization": {
+                        "type": "string"
+                    },
+                    "organization_en": {
+                        "type": "string"
+                    },
+                    "mobile": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
             }
         },
         "parameters": {
