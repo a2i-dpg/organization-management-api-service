@@ -93,7 +93,7 @@ class NascibMemberController extends Controller
                         "title" => $value
                     ];
                 }, array_keys(NascibMember::AUTHORIZED_AUTHORITY), NascibMember::AUTHORIZED_AUTHORITY),
-                "industry_categories" => array_map(function ($index, $value) {
+                "factory_categories" => array_map(function ($index, $value) {
                     return [
                         "id" => $index,
                         "title" => $value
