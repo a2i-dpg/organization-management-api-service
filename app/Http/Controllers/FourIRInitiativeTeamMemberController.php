@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTeamMember;
 use App\Services\FourIRServices\FourIrInitiativeTeamMemberService;
 use Carbon\Carbon;
