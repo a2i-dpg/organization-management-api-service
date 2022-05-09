@@ -1132,7 +1132,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_showcasing"
+                                "$ref": "#/components/schemas/4ir_cs"
                             }
                         }
                     }
@@ -2965,6 +2965,66 @@
                     },
                     "occupation_name": {
                         "type": "string"
+                    },
+                    "occupation_name_en": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string"
+                    },
+                    "start_time": {
+                        "type": "string"
+                    },
+                    "end_time": {
+                        "type": "string"
+                    },
+                    "venue": {
+                        "type": "string"
+                    },
+                    "venue_en": {
+                        "type": "string"
+                    },
+                    "invite_others": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_initiative_id","occupation_name","date","venue","invite_others"
+                ]
+            },
+            "4ir_cs": {
+                "type": "object",
+                "properties": {
+                    "four_ir_initiative_id": {
+                        "type": "integer"
+                    },
+                    "experts": {
+                        "type": "array",
+                        "properties": {
+                            "items": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "name_en": {
+                                    "type" : "string"
+                                },
+                                "designation" : {
+                                    "type" : "string"
+                                },
+                                "organization": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+
                     },
                     "occupation_name_en": {
                         "type": "string"

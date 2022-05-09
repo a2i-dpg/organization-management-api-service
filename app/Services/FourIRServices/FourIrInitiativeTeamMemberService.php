@@ -33,6 +33,7 @@ class FourIrInitiativeTeamMemberService
     {
         $fourIRProjectId = $request['four_ir_initiative_id'] ?? "";
         $email = $request['email'] ?? "";
+        $teamType = $request['team_type'] ?? "";
         $phoneNumber = $request['phone_number'] ?? "";
         $role = $request['role'] ?? "";
         $designation = $request['designation'] ?? "";
@@ -79,6 +80,10 @@ class FourIrInitiativeTeamMemberService
 
         if (!empty($fourIRProjectId)) {
             $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.four_ir_initiative_id', $fourIRProjectId);
+        }
+
+        if (!empty($teamType)) {
+            $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.team_type', $teamType);
         }
 
         if (!empty($email)) {
@@ -194,7 +199,7 @@ class FourIrInitiativeTeamMemberService
     private function updateInitiativeStepper(array $data)
     {
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-        $initiative->form_step = $data['team_type'] == FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE ? FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM : FourIRInitiative::FORM_STEP_EXPERT_TEAM;
+        $initiative->form_step = $data['team_type'] == FourIRInitiativeTeamMember:: IMPLEMENTING_TEAM_TYPE ? FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM : FourIRInitiative::FORM_STEP_EXPERT_TEAM;
         $initiative->save();
     }
 
