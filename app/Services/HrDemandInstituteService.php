@@ -32,6 +32,7 @@ class HrDemandInstituteService
     public function getHrDemandInstituteList(array $request, Carbon $startTime): array
     {
         $hrDemandId = $request['hr_demand_id'] ?? "";
+        $skillIds = $request['skill_ids'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -62,6 +63,15 @@ class HrDemandInstituteService
             $join->on('organizations.id', '=', 'hr_demands.organization_id')
                 ->whereNull('organizations.deleted_at');
         });
+
+        if(!empty($skillIds)){
+            $hrDemandBuilder->join('hr_demand_skills', function ($join) {
+                $join->on('hr_demand_skills.hr_demand_id', '=', 'hr_demands.id')
+                    ->whereNull('organizations.deleted_at');
+            });
+            $hrDemandBuilder->whereIn('hr_demand_skills.skill_id', $skillIds);
+            $hrDemandBuilder->groupBy('hr_demands.id');
+        }
 
         if (!empty($hrDemandId)) {
             $hrDemandBuilder->where('hr_demand_institutes.hr_demand_id', $hrDemandId);
@@ -482,6 +492,15 @@ class HrDemandInstituteService
         return Validator::make($requestData, [
             'hr_demand_id' => [
                 'nullable',
+                'int'
+            ],
+            'skill_ids' => [
+                'nullable',
+                'array',
+                'min:1'
+            ],
+            'skill_ids.*' => [
+                'required',
                 'int'
             ],
             'institute_id' => [

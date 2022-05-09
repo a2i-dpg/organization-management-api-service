@@ -33,6 +33,7 @@ class FourIrInitiativeTeamMemberService
     {
         $fourIRProjectId = $request['four_ir_initiative_id'] ?? "";
         $email = $request['email'] ?? "";
+        $teamType = $request['team_type'] ?? "";
         $phoneNumber = $request['phone_number'] ?? "";
         $role = $request['role'] ?? "";
         $designation = $request['designation'] ?? "";
@@ -79,6 +80,10 @@ class FourIrInitiativeTeamMemberService
 
         if (!empty($fourIRProjectId)) {
             $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.four_ir_initiative_id', $fourIRProjectId);
+        }
+
+        if (!empty($teamType)) {
+            $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.team_type', $teamType);
         }
 
         if (!empty($email)) {
@@ -182,7 +187,20 @@ class FourIrInitiativeTeamMemberService
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
 
+        $this->updateInitiativeStepper($data);
+
         return $fourIrProjectTeamMember;
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    private function updateInitiativeStepper(array $data)
+    {
+        $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
+        $initiative->form_step = $data['team_type'] == FourIRInitiativeTeamMember:: IMPLEMENTING_TEAM_TYPE ? FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM : FourIRInitiative::FORM_STEP_EXPERT_TEAM;
+        $initiative->save();
     }
 
     /**
@@ -214,7 +232,7 @@ class FourIrInitiativeTeamMemberService
     public function update(FourIRInitiativeTeamMember $fourIrProjectTeamMember, array $data): FourIRInitiativeTeamMember
     {
         /** Username can't be updated */
-        if(!empty($data['phone_number'])){
+        if (!empty($data['phone_number'])) {
             unset($data['phone_number']);
         }
 
@@ -265,8 +283,8 @@ class FourIrInitiativeTeamMemberService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
-        if(!empty($data['four_ir_initiative_id']) && !empty($data['team_type'])){
-            if($data['team_type'] == FourIRInitiativeTeamMember::EXPERT_TEAM_TYPE) {
+        if (!empty($data['four_ir_initiative_id'] && !empty($data['team_type']))) {
+            if ($data['team_type'] == FourIRInitiativeTeamMember::EXPERT_TEAM_TYPE) {
                 $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
                 throw_if(!empty($initiative) && $initiative->form_step < FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM, ValidationException::withMessages([
                     'Complete Implementing team step first.[24000]'
@@ -315,10 +333,10 @@ class FourIrInitiativeTeamMemberService
                 'min:6',
                 Rule::unique('four_ir_initiative_team_members')
                     ->ignore($id)
-                    ->where(function (\Illuminate\Database\Query\Builder $query) use($request) {
-                        return $query->where('team_type',$request->input('team_type'))
-                              ->whereNull('deleted_at');
-                }),
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
+                        return $query->where('team_type', $request->input('team_type'))
+                            ->whereNull('deleted_at');
+                    }),
             ],
             'designation' => [
                 'required',
@@ -404,12 +422,12 @@ class FourIrInitiativeTeamMemberService
                 'required',
                 'int',
                 Rule::in(FourIRInitiativeTeamMember::TEAM_TYPES),
-                function ($attr, $value, $failed) use($data) {
+                function ($attr, $value, $failed) use ($data) {
                     $teamMember = FourIRInitiativeTeamMember::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
                         ->where('team_type', $value)
                         ->first();
-                    if(empty($teamMember)){
-                        if($value == FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE){
+                    if (empty($teamMember)) {
+                        if ($value == FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE) {
                             $failed("At least one implementing team member should be registered for this Initiative!");
                         } else {
                             $failed("At least one expert team member should be registered for this Initiative!");
@@ -435,17 +453,17 @@ class FourIrInitiativeTeamMemberService
 
         $payload = [];
 
-        if($data['team_type'] == FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE){
+        if ($data['team_type'] == FourIRInitiativeTeamMember::IMPLEMENTING_TEAM_TYPE) {
             $payload['implementing_team_launching_date'] = $data['launching_date'];
-            if($initiative->form_step < FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM){
+            if ($initiative->form_step < FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM;
             }
         } else {
             $payload['expert_team_launching_date'] = $data['launching_date'];
-            if($initiative->form_step < FourIRInitiative::FORM_STEP_EXPERT_TEAM){
+            if ($initiative->form_step < FourIRInitiative::FORM_STEP_EXPERT_TEAM) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_EXPERT_TEAM;
             }
-            if($initiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_TRUE && $initiative->completion_step < FourIRInitiative::COMPLETION_STEP_TWO){
+            if ($initiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_TRUE && $initiative->completion_step < FourIRInitiative::COMPLETION_STEP_TWO) {
                 $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_TWO;
             }
         }
