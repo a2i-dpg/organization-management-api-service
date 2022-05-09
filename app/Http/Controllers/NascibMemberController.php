@@ -6,6 +6,7 @@ use App\Exceptions\CustomException;
 use App\Models\BaseModel;
 use App\Models\IndustryAssociation;
 use App\Models\MembershipType;
+use App\Models\NascibBusinessTypeService;
 use App\Models\Organization;
 use App\Models\NascibMember;
 use App\Models\SmefCluster;
@@ -92,6 +93,12 @@ class NascibMemberController extends Controller
                         "title" => $value
                     ];
                 }, array_keys(NascibMember::AUTHORIZED_AUTHORITY), NascibMember::AUTHORIZED_AUTHORITY),
+                "factory_categories" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::FACTORY_CATEGORIES), NascibMember::FACTORY_CATEGORIES),
                 "specialized_area" => array_map(function ($index, $value) {
                     return [
                         "id" => $index,
@@ -134,7 +141,14 @@ class NascibMemberController extends Controller
                         "title" => $value
                     ];
                 }, array_keys(NascibMember::BUSINESS_TYPE), NascibMember::BUSINESS_TYPE),
+                "business_type_services" => NascibBusinessTypeService::all()->toArray(),
                 "membership_types" => $membershipType->toArray(),
+                "application_types" => array_map(function ($index, $value) {
+                    return [
+                        "id" => $index,
+                        "title" => $value
+                    ];
+                }, array_keys(NascibMember::APPLICATION_TYPE), NascibMember::APPLICATION_TYPE),
                 "smef_clusters" => SmefCluster::all()->toArray()
             ],
             '_response_status' => [
@@ -162,17 +176,16 @@ class NascibMemberController extends Controller
 
         if (!empty($validated['other_authority'])) {
             $authorizedAuthority = $validated['authorized_authority'];
-            $validated['authorized_authority']=array_merge($authorizedAuthority, [$validated['other_authority']]);
+            $validated['authorized_authority'] = array_merge($authorizedAuthority, [$validated['other_authority']]);
             unset($validated['other_authority']);
         }
-
 
 
         $httpStatusCode = ResponseAlias::HTTP_CREATED;
 
         DB::beginTransaction();
         try {
-            $validated['code']=CodeGenerateService::getIndustryCode();
+            $validated['code'] = CodeGenerateService::getIndustryCode();
             [$organization, $nascibMemberData] = $this->nascibMemberService->registerNascib($organization, $organizationMember, $validated);
             $validated['organization_id'] = $organization->id;
             $validated['password'] = BaseModel::ADMIN_CREATED_USER_DEFAULT_PASSWORD;

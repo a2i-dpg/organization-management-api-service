@@ -120,7 +120,15 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['code'] = ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
             $errors['_response_status']['message'] = $e->getMessage();
         } elseif ($e instanceof Exception) {
-            $errors['_response_status']['message'] = $e->getMessage();
+            $messageBody = json_decode($e->getMessage(), true);
+            $errors['_response_status']['code'] = $e->getCode();
+
+            if (!empty($messageBody['errors'])) {
+                $errors['errors'] = $messageBody['errors'];
+            }
+            if (!empty($messageBody['message'])) {
+                $errors['_response_status']['message'] = $messageBody['message'];
+            }
         }
         return response()->json($errors, $errors['_response_status']['code']);
 
