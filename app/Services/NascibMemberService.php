@@ -604,9 +604,7 @@ class NascibMemberService
                 "array",
             ];
             $rules['business_type_services.*'] = [
-                "required",
-                "integer",
-                'exists:nascib_business_type_services,id'
+                "required"
             ];
 
         }
