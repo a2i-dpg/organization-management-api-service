@@ -61,6 +61,7 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        Log::info("request data".json_encode($request->all()));
         Log::info("file request data".json_encode($request->file('workshop_method_file')));
 
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
