@@ -109,8 +109,9 @@ class FourIRInitiativeTnaFormatController extends Controller
                 $this->fourIRFileLogService->updateFileLog($fourIrInitiative->tna_file_path, $validated, FourIRInitiative::FILE_LOG_TNA_STEP);
             }
 
+
             /** Save the tna_file_path & update the stepper (form_step & completion_step) information */
-            $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
+           $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
 
             /** Store Or Update Excel rows with Tna Format*/
             if(!empty($workshopExcelRows)){
