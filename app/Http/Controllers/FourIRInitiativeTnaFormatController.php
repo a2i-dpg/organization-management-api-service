@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -60,6 +61,8 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        Log::info("file request data".json_encode($request->file('workshop_method_file')));
+
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
 
         $fourIrInitiative = FourIRInitiative::findOrFail($validated['four_ir_initiative_id']);
