@@ -149,7 +149,7 @@ class FourIRInitiativeCblmService
         );
         $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id');
 
-        $fourIrInitiativeCsCurriculumCblmBuilder->with('csCurriculumCblmExperts');
+        $fourIrInitiativeCsCurriculumCblmBuilder->with('experts');
 
         $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.id', '=', $id);
 

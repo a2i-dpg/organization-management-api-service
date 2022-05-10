@@ -42,7 +42,7 @@ class FourIRInitiativeCsCurriculumCblm extends BaseModel
     /**
      * @return HasMany
      */
-    public function csCurriculumCblmExperts(): HasMany
+    public function experts(): HasMany
     {
         return $this->hasMany(FourIrCsCurriculumCblmExpert::class, 'four_ir_initiative_cs_curriculum_cblm_id', 'id');
     }
