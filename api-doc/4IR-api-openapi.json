@@ -2073,26 +2073,39 @@
                                 "$ref": "#/components/schemas/4ir_tots"
                             },
                             "examples": {
-                                "WITH JSON DEMO": {
+                                "DEMO": {
                                     "summary": "An example of Expert JSON",
                                     "description": "An example of Expert JSON, using `value` property",
                                     "value": {
-                                        "four_ir_initiative_id":1,
-                                        "experts":[{
-                                            "name": "string",
-                                            "name_en": "string",
-                                            "designation": "string",
-                                            "organization": "string",
-                                            "organization_en": "string",
-                                            "mobile": "01720588884",
-                                            "email": "string@gmail.com"
-                                        }],
-                                        "level_from":"2",
-                                        "level_to":"3",
-                                        "approved_by":1,
-                                        "developed_organization_name":"hjgh",
-                                        "sector_name": "fhyfg",
-                                        "supported_organization_name":"fghfg"
+                                        "four_ir_initiative_id": 1,
+                                        "master_trainer_name":"DGp",
+                                        "master_trainer_name_en":"DG",
+                                        "master_trainer_mobile":"01720588884",
+                                        "master_trainer_address":"DG",
+                                        "master_trainer_address_en":"DG",
+                                        "master_trainer_email":"ad@email.com",
+                                        "organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ],
+                                        "co_organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ]
                                     }
                                 }
                             }
@@ -2191,29 +2204,42 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_curriculum"
+                                "$ref": "#/components/schemas/4ir_tots"
                             },
                             "examples": {
-                                "WITH JSON DEMO": {
+                                "DEMO": {
                                     "summary": "An example of Expert JSON",
                                     "description": "An example of Expert JSON, using `value` property",
                                     "value": {
-                                        "four_ir_initiative_id":1,
-                                        "experts":[{
-                                            "name": "string",
-                                            "name_en": "string",
-                                            "designation": "string",
-                                            "organization": "string",
-                                            "organization_en": "string",
-                                            "mobile": "01720588884",
-                                            "email": "string@gmail.com"
-                                        }],
-                                        "level_from":"2",
-                                        "level_to":"3",
-                                        "approved_by":1,
-                                        "developed_organization_name":"hjgh",
-                                        "sector_name": "fhyfg",
-                                        "supported_organization_name":"fghfg"
+                                        "four_ir_initiative_id": 1,
+                                        "master_trainer_name":"DGp",
+                                        "master_trainer_name_en":"DG",
+                                        "master_trainer_mobile":"01720588884",
+                                        "master_trainer_address":"DG",
+                                        "master_trainer_address_en":"DG",
+                                        "master_trainer_email":"ad@email.com",
+                                        "organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ],
+                                        "co_organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ]
                                     }
                                 }
                             }
@@ -2260,6 +2286,275 @@
                 ],
                 "summary": "Delete a 4IR Initiation Tot",
                 "description": "API endpoint to delete a 4IR Initiation Tot. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrTotId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Tot deleted successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create-approve-courses": {
+            "get": {
+                "tags": [
+                    "FourIR  Create Approve Courses"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
+                    }
+                ],
+                "summary": "Get all 4IR Create Approve Courses",
+                "responses": {
+                    "200": {
+                        "description": "Get all Create Approve Courses",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "four_ir_initiative_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "four_ir_initiative_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": 14,
+                                            "updated_by": 14,
+                                            "created_at": "2022-04-21T07:18:19.000000Z",
+                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR  Create Approve Courses"
+                ],
+                "summary": "Insert a 4IR Create Approve Courses",
+                "description": "API endpoint to Insert a Create Approve Courses. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_create_and_approve"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_initiative_id": 1,
+                                        "workshop_name": "ttthjkjhkttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "file_path": "gfhgf",
+                                        "created_by": 14,
+                                        "updated_by": 14,
+                                        "updated_at": "2022-04-21T07:28:49.000000Z",
+                                        "created_at": "2022-04-21T07:28:49.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Tot added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create-approve-courses/{fourIrTotId}": {
+            "get": {
+                "tags": [
+                    "FourIR  Create Approve Courses"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrTotId"
+                    }
+                ],
+                "summary": "Get a 4IR Create Approve Courses",
+                "responses": {
+                    "200": {
+                        "description": "Get a Create Approve Courses",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "four_ir_initiative_id": 1,
+                                        "file_path": "gfhgf",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 14,
+                                        "created_at": null,
+                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            },
+            "put": {
+                "tags": [
+                    "FourIR  Create Approve Courses"
+                ],
+                "summary": "Update a 4IR Create Approve Courses",
+                "description": "API endpoint to update a  Create Approve Courses. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrTotId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_tots"
+                            },
+                            "examples": {
+                                "DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id": 1,
+                                        "master_trainer_name":"DGp",
+                                        "master_trainer_name_en":"DG",
+                                        "master_trainer_mobile":"01720588884",
+                                        "master_trainer_address":"DG",
+                                        "master_trainer_address_en":"DG",
+                                        "master_trainer_email":"ad@email.com",
+                                        "organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ],
+                                        "co_organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "four_ir_initiative_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Tot updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR  Create Approve Courses"
+                ],
+                "summary": "Delete a 4IR Initiation Create Approve Courses",
+                "description": "API endpoint to delete a 4IR Create Approve Courses. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/fourIrTotId"
@@ -3600,13 +3895,13 @@
                     "organizers": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/4ir_experts"
+                            "$ref": "#/components/schemas/4ir_organizer"
                         }
                     },
                     "co_organizers": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/4ir_experts"
+                            "$ref": "#/components/schemas/4ir_co_organizer"
                         }
                     },
                     "participants_file": {
@@ -3770,6 +4065,159 @@
                         "type": "string"
                     }
                 }
+            },
+            "4ir_organizer": {
+                "type": "object",
+                "properties":{
+                    "name": {
+                        "type": "string"
+                    },
+                    "name_en": {
+                        "type" : "string"
+                    },
+                    "mobile" : {
+                        "type" : "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "address_en": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "4ir_co_organizer": {
+                "type": "object",
+                "properties":{
+                    "name": {
+                        "type": "string"
+                    },
+                    "name_en": {
+                        "type" : "string"
+                    },
+                    "mobile" : {
+                        "type" : "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "address_en": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "4ir_create_and_approve": {
+                "type": "object",
+                "properties": {
+                    "four_ir_initiative_id": {
+                        "type": "integer"
+                    },
+                    "industry_association_id": {
+                        "type": "integer"
+                    },
+                    "branch_id": {
+                        "type": "integer"
+                    },
+                    "program_id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "level": {
+                        "type": "integer"
+                    },
+                    "title_en": {
+                        "type": "string"
+                    },
+                    "course_fee": {
+                        "type": "integer"
+                    },
+                    "duration": {
+                        "type": "integer"
+                    },
+                    "overview": {
+                        "type": "string"
+                    },
+                    "overview_en": {
+                        "type": "string"
+                    },
+                    "target_group": {
+                        "type": "string"
+                    },
+                    "target_group_en": {
+                        "type": "string"
+                    },
+                    "objectives": {
+                        "type": "string"
+                    },
+                    "objectives_en": {
+                        "type": "string"
+                    },
+                    "lessons": {
+                        "type": "string"
+                    },
+                    "lessons_en": {
+                        "type": "string"
+                    },
+                    "language_medium": {
+                        "type": "string"
+                    },
+                    "training_methodology": {
+                        "type": "string"
+                    },
+                    "training_methodology_en": {
+                        "type": "string"
+                    },
+                    "evaluation_system": {
+                        "type": "string"
+                    },
+                    "evaluation_system_en": {
+                        "type": "string"
+                    },
+                    "prerequisite": {
+                        "type": "string"
+                    },
+                    "prerequisite_en": {
+                        "type": "string"
+                    },
+                    "eligibility": {
+                        "type": "string"
+                    },
+                    "eligibility_en": {
+                        "type": "string"
+                    },
+                    "cover_image": {
+                        "type": "string"
+                    },
+                    "application_form_settings": {
+                        "type": "string"
+                    },
+                    "skills": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_initiative_id","title","level","course_fee","language_medium","skills"
+                ]
             }
         },
         "parameters": {

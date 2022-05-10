@@ -114,7 +114,9 @@ class FourIRCreateApproveCourseService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
-
+        if (!empty($data['skills'])) {
+            $data["skills"] = isset($data['skills']) && is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
+        }
         $customMessage = [
             'row_status.in' => 'Row status must be either 1 or 0. [30000]'
         ];
