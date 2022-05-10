@@ -23,7 +23,7 @@ class MembershipTypeSeeder extends Seeder
         $membershipTypes = [
             [
                 "industry_association_id" => 2,
-                "name" => "সহযোগী",
+                "name" => "সহযোগী সদস্য",
                 "name_en" => "Associate Member",
                 "fee" => 1000,
                 "renewal_fee" => 800,
