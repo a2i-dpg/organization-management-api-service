@@ -14,7 +14,7 @@ class AddBusinessTypeServicesToNascibMembers extends Migration
     public function up()
     {
         Schema::table('nascib_members', function (Blueprint $table) {
-            $table->json("business_type_services")->after("business_type")->nullable();
+            $table->json("business_type_services")->after("business_type");
         });
     }
 

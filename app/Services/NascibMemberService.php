@@ -601,12 +601,11 @@ class NascibMemberService
         } else {
             $rules['business_type_services'] = [
                 "required",
-                "array",
+                "array"
             ];
             $rules['business_type_services.*'] = [
                 "required"
             ];
-
         }
         /** other Authority */
         if (!empty($request->get('other_authority')) && is_array($request->get('other_authority'))) {
