@@ -135,7 +135,6 @@ class FourIRInitiativeTnaFormatService
         $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
             ->where('method_type', $tnaMethod)
             ->first();
-
         if(empty($tnaFormat)){
             /** First, Create TNA format */
             $tnaFormat = new FourIRInitiativeTnaFormat();

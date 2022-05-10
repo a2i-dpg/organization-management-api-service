@@ -2418,14 +2418,14 @@
                 }
             }
         },
-        "/create-approve-courses/{fourIrTotId}": {
+        "/create-approve-courses/{fourIrCreateAndApproveId}": {
             "get": {
                 "tags": [
                     "FourIR  Create Approve Courses"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrTotId"
+                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
                     }
                 ],
                 "summary": "Get a 4IR Create Approve Courses",
@@ -2466,7 +2466,7 @@
                 "description": "API endpoint to update a  Create Approve Courses. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrTotId"
+                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
                     }
                 ],
                 "requestBody": {
@@ -2557,7 +2557,7 @@
                 "description": "API endpoint to delete a 4IR Create Approve Courses. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrTotId"
+                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
                     }
                 ],
                 "responses": {
@@ -4277,6 +4277,15 @@
             },
             "fourIrTotId": {
                 "name": "fourIrTotId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrCreateAndApproveId": {
+                "name": "fourIrCreateAndApproveId",
                 "in": "path",
                 "required": true,
                 "schema": {
