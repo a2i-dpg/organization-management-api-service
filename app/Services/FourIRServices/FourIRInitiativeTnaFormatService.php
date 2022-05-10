@@ -115,7 +115,10 @@ class FourIRInitiativeTnaFormatService
      */
     public function excelDataValidate($file, int $tnaMethod): null|array
     {
+        Log::info("File Type: ".gettype($file));
+        Log::info('File: '.file_get_contents($file));
         $excelData = Excel::toCollection(new FourIrTnaMethodsImport(), $file)->toArray();
+
         $rows = null;
         if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
