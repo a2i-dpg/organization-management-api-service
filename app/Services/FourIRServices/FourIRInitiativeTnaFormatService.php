@@ -131,7 +131,7 @@ class FourIRInitiativeTnaFormatService
      * @param int $tnaMethod
      * @return void
      */
-    public function tnaFormatMethodStore(array $data, array $rows, int $tnaMethod): void
+    public function tnaFormatMethodStore(array $data, array|null $rows, int $tnaMethod): void
     {
         $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
             ->where('method_type', $tnaMethod)
@@ -140,14 +140,21 @@ class FourIRInitiativeTnaFormatService
         if (empty($tnaFormat)) {
             /** First, Create TNA format */
             $tnaFormat = new FourIRInitiativeTnaFormat();
-            $tnaFormat->fill([
+            $payload = [
                 "four_ir_initiative_id" => $data['four_ir_initiative_id'],
-                "method_type" => $tnaMethod,
-                "workshop_numbers" => $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]],
                 "accessor_type" => $data['accessor_type'],
                 "accessor_id" => $data['accessor_id'],
                 "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
-            ]);
+            ];
+            if (!empty($tnaMethod)) {
+                $payload["method_type"] = $tnaMethod;
+            }
+
+            if (!empty($data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]])) {
+                $payload["workshop_numbers"] = $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]];
+            }
+
+            $tnaFormat->fill($payload);
             $tnaFormat->save();
 
         } else {
@@ -191,11 +198,9 @@ class FourIRInitiativeTnaFormatService
 
         if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
-
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_EXPERT_TEAM, ValidationException::withMessages([
                 'Complete Expert team step first.[24000]'
             ]));

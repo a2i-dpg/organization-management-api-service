@@ -49,7 +49,7 @@ class FourIRInitiativeTnaFormatController extends Controller
 
         $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
         $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -62,11 +62,7 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        Log::info("request data".json_encode($request->all()));
-        Log::info("file request data".json_encode($request->hasFile('workshop_method_file')));
-
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
-
         $fourIrInitiative = FourIRInitiative::findOrFail($validated['four_ir_initiative_id']);
 
         /** Fetch the files from Request */
@@ -85,22 +81,22 @@ class FourIRInitiativeTnaFormatController extends Controller
         $otherExcelRows = null;
 
         /** validate Excel files & store excel rows */
-        if(!empty($workshopFile)){
+        if (!empty($workshopFile)) {
             $workshopExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($workshopFile, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
         }
-        if(!empty($fgdFile)){
+        if (!empty($fgdFile)) {
             $fgdExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($fgdFile, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
         }
-        if(!empty($industryVisitFile)){
+        if (!empty($industryVisitFile)) {
             $industryVisitExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($industryVisitFile, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
         }
-        if(!empty($desktopResearchFile)){
+        if (!empty($desktopResearchFile)) {
             $desktopResearchExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($desktopResearchFile, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
         }
-        if(!empty($existingReportFile)){
+        if (!empty($existingReportFile)) {
             $existingReportExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($existingReportFile, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
         }
-        if(!empty($otherWorkshopFile)){
+        if (!empty($otherWorkshopFile)) {
             $otherExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($otherWorkshopFile, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
         }
 
@@ -108,7 +104,7 @@ class FourIRInitiativeTnaFormatController extends Controller
             DB::beginTransaction();
 
             /** Store file_path for versioning */
-            if(empty($fourIrInitiative->tna_file_path)){
+            if (empty($fourIrInitiative->tna_file_path)) {
                 $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_TNA_STEP);
             } else {
                 $this->fourIRFileLogService->updateFileLog($fourIrInitiative->tna_file_path, $validated, FourIRInitiative::FILE_LOG_TNA_STEP);
@@ -116,7 +112,7 @@ class FourIRInitiativeTnaFormatController extends Controller
 
 
             /** Save the tna_file_path & update the stepper (form_step & completion_step) information */
-           $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
+            $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
 
             /** Store Or Update Excel rows with Tna Format*/
             $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
@@ -127,24 +123,24 @@ class FourIRInitiativeTnaFormatController extends Controller
             $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
 
 
-           /** if(!empty($workshopExcelRows)){
-                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
-            }
-            if(!empty($fgdExcelRows)){
-                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdExcelRows, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
-            }
-            if(!empty($industryVisitExcelRows)){
-                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitExcelRows, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
-            }
-            if(!empty($desktopResearchExcelRows)){
-                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchExcelRows, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
-            }
-            if(!empty($existingReportExcelRows)){
-                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
-            }
-            if(!empty($otherExcelRows)){
-                $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
-            } */
+            /** if(!empty($workshopExcelRows)){
+             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+             * }
+             * if(!empty($fgdExcelRows)){
+             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdExcelRows, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+             * }
+             * if(!empty($industryVisitExcelRows)){
+             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitExcelRows, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+             * }
+             * if(!empty($desktopResearchExcelRows)){
+             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchExcelRows, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+             * }
+             * if(!empty($existingReportExcelRows)){
+             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+             * }
+             * if(!empty($otherExcelRows)){
+             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+             * } */
 
             DB::commit();
             $response = [
@@ -155,7 +151,7 @@ class FourIRInitiativeTnaFormatController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
