@@ -21,11 +21,11 @@ class AddNewTotsField extends Migration
             $table->string('co_organiser_address')->after('co_organiser_mobile');
             $table->string('co_organiser_address_en')->after('co_organiser_address');
 
-            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_name organiser_name INT(10) VARCHAR(250)');
-            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_email organiser_email INT(10) VARCHAR(250)');
-            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_mobile organiser_mobile INT(10) VARCHAR(250)');
-            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_address organiser_address INT(10) VARCHAR(250)');
-            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_address_en organiser_address_en INT(10) VARCHAR(250)');
+            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_name organiser_name  VARCHAR(250)');
+            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_email organiser_email  VARCHAR(250)');
+            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_mobile organiser_mobile  VARCHAR(250)');
+            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_address organiser_address  VARCHAR(250)');
+            DB::statement('ALTER TABLE four_ir_initiative_tots CHANGE master_trainer_address_en organiser_address_en  VARCHAR(250)');
 
         });
     }
