@@ -90,16 +90,17 @@ class FourIRInitiativeTnaFormatService
      */
     public function store(FourIRInitiative $fourIrInitiative, array $data)
     {
+
         $payload = [];
-        if(!empty($data['file_path'])){
+        if (!empty($data['file_path'])) {
             $payload['tna_file_path'] = $data['file_path'];
         }
 
-        if($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA){
+        if ($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA) {
             $payload['form_step'] = FourIRInitiative::FORM_STEP_TNA;
         }
 
-        if($fourIrInitiative->completion_step < FourIRInitiative::COMPLETION_STEP_THREE){
+        if ($fourIrInitiative->completion_step < FourIRInitiative::COMPLETION_STEP_THREE) {
             $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_THREE;
         }
 
@@ -136,7 +137,7 @@ class FourIRInitiativeTnaFormatService
         $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
             ->where('method_type', $tnaMethod)
             ->first();
-        if(empty($tnaFormat)){
+        if (empty($tnaFormat)) {
             /** First, Create TNA format */
             $tnaFormat = new FourIRInitiativeTnaFormat();
             $tnaFormat->fill([
@@ -151,7 +152,7 @@ class FourIRInitiativeTnaFormatService
         } else {
             /** Delete all previous methods data */
             $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
-            foreach ($tnaFormatMethods as $method){
+            foreach ($tnaFormatMethods as $method) {
                 $method->delete();
             }
         }
@@ -184,7 +185,7 @@ class FourIRInitiativeTnaFormatService
     {
         $data = $request->all();
 
-        if(!empty($data['four_ir_initiative_id'])){
+        if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
@@ -200,22 +201,21 @@ class FourIRInitiativeTnaFormatService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
         $rules = [
-            'four_ir_initiative_id'=>[
+            'four_ir_initiative_id' => [
                 'required',
                 'int',
                 'exists:four_ir_initiatives,id,deleted_at,NULL'
             ],
-
             'workshop_method_workshop_numbers' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['workshop_method_file']);
+                    return !empty($data['workshop_method_file']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'int'
             ],
             'workshop_method_file' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['workshop_method_workshop_numbers']);
+                    return !empty($data['workshop_method_workshop_numbers']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'mimes:xlsx, csv, xls'
@@ -223,14 +223,14 @@ class FourIRInitiativeTnaFormatService
 
             'fgd_workshop_numbers' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['fgd_workshop_file']);
+                    return !empty($data['fgd_workshop_file']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'int'
             ],
             'fgd_workshop_file' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['fgd_workshop_numbers']);
+                    return !empty($data['fgd_workshop_numbers']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'mimes:xlsx, csv, xls'
@@ -238,14 +238,14 @@ class FourIRInitiativeTnaFormatService
 
             'industry_visit_workshop_numbers' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['industry_visit_file']);
+                    return !empty($data['industry_visit_file']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'int'
             ],
             'industry_visit_file' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['industry_visit_workshop_numbers']);
+                    return !empty($data['industry_visit_workshop_numbers']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'mimes:xlsx, csv, xls'
@@ -253,14 +253,14 @@ class FourIRInitiativeTnaFormatService
 
             'desktop_research_workshop_numbers' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['desktop_research_file']);
+                    return !empty($data['desktop_research_file']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'int'
             ],
             'desktop_research_file' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['desktop_research_workshop_numbers']);
+                    return !empty($data['desktop_research_workshop_numbers']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'mimes:xlsx, csv, xls'
@@ -268,14 +268,14 @@ class FourIRInitiativeTnaFormatService
 
             'existing_report_review_workshop_numbers' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['existing_report_review_file']);
+                    return !empty($data['existing_report_review_file']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'int'
             ],
             'existing_report_review_file' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['existing_report_review_workshop_numbers']);
+                    return !empty($data['existing_report_review_workshop_numbers']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'mimes:xlsx, csv, xls'
@@ -283,14 +283,14 @@ class FourIRInitiativeTnaFormatService
 
             'others_workshop_numbers' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['others_file']);
+                    return !empty($data['others_file']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'int'
             ],
             'others_file' => [
                 Rule::requiredIf(function () use ($data) {
-                    return !empty($data['others_workshop_numbers']);
+                    return !empty($data['others_workshop_numbers']) && empty($data['operation_type']);
                 }),
                 'nullable',
                 'mimes:xlsx, csv, xls'
@@ -324,7 +324,7 @@ class FourIRInitiativeTnaFormatService
     public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($request->all(), [
-            'four_ir_initiative_id'=>'required|int'
+            'four_ir_initiative_id' => 'required|int'
         ]);
     }
 
