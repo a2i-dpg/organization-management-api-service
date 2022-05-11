@@ -126,8 +126,11 @@ class Handler extends ExceptionHandler
             if (!empty($messageBody['errors'])) {
                 $errors['errors'] = $messageBody['errors'];
             }
-            if (!empty($messageBody['message'])) {
+            else if (!empty($messageBody['message'])) {
                 $errors['_response_status']['message'] = $messageBody['message'];
+            }
+            else{
+                $errors['_response_status']['message'] =$e->getMessage();
             }
         }
         return response()->json($errors, $errors['_response_status']['code']);
