@@ -4628,12 +4628,6 @@
                             "$ref": "#/components/schemas/4ir_experts"
                         }
                     },
-                    "level_from": {
-                        "type": "integer"
-                    },
-                    "level_to": {
-                        "type": "integer"
-                    },
                     "approved_by": {
                         "type": "integer"
                     },
@@ -4669,7 +4663,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","experts","level_from","level_to","approved_by","developed_organization_name","sector_name","supported_organization_name"
+                    "four_ir_initiative_id","experts","approved_by","developed_organization_name","sector_name","supported_organization_name"
                 ]
             },
             "4ir_cblm":  {
@@ -4684,12 +4678,6 @@
                             "$ref": "#/components/schemas/4ir_experts"
                         }
                     },
-                    "level_from": {
-                        "type": "integer"
-                    },
-                    "level_to": {
-                        "type": "integer"
-                    },
                     "approved_by": {
                         "type": "integer"
                     },
@@ -4725,7 +4713,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","experts","level_from","level_to","approved_by","developed_organization_name","sector_name","supported_organization_name"
+                    "four_ir_initiative_id","experts","approved_by","developed_organization_name","sector_name","supported_organization_name"
                 ]
             },
             "4ir_tots":  {
