@@ -192,6 +192,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('scale-up', 'FourIRScaleUpController')->render();
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
+        $customRouter()->resourceRoute('sectors', 'FourIRSectorController')->render();
 
         $router->put('/set-team-launching-date', ["as" => "set.team.launching.date", "uses" => "FourIRInitiativeTeamMemberController@setTeamLaunchingDate"]);
         $router->put('/set-cell-launching-date', ["as" => "set.cell.launching.date", "uses" => "FourIRInitiativeCellController@setTeamLaunchingDate"]);

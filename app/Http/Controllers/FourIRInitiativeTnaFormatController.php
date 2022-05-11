@@ -7,6 +7,7 @@ use App\Models\FourIRInitiativeTnaFormat;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRInitiativeTnaFormatService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,8 @@ class FourIRInitiativeTnaFormatController extends Controller
     {
         Log::info("request data".json_encode($request->all()));
         Log::info("file request data".json_encode($request->hasFile('workshop_method_file')));
+
+        throw_if(!$request->hasFile('workshop_method_file'),new Exception('The uploaded file format is invalid',ResponseAlias::HTTP_UNPROCESSABLE_ENTITY));
 
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
 

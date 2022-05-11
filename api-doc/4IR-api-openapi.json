@@ -4095,6 +4095,212 @@
                     }
                 }
             }
+        },
+        "/sectors": {
+            "get": {
+                "tags": [
+                    "FourIR Sectors"
+                ],
+                "summary": "Get FourIR Sectors List",
+                "responses": {
+                    "200": {
+                        "description": "Get FourIR Sectors List",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "title_en": "fbghfg",
+                                            "title": "kibria",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2022-05-11T05:09:32.000000Z",
+                                            "updated_at": "2022-05-11T05:09:32.000000Z"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "title_en": "fbghfg",
+                                            "title": "kibria",
+                                            "row_status": 1,
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2022-05-11T05:18:18.000000Z",
+                                            "updated_at": "2022-05-11T05:18:18.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR Sectors"
+                ],
+                "summary": "Insert a FourIR Sectors",
+                "description": "API endpoint to Insert a FourIR Sectors. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_sector"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "title_en": "fbghfg",
+                                        "title": "kibria",
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "updated_at": "2022-05-11T05:20:23.000000Z",
+                                        "created_at": "2022-05-11T05:20:23.000000Z",
+                                        "id": 3
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Sectors added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sectors/{fourIrSectorId}": {
+            "get": {
+                "tags": [
+                    "FourIR Sectors"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrSectorId"
+                    }
+                ],
+                "summary": "Get a 4IR Sectors",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR Sectors",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "fbghfg",
+                                        "title": "kibria",
+                                        "row_status": 1,
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "created_at": "2022-05-11T05:09:32.000000Z",
+                                        "updated_at": "2022-05-11T05:09:32.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "FourIR Sectors"
+                ],
+                "summary": "Update a 4IR Sectors",
+                "description": "API endpoint to update a Sectors. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrSectorId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_sector"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 2,
+                                        "title": "updated",
+                                        "title_en": "fbghfg",
+                                        "row_status": 1,
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "created_at": "2022-05-11T05:18:18.000000Z",
+                                        "updated_at": "2022-05-11T05:27:16.000000Z",
+                                        "deleted_at": null
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "FourIR Sector updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FourIR Sectors"
+                ],
+                "summary": "Delete a 4IR Sectors",
+                "description": "API endpoint to delete a Sectors. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrSectorId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4IR Sectors successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     },
@@ -4581,6 +4787,28 @@
                     },
                     "given_budget": {
                         "type": "integer"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_initiative_id","approval_status","budget_approval_status","given_budget"
+                ]
+            },
+            "4ir_sector": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "title_en": {
+                        "type": "string"
                     },
                     "row_status": {
                         "type": "integer",
@@ -5084,6 +5312,15 @@
             },
             "fourIrAssessmentId": {
                 "name": "fourIrAssessmentId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrSectorId": {
+                "name": "fourIrSectorId",
                 "in": "path",
                 "required": true,
                 "schema": {
