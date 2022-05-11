@@ -19,7 +19,6 @@ N/A YET
 
 Softbd LTD
 
-
 ## RabbitMQ consume command
 ```shell
 php artisan queue:work --queue=organization.db.sync.q
