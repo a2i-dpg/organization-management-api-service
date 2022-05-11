@@ -89,8 +89,8 @@ class CreateNascibMembersTable extends Migration
             $table->string('other_sector_name_en', 191)->nullable();
             $table->unsignedTinyInteger('business_type');
             $table->string('main_product_name', 600);
-            $table->string('main_product_name_en', 191)->nullable();
             $table->text('main_material_description');
+            $table->string('main_product_name_en', 191)->nullable();
             $table->text('main_material_description_en')->nullable();
             $table->unsignedTinyInteger('is_import')->default(0)->comment('1 -> Yes, 0 -> No');
             $table->json('import_by')->nullable();

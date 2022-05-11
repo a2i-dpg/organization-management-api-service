@@ -320,13 +320,14 @@ class OrganizationService
             $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
                 $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
                     ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                    /** Only payment status is applicable for Nascib otherwise fetch active row status*/
                     ->where(function ($subQuery) {
-                        $subQuery->where("industry_association_organization.payment_status",BaseModel::PAYMENT_NOT_APPLICABLE)
-                            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
-                    })
-                    ->orWhere(function ($subQuery) {
-                        $subQuery->where("industry_association_organization.payment_status",'!=',BaseModel::PAYMENT_NOT_APPLICABLE)
-                            ->where('industry_association_organization.payment_status', BaseModel::PAYMENT_SUCCESS);
+                        $subQuery->orWhere("industry_association_organization.payment_status", BaseModel::PAYMENT_NOT_APPLICABLE)
+                            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE)
+                            ->orWhere(function ($subQueryNested) {
+                                $subQueryNested->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE)
+                                    ->where('industry_association_organization.payment_status', BaseModel::PAYMENT_SUCCESS);
+                            });
                     });
             });
         }
