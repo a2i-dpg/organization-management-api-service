@@ -119,7 +119,15 @@ class FourIRInitiativeTnaFormatController extends Controller
            $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
 
             /** Store Or Update Excel rows with Tna Format*/
-            if(!empty($workshopExcelRows)){
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdExcelRows, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitExcelRows, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchExcelRows, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+
+
+           /** if(!empty($workshopExcelRows)){
                 $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
             }
             if(!empty($fgdExcelRows)){
@@ -136,7 +144,7 @@ class FourIRInitiativeTnaFormatController extends Controller
             }
             if(!empty($otherExcelRows)){
                 $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
-            }
+            } */
 
             DB::commit();
             $response = [

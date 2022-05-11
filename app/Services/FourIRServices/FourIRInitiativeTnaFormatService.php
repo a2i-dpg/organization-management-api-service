@@ -136,6 +136,7 @@ class FourIRInitiativeTnaFormatService
         $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
             ->where('method_type', $tnaMethod)
             ->first();
+
         if (empty($tnaFormat)) {
             /** First, Create TNA format */
             $tnaFormat = new FourIRInitiativeTnaFormat();
@@ -148,6 +149,7 @@ class FourIRInitiativeTnaFormatService
                 "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
             ]);
             $tnaFormat->save();
+
         } else {
             /** Delete all previous methods data */
             $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
@@ -156,22 +158,25 @@ class FourIRInitiativeTnaFormatService
             }
         }
 
-        /** Now create TNA format methods from Excel rows */
-        foreach ($rows as $rowData) {
-            DB::beginTransaction();
-            try {
-                $rowData['four_ir_initiative_tna_format_id'] = $tnaFormat->id;
+        if (!empty($rows)) {
+            /** Now create TNA format methods from Excel rows */
+            foreach ($rows as $rowData) {
+                DB::beginTransaction();
+                try {
+                    $rowData['four_ir_initiative_tna_format_id'] = $tnaFormat->id;
 
-                $fourIRTnaFormatMethod = new FourIRTnaFormatMethod();
-                $fourIRTnaFormatMethod->fill($rowData);
-                $fourIRTnaFormatMethod->save();
+                    $fourIRTnaFormatMethod = new FourIRTnaFormatMethod();
+                    $fourIRTnaFormatMethod->fill($rowData);
+                    $fourIRTnaFormatMethod->save();
 
-                DB::commit();
-            } catch (Throwable $e) {
-                Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
-                DB::rollBack();
+                    DB::commit();
+                } catch (Throwable $e) {
+                    Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
+                    DB::rollBack();
+                }
             }
         }
+
     }
 
     /**
