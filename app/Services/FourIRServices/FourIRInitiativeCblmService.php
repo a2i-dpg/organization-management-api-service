@@ -338,9 +338,8 @@ class FourIRInitiativeCblmService
             ],
             'sector_name' => [
                 'required',
-                'string',
-                'max:300',
-                'min:2'
+                'integer',
+                'exists:four_ir_sectors,id,deleted_at,NULL',
             ],
             'supported_organization_name' => [
                 'required',
