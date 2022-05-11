@@ -1076,14 +1076,14 @@
                 }
             }
         },
-        "/initiative-cells/{fourIrProjectCellId}": {
+        "/initiative-cells/{fourIrInitiativeCellId}": {
             "get": {
                 "tags": [
                     "FourIR Initiative Cells"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrInitiativeCellId"
                     }
                 ],
                 "summary": "4IR Initiative Cells",
@@ -1128,7 +1128,7 @@
                 "description": "API endpoint to update a Project Cells. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrInitiativeCellId"
                     }
                 ],
                 "requestBody": {
@@ -1177,7 +1177,7 @@
                 "description": "API endpoint to delete a 4IR Initiative Cell. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrProjectCellId"
+                        "$ref": "#/components/parameters/fourIrInitiativeCellId"
                     }
                 ],
                 "responses": {
@@ -2900,14 +2900,14 @@
                 }
             }
         },
-        "/employments/{fourIrCreateAndApproveId}": {
+        "/employments/{fourIrEmploymentId}": {
             "get": {
                 "tags": [
                     "FourIR  Employment"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrEmploymentId"
                     }
                 ],
                 "summary": "Get a 4IR Employment",
@@ -2948,7 +2948,7 @@
                 "description": "API endpoint to update a  Create Approve Courses. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrEmploymentId"
                     }
                 ],
                 "requestBody": {
@@ -3039,7 +3039,7 @@
                 "description": "API endpoint to delete a Employment. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrEmploymentId"
                     }
                 ],
                 "responses": {
@@ -3364,14 +3364,14 @@
                 }
             }
         },
-        "/initiative-analysis/{fourIrShowcasingId}": {
+        "/initiative-analysis/{fourIrInitiativeAnalysisId}": {
             "get": {
                 "tags": [
                     "FourIR Initiative Analysis"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrShowcasingId"
+                        "$ref": "#/components/parameters/fourIrInitiativeAnalysisId"
                     }
                 ],
                 "summary": "Get a 4IR Initiative Analysis",
@@ -3408,11 +3408,11 @@
                 "tags": [
                     "FourIR Initiative Analysis"
                 ],
-                "summary": "Update a 4IR Showcasing",
+                "summary": "Update a 4IR Initiative Analysis",
                 "description": "API endpoint to update a 4IR Initiative Analysis. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrShowcasingId"
+                        "$ref": "#/components/parameters/fourIrInitiativeAnalysisId"
                     }
                 ],
                 "requestBody": {
@@ -3461,7 +3461,7 @@
                 "description": "API endpoint to delete a Initiative Analysis. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrShowcasingId"
+                        "$ref": "#/components/parameters/fourIrInitiativeAnalysisId"
                     }
                 ],
                 "responses": {
@@ -3564,14 +3564,14 @@
                 }
             }
         },
-        "/scale-up/{fourIrOccupationId}": {
+        "/scale-up/{fourIrScaleUpId}": {
             "get": {
                 "tags": [
                     "FourIR Scale Up"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrOccupationId"
+                        "$ref": "#/components/parameters/fourIrScaleUpId"
                     }
                 ],
                 "summary": "Get a 4IR Scale Up",
@@ -3614,7 +3614,7 @@
                 "description": "API endpoint to update a 4IR Scale Up. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrOccupationId"
+                        "$ref": "#/components/parameters/fourIrScaleUpId"
                     }
                 ],
                 "requestBody": {
@@ -3663,7 +3663,7 @@
                 "description": "API endpoint to delete a 4IR Scale Up. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrOccupationId"
+                        "$ref": "#/components/parameters/fourIrScaleUpId"
                     }
                 ],
                 "responses": {
@@ -4893,6 +4893,15 @@
                     "example": "1"
                 }
             },
+            "fourIrScaleUpId": {
+                "name": "fourIrScaleUpId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
             "four_ir_tagline_id": {
                 "name": "four_ir_tagline_id",
                 "in": "query",
@@ -4947,6 +4956,15 @@
                     "example": "1"
                 }
             },
+            "fourIrEmploymentId": {
+                "name": "fourIrEmploymentId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
             "four_ir_project_curricukum_id": {
                 "name": "four_ir_project_curricukum_id",
                 "in": "query",
@@ -4985,6 +5003,33 @@
             },
             "fourIrProjectCellId": {
                 "name": "fourIrProjectCellId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrInitiativeCellId": {
+                "name": "fourIrInitiativeCellId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrInitiativeAnalysisId": {
+                "name": "fourIrInitiativeAnalysisId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrInitiativeId": {
+                "name": "fourIrInitiativeId",
                 "in": "path",
                 "required": true,
                 "schema": {
