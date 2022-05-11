@@ -71,7 +71,6 @@ class FourIRInitiativeTotController extends Controller
     function store(Request $request): JsonResponse
     {
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
-
         $excelRows = null;
         if(!empty($request->file('participants_file'))){
             $file = $request->file('participants_file');

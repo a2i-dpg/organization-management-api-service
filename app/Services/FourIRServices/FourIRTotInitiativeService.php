@@ -154,7 +154,6 @@ class FourIRTotInitiativeService
     {
         /** Update initiative stepper */
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
         $payload = [];
 
         if($initiative->form_step < FourIRInitiative::FORM_STEP_TOT){
@@ -169,7 +168,7 @@ class FourIRTotInitiativeService
 
         /** Now store Organizer & participants */
         $fourIrProjectTOt = app(FourIRInitiativeTot::class);
-        return $this->storeOrganizerParticipants($fourIrProjectTOt, $data, $excelRows);
+        return $this->storeMasterTrainers($fourIrProjectTOt, $data, $excelRows);
     }
 
     /**
@@ -193,7 +192,7 @@ class FourIRTotInitiativeService
      */
     public function update(FourIRInitiativeTot $fourIrProjectTOt, array $data, array|null $excelRows): FourIRInitiativeTot
     {
-        return $this->storeOrganizerParticipants($fourIrProjectTOt, $data, $excelRows);
+        return $this->storeMasterTrainers($fourIrProjectTOt, $data, $excelRows);
     }
 
     /**
@@ -202,7 +201,7 @@ class FourIRTotInitiativeService
      * @param array|null $excelRows
      * @return FourIRInitiativeTot
      */
-    private function storeOrganizerParticipants(FourIRInitiativeTot $fourIrProjectTOt, array $data, ?array $excelRows): FourIRInitiativeTot
+    private function storeMasterTrainers(FourIRInitiativeTot $fourIrProjectTOt, array $data, ?array $excelRows): FourIRInitiativeTot
     {
         $fourIrProjectTOt->fill($data);
         $fourIrProjectTOt->save();
@@ -288,95 +287,84 @@ class FourIRTotInitiativeService
                 'int'
             ],
 
-            'master_trainer_name' => [
+            'organiser_name' => [
                 'required',
                 'string'
             ],
-            'master_trainer_name_en' => [
+            'organiser_name_en' => [
                 'nullable',
                 'string'
             ],
-            'master_trainer_mobile' => [
+            'organiser_mobile' => [
                 'required',
                 BaseModel::MOBILE_REGEX,
             ],
-            'master_trainer_address' => [
+            'organiser_address' => [
                 'required',
                 'string'
             ],
-            'master_trainer_address_en' => [
+            'organiser_address_en' => [
                 'nullable',
                 'string'
             ],
-            'master_trainer_email' => [
+            'organiser_email' => [
                 'required',
                 'email',
             ],
-
-            'organizers' => [
+            'co_organiser_name' => [
+                'required',
+                'string'
+            ],
+            'co_organiser_name_en' => [
+                'nullable',
+                'string'
+            ],
+            'co_organiser_mobile' => [
+                'required',
+                BaseModel::MOBILE_REGEX,
+            ],
+            'co_organiser_address' => [
+                'required',
+                'string'
+            ],
+            'co_organiser_address_en' => [
+                'nullable',
+                'string'
+            ],
+            'co_organiser_email' => [
+                'required',
+                'email',
+            ],
+            'master_trainers' => [
                 'required',
                 'array',
                 'min:1'
             ],
-            'organizers.*' => [
+            'master_trainers.*' => [
                 'required',
                 'array'
             ],
-            'organizers.*.name' => [
+            'master_trainers.*.name' => [
                 'required',
                 'string'
             ],
-            'organizers.*.name_en' => [
+            'master_trainers.*.name_en' => [
                 'nullable',
                 'string'
             ],
-            'organizers.*.mobile' => [
+            'master_trainers.*.mobile' => [
                 'required',
                 BaseModel::MOBILE_REGEX,
             ],
-            'organizers.*.address' => [
+            'master_trainers.*.address' => [
                 'required',
                 'string'
             ],
-            'organizers.*.address_en' => [
+            'master_trainers.*.address_en' => [
                 'nullable',
                 'string'
             ],
-            'organizers.*.email' => [
-                'required',
-                'email',
-            ],
-
-            'co_organizers' => [
-                'required',
-                'array',
-                'min:1'
-            ],
-            'co_organizers.*' => [
-                'required',
-                'array'
-            ],
-            'co_organizers.*.name' => [
-                'required',
-                'string'
-            ],
-            'co_organizers.*.name_en' => [
-                'nullable',
-                'string'
-            ],
-            'co_organizers.*.mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX,
-            ],
-            'co_organizers.*.address' => [
-                'required',
-                'string'
-            ],
-            'co_organizers.*.address_en' => [
-                'nullable',
-                'string'
-            ],
-            'co_organizers.*.email' => [
+            'master_trainers.*.email' => [
                 'required',
                 'email',
             ],
