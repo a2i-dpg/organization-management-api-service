@@ -14,7 +14,7 @@ class AddFactoryCategoryIdToNascibMembers extends Migration
     public function up()
     {
         Schema::table('nascib_members', function (Blueprint $table) {
-            $table->unsignedInteger('factory_category_id')->after('business_type');
+            $table->unsignedInteger('factory_category_id')->after('have_factory');
         });
     }
 
