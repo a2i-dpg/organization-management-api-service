@@ -65,8 +65,6 @@ class FourIRInitiativeTnaFormatController extends Controller
         Log::info("request data".json_encode($request->all()));
         Log::info("file request data".json_encode($request->hasFile('workshop_method_file')));
 
-        throw_if(!$request->hasFile('workshop_method_file'),new Exception('The uploaded file format is invalid',ResponseAlias::HTTP_UNPROCESSABLE_ENTITY));
-
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
 
         $fourIrInitiative = FourIRInitiative::findOrFail($validated['four_ir_initiative_id']);

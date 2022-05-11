@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFourIrInitiativeTotOrganizersParticipantsTable extends Migration
+class CreateFourIRInitiativeTotMastersTrainersParticipantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFourIrInitiativeTotOrganizersParticipantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('four_ir_initiative_tot_organizers_participants', function (Blueprint $table) {
+        Schema::create('four_ir_initiative_tot_masters_trainers_participants', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('four_ir_initiative_tot_id');
             $table->unsignedTinyInteger('type')->comment("1 => Organizer, 2 => co-organizer, 3 => participant");
@@ -40,6 +40,6 @@ class CreateFourIrInitiativeTotOrganizersParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('four_ir_initiative_tot_organizers_participants');
+        Schema::dropIfExists('four_i_r_initiative_tot_masters_trainers_participants');
     }
 }
