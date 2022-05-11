@@ -5,7 +5,7 @@ namespace App\Services\FourIRServices;
 use App\Models\BaseModel;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTot;
-use App\Models\FourIRInitiativeTotOrganizersParticipant;
+use App\Models\FourIRInitiativeTotMastersTrainersParticipant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -177,7 +177,7 @@ class FourIRTotInitiativeService
      */
     public function deletePreviousOrganizerParticipantsForUpdate(FourIRInitiativeTot $fourIrInitiativeTot): void
     {
-        $fourIrInitiativeTotOrganizerParticipants = FourIRInitiativeTotOrganizersParticipant::where('four_ir_initiative_tot_id', $fourIrInitiativeTot->id)
+        $fourIrInitiativeTotOrganizerParticipants = FourIRInitiativeTotMastersTrainersParticipant::where('four_ir_initiative_tot_id', $fourIrInitiativeTot->id)
             ->get();
         foreach ($fourIrInitiativeTotOrganizerParticipants as $organizerParticipant) {
             $organizerParticipant->delete();
@@ -206,16 +206,16 @@ class FourIRTotInitiativeService
         $fourIrProjectTOt->fill($data);
         $fourIrProjectTOt->save();
 
-        $organizers = $data['organizers'] ?? [];
-        foreach ($organizers as $organizer) {
-            $organizer['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
-            $organizer['type'] = FourIRInitiativeTot::TYPE_ORGANIZER;
-            $organizer['accessor_type'] = $data['accessor_type'];
-            $organizer['accessor_id'] = $data['accessor_id'];
+        $masterTrainers = $data['master_trainers'] ?? [];
+        foreach ($masterTrainers as $masterTrainer) {
+            $masterTrainer['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
+            $masterTrainer['type'] = FourIRInitiativeTot::TYPE_ORGANIZER;
+            $masterTrainer['accessor_type'] = $data['accessor_type'];
+            $masterTrainer['accessor_id'] = $data['accessor_id'];
 
-            $fourIrTotOrganizerParticipant = new FourIRInitiativeTotOrganizersParticipant();
-            $fourIrTotOrganizerParticipant->fill($organizer);
-            $fourIrTotOrganizerParticipant->save();
+            $fourIrTotMasterTrainerParticipant = new FourIRInitiativeTotMastersTrainersParticipant();
+            $fourIrTotMasterTrainerParticipant->fill($masterTrainer);
+            $fourIrTotMasterTrainerParticipant->save();
         }
 
         $coOrganizers = $data['co_organizers'] ?? [];
@@ -225,7 +225,7 @@ class FourIRTotInitiativeService
             $coOrganizer['accessor_type'] = $data['accessor_type'];
             $coOrganizer['accessor_id'] = $data['accessor_id'];
 
-            $fourIrTotOrganizerParticipant = new FourIRInitiativeTotOrganizersParticipant();
+            $fourIrTotOrganizerParticipant = new FourIRInitiativeTotMastersTrainersParticipant();
             $fourIrTotOrganizerParticipant->fill($coOrganizer);
             $fourIrTotOrganizerParticipant->save();
         }
@@ -237,7 +237,7 @@ class FourIRTotInitiativeService
                 $row['accessor_type'] = $data['accessor_type'];
                 $row['accessor_id'] = $data['accessor_id'];
 
-                $fourIrTotOrganizerParticipant = new FourIRInitiativeTotOrganizersParticipant();
+                $fourIrTotOrganizerParticipant = new FourIRInitiativeTotMastersTrainersParticipant();
                 $fourIrTotOrganizerParticipant->fill($row);
                 $fourIrTotOrganizerParticipant->save();
             }
