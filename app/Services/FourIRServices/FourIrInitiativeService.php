@@ -6,12 +6,17 @@ namespace App\Services\FourIRServices;
 use App\Models\BaseModel;
 use App\Models\FourIRFileLog;
 use App\Models\FourIRInitiative;
+use App\Models\FourIROccupation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -74,14 +79,14 @@ class FourIrInitiativeService
         $fourIrInitiativeBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_initiatives.four_ir_occupation_id');
 
         if (!empty($initiativeName)) {
-            $fourIrInitiativeBuilder->where(function ($builder) use ($initiativeName){
+            $fourIrInitiativeBuilder->where(function ($builder) use ($initiativeName) {
                 $builder->where('four_ir_initiatives.name', 'like', '%' . $initiativeName . '%');
                 $builder->orWhere('four_ir_initiatives.name_en', 'like', '%' . $initiativeName . '%');
             });
         }
 
         if (!empty($organizationName)) {
-            $fourIrInitiativeBuilder->where(function ($builder) use ($organizationName){
+            $fourIrInitiativeBuilder->where(function ($builder) use ($organizationName) {
                 $builder->where('four_ir_initiatives.organization_name', 'like', '%' . $organizationName . '%');
                 $builder->orWhere('four_ir_initiatives.organization_name_en', 'like', '%' . $organizationName . '%');
             });
@@ -418,9 +423,9 @@ class FourIrInitiativeService
                 'int',
                 'exists:four_ir_occupations,id,deleted_at,NULL',
                 Rule::unique('four_ir_initiatives', 'four_ir_occupation_id')
-                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($request){
+                    ->where(function (\Illuminate\Database\Query\Builder $query) use ($request) {
                         return $query->where('four_ir_tagline_id', $request->input('four_ir_tagline_id'))
-                                     ->whereNull('deleted_at');
+                            ->whereNull('deleted_at');
                     }),
                 'distinct'
             ],
@@ -452,10 +457,97 @@ class FourIrInitiativeService
                 'int'
             ],
             '*.row_status' => [
-                'required',
+                'nullable',
                 Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
             ]
         ];
         return Validator::make($excelData, $rules);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getBulkImporterExcelFormat(): string
+    {
+        $fourIrOccupationColumnCoordinate = "H1";
+        $fourIrTaskColumnCoordinate = "M1";
+        $fourIrSkillProvidedCoordinate = "E1";
+
+        $objPHPExcel = new Spreadsheet();
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A1", "Name");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("B1", "Name En");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C1", "Organization Name");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("D1", "Organization Name En");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrSkillProvidedCoordinate, "Is Skill Provide");
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("F1", "Budget");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("G1", "Designation");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrOccupationColumnCoordinate, "Four Ir Occupation Id");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("I1", "Start Date");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("J1", "End Date");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("K1", "Details");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("L1", "File Path");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrTaskColumnCoordinate, "Task");
+
+        $fourIrOccupations = "";
+        foreach (FourIROccupation::all() as $value) {
+            $fourIrOccupations .= $value->id . " | " . $value->title . ",";
+        }
+
+        $fourIrTasks = "";
+        foreach (FourIRInitiative::TASKS as $key => $task) {
+            $fourIrTasks .= $key . ' | ' . $task . ",";
+        }
+
+        $trueFalse = "1 | TRUE, 0 | FALSE";
+
+        $this->dropDownColumnBuilder($objPHPExcel, $fourIrOccupationColumnCoordinate, $fourIrOccupations);
+        $this->dropDownColumnBuilder($objPHPExcel, $fourIrTaskColumnCoordinate, $fourIrTasks);
+        $this->dropDownColumnBuilder($objPHPExcel, $fourIrSkillProvidedCoordinate, $trueFalse);
+
+        $writer = new Xlsx($objPHPExcel);
+        ob_start();
+        $writer->save('php://output');
+        $excelData = ob_get_contents();
+        ob_end_clean();
+        return "data:application/vnd.ms-excel;base64," . base64_encode($excelData);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function dropDownColumnBuilder(Spreadsheet $objPHPExcel, string $column, string $dropdownData): void
+    {
+        $objValidation = $objPHPExcel->setActiveSheetIndex(0)->getCell($column)->getDataValidation();
+        $objValidation->setType(DataValidation::TYPE_LIST);
+        $objValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+        $objValidation->setAllowBlank(false);
+        $objValidation->setShowInputMessage(true);
+        $objValidation->setShowDropDown(true);
+        $objValidation->setPromptTitle('Pick from list');
+        $objValidation->setPrompt('Please pick a value from the drop-down list.');
+        $objValidation->setErrorTitle('Input error');
+        $objValidation->setError('Value is not in list');
+        $objValidation->setFormula1('"' . $dropdownData . '"');
+    }
+
+    public function explodeData(array &$data): void
+    {
+        foreach ($data as $mainKey => $value) {
+            foreach ($value as $subKey => $subValue) {
+                if (!is_array($subValue)) {
+                    $explode = explode('|', $subValue);
+                    if (sizeof($explode) == 2 && !empty($explode[0])) {
+                        $explodedValue = trim($explode[0]);
+                        if (is_numeric($explodedValue)) {
+                            $explodedValue = (int)$explodedValue;
+                        }
+                        $data[$mainKey][$subKey] = $explodedValue;
+                    }
+                }
+
+            }
+
+        }
     }
 }

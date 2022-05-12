@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4efb26fc499b6fc04db7da46dc61feec",
+    "content-hash": "56a4637dbb2e4a33f3b7a4f8d37db0ab",
     "packages": [
         {
             "name": "anis072/lumen-queue-rabbitmq",
@@ -10273,5 +10273,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

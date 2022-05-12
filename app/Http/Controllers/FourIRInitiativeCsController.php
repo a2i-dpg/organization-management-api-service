@@ -22,6 +22,7 @@ class FourIRInitiativeCsController extends Controller
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
+
     /**
      * FourIRInitiativeCsController constructor.
      *
@@ -139,5 +140,21 @@ class FourIRInitiativeCsController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $fourIrInitiativeCell = FourIRInitiativeCsCurriculumCblm::findOrFail($id);
+//        $this->authorize('delete', $fourIrInitiative);
+        $this->fourIrInitiativeCsCurriculumCblmService->destroy($fourIrInitiativeCell);
+        $response = [
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Four Ir Initiative Cs deleted successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
