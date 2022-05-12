@@ -126,10 +126,12 @@ class FourIRTotInitiativeService
                 'four_ir_initiative_tots.organiser_name',
                 'four_ir_initiative_tots.organiser_mobile',
                 'four_ir_initiative_tots.organiser_address',
+                'four_ir_initiative_tots.organiser_email',
                 'four_ir_initiative_tots.organiser_address_en',
                 'four_ir_initiative_tots.co_organiser_name',
                 'four_ir_initiative_tots.co_organiser_mobile',
                 'four_ir_initiative_tots.co_organiser_address',
+                'four_ir_initiative_tots.co_organiser_email',
                 'four_ir_initiative_tots.co_organiser_address_en',
 
                 'four_ir_initiative_tots.accessor_type',
