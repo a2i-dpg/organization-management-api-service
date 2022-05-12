@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FourIRInitiative;
 use App\Models\FourIRResource;
+use App\Models\FourIRSector;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRResourceService;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -37,6 +39,20 @@ class FourIRResourceController extends Controller
 
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getList(Request $request): JsonResponse
+    {
+
+
+        $filter = $this->fourIRResourceService->filterValidator($request)->validate();
+        $response = $this->fourIRResourceService->getResourceList($filter, $this->startTime);
+        return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
      * Only one resource_management can be for an initiative. That's why only single read API is here.
      * Provide Initiative id as the path parameter of this API
      *
@@ -48,7 +64,7 @@ class FourIRResourceController extends Controller
         /** Here $id is the ID of FourIrInitiative */
 
         //$this->authorize('viewAny', FourIRInitiative::class);
-
+        Log::info("r-id".$id);
         $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
         $response = [
             "data" => $fourIrResource,
@@ -59,6 +75,28 @@ class FourIRResourceController extends Controller
             ]
         ];
         return Response::json($response,ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @throws Throwable
+     * @throws ValidationException
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $resource = FourIRResource::query()->findOrFail($id);
+
+        $validated = $this->fourIRResourceService->validator($request, $id)->validate();
+        $data = $this->fourIRResourceService->update($resource, $validated);
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "FourIRSector updated successfully.",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
     /**

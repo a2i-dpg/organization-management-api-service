@@ -145,7 +145,7 @@ class FourIRTotInitiativeService
         );
         $fourIrInitiativeTotBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tots.four_ir_initiative_id');
 
-        $fourIrInitiativeTotBuilder->with('masterTrainerParticipants');
+        $fourIrInitiativeTotBuilder->with('masterTrainers');
 
         $fourIrInitiativeTotBuilder->where('four_ir_initiative_tots.id', '=', $id);
 
