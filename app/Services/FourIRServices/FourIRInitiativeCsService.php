@@ -390,6 +390,15 @@ class FourIRInitiativeCsService
     }
 
     /**
+     * @param FourIRInitiativeCsCurriculumCblm $fourIrInitiativeCsCurriculumCblm
+     * @return bool
+     */
+
+    public function destroy(FourIRInitiativeCsCurriculumCblm $fourIrInitiativeCsCurriculumCblm): bool
+    {
+        return $fourIrInitiativeCsCurriculumCblm->delete();
+    }
+    /**
      * @param Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */

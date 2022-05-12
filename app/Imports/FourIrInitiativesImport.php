@@ -20,6 +20,15 @@ class FourIrInitiativesImport implements ToCollection, SkipsEmptyRows, WithValid
      */
     public function prepareForValidation($data, $index): mixed
     {
+        if(!empty($data['start_date'])){
+            $data['start_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['start_date'])->format('Y-m-d');
+
+        }
+        if(!empty($data['end_date'])){
+            $data['end_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['end_date'])->format('Y-m-d');
+
+        }
+
         if (!empty($data['task'])) {
             $taskId = FourIRInitiative::TASKS[$data['task']];
             $data['task'] = array($taskId);

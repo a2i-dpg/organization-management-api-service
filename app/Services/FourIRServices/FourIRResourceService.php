@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -26,11 +27,12 @@ use Throwable;
 class FourIRResourceService
 {
     /**
-     * @param int $fourIrInitiativeId
+     * @param int $fourIrId
      * @return Model|Builder
      */
-    public function getOneFourIRResource(int $fourIrInitiativeId): Builder|Model
+    public function getOneFourIRResource(int $fourIrId): Builder|Model
     {
+
         /** @var Builder $fourIrResourceBuilder */
         $fourIrResourceBuilder = FourIRResource::select(
             [
@@ -57,7 +59,8 @@ class FourIRResourceService
 
         $fourIrResourceBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_resources.four_ir_initiative_id');
 
-        $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrInitiativeId);
+        $fourIrResourceBuilder->where('four_ir_resources.id', $fourIrId);
+
 
         return $fourIrResourceBuilder->firstOrFail();
     }

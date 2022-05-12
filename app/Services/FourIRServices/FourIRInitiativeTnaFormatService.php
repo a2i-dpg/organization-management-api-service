@@ -79,7 +79,6 @@ class FourIRInitiativeTnaFormatService
             "code" => Response::HTTP_OK,
             "query_time" => $startTime->diffInSeconds(Carbon::now())
         ];
-
         return $response;
     }
 
@@ -128,43 +127,34 @@ class FourIRInitiativeTnaFormatService
 
     /**
      * @param array $data
-     * @param array $rows
+     * @param array|null $rows
      * @param int $tnaMethod
      * @return void
      */
     public function tnaFormatMethodStore(array $data, array|null $rows, int $tnaMethod): void
     {
-        $tnaFormat = FourIRInitiativeTnaFormat::where('four_ir_initiative_id', $data['four_ir_initiative_id'])
-            ->where('method_type', $tnaMethod)
-            ->first();
+        /** First, Create TNA format */
+        $tnaFormat = new FourIRInitiativeTnaFormat();
+        $payload = [
+            "four_ir_initiative_id" => $data['four_ir_initiative_id'],
+            "accessor_type" => $data['accessor_type'],
+            "accessor_id" => $data['accessor_id'],
+            "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
+        ];
 
-        if (empty($tnaFormat)) {
-            /** First, Create TNA format */
-            $tnaFormat = new FourIRInitiativeTnaFormat();
-            $payload = [
-                "four_ir_initiative_id" => $data['four_ir_initiative_id'],
-                "accessor_type" => $data['accessor_type'],
-                "accessor_id" => $data['accessor_id'],
-                "row_status" => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
-            ];
-            if (!empty($tnaMethod)) {
-                $payload["method_type"] = $tnaMethod;
-            }
-
-            if (!empty($data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]])) {
-                $payload["workshop_numbers"] = $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]];
-            }
-
-            $tnaFormat->fill($payload);
-            $tnaFormat->save();
-
-        } else {
-            /** Delete all previous methods data */
-            $tnaFormatMethods = FourIRTnaFormatMethod::where('four_ir_initiative_tna_format_id', $tnaFormat->id)->get();
-            foreach ($tnaFormatMethods as $method) {
-                $method->delete();
-            }
+        if (!empty($tnaMethod)) {
+            $payload["method_type"] = $tnaMethod;
         }
+        if (!empty($data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]])) {
+            $payload["workshop_numbers"] = $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]];
+        }
+
+        FourIRInitiativeTnaFormat::updateOrCreate([
+            "four_ir_initiative_id" => $data['four_ir_initiative_id'],
+            "method_type" => $tnaMethod
+        ],
+            $payload
+        );
 
         if (!empty($rows)) {
             /** Now create TNA format methods from Excel rows */
@@ -172,11 +162,9 @@ class FourIRInitiativeTnaFormatService
                 DB::beginTransaction();
                 try {
                     $rowData['four_ir_initiative_tna_format_id'] = $tnaFormat->id;
-
                     $fourIRTnaFormatMethod = new FourIRTnaFormatMethod();
                     $fourIRTnaFormatMethod->fill($rowData);
                     $fourIRTnaFormatMethod->save();
-
                     DB::commit();
                 } catch (Throwable $e) {
                     Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
