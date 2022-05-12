@@ -27,7 +27,7 @@ class FourIRInitiativeTot extends Model
     /**
      * @return HasMany
      */
-    public function organizerParticipants(): HasMany
+    public function masterTrainerParticipants(): HasMany
     {
         return $this->hasMany(FourIRInitiativeTotMastersTrainersParticipant::class, 'four_ir_initiative_tot_id', 'id');
     }
