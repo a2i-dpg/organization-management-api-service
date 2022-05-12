@@ -2126,6 +2126,51 @@
             }
         },
         "/resource-managements": {
+            "get": {
+                "tags": [
+                    "FourIR Resource Management"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
+                    }
+                ],
+                "summary": "Get all 4IR Resource Management",
+                "responses": {
+                    "200": {
+                        "description": "Get all Resource Management",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "four_ir_initiative_id": "1",
+                                            "approval_status": 0,
+                                            "budget_approval_status": 0,
+                                            "given_budget": 5000,
+                                            "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
+                                            "row_status": "1",
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "deleted_at": null,
+                                            "created_at": "2022-05-11T10:49:45.000000Z",
+                                            "updated_at": "2022-05-12T05:18:05.000000Z"
+                                        } ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "FourIR Resource Management"
@@ -2148,15 +2193,20 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_initiative_id": 1,
-                                        "accessor_type": "INSTRUCTOR",
+                                        "id": 1,
+                                        "four_ir_initiative_id": "1",
+                                        "approval_status": 0,
+                                        "budget_approval_status": 0,
+                                        "given_budget": 5000,
+                                        "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
+                                        "accessor_type": "INSTITUTE",
                                         "accessor_id": 1,
-                                        "file_path": "new",
+                                        "row_status": "1",
                                         "created_by": 1,
                                         "updated_by": 1,
-                                        "updated_at": "2022-04-26T04:36:12.000000Z",
-                                        "created_at": "2022-04-26T04:36:12.000000Z",
-                                        "id": 4
+                                        "deleted_at": null,
+                                        "created_at": "2022-05-11T10:49:45.000000Z",
+                                        "updated_at": "2022-05-12T05:18:05.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2190,13 +2240,19 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "four_ir_initiative_id": "1",
+                                        "approval_status": 0,
+                                        "budget_approval_status": 0,
+                                        "given_budget": 5000,
+                                        "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "row_status": "1",
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "deleted_at": null,
+                                        "created_at": "2022-05-11T10:49:45.000000Z",
+                                        "updated_at": "2022-05-12T05:18:05.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2210,6 +2266,62 @@
                     }
                 }
 
+            },
+            "put": {
+                "tags": [
+                    "FourIR Resource Management"
+                ],
+                "summary": "Update a 4IR Resource Management",
+                "description": "API endpoint to update a  Resource Management. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrResourceId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_resource"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data":
+                                        {
+                                            "id": 1,
+                                            "four_ir_initiative_id": "1",
+                                            "approval_status": 0,
+                                            "budget_approval_status": 0,
+                                            "given_budget": 5000,
+                                            "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
+                                            "row_status": "1",
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "deleted_at": null,
+                                            "created_at": "2022-05-11T10:49:45.000000Z",
+                                            "updated_at": "2022-05-12T05:18:05.000000Z"
+                                        }
+                                    ,
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir CBLM updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/tots": {
