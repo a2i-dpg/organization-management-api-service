@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Exception;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
@@ -51,7 +52,7 @@ class FourIRInitiativeController extends Controller
 
         $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -70,7 +71,7 @@ class FourIRInitiativeController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -102,7 +103,7 @@ class FourIRInitiativeController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -143,7 +144,7 @@ class FourIRInitiativeController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -184,16 +185,13 @@ class FourIRInitiativeController extends Controller
      */
     public function bulkStoreByExcel(Request $request): JsonResponse
     {
-        //$fourIrInitiative = app(FourIRInitiative::class);
-        //$this->authorize('create', $fourIrInitiative);
-
         $this->fourIrInitiativeService->excelImportValidator($request)->validate();
-
         $file = $request->file('file');
-        $excelData = Excel::toCollection(new FourIrInitiativesImport(), $file)->toArray();
+        $excelData = Excel::toCollection(new FourIrInitiativesImport(), $file)->toArray()[0];
+        $this->fourIrInitiativeService->explodeData($excelData);
 
-        if (!empty($excelData) && !empty($excelData[0])) {
-            $rows = $excelData[0];
+        if (!empty($excelData) && !empty($excelData)) {
+            $rows = $excelData;
             $this->fourIrInitiativeService->excelDataValidator($request, $rows)->validate();
             $errorOccurOccupations = [];
 
@@ -212,7 +210,7 @@ class FourIRInitiativeController extends Controller
                     $this->fourIRFileLogService->storeFileLog($initiativeData, FourIRInitiative::FILE_LOG_INITIATIVE_STEP);
 
                     DB::commit();
-                } catch (Throwable $e){
+                } catch (Throwable $e) {
                     Log::info("Error occurred. Inside catch block. Error is: " . json_encode($e->getMessage()));
                     DB::rollBack();
                     $fourIrOccupation = FourIROccupation::find($rowData['four_ir_occupation_id']);
@@ -234,5 +232,22 @@ class FourIRInitiativeController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function bulkImporterExcelFormat(): JsonResponse
+    {
+        $excelFile = $this->fourIrInitiativeService->getBulkImporterExcelFormat();
+        $response = [
+            "data" => $excelFile,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_CREATED,
+                "message" => "Four IR initiatives Created Successfully"
+            ]
+        ];
+        return Response::json($response, $response['_response_status']['code']);
     }
 }
