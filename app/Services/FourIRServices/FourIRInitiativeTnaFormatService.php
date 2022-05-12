@@ -89,6 +89,7 @@ class FourIRInitiativeTnaFormatService
      */
     public function store(FourIRInitiative $fourIrInitiative, array $data)
     {
+
         $payload = [];
         if (!empty($data['file_path'])) {
             $payload['tna_file_path'] = $data['file_path'];
