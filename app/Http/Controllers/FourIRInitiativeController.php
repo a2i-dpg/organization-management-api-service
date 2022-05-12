@@ -194,7 +194,6 @@ class FourIRInitiativeController extends Controller
 
         if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
-
             $this->fourIrInitiativeService->excelDataValidator($request, $rows)->validate();
             $errorOccurOccupations = [];
 
