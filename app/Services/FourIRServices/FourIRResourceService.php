@@ -57,7 +57,7 @@ class FourIRResourceService
 
         $fourIrResourceBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_resources.four_ir_initiative_id');
 
-        $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrInitiativeId);
+        $fourIrResourceBuilder->where('four_ir_resources.id', $fourIrInitiativeId);
 
         return $fourIrResourceBuilder->firstOrFail();
     }
