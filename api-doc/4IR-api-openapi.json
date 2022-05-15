@@ -4623,7 +4623,7 @@
                     }
                 },
                 "required": [
-                    "name","organization_name","four_ir_occupation_id","tasks","budget","start_date","end_date","designation","four_ir_tagline_id"
+                    "name","organization_name","four_ir_occupation_id","budget","start_date","end_date","designation","four_ir_tagline_id"
                 ]
             },
             "4ir_team-member": {
