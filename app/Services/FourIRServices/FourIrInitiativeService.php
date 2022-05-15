@@ -194,19 +194,17 @@ class FourIrInitiativeService
     public function update(FourIRInitiative $fourIrInitiative, array $data): FourIRInitiative
     {
 
-        $fourIrInitiative->fill($data);
-        $fourIrInitiative->save();
-
-        if(sizeof($fourIrInitiative->tasks)==3){
+        if (sizeof($data['tasks']) == 3) {
             $data['completion_step'] = FourIRInitiative::COMPLETION_STEP_ONE;
             $data['form_step'] = FourIRInitiative::FORM_STEP_PROJECT_INITIATION;
             $fourIrInitiative->fill($data);
             $fourIrInitiative->save();
+        } else {
+            $fourIrInitiative->fill($data);
+            $fourIrInitiative->save();
         }
-
-        return $fourIrInitiative;
+        return  $fourIrInitiative;
     }
-
     /**
      * @param FourIRInitiative $fourIrInitiative
      * @return bool
