@@ -714,6 +714,44 @@
                 }
             }
         },
+        "/four-ir-initiatives-import-excel-format": {
+            "get": {
+                "tags": [
+                    "FourIR Initiative Format Download"
+                ],
+                "summary": "Get a 4IR Initiative Format",
+                "responses": {
+                    "200": {
+                        "description": "Get a Initiative Format",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 2,
+                                            "title_en": "welcome",
+                                            "title": "me",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": null,
+                                            "created_at": "2022-04-19T07:19:20.000000Z",
+                                            "updated_at": "2022-04-19T07:19:20.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        },
         "/team-members": {
             "get": {
                 "tags": [
