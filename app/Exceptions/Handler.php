@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['message'] = $e->getMessage();
         } else if ($e instanceof HttpErrorException) {
             $errors['_response_status']['message'] = $e->getPreparedMessage();
-            $errors['_response_status']['code'] =  $e->getCode() ? $e->getCode() : ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
+            $errors['_response_status']['code'] = $e->getCode() ? $e->getCode() : ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
         } else if ($e instanceof RequestException) {
             $errors = idUserErrorMessage($e);
         } elseif ($e instanceof ModelNotFoundException) {
@@ -121,16 +121,14 @@ class Handler extends ExceptionHandler
             $errors['_response_status']['message'] = $e->getMessage();
         } elseif ($e instanceof Exception) {
             $messageBody = json_decode($e->getMessage(), true);
-            $errors['_response_status']['code'] = $e->getCode();
+            $errors['_response_status']['code'] = $e->getCode() != 0 ? $e->getCode() : ResponseAlias::HTTP_INTERNAL_SERVER_ERROR;
 
             if (!empty($messageBody['errors'])) {
                 $errors['errors'] = $messageBody['errors'];
-            }
-            else if (!empty($messageBody['message'])) {
+            } else if (!empty($messageBody['message'])) {
                 $errors['_response_status']['message'] = $messageBody['message'];
-            }
-            else{
-                $errors['_response_status']['message'] =$e->getMessage();
+            } else {
+                $errors['_response_status']['message'] = $e->getMessage();
             }
         }
         return response()->json($errors, $errors['_response_status']['code']);
