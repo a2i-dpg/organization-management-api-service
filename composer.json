@@ -26,7 +26,8 @@
         "phabloraylan/lumen-middleware-trim-or-convert-strings": "^1.0",
         "predis/predis": "~1.0",
         "rbdwllr/reallysimplejwt": "^4.0",
-        "tymon/jwt-auth": "dev-develop"
+        "tymon/jwt-auth": "dev-develop",
+        "phpoffice/phpspreadsheet": "^1.22"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

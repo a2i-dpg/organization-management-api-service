@@ -20,24 +20,21 @@ class FourIrInitiativesImport implements ToCollection, SkipsEmptyRows, WithValid
      */
     public function prepareForValidation($data, $index): mixed
     {
-        if(!empty($data['start_date'])){
-            $data['start_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['start_date'])->format('Y-m-d');
-
+        if (!empty($data['start_date'])) {
+            $data['start_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int) $data['start_date'])->format('Y-m-d');
         }
-        if(!empty($data['end_date'])){
-            $data['end_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['end_date'])->format('Y-m-d');
-
+        if (!empty($data['end_date'])) {
+            $data['end_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int) $data['end_date'])->format('Y-m-d');
         }
 
         if (!empty($data['task'])) {
-            $taskId = FourIRInitiative::TASKS[$data['task']];
-            $data['task'] = array($taskId);
-        }
-
-        if(!empty($data['four_ir_occupation_id'])){
-            $fourIrOccupation = FourIROccupation::where('title', $data['four_ir_occupation_id'])->first();
-            if(!empty($fourIrOccupation)){
-                $data['four_ir_occupation_id'] = $fourIrOccupation->id;
+            $explode = explode('|', $data['task']);
+            if (sizeof($explode) == 2 && !empty($explode[0])) {
+                $explodedValue = trim($explode[0]);
+                if (is_numeric($explodedValue)) {
+                    $explodedValue = (int)$explodedValue;
+                }
+                $data['task'] = array($explodedValue);
             }
         }
 
