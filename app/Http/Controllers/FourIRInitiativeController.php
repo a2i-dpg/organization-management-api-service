@@ -152,6 +152,33 @@ class FourIRInitiativeController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
+    public function taskAndSkillUpdate(Request $request, int $id): JsonResponse
+    {
+          $fourIrInitiative = FourIRInitiative::findOrFail($id);
+
+        // $this->authorize('update', $fourIrInitiative);
+           $validated = $this->fourIrInitiativeService->TaskAndSkillvalidator($request, $id)->validate();
+           $tasks=$validated['tasks'];
+           sort($tasks);
+           $tasks=array_merge ($fourIrInitiative->tasks,$tasks);
+           $tasks=array_unique($tasks);
+//        return Response::json(array_values($tasks), ResponseAlias::HTTP_CREATED);
+           $validated['tasks']=$tasks;
+           $data = $this->fourIrInitiativeService->update($fourIrInitiative, $validated);
+
+            $response = [
+                'data' => $data,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_OK,
+                    "message" => "Four Ir Initiative updated successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
     /**
      * Remove the specified resource from storage
      *

@@ -206,7 +206,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         $router->post('/four-ir-initiatives-import-excel', ["as" => "four.ir.initiatives.import.excel", "uses" => "FourIRInitiativeController@bulkStoreByExcel"]);
         $router->get('/four-ir-initiatives-import-excel-format', ["as" => "four.ir.initiatives.import.excel", "uses" => "FourIRInitiativeController@bulkImporterExcelFormat"]);
-
+        $router->put('/four-ir-initiatives-task-update/{id}', ["as" => "four.ir.initiatives.task.update", "uses" => "FourIRInitiativeController@taskAndSkillUpdate"]);
 
         /** Provide suggestions in drop downs */
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {

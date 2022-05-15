@@ -180,9 +180,6 @@ class FourIrInitiativeService
     public function store(array $data): FourIRInitiative
     {
         $data['initiative_code'] = Uuid::uuid4()->toString();
-        $data['completion_step'] = FourIRInitiative::COMPLETION_STEP_ONE;
-        $data['form_step'] = FourIRInitiative::FORM_STEP_PROJECT_INITIATION;
-
         $fourIrInitiative = new FourIRInitiative();
         $fourIrInitiative->fill($data);
         $fourIrInitiative->save();
@@ -196,8 +193,17 @@ class FourIrInitiativeService
      */
     public function update(FourIRInitiative $fourIrInitiative, array $data): FourIRInitiative
     {
+
         $fourIrInitiative->fill($data);
         $fourIrInitiative->save();
+
+        if(sizeof($fourIrInitiative->tasks)==3){
+            $data['completion_step'] = FourIRInitiative::COMPLETION_STEP_ONE;
+            $data['form_step'] = FourIRInitiative::FORM_STEP_PROJECT_INITIATION;
+            $fourIrInitiative->fill($data);
+            $fourIrInitiative->save();
+        }
+
         return $fourIrInitiative;
     }
 
@@ -237,11 +243,6 @@ class FourIrInitiativeService
                 'required',
                 'int',
                 'exists:four_ir_taglines,id,deleted_at,NULL'
-            ],
-            'is_skill_provide' => [
-                'required',
-                'int',
-                Rule::in(FourIRInitiative::SKILL_PROVIDE_FALSE, FourIRInitiative::SKILL_PROVIDE_TRUE)
             ],
             'name' => [
                 'required',
@@ -300,10 +301,41 @@ class FourIrInitiativeService
                 'string',
                 'max:300',
             ],
-            'tasks' => [
+            'row_status' => [
+                'required_if:' . $id . ',!=,null',
+                'nullable',
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ];
+        return Validator::make($data, $rules, $customMessage);
+    }
+
+    public function TaskAndSkillvalidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    {
+        $data = $request->all();
+        $customMessage = [
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+        if (!empty($data['tasks'])) {
+            $data["tasks"] = isset($data['tasks']) && is_array($data['tasks']) ? $data['tasks'] : explode(',', $data['tasks']);
+        }
+        $rules = [
+            'accessor_type' => [
                 'required',
-                'array',
-                'min:1'
+                'string'
+            ],
+            'accessor_id' => [
+                'required',
+                'int'
+            ],
+            'is_skill_provide' => [
+                'nullable',
+                'int',
+                Rule::in(FourIRInitiative::SKILL_PROVIDE_FALSE, FourIRInitiative::SKILL_PROVIDE_TRUE)
+            ],
+            'tasks' => [
+                'nullable',
+                'array'
             ],
             'tasks.*' => [
                 'required',
