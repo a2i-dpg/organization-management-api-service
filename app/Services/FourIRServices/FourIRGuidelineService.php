@@ -39,9 +39,6 @@ class FourIRGuidelineService
                 'four_ir_guidelines.id',
                 'four_ir_guidelines.name',
                 'four_ir_guidelines.name_en',
-                'four_ir_guidelines.four_ir_occupation_id',
-                'four_ir_occupations.title as occupation_title',
-                'four_ir_occupations.title_en as occupation_title_en',
                 'four_ir_guidelines.file_path',
                 'four_ir_guidelines.row_status',
                 'four_ir_guidelines.created_by',
@@ -50,8 +47,6 @@ class FourIRGuidelineService
                 'four_ir_guidelines.updated_at'
             ]
         );
-
-        $fourIrGuidelineBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_guidelines.four_ir_occupation_id');
 
         $fourIrGuidelineBuilder->orderBy('four_ir_guidelines.id', $order);
 
@@ -102,9 +97,6 @@ class FourIRGuidelineService
                 'four_ir_guidelines.id',
                 'four_ir_guidelines.name',
                 'four_ir_guidelines.name_en',
-                'four_ir_guidelines.four_ir_occupation_id',
-                'four_ir_occupations.title as occupation_title',
-                'four_ir_occupations.title_en as occupation_title_en',
                 'four_ir_guidelines.file_path',
                 'four_ir_guidelines.row_status',
                 'four_ir_guidelines.created_by',
@@ -114,7 +106,7 @@ class FourIRGuidelineService
             ]
         );
 
-        $fourIrGuidelineBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_guidelines.four_ir_occupation_id');
+
 
         $fourIrGuidelineBuilder->where('four_ir_guidelines.id', '=', $id);
 
@@ -173,11 +165,6 @@ class FourIRGuidelineService
             'name_en' => [
                 'nullable',
                 'string'
-            ],
-            'four_ir_occupation_id' => [
-                'required',
-                'int',
-                'exists:four_ir_occupations,id,deleted_at,NULL'
             ],
             'file_path' => [
                 'required',

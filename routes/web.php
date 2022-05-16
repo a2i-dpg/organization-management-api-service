@@ -199,6 +199,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->put('/approve-four-ir-course/{id}', ["as" => "approve.four.ir.course", "uses" => "FourIRCreateApproveCourseController@approveFourIrCourse"]);
         $router->get('/get-4ir-course-enrolled-youths', ["as" => "get.4ir.course.enrolled.youths", "uses" => "FourIREnrollmentApprovalController@getList"]);
         $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
+        $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
 
         /**
          * Four IR Excel imports
@@ -206,7 +207,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         $router->post('/four-ir-initiatives-import-excel', ["as" => "four.ir.initiatives.import.excel", "uses" => "FourIRInitiativeController@bulkStoreByExcel"]);
         $router->get('/four-ir-initiatives-import-excel-format', ["as" => "four.ir.initiatives.import.excel", "uses" => "FourIRInitiativeController@bulkImporterExcelFormat"]);
-
+        $router->put('/four-ir-initiatives-task-update/{id}', ["as" => "four.ir.initiatives.task.update", "uses" => "FourIRInitiativeController@taskAndSkillUpdate"]);
 
         /** Provide suggestions in drop downs */
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {
