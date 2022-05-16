@@ -3895,7 +3895,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_resource"
+                                "$ref": "#/components/schemas/4ir_scalup"
                             }
                         }
                     }
@@ -5134,6 +5134,37 @@
                         "type": "integer"
                     },
                     "file_path": {
+                        "type": "string"
+                    },
+                    "approval_status": {
+                        "type": "integer"
+                    },
+                    "budget_approval_status": {
+                        "type": "integer"
+                    },
+                    "given_budget": {
+                        "type": "integer"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_initiative_id","approval_status","budget_approval_status","given_budget"
+                ]
+            },
+            "4ir_scalup": {
+                "type": "object",
+                "properties": {
+                    "four_ir_initiative_id": {
+                        "type": "integer"
+                    },
+                    "project_name": {
                         "type": "string"
                     },
                     "approval_status": {
