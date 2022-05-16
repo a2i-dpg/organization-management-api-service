@@ -3987,7 +3987,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_occupation"
+                                "$ref": "#/components/schemas/4ir_scalup"
                             }
                         }
                     }
@@ -4667,6 +4667,45 @@
                     }
                 }
             }
+        },
+        "/get-4ir-certificate-list/{fourIrIniativeId}": {
+            "get": {
+                "tags": [
+                    "FourIR Certificates"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrIniativeId"
+                    }
+                ],
+                "summary": "Get a 4IR Certificate",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR Certificate",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "fbghfg",
+                                        "title": "kibria",
+                                        "row_status": 1,
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "created_at": "2022-05-11T05:09:32.000000Z",
+                                        "updated_at": "2022-05-11T05:09:32.000000Z"
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     },
@@ -4826,19 +4865,16 @@
                     "email": {
                         "type": "string"
                     },
-                    "phone_number": {
+                    "file_path": {
                         "type": "string"
                     },
-                    "role": {
+                    "phone_number": {
                         "type": "string"
                     },
                     "designation": {
                         "type": "string"
                     },
-                    "contribution": {
-                        "type": "string"
-                    },
-                    "responsibility": {
+                    "role_responsibility": {
                         "type": "string"
                     },
                     "row_status": {
@@ -4851,7 +4887,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","title","team_type","email","phone_number","role","designation","name"
+                    "four_ir_initiative_id","team_type","email","phone_number","role_responsibility","designation","name"
                 ]
             },
             "4ir_project_cell": {
@@ -5167,14 +5203,29 @@
                     "project_name": {
                         "type": "string"
                     },
-                    "approval_status": {
+                    "project_name_en": {
+                        "type": "string"
+                    },
+                    "previous_budget": {
                         "type": "integer"
                     },
-                    "budget_approval_status": {
+                    "implement_timeline": {
+                        "type": "string"
+                    },
+                    "implement_area": {
+                        "type": "string"
+                    },
+                    "project_documents": {
+                        "type": "string"
+                    },
+                    "tentitive_budget": {
                         "type": "integer"
                     },
-                    "given_budget": {
-                        "type": "integer"
+                    "beneficiary_target": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
                     },
                     "row_status": {
                         "type": "integer",
@@ -5186,7 +5237,8 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","approval_status","budget_approval_status","given_budget"
+                    "four_ir_initiative_id","project_name","previous_budget","implement_timeline",
+                    "implement_area", "project_documents", "tentitive_budget", "beneficiary_target"
                 ]
             },
             "4ir_sector": {
