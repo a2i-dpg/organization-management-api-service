@@ -3050,6 +3050,114 @@
                 }
             }
         },
+        "/get-4ir-course-enrolled-youths": {
+            "get": {
+                "tags": [
+                    "FourIR  Enrollements"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/four_ir_course_id"
+                    }
+                ],
+                "summary": "Get all 4IR Enrollements",
+                "responses": {
+                    "200": {
+                        "description": "Get all Enrollements",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "four_ir_initiative_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "four_ir_initiative_id": 1,
+                                            "workshop_name": "tttttttgfh",
+                                            "skill_required": "ggf",
+                                            "start_date": "2020-11-11",
+                                            "end_date": "2020-11-11",
+                                            "venue": "",
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": 14,
+                                            "updated_by": 14,
+                                            "created_at": "2022-04-21T07:18:19.000000Z",
+                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FourIR  Create Approve Courses"
+                ],
+                "summary": "Insert a 4IR Create Approve Courses",
+                "description": "API endpoint to Insert a Create Approve Courses. A successful request response will show 200 HTTP status code",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_create_and_approve"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "four_ir_initiative_id": 1,
+                                        "workshop_name": "ttthjkjhkttttgfh",
+                                        "skill_required": "ggf",
+                                        "start_date": "2020-11-11",
+                                        "end_date": "2020-11-11",
+                                        "file_path": "gfhgf",
+                                        "created_by": 14,
+                                        "updated_by": 14,
+                                        "updated_at": "2022-04-21T07:28:49.000000Z",
+                                        "created_at": "2022-04-21T07:28:49.000000Z",
+                                        "id": 5
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Tot added successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/employments": {
             "get": {
                 "tags": [
@@ -5606,6 +5714,15 @@
             },
             "four_ir_initiative_id": {
                 "name": "four_ir_initiative_id",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "four_ir_course_id": {
+                "name": "four_ir_course_id",
                 "in": "query",
                 "required": true,
                 "schema": {
