@@ -7,8 +7,8 @@ use App\Facade\ServiceToServiceCall;
 class FourIRCertificateService
 {
 
-    public function getCertificateList(int $fourIrInitiativeId)
+    public function getCertificateList(array $params, int $fourIrInitiativeId)
     {
-        return ServiceToServiceCall::getFourIrCertificateList($fourIrInitiativeId);
+        return ServiceToServiceCall::getFourIrCertificateList($params, $fourIrInitiativeId);
     }
 }

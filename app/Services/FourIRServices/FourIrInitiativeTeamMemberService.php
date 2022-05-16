@@ -63,6 +63,7 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiative_team_members.phone_number',
                 'four_ir_initiative_team_members.designation',
                 'four_ir_initiative_team_members.role_responsibility',
+                'four_ir_initiative_team_members.organization',
                 'four_ir_initiative_team_members.file_path',
                 'four_ir_initiative_team_members.team_type',
                 'four_ir_initiative_team_members.row_status',
@@ -153,6 +154,7 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiative_team_members.phone_number',
                 'four_ir_initiative_team_members.designation',
                 'four_ir_initiative_team_members.role_responsibility',
+                'four_ir_initiative_team_members.organization',
                 'four_ir_initiative_team_members.file_path',
                 'four_ir_initiative_team_members.team_type',
                 'four_ir_initiative_team_members.row_status',
@@ -323,6 +325,10 @@ class FourIrInitiativeTeamMemberService
                 'string'
             ],
             'name_en' => [
+                'nullable',
+                'string'
+            ],
+            'organization' => [
                 'nullable',
                 'string'
             ],
