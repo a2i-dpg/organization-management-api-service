@@ -23,6 +23,7 @@ class CreateFourIRInitiativeCsCurriculumCblmTable extends Migration
             $table->string('developed_organization_name',300);
             $table->string('developed_organization_name_en',300)->nullable();
             $table->string('sector_name',200);
+            $table->date('approve_date')->nullable();
             $table->string('supported_organization_name',200);
             $table->string('supported_organization_name_en',200)->nullable();
             $table->string('file_path', 200)->nullable();

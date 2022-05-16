@@ -54,6 +54,7 @@ class FourIRInitiativeCsService
             'four_ir_initiative_cs_curriculum_cblm.level_from',
             'four_ir_initiative_cs_curriculum_cblm.level_to',
             'four_ir_initiative_cs_curriculum_cblm.approved_by',
+            'four_ir_initiative_cs_curriculum_cblm.approve_date',
             'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
             'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
             'four_ir_initiative_cs_curriculum_cblm.sector_name',
@@ -137,6 +138,7 @@ class FourIRInitiativeCsService
                 'four_ir_initiative_cs_curriculum_cblm.level_from',
                 'four_ir_initiative_cs_curriculum_cblm.level_to',
                 'four_ir_initiative_cs_curriculum_cblm.approved_by',
+                'four_ir_initiative_cs_curriculum_cblm.approve_date',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
                 'four_ir_initiative_cs_curriculum_cblm.sector_name',
@@ -351,6 +353,10 @@ class FourIRInitiativeCsService
                 'string',
                 'max:300',
                 'min:2'
+            ],
+            'approve_date' => [
+                'nullable',
+                'string'
             ],
             'sector_name' => [
                 'required',
