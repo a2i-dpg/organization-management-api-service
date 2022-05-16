@@ -121,7 +121,6 @@ class FourIRInitiativeTnaFormatController extends Controller
             $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
             $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
 
-
             /** if(!empty($workshopExcelRows)){
              * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
              * }
