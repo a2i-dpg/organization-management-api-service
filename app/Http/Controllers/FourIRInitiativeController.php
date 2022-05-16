@@ -152,18 +152,23 @@ class FourIRInitiativeController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function taskAndSkillUpdate(Request $request, int $id): JsonResponse
     {
           $fourIrInitiative = FourIRInitiative::findOrFail($id);
 
-        // $this->authorize('update', $fourIrInitiative);
-           $validated = $this->fourIrInitiativeService->TaskAndSkillvalidator($request, $id)->validate();
-           $tasks=$validated['tasks'];
-           sort($tasks);
-           $tasks=array_merge ($fourIrInitiative->tasks,$tasks);
-           $tasks=array_unique($tasks);
-//        return Response::json(array_values($tasks), ResponseAlias::HTTP_CREATED);
-           $validated['tasks']=$tasks;
+
+           $validated = $this->fourIrInitiativeService->taskAndSkillvalidator($request, $id)->validate();
+           if(!empty( $tasks=$validated['tasks'])){
+               sort($tasks);
+               $tasks=array_merge ($fourIrInitiative->tasks,$tasks);
+               $tasks=array_unique($tasks);
+               $validated['tasks']=$tasks;
+           }else{
+               $validated['tasks']=[];
+           }
            $data = $this->fourIrInitiativeService->update($fourIrInitiative, $validated);
 
             $response = [
