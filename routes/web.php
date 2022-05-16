@@ -200,7 +200,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get('/get-4ir-course-enrolled-youths', ["as" => "get.4ir.course.enrolled.youths", "uses" => "FourIREnrollmentApprovalController@getList"]);
         $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
         $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
-        $router->get('/get-4ir-certificate-list/{fourIrInitiativeId}', ["as" => "get-4ir-certificate-list", "uses" => "FourIRCertificateController@getCertificates"]);
+
 
         /**
          * Four IR Excel imports
@@ -340,7 +340,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->get('organization-unit-types-trashed-data', ['as' => 'organization-unit-types.get-trashed-data', 'uses' => 'OrganizationUnitTypeController@getTrashedData']);
     $router->patch('organization-unit-types-restore{id}', ['as' => 'organization-unit-types.restore', 'uses' => 'OrganizationUnitTypeController@restore']);
     $router->delete('organization-unit-types-force-delete/{id}', ['as' => 'organization-unit-types.force-delete', 'uses' => 'OrganizationUnitTypeController@forceDelete']);
-
+    $router->get('/get-4ir-certificate-list/{fourIrInitiativeId}', ["as" => "get-4ir-certificate-list", "uses" => "FourIRCertificateController@getCertificates"]);
 
 });
 
