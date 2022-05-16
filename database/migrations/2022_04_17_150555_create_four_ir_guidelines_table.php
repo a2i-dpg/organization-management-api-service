@@ -17,7 +17,6 @@ class CreateFourIRGuidelinesTable extends Migration
             $table->increments('id');
             $table->string('name', 300);
             $table->string('name_en', 300)->nullable();
-            $table->unsignedInteger('four_ir_occupation_id');
             $table->string('file_path', 300);
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
             $table->unsignedInteger('created_by')->nullable();
