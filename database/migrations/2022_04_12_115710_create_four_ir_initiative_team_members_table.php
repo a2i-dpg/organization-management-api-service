@@ -16,15 +16,13 @@ class CreateFourIRInitiativeTeamMembersTable extends Migration
         Schema::create('four_ir_initiative_team_members', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('four_ir_initiative_id');
-            $table->unsignedInteger('user_id');
             $table->string('name',200);
             $table->string('name_en',200)->nullable();
             $table->string('email',191);
             $table->string('phone_number',15);
             $table->string('designation',191);
-            $table->string('role',200);
-            $table->text('contribution')->nullable();
-            $table->text('responsibility')->nullable();
+            $table->string('file_path',191);
+            $table->text('role_responsibility',200);
             $table->unsignedTinyInteger('team_type')->comment('1=> implementing team, 2=> expert team');
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
