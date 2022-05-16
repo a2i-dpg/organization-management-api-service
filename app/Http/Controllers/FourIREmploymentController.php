@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
+//TODO: FourIR Employment need to check
 class FourIREmploymentController extends Controller
 {
     public FourIrEmploymentService $fourIrEmploymentService;
@@ -43,7 +44,7 @@ class FourIREmploymentController extends Controller
 
         $filter = $this->fourIrEmploymentService->filterValidator($request)->validate();
         $response = $this->fourIrEmploymentService->getFourIRInitiativeList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -62,7 +63,7 @@ class FourIREmploymentController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -91,7 +92,7 @@ class FourIREmploymentController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
