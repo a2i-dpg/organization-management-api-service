@@ -161,6 +161,7 @@ class FourIRInitiativeController extends Controller
 
 
            $validated = $this->fourIrInitiativeService->taskAndSkillvalidator($request, $id)->validate();
+           Log::info($validated['tasks']);
            if(!empty( $tasks=$validated['tasks'])){
                sort($tasks);
                $tasks=array_merge ($fourIrInitiative->tasks,$tasks);
