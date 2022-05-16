@@ -56,15 +56,14 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_initiative_team_members.user_id',
+
                 'four_ir_initiative_team_members.name',
                 'four_ir_initiative_team_members.name_en',
                 'four_ir_initiative_team_members.email',
                 'four_ir_initiative_team_members.phone_number',
                 'four_ir_initiative_team_members.designation',
-                'four_ir_initiative_team_members.role',
-                'four_ir_initiative_team_members.contribution',
-                'four_ir_initiative_team_members.responsibility',
+                'four_ir_initiative_team_members.role_responsibility',
+                'four_ir_initiative_team_members.file_path',
                 'four_ir_initiative_team_members.team_type',
                 'four_ir_initiative_team_members.row_status',
                 'four_ir_initiative_team_members.created_by',
@@ -94,9 +93,6 @@ class FourIrInitiativeTeamMemberService
             $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.phone_number', 'like', '%' . $phoneNumber . '%');
         }
 
-        if (!empty($role)) {
-            $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.role', 'like', '%' . $role . '%');
-        }
 
         if (!empty($designation)) {
             $fourIrInitiativeTeamMemberBuilder->where('four_ir_initiative_team_members.designation', 'like', '%' . $designation . '%');
@@ -150,15 +146,14 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_initiative_team_members.user_id',
+
                 'four_ir_initiative_team_members.name',
                 'four_ir_initiative_team_members.name_en',
                 'four_ir_initiative_team_members.email',
                 'four_ir_initiative_team_members.phone_number',
                 'four_ir_initiative_team_members.designation',
-                'four_ir_initiative_team_members.role',
-                'four_ir_initiative_team_members.contribution',
-                'four_ir_initiative_team_members.responsibility',
+                'four_ir_initiative_team_members.role_responsibility',
+                'four_ir_initiative_team_members.file_path',
                 'four_ir_initiative_team_members.team_type',
                 'four_ir_initiative_team_members.row_status',
                 'four_ir_initiative_team_members.created_by',
@@ -323,6 +318,10 @@ class FourIrInitiativeTeamMemberService
                 'required',
                 'string'
             ],
+            'file_path' => [
+                'nullable',
+                'string'
+            ],
             'name_en' => [
                 'nullable',
                 'string'
@@ -349,20 +348,10 @@ class FourIrInitiativeTeamMemberService
                 'max:100',
                 'min:2'
             ],
-            'role' => [
+            'role_responsibility' => [
                 'required',
                 'string',
                 'max:200',
-                'min:2'
-            ],
-            'contribution' => [
-                'nullable',
-                'string',
-                'min:2'
-            ],
-            'responsibility' => [
-                'nullable',
-                'string',
                 'min:2'
             ],
             'row_status' => [
