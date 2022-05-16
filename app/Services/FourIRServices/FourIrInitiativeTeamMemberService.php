@@ -328,6 +328,10 @@ class FourIrInitiativeTeamMemberService
                 'nullable',
                 'string'
             ],
+            'organization' => [
+                'nullable',
+                'string'
+            ],
             'email' => [
                 'required',
                 'email'
