@@ -308,7 +308,7 @@ class FourIrInitiativeService
         return Validator::make($data, $rules, $customMessage);
     }
 
-    public function TaskAndSkillvalidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
+    public function taskAndSkillvalidator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
         $customMessage = [
