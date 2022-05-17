@@ -52,6 +52,7 @@ class FourIRTotInitiativeService
             'four_ir_initiative_tots.co_organizer_address',
             'four_ir_initiative_tots.co_organizer_email',
             'four_ir_initiative_tots.co_organizer_address_en',
+            'four_ir_initiative_tots.tot_date',
 
             'four_ir_initiative_tots.accessor_type',
             'four_ir_initiative_tots.accessor_id',
@@ -131,6 +132,8 @@ class FourIRTotInitiativeService
                 'four_ir_initiative_tots.co_organizer_address',
                 'four_ir_initiative_tots.co_organizer_email',
                 'four_ir_initiative_tots.co_organizer_address_en',
+                'four_ir_initiative_tots.tot_date',
+
 
                 'four_ir_initiative_tots.accessor_type',
                 'four_ir_initiative_tots.accessor_id',
@@ -181,13 +184,23 @@ class FourIRTotInitiativeService
      * @param FourIRInitiativeTot $fourIrInitiativeTot
      * @return void
      */
-    public function deletePreviousOrganizerParticipantsForUpdate(FourIRInitiativeTot $fourIrInitiativeTot): void
+    public function deletePreviousMasterTrainersForUpdate(FourIRInitiativeTot $fourIrInitiativeTot): void
     {
-        $fourIrInitiativeTotOrganizerParticipants = FourIRInitiativeTotMastersTrainersParticipant::where('four_ir_initiative_tot_id', $fourIrInitiativeTot->id)
+        $fourIrInitiativeTotMastersTrainers = FourIRInitiativeTotMastersTrainersParticipant::where('four_ir_initiative_tot_id', $fourIrInitiativeTot->id)
             ->get();
-        foreach ($fourIrInitiativeTotOrganizerParticipants as $organizerParticipant) {
+        foreach ($fourIrInitiativeTotMastersTrainers as $organizerParticipant) {
             $organizerParticipant->delete();
         }
+    }
+
+    /**
+     * @param FourIRInitiativeTot $fourIRInitiativeTot
+     * @return bool
+     */
+
+    public function destroy(FourIRInitiativeTot $fourIRInitiativeTot): bool
+    {
+        return $fourIRInitiativeTot->delete();
     }
 
     /**
