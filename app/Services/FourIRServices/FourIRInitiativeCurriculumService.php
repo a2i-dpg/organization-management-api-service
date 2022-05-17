@@ -134,6 +134,7 @@ class FourIRInitiativeCurriculumService
                 'four_ir_initiatives.form_step',
 
                 'four_ir_initiative_cs_curriculum_cblm.approved_by',
+                'four_ir_initiative_cs_curriculum_cblm.approve_date',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
                 'four_ir_initiative_cs_curriculum_cblm.sector_name',
