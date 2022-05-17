@@ -19,8 +19,7 @@ class CreateFourIRInitiativeTotMastersTrainersParticipantsTable extends Migratio
             $table->string('name', 350);
             $table->string('name_en', 350)->nullable();
             $table->string('mobile', 15);
-            $table->string('address', 500);
-            $table->string('address_en', 500)->nullable();
+            $table->string('designation', 500);
             $table->string('email', 500);
             $table->string('organization_name', 500);
             $table->string('organization_name_en', 500)->nullable();
