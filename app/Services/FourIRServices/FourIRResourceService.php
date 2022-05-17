@@ -170,7 +170,7 @@ class FourIRResourceService
             ],
             'approve_by' => [
                 Rule::requiredIf(function() use($data){
-                    return (bool)$data['id_developed_financial_proposal'];
+                    return (bool)$data['is_developed_financial_proposal'];
                 }),
                 'nullable',
                 'string'
