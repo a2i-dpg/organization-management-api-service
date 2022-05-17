@@ -240,7 +240,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json('data');
 
@@ -267,7 +267,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json('data');
 
@@ -294,7 +294,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json('data');
 
@@ -323,7 +323,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }
@@ -344,6 +344,7 @@ class ServiceToServiceCallHandler
             })
             ->json('data');
     }
+
     public function getYouthAssessmentList(array $filterData, int $fourIrInitiativeId): mixed
     {
         $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/get-four-ir-youth-assessment-list/' . $fourIrInitiativeId;
@@ -356,7 +357,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json('data');
     }
@@ -379,7 +380,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }
@@ -404,7 +405,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }
@@ -428,7 +429,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }
@@ -451,7 +452,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }
@@ -474,7 +475,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }
@@ -497,7 +498,7 @@ class ServiceToServiceCallHandler
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
                 Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-                throw new HttpErrorException($httpResponse);
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
             })
             ->json();
     }

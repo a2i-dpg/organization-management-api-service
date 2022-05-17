@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array|mixed getCourseEnrolledYouths(array $payload)
  * @method static array|mixed getCourseBatches(array $payload)
  * @method static array|mixed getFourIrCertificateList(array $filterData, int $fourIrInitiativeId)
+ * @method static array|mixed getYouthAssessmentList(array $filterData, int $fourIrInitiativeId)
  *
  *
  * @see \App\Helpers\Classes\ServiceToServiceCallHandler
