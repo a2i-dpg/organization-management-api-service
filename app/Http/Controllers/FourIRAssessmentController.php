@@ -42,8 +42,9 @@ class FourIRAssessmentController extends Controller
     public function getList(Request $request, int $fourIrInitiativeId): JsonResponse
     {
         $filter = $this->fourIRAssessmentService->filterValidator($request)->validate();
+        $responseData=$this->fourIRAssessmentService->getFourIrAssessmentList($filter, $fourIrInitiativeId);
         $response = [
-            "data" => $this->fourIRAssessmentService->getFourIrAssessmentList($filter, $fourIrInitiativeId),
+            "data" => $responseData,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
