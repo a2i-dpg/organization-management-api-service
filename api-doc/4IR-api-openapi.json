@@ -4710,7 +4710,7 @@
         "/get-four-ir-youth-assessment-list/{fourIrIniativeId}": {
             "get": {
                 "tags": [
-                    "FourIR Assessment"
+                    "FourIR Youth Assessment"
                 ],
                 "parameters": [
                     {
