@@ -340,7 +340,7 @@ class FourIRTotInitiativeService
                 'required',
                 BaseModel::MOBILE_REGEX,
             ],
-            'master_trainers.*.address' => [
+            'master_trainers.*.designation' => [
                 'required',
                 'string'
             ],
