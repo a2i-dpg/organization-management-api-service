@@ -5057,7 +5057,9 @@
                     "comments": {
                         "type": "string"
                     },
-
+                    "approve_date": {
+                        "type": "string"
+                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -5107,7 +5109,9 @@
                     "comments": {
                         "type": "string"
                     },
-
+                    "approve_date": {
+                        "type": "string"
+                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -5389,6 +5393,9 @@
                         "type": "string"
                     },
                     "comments": {
+                        "type": "string"
+                    },
+                    "approve_date": {
                         "type": "string"
                     },
 
