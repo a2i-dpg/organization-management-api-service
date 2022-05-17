@@ -3695,7 +3695,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_showcasing"
+                                "$ref": "#/components/schemas/4ir_initiative_analysis"
                             }
                         }
                     }
@@ -3785,7 +3785,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_resource"
+                                "$ref": "#/components/schemas/4ir_initiative_analysis"
                             }
                         }
                     }
@@ -4877,6 +4877,9 @@
                     "role_responsibility": {
                         "type": "string"
                     },
+                    "organization": {
+                        "type": "string"
+                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -5054,7 +5057,9 @@
                     "comments": {
                         "type": "string"
                     },
-
+                    "approve_date": {
+                        "type": "string"
+                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -5104,7 +5109,9 @@
                     "comments": {
                         "type": "string"
                     },
-
+                    "approve_date": {
+                        "type": "string"
+                    },
                     "row_status": {
                         "type": "integer",
                         "enum": [
@@ -5192,6 +5199,46 @@
                 },
                 "required": [
                     "four_ir_initiative_id","approval_status","budget_approval_status","given_budget"
+                ]
+            },
+            "4ir_initiative_analysis": {
+                "type": "object",
+                "properties": {
+                    "four_ir_initiative_id": {
+                        "type": "integer"
+                    },
+                    "researcher_name": {
+                        "type": "string"
+                    },
+                    "researcher_name_en": {
+                        "type": "string"
+                    },
+                    "organization_name": {
+                        "type": "string"
+                    },
+                    "organization_name_en": {
+                        "type": "string"
+                    },
+                    "research_method": {
+                        "type": "string"
+                    },
+                    "file_path": {
+                        "type": "string"
+                    },
+                    "team_file": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_initiative_id","researcher_name","organization_name"
                 ]
             },
             "4ir_scalup": {
@@ -5346,6 +5393,9 @@
                         "type": "string"
                     },
                     "comments": {
+                        "type": "string"
+                    },
+                    "approve_date": {
                         "type": "string"
                     },
 

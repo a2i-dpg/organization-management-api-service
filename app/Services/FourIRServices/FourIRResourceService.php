@@ -45,9 +45,10 @@ class FourIRResourceService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_resources.approval_status',
-                'four_ir_resources.budget_approval_status',
-                'four_ir_resources.given_budget',
+                'four_ir_resources.approve_by',
+                'four_ir_resources.is_developed_financial_proposal',
+                'four_ir_resources.total_amount',
+                'four_ir_resources.comment',
                 'four_ir_resources.file_path',
                 'four_ir_resources.row_status',
                 'four_ir_resources.created_by',
@@ -149,21 +150,33 @@ class FourIRResourceService
                 'required',
                 'int'
             ],
-            'approval_status' => [
+            'is_developed_financial_proposal' => [
                 'required',
                 'int',
                 Rule::in(BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE)
             ],
-            'budget_approval_status' => [
-                'required',
+            'total_amount' => [
+                Rule::requiredIf(function() use($data){
+                   return (bool)$data['is_developed_financial_proposal'];
+                }),
+                'nullable',
                 'int',
-                Rule::in(BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE)
-            ],
-            'given_budget' => [
-                'required',
-                'numeric'
             ],
             'file_path' => [
+                Rule::requiredIf(function() use($data){
+                    return (bool)$data['is_developed_financial_proposal'];
+                }),
+                'nullable',
+                'string'
+            ],
+            'approve_by' => [
+                Rule::requiredIf(function() use($data){
+                    return (bool)$data['is_developed_financial_proposal'];
+                }),
+                'nullable',
+                'string'
+            ],
+            'comment' => [
                 'nullable',
                 'string'
             ],
@@ -232,6 +245,7 @@ class FourIRResourceService
 
         /** @var Builder $sectorBuilder */
         $fourIrResourceBuilder = FourIRResource::select([
+
             'four_ir_resources.id',
             'four_ir_resources.four_ir_initiative_id',
 
@@ -241,9 +255,10 @@ class FourIRResourceService
             'four_ir_initiatives.completion_step',
             'four_ir_initiatives.form_step',
 
-            'four_ir_resources.approval_status',
-            'four_ir_resources.budget_approval_status',
-            'four_ir_resources.given_budget',
+            'four_ir_resources.approve_by',
+            'four_ir_resources.is_developed_financial_proposal',
+            'four_ir_resources.total_amount',
+            'four_ir_resources.comment',
             'four_ir_resources.file_path',
             'four_ir_resources.row_status',
             'four_ir_resources.created_by',
