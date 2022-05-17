@@ -344,6 +344,22 @@ class ServiceToServiceCallHandler
             })
             ->json('data');
     }
+    public function getYouthAssessmentList(array $filterData, int $fourIrInitiativeId): mixed
+    {
+        $url = clientUrl(BaseModel::INSTITUTE_URL_CLIENT_TYPE) . 'service-to-service-call/get-four-ir-youth-assessment-list/' . $fourIrInitiativeId;
+        return Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(5)
+            ->get($url, $filterData)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                throw new HttpErrorException($httpResponse);
+            })
+            ->json('data');
+    }
 
     /**
      * @param int $courseId
