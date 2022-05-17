@@ -4706,8 +4706,33 @@
                     }
                 }
             }
-        }
+        },
+        "/get-four-ir-youth-assessment-list/{fourIrIniativeId}": {
+            "get": {
+                "tags": [
+                    "FourIR Youth Assessment"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrIniativeId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/course_id"
+                    }
+                ],
+                "summary": "Get a 4IR Assessment",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR Assessment",
+                        "content": {
+                            "application/json": {
 
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
     "components": {
         "securitySchemes": {
@@ -5856,6 +5881,15 @@
             },
             "four_ir_course_id": {
                 "name": "four_ir_course_id",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "course_id": {
+                "name": "course_id",
                 "in": "query",
                 "required": true,
                 "schema": {

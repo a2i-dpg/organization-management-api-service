@@ -44,14 +44,14 @@ class FourIRTotInitiativeService
             'four_ir_initiatives.completion_step',
             'four_ir_initiatives.form_step',
 
-            'four_ir_initiative_tots.organiser_name',
-            'four_ir_initiative_tots.organiser_mobile',
-            'four_ir_initiative_tots.organiser_address',
-            'four_ir_initiative_tots.organiser_address_en',
-            'four_ir_initiative_tots.co_organiser_name',
-            'four_ir_initiative_tots.co_organiser_mobile',
-            'four_ir_initiative_tots.co_organiser_address',
-            'four_ir_initiative_tots.co_organiser_address_en',
+            'four_ir_initiative_tots.organizer_name',
+            'four_ir_initiative_tots.organizer_address',
+            'four_ir_initiative_tots.organizer_email',
+            'four_ir_initiative_tots.organizer_address_en',
+            'four_ir_initiative_tots.co_organizer_name',
+            'four_ir_initiative_tots.co_organizer_address',
+            'four_ir_initiative_tots.co_organizer_email',
+            'four_ir_initiative_tots.co_organizer_address_en',
 
             'four_ir_initiative_tots.accessor_type',
             'four_ir_initiative_tots.accessor_id',
@@ -123,16 +123,14 @@ class FourIRTotInitiativeService
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
-                'four_ir_initiative_tots.organiser_name',
-                'four_ir_initiative_tots.organiser_mobile',
-                'four_ir_initiative_tots.organiser_address',
-                'four_ir_initiative_tots.organiser_email',
-                'four_ir_initiative_tots.organiser_address_en',
-                'four_ir_initiative_tots.co_organiser_name',
-                'four_ir_initiative_tots.co_organiser_mobile',
-                'four_ir_initiative_tots.co_organiser_address',
-                'four_ir_initiative_tots.co_organiser_email',
-                'four_ir_initiative_tots.co_organiser_address_en',
+                'four_ir_initiative_tots.organizer_name',
+                'four_ir_initiative_tots.organizer_address',
+                'four_ir_initiative_tots.organizer_email',
+                'four_ir_initiative_tots.organizer_address_en',
+                'four_ir_initiative_tots.co_organizer_name',
+                'four_ir_initiative_tots.co_organizer_address',
+                'four_ir_initiative_tots.co_organizer_email',
+                'four_ir_initiative_tots.co_organizer_address_en',
 
                 'four_ir_initiative_tots.accessor_type',
                 'four_ir_initiative_tots.accessor_id',
@@ -217,7 +215,6 @@ class FourIRTotInitiativeService
         $masterTrainers = $data['master_trainers'] ?? [];
         foreach ($masterTrainers as $masterTrainer) {
             $masterTrainer['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
-            $masterTrainer['type'] = FourIRInitiativeTot::TYPE_ORGANIZER;
             $masterTrainer['accessor_type'] = $data['accessor_type'];
             $masterTrainer['accessor_id'] = $data['accessor_id'];
 
@@ -226,22 +223,10 @@ class FourIRTotInitiativeService
             $fourIrTotMasterTrainerParticipant->save();
         }
 
-        $coOrganizers = $data['co_organizers'] ?? [];
-        foreach ($coOrganizers as $coOrganizer) {
-            $coOrganizer['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
-            $coOrganizer['type'] = FourIRInitiativeTot::TYPE_CO_ORGANIZER;
-            $coOrganizer['accessor_type'] = $data['accessor_type'];
-            $coOrganizer['accessor_id'] = $data['accessor_id'];
-
-            $fourIrTotOrganizerParticipant = new FourIRInitiativeTotMastersTrainersParticipant();
-            $fourIrTotOrganizerParticipant->fill($coOrganizer);
-            $fourIrTotOrganizerParticipant->save();
-        }
 
         if (!empty($excelRows)) {
             foreach ($excelRows as $row) {
                 $row['four_ir_initiative_tot_id'] = $fourIrProjectTOt->id;
-                $row['type'] = FourIRInitiativeTot::TYPE_PARTICIPANT;
                 $row['accessor_type'] = $data['accessor_type'];
                 $row['accessor_id'] = $data['accessor_id'];
 
@@ -294,52 +279,43 @@ class FourIRTotInitiativeService
                 'required',
                 'int'
             ],
-
-            'organiser_name' => [
+            'organizer_name' => [
                 'required',
                 'string'
             ],
-            'organiser_name_en' => [
+            'organizer_name_en' => [
                 'nullable',
                 'string'
             ],
-            'organiser_mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX,
-            ],
-            'organiser_address' => [
+            'organizer_address' => [
                 'required',
                 'string'
             ],
-            'organiser_address_en' => [
+            'organizer_address_en' => [
                 'nullable',
                 'string'
             ],
-            'organiser_email' => [
+            'organizer_email' => [
                 'required',
                 'email',
             ],
-            'co_organiser_name' => [
+            'co_organizer_name' => [
                 'required',
                 'string'
             ],
-            'co_organiser_name_en' => [
+            'co_organizer_name_en' => [
                 'nullable',
                 'string'
             ],
-            'co_organiser_mobile' => [
-                'required',
-                BaseModel::MOBILE_REGEX,
-            ],
-            'co_organiser_address' => [
+            'co_organizer_address' => [
                 'required',
                 'string'
             ],
-            'co_organiser_address_en' => [
+            'co_organizer_address_en' => [
                 'nullable',
                 'string'
             ],
-            'co_organiser_email' => [
+            'co_organizer_email' => [
                 'required',
                 'email',
             ],
@@ -364,7 +340,7 @@ class FourIRTotInitiativeService
                 'required',
                 BaseModel::MOBILE_REGEX,
             ],
-            'master_trainers.*.address' => [
+            'master_trainers.*.designation' => [
                 'required',
                 'string'
             ],
@@ -375,6 +351,22 @@ class FourIRTotInitiativeService
             'master_trainers.*.email' => [
                 'required',
                 'email',
+            ],
+            'master_trainers.*.organization_name' => [
+                'required',
+                'string'
+            ],
+            'master_trainers.*.organization_name_en' => [
+                'nullable',
+                'string'
+            ],
+            'tot_date' => [
+                'required',
+                'string'
+            ],
+            "proof_of_report_file"=>[
+                'required',
+                'string'
             ],
             'participants_file' => [
                 'nullable',

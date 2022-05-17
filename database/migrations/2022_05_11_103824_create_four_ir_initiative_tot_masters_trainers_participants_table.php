@@ -16,13 +16,13 @@ class CreateFourIRInitiativeTotMastersTrainersParticipantsTable extends Migratio
         Schema::create('four_ir_initiative_tot_masters_trainers_participants', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('four_ir_initiative_tot_id');
-            $table->unsignedTinyInteger('type')->comment("1 => Organizer, 2 => co-organizer, 3 => participant");
             $table->string('name', 350);
             $table->string('name_en', 350)->nullable();
             $table->string('mobile', 15);
-            $table->string('address', 500);
-            $table->string('address_en', 500)->nullable();
+            $table->string('designation', 500);
             $table->string('email', 500);
+            $table->string('organization_name', 500);
+            $table->string('organization_name_en', 500)->nullable();
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');

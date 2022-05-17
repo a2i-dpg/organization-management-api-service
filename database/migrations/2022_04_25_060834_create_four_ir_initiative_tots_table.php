@@ -16,12 +16,16 @@ class CreateFourIRInitiativeTotsTable extends Migration
         Schema::create('four_ir_initiative_tots', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('four_ir_initiative_id');
-            $table->string('master_trainer_name', 350);
-            $table->string('master_trainer_name_en', 350)->nullable();
-            $table->string('master_trainer_mobile', 15);
-            $table->string('master_trainer_address', 500);
-            $table->string('master_trainer_address_en', 500)->nullable();
-            $table->string('master_trainer_email', 500);
+            $table->string('organizer_name', 350);
+            $table->string('organizer_email', 350);
+            $table->string('organizer_address', 350);
+            $table->string('organizer_address_en', 350)->nullable();
+            $table->string('co_organizer_name', 350);
+            $table->string('co_organizer_email', 350);
+            $table->string('co_organizer_address', 350);
+            $table->string('co_organizer_address_en', 350)->nullable();
+            $table->date('tot_date');
+            $table->string('proof_of_report_file', 350);
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
             $table->unsignedTinyInteger('row_status')->default(1)->comment('0 => inactive, 1 => active');
