@@ -172,6 +172,10 @@ class NascibMemberController extends Controller
         /** @var Organization $organization */
         $organization = app(Organization::class);
 
+        $membershipTypeId = MembershipType::firstOrFail()->id;
+
+        $request->offsetSet("membership_type_id", $membershipTypeId);
+
         $validated = $this->nascibMemberService->validator($request)->validate();
 
         if (!empty($validated['other_authority'])) {
