@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseModel;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRShowcasing;
 use App\Services\FourIRServices\FourIRFileLogService;
@@ -81,6 +82,7 @@ class FourIRShowcasingController extends Controller
     {
         //$this->authorize('create', FourIRShowcasing::class);
         $validated = $this->fourIRShowcasingService->validator($request)->validate();
+
         try {
             DB::beginTransaction();
 
@@ -117,7 +119,8 @@ class FourIRShowcasingController extends Controller
     {
         $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
         //$this->authorize('update', $fourIrProject);
-
+        $request->offsetSet('accessor_type',BaseModel::ACCESSOR_TYPE_INSTITUTE);
+        $request->offsetSet('accessor_id',1);
         $validated = $this->fourIRShowcasingService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
