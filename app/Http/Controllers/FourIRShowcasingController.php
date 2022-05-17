@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
-//TODO: FourIR Employment need to check
+
 class FourIRShowcasingController extends Controller
 {
     public FourIRShowcasingService $fourIRShowcasingService;
@@ -119,8 +119,6 @@ class FourIRShowcasingController extends Controller
     {
         $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
         //$this->authorize('update', $fourIrProject);
-        $request->offsetSet('accessor_type',BaseModel::ACCESSOR_TYPE_INSTITUTE);
-        $request->offsetSet('accessor_id',1);
         $validated = $this->fourIRShowcasingService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
