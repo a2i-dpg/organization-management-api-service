@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\FourIrTotParticipantsImport;
-use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTot;
-use App\Models\FourIRInitiativeTotMastersTrainersParticipant;
 use App\Services\FourIRServices\FourIRTotInitiativeService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
