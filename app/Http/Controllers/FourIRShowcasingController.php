@@ -80,10 +80,10 @@ class FourIRShowcasingController extends Controller
     function store(Request $request): JsonResponse
     {
         //$this->authorize('create', FourIRShowcasing::class);
-
         $validated = $this->fourIRShowcasingService->validator($request)->validate();
         try {
             DB::beginTransaction();
+
             $data = $this->fourIRShowcasingService->store($validated);
             $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
@@ -156,7 +156,6 @@ class FourIRShowcasingController extends Controller
     {
         $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
         //$this->authorize('delete', $fourIrProject);
-
         $this->fourIRShowcasingService->destroy($fourIrShowcasing);
         $response = [
             '_response_status' => [

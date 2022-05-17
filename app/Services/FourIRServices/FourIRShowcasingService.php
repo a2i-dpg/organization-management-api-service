@@ -156,22 +156,6 @@ class FourIRShowcasingService
      */
     public function store(array $data): FourIRShowcasing
     {
-        /** Update form step & completion step first */
-        $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
-        $payload = [];
-
-        if($initiative->form_step < FourIRInitiative::FORM_STEP_SHOWCASING){
-            $payload['form_step'] = FourIRInitiative::FORM_STEP_SHOWCASING;
-        }
-        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIFTEEN){
-            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FIFTEEN;
-        }
-
-        $initiative->fill($payload);
-        $initiative->save();
-
-        /** Now store showcasing */
         $fourIrShowcasing = new FourIRShowcasing();
         $fourIrShowcasing->fill($data);
         $fourIrShowcasing->save();
@@ -300,7 +284,7 @@ class FourIRShowcasingService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int',
+            'four_ir_initiative_id' => 'nullable|int',
             'organization_name' => 'nullable|string',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
