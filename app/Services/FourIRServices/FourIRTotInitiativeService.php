@@ -133,6 +133,7 @@ class FourIRTotInitiativeService
                 'four_ir_initiative_tots.co_organizer_email',
                 'four_ir_initiative_tots.co_organizer_address_en',
                 'four_ir_initiative_tots.tot_date',
+                'four_ir_initiative_tots.proof_of_report_file',
 
 
                 'four_ir_initiative_tots.accessor_type',
