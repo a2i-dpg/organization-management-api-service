@@ -35,15 +35,22 @@ class FourIRAssessmentController extends Controller
 
     /**
      * @param Request $request
+     * @param int $fourIrInitiativeId
      * @return JsonResponse
-     * @throws Throwable|ValidationException
+     * @throws ValidationException
      */
-    public function getList(Request $request): JsonResponse
+    public function getList(Request $request, int $fourIrInitiativeId): JsonResponse
     {
-
         $filter = $this->fourIRAssessmentService->filterValidator($request)->validate();
-        $response = $this->fourIRAssessmentService->getFourIrAssessmentList($filter, $this->startTime);
-        return Response::json($response, ResponseAlias::HTTP_OK);
+        $response = [
+            "data" => $this->fourIRAssessmentService->getFourIrAssessmentList($filter, $fourIrInitiativeId),
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, $response['_response_status']['code']);
     }
 
     /**
@@ -64,93 +71,4 @@ class FourIRAssessmentController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws Throwable|ValidationException
-     */
-    function store(Request $request): JsonResponse
-    {
-        $validated = $this->fourIRAssessmentService->validator($request)->validate();
-        try {
-            DB::beginTransaction();
-            $data = $this->fourIRAssessmentService->store($validated);
-            $this->fourIRFileLogService->storeFileLog($data->toArray(), FourIRInitiative::FILE_LOG_ASSESSMENT_STEP);
-
-            DB::commit();
-            $response = [
-                'data' => $data,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_CREATED,
-                    "message" => "Four Ir Assessment  added successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e){
-            DB::rollBack();
-            throw $e;
-        }
-
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Update the specified resource in storage
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     * @throws ValidationException
-     * @throws Throwable
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $fourIrAssessment = FourIRAssessment::findOrFail($id);
-        $validated = $this->fourIRAssessmentService->validator($request, $id)->validate();
-        try {
-            DB::beginTransaction();
-            $filePath = $fourIrAssessment['file_path'];
-            $data = $this->fourIRAssessmentService->update($fourIrAssessment, $validated);
-            $this->fourIRFileLogService->updateFileLog($filePath, $data->toArray(), FourIRInitiative::FILE_LOG_ASSESSMENT_STEP);
-
-            DB::commit();
-            $response = [
-                'data' => $data,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Assessment updated successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
-        } catch (Throwable $e){
-            DB::rollBack();
-            throw $e;
-        }
-
-        return Response::json($response, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * Remove the specified resource from storage
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $fourIrAssessment = FourIRAssessment::findOrFail($id);
-        $this->fourIRAssessmentService->destroy($fourIrAssessment);
-        $response = [
-            '_response_status' => [
-                "success" => true,
-                "code" => ResponseAlias::HTTP_OK,
-                "message" => "Four Ir Assessment deleted successfully",
-                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-            ]
-        ];
-        return Response::json($response, ResponseAlias::HTTP_OK);
-    }
 }

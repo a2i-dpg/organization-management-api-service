@@ -2,6 +2,7 @@
 
 namespace App\Services\FourIRServices;
 
+use App\Facade\ServiceToServiceCall;
 use App\Models\BaseModel;
 use App\Models\FourIRAssessment;
 use App\Models\FourIRCourseDevelopment;
@@ -20,90 +21,12 @@ class FourIRAssessmentService
 
     /**
      * @param array $request
-     * @param Carbon $startTime
+     * @param int $fourIrInitiativeId
      * @return array
      */
-    public function getFourIrAssessmentList(array $request, Carbon $startTime): array
+    public function getFourIrAssessmentList(array $request, int $fourIrInitiativeId): array
     {
-        $fourIrProjectId = $request['four_ir_initiative_id'] ?? "";
-        $courseName = $request['course_name'] ?? "";
-        $examineName = $request['examine_name'] ?? "";
-        $examinerName = $request['examiner_name'] ?? "";
-        $paginate = $request['page'] ?? "";
-        $pageSize = $request['page_size'] ?? "";
-        $rowStatus = $request['row_status'] ?? "";
-        $order = $request['order'] ?? "ASC";
-
-        /** @var Builder $fourIrAssessmentBuilder */
-        $fourIrAssessmentBuilder = FourIRAssessment::select([
-            'four_ir_assessments.id',
-            'four_ir_assessments.four_ir_initiative_id',
-            'four_ir_assessments.course_name',
-            'four_ir_assessments.course_name_en',
-            'four_ir_assessments.examine_name',
-            'four_ir_assessments.examine_name_en',
-            'four_ir_assessments.examiner_name',
-            'four_ir_assessments.examiner_name_en',
-            'four_ir_assessments.file_path',
-            'four_ir_assessments.accessor_type',
-            'four_ir_assessments.accessor_id',
-            'four_ir_assessments.row_status',
-            'four_ir_assessments.created_by',
-            'four_ir_assessments.updated_by',
-            'four_ir_assessments.created_at',
-            'four_ir_assessments.updated_at'
-        ])->acl();
-        $fourIrAssessmentBuilder->orderBy('four_ir_assessments.id', $order);
-
-        if (is_numeric($fourIrProjectId)) {
-            $fourIrAssessmentBuilder->where('four_ir_assessments.four_ir_initiative_id', $fourIrProjectId);
-        }
-
-        if (!empty($courseName)) {
-            $fourIrAssessmentBuilder->where(function ($builder) use ($courseName) {
-                $builder->where('four_ir_assessments.course_name', 'like', '%' . $courseName . '%');
-                $builder->orWhere('four_ir_assessments.course_name_en', 'like', '%' . $courseName . '%');
-            });
-        }
-        if (!empty($examineName)) {
-            $fourIrAssessmentBuilder->where(function ($builder) use ($examineName) {
-                $builder->where('four_ir_assessments.examine_name', 'like', '%' . $examineName . '%');
-                $builder->orWhere('four_ir_assessments.examine_name_en', 'like', '%' . $examineName . '%');
-            });
-        }
-        if (!empty($examinerName)) {
-            $fourIrAssessmentBuilder->where(function ($builder) use ($examinerName) {
-                $builder->where('four_ir_assessments.examiner_name', 'like', '%' . $examinerName . '%');
-                $builder->orWhere('four_ir_assessments.examiner_name_en', 'like', '%' . $examinerName . '%');
-            });
-        }
-
-        if (is_numeric($rowStatus)) {
-            $fourIrAssessmentBuilder->where('four_ir_assessments.row_status', $rowStatus);
-        }
-
-        /** @var  Collection $fourIrAssessments */
-        if (is_numeric($paginate) || is_numeric($pageSize)) {
-            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $fourIrAssessments = $fourIrAssessmentBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrAssessments->toArray();
-            $response['current_page'] = $paginateData->current_page;
-            $response['total_page'] = $paginateData->last_page;
-            $response['page_size'] = $paginateData->per_page;
-            $response['total'] = $paginateData->total;
-        } else {
-            $fourIrAssessments = $fourIrAssessmentBuilder->get();
-        }
-
-        $response['order'] = $order;
-        $response['data'] = $fourIrAssessments->toArray()['data'] ?? $fourIrAssessments->toArray();
-        $response['_response_status'] = [
-            "success" => true,
-            "code" => Response::HTTP_OK,
-            "query_time" => $startTime->diffInSeconds(Carbon::now())
-        ];
-
-        return $response;
+        return ServiceToServiceCall::getYouthAssessmentList($request, $fourIrInitiativeId);
     }
 
     /**
@@ -260,8 +183,7 @@ class FourIRAssessmentService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int',
-            'course_name' => 'nullable',
+            'course_id' => 'nullable',
             'examine_name' => 'nullable',
             'examiner_name' => 'nullable',
             'page' => 'nullable|integer|gt:0',

@@ -92,6 +92,7 @@ class FourIRResourceService
             /** Create new instance to store */
             $fourIRResource = new FourIRResource();
         }
+
         $fourIRResource->fill($data);
         $fourIRResource->save();
 
