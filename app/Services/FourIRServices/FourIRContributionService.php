@@ -18,14 +18,14 @@ use Symfony\Component\HttpFoundation\Response;
 class FourIRContributionService
 {
 
-    public function getList(array $request): array
+    public function getList(array $request, int $userId = null): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $userId = 18;
+        $userId = $userId ?? Auth::id();
         $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
@@ -90,7 +90,6 @@ class FourIRContributionService
 
         return $response;
     }
-
 
 
     public function getOne(int $id): array
