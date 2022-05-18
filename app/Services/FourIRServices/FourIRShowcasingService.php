@@ -232,11 +232,11 @@ class FourIRShowcasingService
             ],
             'start_time' => [
                 'required',
-                'date-format:Y-m-d'
+                'date_format:H:i'
             ],
             'end_time' => [
                 'required',
-                'date-format:Y-m-d',
+                'date_format:H:i',
                 'after:start_time'
             ],
             'event_description' => [
