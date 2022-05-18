@@ -7,6 +7,7 @@ use App\Models\FourIRContribution;
 use App\Models\FourIRInitiativeTeamMember;
 use App\Models\FourIRInitiativeTnaFormat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FourIRContributionService
@@ -20,6 +21,7 @@ class FourIRContributionService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
+        $userId = Auth::id();
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id as four_ir_initiative_team_member_id",
@@ -42,7 +44,7 @@ class FourIRContributionService
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
         $fourIrContributionBuilder->join("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
-        $fourIrContributionBuilder->where("four_ir_initiative_team_members.user_id");
+        $fourIrContributionBuilder->where("four_ir_initiative_team_members.user_id", $userId);
     }
 
     public function createOrUpdate(array $request)

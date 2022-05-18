@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
@@ -115,6 +116,8 @@ class FourIRInitiativeTotController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
+        Log::info(FourIRInitiativeTot::class.json_encode($request->all(),JSON_PRETTY_PRINT));
+
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
 
         $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
