@@ -26,6 +26,7 @@ class HumanResourceService
     public function getHumanResourceList(array $request, Carbon $startTime): array
     {
         $titleEn = $request['title_en'] ?? "";
+        $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $title = $request['title'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
@@ -62,6 +63,9 @@ class HumanResourceService
 
         ])->acl();
 
+        if(!empty($fourIrInitiativeId)){
+            $humanResourceBuilder->where('human_resources.four_ir_initiative_id', $fourIrInitiativeId);
+        }
         $humanResourceBuilder->join('organizations', function ($join) use ($rowStatus) {
             $join->on('human_resources.organization_id', '=', 'organizations.id')
                 ->whereNull('organizations.deleted_at');
@@ -410,6 +414,7 @@ class HumanResourceService
         }
 
         return Validator::make($request->all(), [
+            'four_ir_initiative_id'=>'nullable|max:300|min:2',
             'title_en' => 'nullable|max:300|min:2',
             'title' => 'nullable|max:600|min:2',
             'page' => 'nullable|integer|gt:0',
