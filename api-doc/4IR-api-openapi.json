@@ -2660,7 +2660,7 @@
                 }
 
             },
-            "put": {
+            "post": {
                 "tags": [
                     "FourIR  Tot"
                 ],
