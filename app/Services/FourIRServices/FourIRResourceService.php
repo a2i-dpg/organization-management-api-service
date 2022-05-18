@@ -231,7 +231,7 @@ class FourIRResourceService
      * @param Carbon $startTime
      * @return array
      */
-    public function getResourceList($filter, Carbon $startTime): array
+    public function getResourceList($request, Carbon $startTime): array
     {
 
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
