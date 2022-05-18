@@ -117,7 +117,7 @@ class FourIRInitiativeTotController extends Controller
     {
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
 
-        $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
+        $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
 
         $excelRows = null;
         if(!empty($request->file('participants_file'))){
