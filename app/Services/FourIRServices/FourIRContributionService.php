@@ -18,19 +18,24 @@ use Symfony\Component\HttpFoundation\Response;
 class FourIRContributionService
 {
 
-    public function getList(array $filter): array
+    public function getList(array $request): array
     {
-
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $userId = Auth::id();
+        $userId = 18;
         $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
-            "four_ir_initiative_team_members.id as four_ir_initiative_team_member_id",
+            "four_ir_initiative_team_members.id",
+            "four_ir_initiative_team_members.role",
+            "four_ir_initiative_team_members.name as team_member_name",
+            "four_ir_initiative_team_members.name_en as team_member_name_en",
+            "four_ir_initiative_team_members.email as team_member_email",
+            "four_ir_initiative_team_members.phone_number as team_member_phone_number",
+            "four_ir_initiative_team_members.designation as team_member_designation",
             "four_ir_contributions.id as four_ir_contribution_id",
             "four_ir_contributions.four_ir_initiative_id as four_ir_initiative_id",
             "four_ir_taglines.id as four_ir_tagline_id",
@@ -45,7 +50,7 @@ class FourIRContributionService
             'four_ir_contributions.updated_by',
             'four_ir_contributions.created_at',
             'four_ir_contributions.updated_at'
-        ])->acl();
+        ]);
 
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
@@ -86,6 +91,41 @@ class FourIRContributionService
         return $response;
     }
 
+
+
+    public function getOne(int $id): array
+    {
+        $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
+            "four_ir_initiative_team_members.id",
+            "four_ir_initiative_team_members.role",
+            "four_ir_initiative_team_members.name as team_member_name",
+            "four_ir_initiative_team_members.name_en as team_member_name_en",
+            "four_ir_initiative_team_members.email as team_member_email",
+            "four_ir_initiative_team_members.phone_number as team_member_phone_number",
+            "four_ir_initiative_team_members.designation as team_member_designation",
+            "four_ir_contributions.id as four_ir_contribution_id",
+            "four_ir_contributions.four_ir_initiative_id as four_ir_initiative_id",
+            "four_ir_taglines.id as four_ir_tagline_id",
+            "four_ir_taglines.name as four_ir_tagline_name",
+            "four_ir_taglines.name_en as four_ir_tagline_name_en",
+            "four_ir_initiatives.name as four_ir_tagline_name",
+            "four_ir_initiatives.name_en as four_ir_tagline_name_en",
+            "four_ir_contributions.contribution as contribution",
+            "four_ir_contributions.contribution_en as contribution_en",
+            'four_ir_contributions.row_status',
+            'four_ir_contributions.created_by',
+            'four_ir_contributions.updated_by',
+            'four_ir_contributions.created_at',
+            'four_ir_contributions.updated_at'
+        ]);
+
+        $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
+        $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
+        $fourIrContributionBuilder->join("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
+        $fourIrContributionBuilder->where("four_ir_initiative_team_members.id", $id);
+        return $fourIrContributionBuilder->firstOrFail()->toArray();
+    }
+
     public function createOrUpdate(array $request)
     {
         return FourIRContribution::updateOrCreate(
@@ -124,7 +164,7 @@ class FourIRContributionService
         }
 
         return Validator::make($request->all(), [
-            'four_ir_initiative_id' => 'required|int',
+            'four_ir_initiative_id' => 'nullable|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [

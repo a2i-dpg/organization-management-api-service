@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FourIRContribution;
 use App\Services\FourIRServices\FourIRContributionService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +22,7 @@ class FourIRContributionController extends Controller
     public function __construct(FourIRContributionService $fourIRContributionService)
     {
         $this->fourIRContributionService = $fourIRContributionService;
-        $this->startTime=Carbon::now();
+        $this->startTime = Carbon::now();
     }
 
     public function getList(Request $request): JsonResponse
@@ -33,9 +32,18 @@ class FourIRContributionController extends Controller
         return Response::json($response, $response['_response_status']['code']);
     }
 
-    public function read(int $id)
+    public function read(int $id): JsonResponse
     {
-
+        $responseData = $this->fourIRContributionService->getOne($id);
+        $response = [
+            "data" => $responseData,
+            "_response_status" => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
+        return Response::json($response, $response['_response_status']['code']);
     }
 
     /**
@@ -44,7 +52,7 @@ class FourIRContributionController extends Controller
     function store(Request $request): JsonResponse
     {
         $validateData = $this->fourIRContributionService->valiation($request)->validate();
-        $validateData['user_id']=18;
+        $validateData['user_id'] = 18;
         $responseData = $this->fourIRContributionService->createOrUpdate($validateData);
         $response = [
             "data" => $responseData,
