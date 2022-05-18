@@ -56,6 +56,19 @@ class FourIRInitiativeController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function getAllFourIrInitiatives(Request $request): JsonResponse
+    {
+//        $this->authorize('viewAny', FourIRInitiative::class);
+
+        $filter = $this->fourIrInitiativeService->filterValidatorForAll($request)->validate();
+        $response = $this->fourIrInitiativeService->getFourIrAllInitiativeList($filter, $this->startTime);
+        return Response::json($response, ResponseAlias::HTTP_OK);
+    }
+    /**
      * @param int $id
      * @return JsonResponse
      */

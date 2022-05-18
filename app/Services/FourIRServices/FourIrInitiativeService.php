@@ -128,6 +128,101 @@ class FourIrInitiativeService
     }
 
     /**
+     * @param array $request
+     * @param Carbon $startTime
+     * @return array
+     */
+    public function getFourIrAllInitiativeList(array $request, Carbon $startTime): array
+    {
+        $initiativeName = $request['name'] ?? "";
+        $organizationName = $request['organization_name'] ?? "";
+        $startDate = $request['start_date'] ?? "";
+        $paginate = $request['page'] ?? "";
+        $pageSize = $request['page_size'] ?? "";
+        $rowStatus = $request['row_status'] ?? "";
+        $order = $request['order'] ?? "ASC";
+
+        /** @var Builder $fourIrInitiativeBuilder */
+        $fourIrInitiativeBuilder = FourIRInitiative::select(
+            [
+                'four_ir_initiatives.id',
+                'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_initiatives.is_skill_provide',
+                'four_ir_initiatives.implementing_team_launching_date',
+                'four_ir_initiatives.expert_team_launching_date',
+                'four_ir_initiatives.name',
+                'four_ir_initiatives.name_en',
+                'four_ir_initiatives.organization_name',
+                'four_ir_initiatives.organization_name_en',
+                'four_ir_initiatives.budget',
+                'four_ir_initiatives.designation',
+                'four_ir_initiatives.four_ir_occupation_id',
+                'four_ir_initiatives.start_date',
+                'four_ir_initiatives.end_date',
+                'four_ir_initiatives.file_path',
+                'four_ir_initiatives.tasks',
+                'four_ir_initiatives.completion_step',
+                'four_ir_initiatives.form_step',
+                'four_ir_initiatives.initiative_code',
+                'four_ir_initiatives.accessor_type',
+                'four_ir_initiatives.accessor_id',
+                'four_ir_initiatives.row_status',
+                'four_ir_initiatives.created_by',
+                'four_ir_initiatives.updated_by',
+                'four_ir_initiatives.created_at',
+                'four_ir_initiatives.updated_at'
+            ]
+        )->acl();
+
+        if (!empty($initiativeName)) {
+            $fourIrInitiativeBuilder->where(function ($builder) use ($initiativeName) {
+                $builder->where('four_ir_initiatives.name', 'like', '%' . $initiativeName . '%');
+                $builder->orWhere('four_ir_initiatives.name_en', 'like', '%' . $initiativeName . '%');
+            });
+        }
+
+        if (!empty($organizationName)) {
+            $fourIrInitiativeBuilder->where(function ($builder) use ($organizationName) {
+                $builder->where('four_ir_initiatives.organization_name', 'like', '%' . $organizationName . '%');
+                $builder->orWhere('four_ir_initiatives.organization_name_en', 'like', '%' . $organizationName . '%');
+            });
+        }
+
+        if (!empty($startDate)) {
+            $fourIrInitiativeBuilder->whereDate('four_ir_initiatives.start_date', $startDate);
+        }
+
+        $fourIrInitiativeBuilder->orderBy('four_ir_initiatives.id', $order);
+
+        if (is_numeric($rowStatus)) {
+            $fourIrInitiativeBuilder->where('four_ir_initiatives.row_status', $rowStatus);
+        }
+
+        /** @var Collection $fourIrInitiatives */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $fourIrInitiatives = $fourIrInitiativeBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrInitiatives->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $fourIrInitiatives = $fourIrInitiativeBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $fourIrInitiatives->toArray()['data'] ?? $fourIrInitiatives->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
+        ];
+
+        return $response;
+    }
+
+    /**
      * @param int $id
      * @return FourIRInitiative
      */
@@ -367,6 +462,40 @@ class FourIrInitiativeService
 
         return Validator::make($request->all(), [
             'four_ir_tagline_id' => 'required|int',
+            'name' => 'nullable|max:600|min:2',
+            'organization_name' => 'nullable|max:600|min:2',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'start_date' => 'nullable|date',
+            'order' => [
+                'nullable',
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function filterValidatorForAll(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        return Validator::make($request->all(), [
             'name' => 'nullable|max:600|min:2',
             'organization_name' => 'nullable|max:600|min:2',
             'page' => 'nullable|integer|gt:0',
