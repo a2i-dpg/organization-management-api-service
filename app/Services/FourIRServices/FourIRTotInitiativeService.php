@@ -264,12 +264,12 @@ class FourIRTotInitiativeService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
-        Log::info($data);
+
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        if(!empty( $data['master_trainers'])){
-            $data['master_trainers']=json_decode( $data['master_trainers'],true);
+        if(!empty($data['master_trainers'])){
+            $data['master_trainers']=json_decode($data['master_trainers'],true);
         }
         if(!empty($data['four_ir_initiative_id'])){
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);

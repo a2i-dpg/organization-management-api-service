@@ -47,6 +47,7 @@ class FourIrInitiativeService
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_taglines.name as four_ir_tagline_name',
                 'four_ir_initiatives.is_skill_provide',
                 'four_ir_initiatives.implementing_team_launching_date',
                 'four_ir_initiatives.expert_team_launching_date',
@@ -77,7 +78,7 @@ class FourIrInitiativeService
         )->acl();
 
         $fourIrInitiativeBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_initiatives.four_ir_occupation_id');
-
+        $fourIrInitiativeBuilder->join('four_ir_taglines', 'four_ir_taglines.id', '=', 'four_ir_initiatives.four_ir_tagline_id');
         if (!empty($initiativeName)) {
             $fourIrInitiativeBuilder->where(function ($builder) use ($initiativeName) {
                 $builder->where('four_ir_initiatives.name', 'like', '%' . $initiativeName . '%');
@@ -137,6 +138,7 @@ class FourIrInitiativeService
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_taglines.name as four_ir_tagline_name',
                 'four_ir_initiatives.is_skill_provide',
                 'four_ir_initiatives.implementing_team_launching_date',
                 'four_ir_initiatives.expert_team_launching_date',
@@ -169,7 +171,7 @@ class FourIrInitiativeService
         $fourIrInitiativeBuilder->where('four_ir_initiatives.id', '=', $id);
 
         $fourIrInitiativeBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_initiatives.four_ir_occupation_id');
-
+        $fourIrInitiativeBuilder->join('four_ir_taglines', 'four_ir_taglines.id', '=', 'four_ir_initiatives.four_ir_tagline_id');
         return $fourIrInitiativeBuilder->firstOrFail();
     }
 

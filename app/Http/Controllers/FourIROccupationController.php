@@ -128,6 +128,7 @@ class FourIROccupationController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
+
     /**
      * Remove the specified resource from storage
      *
