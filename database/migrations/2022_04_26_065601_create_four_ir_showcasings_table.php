@@ -21,8 +21,8 @@ class CreateFourIrShowcasingsTable extends Migration
             $table->string('invite_other_organization', 400);
             $table->string('invite_other_organization_en', 400)->nullable();
             $table->string('venue', 100);
-            $table->date('start_time');
-            $table->date('end_time');
+            $table->string('start_time', 100);
+            $table->string('end_time', 100);
             $table->text('event_description')->nullable();
             $table->string('file_path', 200)->nullable();
             $table->string('accessor_type', 100);
