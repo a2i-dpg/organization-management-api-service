@@ -51,13 +51,17 @@ class FourIRScaleUpService
 
                 'four_ir_scale_ups.project_name',
                 'four_ir_scale_ups.project_name_en',
-                'four_ir_scale_ups.previous_budget',
+                'four_ir_scale_ups.budget',
                 'four_ir_scale_ups.implement_timeline',
-                'four_ir_scale_ups.implement_area',
-                'four_ir_scale_ups.project_documents',
-                'four_ir_scale_ups.tentitive_budget',
+                'four_ir_scale_ups.start_date',
+                'four_ir_scale_ups.end_date',
                 'four_ir_scale_ups.beneficiary_target',
-                'four_ir_scale_ups.description',
+                'four_ir_scale_ups.number_of_beneficiary',
+                'four_ir_scale_ups.implement_area',
+                'four_ir_scale_ups.approval_status',
+                'four_ir_scale_ups.approve_by',
+                'four_ir_scale_ups.documents_approval-status',
+                'four_ir_scale_ups.file_path',
                 'four_ir_scale_ups.accessor_type',
                 'four_ir_scale_ups.accessor_id',
                 'four_ir_scale_ups.row_status',
@@ -131,13 +135,17 @@ class FourIRScaleUpService
 
                 'four_ir_scale_ups.project_name',
                 'four_ir_scale_ups.project_name_en',
-                'four_ir_scale_ups.previous_budget',
+                'four_ir_scale_ups.budget',
                 'four_ir_scale_ups.implement_timeline',
-                'four_ir_scale_ups.implement_area',
-                'four_ir_scale_ups.project_documents',
-                'four_ir_scale_ups.tentitive_budget',
+                'four_ir_scale_ups.start_date',
+                'four_ir_scale_ups.end_date',
                 'four_ir_scale_ups.beneficiary_target',
-                'four_ir_scale_ups.description',
+                'four_ir_scale_ups.number_of_beneficiary',
+                'four_ir_scale_ups.implement_area',
+                'four_ir_scale_ups.approval_status',
+                'four_ir_scale_ups.approve_by',
+                'four_ir_scale_ups.documents_approval-status',
+                'four_ir_scale_ups.file_path',
                 'four_ir_scale_ups.accessor_type',
                 'four_ir_scale_ups.accessor_id',
                 'four_ir_scale_ups.row_status',
@@ -250,7 +258,7 @@ class FourIRScaleUpService
                 'nullable',
                 'string'
             ],
-            'previous_budget' => [
+            'budget' => [
                 'required',
                 'numeric'
             ],
@@ -258,26 +266,42 @@ class FourIRScaleUpService
                 'required',
                 'string'
             ],
-            'implement_area' => [
+            'start_date' => [
                 'required',
                 'string'
             ],
-            'project_documents' => [
+            'end_date' => [
                 'required',
                 'string'
-            ],
-            'tentitive_budget' => [
-                'required',
-                'numeric'
             ],
             'beneficiary_target' => [
                 'required',
                 'string'
             ],
-            'description' => [
-                'nullable',
+            'number_of_beneficiary' => [
+                'required',
                 'string'
             ],
+            'implement_area' => [
+                'required',
+                'string'
+            ],
+            'approval_status' => [
+                'required',
+                'integer'
+            ],
+            'approve_by' => [
+                'required',
+                'string'
+            ],
+            "documents_approval-status"=>[
+                'required',
+                'integer'
+            ],
+           "file_path"=>[
+               'string',
+               'nullable'
+           ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
                 'nullable',
