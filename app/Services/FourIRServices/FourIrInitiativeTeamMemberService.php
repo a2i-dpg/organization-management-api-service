@@ -310,6 +310,10 @@ class FourIrInitiativeTeamMemberService
                 'required',
                 'int'
             ],
+            'user_id' =>[
+                'required',
+                'int'
+            ],
             'team_type' => [
                 'required',
                 'int',
