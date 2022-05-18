@@ -2781,6 +2781,99 @@
                 }
             }
         },
+        "/tots-update/{fourIrTotId}": {
+            "post": {
+                "tags": [
+                    "FourIR  Tot"
+                ],
+                "summary": "Update a 4IR Initiation Tot",
+                "description": "API endpoint to update a  Tot. A successful request response will show 200 HTTP status code",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrTotId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_tots"
+                            },
+                            "examples": {
+                                "DEMO": {
+                                    "summary": "An example of Expert JSON",
+                                    "description": "An example of Expert JSON, using `value` property",
+                                    "value": {
+                                        "four_ir_initiative_id": 1,
+                                        "master_trainer_name":"DGp",
+                                        "master_trainer_name_en":"DG",
+                                        "master_trainer_mobile":"01720588884",
+                                        "master_trainer_address":"DG",
+                                        "master_trainer_address_en":"DG",
+                                        "master_trainer_email":"ad@email.com",
+                                        "organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ],
+                                        "co_organizers": [
+                                            {
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "address": "string",
+                                                "address_en": "string"
+
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/4ir_curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "four_ir_initiative_id": 1,
+                                            "file_path": "gfhgf",
+                                            "row_status": 1,
+                                            "created_by": null,
+                                            "updated_by": 14,
+                                            "created_at": null,
+                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        }
+                                    ],
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "message": "4Ir Tot updated successfully.",
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/create-approve-courses": {
             "get": {
                 "tags": [
