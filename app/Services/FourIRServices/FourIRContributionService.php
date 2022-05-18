@@ -31,7 +31,7 @@ class FourIRContributionService
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
-            "four_ir_initiative_team_members.role",
+            "four_ir_initiative_team_members.role_responsibility",
             "four_ir_initiative_team_members.name as team_member_name",
             "four_ir_initiative_team_members.name_en as team_member_name_en",
             "four_ir_initiative_team_members.email as team_member_email",
@@ -97,7 +97,7 @@ class FourIRContributionService
     {
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
-            "four_ir_initiative_team_members.role",
+            "four_ir_initiative_team_members.role_responsibility",
             "four_ir_initiative_team_members.name as team_member_name",
             "four_ir_initiative_team_members.name_en as team_member_name_en",
             "four_ir_initiative_team_members.email as team_member_email",

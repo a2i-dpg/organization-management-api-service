@@ -179,7 +179,6 @@ class FourIrInitiativeTeamMemberService
     {
         $userData = $this->createPayloadToStoreUser($data);
         $data['user_id'] = $userData['id'];
-
         $fourIrProjectTeamMember = app()->make(FourIRInitiativeTeamMember::class);
         $fourIrProjectTeamMember->fill($data);
         $fourIrProjectTeamMember->save();
