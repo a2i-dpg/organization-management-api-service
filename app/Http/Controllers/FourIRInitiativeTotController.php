@@ -116,7 +116,7 @@ class FourIRInitiativeTotController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        Log::info(FourIRInitiativeTot::class.json_encode($request->all(),JSON_PRETTY_PRINT));
+        Log::info(FourIRInitiativeTot::class.json_encode(["id"=>$id,"request:"=>$request->all()],JSON_PRETTY_PRINT));
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
 
