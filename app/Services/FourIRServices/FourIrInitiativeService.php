@@ -35,6 +35,7 @@ class FourIrInitiativeService
     public function getFourIrInitiativeList(array $request, Carbon $startTime): array
     {
         $initiativeName = $request['name'] ?? "";
+        $four_ir_tagline_id = $request['four_ir_tagline_id'] ?? "";
         $organizationName = $request['organization_name'] ?? "";
         $startDate = $request['start_date'] ?? "";
         $paginate = $request['page'] ?? "";
@@ -93,6 +94,10 @@ class FourIrInitiativeService
             });
         }
 
+        if (!empty($four_ir_tagline_id)) {
+            $fourIrInitiativeBuilder->where("four_ir_taglines.id",'=',$four_ir_tagline_id);
+        }
+
         if (!empty($startDate)) {
             $fourIrInitiativeBuilder->whereDate('four_ir_initiatives.start_date', $startDate);
         }
@@ -147,6 +152,7 @@ class FourIrInitiativeService
             [
                 'four_ir_initiatives.id',
                 'four_ir_initiatives.four_ir_tagline_id',
+                'four_ir_taglines.name as four_ir_tagline_name',
                 'four_ir_initiatives.is_skill_provide',
                 'four_ir_initiatives.implementing_team_launching_date',
                 'four_ir_initiatives.expert_team_launching_date',
@@ -157,6 +163,8 @@ class FourIrInitiativeService
                 'four_ir_initiatives.budget',
                 'four_ir_initiatives.designation',
                 'four_ir_initiatives.four_ir_occupation_id',
+                'four_ir_occupations.title as occupation_title',
+                'four_ir_occupations.title_en as occupation_title_en',
                 'four_ir_initiatives.start_date',
                 'four_ir_initiatives.end_date',
                 'four_ir_initiatives.file_path',
@@ -174,6 +182,8 @@ class FourIrInitiativeService
             ]
         )->acl();
 
+        $fourIrInitiativeBuilder->join('four_ir_occupations', 'four_ir_occupations.id', '=', 'four_ir_initiatives.four_ir_occupation_id');
+        $fourIrInitiativeBuilder->join('four_ir_taglines', 'four_ir_taglines.id', '=', 'four_ir_initiatives.four_ir_tagline_id');
         if (!empty($initiativeName)) {
             $fourIrInitiativeBuilder->where(function ($builder) use ($initiativeName) {
                 $builder->where('four_ir_initiatives.name', 'like', '%' . $initiativeName . '%');
