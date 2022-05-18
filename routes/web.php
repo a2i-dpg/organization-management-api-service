@@ -193,7 +193,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
         $customRouter()->resourceRoute('sectors', 'FourIRSectorController')->render();
-
         $customRouter()->resourceRoute('contributions', 'FourIRContributionController')->render();
         $router->get('/get-4ir-certificate-list/{fourIrInitiativeId}', ["as" => "get-4ir-certificate-list", "uses" => "FourIRCertificateController@getCertificates"]);
 
