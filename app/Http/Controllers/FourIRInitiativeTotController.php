@@ -159,6 +159,7 @@ class FourIRInitiativeTotController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
+        Log::info("FourIRInitiativeTot ".json_encode($request->all()));
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
         try {
             DB::beginTransaction();
