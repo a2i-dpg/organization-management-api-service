@@ -18,14 +18,15 @@ use Symfony\Component\HttpFoundation\Response;
 class FourIRContributionService
 {
 
-    public function getList(array $request, int $userId = null): array
+    public function getList(array $request): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
+
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $userId = $userId ?? Auth::id();
+        $userId =  $request['user_id'] ?? Auth::id();
         $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
@@ -121,7 +122,7 @@ class FourIRContributionService
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
         $fourIrContributionBuilder->join("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
-        $fourIrContributionBuilder->where("four_ir_initiative_team_members.id", $id);
+        $fourIrContributionBuilder->where("four_ir_contributions.id", $id);
         return $fourIrContributionBuilder->firstOrFail()->toArray();
     }
 
@@ -164,6 +165,7 @@ class FourIRContributionService
 
         return Validator::make($request->all(), [
             'four_ir_initiative_id' => 'nullable|int',
+            'user_id' => 'nullable|int',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
