@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -52,6 +53,7 @@ class FourIRTotInitiativeService
             'four_ir_initiative_tots.co_organizer_address',
             'four_ir_initiative_tots.co_organizer_email',
             'four_ir_initiative_tots.co_organizer_address_en',
+            'four_ir_initiative_tots.tot_date',
 
             'four_ir_initiative_tots.accessor_type',
             'four_ir_initiative_tots.accessor_id',
@@ -131,6 +133,9 @@ class FourIRTotInitiativeService
                 'four_ir_initiative_tots.co_organizer_address',
                 'four_ir_initiative_tots.co_organizer_email',
                 'four_ir_initiative_tots.co_organizer_address_en',
+                'four_ir_initiative_tots.tot_date',
+                'four_ir_initiative_tots.proof_of_report_file',
+
 
                 'four_ir_initiative_tots.accessor_type',
                 'four_ir_initiative_tots.accessor_id',
@@ -181,13 +186,23 @@ class FourIRTotInitiativeService
      * @param FourIRInitiativeTot $fourIrInitiativeTot
      * @return void
      */
-    public function deletePreviousOrganizerParticipantsForUpdate(FourIRInitiativeTot $fourIrInitiativeTot): void
+    public function deletePreviousMasterTrainersForUpdate(FourIRInitiativeTot $fourIrInitiativeTot): void
     {
-        $fourIrInitiativeTotOrganizerParticipants = FourIRInitiativeTotMastersTrainersParticipant::where('four_ir_initiative_tot_id', $fourIrInitiativeTot->id)
+        $fourIrInitiativeTotMastersTrainers = FourIRInitiativeTotMastersTrainersParticipant::where('four_ir_initiative_tot_id', $fourIrInitiativeTot->id)
             ->get();
-        foreach ($fourIrInitiativeTotOrganizerParticipants as $organizerParticipant) {
+        foreach ($fourIrInitiativeTotMastersTrainers as $organizerParticipant) {
             $organizerParticipant->delete();
         }
+    }
+
+    /**
+     * @param FourIRInitiativeTot $fourIRInitiativeTot
+     * @return bool
+     */
+
+    public function destroy(FourIRInitiativeTot $fourIRInitiativeTot): bool
+    {
+        return $fourIRInitiativeTot->delete();
     }
 
     /**
@@ -249,10 +264,13 @@ class FourIRTotInitiativeService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+        Log::info($data);
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
-        $data['master_trainers']=json_decode( $data['master_trainers'],true);
+        if(!empty( $data['master_trainers'])){
+            $data['master_trainers']=json_decode( $data['master_trainers'],true);
+        }
         if(!empty($data['four_ir_initiative_id'])){
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 

@@ -117,7 +117,7 @@ class FourIRInitiativeTotController extends Controller
     {
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
 
-        $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
+        $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
 
         $excelRows = null;
         if(!empty($request->file('participants_file'))){
@@ -132,7 +132,7 @@ class FourIRInitiativeTotController extends Controller
 
         try {
             DB::beginTransaction();
-            $this->fourIRTotInitiativeService->deletePreviousOrganizerParticipantsForUpdate($fourIrInitiativeTot);
+            $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
             $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
 
             DB::commit();
@@ -151,5 +151,34 @@ class FourIRInitiativeTotController extends Controller
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+        try {
+            DB::beginTransaction();
+            $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
+            $fourIrTot = $this->fourIRTotInitiativeService->destroy($fourIrInitiativeTot);
+
+            DB::commit();
+            $response = [
+                'data' => $fourIrTot,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Initiative TOT Deleted successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 }
