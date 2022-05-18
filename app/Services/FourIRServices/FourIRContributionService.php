@@ -3,17 +3,22 @@
 namespace App\Services\FourIRServices;
 
 
+use App\Models\BaseModel;
 use App\Models\FourIRContribution;
 use App\Models\FourIRInitiativeTeamMember;
 use App\Models\FourIRInitiativeTnaFormat;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class FourIRContributionService
 {
 
-    public function getList(array $filter)
+    public function getList(array $filter): array
     {
 
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
@@ -22,6 +27,7 @@ class FourIRContributionService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $userId = Auth::id();
+        $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id as four_ir_initiative_team_member_id",
@@ -45,6 +51,39 @@ class FourIRContributionService
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
         $fourIrContributionBuilder->join("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->where("four_ir_initiative_team_members.user_id", $userId);
+
+        $fourIrContributionBuilder->orderBy('four_ir_initiative_team_members.id', $order);
+
+        if (!empty($fourIrInitiativeId)) {
+            $fourIrContributionBuilder->where('four_ir_initiative_team_members.four_ir_initiative_id', $fourIrInitiativeId);
+        }
+
+        if (is_numeric($rowStatus)) {
+            $fourIrContributionBuilder->where('four_ir_contributions.row_status', $rowStatus);
+        }
+
+        /** @var Collection $fourIrProjectTeamMembers */
+        if (is_numeric($paginate) || is_numeric($pageSize)) {
+            $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
+            $fourIrContributions = $fourIrContributionBuilder->paginate($pageSize);
+            $paginateData = (object)$fourIrProjectTeamMembers->toArray();
+            $response['current_page'] = $paginateData->current_page;
+            $response['total_page'] = $paginateData->last_page;
+            $response['page_size'] = $paginateData->per_page;
+            $response['total'] = $paginateData->total;
+        } else {
+            $fourIrContributions = $fourIrContributionBuilder->get();
+        }
+
+        $response['order'] = $order;
+        $response['data'] = $fourIrContributions->toArray()['data'] ?? $fourIrContributions->toArray();
+        $response['_response_status'] = [
+            "success" => true,
+            "code" => Response::HTTP_OK,
+            "query_time" => 0
+        ];
+
+        return $response;
     }
 
     public function createOrUpdate(array $request)
@@ -71,5 +110,33 @@ class FourIRContributionService
             ]
         ];
         return Validator::make($request->all(), $rules);
+    }
+
+    public function filterValidator(Request $request): \Illuminate\Contracts\Validation\Validator
+    {
+        $customMessage = [
+            'order.in' => 'Order must be within ASC or DESC.[30000]',
+            'row_status.in' => 'Row status must be within 1 or 0. [30000]'
+        ];
+
+        if ($request->filled('order')) {
+            $request->offsetSet('order', strtoupper($request->get('order')));
+        }
+
+        return Validator::make($request->all(), [
+            'four_ir_initiative_id' => 'required|int',
+            'page' => 'nullable|integer|gt:0',
+            'page_size' => 'nullable|integer|gt:0',
+            'order' => [
+                'nullable',
+                'string',
+                Rule::in([BaseModel::ROW_ORDER_ASC, BaseModel::ROW_ORDER_DESC])
+            ],
+            'row_status' => [
+                'nullable',
+                "integer",
+                Rule::in([BaseModel::ROW_STATUS_ACTIVE, BaseModel::ROW_STATUS_INACTIVE]),
+            ],
+        ], $customMessage);
     }
 }
