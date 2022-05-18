@@ -59,7 +59,7 @@ class FourIRInitiativeTnaFormatService
                 'four_ir_initiative_tna_formats.created_at',
                 'four_ir_initiative_tna_formats.updated_at'
             ]
-        );
+        )->acl();
 
         $fourIrProjectTnaFormatBuilder->orderBy('four_ir_initiative_tna_formats.id', $order);
 

@@ -101,4 +101,9 @@ class User extends BaseModel implements
         return $this->user_type == BaseModel::REGISTERED_TRAINING_ORGANIZATION_USER_TYPE && $this->registered_training_organization_id;
     }
 
+    public function isFourIRUser(): bool
+    {
+        return $this->user_type == BaseModel::FOUR_IR_USER_TYPE;
+    }
+
 }

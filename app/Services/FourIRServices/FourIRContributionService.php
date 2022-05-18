@@ -51,7 +51,7 @@ class FourIRContributionService
             'four_ir_contributions.updated_by',
             'four_ir_contributions.created_at',
             'four_ir_contributions.updated_at'
-        ]);
+        ])->acl();
 
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");

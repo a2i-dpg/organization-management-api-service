@@ -53,7 +53,8 @@ class FourIRAssessmentService
             'four_ir_assessments.updated_by',
             'four_ir_assessments.created_at',
             'four_ir_assessments.updated_at'
-        ]);
+        ])->acl();
+
         $fourIrAssessmentBuilder->where('four_ir_assessments.id', '=', $id);
 
         return $fourIrAssessmentBuilder->firstOrFail();

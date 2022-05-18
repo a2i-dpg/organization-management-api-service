@@ -3,6 +3,7 @@
 namespace App\Traits\Scopes;
 
 use App\Models\BaseModel;
+use App\Models\FourIRInitiativeTeamMember;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -44,9 +45,14 @@ trait ScopeAcl
             if (Schema::hasColumn($tableName, 'accessor_id')) {
                 $query->where($tableName . '.accessor_id', $authUser->institute_id);
             }
-        }else if ($authUser && $authUser->isRtoUser()) {  // RTO User
+        } else if ($authUser && $authUser->isRtoUser()) {  // RTO User
             if (Schema::hasColumn($tableName, 'registered_training_organization_id')) {
                 $query = $query->where($tableName . '.registered_training_organization_id', $authUser->registered_training_organization_id);
+            }
+        } else if ($authUser && $authUser->isFourIRUser()) {  // RTO User
+            if (Schema::hasColumn($tableName, 'four_ir_initiative_id')) {
+                $fourIrInitiativeIds = FourIRInitiativeTeamMember::where("user_id", $authUser->id)->pluck('four_ir_initiative_id')->toArray();
+                $query = $query->where($tableName . '.four_ir_initiative_id', $fourIrInitiativeIds);
             }
         }
         return $query;

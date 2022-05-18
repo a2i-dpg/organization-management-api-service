@@ -46,7 +46,7 @@ class FourIRGuidelineService
                 'four_ir_guidelines.created_at',
                 'four_ir_guidelines.updated_at'
             ]
-        );
+        )->acl();
 
         $fourIrGuidelineBuilder->orderBy('four_ir_guidelines.id', $order);
 

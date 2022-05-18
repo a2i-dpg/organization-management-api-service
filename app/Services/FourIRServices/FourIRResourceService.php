@@ -73,16 +73,16 @@ class FourIRResourceService
      */
     public function store(array $data, FourIRResource|null $fourIRResource): FourIRResource
     {
-        if(empty($fourIRResource)) {
+        if (empty($fourIRResource)) {
             /** Update initiative stepper */
             $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
             $payload = [];
 
-            if($initiative->form_step < FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT){
+            if ($initiative->form_step < FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT;
             }
-            if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SEVEN){
+            if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_SEVEN) {
                 $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_SEVEN;
             }
 
@@ -124,7 +124,7 @@ class FourIRResourceService
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];
 
-        if(!empty($data['four_ir_initiative_id'])){
+        if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
@@ -156,21 +156,21 @@ class FourIRResourceService
                 Rule::in(BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE)
             ],
             'total_amount' => [
-                Rule::requiredIf(function() use($data){
-                   return (bool)$data['is_developed_financial_proposal'];
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['is_developed_financial_proposal'];
                 }),
                 'nullable',
                 'int',
             ],
             'file_path' => [
-                Rule::requiredIf(function() use($data){
+                Rule::requiredIf(function () use ($data) {
                     return (bool)$data['is_developed_financial_proposal'];
                 }),
                 'nullable',
                 'string'
             ],
             'approve_by' => [
-                Rule::requiredIf(function() use($data){
+                Rule::requiredIf(function () use ($data) {
                     return (bool)$data['is_developed_financial_proposal'];
                 }),
                 'nullable',
@@ -236,7 +236,7 @@ class FourIRResourceService
 
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $approvalStatus = $request['approval_status'] ?? "";
-        $budgetApprovalStatus= $request['budget_approval_status'] ?? "";
+        $budgetApprovalStatus = $request['budget_approval_status'] ?? "";
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
@@ -265,7 +265,7 @@ class FourIRResourceService
             'four_ir_resources.updated_by',
             'four_ir_resources.created_at',
             'four_ir_resources.updated_at'
-        ]);
+        ])->acl();
 
         $fourIrResourceBuilder->orderBy('four_ir_resources.id', $order);
 
@@ -277,13 +277,13 @@ class FourIRResourceService
         $fourIrResourceBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_resources.four_ir_initiative_id');
 
         if (!empty($fourIrInitiativeId)) {
-            $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrInitiativeId );
+            $fourIrResourceBuilder->where('four_ir_resources.four_ir_initiative_id', $fourIrInitiativeId);
         }
         if (!empty($approvalStatus)) {
-            $fourIrResourceBuilder->where('four_ir_resources.approval_status', $approvalStatus );
+            $fourIrResourceBuilder->where('four_ir_resources.approval_status', $approvalStatus);
         }
         if (!empty($budgetApprovalStatus)) {
-            $fourIrResourceBuilder->where('four_ir_resources.budget_approval_status', $budgetApprovalStatus );
+            $fourIrResourceBuilder->where('four_ir_resources.budget_approval_status', $budgetApprovalStatus);
         }
 
 
