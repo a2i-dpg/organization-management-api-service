@@ -115,6 +115,7 @@ class FourIRInitiativeTotController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
+        dd($request->all());
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
 
         $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
@@ -153,6 +154,52 @@ class FourIRInitiativeTotController extends Controller
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws Throwable
+     * @throws ValidationException
+     */
+    public function fourIrTotupdate(Request $request, int $id): JsonResponse
+    {
+
+        $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+        $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
+
+        $excelRows = null;
+        if(!empty($request->file('participants_file'))){
+            $file = $request->file('participants_file');
+            $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
+
+            if (!empty($excelData) && !empty($excelData[0])) {
+                $excelRows = $excelData[0];
+                $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+            }
+        }
+
+        try {
+            DB::beginTransaction();
+            $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
+            $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
+
+            DB::commit();
+            $response = [
+                'data' => $fourIrTot,
+                '_response_status' => [
+                    "success" => true,
+                    "code" => ResponseAlias::HTTP_CREATED,
+                    "message" => "Four Ir Initiative TOT update successfully",
+                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+                ]
+            ];
+        } catch (Throwable $e){
+            DB::rollBack();
+            throw $e;
+        }
+
+        return Response::json($response, ResponseAlias::HTTP_CREATED);
+    }
     /**
      * @param int $id
      * @return JsonResponse

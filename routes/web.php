@@ -200,7 +200,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get('/get-4ir-course-enrolled-youths', ["as" => "get.4ir.course.enrolled.youths", "uses" => "FourIREnrollmentApprovalController@getList"]);
         $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
         $router->get('/get-4ir-certificate-list/{fourIrInitiativeId}', ["as" => "get-4ir-certificate-list", "uses" => "FourIRCertificateController@getCertificates"]);
-
+        $router->post('/tots/{id}', ["as" => "update.4ir.tots", "uses" => "FourIRInitiativeTotController@fourIrTotupdate"]);
         /**
          * Four IR Excel imports
          */
