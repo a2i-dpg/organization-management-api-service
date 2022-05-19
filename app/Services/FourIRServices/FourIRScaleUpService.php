@@ -264,7 +264,11 @@ class FourIRScaleUpService
                 'required',
                 'numeric'
             ],
-            'implement_timeline' => [
+            'timeline_start_year' => [
+                'required',
+                'string'
+            ],
+            'timeline_end_year' => [
                 'required',
                 'string'
             ],
@@ -297,7 +301,7 @@ class FourIRScaleUpService
                     return (bool)$data['approval_status'];
                 }),
                 'nullable',
-                'int',
+                'string',
             ],
             "documents_approval-status"=>[
                 'required',
