@@ -76,17 +76,14 @@ class FourIRContributionService
         if (is_numeric($rowStatus)) {
             $fourIrContributionBuilder->where('four_ir_contributions.row_status', $rowStatus);
         }
-<<<<<<< HEAD
 
-        /** @var Collection $fourIrContributions */
-=======
-        Log::info("SQL-:   " . json_encode($fourIrContributionBuilder->toSql()));
+        Log::info("SQL:   " .$fourIrContributionBuilder->toSql());
+
         /** @var Collection $fourIrProjectTeamMembers */
->>>>>>> 90ce2b961299c0853699d9779ef87696764b9da1
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $fourIrContributions = $fourIrContributionBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrContributions->toArray();
+            $paginateData = (object)$fourIrProjectTeamMembers->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
