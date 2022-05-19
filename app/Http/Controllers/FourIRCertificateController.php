@@ -42,11 +42,11 @@ class FourIRCertificateController extends Controller
 
         foreach ($certificates as &$certifications){
             if(in_array($certifications['youth_id'],array_column($employed, 'user_id'))){
-                $certifications['employment']=2;
+                $certifications['employment_status']=2;
             }else if(in_array($certifications['youth_id'],array_column($notApplicable, 'user_id'))){
-                $certifications['employment']=3;
+                $certifications['employment_status']=3;
             }else{
-                $certifications['employment']=1;
+                $certifications['employment_status']=1;
             }
         }
         $response = [
