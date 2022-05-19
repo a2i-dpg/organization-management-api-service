@@ -213,13 +213,14 @@ class FourIrEmploymentService
         }
         $initiative->fill($payload);
         $initiative->save();
+
         $fourIrEmployment= FourIREmployment::updateOrCreate(
             [
-                'email' =>  $data['email'],
-                'contact_number' =>  $data['contact_number']
+                'user_id' =>  $data['youth_id']
             ],
            $data
         );
+
         return $fourIrEmployment;
     }
 
