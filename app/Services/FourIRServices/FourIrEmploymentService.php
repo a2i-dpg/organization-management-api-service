@@ -283,10 +283,11 @@ class FourIrEmploymentService
                 'int'
             ],
             'name' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 'string',
-                'max:600',
-                'min:2'
             ],
             'name_en' => [
                 'nullable',
@@ -295,14 +296,18 @@ class FourIrEmploymentService
                 'min:2'
             ],
             'email' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 'email'
             ],
             'industry_name' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 'string',
-                'max:600',
-                'min:2'
             ],
             'industry_name_en' => [
                 'nullable',
@@ -311,25 +316,40 @@ class FourIrEmploymentService
                 'min:2'
             ],
             'job_starting_date' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 'date-format:Y-m-d'
             ],
             'contact_number' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 BaseModel::MOBILE_REGEX
             ],
             'designation' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 'string',
                 'max:300'
             ],
             'starting_salary' => [
-                'required',
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
                 'int'
             ],
             'medium_of_job' => [
-                'required',
-                'string'
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['employment_status'];
+                }),
+                'nullable',
+                'string',
             ],
             'row_status' => [
                 'required_if:' . $id . ',!=,null',
