@@ -24,6 +24,7 @@ class CreateFourIRInitiativeTeamMembersTable extends Migration
             $table->string('designation',191);
             $table->string('organization',191);
             $table->string('file_path',191);
+            $table->unsignedInteger('application_role_id');
             $table->text('role_responsibility',200);
             $table->unsignedTinyInteger('team_type')->comment('1=> implementing team, 2=> expert team');
             $table->string('accessor_type', 100);
