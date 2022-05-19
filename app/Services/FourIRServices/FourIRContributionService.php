@@ -76,7 +76,9 @@ class FourIRContributionService
         if (is_numeric($rowStatus)) {
             $fourIrContributionBuilder->where('four_ir_contributions.row_status', $rowStatus);
         }
-        Log::info("SQL-:   " . json_encode($fourIrContributionBuilder->toSql()));
+
+        Log::info("SQL:   " .$fourIrContributionBuilder->toSql());
+
         /** @var Collection $fourIrProjectTeamMembers */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
