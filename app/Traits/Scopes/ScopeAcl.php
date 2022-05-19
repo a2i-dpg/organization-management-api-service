@@ -52,7 +52,8 @@ trait ScopeAcl
         } else if ($authUser && $authUser->isFourIRUser()) {  // RTO User
             if (Schema::hasColumn($tableName, 'four_ir_initiative_id')) {
                 $fourIrInitiativeIds = FourIRInitiativeTeamMember::where("user_id", $authUser->id)->pluck('four_ir_initiative_id')->toArray();
-                $query = $query->where($tableName . '.four_ir_initiative_id', $fourIrInitiativeIds);
+                Log::info("fourIrInitiative ACL Scope: " . json_encode($fourIrInitiativeIds));
+                $query = $query->whereIn($tableName . '.four_ir_initiative_id', $fourIrInitiativeIds);
             }
         }
         return $query;
