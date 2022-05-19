@@ -61,7 +61,7 @@ class FourIRScaleUpService
                 'four_ir_scale_ups.implement_area',
                 'four_ir_scale_ups.approval_status',
                 'four_ir_scale_ups.approve_by',
-                'four_ir_scale_ups.documents_approval-status',
+                'four_ir_scale_ups.documents_approval_status',
                 'four_ir_scale_ups.file_path',
                 'four_ir_scale_ups.accessor_type',
                 'four_ir_scale_ups.accessor_id',
@@ -146,7 +146,7 @@ class FourIRScaleUpService
                 'four_ir_scale_ups.implement_area',
                 'four_ir_scale_ups.approval_status',
                 'four_ir_scale_ups.approve_by',
-                'four_ir_scale_ups.documents_approval-status',
+                'four_ir_scale_ups.documents_approval_status',
                 'four_ir_scale_ups.file_path',
                 'four_ir_scale_ups.accessor_type',
                 'four_ir_scale_ups.accessor_id',
@@ -303,7 +303,7 @@ class FourIRScaleUpService
                 'nullable',
                 'string',
             ],
-            "documents_approval-status"=>[
+            "documents_approval_status"=>[
                 'required',
                 'integer'
             ],
