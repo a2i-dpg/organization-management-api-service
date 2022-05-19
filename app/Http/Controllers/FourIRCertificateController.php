@@ -45,14 +45,14 @@ class FourIRCertificateController extends Controller
         foreach ($certificates as &$certifications){
             if(in_array($certifications['youth_id'],array_column($employed, 'user_id'))){
                 $certifications['employment_status']=2;
-                $certifications['employment_info']=$employments[array_search('youth_id', array_column($employments, 'user_id'))] ?? new stdClass();
+                $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
 
             }else if(in_array($certifications['youth_id'],array_column($notApplicable, 'user_id'))){
                 $certifications['employment_status']=3;
-                $certifications['employment_info']=$employments[array_search('youth_id', array_column($employments, 'user_id'))] ?? new stdClass();
+                $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
             }else{
                 $certifications['employment_status']=1;
-                $certifications['employment_info']=$employments[array_search('youth_id', array_column($employments, 'user_id'))] ?? new stdClass();
+                $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
             }
         }
         $response = [
