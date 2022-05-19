@@ -178,6 +178,7 @@ class FourIrEmploymentService
                 'four_ir_employments.contact_number',
                 'four_ir_employments.designation',
                 'four_ir_employments.starting_salary',
+                'four_ir_employments.employment_status',
                 'four_ir_employments.medium_of_job',
                 'four_ir_employments.accessor_id',
                 'four_ir_employments.row_status',
