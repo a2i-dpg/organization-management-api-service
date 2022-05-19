@@ -287,12 +287,12 @@ class FourIRResourceService
         }
 
 
-        /** @var Collection $occupations */
+        /** @var Collection $resource */
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $occupations = $fourIrResourceBuilder->paginate($pageSize);
-            $paginateData = (object)$occupations->toArray();
+            $resource = $fourIrResourceBuilder->paginate($pageSize);
+            $paginateData = (object)$resource->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
