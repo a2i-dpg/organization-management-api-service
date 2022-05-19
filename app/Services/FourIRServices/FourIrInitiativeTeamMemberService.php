@@ -65,6 +65,7 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiative_team_members.designation',
                 'four_ir_initiative_team_members.role_responsibility',
                 'four_ir_initiative_team_members.organization',
+                'four_ir_initiative_team_members.application_role_id',
                 'four_ir_initiative_team_members.file_path',
                 'four_ir_initiative_team_members.team_type',
                 'four_ir_initiative_team_members.row_status',
@@ -157,6 +158,7 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiative_team_members.designation',
                 'four_ir_initiative_team_members.role_responsibility',
                 'four_ir_initiative_team_members.organization',
+                'four_ir_initiative_team_members.application_role_id',
                 'four_ir_initiative_team_members.file_path',
                 'four_ir_initiative_team_members.team_type',
                 'four_ir_initiative_team_members.row_status',
@@ -309,6 +311,10 @@ class FourIrInitiativeTeamMemberService
                 'string'
             ],
             'accessor_id' => [
+                'required',
+                'int'
+            ],
+            'application_role_id' => [
                 'required',
                 'int'
             ],
