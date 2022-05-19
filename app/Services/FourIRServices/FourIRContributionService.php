@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class FourIRContributionService
 {
 
-    public function getList(array $request): array
+    public function getContributionList(array $request): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
 

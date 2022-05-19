@@ -30,7 +30,7 @@ class FourIRContributionController extends Controller
     {
         Log::info("Auth UserId: " . Auth::id());
         $filter = $this->fourIRContributionService->filterValidator($request)->validate();
-        $response = $this->fourIRContributionService->getList($filter);
+        $response = $this->fourIRContributionService->getContributionList($filter);
         return Response::json($response, $response['_response_status']['code']);
     }
 
