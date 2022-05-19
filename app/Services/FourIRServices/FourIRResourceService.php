@@ -243,7 +243,7 @@ class FourIRResourceService
         $order = $request['order'] ?? "ASC";
 
 
-        /** @var Builder $sectorBuilder */
+        /** @var Builder $fourIrResourceBuilder */
         $fourIrResourceBuilder = FourIRResource::select([
 
             'four_ir_resources.id',
@@ -291,7 +291,7 @@ class FourIRResourceService
 
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
-            $occupations = $sectorBuilder->paginate($pageSize);
+            $occupations = $fourIrResourceBuilder->paginate($pageSize);
             $paginateData = (object)$occupations->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
