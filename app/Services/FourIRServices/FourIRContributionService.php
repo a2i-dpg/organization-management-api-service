@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services\FourIRServices;
+
 use App\Models\BaseModel;
 use App\Models\FourIRContribution;
 use App\Models\FourIRInitiativeTeamMember;
@@ -25,8 +26,10 @@ class FourIRContributionService
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
-        $userId =  $request['user_id'] ?? Auth::id();
+        $userId = $request['user_id'] ?? Auth::id();
         $response = [];
+
+        Log::info("Filter Payload" . json_encode($request));
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
@@ -73,8 +76,13 @@ class FourIRContributionService
         if (is_numeric($rowStatus)) {
             $fourIrContributionBuilder->where('four_ir_contributions.row_status', $rowStatus);
         }
+<<<<<<< HEAD
 
         /** @var Collection $fourIrContributions */
+=======
+        Log::info("SQL-:   " . json_encode($fourIrContributionBuilder->toSql()));
+        /** @var Collection $fourIrProjectTeamMembers */
+>>>>>>> 90ce2b961299c0853699d9779ef87696764b9da1
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $fourIrContributions = $fourIrContributionBuilder->paginate($pageSize);

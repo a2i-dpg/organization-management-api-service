@@ -31,7 +31,7 @@ class FourIRCertificateController extends Controller
 
         $youthIds = array_column($certificates, 'youth_id') ?? [];
 
-       $employments= app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds,$fourIrInitiativeId ,$this->startTime) ?? [];
+        $employments= app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds,$fourIrInitiativeId ,$this->startTime) ?? [];
 
         $employed = array_filter($employments, function ($employment) {
             return ($employment['employment_status'] == 2);
