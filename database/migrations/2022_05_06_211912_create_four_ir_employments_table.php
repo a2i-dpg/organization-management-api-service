@@ -17,6 +17,7 @@ class CreateFourIrEmploymentsTable extends Migration
             $table->id();
             $table->unsignedInteger('four_ir_initiative_id');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('employment_status');
             $table->string('name', 350);
             $table->string('name_en', 350)->nullable();
             $table->string('email', 500);
