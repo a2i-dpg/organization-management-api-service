@@ -72,11 +72,11 @@ class FourIRCreateApproveCourseService
 
         $payload = [];
 
-        if($initiative->form_step < FourIRInitiative::FORM_STEP_CREATE_APPROVE_COURSE){
-            $payload['form_step'] = FourIRInitiative::FORM_STEP_CREATE_APPROVE_COURSE;
+        if($initiative->form_step < FourIRInitiative::FORM_STEP_SCALE_UP){
+            $payload['form_step'] = FourIRInitiative::FORM_STEP_SCALE_UP;
         }
-        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_NINE){
-            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_NINE;
+        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FIFTEEN){
+            $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FIFTEEN;
         }
 
         $initiative->fill($payload);
