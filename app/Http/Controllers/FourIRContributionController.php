@@ -28,8 +28,6 @@ class FourIRContributionController extends Controller
 
     public function getList(Request $request): JsonResponse
     {
-        Log::info("Auth UserId: " . Auth::id());
-
         $filter = $this->fourIRContributionService->filterValidator($request)->validate();
         $response = $this->fourIRContributionService->getContributionList($filter);
         return Response::json($response, $response['_response_status']['code']);
