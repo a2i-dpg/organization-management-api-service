@@ -289,12 +289,12 @@ class FourIrEmploymentService
                 'int'
             ],
             "user_id"=>[
-        'required',
-        'int'
-        ],
+                'required',
+                'int'
+             ],
             'name' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status'])&&!(bool)$data['employment_status'];
                 }),
                 'nullable',
                 'string',
