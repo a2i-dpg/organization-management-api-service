@@ -178,6 +178,7 @@ class FourIrEmploymentService
                 'four_ir_employments.contact_number',
                 'four_ir_employments.designation',
                 'four_ir_employments.starting_salary',
+                'four_ir_employments.employment_status',
                 'four_ir_employments.medium_of_job',
                 'four_ir_employments.accessor_id',
                 'four_ir_employments.row_status',
@@ -213,10 +214,11 @@ class FourIrEmploymentService
         $initiative->fill($payload);
         $initiative->save();
         $fourIrEmployment= FourIREmployment::updateOrCreate(
-
-            ['email' =>  request('email'),'contact_number' =>  request('contact_number')],
+            [
+                'email' =>  $data['email'],
+                'contact_number' =>  $data['contact_number']
+            ],
            $data
-
         );
         return $fourIrEmployment;
     }
@@ -278,6 +280,10 @@ class FourIrEmploymentService
                 'string'
             ],
             'accessor_id' => [
+                'required',
+                'int'
+            ],
+            "employment_status"=>[
                 'required',
                 'int'
             ],
