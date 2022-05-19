@@ -202,7 +202,6 @@ class FourIrEmploymentService
     {
         /** Update form step & completion step first */
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
         $payload = [];
 
         if($initiative->form_step < FourIRInitiative::FORM_STEP_EMPLOYMENT){
@@ -211,14 +210,14 @@ class FourIrEmploymentService
         if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FOURTEEN){
             $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FOURTEEN;
         }
-
         $initiative->fill($payload);
         $initiative->save();
+        $fourIrEmployment= FourIREmployment::updateOrCreate(
 
-        /** Now store employment */
-        $fourIrEmployment = new FourIREmployment();
-        $fourIrEmployment->fill($data);
-        $fourIrEmployment->save();
+            ['email' =>  request('email'),'contact_number' =>  request('contact_number')],
+           $data
+
+        );
         return $fourIrEmployment;
     }
 
