@@ -72,11 +72,11 @@ class FourIRContributionService
             $fourIrContributionBuilder->where('four_ir_contributions.row_status', $rowStatus);
         }
 
-        /** @var Collection $fourIrProjectTeamMembers */
+        /** @var Collection $fourIrContributions */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $fourIrContributions = $fourIrContributionBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjectTeamMembers->toArray();
+            $paginateData = (object)$fourIrContributions->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
