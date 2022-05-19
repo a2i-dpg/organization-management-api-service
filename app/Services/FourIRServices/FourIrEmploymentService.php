@@ -288,6 +288,10 @@ class FourIrEmploymentService
                 'required',
                 'int'
             ],
+            "youth_id"=>[
+        'required',
+        'int'
+        ],
             'name' => [
                 Rule::requiredIf(function () use ($data) {
                     return (bool)$data['employment_status'];
