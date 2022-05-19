@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class FourIRContributionService
 {
 
-    public function getList(array $request): array
+    public function getContributionList(array $request): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
 
@@ -25,6 +26,7 @@ class FourIRContributionService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $userId =  $request['user_id'] ?? Auth::id();
+        Log::info('User-Id-in Contribution: '.$userId);
         $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
@@ -37,7 +39,8 @@ class FourIRContributionService
             "four_ir_initiative_team_members.designation as team_member_designation",
             "four_ir_initiative_team_members.file_path as team_member_file_path",
             "four_ir_contributions.id as four_ir_contribution_id",
-            "four_ir_contributions.four_ir_initiative_id as four_ir_initiative_id",
+            "four_ir_initiative_team_members.four_ir_initiative_id as four_ir_initiative_id",
+            "four_ir_contributions.four_ir_initiative_id as four_ir_contribution_initiative_id",
             "four_ir_taglines.id as four_ir_tagline_id",
             "four_ir_taglines.name as four_ir_tagline_name",
             "four_ir_taglines.name_en as four_ir_tagline_name_en",
