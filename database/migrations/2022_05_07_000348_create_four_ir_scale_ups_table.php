@@ -28,7 +28,7 @@ class CreateFourIrScaleUpsTable extends Migration
             $table->text('implement_area');
             $table->unsignedInteger('approval_status');
             $table->string('approve_by');
-            $table->unsignedInteger('documents_approval-status');
+            $table->unsignedInteger('documents_approval_status');
             $table->string('file_path');
             $table->string('accessor_type', 100);
             $table->unsignedInteger('accessor_id');
