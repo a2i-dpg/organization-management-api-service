@@ -52,7 +52,7 @@ class FourIRContributionController extends Controller
     function store(Request $request): JsonResponse
     {
         $validateData = $this->fourIRContributionService->valiation($request)->validate();
-        $validateData['user_id'] = 18;
+        $validateData['user_id'] = Auth::id();
         $responseData = $this->fourIRContributionService->createOrUpdate($validateData);
         $response = [
             "data" => $responseData,

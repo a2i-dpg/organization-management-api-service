@@ -28,7 +28,7 @@ class FourIrEmploymentService
      * @param Carbon $startTime
      * @return array
      */
-    public function getFourIrInitiativeList(array $request, Carbon $startTime): array
+    public function getFourIrEmploymentList(array $request, Carbon $startTime): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $name = $request['name'] ?? "";
@@ -111,11 +111,51 @@ class FourIrEmploymentService
         return $response;
     }
 
+    public function getEmploymentByYouthIds(array $youthIds, int $fourIrInitiativeId, Carbon $startTime): array
+    {
+
+        /** @var Builder $fourIrEmploymentBuilder */
+        $fourIrEmploymentBuilder = FourIREmployment::select(
+            [
+                'four_ir_employments.id',
+                'four_ir_employments.four_ir_initiative_id',
+                'four_ir_employments.name',
+                'four_ir_employments.user_id',
+                'four_ir_employments.employment_status',
+                'four_ir_employments.name_en',
+                'four_ir_employments.email',
+                'four_ir_employments.industry_name',
+                'four_ir_employments.industry_name_en',
+                'four_ir_employments.job_starting_date',
+                'four_ir_employments.contact_number',
+                'four_ir_employments.designation',
+                'four_ir_employments.starting_salary',
+                'four_ir_employments.medium_of_job',
+                'four_ir_employments.accessor_id',
+                'four_ir_employments.row_status',
+                'four_ir_employments.created_by',
+                'four_ir_employments.updated_by',
+                'four_ir_employments.created_at',
+                'four_ir_employments.updated_at'
+            ]
+        )->acl();
+
+        if(!empty($fourIrInitiativeId)){
+            $fourIrEmploymentBuilder->where('four_ir_employments.four_ir_initiative_id', $fourIrInitiativeId);
+        }
+
+        if(!empty($youthIds)){
+            $fourIrEmploymentBuilder->whereIn('four_ir_employments.user_id', $youthIds);
+        }
+
+        return  $fourIrEmploymentBuilder->get()->toArray()['data'] ?? $fourIrEmploymentBuilder->get()->toArray();
+    }
+
     /**
      * @param int $id
      * @return FourIREmployment
      */
-    public function getOneFourIrInitiative(int $id): FourIREmployment
+    public function getOneFourIrEmployment(int $id): FourIREmployment
     {
         /** @var FourIREmployment|Builder $fourIrEmploymentBuilder */
         $fourIrEmploymentBuilder = FourIREmployment::select(
