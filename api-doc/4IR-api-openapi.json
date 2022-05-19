@@ -3240,7 +3240,7 @@
             }
         },
         "/approve-four-ir-course/{fourIrCreateAndApproveId}": {
-            "get": {
+            "put": {
                 "tags": [
                     "FourIR  Create Approve Courses"
                 ],
