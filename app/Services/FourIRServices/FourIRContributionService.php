@@ -83,7 +83,7 @@ class FourIRContributionService
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $fourIrContributions = $fourIrContributionBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjectTeamMembers->toArray();
+            $paginateData = (object)$fourIrContributions->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
@@ -104,7 +104,7 @@ class FourIRContributionService
     }
 
 
-    public function getOne(int $id): array
+    public function getOne(int $id): FourIRInitiativeTeamMember
     {
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
@@ -136,9 +136,9 @@ class FourIRContributionService
 
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
-        $fourIrContributionBuilder->leftJoin("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
-        $fourIrContributionBuilder->where("four_ir_contributions.id", $id);
-        return $fourIrContributionBuilder->firstOrFail()->toArray();
+        $fourIrContributionBuilder->join("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
+        $fourIrContributionBuilder->where("four_ir_initiative_team_members.id", $id);
+        return $fourIrContributionBuilder->firstOrFail();
     }
 
     public function createOrUpdate(array $request)
