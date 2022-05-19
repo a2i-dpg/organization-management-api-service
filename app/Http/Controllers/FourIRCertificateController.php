@@ -40,6 +40,7 @@ class FourIRCertificateController extends Controller
             return ($employment['employment_status'] == 3);
         }) ?? [];
 
+
         foreach ($certificates as &$certifications){
             if(in_array($certifications['youth_id'],array_column($employed, 'user_id'))){
                 $certifications['employment_status']=2;
