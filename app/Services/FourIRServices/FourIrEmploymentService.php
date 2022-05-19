@@ -216,7 +216,7 @@ class FourIrEmploymentService
 
         $fourIrEmployment= FourIREmployment::updateOrCreate(
             [
-                'user_id' =>  $data['youth_id']
+                'user_id' =>  $data['user_id']
             ],
            $data
         );
@@ -288,7 +288,7 @@ class FourIrEmploymentService
                 'required',
                 'int'
             ],
-            "youth_id"=>[
+            "user_id"=>[
         'required',
         'int'
         ],
