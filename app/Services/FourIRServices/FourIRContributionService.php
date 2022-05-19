@@ -26,7 +26,7 @@ class FourIRContributionService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $userId =  $request['user_id'] ?? Auth::id();
-        Log::info('User-Id: '.$userId);
+        Log::info('User-Id-in Contribution: '.$userId);
         $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
