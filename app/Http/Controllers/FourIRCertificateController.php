@@ -41,10 +41,6 @@ class FourIRCertificateController extends Controller
             return ($employment['employment_status'] == 3);
         }) ?? [];
 
-        Log::info("Certificate ".json_encode(
-                $certificates
-            ,JSON_PRETTY_PRINT));
-
         foreach ($certificates as &$certifications){
             if(in_array($certifications['youth_id'],array_column($employed, 'user_id'))){
                 $certifications['employment_status']=2;
@@ -58,14 +54,6 @@ class FourIRCertificateController extends Controller
                 $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
             }
         }
-
-        Log::info("Certificate ".json_encode([
-                $certificates,
-                $youthIds,
-                $employments,
-                $employed,
-                $notApplicable
-            ],JSON_PRETTY_PRINT));
 
         $response = [
             "data" => $certificates,
