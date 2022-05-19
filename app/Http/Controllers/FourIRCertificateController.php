@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\FourIRServices\FourIRCertificateService;
+use App\Services\FourIRServices\FourIrEmploymentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -25,9 +27,30 @@ class FourIRCertificateController extends Controller
 
     public function getCertificates(Request $request, int $fourIrInitiativeId): \Illuminate\Http\JsonResponse
     {
-        $responseData = $this->fourIRCertificateService->getCertificateList($request->all(),$fourIrInitiativeId);
+        $certificates = $this->fourIRCertificateService->getCertificateList($request->all(),$fourIrInitiativeId);
+
+        $youthIds = array_column($certificates, 'youth_id') ?? [];
+
+       $employments= app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds,$fourIrInitiativeId ,$this->startTime) ?? [];
+
+        $employed = array_filter($employments, function ($employment) {
+            return ($employment['employment_status'] == 2);
+        }) ?? [];
+        $notApplicable= array_filter($employments, function ($employment) {
+            return ($employment['employment_status'] == 3);
+        }) ?? [];
+
+        foreach ($certificates as &$certifications){
+            if(in_array($certifications['youth_id'],array_column($employed, 'user_id'))){
+                $certifications['employment']=2;
+            }else if(in_array($certifications['youth_id'],array_column($notApplicable, 'user_id'))){
+                $certifications['employment']=3;
+            }else{
+                $certifications['employment']=1;
+            }
+        }
         $response = [
-            "data" => $responseData,
+            "data" => $certificates,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -37,4 +60,6 @@ class FourIRCertificateController extends Controller
 
         return Response::json($response, $response['_response_status']['code']);
     }
+
+
 }

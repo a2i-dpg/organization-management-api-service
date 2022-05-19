@@ -43,7 +43,7 @@ class FourIREmploymentController extends Controller
 //        $this->authorize('viewAny', FourIREmployment::class);
 
         $filter = $this->fourIrEmploymentService->filterValidator($request)->validate();
-        $response = $this->fourIrEmploymentService->getFourIRInitiativeList($filter, $this->startTime);
+        $response = $this->fourIrEmploymentService->getFourIrEmploymentList($filter, $this->startTime);
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -53,7 +53,7 @@ class FourIREmploymentController extends Controller
      */
     public function read(int $id): JsonResponse
     {
-        $fourIrEmployment = $this->fourIrEmploymentService->getOneFourIRInitiative($id);
+        $fourIrEmployment = $this->fourIrEmploymentService->getOneFourIrEmployment($id);
 //        $this->authorize('view', $fourIrEmployment);
         $response = [
             "data" => $fourIrEmployment,
