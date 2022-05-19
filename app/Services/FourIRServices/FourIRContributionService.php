@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,7 @@ class FourIRContributionService
         $rowStatus = $request['row_status'] ?? "";
         $order = $request['order'] ?? "ASC";
         $userId =  $request['user_id'] ?? Auth::id();
+        Log::info('User-Id: '.$userId);
         $response = [];
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
