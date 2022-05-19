@@ -52,7 +52,8 @@ class FourIRScaleUpService
                 'four_ir_scale_ups.project_name',
                 'four_ir_scale_ups.project_name_en',
                 'four_ir_scale_ups.budget',
-                'four_ir_scale_ups.implement_timeline',
+                'four_ir_scale_ups.timeline_start_year',
+                'four_ir_scale_ups.timeline_end_year',
                 'four_ir_scale_ups.start_date',
                 'four_ir_scale_ups.end_date',
                 'four_ir_scale_ups.beneficiary_target',
@@ -136,7 +137,8 @@ class FourIRScaleUpService
                 'four_ir_scale_ups.project_name',
                 'four_ir_scale_ups.project_name_en',
                 'four_ir_scale_ups.budget',
-                'four_ir_scale_ups.implement_timeline',
+                'four_ir_scale_ups.timeline_start_year',
+                'four_ir_scale_ups.timeline_end_year',
                 'four_ir_scale_ups.start_date',
                 'four_ir_scale_ups.end_date',
                 'four_ir_scale_ups.beneficiary_target',
@@ -291,8 +293,11 @@ class FourIRScaleUpService
                 'integer'
             ],
             'approve_by' => [
-                'required',
-                'string'
+                Rule::requiredIf(function () use ($data) {
+                    return (bool)$data['approval_status'];
+                }),
+                'nullable',
+                'int',
             ],
             "documents_approval-status"=>[
                 'required',

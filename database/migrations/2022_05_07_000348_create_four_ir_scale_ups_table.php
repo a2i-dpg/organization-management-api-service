@@ -19,7 +19,8 @@ class CreateFourIrScaleUpsTable extends Migration
             $table->string('project_name', 100);
             $table->string('project_name_en', 100)->nullable();
             $table->decimal('budget')->default(0);
-            $table->string('implement_timeline', 400);
+            $table->string('timeline_start_year', 400);
+            $table->string('timeline_end_year', 400);
             $table->date('start_date');
             $table->date('end_date');
             $table->string('beneficiary_target', 400);
