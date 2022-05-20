@@ -29,9 +29,6 @@ class FourIRContributionService
         $userId = $request['user_id'] ?? Auth::id();
         $response = [];
 
-        Log::info("Filter Payload" . json_encode([$request,$userId]));
-        Log::info("Filter UserId" .$userId);
-
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
             "four_ir_initiative_team_members.four_ir_initiative_id",
