@@ -70,12 +70,12 @@ class FourIrEmploymentService
 
         $fourIrEmploymentBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_employments.four_ir_initiative_id');
 
-        if(!empty($fourIrInitiativeId)){
+        if (!empty($fourIrInitiativeId)) {
             $fourIrEmploymentBuilder->where('four_ir_initiative_id', $fourIrInitiativeId);
         }
 
         if (!empty($name)) {
-            $fourIrEmploymentBuilder->where(function ($builder) use ($name){
+            $fourIrEmploymentBuilder->where(function ($builder) use ($name) {
                 $builder->where('four_ir_employments.name', 'like', '%' . $name . '%');
                 $builder->orWhere('four_ir_employments.name_en', 'like', '%' . $name . '%');
             });
@@ -140,15 +140,15 @@ class FourIrEmploymentService
             ]
         )->acl();
 
-        if(!empty($fourIrInitiativeId)){
+        if (!empty($fourIrInitiativeId)) {
             $fourIrEmploymentBuilder->where('four_ir_employments.four_ir_initiative_id', $fourIrInitiativeId);
         }
 
-        if(!empty($youthIds)){
+        if (!empty($youthIds)) {
             $fourIrEmploymentBuilder->whereIn('four_ir_employments.user_id', $youthIds);
         }
 
-        return  $fourIrEmploymentBuilder->get()->toArray()['data'] ?? $fourIrEmploymentBuilder->get()->toArray();
+        return $fourIrEmploymentBuilder->get()->toArray()['data'] ?? $fourIrEmploymentBuilder->get()->toArray();
     }
 
     /**
@@ -205,20 +205,20 @@ class FourIrEmploymentService
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
         $payload = [];
 
-        if($initiative->form_step < FourIRInitiative::FORM_STEP_EMPLOYMENT){
+        if ($initiative->form_step < FourIRInitiative::FORM_STEP_EMPLOYMENT) {
             $payload['form_step'] = FourIRInitiative::FORM_STEP_EMPLOYMENT;
         }
-        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FOURTEEN){
+        if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_FOURTEEN) {
             $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_FOURTEEN;
         }
         $initiative->fill($payload);
         $initiative->save();
 
-        $fourIrEmployment= FourIREmployment::updateOrCreate(
+        $fourIrEmployment = FourIREmployment::updateOrCreate(
             [
-                'user_id' =>  $data['youth_id']
+                'user_id' => $data['user_id']
             ],
-           $data
+            $data
         );
 
         return $fourIrEmployment;
@@ -284,17 +284,17 @@ class FourIrEmploymentService
                 'required',
                 'int'
             ],
-            "employment_status"=>[
+            "employment_status" => [
                 'required',
                 'int'
             ],
-            "youth_id"=>[
-        'required',
-        'int'
-        ],
+            "user_id" => [
+                'required',
+                'int'
+            ],
             'name' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'string',
@@ -307,14 +307,14 @@ class FourIrEmploymentService
             ],
             'email' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'email'
             ],
             'industry_name' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'string',
@@ -327,21 +327,21 @@ class FourIrEmploymentService
             ],
             'job_starting_date' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'date-format:Y-m-d'
             ],
             'contact_number' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 BaseModel::MOBILE_REGEX
             ],
             'designation' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'string',
@@ -349,14 +349,14 @@ class FourIrEmploymentService
             ],
             'starting_salary' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'int'
             ],
             'medium_of_job' => [
                 Rule::requiredIf(function () use ($data) {
-                    return (bool)$data['employment_status'];
+                    return !empty($data['employment_status']) && $data['employment_status'] == 2;
                 }),
                 'nullable',
                 'string',

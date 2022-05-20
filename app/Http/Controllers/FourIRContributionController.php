@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use stdClass;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class FourIRContributionController extends Controller

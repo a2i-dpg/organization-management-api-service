@@ -28,41 +28,34 @@ class FourIRContributionService
         $order = $request['order'] ?? "ASC";
         $userId = $request['user_id'] ?? Auth::id();
         $response = [];
-        Log::info("Filter Payload" . json_encode($request));
+
+        Log::info("Filter Payload" . json_encode([$request,$userId]));
+        Log::info("Filter UserId" .$userId);
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
+            "four_ir_initiative_team_members.four_ir_initiative_id",
+            "four_ir_initiative_team_members.user_id",
             "four_ir_initiative_team_members.role_responsibility",
             "four_ir_initiative_team_members.name as team_member_name",
             "four_ir_initiative_team_members.name_en as team_member_name_en",
             "four_ir_initiative_team_members.email as team_member_email",
             "four_ir_initiative_team_members.phone_number as team_member_phone_number",
             "four_ir_initiative_team_members.designation as team_member_designation",
-            "four_ir_initiative_team_members.file_path as team_member_file_path",
-            "four_ir_contributions.id as four_ir_contribution_id",
-            "four_ir_initiative_team_members.four_ir_initiative_id as four_ir_initiative_id",
-            "four_ir_contributions.four_ir_initiative_id as four_ir_contribution_initiative_id",
             "four_ir_taglines.id as four_ir_tagline_id",
             "four_ir_taglines.name as four_ir_tagline_name",
             "four_ir_taglines.name_en as four_ir_tagline_name_en",
-            "four_ir_initiatives.name as four_ir_initiative_name",
-            "four_ir_initiatives.name_en as four_ir_initiative_name_en",
+            "four_ir_initiatives.name as four_ir_tagline_name",
+            "four_ir_initiatives.name_en as four_ir_tagline_name_en",
             "four_ir_initiative_team_members.user_id",
             "four_ir_initiative_team_members.file_path",
             "four_ir_initiative_team_members.organization",
             "four_ir_initiative_team_members.team_type",
-            "four_ir_contributions.contribution as contribution",
-            "four_ir_contributions.contribution_en as contribution_en",
-            'four_ir_contributions.row_status',
-            'four_ir_contributions.created_by',
-            'four_ir_contributions.updated_by',
-            'four_ir_contributions.created_at',
-            'four_ir_contributions.updated_at'
         ])->acl();
 
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
-        $fourIrContributionBuilder->leftJoin("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
+//        $fourIrContributionBuilder->leftJoin("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
 
         $fourIrContributionBuilder->where("four_ir_initiative_team_members.user_id", $userId);
 
@@ -80,7 +73,7 @@ class FourIRContributionService
         if (is_numeric($paginate) || is_numeric($pageSize)) {
             $pageSize = $pageSize ?: BaseModel::DEFAULT_PAGE_SIZE;
             $fourIrContributions = $fourIrContributionBuilder->paginate($pageSize);
-            $paginateData = (object)$fourIrProjectTeamMembers->toArray();
+            $paginateData = (object)$fourIrContributions->toArray();
             $response['current_page'] = $paginateData->current_page;
             $response['total_page'] = $paginateData->last_page;
             $response['page_size'] = $paginateData->per_page;
@@ -101,41 +94,38 @@ class FourIRContributionService
     }
 
 
-    public function getOne(int $id): array
+    public function getOne(int $id)
     {
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
+            "four_ir_initiative_team_members.four_ir_initiative_id",
+            "four_ir_initiative_team_members.user_id",
             "four_ir_initiative_team_members.role_responsibility",
             "four_ir_initiative_team_members.name as team_member_name",
             "four_ir_initiative_team_members.name_en as team_member_name_en",
             "four_ir_initiative_team_members.email as team_member_email",
             "four_ir_initiative_team_members.phone_number as team_member_phone_number",
             "four_ir_initiative_team_members.designation as team_member_designation",
-            "four_ir_contributions.id as four_ir_contribution_id",
-            "four_ir_contributions.four_ir_initiative_id as four_ir_initiative_id",
             "four_ir_taglines.id as four_ir_tagline_id",
             "four_ir_taglines.name as four_ir_tagline_name",
             "four_ir_taglines.name_en as four_ir_tagline_name_en",
             "four_ir_initiatives.name as four_ir_tagline_name",
             "four_ir_initiatives.name_en as four_ir_tagline_name_en",
-            "four_ir_contributions.contribution as contribution",
-            "four_ir_contributions.contribution_en as contribution_en",
             "four_ir_initiative_team_members.user_id",
             "four_ir_initiative_team_members.file_path",
             "four_ir_initiative_team_members.organization",
             "four_ir_initiative_team_members.team_type",
-            'four_ir_contributions.row_status',
-            'four_ir_contributions.created_by',
-            'four_ir_contributions.updated_by',
-            'four_ir_contributions.created_at',
-            'four_ir_contributions.updated_at'
         ]);
 
         $fourIrContributionBuilder->join("four_ir_initiatives", "four_ir_initiatives.id", "four_ir_initiative_team_members.four_ir_initiative_id");
         $fourIrContributionBuilder->join("four_ir_taglines", "four_ir_taglines.id", "four_ir_initiatives.four_ir_tagline_id");
-        $fourIrContributionBuilder->leftJoin("four_ir_contributions", "four_ir_contributions.four_ir_initiative_id", "four_ir_initiative_team_members.four_ir_initiative_id");
-        $fourIrContributionBuilder->where("four_ir_contributions.id", $id);
-        return $fourIrContributionBuilder->firstOrFail()->toArray();
+        $fourIrContributionBuilder->where("four_ir_initiative_team_members.id", $id);
+        $member = $fourIrContributionBuilder->firstOrFail()->toArray();
+
+        $contribution = FourIRContribution::where("four_ir_initiative_id", $member['four_ir_initiative_id'])->where("user_id", $member['user_id'])->first();
+        $member['contribution'] = $contribution;
+        return $member;
+
     }
 
     public function createOrUpdate(array $request)
