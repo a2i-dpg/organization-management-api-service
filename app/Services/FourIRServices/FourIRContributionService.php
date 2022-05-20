@@ -28,7 +28,6 @@ class FourIRContributionService
         $order = $request['order'] ?? "ASC";
         $userId = $request['user_id'] ?? Auth::id();
         $response = [];
-
         Log::info("Filter Payload" . json_encode($request));
 
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
@@ -76,8 +75,6 @@ class FourIRContributionService
         if (is_numeric($rowStatus)) {
             $fourIrContributionBuilder->where('four_ir_contributions.row_status', $rowStatus);
         }
-
-        Log::info("SQL:   " .$fourIrContributionBuilder->toSql());
 
         /** @var Collection $fourIrProjectTeamMembers */
         if (is_numeric($paginate) || is_numeric($pageSize)) {
