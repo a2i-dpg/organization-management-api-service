@@ -68,6 +68,7 @@ class FourIRInitiativeController extends Controller
         $response = $this->fourIrInitiativeService->getFourIrAllInitiativeList($filter, $this->startTime);
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
+
     /**
      * @param int $id
      * @return JsonResponse
@@ -88,6 +89,16 @@ class FourIRInitiativeController extends Controller
     }
 
     function store(Request $request): JsonResponse
+    {
+        if (!empty($request->get('four_ir_initiative_analysis_id'))) {
+            return $this->update($request, $request->get('four_ir_initiative_analysis_id'));
+        } else {
+            return $this->create($request);
+        }
+    }
+
+
+    function create(Request $request): JsonResponse
     {
         // $this->authorize('create', FourIRInitiative::class);
         $validated = $this->fourIrInitiativeService->validator($request)->validate();
@@ -162,27 +173,27 @@ class FourIRInitiativeController extends Controller
      */
     public function taskAndSkillUpdate(Request $request, int $id): JsonResponse
     {
-          $fourIrInitiative = FourIRInitiative::findOrFail($id);
+        $fourIrInitiative = FourIRInitiative::findOrFail($id);
 
 
-           $validated = $this->fourIrInitiativeService->taskAndSkillvalidator($request, $id)->validate();
-               $intasks=$validated['tasks'] ?? [];
-               $exisTasks=$fourIrInitiative->tasks ?? [];
-               $tasks=array_merge ($intasks,$exisTasks);
-               $tasks=array_unique($tasks);
-               $validated['tasks']=$tasks;
+        $validated = $this->fourIrInitiativeService->taskAndSkillvalidator($request, $id)->validate();
+        $intasks = $validated['tasks'] ?? [];
+        $exisTasks = $fourIrInitiative->tasks ?? [];
+        $tasks = array_merge($intasks, $exisTasks);
+        $tasks = array_unique($tasks);
+        $validated['tasks'] = $tasks;
 
-           $data = $this->fourIrInitiativeService->update($fourIrInitiative, $validated);
+        $data = $this->fourIrInitiativeService->update($fourIrInitiative, $validated);
 
-            $response = [
-                'data' => $data,
-                '_response_status' => [
-                    "success" => true,
-                    "code" => ResponseAlias::HTTP_OK,
-                    "message" => "Four Ir Initiative updated successfully",
-                    "query_time" => $this->startTime->diffInSeconds(Carbon::now())
-                ]
-            ];
+        $response = [
+            'data' => $data,
+            '_response_status' => [
+                "success" => true,
+                "code" => ResponseAlias::HTTP_OK,
+                "message" => "Four Ir Initiative updated successfully",
+                "query_time" => $this->startTime->diffInSeconds(Carbon::now())
+            ]
+        ];
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
