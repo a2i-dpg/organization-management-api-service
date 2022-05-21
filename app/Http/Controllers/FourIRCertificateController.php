@@ -28,30 +28,24 @@ class FourIRCertificateController extends Controller
 
     public function getCertificates(Request $request, int $fourIrInitiativeId): \Illuminate\Http\JsonResponse
     {
-        $certificates = $this->fourIRCertificateService->getCertificateList($request->all(),$fourIrInitiativeId);
+        $certificates = $this->fourIRCertificateService->getCertificateList($request->all(), $fourIrInitiativeId);
 
         $youthIds = array_column($certificates, 'youth_id') ?? [];
 
-        $employments= app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds,$fourIrInitiativeId ,$this->startTime) ?? [];
+        $employments = app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds, $fourIrInitiativeId, $this->startTime) ?? [];
 
-        $employed = array_filter($employments, function ($employment) {
-            return ($employment['employment_status'] == 2);
-        }) ?? [];
-        $notApplicable= array_filter($employments, function ($employment) {
-            return ($employment['employment_status'] == 3);
-        }) ?? [];
 
-        foreach ($certificates as &$certifications){
-            if(in_array($certifications['youth_id'],array_column($employed, 'user_id'))){
-                $certifications['employment_status']=2;
-                $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
-
-            }else if(in_array($certifications['youth_id'],array_column($notApplicable, 'user_id'))){
-                $certifications['employment_status']=3;
-                $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
-            }else{
-                $certifications['employment_status']=1;
-                $certifications['employment_info']=$employments[array_search($certifications['youth_id'], array_column($employments, 'user_id'))] ?? new stdClass();
+        foreach ($certificates as &$certifications) {
+            if (!empty($employments[$certifications['youth_id']])) {
+                $certifications['employment_status'] = $employments[$certifications['youth_id']]['employment_status'];
+                if (in_array($employments[$certifications['youth_id']]['employment_status'],[1,3])) {
+                    $certifications['employment_info'] = new stdClass();
+                } else {
+                    $certifications['employment_info'] = $employments[$certifications['youth_id']];
+                }
+            } else {
+                $certifications['employment_status'] = 1;
+                $certifications['employment_info'] = new stdClass();
             }
         }
 
