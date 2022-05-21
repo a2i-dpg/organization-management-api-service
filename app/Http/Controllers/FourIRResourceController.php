@@ -83,7 +83,7 @@ class FourIRResourceController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $resource = FourIRResource::query()->findOrFail($id);
+        $resource = FourIRResource::findOrFail($id);
 
         $validated = $this->fourIRResourceService->validator($request, $id)->validate();
         $data = $this->fourIRResourceService->update($resource, $validated);

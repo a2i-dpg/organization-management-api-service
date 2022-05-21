@@ -100,15 +100,15 @@ class FourIRResourceService
     }
 
     /**
-     * @param FourIRResource $sector
+     * @param FourIRResource $resource
      * @param array $data
      * @return FourIRResource
      */
-    public function update(FourIRResource $sector, array $data): FourIRResource
+    public function update(FourIRResource $resource, array $data): FourIRResource
     {
-        $sector->fill($data);
-        $sector->save();
-        return $sector;
+        $resource->fill($data);
+        $resource->save();
+        return $resource;
     }
 
     /**
@@ -160,7 +160,7 @@ class FourIRResourceService
                     return (bool)$data['is_developed_financial_proposal'];
                 }),
                 'nullable',
-                'int',
+                'numeric',
             ],
             'file_path' => [
                 Rule::requiredIf(function () use ($data) {
