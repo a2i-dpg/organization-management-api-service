@@ -138,7 +138,7 @@ class FourIrEmploymentService
                 'four_ir_employments.created_at',
                 'four_ir_employments.updated_at'
             ]
-        )->acl();
+        );
 
         if (!empty($fourIrInitiativeId)) {
             $fourIrEmploymentBuilder->where('four_ir_employments.four_ir_initiative_id', $fourIrInitiativeId);
@@ -148,7 +148,7 @@ class FourIrEmploymentService
             $fourIrEmploymentBuilder->whereIn('four_ir_employments.user_id', $youthIds);
         }
 
-        return $fourIrEmploymentBuilder->get()->toArray()['data'] ?? $fourIrEmploymentBuilder->get()->toArray();
+        return $fourIrEmploymentBuilder->get()->keyBy("user_id")->toArray();
     }
 
     /**
