@@ -126,7 +126,8 @@ class FourIRShowcasingService
                 'four_ir_initiatives.is_skill_provide',
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
-
+                'four_ir_taglines.name as four_ir_tagline_name',
+                'four_ir_taglines.id as four_ir_tagline_id',
                 'four_ir_showcasings.organization_name',
                 'four_ir_showcasings.organization_name_en',
                 'four_ir_showcasings.invite_other_organization',
@@ -144,6 +145,7 @@ class FourIRShowcasingService
             ]
         );
         $fourIrShowcasingBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_showcasings.four_ir_initiative_id');
+        $fourIrShowcasingBuilder->join('four_ir_taglines', 'four_ir_taglines.id', '=', 'four_ir_initiatives.four_ir_tagline_id');
 
         $fourIrShowcasingBuilder->where('four_ir_showcasings.id', '=', $id);
 
