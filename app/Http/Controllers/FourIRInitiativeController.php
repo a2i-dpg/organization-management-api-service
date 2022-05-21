@@ -87,14 +87,6 @@ class FourIRInitiativeController extends Controller
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     * @throws Throwable
-     */
     function store(Request $request): JsonResponse
     {
         // $this->authorize('create', FourIRInitiative::class);

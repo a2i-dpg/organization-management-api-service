@@ -49,7 +49,7 @@ class FourIRInitiativeAnalysisController extends Controller
 
         $filter = $this->fourIRInitiativeAnalysisService->filterValidator($request)->validate();
         $response = $this->fourIRInitiativeAnalysisService->getFourIrInitiativeAnalysisList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -68,7 +68,7 @@ class FourIRInitiativeAnalysisController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -80,10 +80,26 @@ class FourIRInitiativeAnalysisController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        if (!empty($request->get('four_ir_initiative_analysis_id'))) {
+            return $this->update($request, $request->get('four_ir_initiative_analysis_id'));
+        } else {
+            return $this->store($request);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Throwable|ValidationException
+     */
+    function create(Request $request): JsonResponse
+    {
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 
         $excelRows = null;
-        if(!empty($request->file('team_file'))){
+        if (!empty($request->file('team_file'))) {
             $file = $request->file('team_file');
             $excelData = Excel::toCollection(new FourIrInitiativeAnalysisTeamImport(), $file)->toArray();
 
@@ -108,7 +124,7 @@ class FourIRInitiativeAnalysisController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -132,7 +148,7 @@ class FourIRInitiativeAnalysisController extends Controller
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 
         $excelRows = null;
-        if(!empty($request->file('team_file'))){
+        if (!empty($request->file('team_file'))) {
             $file = $request->file('team_file');
             $excelData = Excel::toCollection(new FourIrInitiativeAnalysisTeamImport(), $file)->toArray();
 
@@ -159,7 +175,7 @@ class FourIRInitiativeAnalysisController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
