@@ -204,6 +204,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
         $router->post('/tots-update/{id}', ["as" => "update.4ir.tots", "uses" => "FourIRInitiativeTotController@fourIrTotupdate"]);
         $router->get('/all-initiatives', ["as" => "all.initiatives", "uses" => "FourIRInitiativeController@getAllFourIrInitiatives"]);
+
         /**
          * Four IR Excel imports
          */

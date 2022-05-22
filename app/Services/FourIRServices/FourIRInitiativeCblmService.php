@@ -55,6 +55,7 @@ class FourIRInitiativeCblmService
             'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
             'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
             'four_ir_initiative_cs_curriculum_cblm.sector_name',
+            'four_ir_sectors.title as sector_title',
             'four_ir_initiative_cs_curriculum_cblm.supported_organization_name',
             'four_ir_initiative_cs_curriculum_cblm.supported_organization_name_en',
             'four_ir_initiative_cs_curriculum_cblm.file_path',
@@ -67,6 +68,7 @@ class FourIRInitiativeCblmService
         ])->acl();
 
         $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id');
+        $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_sectors',  'four_ir_initiative_cs_curriculum_cblm.sector_name', '=', 'four_ir_sectors.id');
 
         $fourIrInitiativeCsCurriculumCblmBuilder->where('four_ir_initiative_cs_curriculum_cblm.type', FourIRInitiativeCsCurriculumCblm::TYPE_CBLM);
 
@@ -137,6 +139,7 @@ class FourIRInitiativeCblmService
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name',
                 'four_ir_initiative_cs_curriculum_cblm.developed_organization_name_en',
                 'four_ir_initiative_cs_curriculum_cblm.sector_name',
+                'four_ir_sectors.title as sector_title',
                 'four_ir_initiative_cs_curriculum_cblm.supported_organization_name',
                 'four_ir_initiative_cs_curriculum_cblm.supported_organization_name_en',
                 'four_ir_initiative_cs_curriculum_cblm.file_path',
@@ -149,6 +152,7 @@ class FourIRInitiativeCblmService
             ]
         );
         $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_cs_curriculum_cblm.four_ir_initiative_id');
+        $fourIrInitiativeCsCurriculumCblmBuilder->join('four_ir_sectors',  'four_ir_initiative_cs_curriculum_cblm.sector_name', '=', 'four_ir_sectors.id');
 
         $fourIrInitiativeCsCurriculumCblmBuilder->with('experts');
 
