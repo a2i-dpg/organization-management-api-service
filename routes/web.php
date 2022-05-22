@@ -2,8 +2,14 @@
 
 /** @var Router $router */
 
+use App\Helpers\Classes\CustomExceptionHandler;
 use App\Helpers\Classes\CustomRouter;
+use Illuminate\Http\Client\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Laravel\Lumen\Routing\Router;
+use Ramsey\Uuid\Uuid;
 
 $customRouter = function (string $as = '') use ($router) {
     $custom = new CustomRouter($router);
@@ -350,6 +356,26 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
     $router->patch('organization-unit-types-restore{id}', ['as' => 'organization-unit-types.restore', 'uses' => 'OrganizationUnitTypeController@restore']);
     $router->delete('organization-unit-types-force-delete/{id}', ['as' => 'organization-unit-types.force-delete', 'uses' => 'OrganizationUnitTypeController@forceDelete']);
 
+});
+
+$router->post("file-update", function (Request $request) {
+    $file = $request->file('files');
+    $fileName = Uuid::uuid6() . "." . $file->getClientOriginalExtension();
+    $url = "https://file.nise.gov.bd/test";
+    $fileUploaded = Http::withOptions([
+        'verify' => config("nise3.should_ssl_verify"),
+        'debug' => config('nise3.http_debug'),
+    ])
+        ->timeout(60)
+        ->attach("files", file_get_contents($file), $fileName)
+        ->put($url)
+        ->throw(static function (\Illuminate\Http\Response $httpResponse, $httpException) use ($url) {
+            Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+            Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+            CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
+        })
+        ->json();
+    return $fileUploaded['status'] ? $fileUploaded['url'] : null;
 });
 
 

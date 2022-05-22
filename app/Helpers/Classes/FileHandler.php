@@ -2,9 +2,13 @@
 
 namespace App\Helpers\Classes;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 use Throwable;
 
 /**
@@ -26,7 +30,7 @@ class FileHandler
         }
         $fileName = $fileName ?: md5(time()) . '.' . $file->getClientOriginalExtension();
         if ($dir) {
-            $dir=$dir."/".date('Y/F');
+            $dir = $dir . "/" . date('Y/F');
             if (file_exists($dir)) {
                 mkdir($dir, 0777);
             }
@@ -63,5 +67,25 @@ class FileHandler
         }
 
         return true;
+    }
+
+    public static function uploadToCloud(UploadedFile $file)
+    {
+        $fileName = Uuid::uuid6() . "." . $file->getClientOriginalExtension();
+        $url = "https://file.nise.gov.bd/test";
+        $fileUploaded = Http::withOptions([
+            'verify' => config("nise3.should_ssl_verify"),
+            'debug' => config('nise3.http_debug'),
+        ])
+            ->timeout(60)
+            ->attach("files", file_get_contents($file), $fileName)
+            ->put($url)
+            ->throw(static function (Response $httpResponse, $httpException) use ($url) {
+                Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
+                Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
+                CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
+            })
+            ->json();
+        return $fileUploaded['status'] ? $fileUploaded['url'] : null;
     }
 }
