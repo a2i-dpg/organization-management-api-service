@@ -84,7 +84,6 @@ class FourIRInitiativeTnaFormatController extends Controller
         /** validate Excel files & store excel rows */
         if (!empty($workshopFile)) {
             $workshopExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($workshopFile, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
-            FileHandler::uploadToCloud($workshopFile);
         }
         if (!empty($fgdFile)) {
             $fgdExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($fgdFile, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
