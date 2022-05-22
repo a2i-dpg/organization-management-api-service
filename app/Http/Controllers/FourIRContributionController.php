@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRContribution;
 use App\Services\FourIRServices\FourIRContributionService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,7 @@ class FourIRContributionController extends Controller
 
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', FourIRContribution::class);
         $filter = $this->fourIRContributionService->filterValidator($request)->validate();
         $response = $this->fourIRContributionService->getContributionList($filter);
         return Response::json($response, $response['_response_status']['code']);
@@ -36,9 +38,10 @@ class FourIRContributionController extends Controller
 
     public function read(int $id): JsonResponse
     {
-        $responseData = $this->fourIRContributionService->getOne($id);
+        $contribution = $this->fourIRContributionService->getOne($id);
+        $this->authorize('view', $contribution);
         $response = [
-            "data" => $responseData,
+            "data" => $contribution,
             "_response_status" => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
@@ -53,8 +56,10 @@ class FourIRContributionController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('create', FourIRContribution::class);
         $validateData = $this->fourIRContributionService->valiation($request)->validate();
         $validateData['user_id'] = Auth::id();
+
         $responseData = $this->fourIRContributionService->createOrUpdate($validateData);
         $response = [
             "data" => $responseData,
