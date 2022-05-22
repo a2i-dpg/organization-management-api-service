@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\BaseModel;
 use App\Models\User;
+use App\Services\FourIRServices\FourIrInitiativeService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -68,6 +69,9 @@ class Authenticate
                 $request->offsetSet('accessor_type', BaseModel::ACCESSOR_TYPE_INSTITUTE);
                 $request->offsetSet('accessor_id', $authUser->institute_id);
             }
+
+            /** System Admin initiative Access  */
+            FourIrInitiativeService::accessor();
         }
 
         return $next($request);

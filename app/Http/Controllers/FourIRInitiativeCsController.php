@@ -46,7 +46,7 @@ class FourIRInitiativeCsController extends Controller
         $filter = $this->fourIrInitiativeCsCurriculumCblmService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeCsCurriculumCblmService->getFourIRInitiativeCsCurriculumCblmList($filter, $this->startTime);
 
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -65,7 +65,7 @@ class FourIRInitiativeCsController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -96,7 +96,7 @@ class FourIRInitiativeCsController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -134,7 +134,7 @@ class FourIRInitiativeCsController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }

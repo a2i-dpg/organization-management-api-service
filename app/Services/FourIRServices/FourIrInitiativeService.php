@@ -95,7 +95,7 @@ class FourIrInitiativeService
         }
 
         if (!empty($four_ir_tagline_id)) {
-            $fourIrInitiativeBuilder->where("four_ir_taglines.id",'=',$four_ir_tagline_id);
+            $fourIrInitiativeBuilder->where("four_ir_taglines.id", '=', $four_ir_tagline_id);
         }
 
         if (!empty($startDate)) {
@@ -310,8 +310,9 @@ class FourIrInitiativeService
             $fourIrInitiative->fill($data);
             $fourIrInitiative->save();
         }
-        return  $fourIrInitiative;
+        return $fourIrInitiative;
     }
+
     /**
      * @param FourIRInitiative $fourIrInitiative
      * @return bool
@@ -719,6 +720,15 @@ class FourIrInitiativeService
 
             }
 
+        }
+    }
+
+    public static function accessor(): void
+    {
+        if (!empty(request('four_ir_initiative_id'))) {
+            $fourIrInitiative = FourIRInitiative::findOrFail(request('four_ir_initiative_id'));
+            request()->offsetSet('accessor_id',$fourIrInitiative->accessor_id);
+            request()->offsetSet('accessor_type', $fourIrInitiative->accessor_type);
         }
     }
 }
