@@ -5253,9 +5253,6 @@
                     "four_ir_initiative_id": {
                         "type": "integer"
                     },
-                    "user_id": {
-                        "type": "integer"
-                    },
                     "team_type": {
                         "type": "integer",
                         "description": "('1=> implementing team, 2=> mentoring team')"
@@ -5281,6 +5278,9 @@
                     "role_responsibility": {
                         "type": "string"
                     },
+                    "application_role_id": {
+                        "type": "integer"
+                    },
                     "organization": {
                         "type": "string"
                     },
@@ -5294,7 +5294,7 @@
                     }
                 },
                 "required": [
-                    "four_ir_initiative_id","team_type","email","phone_number","role_responsibility","designation","name"
+                    "four_ir_initiative_id","team_type","email","phone_number","role_responsibility","designation","name","application_role_id"
                 ]
             },
             "4ir_project_cell": {
