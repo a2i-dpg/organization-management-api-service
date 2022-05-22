@@ -39,7 +39,6 @@ class FourIRTaglineController extends Controller
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAny', FourIRTagline::class);
-
         $filter = $this->fourIrTaglineService->filterValidator($request)->validate();
         $response = $this->fourIrTaglineService->getFourIRTaglineList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);

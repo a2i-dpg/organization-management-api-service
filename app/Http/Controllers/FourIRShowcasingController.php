@@ -45,7 +45,7 @@ class FourIRShowcasingController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRShowcasing::class);
+        $this->authorize('viewAny', FourIRShowcasing::class);
 
         $filter = $this->fourIRShowcasingService->filterValidator($request)->validate();
         $response = $this->fourIRShowcasingService->getFourShowcasingList($filter, $this->startTime);
@@ -59,7 +59,7 @@ class FourIRShowcasingController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrShowcasing = $this->fourIRShowcasingService->getOneFourIrShowcasing($id);
-//        $this->authorize('view', $fourIrProject);
+       $this->authorize('view', $fourIrShowcasing);
         $response = [
             "data" => $fourIrShowcasing,
             "_response_status" => [
@@ -80,7 +80,7 @@ class FourIRShowcasingController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('create', FourIRShowcasing::class);
+        $this->authorize('create', FourIRShowcasing::class);
         $validated = $this->fourIRShowcasingService->validator($request)->validate();
 
         try {
@@ -118,7 +118,7 @@ class FourIRShowcasingController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
-        //$this->authorize('update', $fourIrProject);
+        $this->authorize('update', $fourIrShowcasing);
         $validated = $this->fourIRShowcasingService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
@@ -156,7 +156,7 @@ class FourIRShowcasingController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrShowcasing = FourIRShowcasing::findOrFail($id);
-        //$this->authorize('delete', $fourIrProject);
+        $this->authorize('delete', $fourIrShowcasing);
         $this->fourIRShowcasingService->destroy($fourIrShowcasing);
         $response = [
             '_response_status' => [
