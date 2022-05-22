@@ -48,7 +48,7 @@ class FourIRInitiativeController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRInitiative::class);
+     $this->authorize('viewAny', FourIRInitiative::class);
 
         $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter, $this->startTime);
@@ -62,7 +62,7 @@ class FourIRInitiativeController extends Controller
      */
     public function getAllFourIrInitiatives(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRInitiative::class);
+        $this->authorize('viewAny', FourIRInitiative::class);
 
         $filter = $this->fourIrInitiativeService->filterValidatorForAll($request)->validate();
         $response = $this->fourIrInitiativeService->getFourIrAllInitiativeList($filter, $this->startTime);
@@ -76,7 +76,7 @@ class FourIRInitiativeController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiative = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
-//        $this->authorize('view', $fourIrInitiative);
+       $this->authorize('view', $fourIrInitiative);
         $response = [
             "data" => $fourIrInitiative,
             "_response_status" => [
@@ -100,7 +100,7 @@ class FourIRInitiativeController extends Controller
 
     function create(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIRInitiative::class);
+         $this->authorize('create', FourIRInitiative::class);
         $validated = $this->fourIrInitiativeService->validator($request)->validate();
         try {
             DB::beginTransaction();
@@ -140,7 +140,7 @@ class FourIRInitiativeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrInitiative = FourIRInitiative::findOrFail($id);
-        // $this->authorize('update', $fourIrInitiative);
+        $this->authorize('update', $fourIrInitiative);
         $validated = $this->fourIrInitiativeService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
@@ -209,7 +209,7 @@ class FourIRInitiativeController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrInitiative = FourIRInitiative::findOrFail($id);
-//        $this->authorize('delete', $fourIrInitiative);
+      $this->authorize('delete', $fourIrInitiative);
         $this->fourIrInitiativeService->destroy($fourIrInitiative);
         $response = [
             '_response_status' => [
