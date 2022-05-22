@@ -51,8 +51,6 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiatives.name as initiative_name',
                 'four_ir_initiatives.name_en as initiative_name_en',
                 'four_ir_initiatives.is_skill_provide',
-                'four_ir_initiatives.implementing_team_launching_date',
-                'four_ir_initiatives.expert_team_launching_date',
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 
@@ -144,8 +142,6 @@ class FourIrInitiativeTeamMemberService
                 'four_ir_initiatives.name as initiative_name',
                 'four_ir_initiatives.name_en as initiative_name_en',
                 'four_ir_initiatives.is_skill_provide',
-                'four_ir_initiatives.implementing_team_launching_date',
-                'four_ir_initiatives.expert_team_launching_date',
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
 

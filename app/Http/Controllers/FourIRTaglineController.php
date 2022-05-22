@@ -34,11 +34,11 @@ class FourIRTaglineController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRTagline::class);
+        $this->authorize('viewAny', FourIRTagline::class);
 
         $filter = $this->fourIrTaglineService->filterValidator($request)->validate();
         $response = $this->fourIrTaglineService->getFourIRTaglineList($filter, $this->startTime);
@@ -48,11 +48,12 @@ class FourIRTaglineController extends Controller
     /**
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
         $fourIrTagline = $this->fourIrTaglineService->getOneFourIRTagline($id);
-        //$this->authorize('view', $fourIrTagline);
+        $this->authorize('view', $fourIrTagline);
         $response = [
             "data" => $fourIrTagline,
             "_response_status" => [
@@ -74,7 +75,7 @@ class FourIRTaglineController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIRTagline::class);
+         $this->authorize('create', FourIRTagline::class);
         $validated = $this->fourIrTaglineService->validator($request)->validate();
         $data = $this->fourIrTaglineService->store($validated);
 
@@ -103,7 +104,7 @@ class FourIRTaglineController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrTagline = FourIRTagline::findOrFail($id);
-        // $this->authorize('update', $fourIrTagline);
+         $this->authorize('update', $fourIrTagline);
         $validated = $this->fourIrTaglineService->validator($request, $id)->validate();
         $data = $this->fourIrTaglineService->update($fourIrTagline, $validated);
 
@@ -131,7 +132,7 @@ class FourIRTaglineController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrTagline = FourIRTagline::findOrFail($id);
-//        $this->authorize('delete', $fourIrTagline);
+       $this->authorize('delete', $fourIrTagline);
         $this->fourIrTaglineService->destroy($fourIrTagline);
         $response = [
             '_response_status' => [

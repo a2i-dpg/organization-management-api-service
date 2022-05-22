@@ -49,7 +49,7 @@ class FourIRSectorController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', Occupation::class);
+       $this->authorize('viewAny', FourIRSector::class);
 
         $filter = $this->fourIrSectorService->filterValidator($request)->validate();
         $response = $this->fourIrSectorService->getSectorList($filter, $this->startTime);
@@ -66,7 +66,7 @@ class FourIRSectorController extends Controller
     public function read(int $id): JsonResponse
     {
         $sector = $this->fourIrSectorService->getOneSector($id);
-//        $this->authorize('view', $sector);
+        $this->authorize('view', $sector);
         $response = [
             "data" => $sector,
             "_response_status" => [
@@ -88,7 +88,7 @@ class FourIRSectorController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', Occupation::class);
+        $this->authorize('create', FourIRSector::class);
 
         $validated = $this->fourIrSectorService->validator($request)->validate();
         $data = $this->fourIrSectorService->store($validated);
@@ -116,7 +116,7 @@ class FourIRSectorController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $sector = FourIRSector::findOrFail($id);
-//        $this->authorize('update', $sector);
+       $this->authorize('update', $sector);
 
         $validated = $this->fourIrSectorService->validator($request, $id)->validate();
         $data = $this->fourIrSectorService->update($sector, $validated);
@@ -142,7 +142,7 @@ class FourIRSectorController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $sector = FourIRSector::findOrFail($id);
-//        $this->authorize('delete', $sector);
+        $this->authorize('delete', $sector);
         $this->fourIrSectorService->destroy($sector);
         $response = [
             '_response_status' => [
