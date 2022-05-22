@@ -392,7 +392,7 @@ class ServiceToServiceCallHandler
      */
     public function createFourIrCourse(array $payload): mixed
     {
-        clearstatcache();
+//        clearstatcache();
 
         $payload['row_status'] = BaseModel::ROW_STATUS_INACTIVE;
 
