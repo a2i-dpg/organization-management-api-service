@@ -269,7 +269,6 @@ class FourIRInitiativeCsService
 
         if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
