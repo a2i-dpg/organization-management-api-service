@@ -294,7 +294,7 @@ class IndustryAssociationService
                 'verify' => config('nise3.should_ssl_verify'),
                 'debug' => config('nise3.http_debug')
             ])
-            ->timeout(60)
+            ->timeout(120)
             ->delete($url, $userPostField)
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
@@ -385,7 +385,7 @@ class IndustryAssociationService
                 'verify' => config('nise3.should_ssl_verify'),
                 'debug' => config('nise3.http_debug')
             ])
-            ->timeout(60)
+            ->timeout(120)
             ->put($url, $userPostField)
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
@@ -490,7 +490,7 @@ class IndustryAssociationService
                 'debug' => config('nise3.http_debug'),
                 'timeout' => config('nise3.http_timeout'),
             ])
-            ->timeout(60)
+            ->timeout(120)
             ->post($url, $userPostField)
             ->throw(static function (Response $httpResponse, $httpException) use ($url) {
                 Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
