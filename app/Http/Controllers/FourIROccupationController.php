@@ -43,10 +43,11 @@ class FourIROccupationController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRInitiative::class);
+      $this->authorize('viewAny', FourIROccupationService::class);
 
         $filter = $this->fourIROccupationService->filterValidator($request)->validate();
         $response = $this->fourIROccupationService->getFourIROccupationList($filter, $this->startTime);
@@ -56,11 +57,12 @@ class FourIROccupationController extends Controller
     /**
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
         $fourIrOccupation = $this->fourIROccupationService->getOneFourIROccupation($id);
-//        $this->authorize('view', $fourIrOccupation);
+        $this->authorize('view', $fourIrOccupation);
         $response = [
             "data" => $fourIrOccupation,
             "_response_status" => [
@@ -78,11 +80,12 @@ class FourIROccupationController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     function store(Request $request): JsonResponse
     {
 
-
+        $this->authorize('create', FourIROccupation::class);
         $validated = $this->fourIROccupationService->validator($request)->validate();
         $data = $this->fourIROccupationService->store($validated);
 
@@ -110,7 +113,7 @@ class FourIROccupationController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrOccupation = FourIROccupation::findOrFail($id);
-//        $this->authorize('update', $fourIrOccupation);
+        $this->authorize('update', $fourIrOccupation);
 
         $validated = $this->fourIROccupationService->validator($request, $id)->validate();
         $data = $this->fourIROccupationService->update($fourIrOccupation, $validated);
@@ -140,7 +143,7 @@ class FourIROccupationController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrOccupation = FourIROccupation::findOrFail($id);
-//        $this->authorize('delete', $fourIrOccupation);
+       $this->authorize('delete', $fourIrOccupation);
         $this->fourIROccupationService->destroy($fourIrOccupation);
         $response = [
             '_response_status' => [
