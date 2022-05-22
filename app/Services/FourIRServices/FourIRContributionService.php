@@ -146,6 +146,10 @@ class FourIRContributionService
             "contribution" => [
                 "required",
                 "string"
+            ],
+            "contribution_en" => [
+                "nullable",
+                "string"
             ]
         ];
         return Validator::make($request->all(), $rules);
