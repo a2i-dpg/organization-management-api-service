@@ -19,7 +19,6 @@ class FourIRTaglinePolicy extends BasePolicy
      */
     public function viewAny(User $authUser): bool
     {
-        dd($authUser);
         return $authUser->hasPermission('view_any_4ir_taglines');
 
     }
