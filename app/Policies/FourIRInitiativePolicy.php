@@ -7,7 +7,7 @@ use App\Models\FourIRInitiative;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class FourIRInitivePolicy
+class FourIRInitiativePolicy
 {
     use HandlesAuthorization;
 
@@ -19,6 +19,7 @@ class FourIRInitivePolicy
      */
     public function viewAny(User $authUser): bool
     {
+
         return $authUser->hasPermission('view_any_4ir_initiatives');
 
     }
@@ -77,6 +78,7 @@ class FourIRInitivePolicy
      */
     public function viewAnyInitiativeStep(User $authUser): bool
     {
+
         return $authUser->hasPermission('view_any_4ir_initiative_step');
 
     }

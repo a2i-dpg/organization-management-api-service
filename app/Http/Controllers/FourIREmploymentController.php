@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FourIREmployment;
+use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIrEmploymentService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -40,7 +41,7 @@ class FourIREmploymentController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIREmployment::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
 
         $filter = $this->fourIrEmploymentService->filterValidator($request)->validate();
@@ -77,7 +78,7 @@ class FourIREmploymentController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIREmployment::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIrEmploymentService->validator($request)->validate();
         try {
             DB::beginTransaction();

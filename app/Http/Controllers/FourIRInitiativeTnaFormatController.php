@@ -46,7 +46,7 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        // $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTnaFormat::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
         $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
         $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
@@ -63,7 +63,7 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('creatInitiativeStep', FourIRInitiativeTnaFormat::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
         $fourIrInitiative = FourIRInitiative::findOrFail($validated['four_ir_initiative_id']);
         /** Fetch the files from Request */
