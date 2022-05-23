@@ -42,6 +42,7 @@ class FourIRInitiativeCurriculumController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
+
         $this->authorize('viewAnyInitiativeStep', FourIRInitiativeCsCurriculumCblm::class);
         $filter = $this->fourIrInitiativeCsCurriculumCblmService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeCsCurriculumCblmService->getFourIRInitiativeCsCurriculumCblmList($filter, $this->startTime);
