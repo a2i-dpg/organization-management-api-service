@@ -53,6 +53,7 @@ class FourIRInitiative extends BaseModel
     public const COMPLETION_STEP_SEVEN = 7;
     public const COMPLETION_STEP_EIGHT = 8;
     public const COMPLETION_STEP_NINE = 9;
+    public const COMPLETION_STEP_THIRTEEN = 13;
     public const COMPLETION_STEP_FOURTEEN = 14;
     public const COMPLETION_STEP_FIFTEEN = 15;
     public const COMPLETION_STEP_SIXTEEN = 16;

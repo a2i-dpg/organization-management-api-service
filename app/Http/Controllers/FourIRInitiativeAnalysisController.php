@@ -45,7 +45,7 @@ class FourIRInitiativeAnalysisController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRShowcasing::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeAnalysis::class);
 
         $filter = $this->fourIRInitiativeAnalysisService->filterValidator($request)->validate();
         $response = $this->fourIRInitiativeAnalysisService->getFourIrInitiativeAnalysisList($filter, $this->startTime);
@@ -59,6 +59,7 @@ class FourIRInitiativeAnalysisController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = $this->fourIRInitiativeAnalysisService->getOneFourIrInitiativeAnalysis($id);
+        $this->authorize('viewSingleInitiativeStep', $fourIrInitiativeAnalysis);
 //        $this->authorize('view', $fourIrProject);
         $response = [
             "data" => $fourIrInitiativeAnalysis,
@@ -96,6 +97,7 @@ class FourIRInitiativeAnalysisController extends Controller
      */
     function create(Request $request): JsonResponse
     {
+        $this->authorize('creatInitiativeStep', FourIRInitiativeAnalysis::class);
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 
         $excelRows = null;
@@ -144,6 +146,7 @@ class FourIRInitiativeAnalysisController extends Controller
     function update(Request $request, int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = FourIRInitiativeAnalysis::findOrFail($id);
+        $this->authorize('updateInitiativeStep', $fourIrInitiativeAnalysis);
 
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 

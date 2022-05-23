@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
+use App\Models\FourIRCreateAndApprove;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRCreateApproveCourseService;
 use Carbon\Carbon;
@@ -42,7 +43,7 @@ class FourIRCreateApproveCourseController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRInitiative::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRCreateAndApprove::class);
 
         $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter);
@@ -57,7 +58,8 @@ class FourIRCreateApproveCourseController extends Controller
     {
         /** This $id must be course_id of institute service course table */
         $response = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
-        //$this->authorize('view', $fourIrInitiative);
+        $this->authorize('viewSingleInitiativeStep', $response);
+
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
@@ -71,7 +73,8 @@ class FourIRCreateApproveCourseController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIRInitiative::class);
+        $this->authorize('creatInitiativeStep', FourIRCreateAndApprove::class);
+
 
         $validated = $this->fourIrInitiativeService->validator($request)->validate();
         $validated['row_status'] = BaseModel::ROW_STATUS_INACTIVE;

@@ -45,6 +45,7 @@ class FourIRInitiativeController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
@@ -59,6 +60,7 @@ class FourIRInitiativeController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getAllFourIrInitiatives(Request $request): JsonResponse
     {
@@ -72,6 +74,7 @@ class FourIRInitiativeController extends Controller
     /**
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
@@ -97,7 +100,13 @@ class FourIRInitiativeController extends Controller
         }
     }
 
-
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     * @throws ValidationException
+     */
     function create(Request $request): JsonResponse
     {
          $this->authorize('create', FourIRInitiative::class);
