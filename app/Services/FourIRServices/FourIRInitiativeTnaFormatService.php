@@ -73,7 +73,7 @@ class FourIRInitiativeTnaFormatService
 
         /** @var Collection $fourIrProjects */
         $fourIrProjects = $fourIrProjectTnaFormatBuilder->get();
-        $fileLog = app(FourIRFileLogService::class)->getFilePath($fourIrProjectId);
+        $fileLog = app(FourIRFileLogService::class)->getFilePath($fourIrProjectId,FourIRInitiative::COMPLETION_STEP_THREE);
         $filePath = !empty($fileLog->file_path) ? $fileLog->file_path : null;
 
         $response['order'] = $order;
