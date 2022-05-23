@@ -42,6 +42,7 @@ class FourIRInitiativeCblmController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeCsCurriculumCblm::class);
         $filter = $this->fourIrInitiativeCsCurriculumCblmService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeCsCurriculumCblmService->getFourIRInitiativeCsCurriculumCblmList($filter, $this->startTime);
 
@@ -55,7 +56,7 @@ class FourIRInitiativeCblmController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = $this->fourIrInitiativeCsCurriculumCblmService->getOneFourIRInitiativeCsCurriculumCblm($id);
-//        $this->authorize('view', $fourIrProject);
+        $this->authorize('viewSingleInitiativeStep', $fourIrInitiativeAnalysis);
         $response = [
             "data" => $fourIrInitiativeAnalysis,
             "_response_status" => [
@@ -77,7 +78,7 @@ class FourIRInitiativeCblmController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('create', FourIRInitiativeCsCurriculumCblm::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiativeCsCurriculumCblm::class);
         $validated = $this->fourIrInitiativeCsCurriculumCblmService->validator($request)->validate();
         try {
             DB::beginTransaction();
@@ -115,7 +116,7 @@ class FourIRInitiativeCblmController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrInitiativeCsCurriculumCblm = FourIRInitiativeCsCurriculumCblm::findOrFail($id);
-        //$this->authorize('update', $fourIrInitiativeCsCurriculumCblm);
+        $this->authorize('updateInitiativeStep', $fourIrInitiativeCsCurriculumCblm);
         $validated = $this->fourIrInitiativeCsCurriculumCblmService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();

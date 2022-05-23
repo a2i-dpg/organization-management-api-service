@@ -70,4 +70,57 @@ class FourIRInitivePolicy
     {
         return $authUser->hasPermission('delete_4ir_initiatives');
     }
+
+    /**
+     * @param User $authUser
+     * @return bool
+     */
+    public function viewAnyInitiativeStep(User $authUser): bool
+    {
+        return $authUser->hasPermission('view_any_4ir_initiative_step');
+
+    }
+
+    /**
+     * @param User $authUser
+     * @param FourIRInitiative $fourIRInitiative
+     * @return bool
+     */
+    public function viewSingleInitiativeStep(User $authUser, FourIRInitiative $fourIRInitiative): bool
+    {
+        return $authUser->hasPermission('view_single_4ir_initiative_step');
+
+    }
+
+    /**
+     * @param User $authUser
+     * @return bool
+     */
+    public function creatInitiativeStep(User $authUser): bool
+    {
+        return $authUser->hasPermission('create_4ir_initiative_step');
+
+    }
+
+    /**
+     * @param User $authUser
+     * @param FourIRInitiative $fourIRInitiative
+     * @return bool
+     */
+    public function updateInitiativeStep(User $authUser, FourIRInitiative $fourIRInitiative): bool
+    {
+        return $authUser->hasPermission('update_4ir_initiatives_step');
+
+    }
+
+    /**
+     * @param User $authUser
+     * @param FourIRInitiative $fourIRInitiative
+     * @return bool
+     */
+    public function deleteInitiativeStep(User $authUser, FourIRInitiative $fourIRInitiative): bool
+    {
+        return $authUser->hasPermission('delete_4ir_initiative_step');
+
+    }
 }
