@@ -41,7 +41,7 @@ class FourIRInitiativeTeamMemberController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRInitiativeTeamMember::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTeamMember::class);
 
         $filter = $this->fourIrProjectTeamMemberService->filterValidator($request)->validate();
         $response = $this->fourIrProjectTeamMemberService->getFourIrInitiativeTeamMemberList($filter, $this->startTime);
@@ -56,7 +56,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrProjectTeamMember = $this->fourIrProjectTeamMemberService->getOneFourIrInitiativeTeamMember($id);
-        //$this->authorize('view', $fourIrProjectTeamMember);
+        $this->authorize('viewSingleInitiativeStep', $fourIrProjectTeamMember);
         $response = [
             "data" => $fourIrProjectTeamMember,
             "_response_status" => [
@@ -80,7 +80,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     function store(Request $request): JsonResponse
     {
        // $this->authorize('create', FourIRInitiativeTeamMember::class);
-
+        $this->authorize('creatInitiativeStep', FourIRInitiativeTeamMember::class);
         $validated = $this->fourIrProjectTeamMemberService->validator($request)->validate();
         $data = $this->fourIrProjectTeamMemberService->store($validated);
 
@@ -109,7 +109,8 @@ class FourIRInitiativeTeamMemberController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
-        //$this->authorize('update', $fourIrProjectTeamMember);
+        $this->authorize('updateInitiativeStep', $fourIrProjectTeamMember);
+
 
         $validated = $this->fourIrProjectTeamMemberService->validator($request, $id)->validate();
         try {
@@ -146,7 +147,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
-        //$this->authorize('delete', $fourIrProjectTeamMember);
+        $this->authorize('deleteInitiativeStep', $fourIrProjectTeamMember);
         try {
             DB::beginTransaction();
 

@@ -38,6 +38,7 @@ class FourIRInitiativeTotController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTot::class);
         $filter = $this->fourIRTotInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIRTotInitiativeService->getFourIrProjectTOtList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
@@ -50,7 +51,7 @@ class FourIRInitiativeTotController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = $this->fourIRTotInitiativeService->getOneFourIrInitiativeAnalysis($id);
-//        $this->authorize('view', $fourIrProject);
+        $this->authorize('viewSingleInitiativeStep', $fourIrInitiativeAnalysis);
         $response = [
             "data" => $fourIrInitiativeAnalysis,
             "_response_status" => [
@@ -71,6 +72,7 @@ class FourIRInitiativeTotController extends Controller
      */
     function store(Request $request): JsonResponse
     {
+        $this->authorize('creatInitiativeStep', FourIRInitiativeTot::class);
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
         $excelRows = null;
         if(!empty($request->file('participants_file'))){
@@ -119,6 +121,8 @@ class FourIRInitiativeTotController extends Controller
         Log::info(FourIRInitiativeTot::class.json_encode(["id"=>$id,"request:"=>$request->all()],JSON_PRETTY_PRINT));
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+        $this->authorize('updateInitiativeStep', $fourIrInitiativeTot);
+
 
         $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
 
@@ -167,6 +171,7 @@ class FourIRInitiativeTotController extends Controller
     {
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+        $this->authorize('updateInitiativeStep', $fourIrInitiativeTot);
         $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
 
         $excelRows = null;
@@ -208,8 +213,10 @@ class FourIRInitiativeTotController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        Log::info("FourIRInitiativeTot ".json_encode($request->all()));
+
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+        $this->authorize('deleteInitiativeStep', $fourIrInitiativeTot);
+
         try {
             DB::beginTransaction();
             $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
