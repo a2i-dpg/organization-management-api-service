@@ -45,7 +45,7 @@ class FourIRInitiativeAnalysisController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRShowcasing::class);
+        $this->authorize('viewAny', FourIRShowcasing::class);
 
         $filter = $this->fourIRInitiativeAnalysisService->filterValidator($request)->validate();
         $response = $this->fourIRInitiativeAnalysisService->getFourIrInitiativeAnalysisList($filter, $this->startTime);
