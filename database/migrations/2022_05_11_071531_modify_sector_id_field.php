@@ -14,7 +14,9 @@ class ModifySectorIdField extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE four_ir_initiative_cs_curriculum_cblm CHANGE sector_name sector_id INT(10) UNSIGNED');
+        Schema::create('four_ir_initiative_cs_curriculum_cblm', function (Blueprint $table) {
+            $table->unsignedInteger('sector_name')->change();
+        });
     }
 
     /**
@@ -24,6 +26,9 @@ class ModifySectorIdField extends Migration
      */
     public function down()
     {
-        //
+        Schema::create('four_ir_initiative_cs_curriculum_cblm', function (Blueprint $table) {
+            $table->string('sector_name',200);
+        });
+
     }
 }
