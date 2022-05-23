@@ -197,6 +197,8 @@ class FourIRInitiativeTnaFormatService
     {
         $data = $request->all();
 
+        FourIrInitiativeService::accessor();
+
         if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 

@@ -720,7 +720,7 @@ class FourIrInitiativeService
     public static function accessor(): void
     {
         if (!empty(request('four_ir_initiative_id'))) {
-            $fourIrInitiative = FourIRInitiative::find(request('four_ir_initiative_id'));
+            $fourIrInitiative = FourIRInitiative::findOrFail(request('four_ir_initiative_id'));
             request()->offsetSet('accessor_id',$fourIrInitiative->accessor_id);
             request()->offsetSet('accessor_type', $fourIrInitiative->accessor_type);
         }

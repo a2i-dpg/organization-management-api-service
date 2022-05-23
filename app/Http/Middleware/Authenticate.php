@@ -70,8 +70,6 @@ class Authenticate
                 $request->offsetSet('accessor_id', $authUser->institute_id);
             }
 
-            /** System Admin initiative Access  */
-            //FourIrInitiativeService::accessor();
         }
 
         return $next($request);
