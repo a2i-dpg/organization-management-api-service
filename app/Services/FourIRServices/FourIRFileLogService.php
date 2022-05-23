@@ -12,6 +12,13 @@ use App\Models\FourIRInitiative;
  */
 class FourIRFileLogService
 {
+    public function getFileLogs()
+    {
+        $fileLogBuilder=FourIRFileLog::select([
+           ""
+        ]);
+    }
+
     /**
      * @param array $data
      * @param string $step
@@ -86,7 +93,7 @@ class FourIRFileLogService
      */
     public function getFilePath(int $fourIrInitiativeId): mixed
     {
-      return FourIRFileLog::where("four_ir_initiative_id", $fourIrInitiativeId)->latest()->first();
+        return FourIRFileLog::where("four_ir_initiative_id", $fourIrInitiativeId)->latest()->first();
 
     }
 }

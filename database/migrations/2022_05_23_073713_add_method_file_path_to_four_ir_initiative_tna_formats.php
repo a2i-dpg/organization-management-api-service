@@ -26,7 +26,7 @@ class AddMethodFilePathToFourIrInitiativeTnaFormats extends Migration
     public function down()
     {
         Schema::table('four_ir_initiative_tna_formats', function (Blueprint $table) {
-            //
+            $table->dropColumn('method_file_path');
         });
     }
 }

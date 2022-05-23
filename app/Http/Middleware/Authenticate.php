@@ -71,7 +71,7 @@ class Authenticate
             }
 
             /** System Admin initiative Access  */
-            FourIrInitiativeService::accessor();
+            //FourIrInitiativeService::accessor();
         }
 
         return $next($request);

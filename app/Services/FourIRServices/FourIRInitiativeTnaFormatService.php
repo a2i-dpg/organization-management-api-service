@@ -68,7 +68,7 @@ class FourIRInitiativeTnaFormatService
         $fourIrProjectTnaFormatBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tna_formats.four_ir_initiative_id');
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id', 'like', '%' . $fourIrProjectId . '%');
+            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id',$fourIrProjectId);
         }
 
         /** @var Collection $fourIrProjects */
