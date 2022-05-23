@@ -14,9 +14,7 @@ class FourIRFileLogService
 {
     public function getFileLogs()
     {
-        $fileLogBuilder=FourIRFileLog::select([
-           ""
-        ]);
+
     }
 
     /**
