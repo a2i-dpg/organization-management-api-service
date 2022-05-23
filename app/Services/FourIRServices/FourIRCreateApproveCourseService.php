@@ -114,6 +114,7 @@ class FourIRCreateApproveCourseService
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
         $data = $request->all();
+        FourIrInitiativeService::accessor();
         if (!empty($data['skills'])) {
             $data["skills"] = isset($data['skills']) && is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
         }
