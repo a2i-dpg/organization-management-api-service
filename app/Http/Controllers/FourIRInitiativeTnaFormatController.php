@@ -9,6 +9,7 @@ use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRInitiativeTnaFormatService;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,12 +43,11 @@ class FourIRInitiativeTnaFormatController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
-
         $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
         $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
         return Response::json($response, ResponseAlias::HTTP_OK);
