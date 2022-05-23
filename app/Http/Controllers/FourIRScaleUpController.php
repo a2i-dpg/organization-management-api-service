@@ -38,7 +38,7 @@ class FourIRScaleUpController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIRScaleUp::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRScaleUp::class);
 
         $filter = $this->fourIRScaleUpService->filterValidator($request)->validate();
         $response = $this->fourIRScaleUpService->getFourShowcasingList($filter, $this->startTime);
@@ -52,7 +52,7 @@ class FourIRScaleUpController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrScaleUp = $this->fourIRScaleUpService->getOneFourIrShowcasing($id);
-//        $this->authorize('view', $fourIrProject);
+        $this->authorize('viewSingleInitiativeStep', $fourIrScaleUp);
         $response = [
             "data" => $fourIrScaleUp,
             "_response_status" => [
@@ -73,7 +73,7 @@ class FourIRScaleUpController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-//        $this->authorize('create', FourIRScaleUp::class);
+        $this->authorize('creatInitiativeStep', FourIRScaleUp::class);
 
         $validated = $this->fourIRScaleUpService->validator($request)->validate();
         $data = $this->fourIRScaleUpService->store($validated);
@@ -102,7 +102,7 @@ class FourIRScaleUpController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
-//        $this->authorize('update', $fourIrProject);
+        $this->authorize('updateInitiativeStep', $fourIrScaleUp);
 
         $validated = $this->fourIRScaleUpService->validator($request, $id)->validate();
         $data = $this->fourIRScaleUpService->update($fourIrScaleUp, $validated);
@@ -131,7 +131,7 @@ class FourIRScaleUpController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
-//        $this->authorize('delete', $fourIrProject);
+        $this->authorize('deleteInitiativeStep', $fourIrScaleUp);
         $this->fourIRScaleUpService->destroy($fourIrScaleUp);
         $response = [
             '_response_status' => [

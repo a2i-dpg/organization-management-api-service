@@ -117,7 +117,7 @@ class FourIRInitiativeCsController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrInitiativeCsCurriculumCblm = FourIRInitiativeCsCurriculumCblm::findOrFail($id);
-        //$this->authorize('update', $fourIrInitiativeCsCurriculumCblm);
+        $this->authorize('updateInitiativeStep', $fourIrInitiativeCsCurriculumCblm);
         $validated = $this->fourIrInitiativeCsCurriculumCblmService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();
@@ -146,7 +146,7 @@ class FourIRInitiativeCsController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrInitiativeCell = FourIRInitiativeCsCurriculumCblm::findOrFail($id);
-//        $this->authorize('delete', $fourIrInitiative);
+        $this->authorize('deleteInitiativeStep', $fourIrInitiativeCell);
         $this->fourIrInitiativeCsCurriculumCblmService->destroy($fourIrInitiativeCell);
         $response = [
             '_response_status' => [
