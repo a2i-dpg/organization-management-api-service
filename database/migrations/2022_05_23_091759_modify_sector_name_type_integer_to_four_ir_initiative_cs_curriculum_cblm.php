@@ -14,8 +14,8 @@ class ModifySectorNameTypeIntegerToFourIrInitiativeCsCurriculumCblm extends Migr
     public function up()
     {
         Schema::table('four_ir_initiative_cs_curriculum_cblm', function (Blueprint $table) {
-            //
-        });
+            $table->unsignedSmallInteger('sector_name')->change();
+;        });
     }
 
     /**
@@ -26,7 +26,7 @@ class ModifySectorNameTypeIntegerToFourIrInitiativeCsCurriculumCblm extends Migr
     public function down()
     {
         Schema::table('four_ir_initiative_cs_curriculum_cblm', function (Blueprint $table) {
-            //
+            $table->string('sector_name',200);
         });
     }
 }
