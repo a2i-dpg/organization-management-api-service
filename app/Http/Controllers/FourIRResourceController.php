@@ -46,7 +46,7 @@ class FourIRResourceController extends Controller
     public function getList(Request $request): JsonResponse
     {
 
-
+        $this->authorize('viewAnyInitiativeStep', FourIRResource::class);
         $filter = $this->fourIRResourceService->filterValidator($request)->validate();
         $response = $this->fourIRResourceService->getResourceList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
@@ -66,6 +66,7 @@ class FourIRResourceController extends Controller
         //$this->authorize('viewAny', FourIRInitiative::class);
         Log::info("r-id".$id);
         $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
+        $this->authorize('viewSingleInitiativeStep', $fourIrResource);
         $response = [
             "data" => $fourIrResource,
             "_response_status" => [
@@ -84,7 +85,7 @@ class FourIRResourceController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $resource = FourIRResource::findOrFail($id);
-
+        $this->authorize('updateInitiativeStep', $resource);
         $validated = $this->fourIRResourceService->validator($request, $id)->validate();
         $data = $this->fourIRResourceService->update($resource, $validated);
         $response = [
@@ -110,7 +111,7 @@ class FourIRResourceController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('create', FourIRGuideline::class);
+        $this->authorize('creatInitiativeStep', FourIRResource::class);
         $validated = $this->fourIRResourceService->validator($request)->validate();
         try {
             DB::beginTransaction();
