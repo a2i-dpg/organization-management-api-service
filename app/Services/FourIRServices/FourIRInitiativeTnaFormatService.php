@@ -3,11 +3,13 @@
 
 namespace App\Services\FourIRServices;
 
+use App\Helpers\Classes\FileHandler;
 use App\Imports\FourIrTnaMethodsImport;
 use App\Models\BaseModel;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTnaFormat;
 use App\Models\FourIRTnaFormatMethod;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -45,10 +47,10 @@ class FourIRInitiativeTnaFormatService
                 'four_ir_initiative_tna_formats.four_ir_initiative_id',
                 'four_ir_initiative_tna_formats.method_type',
                 'four_ir_initiative_tna_formats.workshop_numbers',
+                'four_ir_initiative_tna_formats.method_file_path',
 
                 'four_ir_initiatives.name as initiative_name',
                 'four_ir_initiatives.name_en as initiative_name_en',
-                'four_ir_initiatives.tna_file_path',
                 'four_ir_initiatives.is_skill_provide',
                 'four_ir_initiatives.completion_step',
                 'four_ir_initiatives.form_step',
@@ -71,9 +73,12 @@ class FourIRInitiativeTnaFormatService
 
         /** @var Collection $fourIrProjects */
         $fourIrProjects = $fourIrProjectTnaFormatBuilder->get();
+        $fileLog = app(FourIRFileLogService::class)->getFilePath($fourIrProjectId);
+        $filePath = !empty($fileLog->file_path) ? $fileLog->file_path : null;
 
         $response['order'] = $order;
-        $response['data'] = $fourIrProjects->toArray()['data'] ?? $fourIrProjects->toArray();
+        $response['data']['methods'] = $fourIrProjects->toArray()['data'] ?? $fourIrProjects->toArray();
+        $response['data']['file_path'] = $filePath;
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
@@ -87,14 +92,13 @@ class FourIRInitiativeTnaFormatService
      * @param array $data
      * @return void
      */
-    public function store(FourIRInitiative $fourIrInitiative, array $data)
+    public function store(FourIRInitiative $fourIrInitiative, array $data): void
     {
 
         $payload = [];
         if (!empty($data['file_path'])) {
             $payload['tna_file_path'] = $data['file_path'];
         }
-
         if ($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TNA) {
             $payload['form_step'] = FourIRInitiative::FORM_STEP_TNA;
         }
@@ -110,19 +114,24 @@ class FourIRInitiativeTnaFormatService
     /**
      * @param $file
      * @param int $tnaMethod
-     * @return array|null
+     * @return array
      * @throws ValidationException
      */
-    public function excelDataValidate($file, int $tnaMethod): null|array
+    public function excelDataValidate($file, int $tnaMethod): array
     {
         $excelData = Excel::toCollection(new FourIrTnaMethodsImport(), $file)->toArray();
 
         $rows = null;
+        $methodFilePath = null;
         if (!empty($excelData) && !empty($excelData[0])) {
             $rows = $excelData[0];
             $this->excelDataValidator($rows, $tnaMethod)->validate();
+            $methodFilePath = FileHandler::uploadToCloud($file);
         }
-        return $rows;
+        return [
+            $rows,
+            $methodFilePath
+        ];
     }
 
     /**
@@ -131,10 +140,9 @@ class FourIRInitiativeTnaFormatService
      * @param int $tnaMethod
      * @return void
      */
-    public function tnaFormatMethodStore(array $data, array|null $rows, int $tnaMethod): void
+    public function tnaFormatMethodStore(array $data, array|null $rows, int $tnaMethod, string|null $methodFilePath): void
     {
         /** First, Create TNA format */
-        $tnaFormat = new FourIRInitiativeTnaFormat();
         $payload = [
             "four_ir_initiative_id" => $data['four_ir_initiative_id'],
             "accessor_type" => $data['accessor_type'],
@@ -148,8 +156,11 @@ class FourIRInitiativeTnaFormatService
         if (!empty($data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]])) {
             $payload["workshop_numbers"] = $data[FourIRInitiativeTnaFormat::TNA_METHODS_WORKSHOP_NUMBER_KEYS[$tnaMethod]];
         }
+        if (!empty($methodFilePath)) {
+            $payload["method_file_path"] = $methodFilePath;
+        }
 
-        FourIRInitiativeTnaFormat::updateOrCreate([
+        $tnaFormat = FourIRInitiativeTnaFormat::updateOrCreate([
             "four_ir_initiative_id" => $data['four_ir_initiative_id'],
             "method_type" => $tnaMethod
         ],
@@ -187,6 +198,7 @@ class FourIRInitiativeTnaFormatService
 
         if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
+
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));

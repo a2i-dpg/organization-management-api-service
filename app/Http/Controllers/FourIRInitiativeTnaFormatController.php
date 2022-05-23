@@ -46,7 +46,7 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTnaFormat::class);
+        // $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTnaFormat::class);
 
         $filter = $this->fourIRProjectTnaFormatService->filterValidator($request)->validate();
         $response = $this->fourIRProjectTnaFormatService->getFourIrProjectTnaFormatList($filter, $this->startTime);
@@ -63,10 +63,9 @@ class FourIRInitiativeTnaFormatController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRInitiativeTnaFormat::class);
+        //$this->authorize('creatInitiativeStep', FourIRInitiativeTnaFormat::class);
         $validated = $this->fourIRProjectTnaFormatService->validator($request)->validate();
         $fourIrInitiative = FourIRInitiative::findOrFail($validated['four_ir_initiative_id']);
-
         /** Fetch the files from Request */
         $workshopFile = !empty($validated['workshop_method_workshop_numbers']) ? $request->file('workshop_method_file') : null;
         $fgdFile = !empty($validated['fgd_workshop_numbers']) ? $request->file('fgd_workshop_file') : null;
@@ -84,22 +83,22 @@ class FourIRInitiativeTnaFormatController extends Controller
 
         /** validate Excel files & store excel rows */
         if (!empty($workshopFile)) {
-            $workshopExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($workshopFile, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
+            [$workshopExcelRows, $workshopFile] = $this->fourIRProjectTnaFormatService->excelDataValidate($workshopFile, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
         }
         if (!empty($fgdFile)) {
-            $fgdExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($fgdFile, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
+            [$fgdExcelRows, $fgdFile] = $this->fourIRProjectTnaFormatService->excelDataValidate($fgdFile, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
         }
         if (!empty($industryVisitFile)) {
-            $industryVisitExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($industryVisitFile, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
+            [$industryVisitExcelRows, $industryVisitFile] = $this->fourIRProjectTnaFormatService->excelDataValidate($industryVisitFile, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
         }
         if (!empty($desktopResearchFile)) {
-            $desktopResearchExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($desktopResearchFile, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
+            [$desktopResearchExcelRows, $desktopResearchFile] = $this->fourIRProjectTnaFormatService->excelDataValidate($desktopResearchFile, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
         }
         if (!empty($existingReportFile)) {
-            $existingReportExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($existingReportFile, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
+            [$existingReportExcelRows, $existingReportFile] = $this->fourIRProjectTnaFormatService->excelDataValidate($existingReportFile, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
         }
         if (!empty($otherWorkshopFile)) {
-            $otherExcelRows = $this->fourIRProjectTnaFormatService->excelDataValidate($otherWorkshopFile, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
+            [$otherExcelRows, $otherWorkshopFile] = $this->fourIRProjectTnaFormatService->excelDataValidate($otherWorkshopFile, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
         }
 
         try {
@@ -113,34 +112,16 @@ class FourIRInitiativeTnaFormatController extends Controller
             }
 
             /** Save the tna_file_path & update the stepper (form_step & completion_step) information */
+
             $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
 
             /** Store Or Update Excel rows with Tna Format*/
-            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
-            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdExcelRows, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
-            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitExcelRows, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
-            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchExcelRows, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
-            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
-            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
-
-            /** if(!empty($workshopExcelRows)){
-             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD);
-             * }
-             * if(!empty($fgdExcelRows)){
-             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdExcelRows, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD);
-             * }
-             * if(!empty($industryVisitExcelRows)){
-             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitExcelRows, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD);
-             * }
-             * if(!empty($desktopResearchExcelRows)){
-             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchExcelRows, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD);
-             * }
-             * if(!empty($existingReportExcelRows)){
-             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD);
-             * }
-             * if(!empty($otherExcelRows)){
-             * $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD);
-             * } */
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD, $workshopFile);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $fgdExcelRows, FourIRInitiativeTnaFormat::FGD_WORKSHOP_TNA_METHOD, $fgdFile);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $industryVisitExcelRows, FourIRInitiativeTnaFormat::INDUSTRY_VISIT_TNA_METHOD, $industryVisitFile);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $desktopResearchExcelRows, FourIRInitiativeTnaFormat::DESKTOP_RESEARCH_TNA_METHOD, $desktopResearchFile);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $existingReportExcelRows, FourIRInitiativeTnaFormat::EXISTING_REPORT_VIEW_TNA_METHOD, $existingReportFile);
+            $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $otherExcelRows, FourIRInitiativeTnaFormat::OTHERS_TNA_METHOD, $otherWorkshopFile);
 
             DB::commit();
             $response = [

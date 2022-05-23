@@ -17,9 +17,9 @@ class FourIRFileLogService
      * @param string $step
      * @return void
      */
-    public function storeFileLog(array $data, string $step)
+    public function storeFileLog(array $data, string $step): void
     {
-        if(!empty($data['file_path'])){
+        if (!empty($data['file_path'])) {
             $this->store($data, $step);
         }
     }
@@ -30,9 +30,9 @@ class FourIRFileLogService
      * @param string $step
      * @return void
      */
-    public function updateFileLog(string|null $filePath, array $data, string $step)
+    public function updateFileLog(string|null $filePath, array $data, string $step): void
     {
-        if(!empty($data['file_path']) && $filePath != $data['file_path']){
+        if (!empty($data['file_path']) && $filePath != $data['file_path']) {
             $this->store($data, $step);
         }
     }
@@ -63,7 +63,7 @@ class FourIRFileLogService
      * @param string $step
      * @return void
      */
-    public function storeOrUpdateFileLog(array $data, string $step)
+    public function storeOrUpdateFileLog(array $data, string $step): void
     {
         FourIRFileLog::updateOrCreate(
             [
@@ -77,5 +77,16 @@ class FourIRFileLogService
                 'row_status' => $data['row_status'] ?? BaseModel::ROW_STATUS_ACTIVE
             ]
         );
+    }
+
+
+    /**
+     * @param int $fourIrInitiativeId
+     * @return mixed
+     */
+    public function getFilePath(int $fourIrInitiativeId): mixed
+    {
+      return FourIRFileLog::where("four_ir_initiative_id", $fourIrInitiativeId)->latest()->first();
+
     }
 }
