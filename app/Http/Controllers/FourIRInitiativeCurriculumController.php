@@ -43,7 +43,7 @@ class FourIRInitiativeCurriculumController extends Controller
     public function getList(Request $request): JsonResponse
     {
 
-        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeCsCurriculumCblm::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
         $filter = $this->fourIrInitiativeCsCurriculumCblmService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeCsCurriculumCblmService->getFourIRInitiativeCsCurriculumCblmList($filter, $this->startTime);
 
@@ -79,7 +79,7 @@ class FourIRInitiativeCurriculumController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRInitiativeCsCurriculumCblm::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIrInitiativeCsCurriculumCblmService->validator($request)->validate();
         try {
             DB::beginTransaction();

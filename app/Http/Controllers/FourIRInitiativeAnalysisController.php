@@ -45,7 +45,7 @@ class FourIRInitiativeAnalysisController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeAnalysis::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
         $filter = $this->fourIRInitiativeAnalysisService->filterValidator($request)->validate();
         $response = $this->fourIRInitiativeAnalysisService->getFourIrInitiativeAnalysisList($filter, $this->startTime);
@@ -97,7 +97,7 @@ class FourIRInitiativeAnalysisController extends Controller
      */
     function create(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRInitiativeAnalysis::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 
         $excelRows = null;

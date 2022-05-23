@@ -78,6 +78,7 @@ class FourIRInitiativePolicy
      */
     public function viewAnyInitiativeStep(User $authUser): bool
     {
+
         return $authUser->hasPermission('view_any_4ir_initiative_step');
 
     }
