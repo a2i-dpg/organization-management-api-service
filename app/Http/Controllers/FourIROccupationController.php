@@ -47,7 +47,7 @@ class FourIROccupationController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-      $this->authorize('viewAny', FourIROccupationService::class);
+      $this->authorize('viewAny', FourIROccupation::class);
 
         $filter = $this->fourIROccupationService->filterValidator($request)->validate();
         $response = $this->fourIROccupationService->getFourIROccupationList($filter, $this->startTime);
