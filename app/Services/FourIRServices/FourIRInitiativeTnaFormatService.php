@@ -138,6 +138,7 @@ class FourIRInitiativeTnaFormatService
      * @param array $data
      * @param array|null $rows
      * @param int $tnaMethod
+     * @param string|null $methodFilePath
      * @return void
      */
     public function tnaFormatMethodStore(array $data, array|null $rows, int $tnaMethod, string|null $methodFilePath): void
