@@ -38,7 +38,7 @@ class FourIRInitiativeCellController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRInitiativeCell::class);
+//        $this->authorize('viewAnyInitiativeStep', FourIRGuideline::class);
 
         $filter = $this->fourIRInitiativeCellService->filterValidator($request)->validate();
         $response = $this->fourIRInitiativeCellService->getFourIRInitiativeCellList($filter, $this->startTime);

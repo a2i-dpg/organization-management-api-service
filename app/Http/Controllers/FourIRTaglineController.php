@@ -52,7 +52,7 @@ class FourIRTaglineController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrTagline = $this->fourIrTaglineService->getOneFourIRTagline($id);
-        $this->authorize('view', $fourIrTagline);
+//        $this->authorize('view', $fourIrTagline);
         $response = [
             "data" => $fourIrTagline,
             "_response_status" => [

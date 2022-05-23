@@ -29,7 +29,7 @@ class FourIRCertificateController extends Controller
     public function getCertificates(Request $request, int $fourIrInitiativeId): \Illuminate\Http\JsonResponse
     {
         $certificates = $this->fourIRCertificateService->getCertificateList($request->all(), $fourIrInitiativeId);
-
+        $this->authorize('viewSingleInitiativeStep', $certificates);
         $youthIds = array_column($certificates, 'youth_id') ?? [];
 
         $employments = app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds, $fourIrInitiativeId, $this->startTime) ?? [];

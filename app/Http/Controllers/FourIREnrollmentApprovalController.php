@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIREmployment;
 use App\Services\FourIRServices\FourIREnrollmentApprovalService;
 use App\Services\FourIRServices\FourIRFileLogService;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class FourIREnrollmentApprovalController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        //$this->authorize('viewAny', FourIRInitiative::class);
+        $this->authorize('viewAnyInitiativeStep', FourIREmployment::class);
 
         $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter);

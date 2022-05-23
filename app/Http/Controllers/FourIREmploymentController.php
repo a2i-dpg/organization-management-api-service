@@ -40,7 +40,8 @@ class FourIREmploymentController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-//        $this->authorize('viewAny', FourIREmployment::class);
+        $this->authorize('viewAnyInitiativeStep', FourIREmployment::class);
+
 
         $filter = $this->fourIrEmploymentService->filterValidator($request)->validate();
         $response = $this->fourIrEmploymentService->getFourIrEmploymentList($filter, $this->startTime);
@@ -54,7 +55,7 @@ class FourIREmploymentController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrEmployment = $this->fourIrEmploymentService->getOneFourIrEmployment($id);
-//        $this->authorize('view', $fourIrEmployment);
+        $this->authorize('viewSingleInitiativeStep', $fourIrEmployment);
         $response = [
             "data" => $fourIrEmployment,
             "_response_status" => [
@@ -76,7 +77,7 @@ class FourIREmploymentController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', FourIREmployment::class);
+        $this->authorize('creatInitiativeStep', FourIREmployment::class);
         $validated = $this->fourIrEmploymentService->validator($request)->validate();
         try {
             DB::beginTransaction();
@@ -113,7 +114,7 @@ class FourIREmploymentController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrEmployment = FourIREmployment::findOrFail($id);
-        // $this->authorize('update', $fourIrEmployment);
+        $this->authorize('updateInitiativeStep', $fourIrEmployment);
         $validated = $this->fourIrEmploymentService->validator($request, $id)->validate();
         $data = $this->fourIrEmploymentService->update($fourIrEmployment, $validated);
 
@@ -140,7 +141,7 @@ class FourIREmploymentController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrEmployment = FourIREmployment::findOrFail($id);
-//        $this->authorize('delete', $fourIrEmployment);
+        $this->authorize('deleteInitiativeStep', $fourIrEmployment);
         $this->fourIrEmploymentService->destroy($fourIrEmployment);
         $response = [
             '_response_status' => [

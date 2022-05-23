@@ -7,7 +7,7 @@ use App\Models\FourIRTagline;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class FourIRTaglinePolicy
+class FourIRTaglinePolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -32,6 +32,7 @@ class FourIRTaglinePolicy
      */
     public function view(User $authUser, FourIRTagline $fourIRTagline): bool
     {
+
         return $authUser->hasPermission('view_single_4ir_taglines');
 
     }
