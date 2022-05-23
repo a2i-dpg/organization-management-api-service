@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseModel;
 use App\Models\FourIRCreateAndApprove;
+use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRCreateApproveCourseService;
 use Carbon\Carbon;
@@ -43,7 +44,7 @@ class FourIRCreateApproveCourseController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRCreateAndApprove::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
         $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter);
@@ -73,7 +74,7 @@ class FourIRCreateApproveCourseController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRCreateAndApprove::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
 
 
         $validated = $this->fourIrInitiativeService->validator($request)->validate();

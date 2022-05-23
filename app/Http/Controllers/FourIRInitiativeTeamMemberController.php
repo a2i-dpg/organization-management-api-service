@@ -41,7 +41,7 @@ class FourIRInitiativeTeamMemberController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTeamMember::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
         $filter = $this->fourIrProjectTeamMemberService->filterValidator($request)->validate();
         $response = $this->fourIrProjectTeamMemberService->getFourIrInitiativeTeamMemberList($filter, $this->startTime);
@@ -80,7 +80,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     function store(Request $request): JsonResponse
     {
        // $this->authorize('create', FourIRInitiativeTeamMember::class);
-        $this->authorize('creatInitiativeStep', FourIRInitiativeTeamMember::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIrProjectTeamMemberService->validator($request)->validate();
         $data = $this->fourIrProjectTeamMemberService->store($validated);
 

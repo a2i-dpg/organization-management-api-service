@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\FourIrTotParticipantsImport;
+use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTot;
 use App\Services\FourIRServices\FourIRTotInitiativeService;
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ class FourIRInitiativeTotController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRInitiativeTot::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
         $filter = $this->fourIRTotInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIRTotInitiativeService->getFourIrProjectTOtList($filter, $this->startTime);
         return Response::json($response,ResponseAlias::HTTP_OK);
@@ -72,7 +73,7 @@ class FourIRInitiativeTotController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRInitiativeTot::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
         $excelRows = null;
         if(!empty($request->file('participants_file'))){

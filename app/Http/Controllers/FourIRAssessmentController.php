@@ -41,7 +41,7 @@ class FourIRAssessmentController extends Controller
      */
     public function getList(Request $request, int $fourIrInitiativeId): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRAssessment::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
         $filter = $this->fourIRAssessmentService->filterValidator($request)->validate();
         $responseData=$this->fourIRAssessmentService->getFourIrAssessmentList($filter, $fourIrInitiativeId);
         $response = [

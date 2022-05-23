@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRInitiative;
 use App\Models\FourIRScaleUp;
 use App\Services\FourIRServices\FourIRScaleUpService;
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ class FourIRScaleUpController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAnyInitiativeStep', FourIRScaleUp::class);
+        $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
         $filter = $this->fourIRScaleUpService->filterValidator($request)->validate();
         $response = $this->fourIRScaleUpService->getFourShowcasingList($filter, $this->startTime);
@@ -73,7 +74,7 @@ class FourIRScaleUpController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRScaleUp::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
 
         $validated = $this->fourIRScaleUpService->validator($request)->validate();
         $data = $this->fourIRScaleUpService->store($validated);
