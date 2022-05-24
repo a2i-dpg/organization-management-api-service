@@ -66,7 +66,7 @@ class FourIRResourceController extends Controller
         //$this->authorize('viewAny', FourIRInitiative::class);
         Log::info("r-id".$id);
         $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrResource);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fourIrResource,
             "_response_status" => [
@@ -85,7 +85,7 @@ class FourIRResourceController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $resource = FourIRResource::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $resource);
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRResourceService->validator($request, $id)->validate();
         $data = $this->fourIRResourceService->update($resource, $validated);
         $response = [

@@ -56,7 +56,7 @@ class FourIREmploymentController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrEmployment = $this->fourIrEmploymentService->getOneFourIrEmployment($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrEmployment);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fourIrEmployment,
             "_response_status" => [
@@ -115,7 +115,7 @@ class FourIREmploymentController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrEmployment = FourIREmployment::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrEmployment);
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIrEmploymentService->validator($request, $id)->validate();
         $data = $this->fourIrEmploymentService->update($fourIrEmployment, $validated);
 

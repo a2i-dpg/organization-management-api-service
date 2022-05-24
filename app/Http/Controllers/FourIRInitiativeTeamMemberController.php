@@ -56,7 +56,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrProjectTeamMember = $this->fourIrProjectTeamMemberService->getOneFourIrInitiativeTeamMember($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrProjectTeamMember);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fourIrProjectTeamMember,
             "_response_status" => [
@@ -109,7 +109,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrProjectTeamMember);
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
 
 
         $validated = $this->fourIrProjectTeamMemberService->validator($request, $id)->validate();

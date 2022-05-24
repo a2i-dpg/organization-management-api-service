@@ -53,7 +53,7 @@ class FourIRScaleUpController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrScaleUp = $this->fourIRScaleUpService->getOneFourIrShowcasing($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrScaleUp);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fourIrScaleUp,
             "_response_status" => [
@@ -103,7 +103,7 @@ class FourIRScaleUpController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrScaleUp);
+        $this->authorize('updateInitiativeStep',FourIRInitiative::class);
 
         $validated = $this->fourIRScaleUpService->validator($request, $id)->validate();
         $data = $this->fourIRScaleUpService->update($fourIrScaleUp, $validated);

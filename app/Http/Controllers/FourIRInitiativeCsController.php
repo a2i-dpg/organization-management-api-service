@@ -57,7 +57,7 @@ class FourIRInitiativeCsController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = $this->fourIrInitiativeCsCurriculumCblmService->getOneFourIRInitiativeCsCurriculumCblm($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrInitiativeAnalysis);
+        $this->authorize('viewSingleInitiativeStep',FourIRInitiative::class);
         $response = [
             "data" => $fourIrInitiativeAnalysis,
             "_response_status" => [
@@ -117,7 +117,7 @@ class FourIRInitiativeCsController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrInitiativeCsCurriculumCblm = FourIRInitiativeCsCurriculumCblm::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrInitiativeCsCurriculumCblm);
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIrInitiativeCsCurriculumCblmService->validator($request, $id)->validate();
         try {
             DB::beginTransaction();

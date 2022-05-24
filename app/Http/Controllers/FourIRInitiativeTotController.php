@@ -53,7 +53,7 @@ class FourIRInitiativeTotController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = $this->fourIRTotInitiativeService->getOneFourIrInitiativeAnalysis($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrInitiativeAnalysis);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fourIrInitiativeAnalysis,
             "_response_status" => [
@@ -123,7 +123,7 @@ class FourIRInitiativeTotController extends Controller
         Log::info(FourIRInitiativeTot::class . json_encode(["id" => $id, "request:" => $request->all()], JSON_PRETTY_PRINT));
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrInitiativeTot);
+        $this->authorize('updateInitiativeStep',FourIRInitiative::class);
 
 
         $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
@@ -173,7 +173,7 @@ class FourIRInitiativeTotController extends Controller
     {
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrInitiativeTot);
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
 
         $excelRows = null;
