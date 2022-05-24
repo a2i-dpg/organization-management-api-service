@@ -85,6 +85,7 @@ class FourIRInitiativeTotController extends Controller
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
+                Log::info("participants_file_path: ".json_encode([$file,$validated]));
             }
         }
 
@@ -194,6 +195,7 @@ class FourIRInitiativeTotController extends Controller
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
+                Log::info("participants_file_path: ".json_encode([$file,$validated]));
             }
         }
 
@@ -201,7 +203,6 @@ class FourIRInitiativeTotController extends Controller
             DB::beginTransaction();
             $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
             $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
-            $validated['file_path'] = $validated['proof_of_report_file'];
             app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
             DB::commit();
