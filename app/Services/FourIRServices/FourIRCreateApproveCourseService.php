@@ -23,7 +23,7 @@ class FourIRCreateApproveCourseService
      * @param array $request
      * @return array
      */
-    public function getFourIrInitiativeList(array $request): array
+    public function getFourIRCourseList(array $request): array
     {
         $response = ServiceToServiceCall::getFourIrCourseList($request);
 
@@ -45,7 +45,7 @@ class FourIRCreateApproveCourseService
      * @param int $id
      * @return array
      */
-    public function getOneFourIrInitiative(int $id): array
+    public function getOneFourIRCourse(int $id): array
     {
         $response = ServiceToServiceCall::getFourIrCourseByCourseId($id);
 

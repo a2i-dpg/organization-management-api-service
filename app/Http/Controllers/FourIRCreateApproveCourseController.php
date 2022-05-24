@@ -18,20 +18,20 @@ use Throwable;
 
 class FourIRCreateApproveCourseController extends Controller
 {
-    public FourIRCreateApproveCourseService $fourIrInitiativeService;
+    public FourIRCreateApproveCourseService $fourIrCreateAndApproveService;
     public FourIRFileLogService $fourIRFileLogService;
     private Carbon $startTime;
 
     /**
      * FourIRInitiativeController constructor.
      *
-     * @param FourIRCreateApproveCourseService $fourIrInitiativeService
+     * @param FourIRCreateApproveCourseService $fourIrCreateAndApproveService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIRCreateApproveCourseService $fourIrInitiativeService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIRCreateApproveCourseService $fourIrCreateAndApproveService, FourIRFileLogService $fourIRFileLogService)
     {
         $this->startTime = Carbon::now();
-        $this->fourIrInitiativeService = $fourIrInitiativeService;
+        $this->fourIrCreateAndApproveService = $fourIrCreateAndApproveService;
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
@@ -41,24 +41,26 @@ class FourIRCreateApproveCourseController extends Controller
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
+     * @throws AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
-        $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
-        $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter);
+        $filter = $this->fourIrCreateAndApproveService->filterValidator($request)->validate();
+        $response = $this->fourIrCreateAndApproveService->getFourIRCourseList($filter);
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
      * @param int $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function read(int $id): JsonResponse
     {
         /** This $id must be course_id of institute service course table */
-        $response = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
+        $response = $this->fourIrCreateAndApproveService->getOneFourIRCourse($id);
         $this->authorize('viewSingleInitiativeStep',FourIRInitiative::class);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
@@ -75,11 +77,9 @@ class FourIRCreateApproveCourseController extends Controller
     function store(Request $request): JsonResponse
     {
         $this->authorize('creatInitiativeStep', FourIRInitiative::class);
-
-
-        $validated = $this->fourIrInitiativeService->validator($request)->validate();
+        $validated = $this->fourIrCreateAndApproveService->validator($request)->validate();
         $validated['row_status'] = BaseModel::ROW_STATUS_INACTIVE;
-        $response = $this->fourIrInitiativeService->store($validated);
+        $response = $this->fourIrCreateAndApproveService->store($validated);
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
@@ -96,8 +96,8 @@ class FourIRCreateApproveCourseController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $validated = $this->fourIrInitiativeService->validator($request, $id)->validate();
-        $response = $this->fourIrInitiativeService->update($validated, $id);
+        $validated = $this->fourIrCreateAndApproveService->validator($request, $id)->validate();
+        $response = $this->fourIrCreateAndApproveService->update($validated, $id);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
@@ -110,7 +110,7 @@ class FourIRCreateApproveCourseController extends Controller
      */
     public function approveFourIrCourse(int $id): JsonResponse
     {
-        $response = $this->fourIrInitiativeService->approveFourIrCourse($id);
+        $response = $this->fourIrCreateAndApproveService->approveFourIrCourse($id);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }
