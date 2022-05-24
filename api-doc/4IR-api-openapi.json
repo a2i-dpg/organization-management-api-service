@@ -1775,19 +1775,16 @@
                                         "four_ir_initiative_id": 1,
                                         "accessor_type": "INSTITUTE",
                                         "accessor_id": 1,
-                                        "level_from": "2",
-                                        "level_to": "3",
                                         "approved_by": 1,
                                         "developed_organization_name": "hjgh",
-                                        "approve_date": "2002-02-09",
                                         "sector_name": 1,
                                         "supported_organization_name": "fghfg",
-                                        "type": 1,
+                                        "type": 2,
                                         "created_by": 5,
                                         "updated_by": 5,
-                                        "updated_at": "2022-05-24T05:07:01.000000Z",
-                                        "created_at": "2022-05-24T05:07:01.000000Z",
-                                        "id": 1
+                                        "updated_at": "2022-05-24T07:23:34.000000Z",
+                                        "created_at": "2022-05-24T07:23:34.000000Z",
+                                        "id": 3
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2060,16 +2057,21 @@
                                 "example": {
                                     "data": {
                                         "four_ir_initiative_id": 1,
-                                        "workshop_name": "ttthjkjhkttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "file_path": "gfhgf",
-                                        "created_by": 14,
-                                        "updated_by": 14,
-                                        "updated_at": "2022-04-21T07:28:49.000000Z",
-                                        "created_at": "2022-04-21T07:28:49.000000Z",
-                                        "id": 5
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "level_from": "2",
+                                        "level_to": "3",
+                                        "approved_by": 1,
+                                        "developed_organization_name": "hjgh",
+                                        "approve_date": "2002-02-09",
+                                        "sector_name": 1,
+                                        "supported_organization_name": "fghfg",
+                                        "type": 1,
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "updated_at": "2022-05-24T07:15:32.000000Z",
+                                        "created_at": "2022-05-24T07:15:32.000000Z",
+                                        "id": 2
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2253,32 +2255,48 @@
                                         {
                                             "id": 1,
                                             "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
+                                            "type": 1,
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 4,
+                                            "form_step": 6,
+                                            "approved_by": 1,
+                                            "approve_date": "2002-02-09",
+                                            "developed_organization_name": "hjgh",
+                                            "developed_organization_name_en": null,
+                                            "sector_name": 1,
+                                            "sector_title": "kibria",
+                                            "supported_organization_name": "fghfg",
+                                            "supported_organization_name_en": null,
+                                            "file_path": null,
+                                            "comments": null,
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
-                                            "created_by": 14,
-                                            "updated_by": 14,
-                                            "created_at": "2022-04-21T07:18:19.000000Z",
-                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                            "created_by": 5,
+                                            "updated_by": 5,
+                                            "created_at": "2022-05-24T05:07:01.000000Z",
+                                            "updated_at": "2022-05-24T05:07:01.000000Z",
+                                            "experts": [
+                                                {
+                                                    "id": 19,
+                                                    "four_ir_initiative_cs_curriculum_cblm_id": 1,
+                                                    "name": "string",
+                                                    "name_en": "string",
+                                                    "designation": "string",
+                                                    "organization": "string",
+                                                    "organization_en": "string",
+                                                    "mobile": "01720588884",
+                                                    "email": "string@gmail.com",
+                                                    "accessor_type": "INSTITUTE",
+                                                    "accessor_id": 1,
+                                                    "row_status": 1,
+                                                    "created_by": 5,
+                                                    "updated_by": 5,
+                                                    "deleted_at": null,
+                                                    "created_at": "2022-05-24T07:13:32.000000Z",
+                                                    "updated_at": "2022-05-24T07:13:32.000000Z"
+                                                }
+                                            ]
                                         }
                                     ],
                                     "_response_status": {
@@ -2345,17 +2363,28 @@
                             "application/json": {
                                 "example": {
                                     "data": {
+                                        "id": 1,
                                         "four_ir_initiative_id": 1,
-                                        "workshop_name": "ttthjkjhkttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "file_path": "gfhgf",
-                                        "created_by": 14,
-                                        "updated_by": 14,
-                                        "updated_at": "2022-04-21T07:28:49.000000Z",
-                                        "created_at": "2022-04-21T07:28:49.000000Z",
-                                        "id": 5
+                                        "type": 1,
+                                        "level_from": 2,
+                                        "level_to": 3,
+                                        "approved_by": 1,
+                                        "developed_organization_name": "hjgh",
+                                        "developed_organization_name_en": null,
+                                        "sector_name": 1,
+                                        "approve_date": "2002-02-09",
+                                        "supported_organization_name": "fghfg",
+                                        "supported_organization_name_en": null,
+                                        "file_path": null,
+                                        "comments": null,
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "row_status": 1,
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "deleted_at": null,
+                                        "created_at": "2022-05-24T05:07:01.000000Z",
+                                        "updated_at": "2022-05-24T05:07:01.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2390,12 +2419,48 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
+                                        "type": 1,
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 4,
+                                        "form_step": 6,
+                                        "approved_by": 1,
+                                        "approve_date": "2002-02-09",
+                                        "developed_organization_name": "hjgh",
+                                        "developed_organization_name_en": null,
+                                        "sector_name": 1,
+                                        "sector_title": "kibria",
+                                        "supported_organization_name": "fghfg",
+                                        "supported_organization_name_en": null,
+                                        "file_path": null,
+                                        "comments": null,
                                         "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "created_at": "2022-05-24T05:07:01.000000Z",
+                                        "updated_at": "2022-05-24T05:07:01.000000Z",
+                                        "experts": [
+                                            {
+                                                "id": 19,
+                                                "four_ir_initiative_cs_curriculum_cblm_id": 1,
+                                                "name": "string",
+                                                "name_en": "string",
+                                                "designation": "string",
+                                                "organization": "string",
+                                                "organization_en": "string",
+                                                "mobile": "01720588884",
+                                                "email": "string@gmail.com",
+                                                "accessor_type": "INSTITUTE",
+                                                "accessor_id": 1,
+                                                "row_status": 1,
+                                                "created_by": 5,
+                                                "updated_by": 5,
+                                                "deleted_at": null,
+                                                "created_at": "2022-05-24T07:13:32.000000Z",
+                                                "updated_at": "2022-05-24T07:13:32.000000Z"
+                                            }
+                                        ]
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2538,19 +2603,22 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "four_ir_initiative_id": "1",
-                                            "approval_status": 0,
-                                            "budget_approval_status": 0,
-                                            "given_budget": 5000,
-                                            "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
-                                            "accessor_type": "INSTITUTE",
-                                            "accessor_id": 1,
-                                            "row_status": "1",
+                                            "four_ir_initiative_id": 1,
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 6,
+                                            "form_step": 8,
+                                            "approve_by": "fgfd",
+                                            "is_developed_financial_proposal": 1,
+                                            "total_amount": "12333.00",
+                                            "comment": "fdgfdg",
+                                            "file_path": "fdsf",
+                                            "row_status": 1,
                                             "created_by": 1,
-                                            "updated_by": 1,
-                                            "deleted_at": null,
-                                            "created_at": "2022-05-11T10:49:45.000000Z",
-                                            "updated_at": "2022-05-12T05:18:05.000000Z"
+                                            "updated_by": 5,
+                                            "created_at": "2022-05-17T04:54:06.000000Z",
+                                            "updated_at": "2022-05-24T07:29:45.000000Z"
                                         } ],
                                     "_response_status": {
                                         "success": true,
@@ -2588,18 +2656,19 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_initiative_id": "1",
-                                        "approval_status": 0,
-                                        "budget_approval_status": 0,
-                                        "given_budget": 5000,
-                                        "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
+                                        "is_developed_financial_proposal": "1",
+                                        "total_amount": "12333",
+                                        "file_path": "fdsf",
+                                        "comment": "fdgfdg",
                                         "accessor_type": "INSTITUTE",
+                                        "approve_by": "fgfd",
                                         "accessor_id": 1,
                                         "row_status": "1",
                                         "created_by": 1,
-                                        "updated_by": 1,
+                                        "updated_by": 5,
                                         "deleted_at": null,
-                                        "created_at": "2022-05-11T10:49:45.000000Z",
-                                        "updated_at": "2022-05-12T05:18:05.000000Z"
+                                        "created_at": "2022-05-17T04:54:06.000000Z",
+                                        "updated_at": "2022-05-24T07:29:45.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2633,19 +2702,22 @@
                                 "example": {
                                     "data": {
                                         "id": 1,
-                                        "four_ir_initiative_id": "1",
-                                        "approval_status": 0,
-                                        "budget_approval_status": 0,
-                                        "given_budget": 5000,
-                                        "file_path": "cN3lnSrxQgbfX57zsAtEBXzkSdBwtT1652269213.png",
-                                        "accessor_type": "INSTITUTE",
-                                        "accessor_id": 1,
-                                        "row_status": "1",
+                                        "four_ir_initiative_id": 1,
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 6,
+                                        "form_step": 8,
+                                        "approve_by": "fgfd",
+                                        "is_developed_financial_proposal": 1,
+                                        "total_amount": "12333.00",
+                                        "comment": "fdgfdg",
+                                        "file_path": "fdsf",
+                                        "row_status": 1,
                                         "created_by": 1,
-                                        "updated_by": 1,
-                                        "deleted_at": null,
-                                        "created_at": "2022-05-11T10:49:45.000000Z",
-                                        "updated_at": "2022-05-12T05:18:05.000000Z"
+                                        "updated_by": 5,
+                                        "created_at": "2022-05-17T04:54:06.000000Z",
+                                        "updated_at": "2022-05-24T07:29:45.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2736,34 +2808,58 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "id": 1,
+                                            "id": 2,
                                             "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 8,
+                                            "form_step": 10,
+                                            "organizer_name": "a",
+                                            "organizer_address": "a",
+                                            "organizer_email": "a@gmail.com",
+                                            "organizer_address_en": null,
+                                            "co_organizer_name": "a",
+                                            "co_organizer_address": "ghfghgfhfg",
+                                            "co_organizer_email": "a@gmail.com",
+                                            "co_organizer_address_en": null,
+                                            "tot_date": "2002-09-12",
+                                            "proof_of_report_file": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                            "participants_file_path": null,
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2022-05-17T10:20:51.000000Z",
+                                            "updated_at": "2022-05-17T11:24:15.000000Z"
                                         },
                                         {
-                                            "id": 4,
+                                            "id": 2,
                                             "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 8,
+                                            "form_step": 10,
+                                            "organizer_name": "a",
+                                            "organizer_address": "a",
+                                            "organizer_email": "a@gmail.com",
+                                            "organizer_address_en": null,
+                                            "co_organizer_name": "a",
+                                            "co_organizer_address": "ghfghgfhfg",
+                                            "co_organizer_email": "a@gmail.com",
+                                            "co_organizer_address_en": null,
+                                            "tot_date": "2002-09-12",
+                                            "proof_of_report_file": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                            "participants_file_path": null,
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
                                             "row_status": 1,
-                                            "created_by": 14,
-                                            "updated_by": 14,
-                                            "created_at": "2022-04-21T07:18:19.000000Z",
-                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2022-05-17T10:20:51.000000Z",
+                                            "updated_at": "2022-05-17T11:24:15.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -2795,35 +2891,21 @@
                                     "summary": "An example of Expert JSON",
                                     "description": "An example of Expert JSON, using `value` property",
                                     "value": {
+                                        "co_organizer_address": "a",
+                                        "co_organizer_email": "a@gmail.com",
+                                        "co_organizer_name": "a",
                                         "four_ir_initiative_id": 1,
-                                        "master_trainer_name":"DGp",
-                                        "master_trainer_name_en":"DG",
-                                        "master_trainer_mobile":"01720588884",
-                                        "master_trainer_address":"DG",
-                                        "master_trainer_address_en":"DG",
-                                        "master_trainer_email":"ad@email.com",
-                                        "organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
 
-                                            }
-                                        ],
-                                        "co_organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
+                                        "master_trainers": "[ {\"name\": \"a\",\"mobile\": \"01923232323\",\"address\": \"hjgh\",\"email\":\"ww@gmail.com\",\"organization_name\":\"fdgg\",\"organization_name_en\":\"fdgbcgfg\" ,\"designation\":\"ghfghfghfg\" }]",
 
-                                            }
-                                        ]
+                                        "organizer_address": "a",
+                                        "organizer_email": "a@gmail.com",
+                                        "organizer_name": "a",
+                                        "participants": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "tot_date":"2002-09-12",
+                                        "proof_of_report_file":"ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "row_status": "1"
+
                                     }
                                 }
                             }
@@ -2843,16 +2925,22 @@
                                 "example": {
                                     "data": {
                                         "four_ir_initiative_id": 1,
-                                        "workshop_name": "ttthjkjhkttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "file_path": "gfhgf",
-                                        "created_by": 14,
-                                        "updated_by": 14,
-                                        "updated_at": "2022-04-21T07:28:49.000000Z",
-                                        "created_at": "2022-04-21T07:28:49.000000Z",
-                                        "id": 5
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "organizer_name": "a",
+                                        "organizer_address": "a",
+                                        "organizer_email": "a@gmail.com",
+                                        "co_organizer_name": "a",
+                                        "co_organizer_address": "a",
+                                        "co_organizer_email": "a@gmail.com",
+                                        "tot_date": "2002-09-12",
+                                        "proof_of_report_file": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "row_status": "1",
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "updated_at": "2022-05-24T08:07:41.000000Z",
+                                        "created_at": "2022-05-24T08:07:41.000000Z",
+                                        "id": 3
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2885,14 +2973,53 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 1,
+                                        "id": 2,
                                         "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 6,
+                                        "form_step": 8,
+                                        "organizer_name": "a",
+                                        "organizer_address": "a",
+                                        "organizer_email": "a@gmail.com",
+                                        "organizer_address_en": null,
+                                        "co_organizer_name": "a",
+                                        "co_organizer_address": "ghfghgfhfg",
+                                        "co_organizer_email": "a@gmail.com",
+                                        "co_organizer_address_en": null,
+                                        "tot_date": "2002-09-12",
+                                        "proof_of_report_file": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "participants_file_path": null,
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
                                         "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "created_by": 1,
+                                        "updated_by": 1,
+                                        "created_at": "2022-05-17T10:20:51.000000Z",
+                                        "updated_at": "2022-05-17T11:24:15.000000Z",
+                                        "master_trainers": [
+                                            {
+                                                "id": 21,
+                                                "four_ir_initiative_tot_id": 2,
+                                                "name": "a",
+                                                "name_en": null,
+                                                "mobile": "01923232323",
+                                                "address": "hjgh",
+                                                "address_en": null,
+                                                "email": "ww@gmail.com",
+                                                "organization_name": "fdgg",
+                                                "organization_name_en": "fdgbcgfg",
+                                                "accessor_type": "INSTITUTE",
+                                                "accessor_id": 1,
+                                                "row_status": 1,
+                                                "created_by": 1,
+                                                "updated_by": 1,
+                                                "deleted_at": null,
+                                                "created_at": "2022-05-18T04:57:08.000000Z",
+                                                "updated_at": "2022-05-18T04:57:08.000000Z"
+                                            }
+                                        ]
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -2929,42 +3056,23 @@
                                     "summary": "An example of Expert JSON",
                                     "description": "An example of Expert JSON, using `value` property",
                                     "value": {
+                                        "co_organizer_address": "a",
+                                        "co_organizer_email": "a@gmail.com",
+                                        "co_organizer_name": "a",
                                         "four_ir_initiative_id": 1,
-                                        "master_trainer_name":"DGp",
-                                        "master_trainer_name_en":"DG",
-                                        "master_trainer_mobile":"01720588884",
-                                        "master_trainer_address":"DG",
-                                        "master_trainer_address_en":"DG",
-                                        "master_trainer_email":"ad@email.com",
-                                        "organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
 
-                                            }
-                                        ],
-                                        "co_organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
+                                        "master_trainers": "[ {\"name\": \"a\",\"mobile\": \"01923232323\",\"address\": \"hjgh\",\"email\":\"ww@gmail.com\",\"organization_name\":\"fdgg\",\"organization_name_en\":\"fdgbcgfg\" ,\"designation\":\"ghfghfghfg\" }]",
 
-                                            }
-                                        ]
+                                        "organizer_address": "a",
+                                        "organizer_email": "a@gmail.com",
+                                        "organizer_name": "a",
+                                        "participants": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "tot_date":"2002-09-12",
+                                        "proof_of_report_file":"ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "row_status": "1"
+
                                     }
                                 }
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_curriculum"
                             }
                         }
                     }
@@ -3051,42 +3159,24 @@
                                     "summary": "An example of Expert JSON",
                                     "description": "An example of Expert JSON, using `value` property",
                                     "value": {
+                                        "co_organizer_address": "a",
+                                        "co_organizer_email": "a@gmail.com",
+                                        "co_organizer_name": "a",
                                         "four_ir_initiative_id": 1,
-                                        "master_trainer_name":"DGp",
-                                        "master_trainer_name_en":"DG",
-                                        "master_trainer_mobile":"01720588884",
-                                        "master_trainer_address":"DG",
-                                        "master_trainer_address_en":"DG",
-                                        "master_trainer_email":"ad@email.com",
-                                        "organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
 
-                                            }
-                                        ],
-                                        "co_organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
+                                        "master_trainers": "[ {\"name\": \"a\",\"mobile\": \"01923232323\",\"address\": \"hjgh\",\"email\":\"ww@gmail.com\",\"organization_name\":\"fdgg\",\"organization_name_en\":\"fdgbcgfg\" ,\"designation\":\"ghfghfghfg\" }]",
 
-                                            }
-                                        ]
+                                        "organizer_address": "a",
+                                        "organizer_email": "a@gmail.com",
+                                        "organizer_name": "a",
+                                        "participants": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "tot_date":"2002-09-12",
+                                        "proof_of_report_file":"ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                        "row_status": "1"
+
                                     }
+
                                 }
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_curriculum"
                             }
                         }
                     }
@@ -3099,13 +3189,27 @@
                                 "example": {
                                     "data": [
                                         {
+                                            "id": 2,
                                             "four_ir_initiative_id": 1,
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                            "organizer_name": "a",
+                                            "organizer_email": "a@gmail.com",
+                                            "organizer_address": "a",
+                                            "organizer_address_en": null,
+                                            "co_organizer_name": "a",
+                                            "co_organizer_email": "a@gmail.com",
+                                            "co_organizer_address": "a",
+                                            "co_organizer_address_en": null,
+                                            "tot_date": "2002-09-12",
+                                            "proof_of_report_file": "ZAPfTmI798UIiudQHYa0I9GbvMfpCr1652255404.jpg",
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
+                                            "row_status": "1",
+                                            "created_by": 1,
+                                            "updated_by": 5,
+                                            "deleted_at": null,
+                                            "created_at": "2022-05-17T10:20:51.000000Z",
+                                            "updated_at": "2022-05-24T08:16:41.000000Z",
+                                            "participants_file_path": null
                                         }
                                     ],
                                     "_response_status": {
@@ -3140,19 +3244,52 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "id": 1,
+                                            "id": 38,
+                                            "code": "C000000000000000014",
+                                            "level": 1,
+                                            "language_medium": 1,
+                                            "institute_id": null,
+                                            "industry_association_id": null,
+                                            "institute_title": null,
+                                            "institute_title_en": null,
+                                            "branch_id": null,
+                                            "branch_title": null,
+                                            "branch_title_en": null,
+                                            "program_id": null,
+                                            "program_title": null,
+                                            "program_title_en": null,
+                                            "title": "1sadfcsd",
+                                            "title_en": null,
                                             "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
+                                            "course_fee": 0,
+                                            "duration": null,
+                                            "overview": null,
+                                            "overview_en": null,
+                                            "target_group": null,
+                                            "target_group_en": null,
+                                            "objectives": null,
+                                            "objectives_en": null,
+                                            "lessons": null,
+                                            "lessons_en": null,
+                                            "training_methodology": null,
+                                            "training_methodology_en": null,
+                                            "evaluation_system": null,
+                                            "evaluation_system_en": null,
+                                            "prerequisite": null,
+                                            "prerequisite_en": null,
+                                            "eligibility": null,
+                                            "eligibility_en": null,
+                                            "cover_image": null,
+                                            "application_form_settings": null,
+                                            "row_status": 0,
                                             "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                            "updated_by": null,
+                                            "created_at": "2022-05-24T08:19:49.000000Z",
+                                            "updated_at": "2022-05-24T08:19:49.000000Z",
+                                            "deleted_at": null,
+                                            "is_skill_provide": 1,
+                                            "completion_step": 13,
+                                            "form_step": 15
                                         },
                                         {
                                             "id": 4,
@@ -3204,17 +3341,43 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_initiative_id": 1,
-                                        "workshop_name": "ttthjkjhkttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "file_path": "gfhgf",
-                                        "created_by": 14,
-                                        "updated_by": 14,
-                                        "updated_at": "2022-04-21T07:28:49.000000Z",
-                                        "created_at": "2022-04-21T07:28:49.000000Z",
-                                        "id": 5
+                                        "id": 1,
+                                        "code": "SSP00000002C0000001",
+                                        "institute_id": 2,
+                                        "industry_association_id": null,
+                                        "four_ir_initiative_id": "1",
+                                        "level": "1",
+                                        "language_medium": "1",
+                                        "branch_id": null,
+                                        "program_id": null,
+                                        "title": "1sadfcsd",
+                                        "title_en": null,
+                                        "course_fee": 500,
+                                        "duration": null,
+                                        "overview": null,
+                                        "overview_en": null,
+                                        "target_group": null,
+                                        "target_group_en": null,
+                                        "objectives": null,
+                                        "objectives_en": null,
+                                        "lessons": null,
+                                        "lessons_en": null,
+                                        "training_methodology": null,
+                                        "training_methodology_en": null,
+                                        "evaluation_system": null,
+                                        "evaluation_system_en": null,
+                                        "prerequisite": null,
+                                        "prerequisite_en": null,
+                                        "eligibility": null,
+                                        "eligibility_en": null,
+                                        "cover_image": "https://file.nise3.xyz/uploads/5KIpbON1IwN3Q8X6FKNjiTSzqBmbjk1644406269.png",
+                                        "application_form_settings": "{\"ethnic_group_info\":[false,false],\"freedom_fighter_info\":[false,false],\"disability_info\":[false,false],\"education_info\":[false,false],\"occupation_info\":[false,false],\"guardian_info\":[false,false],\"miscellaneous_info\":[false,false]}",
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": "2022-02-09T11:32:02.000000Z",
+                                        "updated_at": "2022-05-24T08:44:08.000000Z",
+                                        "deleted_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -3229,55 +3392,64 @@
                 }
             }
         },
-        "/approve-four-ir-course/{fourIrCreateAndApproveId}": {
+        "/approve-four-ir-course/{fourIrCourseId}": {
             "put": {
                 "tags": [
                     "FourIR  Create Approve Courses"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrCourseId"
                     }
                 ],
-                "summary": "Get all 4IR Create Approve Courses",
+                "summary": "Approve A four Ir Course",
                 "responses": {
                     "200": {
-                        "description": "Get all Create Approve Courses",
+                        "description": "Approve A four Ir Course",
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "data": [
+                                    "data":
                                         {
                                             "id": 1,
-                                            "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
+                                            "code": "SSP00000002C0000001",
+                                            "institute_id": 2,
+                                            "industry_association_id": null,
+                                            "four_ir_initiative_id": null,
+                                            "level": 1,
+                                            "language_medium": 1,
+                                            "branch_id": null,
+                                            "program_id": null,
+                                            "title": "ব্লক বাটিক",
+                                            "title_en": null,
+                                            "course_fee": 500,
+                                            "duration": null,
+                                            "overview": null,
+                                            "overview_en": null,
+                                            "target_group": null,
+                                            "target_group_en": null,
+                                            "objectives": null,
+                                            "objectives_en": null,
+                                            "lessons": null,
+                                            "lessons_en": null,
+                                            "training_methodology": null,
+                                            "training_methodology_en": null,
+                                            "evaluation_system": null,
+                                            "evaluation_system_en": null,
+                                            "prerequisite": null,
+                                            "prerequisite_en": null,
+                                            "eligibility": null,
+                                            "eligibility_en": null,
+                                            "cover_image": "https://file.nise3.xyz/uploads/5KIpbON1IwN3Q8X6FKNjiTSzqBmbjk1644406269.png",
+                                            "application_form_settings": "{\"ethnic_group_info\":[false,false],\"freedom_fighter_info\":[false,false],\"disability_info\":[false,false],\"education_info\":[false,false],\"occupation_info\":[false,false],\"guardian_info\":[false,false],\"miscellaneous_info\":[false,false]}",
                                             "row_status": 1,
                                             "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
-                                            "created_by": 14,
-                                            "updated_by": 14,
-                                            "created_at": "2022-04-21T07:18:19.000000Z",
-                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                            "updated_by": null,
+                                            "created_at": "2022-02-09T11:32:02.000000Z",
+                                            "updated_at": "2022-02-09T11:32:02.000000Z",
+                                            "deleted_at": null
                                         }
-                                    ],
+                                    ,
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
@@ -3291,14 +3463,14 @@
                 }
             }
         },
-        "/create-approve-courses/{fourIrCreateAndApproveId}": {
+        "/create-approve-courses/{fourIrCourseId}": {
             "get": {
                 "tags": [
                     "FourIR  Create Approve Courses"
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrCourseId"
                     }
                 ],
                 "summary": "Get a 4IR Create Approve Courses",
@@ -3339,56 +3511,14 @@
                 "description": "API endpoint to update a  Create Approve Courses. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrCourseId"
                     }
                 ],
                 "requestBody": {
                     "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_tots"
-                            },
-                            "examples": {
-                                "DEMO": {
-                                    "summary": "An example of Expert JSON",
-                                    "description": "An example of Expert JSON, using `value` property",
-                                    "value": {
-                                        "four_ir_initiative_id": 1,
-                                        "master_trainer_name":"DGp",
-                                        "master_trainer_name_en":"DG",
-                                        "master_trainer_mobile":"01720588884",
-                                        "master_trainer_address":"DG",
-                                        "master_trainer_address_en":"DG",
-                                        "master_trainer_email":"ad@email.com",
-                                        "organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
-
-                                            }
-                                        ],
-                                        "co_organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
-
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_curriculum"
+                                "$ref": "#/components/schemas/4ir_create_and_approve"
                             }
                         }
                     }
@@ -3401,13 +3531,43 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "four_ir_initiative_id": 1,
-                                            "file_path": "gfhgf",
+                                            "id": 1,
+                                            "code": "SSP00000002C0000001",
+                                            "institute_id": 2,
+                                            "industry_association_id": null,
+                                            "four_ir_initiative_id": "1",
+                                            "level": "1",
+                                            "language_medium": "1",
+                                            "branch_id": null,
+                                            "program_id": null,
+                                            "title": "1sadfcsd",
+                                            "title_en": null,
+                                            "course_fee": 500,
+                                            "duration": null,
+                                            "overview": null,
+                                            "overview_en": null,
+                                            "target_group": null,
+                                            "target_group_en": null,
+                                            "objectives": null,
+                                            "objectives_en": null,
+                                            "lessons": null,
+                                            "lessons_en": null,
+                                            "training_methodology": null,
+                                            "training_methodology_en": null,
+                                            "evaluation_system": null,
+                                            "evaluation_system_en": null,
+                                            "prerequisite": null,
+                                            "prerequisite_en": null,
+                                            "eligibility": null,
+                                            "eligibility_en": null,
+                                            "cover_image": "https://file.nise3.xyz/uploads/5KIpbON1IwN3Q8X6FKNjiTSzqBmbjk1644406269.png",
+                                            "application_form_settings": "{\"ethnic_group_info\":[false,false],\"freedom_fighter_info\":[false,false],\"disability_info\":[false,false],\"education_info\":[false,false],\"occupation_info\":[false,false],\"guardian_info\":[false,false],\"miscellaneous_info\":[false,false]}",
                                             "row_status": 1,
                                             "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                            "updated_by": null,
+                                            "created_at": "2022-02-09T11:32:02.000000Z",
+                                            "updated_at": "2022-05-24T08:44:08.000000Z",
+                                            "deleted_at": null
                                         }
                                     ],
                                     "_response_status": {
@@ -3430,7 +3590,7 @@
                 "description": "API endpoint to delete a 4IR Create Approve Courses. A successful request response will show 200 HTTP status code",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/fourIrCreateAndApproveId"
+                        "$ref": "#/components/parameters/fourIrCourseId"
                     }
                 ],
                 "responses": {
@@ -5696,14 +5856,17 @@
                     "file_path": {
                         "type": "string"
                     },
-                    "approval_status": {
+                    "approve_by": {
+                        "type": "string"
+                    },
+                    "total_amount": {
                         "type": "integer"
                     },
-                    "budget_approval_status": {
+                    "is_developed_financial_proposal": {
                         "type": "integer"
                     },
-                    "given_budget": {
-                        "type": "integer"
+                    "comment": {
+                        "type": "string"
                     },
                     "row_status": {
                         "type": "integer",
@@ -6401,6 +6564,15 @@
             "course_id": {
                 "name": "course_id",
                 "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
+            "fourIrCourseId": {
+                "name": "fourIrCourseId",
+                "in": "pathe",
                 "required": true,
                 "schema": {
                     "type": "integer",

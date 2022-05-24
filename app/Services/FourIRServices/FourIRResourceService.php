@@ -73,12 +73,10 @@ class FourIRResourceService
      */
     public function store(array $data, FourIRResource|null $fourIRResource): FourIRResource
     {
-        if (empty($fourIRResource)) {
+
             /** Update initiative stepper */
             $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
             $payload = [];
-
             if ($initiative->form_step < FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT) {
                 $payload['form_step'] = FourIRInitiative::FORM_STEP_RESOURCE_MANAGEMENT;
             }
@@ -91,7 +89,7 @@ class FourIRResourceService
 
             /** Create new instance to store */
             $fourIRResource = new FourIRResource();
-        }
+
 
         $fourIRResource->fill($data);
         $fourIRResource->save();
