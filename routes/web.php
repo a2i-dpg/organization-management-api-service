@@ -200,6 +200,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
         $customRouter()->resourceRoute('sectors', 'FourIRSectorController')->render();
         $customRouter()->resourceRoute('contributions', 'FourIRContributionController')->render();
+        $customRouter()->resourceRoute('file-logs', 'FourIRFileLogController')->render();
         $router->get('/get-4ir-certificate-list/{fourIrInitiativeId}', ["as" => "get-4ir-certificate-list", "uses" => "FourIRCertificateController@getCertificates"]);
 
         $router->put('/set-team-launching-date', ["as" => "set.team.launching.date", "uses" => "FourIRInitiativeTeamMemberController@setTeamLaunchingDate"]);
@@ -358,25 +359,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
 
 });
 
-$router->post("file-update", function (Request $request) {
-    $file = $request->file('files');
-    $fileName = Uuid::uuid6() . "." . $file->getClientOriginalExtension();
-    $url = "https://file.nise.gov.bd/test";
-    $fileUploaded = Http::withOptions([
-        'verify' => config("nise3.should_ssl_verify"),
-        'debug' => config('nise3.http_debug'),
-    ])
-        ->timeout(60)
-        ->attach("files", file_get_contents($file), $fileName)
-        ->put($url)
-        ->throw(static function (\Illuminate\Http\Response $httpResponse, $httpException) use ($url) {
-            Log::debug(get_class($httpResponse) . ' - ' . get_class($httpException));
-            Log::debug("Http/Curl call error. Destination:: " . $url . ' and Response:: ' . $httpResponse->body());
-            CustomExceptionHandler::customHttpResponseMessage($httpResponse->body());
-        })
-        ->json();
-    return $fileUploaded['status'] ? $fileUploaded['url'] : null;
-});
 
 
 

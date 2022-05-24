@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FourIRFileLogService
 {
-    public function getFileLogs(array $request): array
+    public function getFileLogs(array $request, Carbon $startTime): array
     {
         $fourIrInitiativeId = $request['four_ir_initiative_id'] ?? "";
         $name = $request['name'] ?? "";
@@ -26,8 +26,11 @@ class FourIRFileLogService
         $paginate = $request['page'] ?? "";
         $pageSize = $request['page_size'] ?? "";
         $rowStatus = $request['row_status'] ?? "";
-        $order = $request['order'] ?? "ASC";
-        $step = $request['step'] ?? "";
+        $order = $request['order'] ?? "DESC";
+        $step = $request['file_log_step'] ?? "";
+        $fromDate = $request['from_date'] ?? "";
+        $toDate = $request['to_date'] ?? "";
+        $toDate = (new Carbon($toDate))->addDay();
 
         $fileLogBuilder = FourIRFileLog::select([
             "four_ir_file_logs.id",
@@ -70,9 +73,16 @@ class FourIRFileLogService
             $builder->where('four_ir_file_logs.four_ir_initiative_id', $fourIrInitiativeId);
         });
 
-
         if (is_numeric($rowStatus)) {
             $fileLogBuilder->where('four_ir_file_logs.row_status', $rowStatus);
+        }
+
+        if (!empty($fromDate) && empty($toDate)) {
+            $fileLogBuilder->whereDate('four_ir_file_logs.created_at', $fromDate);
+        } elseif (empty($fromDate) && !empty($toDate)) {
+            $fileLogBuilder->whereDate('four_ir_file_logs.created_at', $fromDate);
+        } elseif (!empty($fromDate) && !empty($toDate)) {
+            $fileLogBuilder->whereBetween('four_ir_file_logs.created_at', [$fromDate, $toDate]);
         }
 
         /** @var Collection $fourIrTaglines */
@@ -93,7 +103,7 @@ class FourIRFileLogService
         $response['_response_status'] = [
             "success" => true,
             "code" => Response::HTTP_OK,
-            "query_time" => 0
+            "query_time" => $startTime->diffInSeconds(Carbon::now())
         ];
         return $response;
 
@@ -221,7 +231,9 @@ class FourIRFileLogService
             "name" => "nullable",
             "name_en" => "nullable",
             'four_ir_initiative_id' => 'required|int',
-            'step' => 'required|int',
+            'file_log_step' => 'required|int',
+            'from_date' => 'nullable|date',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
