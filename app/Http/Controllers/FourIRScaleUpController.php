@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FourIRInitiative;
 use App\Models\FourIRScaleUp;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRScaleUpService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
+
 //TODO: FourIR Employment need to check
 class FourIRScaleUpController extends Controller
 {
@@ -40,10 +42,9 @@ class FourIRScaleUpController extends Controller
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
-
         $filter = $this->fourIRScaleUpService->filterValidator($request)->validate();
         $response = $this->fourIRScaleUpService->getFourShowcasingList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -62,7 +63,7 @@ class FourIRScaleUpController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -75,9 +76,10 @@ class FourIRScaleUpController extends Controller
     function store(Request $request): JsonResponse
     {
         $this->authorize('creatInitiativeStep', FourIRInitiative::class);
-
         $validated = $this->fourIRScaleUpService->validator($request)->validate();
         $data = $this->fourIRScaleUpService->store($validated);
+
+        app(FourIRFileLogService::class)->storeFileLog($validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
         $response = [
             'data' => $data,
@@ -103,10 +105,16 @@ class FourIRScaleUpController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
-        $this->authorize('updateInitiativeStep',FourIRInitiative::class);
+
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
+
+        $filePath = $fourIrScaleUp->file_path;
 
         $validated = $this->fourIRScaleUpService->validator($request, $id)->validate();
+
         $data = $this->fourIRScaleUpService->update($fourIrScaleUp, $validated);
+
+        app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
         $response = [
             'data' => $data,
