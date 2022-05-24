@@ -86,6 +86,10 @@ class FourIRInitiativeTotController extends Controller
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
                 Log::info("participants_file_path: ".json_encode([$file,$validated]));
+            }else{
+                throw_if(empty($excelData) && empty($excelData[0]), ValidationException::withMessages([
+                    'The participant list is empty.[24000]'
+                ]));
             }
         }
 
@@ -142,6 +146,10 @@ class FourIRInitiativeTotController extends Controller
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
                 Log::info("participants_file_path: ".json_encode($validated));
+            }else{
+                throw_if(empty($excelData) && empty($excelData[0]), ValidationException::withMessages([
+                    'The participant list is empty.[24000]'
+                ]));
             }
         }
 
@@ -196,6 +204,10 @@ class FourIRInitiativeTotController extends Controller
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
                 Log::info("participants_file_path: ".json_encode([$file,$validated]));
+            }else{
+                throw_if(empty($excelData) && empty($excelData[0]), ValidationException::withMessages([
+                    'The participant list is empty.[24000]'
+                ]));
             }
         }
 
