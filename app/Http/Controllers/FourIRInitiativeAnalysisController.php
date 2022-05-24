@@ -85,7 +85,7 @@ class FourIRInitiativeAnalysisController extends Controller
         if (!empty($request->get('four_ir_initiative_analysis_id'))) {
             return $this->update($request, $request->get('four_ir_initiative_analysis_id'));
         } else {
-            return $this->store($request);
+            return $this->create($request);
         }
     }
 
