@@ -6,6 +6,7 @@ use App\Helpers\Classes\FileHandler;
 use App\Imports\FourIrTotParticipantsImport;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTot;
+use App\Services\FourIRServices\FourIRFileLogService;
 use App\Services\FourIRServices\FourIRTotInitiativeService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -74,7 +75,7 @@ class FourIRInitiativeTotController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
+        //$this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
         $excelRows = null;
         if (!empty($request->file('participants_file'))) {
@@ -90,6 +91,8 @@ class FourIRInitiativeTotController extends Controller
         try {
             DB::beginTransaction();
             $fourIrTot = $this->fourIRTotInitiativeService->store($validated, $excelRows);
+            $validated['file_path'] = $validated['proof_of_report_file'];
+            app(FourIRFileLogService::class)->storeFileLog($validated, FourIRInitiative::FILE_LOG_INITIATIVE_TOT_STEP);
 
             DB::commit();
             $response = [
@@ -123,7 +126,8 @@ class FourIRInitiativeTotController extends Controller
         Log::info(FourIRInitiativeTot::class . json_encode(["id" => $id, "request:" => $request->all()], JSON_PRETTY_PRINT));
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
-        $this->authorize('updateInitiativeStep',FourIRInitiative::class);
+        $filePath = $fourIrInitiativeTot->proof_of_report_file;
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
 
 
         $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
@@ -140,9 +144,12 @@ class FourIRInitiativeTotController extends Controller
         }
 
         try {
+
             DB::beginTransaction();
             $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
             $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
+            $validated['file_path'] = $validated['proof_of_report_file'];
+            app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
             DB::commit();
             $response = [
