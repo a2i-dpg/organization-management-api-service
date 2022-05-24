@@ -30,7 +30,6 @@ class FourIRFileLogService
         $step = $request['file_log_step'] ?? "";
         $fromDate = $request['from_date'] ?? "";
         $toDate = $request['to_date'] ?? "";
-        $toDate = (new Carbon($toDate))->addDay();
 
         $fileLogBuilder = FourIRFileLog::select([
             "four_ir_file_logs.id",
@@ -80,9 +79,9 @@ class FourIRFileLogService
         if (!empty($fromDate) && empty($toDate)) {
             $fileLogBuilder->whereDate('four_ir_file_logs.created_at', $fromDate);
         } elseif (empty($fromDate) && !empty($toDate)) {
-            $fileLogBuilder->whereDate('four_ir_file_logs.created_at', $fromDate);
+            $fileLogBuilder->whereDate('four_ir_file_logs.created_at',(new Carbon($toDate))->addDay());
         } elseif (!empty($fromDate) && !empty($toDate)) {
-            $fileLogBuilder->whereBetween('four_ir_file_logs.created_at', [$fromDate, $toDate]);
+            $fileLogBuilder->whereBetween('four_ir_file_logs.created_at', [$fromDate, (new Carbon($toDate))->addDay()]);
         }
 
         /** @var Collection $fourIrTaglines */
