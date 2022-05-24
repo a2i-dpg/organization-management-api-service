@@ -5134,6 +5134,67 @@
                     }
                 }
             }
+        },
+        "/file-logs": {
+            "get": {
+                "tags": [
+                    "File Log"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/name"
+                    },
+                    {
+                        "$ref": "#/components/parameters/name_en"
+                    },
+                    {
+                        "$ref": "#/components/parameters/four_ir_initiative_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/file_log_step"
+                    },
+                    {
+                        "$ref": "#/components/parameters/from_date"
+                    },
+                    {
+                        "$ref": "#/components/parameters/to_date"
+                    }
+                ],
+                "summary": "Get a 4IR File Log List",
+                "responses": {
+                    "200": {
+                        "description": "Get a  List 4IR Log",
+                        "content": {
+                            "application/json": {
+
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/file-logs/{fourIrFileLogId}": {
+            "get": {
+                "tags": [
+                    "File Log"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrFileLogId"
+                    }
+                ],
+                "summary": "Get a 4IR File Log",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR File Log",
+                        "content": {
+                            "application/json": {
+
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -6058,6 +6119,15 @@
                     "example": "1"
                 }
             },
+            "fourIrFileLogId": {
+                "name": "fourIrFileLogId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": "1"
+                }
+            },
             "fourIrOccupationId": {
                 "name": "fourIrOccupationId",
                 "in": "path",
@@ -6342,7 +6412,43 @@
                 "in": "query",
                 "required": false,
                 "schema": {
+                    "type": "string",
+                    "example": "1"
+                }
+            },
+            "file_log_step": {
+                "name": "file_log_step",
+                "in": "query",
+                "required": false,
+                "schema": {
                     "type": "integer",
+                    "example": "1"
+                }
+            },
+            "from_date": {
+                "name": "from_date",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "1"
+                }
+            },
+            "to_date": {
+                "name": "to_date",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "1"
+                }
+            },
+            "name_en": {
+                "name": "name_en",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
                     "example": "1"
                 }
             },
