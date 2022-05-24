@@ -62,7 +62,7 @@ class FourIRAssessmentController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIRAssessment = $this->fourIRAssessmentService->getOneFourIrAssessment($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIRAssessment);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fourIRAssessment,
             "_response_status" => [

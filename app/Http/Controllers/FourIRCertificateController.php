@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIRCertificateService;
 use App\Services\FourIRServices\FourIrEmploymentService;
 use Carbon\Carbon;
@@ -29,7 +30,7 @@ class FourIRCertificateController extends Controller
     public function getCertificates(Request $request, int $fourIrInitiativeId): \Illuminate\Http\JsonResponse
     {
         $certificates = $this->fourIRCertificateService->getCertificateList($request->all(), $fourIrInitiativeId);
-        $this->authorize('viewSingleInitiativeStep', $certificates);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $youthIds = array_column($certificates, 'youth_id') ?? [];
 
         $employments = app(FourIrEmploymentService::class)->getEmploymentByYouthIds($youthIds, $fourIrInitiativeId, $this->startTime) ?? [];

@@ -59,7 +59,7 @@ class FourIRCreateApproveCourseController extends Controller
     {
         /** This $id must be course_id of institute service course table */
         $response = $this->fourIrInitiativeService->getOneFourIRInitiative($id);
-        $this->authorize('viewSingleInitiativeStep', $response);
+        $this->authorize('viewSingleInitiativeStep',FourIRInitiative::class);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
     }

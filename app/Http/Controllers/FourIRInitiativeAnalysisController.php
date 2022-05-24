@@ -60,7 +60,7 @@ class FourIRInitiativeAnalysisController extends Controller
     public function read(int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = $this->fourIRInitiativeAnalysisService->getOneFourIrInitiativeAnalysis($id);
-        $this->authorize('viewSingleInitiativeStep', $fourIrInitiativeAnalysis);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
 //        $this->authorize('view', $fourIrProject);
         $response = [
             "data" => $fourIrInitiativeAnalysis,
@@ -148,7 +148,7 @@ class FourIRInitiativeAnalysisController extends Controller
     function update(Request $request, int $id): JsonResponse
     {
         $fourIrInitiativeAnalysis = FourIRInitiativeAnalysis::findOrFail($id);
-        $this->authorize('updateInitiativeStep', $fourIrInitiativeAnalysis);
+        $this->authorize('updateInitiativeStep', FourIRInitiative::class);
 
         $validated = $this->fourIRInitiativeAnalysisService->validator($request)->validate();
 

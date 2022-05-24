@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIRFileLogService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -36,7 +37,7 @@ class FourIRFileLogController extends Controller
     public function read(int $id): JsonResponse
     {
         $fileLog = $this->fourIRFileLogService->getFileLog($id);
-        //  $this->authorize('viewSingleInitiativeStep', $fourIrEmployment);
+        $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
             "data" => $fileLog,
             "_response_status" => [

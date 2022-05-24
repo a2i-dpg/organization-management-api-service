@@ -1153,15 +1153,23 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "title": "meme",
-                                        "title_en": "welcome",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": null,
-                                        "created_at": "2022-04-19T07:19:20.000000Z",
-                                        "updated_at": "2022-04-19T08:45:15.000000Z",
-                                        "deleted_at": null
+                                        "four_ir_initiative_id": "1",
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "application_role_id": "7",
+                                        "team_type": "1",
+                                        "name": "dfgdg",
+                                        "organization": "fghfgh",
+                                        "email": "dfsd@gmail.com",
+                                        "phone_number": "01681815559",
+                                        "designation": "sdfvcsdv",
+                                        "role_responsibility": "idufvhb",
+                                        "user_id": 112,
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "updated_at": "2022-05-24T04:23:41.000000Z",
+                                        "created_at": "2022-05-24T04:23:41.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1247,15 +1255,23 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "id": 2,
-                                        "title": "meme",
-                                        "title_en": "welcome",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": null,
-                                        "created_at": "2022-04-19T07:19:20.000000Z",
-                                        "updated_at": "2022-04-19T08:45:15.000000Z",
-                                        "deleted_at": null
+                                        "four_ir_initiative_id": "1",
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "application_role_id": "7",
+                                        "team_type": "1",
+                                        "name": "dfgdg",
+                                        "organization": "fghfgh",
+                                        "email": "dfsd@gmail.com",
+                                        "phone_number": "01681815559",
+                                        "designation": "sdfvcsdv",
+                                        "role_responsibility": "idufvhb",
+                                        "user_id": 112,
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "updated_at": "2022-05-24T04:23:41.000000Z",
+                                        "created_at": "2022-05-24T04:23:41.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1568,19 +1584,21 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "id": 1,
+                                            "id": 2,
                                             "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
+                                            "method_type": 2,
+                                            "workshop_numbers": 0,
+                                            "method_file_path": null,
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 2,
+                                            "form_step": 3,
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                            "created_by": 1,
+                                            "updated_by": 1,
+                                            "created_at": "2022-05-16T03:21:01.000000Z",
+                                            "updated_at": "2022-05-16T03:21:01.000000Z"
                                         },
                                         {
                                             "id": 4,
@@ -1631,23 +1649,10 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "data": {
-                                        "four_ir_initiative_id": 1,
-                                        "workshop_name": "ttthjkjhkttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "file_path": "gfhgf",
-                                        "created_by": 14,
-                                        "updated_by": 14,
-                                        "updated_at": "2022-04-21T07:28:49.000000Z",
-                                        "created_at": "2022-04-21T07:28:49.000000Z",
-                                        "id": 5
-                                    },
                                     "_response_status": {
                                         "success": true,
                                         "code": 200,
-                                        "message": "4Ir Tna Format updated successfully.",
+                                        "message": "4Ir Tna Format Updated/Added successfully.",
                                         "query_time": 0
                                     }
                                 }
@@ -1677,19 +1682,30 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "occupation_name": "dfgdf",
-                                            "occupation_name_en": "fdgfd",
-                                            "date": "2004-09-09",
-                                            "start_time": null,
-                                            "end_time": null,
-                                            "venue": "hfghf",
-                                            "venue_en": "fghfgh",
-                                            "invite_others": "fghgfh",
+                                            "four_ir_initiative_id": 1,
+                                            "type": 1,
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 4,
+                                            "form_step": 6,
+                                            "level_from": 2,
+                                            "level_to": 3,
+                                            "approved_by": 1,
+                                            "approve_date": "2002-02-09",
+                                            "developed_organization_name": "hjgh",
+                                            "developed_organization_name_en": null,
+                                            "sector_name": 1,
+                                            "sector_title": "kibria",
+                                            "supported_organization_name": "fghfg",
+                                            "supported_organization_name_en": null,
+                                            "file_path": null,
+                                            "comments": null,
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "created_by": 5,
+                                            "updated_by": 5,
+                                            "created_at": "2022-05-24T05:07:01.000000Z",
+                                            "updated_at": "2022-05-24T05:07:01.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -1734,6 +1750,7 @@
                                         "level_from":"2",
                                         "level_to":"3",
                                         "approved_by":1,
+                                        "approve_date": "2002-09-09",
                                         "developed_organization_name":"hjgh",
                                         "sector_name": "fhyfg",
                                         "supported_organization_name":"fghfg"
@@ -1756,14 +1773,21 @@
                                 "example": {
                                     "data": {
                                         "four_ir_initiative_id": 1,
-                                        "accessor_type": "INSTRUCTOR",
+                                        "accessor_type": "INSTITUTE",
                                         "accessor_id": 1,
-                                        "file_path": "new",
-                                        "created_by": 1,
-                                        "updated_by": 1,
-                                        "updated_at": "2022-04-26T04:36:12.000000Z",
-                                        "created_at": "2022-04-26T04:36:12.000000Z",
-                                        "id": 4
+                                        "level_from": "2",
+                                        "level_to": "3",
+                                        "approved_by": 1,
+                                        "developed_organization_name": "hjgh",
+                                        "approve_date": "2002-02-09",
+                                        "sector_name": 1,
+                                        "supported_organization_name": "fghfg",
+                                        "type": 1,
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "updated_at": "2022-05-24T05:07:01.000000Z",
+                                        "created_at": "2022-05-24T05:07:01.000000Z",
+                                        "id": 1
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1798,12 +1822,29 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
+                                        "type": 1,
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 4,
+                                        "form_step": 6,
+                                        "level_from": 2,
+                                        "level_to": 3,
+                                        "approved_by": 1,
+                                        "approve_date": "2002-02-09",
+                                        "developed_organization_name": "hjgh",
+                                        "developed_organization_name_en": null,
+                                        "sector_name": 1,
+                                        "sector_title": "kibria",
+                                        "supported_organization_name": "fghfg",
+                                        "supported_organization_name_en": null,
+                                        "file_path": null,
+                                        "comments": null,
                                         "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "created_at": "2022-05-24T05:07:01.000000Z",
+                                        "updated_at": "2022-05-24T05:07:01.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -1874,12 +1915,21 @@
                                     "data": [
                                         {
                                             "four_ir_initiative_id": 1,
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
+                                            "level_from": "2",
+                                            "level_to": "3",
+                                            "approved_by": 1,
+                                            "developed_organization_name": "hjgh",
+                                            "approve_date": "2002-02-09",
+                                            "sector_name": 1,
+                                            "supported_organization_name": "fghfg",
+                                            "type": 1,
+                                            "created_by": 5,
+                                            "updated_by": 5,
+                                            "updated_at": "2022-05-24T05:07:01.000000Z",
+                                            "created_at": "2022-05-24T05:07:01.000000Z",
+                                            "id": 1
                                         }
                                     ],
                                     "_response_status": {
@@ -1987,6 +2037,7 @@
                                         "level_from":"2",
                                         "level_to":"3",
                                         "approved_by":1,
+                                        "approve_date": "2002-09-09",
                                         "developed_organization_name":"hjgh",
                                         "sector_name": "fhyfg",
                                         "supported_organization_name":"fghfg"
@@ -2272,6 +2323,7 @@
                                         "level_from":"2",
                                         "level_to":"3",
                                         "approved_by":1,
+                                        "approve_date": "2002-09-09",
                                         "developed_organization_name":"hjgh",
                                         "sector_name": "fhyfg",
                                         "supported_organization_name":"fghfg"
