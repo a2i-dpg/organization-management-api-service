@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Classes\FileHandler;
 use App\Imports\FourIrInitiativeAnalysisTeamImport;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeAnalysis;
@@ -108,6 +109,7 @@ class FourIRInitiativeAnalysisController extends Controller
             if (!empty($excelData) && !empty($excelData[0])) {
                 $excelRows = $excelData[0];
                 $this->fourIRInitiativeAnalysisService->excelDataValidator($excelRows)->validate();
+                $validated['team_file_path']=FileHandler::uploadToCloud($file);
             }
         }
 

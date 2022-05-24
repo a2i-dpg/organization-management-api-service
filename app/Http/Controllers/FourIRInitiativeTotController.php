@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Classes\FileHandler;
 use App\Imports\FourIrTotParticipantsImport;
 use App\Models\FourIRInitiative;
 use App\Models\FourIRInitiativeTot;
@@ -42,7 +43,7 @@ class FourIRInitiativeTotController extends Controller
         $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
         $filter = $this->fourIRTotInitiativeService->filterValidator($request)->validate();
         $response = $this->fourIRTotInitiativeService->getFourIrProjectTOtList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -61,7 +62,7 @@ class FourIRInitiativeTotController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -76,13 +77,13 @@ class FourIRInitiativeTotController extends Controller
         $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
         $excelRows = null;
-        if(!empty($request->file('participants_file'))){
+        if (!empty($request->file('participants_file'))) {
             $file = $request->file('participants_file');
             $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
-
             if (!empty($excelData) && !empty($excelData[0])) {
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+                $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
             }
         }
 
@@ -100,7 +101,7 @@ class FourIRInitiativeTotController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -119,16 +120,16 @@ class FourIRInitiativeTotController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        Log::info(FourIRInitiativeTot::class.json_encode(["id"=>$id,"request:"=>$request->all()],JSON_PRETTY_PRINT));
+        Log::info(FourIRInitiativeTot::class . json_encode(["id" => $id, "request:" => $request->all()], JSON_PRETTY_PRINT));
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
         $this->authorize('updateInitiativeStep', $fourIrInitiativeTot);
 
 
-        $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
+        $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
 
         $excelRows = null;
-        if(!empty($request->file('participants_file'))){
+        if (!empty($request->file('participants_file'))) {
             $file = $request->file('participants_file');
             $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
 
@@ -153,7 +154,7 @@ class FourIRInitiativeTotController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -173,10 +174,10 @@ class FourIRInitiativeTotController extends Controller
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
         $this->authorize('updateInitiativeStep', $fourIrInitiativeTot);
-        $validated = $this->fourIRTotInitiativeService->validator($request,$id)->validate();
+        $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
 
         $excelRows = null;
-        if(!empty($request->file('participants_file'))){
+        if (!empty($request->file('participants_file'))) {
             $file = $request->file('participants_file');
             $excelData = Excel::toCollection(new FourIrTotParticipantsImport(), $file)->toArray();
 
@@ -201,13 +202,14 @@ class FourIRInitiativeTotController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
 
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
+
     /**
      * @param int $id
      * @return JsonResponse
@@ -233,7 +235,7 @@ class FourIRInitiativeTotController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
