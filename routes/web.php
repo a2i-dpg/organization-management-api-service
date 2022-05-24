@@ -209,7 +209,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get('/get-4ir-course-enrolled-youths', ["as" => "get.4ir.course.enrolled.youths", "uses" => "FourIREnrollmentApprovalController@getList"]);
         $router->get('/get-4ir-course-batches', ["as" => "get.4ir.course.batches", "uses" => "FourIRSkillDevelopmentController@getList"]);
 
-        $router->post('/tots-update/{id}', ["as" => "update.4ir.tots", "uses" => "FourIRInitiativeTotController@fourIrTotupdate"]);
+        $router->post('/tots-update/{id}', ["as" => "update.4ir.tots", "uses" => "FourIRInitiativeTotController@fourIrTotUpdate"]);
         $router->get('/all-initiatives', ["as" => "all.initiatives", "uses" => "FourIRInitiativeController@getAllFourIrInitiatives"]);
 
         /**

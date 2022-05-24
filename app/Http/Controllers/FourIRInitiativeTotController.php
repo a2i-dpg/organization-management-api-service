@@ -85,7 +85,7 @@ class FourIRInitiativeTotController extends Controller
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
-                Log::info("participants_file_path: ".json_encode([$file,$validated]));
+
             }else{
                 throw_if(empty($excelData) && empty($excelData[0]), ValidationException::withMessages([
                     'The participant list is empty.[24000]'
@@ -145,9 +145,9 @@ class FourIRInitiativeTotController extends Controller
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
-                Log::info("participants_file_path: ".json_encode($validated));
+
             }else{
-                throw_if(empty($excelData) && empty($excelData[0]), ValidationException::withMessages([
+                throw_if(true, ValidationException::withMessages([
                     'The participant list is empty.[24000]'
                 ]));
             }
@@ -159,7 +159,7 @@ class FourIRInitiativeTotController extends Controller
             $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
             $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
             $validated['file_path'] = $validated['proof_of_report_file'];
-            app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
+            app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_INITIATIVE_TOT_STEP);
 
             DB::commit();
             $response = [
@@ -186,7 +186,7 @@ class FourIRInitiativeTotController extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function fourIrTotupdate(Request $request, int $id): JsonResponse
+    public function fourIrTotUpdate(Request $request, int $id): JsonResponse
     {
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
@@ -203,9 +203,9 @@ class FourIRInitiativeTotController extends Controller
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
-                Log::info("participants_file_path: ".json_encode([$file,$validated]));
+
             }else{
-                throw_if(empty($excelData) && empty($excelData[0]), ValidationException::withMessages([
+                throw_if(true, ValidationException::withMessages([
                     'The participant list is empty.[24000]'
                 ]));
             }
@@ -215,7 +215,8 @@ class FourIRInitiativeTotController extends Controller
             DB::beginTransaction();
             $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
             $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
-            app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
+            $validated['file_path'] = $validated['proof_of_report_file'];
+            app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_INITIATIVE_TOT_STEP);
 
             DB::commit();
             $response = [
