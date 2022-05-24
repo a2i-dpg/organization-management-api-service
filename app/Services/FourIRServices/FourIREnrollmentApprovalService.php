@@ -21,7 +21,7 @@ class FourIREnrollmentApprovalService
      * @param array $request
      * @return array
      */
-    public function getFourIrInitiativeList(array $request): array
+    public function getFourIrEnrollmentList(array $request): array
     {
         return ServiceToServiceCall::getCourseEnrolledYouths($request);
     }
