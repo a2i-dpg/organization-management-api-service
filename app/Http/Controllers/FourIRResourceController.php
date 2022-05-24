@@ -49,7 +49,7 @@ class FourIRResourceController extends Controller
         $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
         $filter = $this->fourIRResourceService->filterValidator($request)->validate();
         $response = $this->fourIRResourceService->getResourceList($filter, $this->startTime);
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -64,7 +64,7 @@ class FourIRResourceController extends Controller
         /** Here $id is the ID of FourIrInitiative */
 
         //$this->authorize('viewAny', FourIRInitiative::class);
-        Log::info("r-id".$id);
+        Log::info("r-id" . $id);
         $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
         $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
         $response = [
@@ -75,7 +75,7 @@ class FourIRResourceController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
-        return Response::json($response,ResponseAlias::HTTP_OK);
+        return Response::json($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -85,9 +85,17 @@ class FourIRResourceController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $resource = FourIRResource::findOrFail($id);
+
+        $filePath = $resource->file_path;
+
         $this->authorize('updateInitiativeStep', FourIRInitiative::class);
+
         $validated = $this->fourIRResourceService->validator($request, $id)->validate();
+
         $data = $this->fourIRResourceService->update($resource, $validated);
+
+        $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
+
         $response = [
             'data' => $data,
             '_response_status' => [
@@ -97,6 +105,7 @@ class FourIRResourceController extends Controller
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now())
             ]
         ];
+
         return Response::json($response, ResponseAlias::HTTP_CREATED);
     }
 
@@ -111,17 +120,21 @@ class FourIRResourceController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
+       // $this->authorize('creatInitiativeStep', FourIRInitiative::class);
+
         $validated = $this->fourIRResourceService->validator($request)->validate();
+
         try {
             DB::beginTransaction();
             $fourIrResource = FourIRResource::where('four_ir_initiative_id', $validated['four_ir_initiative_id'])->first();
+
+            $filePath = $fourIrResource->file_path;
+
             $data = $this->fourIRResourceService->store($validated, $fourIrResource);
 
             if(empty($fourIrResource)){
                 $this->fourIRFileLogService->storeFileLog($validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
             } else {
-                $filePath = $fourIrResource->file_path;
                 $this->fourIRFileLogService->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_PROJECT_RESOURCE_MANAGEMENT_STEP);
             }
 
@@ -135,7 +148,7 @@ class FourIRResourceController extends Controller
                     "query_time" => $this->startTime->diffInSeconds(Carbon::now())
                 ]
             ];
-        } catch (Throwable $e){
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }

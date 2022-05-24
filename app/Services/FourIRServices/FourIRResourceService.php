@@ -5,6 +5,7 @@ namespace App\Services\FourIRServices;
 
 use App\Models\BaseModel;
 use App\Models\FourIRInitiative;
+use App\Models\FourIRInitiativeTnaFormat;
 use App\Models\FourIRResource;
 use App\Models\FourIRSector;
 use Carbon\Carbon;
