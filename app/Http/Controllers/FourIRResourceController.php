@@ -63,7 +63,7 @@ class FourIRResourceController extends Controller
     {
         /** Here $id is the ID of FourIrInitiative */
 
-        //$this->authorize('viewAny', FourIRInitiative::class);
+        $this->authorize('viewAny', FourIRInitiative::class);
         Log::info("r-id" . $id);
         $fourIrResource = $this->fourIRResourceService->getOneFourIRResource($id);
         $this->authorize('viewSingleInitiativeStep', FourIRInitiative::class);
@@ -120,7 +120,7 @@ class FourIRResourceController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-       // $this->authorize('creatInitiativeStep', FourIRInitiative::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
 
         $validated = $this->fourIRResourceService->validator($request)->validate();
 
