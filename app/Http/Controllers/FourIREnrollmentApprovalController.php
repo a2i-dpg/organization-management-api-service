@@ -7,6 +7,7 @@ use App\Models\FourIRInitiative;
 use App\Services\FourIRServices\FourIREnrollmentApprovalService;
 use App\Services\FourIRServices\FourIRFileLogService;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -15,18 +16,18 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class FourIREnrollmentApprovalController extends Controller
 {
-    public FourIREnrollmentApprovalService $fourIrInitiativeService;
+    public FourIREnrollmentApprovalService $fourIREnrollmentApprovalService;
     public FourIRFileLogService $fourIRFileLogService;
 
     /**
      * FourIRInitiativeController constructor.
      *
-     * @param FourIREnrollmentApprovalService $fourIrInitiativeService
+     * @param FourIREnrollmentApprovalService $fourIREnrollmentApprovalService
      * @param FourIRFileLogService $fourIRFileLogService
      */
-    public function __construct(FourIREnrollmentApprovalService $fourIrInitiativeService, FourIRFileLogService $fourIRFileLogService)
+    public function __construct(FourIREnrollmentApprovalService $fourIREnrollmentApprovalService, FourIRFileLogService $fourIRFileLogService)
     {
-        $this->fourIrInitiativeService = $fourIrInitiativeService;
+        $this->fourIREnrollmentApprovalService = $fourIREnrollmentApprovalService;
         $this->fourIRFileLogService = $fourIRFileLogService;
     }
 
@@ -35,14 +36,14 @@ class FourIREnrollmentApprovalController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      */
     public function getList(Request $request): JsonResponse
     {
         $this->authorize('viewAnyInitiativeStep', FourIRInitiative::class);
 
-        $filter = $this->fourIrInitiativeService->filterValidator($request)->validate();
-        $response = $this->fourIrInitiativeService->getFourIRInitiativeList($filter);
+        $filter = $this->fourIREnrollmentApprovalService->filterValidator($request)->validate();
+        $response = $this->fourIREnrollmentApprovalService->getFourIrEnrollmentList($filter);
         return Response::json($response,ResponseAlias::HTTP_OK);
     }
 }
