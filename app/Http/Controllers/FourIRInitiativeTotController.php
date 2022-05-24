@@ -75,7 +75,7 @@ class FourIRInitiativeTotController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        //$this->authorize('creatInitiativeStep', FourIRInitiative::class);
+        $this->authorize('creatInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRTotInitiativeService->validator($request)->validate();
         $excelRows = null;
         if (!empty($request->file('participants_file'))) {
@@ -181,6 +181,7 @@ class FourIRInitiativeTotController extends Controller
     {
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
+        $filePath = $fourIrInitiativeTot->proof_of_report_file;
         $this->authorize('updateInitiativeStep', FourIRInitiative::class);
         $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
 
@@ -192,6 +193,7 @@ class FourIRInitiativeTotController extends Controller
             if (!empty($excelData) && !empty($excelData[0])) {
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+                $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
             }
         }
 
@@ -199,6 +201,8 @@ class FourIRInitiativeTotController extends Controller
             DB::beginTransaction();
             $this->fourIRTotInitiativeService->deletePreviousMasterTrainersForUpdate($fourIrInitiativeTot);
             $fourIrTot = $this->fourIRTotInitiativeService->update($fourIrInitiativeTot, $validated, $excelRows);
+            $validated['file_path'] = $validated['proof_of_report_file'];
+            app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
 
             DB::commit();
             $response = [
