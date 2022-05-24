@@ -79,7 +79,7 @@ class FourIRFileLogService
         if (!empty($fromDate) && empty($toDate)) {
             $fileLogBuilder->whereDate('four_ir_file_logs.created_at', $fromDate);
         } elseif (empty($fromDate) && !empty($toDate)) {
-            $fileLogBuilder->whereDate('four_ir_file_logs.created_at',(new Carbon($toDate))->addDay());
+            $fileLogBuilder->whereDate('four_ir_file_logs.created_at',$toDate);
         } elseif (!empty($fromDate) && !empty($toDate)) {
             $fileLogBuilder->whereBetween('four_ir_file_logs.created_at', [$fromDate, (new Carbon($toDate))->addDay()]);
         }
@@ -231,8 +231,8 @@ class FourIRFileLogService
             "name_en" => "nullable",
             'four_ir_initiative_id' => 'required|int',
             'file_log_step' => 'required|int',
-            'from_date' => 'nullable|date',
-            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'from_date' => 'nullable|date|date_format:Y-m-d',
+            'to_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:from_date',
             'page' => 'nullable|integer|gt:0',
             'page_size' => 'nullable|integer|gt:0',
             'order' => [
