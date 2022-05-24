@@ -140,6 +140,7 @@ class FourIRInitiativeTotController extends Controller
             if (!empty($excelData) && !empty($excelData[0])) {
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
+                $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
             }
         }
 
