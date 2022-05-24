@@ -129,7 +129,6 @@ class FourIRInitiativeTotController extends Controller
         $filePath = $fourIrInitiativeTot->proof_of_report_file;
         $this->authorize('updateInitiativeStep', FourIRInitiative::class);
 
-
         $validated = $this->fourIRTotInitiativeService->validator($request, $id)->validate();
 
         $excelRows = null;
@@ -141,6 +140,7 @@ class FourIRInitiativeTotController extends Controller
                 $excelRows = $excelData[0];
                 $this->fourIRTotInitiativeService->excelDataValidator($excelRows)->validate();
                 $validated['participants_file_path'] = FileHandler::uploadToCloud($file);
+                Log::info("participants_file_path: ".json_encode($validated));
             }
         }
 
