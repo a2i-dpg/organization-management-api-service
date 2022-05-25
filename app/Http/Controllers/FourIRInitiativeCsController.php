@@ -146,7 +146,7 @@ class FourIRInitiativeCsController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrInitiativeCell = FourIRInitiativeCsCurriculumCblm::findOrFail($id);
-        $this->authorize('deleteInitiativeStep', $fourIrInitiativeCell);
+        $this->authorize('deleteInitiativeStep', FourIRInitiative::class);
         $this->fourIrInitiativeCsCurriculumCblmService->destroy($fourIrInitiativeCell);
         $response = [
             '_response_status' => [
