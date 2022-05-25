@@ -128,7 +128,7 @@ class FourIRResourceController extends Controller
             DB::beginTransaction();
             $fourIrResource = FourIRResource::where('four_ir_initiative_id', $validated['four_ir_initiative_id'])->first();
 
-            $filePath = $fourIrResource->file_path;
+            $filePath = $fourIrResource->file_path ?? null;
 
             $data = $this->fourIRResourceService->store($validated, $fourIrResource);
 
