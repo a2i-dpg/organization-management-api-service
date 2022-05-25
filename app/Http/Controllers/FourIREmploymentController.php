@@ -142,7 +142,7 @@ class FourIREmploymentController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrEmployment = FourIREmployment::findOrFail($id);
-        $this->authorize('deleteInitiativeStep', $fourIrEmployment);
+        $this->authorize('deleteInitiativeStep', FourIRInitiative::class);
         $this->fourIrEmploymentService->destroy($fourIrEmployment);
         $response = [
             '_response_status' => [

@@ -140,7 +140,7 @@ class FourIRScaleUpController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrScaleUp = FourIRScaleUp::findOrFail($id);
-        $this->authorize('deleteInitiativeStep', $fourIrScaleUp);
+        $this->authorize('deleteInitiativeStep',FourIRInitiative::class);
         $this->fourIRScaleUpService->destroy($fourIrScaleUp);
         $response = [
             '_response_status' => [
