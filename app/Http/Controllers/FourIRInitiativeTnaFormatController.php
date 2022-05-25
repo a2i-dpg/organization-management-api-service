@@ -113,7 +113,7 @@ class FourIRInitiativeTnaFormatController extends Controller
 
             /** Save the tna_file_path & update the stepper (form_step & completion_step) information */
 
-            $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
+            $tnaFormat = $this->fourIRProjectTnaFormatService->store($fourIrInitiative, $validated);
 
             /** Store Or Update Excel rows with Tna Format*/
             $this->fourIRProjectTnaFormatService->tnaFormatMethodStore($validated, $workshopExcelRows, FourIRInitiativeTnaFormat::WORKSHOP_TNA_METHOD, $workshopFile);
@@ -125,6 +125,7 @@ class FourIRInitiativeTnaFormatController extends Controller
 
             DB::commit();
             $response = [
+                'data' => $tnaFormat,
                 '_response_status' => [
                     "success" => true,
                     "code" => ResponseAlias::HTTP_CREATED,
