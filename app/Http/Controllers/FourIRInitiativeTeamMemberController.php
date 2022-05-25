@@ -147,7 +147,7 @@ class FourIRInitiativeTeamMemberController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $fourIrProjectTeamMember = FourIRInitiativeTeamMember::findOrFail($id);
-        $this->authorize('deleteInitiativeStep', $fourIrProjectTeamMember);
+        $this->authorize('deleteInitiativeStep', FourIRInitiative::class);
         try {
             DB::beginTransaction();
 

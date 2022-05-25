@@ -242,7 +242,7 @@ class FourIRInitiativeTotController extends Controller
     {
 
         $fourIrInitiativeTot = FourIRInitiativeTot::findOrFail($id);
-        $this->authorize('deleteInitiativeStep', $fourIrInitiativeTot);
+        $this->authorize('deleteInitiativeStep', FourIRInitiative::class);
 
         try {
             DB::beginTransaction();
