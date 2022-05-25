@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LocUnionsMunicipalityCityArea extends BaseModel
 {
+    public const TYPE_OF_UNION = 1;
+    public const TYPE_OF_MUNICIPALITY = 2;
+    public const TYPE_OF_CITY_CORP_AREA = 3;
+
     use SoftDeletes, HasFactory;
 
     protected $table = 'loc_unions_municipality_city_areas';
