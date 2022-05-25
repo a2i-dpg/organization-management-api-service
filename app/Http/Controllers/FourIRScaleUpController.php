@@ -79,7 +79,7 @@ class FourIRScaleUpController extends Controller
         $validated = $this->fourIRScaleUpService->validator($request)->validate();
         $data = $this->fourIRScaleUpService->store($validated);
 
-        app(FourIRFileLogService::class)->storeFileLog($validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
+        app(FourIRFileLogService::class)->storeFileLog($validated, FourIRInitiative::FILE_LOG_INITIATIVE_SCALE_UP_STEP);
 
         $response = [
             'data' => $data,
@@ -114,7 +114,7 @@ class FourIRScaleUpController extends Controller
 
         $data = $this->fourIRScaleUpService->update($fourIrScaleUp, $validated);
 
-        app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_SHOWCASING_STEP);
+        app(FourIRFileLogService::class)->updateFileLog($filePath, $validated, FourIRInitiative::FILE_LOG_INITIATIVE_SCALE_UP_STEP);
 
         $response = [
             'data' => $data,
