@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LocCityCorporationWard extends BaseModel
+class LocUnionsMunicipalityCityArea extends BaseModel
 {
     use SoftDeletes, HasFactory;
 
-    protected $table = 'loc_city_corporation_wards';
+    protected $table = 'loc_unions_municipality_city_areas';
     protected $guarded = BaseModel::COMMON_GUARDED_FIELDS_ONLY_SOFT_DELETE;
     public $timestamps = false;
 
@@ -27,5 +27,10 @@ class LocCityCorporationWard extends BaseModel
     public function locCityCorporation(): BelongsTo
     {
         return $this->belongsTo(LocCityCorporation::class, 'loc_city_corporation_id');
+    }
+
+    public function locUpazila(): BelongsTo
+    {
+        return $this->belongsTo(LocUpazila::class, 'loc_upazila_id');
     }
 }

@@ -23,10 +23,8 @@ class CreateLocCityCorporationsTable extends Migration
             $table->string('title_en')->nullable();
 
             $table->mediumInteger('loc_division_id')->unsigned()->default(0);
-            $table->mediumInteger('loc_district_id')->unsigned();
+            $table->mediumInteger('loc_district_id')->unsigned()->default(0);
 
-            $table->integer('loc_upazila_id')->unsigned()->nullable()->default(0);
-            $table->timestamps();
             $table->softDeletes();
 
         });
