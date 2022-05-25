@@ -3695,32 +3695,28 @@
                                         {
                                             "id": 1,
                                             "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 16,
+                                            "form_step": 15,
+                                            "name": "imran",
+                                            "name_en": "imran",
+                                            "email": "imran@gmail.com",
+                                            "industry_name": "softbd",
+                                            "industry_name_en": "softbd",
+                                            "job_starting_date": "2022-05-19",
+                                            "contact_number": "01876767678",
+                                            "designation": "software engineer",
+                                            "starting_salary": 5000,
+                                            "employment_status": 3,
+                                            "medium_of_job": "mohmud vai",
+                                            "accessor_id": 1,
                                             "row_status": 1,
                                             "created_by": null,
-                                            "updated_by": 14,
+                                            "updated_by": 5,
                                             "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
-                                        },
-                                        {
-                                            "id": 4,
-                                            "four_ir_initiative_id": 1,
-                                            "workshop_name": "tttttttgfh",
-                                            "skill_required": "ggf",
-                                            "start_date": "2020-11-11",
-                                            "end_date": "2020-11-11",
-                                            "venue": "",
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
-                                            "created_by": 14,
-                                            "updated_by": 14,
-                                            "created_at": "2022-04-21T07:18:19.000000Z",
-                                            "updated_at": "2022-04-21T07:18:19.000000Z"
+                                            "updated_at": "2022-05-24T11:54:55.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -3745,7 +3741,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_create_and_approve"
+                                "$ref": "#/components/schemas/4ir_employment"
                             }
                         }
                     }
@@ -3757,17 +3753,28 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_initiative_id": 1,
-                                        "workshop_name": "ttthjkjhkttttgfh",
-                                        "skill_required": "ggf",
-                                        "start_date": "2020-11-11",
-                                        "end_date": "2020-11-11",
-                                        "file_path": "gfhgf",
-                                        "created_by": 14,
-                                        "updated_by": 14,
-                                        "updated_at": "2022-04-21T07:28:49.000000Z",
-                                        "created_at": "2022-04-21T07:28:49.000000Z",
-                                        "id": 5
+                                        "id": 1,
+                                        "four_ir_initiative_id": "1",
+                                        "user_id": 1,
+                                        "employment_status": 3,
+                                        "name": "imran",
+                                        "name_en": "imran",
+                                        "email": "imran@gmail.com",
+                                        "industry_name": "softbd",
+                                        "industry_name_en": "softbd",
+                                        "job_starting_date": "2022-05-19",
+                                        "contact_number": "01876767678",
+                                        "designation": "software engineer",
+                                        "starting_salary": 5000,
+                                        "medium_of_job": "mohmud vai",
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
+                                        "row_status": 1,
+                                        "created_by": null,
+                                        "updated_by": 5,
+                                        "deleted_at": null,
+                                        "created_at": null,
+                                        "updated_at": "2022-05-24T11:54:55.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -3802,12 +3809,28 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 16,
+                                        "form_step": 15,
+                                        "name": "imran",
+                                        "name_en": "imran",
+                                        "email": "imran@gmail.com",
+                                        "industry_name": "softbd",
+                                        "industry_name_en": "softbd",
+                                        "job_starting_date": "2022-05-19",
+                                        "contact_number": "01876767678",
+                                        "designation": "software engineer",
+                                        "starting_salary": 5000,
+                                        "employment_status": 3,
+                                        "medium_of_job": "mohmud vai",
+                                        "accessor_id": 1,
                                         "row_status": 1,
                                         "created_by": null,
-                                        "updated_by": 14,
+                                        "updated_by": 5,
                                         "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "updated_at": "2022-05-24T11:54:55.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -3835,51 +3858,9 @@
                 ],
                 "requestBody": {
                     "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_tots"
-                            },
-                            "examples": {
-                                "DEMO": {
-                                    "summary": "An example of Expert JSON",
-                                    "description": "An example of Expert JSON, using `value` property",
-                                    "value": {
-                                        "four_ir_initiative_id": 1,
-                                        "master_trainer_name":"DGp",
-                                        "master_trainer_name_en":"DG",
-                                        "master_trainer_mobile":"01720588884",
-                                        "master_trainer_address":"DG",
-                                        "master_trainer_address_en":"DG",
-                                        "master_trainer_email":"ad@email.com",
-                                        "organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
-
-                                            }
-                                        ],
-                                        "co_organizers": [
-                                            {
-                                                "name": "string",
-                                                "name_en": "string",
-                                                "mobile": "01720588884",
-                                                "email": "string@gmail.com",
-                                                "address": "string",
-                                                "address_en": "string"
-
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_curriculum"
+                                "$ref": "#/components/schemas/4ir_employment"
                             }
                         }
                     }
@@ -3963,14 +3944,23 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "occupation_name": "dfgdf",
-                                            "occupation_name_en": "fdgfd",
-                                            "date": "2004-09-09",
-                                            "start_time": null,
-                                            "end_time": null,
-                                            "venue": "hfghf",
-                                            "venue_en": "fghfgh",
-                                            "invite_others": "fghgfh",
+                                            "four_ir_initiative_id": 1,
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 16,
+                                            "form_step": 15,
+                                            "four_ir_tagline_name": "dsfdsf",
+                                            "four_ir_tagline_id": 1,
+                                            "organization_name": "dfds",
+                                            "organization_name_en": "gfdgfd",
+                                            "invite_other_organization": "fdgfd",
+                                            "invite_other_organization_en": "fdgfd",
+                                            "venue": "fdgdf",
+                                            "start_time": "123",
+                                            "end_time": "12323",
+                                            "event_description": "fdgdgfdgfd",
+                                            "file_path": "fdgfd",
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
@@ -4055,12 +4045,27 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 16,
+                                        "form_step": 15,
+                                        "four_ir_tagline_name": "dsfdsf",
+                                        "four_ir_tagline_id": 1,
+                                        "organization_name": "dfds",
+                                        "organization_name_en": "gfdgfd",
+                                        "invite_other_organization": "fdgfd",
+                                        "invite_other_organization_en": "fdgfd",
+                                        "venue": "fdgdf",
+                                        "start_time": "123",
+                                        "end_time": "12323",
+                                        "event_description": "fdgdgfdgfd",
+                                        "file_path": "fdgfd",
                                         "row_status": 1,
                                         "created_by": null,
-                                        "updated_by": 14,
+                                        "updated_by": null,
                                         "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "updated_at": null
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -4174,19 +4179,26 @@
                                     "data": [
                                         {
                                             "id": 1,
-                                            "occupation_name": "dfgdf",
-                                            "occupation_name_en": "fdgfd",
-                                            "date": "2004-09-09",
-                                            "start_time": null,
-                                            "end_time": null,
-                                            "venue": "hfghf",
-                                            "venue_en": "fghfgh",
-                                            "invite_others": "fghgfh",
+                                            "four_ir_initiative_id": 1,
+                                            "initiative_name": "KJHKJhkjhjkhkjh",
+                                            "initiative_name_en": "fghfg",
+                                            "is_skill_provide": 1,
+                                            "completion_step": 16,
+                                            "form_step": 15,
+                                            "researcher_name": "fdgfdg",
+                                            "researcher_name_en": null,
+                                            "organization_name": "fhgfhgfh",
+                                            "organization_name_en": null,
+                                            "research_method": null,
+                                            "file_path": null,
+                                            "team_file_path": null,
+                                            "accessor_type": "INSTITUTE",
+                                            "accessor_id": 1,
                                             "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": null,
-                                            "updated_at": null
+                                            "created_by": 5,
+                                            "updated_by": 5,
+                                            "created_at": "2022-05-24T10:42:20.000000Z",
+                                            "updated_at": "2022-05-24T10:42:20.000000Z"
                                         }
                                     ],
                                     "_response_status": {
@@ -4223,15 +4235,16 @@
                             "application/json": {
                                 "example": {
                                     "data": {
-                                        "four_ir_initiative_id": 1,
-                                        "accessor_type": "INSTRUCTOR",
+                                        "four_ir_initiative_id": "1",
+                                        "accessor_type": "INSTITUTE",
                                         "accessor_id": 1,
-                                        "file_path": "new",
-                                        "created_by": 1,
-                                        "updated_by": 1,
-                                        "updated_at": "2022-04-26T04:36:12.000000Z",
-                                        "created_at": "2022-04-26T04:36:12.000000Z",
-                                        "id": 4
+                                        "researcher_name": "fdgfdg",
+                                        "organization_name": "fhgfhgfh",
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "updated_at": "2022-05-25T04:02:52.000000Z",
+                                        "created_at": "2022-05-25T04:02:52.000000Z",
+                                        "id": 3
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -4266,12 +4279,25 @@
                                     "data": {
                                         "id": 1,
                                         "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
+                                        "initiative_name": "KJHKJhkjhjkhkjh",
+                                        "initiative_name_en": "fghfg",
+                                        "is_skill_provide": 1,
+                                        "completion_step": 16,
+                                        "form_step": 15,
+                                        "researcher_name": "fdgfdg",
+                                        "researcher_name_en": null,
+                                        "organization_name": "fhgfhgfh",
+                                        "organization_name_en": null,
+                                        "research_method": null,
+                                        "file_path": null,
+                                        "team_file_path": null,
+                                        "accessor_type": "INSTITUTE",
+                                        "accessor_id": 1,
                                         "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
+                                        "created_by": 5,
+                                        "updated_by": 5,
+                                        "created_at": "2022-05-24T10:42:20.000000Z",
+                                        "updated_at": "2022-05-24T10:42:20.000000Z"
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -4581,14 +4607,14 @@
                                 "example": {
                                     "data": [
                                         {
-                                            "id": 2,
-                                            "title_en": "welcome",
-                                            "title": "me",
+                                            "id": 1,
+                                            "title_en": "Occupation 1",
+                                            "title": "Occupation 1",
                                             "row_status": 1,
                                             "created_by": null,
                                             "updated_by": null,
-                                            "created_at": "2022-04-19T07:19:20.000000Z",
-                                            "updated_at": "2022-04-19T07:19:20.000000Z"
+                                            "created_at": null,
+                                            "updated_at": null
                                         }
                                     ],
                                     "_response_status": {
@@ -4613,7 +4639,7 @@
                     "content": {
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "#/components/schemas/4ir_resource"
+                                "$ref": "#/components/schemas/4ir_occupation"
                             }
                         }
                     }
@@ -4769,215 +4795,6 @@
                 }
             }
         },
-        "/assessments": {
-            "get": {
-                "tags": [
-                    "FourIR Assesment"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/four_ir_initiative_id"
-                    }
-                ],
-                "summary": "Get FourIR Assesment List",
-                "responses": {
-                    "200": {
-                        "description": "Get FourIR Assesment List",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "occupation_name": "dfgdf",
-                                            "occupation_name_en": "fdgfd",
-                                            "date": "2004-09-09",
-                                            "start_time": null,
-                                            "end_time": null,
-                                            "venue": "hfghf",
-                                            "venue_en": "fghfgh",
-                                            "invite_others": "fghgfh",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": null,
-                                            "created_at": null,
-                                            "updated_at": null
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "FourIR Assesment"
-                ],
-                "summary": "Insert a FourIR Assesment",
-                "description": "API endpoint to Insert a FourIR Assesment. A successful request response will show 200 HTTP status code",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_showcasing"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "four_ir_initiative_id": 1,
-                                        "accessor_type": "INSTRUCTOR",
-                                        "accessor_id": 1,
-                                        "file_path": "new",
-                                        "created_by": 1,
-                                        "updated_by": 1,
-                                        "updated_at": "2022-04-26T04:36:12.000000Z",
-                                        "created_at": "2022-04-26T04:36:12.000000Z",
-                                        "id": 4
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4Ir Resource Management added successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/assessments/{fourIrAssessmentId}": {
-            "get": {
-                "tags": [
-                    "FourIR Assesment"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrAssessmentId"
-                    }
-                ],
-                "summary": "Get a 4IR Assesment",
-                "responses": {
-                    "200": {
-                        "description": "Get a 4IR Assesment",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "four_ir_initiative_id": 1,
-                                        "file_path": "gfhgf",
-                                        "row_status": 1,
-                                        "created_by": null,
-                                        "updated_by": 14,
-                                        "created_at": null,
-                                        "updated_at": "2022-04-21T06:40:45.000000Z"
-                                    },
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "FourIR Assesment"
-                ],
-                "summary": "Update a 4IR Assesment",
-                "description": "API endpoint to update a Assesment. A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrAssessmentId"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/4ir_resource"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "data": [
-                                        {
-                                            "four_ir_initiative_id": 1,
-                                            "file_path": "gfhgf",
-                                            "row_status": 1,
-                                            "created_by": null,
-                                            "updated_by": 14,
-                                            "created_at": null,
-                                            "updated_at": "2022-04-21T06:40:45.000000Z"
-                                        }
-                                    ],
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4Ir Resource Management successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "FourIR Assesment"
-                ],
-                "summary": "Delete a 4IR Assesment",
-                "description": "API endpoint to delete a Assesment. A successful request response will show 200 HTTP status code",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/fourIrAssessmentId"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "_response_status": {
-                                        "success": true,
-                                        "code": 200,
-                                        "message": "4IR Resource Management successfully.",
-                                        "query_time": 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/sectors": {
             "get": {
                 "tags": [
@@ -4998,8 +4815,8 @@
                                             "row_status": 1,
                                             "created_by": 1,
                                             "updated_by": 1,
-                                            "created_at": "2022-05-11T05:09:32.000000Z",
-                                            "updated_at": "2022-05-11T05:09:32.000000Z"
+                                            "created_at": "2022-05-11T10:49:24.000000Z",
+                                            "updated_at": "2022-05-11T10:49:24.000000Z"
                                         },
                                         {
                                             "id": 2,
@@ -5201,15 +5018,96 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "data": {
+                                    "data":  {
                                         "id": 1,
-                                        "title_en": "fbghfg",
-                                        "title": "kibria",
-                                        "row_status": 1,
-                                        "created_by": 1,
-                                        "updated_by": 1,
-                                        "created_at": "2022-05-11T05:09:32.000000Z",
-                                        "updated_at": "2022-05-11T05:09:32.000000Z"
+                                        "certificate_id": 22,
+                                        "certificate_title": "test2",
+                                        "certificate_title_en": "test2",
+                                        "course_title": "4 IR Course",
+                                        "course_title_en": null,
+                                        "certificate_result_type": 4,
+                                        "issued_at": "2022-05-23 12:22:20",
+                                        "youth_id": 50,
+                                        "course_id": 23,
+                                        "batch_id": 1,
+                                        "batch_title": "ব্লক বাটিক - 01",
+                                        "batch_title_en": null,
+                                        "batch_start_date": "2022-02-11",
+                                        "batch_end_date": "2022-02-12",
+                                        "row_status": 0,
+                                        "youth_profile": {
+                                            "id": 50,
+                                            "idp_user_id": "cd59e9cb-2d71-4fad-a612-5b76c948823e",
+                                            "username": "01701001101",
+                                            "user_name_type": 2,
+                                            "youth_auth_source": null,
+                                            "first_name": "Asir",
+                                            "first_name_en": null,
+                                            "last_name": "Billah",
+                                            "last_name_en": null,
+                                            "expected_salary": null,
+                                            "job_level": null,
+                                            "loc_division_id": 1,
+                                            "code": "Y0000000000000076",
+                                            "division_title": "বরিশাল",
+                                            "division_title_en": "Barisal",
+                                            "loc_district_id": 1,
+                                            "district_title": "বরগুনা",
+                                            "district_title_en": "BARGUNA",
+                                            "loc_upazila_id": 1,
+                                            "upazila_title": "বাগেরহাট সদর",
+                                            "upazila_title_en": "BAGERHAT SADAR",
+                                            "gender": 1,
+                                            "religion": 1,
+                                            "is_freelance_profile": 0,
+                                            "marital_status": 1,
+                                            "nationality": 1,
+                                            "email": "asirbillah1@gmail.com",
+                                            "mobile": "01701001101",
+                                            "identity_number_type": 1,
+                                            "identity_number": "56607009",
+                                            "date_of_birth": "1994-12-31T18:00:00.000000Z",
+                                            "age": 27,
+                                            "freedom_fighter_status": 1,
+                                            "physical_disability_status": 1,
+                                            "does_belong_to_ethnic_group": 1,
+                                            "bio": null,
+                                            "bio_en": null,
+                                            "photo": null,
+                                            "cv_path": null,
+                                            "signature_image_path": null,
+                                            "default_cv_template": null,
+                                            "admin_access_type": null,
+                                            "row_status": 1,
+                                            "created_at": "2022-04-25T10:10:33.000000Z",
+                                            "updated_at": "2022-04-25T10:10:33.000000Z",
+                                            "profile_completed": 50,
+                                            "total_job_experience": {
+                                                "year": 0,
+                                                "month": 0
+                                            },
+                                            "physical_disabilities": [
+                                                {
+                                                    "id": 5,
+                                                    "code": "Physical_Dis",
+                                                    "title": "শারীরিক অক্ষমতা",
+                                                    "title_en": "Physical Disabilities",
+                                                    "row_status": 1,
+                                                    "created_at": null,
+                                                    "updated_at": null,
+                                                    "deleted_at": null
+                                                }
+                                            ],
+                                            "youth_languages_proficiencies": [],
+                                            "skills": [],
+                                            "youth_educations": [],
+                                            "youth_job_experiences": [],
+                                            "youth_certifications": [],
+                                            "youth_portfolios": [],
+                                            "youth_addresses": []
+                                        },
+                                        "employment_status": 1,
+                                        "employment_info": {}
                                     },
                                     "_response_status": {
                                         "success": true,
@@ -5223,7 +5121,7 @@
                 }
             }
         },
-        "/get-four-ir-youth-assessment-list/{fourIrIniativeId}": {
+        "/get-four-ir-youth-assessment-list": {
             "get": {
                 "tags": [
                     "FourIR Youth Assessment"
@@ -5234,6 +5132,35 @@
                     },
                     {
                         "$ref": "#/components/parameters/course_id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/examine_name"
+                    },
+                    {
+                        "$ref": "#/components/parameters/examiner_name"
+                    }
+                ],
+                "summary": "Get a 4IR Assessment List",
+                "responses": {
+                    "200": {
+                        "description": "Get a 4IR Assessment List",
+                        "content": {
+                            "application/json": {
+
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/get-four-ir-youth-assessment-list/{fourIrAssessmentId}": {
+            "get": {
+                "tags": [
+                    "FourIR Youth Assessment"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/fourIrAssessmentId"
                     }
                 ],
                 "summary": "Get a 4IR Assessment",
@@ -5950,13 +5877,13 @@
                     "four_ir_initiative_id": {
                         "type": "integer"
                     },
-                    "occupation_name": {
+                    "organization_name": {
                         "type": "string"
                     },
-                    "occupation_name_en": {
+                    "organization_name_en": {
                         "type": "string"
                     },
-                    "date": {
+                    "event_description": {
                         "type": "string"
                     },
                     "start_time": {
@@ -5971,7 +5898,13 @@
                     "venue_en": {
                         "type": "string"
                     },
-                    "invite_others": {
+                    "invite_other_organization": {
+                        "type": "string"
+                    },
+                    "invite_other_organization_en": {
+                        "type": "string"
+                    },
+                    "file_path": {
                         "type": "string"
                     },
                     "row_status": {
@@ -6223,6 +6156,61 @@
                 },
                 "required": [
                     "four_ir_initiative_id","title","level","course_fee","language_medium","skills"
+                ]
+            },
+            "4ir_employment": {
+                "type": "object",
+                "properties": {
+                    "four_ir_initiative_id": {
+                        "type": "integer"
+                    },
+                    "employment_status": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "name_en": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "industry_name": {
+                        "type": "string"
+                    },
+                    "industry_name_en": {
+                        "type": "string"
+                    },
+                    "job_starting_date": {
+                        "type": "string"
+                    },
+                    "contact_number": {
+                        "type": "string"
+                    },
+                    "designation": {
+                        "type": "string"
+                    },
+                    "starting_salary": {
+                        "type": "integer"
+                    },
+                    "medium_of_job": {
+                        "type": "string"
+                    },
+                    "row_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "description": "Required when updating. 1=>Active 2=>Inactive"
+                    }
+                },
+                "required": [
+                    "four_ir_initiative_id","employment_status"
                 ]
             }
         },
@@ -6524,15 +6512,35 @@
                     "example": "1"
                 }
             },
-            "fourIrCourseId": {
-                "name": "fourIrCourseId",
-                "in": "pathe",
+            "examine_name": {
+                "name": "examine_name",
+                "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "integer",
+                    "type": "string",
                     "example": "1"
                 }
             },
+            "fourIrCourseId": {
+                "name": "fourIrCourseId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "example": "1"
+                }
+            },
+
+            "examiner_name": {
+                "name": "examiner_name",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "example": "1"
+                }
+            },
+
             "name": {
                 "name": "name",
                 "in": "query",
