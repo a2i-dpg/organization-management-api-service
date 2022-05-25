@@ -24,24 +24,8 @@ class CreateLocUnionsTable extends Migration
             $table->unsignedMediumInteger('loc_division_id');
             $table->unsignedMediumInteger('loc_district_id');
             $table->unsignedInteger('loc_upazila_id');
-            $table->timestamps();
+
             $table->softDeletes();
-
-
-            /*            $table->foreign('loc_district_id')
-                            ->references('id')
-                            ->on('loc_districts')
-                            ->onDelete('CASCADE')
-                            ->onUpdate('CASCADE');
-
-                        $table->foreign('loc_upazila_id')
-                            ->references('id')
-                            ->on('loc_upazilas')
-                            ->onDelete('CASCADE')
-                            ->onUpdate('CASCADE');
-            */
-
-
         });
 
     }
