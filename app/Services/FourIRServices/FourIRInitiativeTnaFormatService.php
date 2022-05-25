@@ -68,12 +68,12 @@ class FourIRInitiativeTnaFormatService
         $fourIrProjectTnaFormatBuilder->join('four_ir_initiatives', 'four_ir_initiatives.id', '=', 'four_ir_initiative_tna_formats.four_ir_initiative_id');
 
         if (!empty($fourIrProjectId)) {
-            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id',$fourIrProjectId);
+            $fourIrProjectTnaFormatBuilder->where('four_ir_initiative_tna_formats.four_ir_initiative_id', $fourIrProjectId);
         }
 
         /** @var Collection $fourIrProjects */
         $fourIrProjects = $fourIrProjectTnaFormatBuilder->get();
-        $fileLog = app(FourIRFileLogService::class)->getFilePath($fourIrProjectId,FourIRInitiative::COMPLETION_STEP_THREE);
+        $fileLog = app(FourIRFileLogService::class)->getFilePath($fourIrProjectId, FourIRInitiative::FILE_LOG_TNA_STEP);
         $filePath = !empty($fileLog->file_path) ? $fileLog->file_path : null;
 
         $response['order'] = $order;
@@ -90,9 +90,9 @@ class FourIRInitiativeTnaFormatService
     /**
      * @param FourIRInitiative $fourIrInitiative
      * @param array $data
-     * @return void
+     * @return FourIRInitiative
      */
-    public function store(FourIRInitiative $fourIrInitiative, array $data): void
+    public function store(FourIRInitiative $fourIrInitiative, array $data): FourIRInitiative
     {
 
         $payload = [];
@@ -109,6 +109,8 @@ class FourIRInitiativeTnaFormatService
 
         $fourIrInitiative->fill($payload);
         $fourIrInitiative->save();
+        return $fourIrInitiative;
+
     }
 
     /**
