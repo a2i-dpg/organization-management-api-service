@@ -197,7 +197,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $customRouter()->resourceRoute('initiative-analysis', 'FourIRInitiativeAnalysisController')->render();
         $customRouter()->resourceRoute('scale-up', 'FourIRScaleUpController')->render();
         $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
-        $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
         $customRouter()->resourceRoute('sectors', 'FourIRSectorController')->render();
         $customRouter()->resourceRoute('contributions', 'FourIRContributionController')->render();
         $customRouter()->resourceRoute('file-logs', 'FourIRFileLogController')->render();
