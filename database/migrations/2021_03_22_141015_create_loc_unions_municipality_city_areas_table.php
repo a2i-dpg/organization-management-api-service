@@ -30,7 +30,6 @@ class CreateLocUnionsMunicipalityCityAreasTable extends Migration
             $table->unsignedMediumInteger('loc_city_corporation_id')->nullable();
             $table->unsignedInteger('loc_upazila_id')->nullable();
 
-            $table->timestamps();
             $table->softDeletes();
 
         });
