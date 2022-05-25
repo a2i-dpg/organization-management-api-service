@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -30,17 +29,7 @@ class CreateLocCityCorporationsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-
-            /*                        $table->foreign('loc_district_id', 'ccopro_district_id_foreign')
-                                        ->references('id')
-                                        ->on('loc_districts')
-                                        ->onDelete('CASCADE')
-                                        ->onUpdate('CASCADE');
-            */
-
-
         });
-
 
     }
 
