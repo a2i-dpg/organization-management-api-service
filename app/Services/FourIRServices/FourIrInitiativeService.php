@@ -636,8 +636,10 @@ class FourIrInitiativeService
     public function getBulkImporterExcelFormat(): string
     {
         $fourIrOccupationColumnCoordinate = "H1";
-        $fourIrTaskColumnCoordinate = "M1";
         $fourIrSkillProvidedCoordinate = "E1";
+        $fourIrTaskColumnCoordinate1 = "M1";
+        $fourIrTaskColumnCoordinate2 = "N1";
+        $fourIrTaskColumnCoordinate3 = "O1";
 
         $objPHPExcel = new Spreadsheet();
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A1", "Name");
@@ -653,7 +655,10 @@ class FourIrInitiativeService
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("J1", "End Date");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("K1", "Details");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("L1", "File Path");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrTaskColumnCoordinate, "Task");
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrTaskColumnCoordinate1, "Task1");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrTaskColumnCoordinate2, "Task2");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fourIrTaskColumnCoordinate3, "Task3");
 
         $fourIrOccupations = "";
         foreach (FourIROccupation::all() as $value) {
@@ -668,8 +673,23 @@ class FourIrInitiativeService
         $trueFalse = "1 | TRUE, 0 | FALSE";
 
         $this->dropDownColumnBuilder($objPHPExcel, $fourIrOccupationColumnCoordinate, $fourIrOccupations);
-        $this->dropDownColumnBuilder($objPHPExcel, $fourIrTaskColumnCoordinate, $fourIrTasks);
+        $this->dropDownColumnBuilder($objPHPExcel, $fourIrTaskColumnCoordinate1, $fourIrTasks);
+        $this->dropDownColumnBuilder($objPHPExcel, $fourIrTaskColumnCoordinate2, $fourIrTasks);
+        $this->dropDownColumnBuilder($objPHPExcel, $fourIrTaskColumnCoordinate3, $fourIrTasks);
         $this->dropDownColumnBuilder($objPHPExcel, $fourIrSkillProvidedCoordinate, $trueFalse);
+
+
+//        $fileName = 'candidate_list_excel_upload_' . time() . '.xlsx';
+//        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//        header("Content-Disposition: attachment;filename=$fileName");
+//        header('Cache-Control: max-age=0');
+//        header('Cache-Control: max-age=1');
+//        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+//        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+//        header('Cache-Control: cache, must-revalidate');
+//        header('Pragma: public');
+//        $writer = new Xlsx($objPHPExcel);
+//        $writer->save('php://output');
 
         $writer = new Xlsx($objPHPExcel);
         ob_start();
@@ -684,6 +704,7 @@ class FourIrInitiativeService
      */
     private function dropDownColumnBuilder(Spreadsheet $objPHPExcel, string $column, string $dropdownData): void
     {
+        $column = substr_replace($column, "", -1) . "2";
         $objValidation = $objPHPExcel->setActiveSheetIndex(0)->getCell($column)->getDataValidation();
         $objValidation->setType(DataValidation::TYPE_LIST);
         $objValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
@@ -721,7 +742,7 @@ class FourIrInitiativeService
     {
         if (!empty(request('four_ir_initiative_id'))) {
             $fourIrInitiative = FourIRInitiative::findOrFail(request('four_ir_initiative_id'));
-            request()->offsetSet('accessor_id',$fourIrInitiative->accessor_id);
+            request()->offsetSet('accessor_id', $fourIrInitiative->accessor_id);
             request()->offsetSet('accessor_type', $fourIrInitiative->accessor_type);
         }
     }

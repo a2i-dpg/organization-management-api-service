@@ -21,21 +21,47 @@ class FourIrInitiativesImport implements ToCollection, SkipsEmptyRows, WithValid
     public function prepareForValidation($data, $index): mixed
     {
         if (!empty($data['start_date'])) {
-            $data['start_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int) $data['start_date'])->format('Y-m-d');
+            $data['start_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int)$data['start_date'])->format('Y-m-d');
         }
         if (!empty($data['end_date'])) {
-            $data['end_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int) $data['end_date'])->format('Y-m-d');
+            $data['end_date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((int)$data['end_date'])->format('Y-m-d');
         }
 
-        if (!empty($data['task'])) {
-            $explode = explode('|', $data['task']);
+        $task = [];
+
+        if (!empty($data['task1'])) {
+            $explode = explode('|', $data['task1']);
             if (sizeof($explode) == 2 && !empty($explode[0])) {
                 $explodedValue = trim($explode[0]);
                 if (is_numeric($explodedValue)) {
                     $explodedValue = (int)$explodedValue;
                 }
-                $data['task'] = array($explodedValue);
+                $task[] = $explodedValue;
             }
+        }
+        if (!empty($data['task2'])) {
+            $explode = explode('|', $data['task2']);
+            if (sizeof($explode) == 2 && !empty($explode[0])) {
+                $explodedValue = trim($explode[0]);
+                if (is_numeric($explodedValue)) {
+                    $explodedValue = (int)$explodedValue;
+                }
+                $task[] = $explodedValue;
+            }
+        }
+        if (!empty($data['task3'])) {
+            $explode = explode('|', $data['task3']);
+            if (sizeof($explode) == 2 && !empty($explode[0])) {
+                $explodedValue = trim($explode[0]);
+                if (is_numeric($explodedValue)) {
+                    $explodedValue = (int)$explodedValue;
+                }
+                $task[] = $explodedValue;
+            }
+        }
+
+        if (!empty($task)) {
+            $data['task'] =array_unique($task);
         }
 
         return $data;
