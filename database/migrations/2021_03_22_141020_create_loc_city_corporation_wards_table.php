@@ -15,7 +15,6 @@ class CreateLocCityCorporationWardsTable extends Migration
      */
     public function up()
     {
-
         Schema::create('loc_city_corporation_wards', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 350);
@@ -25,16 +24,7 @@ class CreateLocCityCorporationWardsTable extends Migration
             $table->mediumInteger('loc_city_corporation_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-
-            /*            $table->foreign('loc_city_corporation_id', 'ccoproward_city_corp_id_foreign')
-                            ->references('id')
-                            ->on('loc_city_corporations')
-                            ->onDelete('CASCADE')
-                            ->onUpdate('CASCADE');
-            */
-
         });
-
 
     }
 
