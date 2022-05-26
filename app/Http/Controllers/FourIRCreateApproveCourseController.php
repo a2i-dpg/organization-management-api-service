@@ -110,6 +110,7 @@ class FourIRCreateApproveCourseController extends Controller
      */
     public function approveFourIrCourse(int $id): JsonResponse
     {
+        $this->authorize('approveCourseInitiativeStep', FourIRInitiative::class);
         $response = $this->fourIrCreateAndApproveService->approveFourIrCourse($id);
 
         return Response::json($response, ResponseAlias::HTTP_OK);
