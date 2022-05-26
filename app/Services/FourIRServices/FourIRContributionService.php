@@ -42,8 +42,8 @@ class FourIRContributionService
             "four_ir_taglines.id as four_ir_tagline_id",
             "four_ir_taglines.name as four_ir_tagline_name",
             "four_ir_taglines.name_en as four_ir_tagline_name_en",
-            "four_ir_initiatives.name as four_ir_tagline_name",
-            "four_ir_initiatives.name_en as four_ir_tagline_name_en",
+            "four_ir_initiatives.name as four_ir_initiative_name",
+            "four_ir_initiatives.name_en as four_ir_initiative_name_en",
             "four_ir_initiative_team_members.user_id",
             "four_ir_initiative_team_members.file_path",
             "four_ir_initiative_team_members.organization",
@@ -91,7 +91,7 @@ class FourIRContributionService
     }
 
 
-    public function getOne(int $id)
+    public function getOne(int $id): array
     {
         $fourIrContributionBuilder = FourIRInitiativeTeamMember::select([
             "four_ir_initiative_team_members.id",
@@ -106,8 +106,8 @@ class FourIRContributionService
             "four_ir_taglines.id as four_ir_tagline_id",
             "four_ir_taglines.name as four_ir_tagline_name",
             "four_ir_taglines.name_en as four_ir_tagline_name_en",
-            "four_ir_initiatives.name as four_ir_tagline_name",
-            "four_ir_initiatives.name_en as four_ir_tagline_name_en",
+            "four_ir_initiatives.name as four_ir_initiative_name",
+            "four_ir_initiatives.name_en as four_ir_initiative_name_en",
             "four_ir_initiative_team_members.user_id",
             "four_ir_initiative_team_members.file_path",
             "four_ir_initiative_team_members.organization",

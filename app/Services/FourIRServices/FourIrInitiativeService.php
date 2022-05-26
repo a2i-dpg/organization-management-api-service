@@ -614,11 +614,11 @@ class FourIrInitiativeService
                 'string',
                 'max:300',
             ],
-            '*.task' => [
+            '*.tasks' => [
                 'required',
                 'array'
             ],
-            '*.task.*' => [
+            '*.tasks.*' => [
                 'required',
                 'int'
             ],

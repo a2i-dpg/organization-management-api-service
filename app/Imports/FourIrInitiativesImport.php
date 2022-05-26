@@ -61,7 +61,7 @@ class FourIrInitiativesImport implements ToCollection, SkipsEmptyRows, WithValid
         }
 
         if (!empty($task)) {
-            $data['task'] =array_unique($task);
+            $data['tasks'] =array_unique($task);
         }
 
         return $data;
