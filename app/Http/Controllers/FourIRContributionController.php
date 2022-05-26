@@ -30,7 +30,7 @@ class FourIRContributionController extends Controller
 
     public function getList(Request $request): JsonResponse
     {
-        $this->authorize('viewAny', FourIRContribution::class);
+       // $this->authorize('viewAny', FourIRContribution::class);
         $filter = $this->fourIRContributionService->filterValidator($request)->validate();
         $response = $this->fourIRContributionService->getContributionList($filter);
         return Response::json($response, $response['_response_status']['code']);
@@ -39,7 +39,7 @@ class FourIRContributionController extends Controller
     public function read(int $id): JsonResponse
     {
         $contribution = $this->fourIRContributionService->getOne($id);
-        $this->authorize('view', $contribution);
+        //$this->authorize('view', $contribution);
         $response = [
             "data" => $contribution,
             "_response_status" => [
@@ -56,7 +56,7 @@ class FourIRContributionController extends Controller
      */
     function store(Request $request): JsonResponse
     {
-        $this->authorize('create', FourIRContribution::class);
+       // $this->authorize('create', FourIRContribution::class);
         $validateData = $this->fourIRContributionService->valiation($request)->validate();
         $validateData['user_id'] = Auth::id();
 
