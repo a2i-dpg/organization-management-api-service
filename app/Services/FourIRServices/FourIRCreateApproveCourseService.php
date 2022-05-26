@@ -29,7 +29,7 @@ class FourIRCreateApproveCourseService
 
         $courseList = $response['data'];
 
-        foreach ($courseList as &$course){
+        foreach ($courseList as &$course) {
             $fourIrInitiative = FourIRInitiative::find($course['four_ir_initiative_id']);
             $course['is_skill_provide'] = $fourIrInitiative->is_skill_provide;
             $course['completion_step'] = $fourIrInitiative->completion_step;
@@ -72,10 +72,10 @@ class FourIRCreateApproveCourseService
 
         $payload = [];
 
-        if($initiative->form_step < FourIRInitiative::FORM_STEP_SCALE_UP){
+        if ($initiative->form_step < FourIRInitiative::FORM_STEP_SCALE_UP) {
             $payload['form_step'] = FourIRInitiative::FORM_STEP_SCALE_UP;
         }
-        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_THIRTEEN){
+        if ($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_THIRTEEN) {
             $payload['completion_step'] = FourIRInitiative::COMPLETION_STEP_THIRTEEN;
         }
 
@@ -113,8 +113,8 @@ class FourIRCreateApproveCourseService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $data = $request->all();
         FourIrInitiativeService::accessor();
+        $data = $request->all();
         if (!empty($data['skills'])) {
             $data["skills"] = isset($data['skills']) && is_array($data['skills']) ? $data['skills'] : explode(',', $data['skills']);
         }
@@ -122,7 +122,7 @@ class FourIRCreateApproveCourseService
             'row_status.in' => 'Row status must be either 1 or 0. [30000]'
         ];
 
-        if(!empty($data['four_ir_initiative_id'])){
+        if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 
             throw_if(!empty($fourIrInitiative) && $fourIrInitiative->is_skill_provide == FourIRInitiative::SKILL_PROVIDE_FALSE, ValidationException::withMessages([
@@ -134,11 +134,21 @@ class FourIRCreateApproveCourseService
             ]));
         }
 
+        if ($data['accessor_type'] == BaseModel::ACCESSOR_TYPE_INSTITUTE) {
+            $data['institute_id'] = $data['accessor_id'];
+        } elseif ($data['accessor_type'] == BaseModel::ACCESSOR_TYPE_INDUSTRY_ASSOCIATION) {
+            $data['industry_association_id'] = $data['accessor_id'];
+        }
+
         $rules = [
             'four_ir_initiative_id' => [
                 'required',
                 'integer',
                 'exists:four_ir_initiatives,id,deleted_at,NULL',
+            ],
+            'institute_id' => [
+                "nullable",
+                "int"
             ],
             'industry_association_id' => [
                 "nullable",
@@ -146,11 +156,11 @@ class FourIRCreateApproveCourseService
             ],
             'branch_id' => [
                 'nullable',
-                'int',
+                'int'
             ],
             'program_id' => [
                 'nullable',
-                'int',
+                'int'
             ],
             'title' => [
                 'required',

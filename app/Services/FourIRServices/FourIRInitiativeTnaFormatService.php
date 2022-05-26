@@ -197,10 +197,8 @@ class FourIRInitiativeTnaFormatService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $data = $request->all();
-
         FourIrInitiativeService::accessor();
-
+        $data = $request->all();
         if (!empty($data['four_ir_initiative_id'])) {
             $fourIrInitiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
 

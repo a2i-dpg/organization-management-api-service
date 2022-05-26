@@ -259,8 +259,8 @@ class FourIRInitiativeCsService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $data = $request->all();
         FourIrInitiativeService::accessor();
+        $data = $request->all();
         if (!empty($data['experts'])) {
             $data["experts"] = isset($data['experts']) && is_array($data['experts']) ? $data['experts'] : explode(',', $data['experts']);
         }

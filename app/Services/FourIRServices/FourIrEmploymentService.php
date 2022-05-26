@@ -253,8 +253,8 @@ class FourIrEmploymentService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $data = $request->all();
         FourIrInitiativeService::accessor();
+        $data = $request->all();
         $customMessage = [
             'row_status.in' => 'Row status must be within 1 or 0. [30000]'
         ];

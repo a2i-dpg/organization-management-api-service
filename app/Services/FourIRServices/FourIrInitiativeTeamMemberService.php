@@ -284,8 +284,8 @@ class FourIrInitiativeTeamMemberService
      */
     public function validator(Request $request, int $id = null): \Illuminate\Contracts\Validation\Validator
     {
-        $data = $request->all();
         FourIrInitiativeService::accessor();
+        $data = $request->all();
         if (!empty($data['four_ir_initiative_id'] && !empty($data['team_type']))) {
             if ($data['team_type'] == FourIRInitiativeTeamMember::EXPERT_TEAM_TYPE) {
                 $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
