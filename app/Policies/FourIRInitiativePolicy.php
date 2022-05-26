@@ -123,4 +123,15 @@ class FourIRInitiativePolicy
         return $authUser->hasPermission('delete_4ir_initiative_step');
 
     }
+
+    /**
+     * @param User $authUser
+     * @return bool
+     */
+
+    public function approveCourseInitiativeStep(User $authUser): bool
+    {
+        return $authUser->hasPermission('approve_4ir_initiative_course');
+
+    }
 }
