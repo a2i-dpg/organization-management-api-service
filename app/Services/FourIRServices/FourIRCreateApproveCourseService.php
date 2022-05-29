@@ -129,7 +129,7 @@ class FourIRCreateApproveCourseService
                 "This form step is not allowed as the initiative was set for Not Skill Provider!"
             ]));
 
-            throw_if(!empty($fourIrInitiative) && $fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TOT, ValidationException::withMessages([
+           throw_if(!empty($fourIrInitiative) && ($fourIrInitiative->form_step < FourIRInitiative::FORM_STEP_TOT && $fourIrInitiative->completion_step < FourIRInitiative::FILE_LOG_INITIATIVE_TOT_STEP ), ValidationException::withMessages([
                 'Complete Tot step first.[24000]'
             ]));
         }
