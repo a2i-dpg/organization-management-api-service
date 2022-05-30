@@ -3,10 +3,14 @@
 namespace App\Services;
 
 use App\Exceptions\HttpErrorException;
+use App\Models\AppliedJob;
 use App\Models\BaseModel;
+use App\Models\CandidateRequirement;
+use App\Models\HrDemand;
 use App\Models\IndustryAssociation;
 use App\Models\NascibMember;
 use App\Models\PaymentTransactionHistory;
+use App\Models\PrimaryJobInformation;
 use App\Models\SmefMember;
 use Carbon\Carbon;
 use Illuminate\Http\Client\RequestException;
@@ -316,13 +320,14 @@ class OrganizationService
             $organizationBuilder->join('industry_association_organization', function ($join) use ($industryAssociationId) {
                 $join->on('industry_association_organization.organization_id', '=', 'organizations.id')
                     ->where('industry_association_organization.industry_association_id', $industryAssociationId)
+                    /** Only payment status is applicable for Nascib otherwise fetch active row status*/
                     ->where(function ($subQuery) {
-                        $subQuery->where("industry_association_organization.payment_status",BaseModel::PAYMENT_NOT_APPLICABLE)
-                            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE);
-                    })
-                    ->orWhere(function ($subQuery) {
-                        $subQuery->where("industry_association_organization.payment_status",'!=',BaseModel::PAYMENT_NOT_APPLICABLE)
-                            ->where('industry_association_organization.payment_status', BaseModel::PAYMENT_SUCCESS);
+                        $subQuery->orWhere("industry_association_organization.payment_status", BaseModel::PAYMENT_NOT_APPLICABLE)
+                            ->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE)
+                            ->orWhere(function ($subQueryNested) {
+                                $subQueryNested->where('industry_association_organization.row_status', BaseModel::ROW_STATUS_ACTIVE)
+                                    ->where('industry_association_organization.payment_status', BaseModel::PAYMENT_SUCCESS);
+                            });
                     });
             });
         }
@@ -1771,5 +1776,96 @@ class OrganizationService
                 Rule::in(Organization::ROW_STATUSES),
             ],
         ], $customMessage);
+    }
+
+    /**
+     * @param Organization $organization
+     * @return array
+     */
+    public function getOrganizationDashboardStatistics(Organization $organization): array
+    {
+        $employed = $this->employmentCountByOrganization($organization);
+        $unemployed = 0;
+        $vacancies = $this->getVacancyCountByOrganization($organization);
+        $trendingSkills = $this->getTrendingJobSkillsCountByOrganization($organization);
+        $hrDemandedVacancy = $this->getHrDemandedVacancy($organization);
+        $hrDemandProvidedVacancy = $this->getHrDemandProvidedVacancyByInstitute($organization);
+
+        return [
+            "employed" => $employed,
+            "unemployed" => $unemployed,
+            "vacancies" => $vacancies,
+            "trending_skills" => $trendingSkills,
+            "hr_demanded" => $hrDemandedVacancy,
+            "hr_demand_provided" => $hrDemandProvidedVacancy
+        ];
+    }
+
+    /**
+     * @param Organization $organization
+     * @return int
+     */
+    public function employmentCountByOrganization(Organization $organization): int
+    {
+        return AppliedJob::query()
+            ->join('primary_job_information', 'primary_job_information.job_id', '=', 'applied_jobs.job_id')
+            ->where('primary_job_information.organization_id', $organization->id)
+            ->where('applied_jobs.apply_status', AppliedJob::APPLY_STATUS["Hired"])
+            ->count('applied_jobs.id');
+    }
+
+    /**
+     * @param Organization $organization
+     * @return int
+     */
+    public function getVacancyCountByOrganization(Organization $organization): int
+    {
+        return PrimaryJobInformation::where('organization_id', $organization->id)
+            ->where('application_deadline', '>', Carbon::today())
+            ->where('published_at', '<=', Carbon::now())
+            ->sum('no_of_vacancies');
+    }
+
+    /**
+     * @param Organization $organization
+     * @return int
+     */
+    public function getTrendingJobSkillsCountByOrganization(Organization $organization): int
+    {
+        $candidateRequirementBuilder = CandidateRequirement::query()
+            ->join('primary_job_information', 'primary_job_information.job_id', '=', 'candidate_requirements.job_id')
+            ->where('primary_job_information.organization_id', $organization->id);
+
+        $candidateRequirements = $candidateRequirementBuilder->get();
+
+        $trendingSkills = 0;
+        foreach ($candidateRequirements as $candidateRequirement) {
+            $trendingSkills += $candidateRequirement->skills()->distinct()->count('skill_id');
+        }
+        return $trendingSkills;
+    }
+
+    /**
+     * @param Organization $organization
+     * @return int
+     */
+    public function getHrDemandedVacancy(Organization $organization): int
+    {
+        return HrDemand::where('organization_id', $organization->id)
+            ->where('row_status', BaseModel::ROW_STATUS_ACTIVE)
+            ->sum('vacancy');
+    }
+
+    /**
+     * @param Organization $organization
+     * @return int
+     */
+    public function getHrDemandProvidedVacancyByInstitute(Organization $organization): int
+    {
+        return HrDemand::where('organization_id', $organization->id)
+            ->join('hr_demand_institutes', 'hr_demand_institutes.hr_demand_id', '=', 'hr_demands.id')
+            ->where('hr_demand_institutes.row_status', BaseModel::ROW_STATUS_ACTIVE)
+            ->where('hr_demands.row_status', BaseModel::ROW_STATUS_ACTIVE)
+            ->sum('vacancy_provided_by_institute');
     }
 }

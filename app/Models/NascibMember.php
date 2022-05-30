@@ -100,25 +100,32 @@ class NascibMember extends BaseModel
     ];
     const OTHER_SECTOR_KEY = "other_sector";
     public const SECTOR = [
-        1 => 'পাটজাত',
-        2 => 'চামড়া',
-        3 => 'হস্তশিল্প',
-        4 => 'ফ্যাশন',
-        5 => 'হালকা প্রকৌশল',
-        6 => 'পোশাক',
-        7 => 'ডিজাইন',
-        8 => 'কৃষি প্রক্রিয়াজাত',
-        9 => 'আইটি',
-        10 => 'হারবাল',
-        11 => 'প্লাস্তিক',
-        12 => 'সিনথেটিকস',
-        13 => 'ইলেক্ট্রিক্যাল',
-        14 => 'ইলেক্ট্রনিক',
-        15 => 'লাইট ইঞ্জিনিয়ারিং',
-        16 => 'জুয়েলারি',
-        17 => 'হস্তশিল্প (বিভিন্ন প্রকার)',
-        18 => 'খাদ্য ও পানীয়',
-        self::OTHER_SECTOR_KEY => 'অন্যন্য'
+        1 => "পাট ও পাটজাত (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        2 => "চামড়া ও চামড়াজাত (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        3 => "প্লাস্টিক, রাবার ও সিনথেটিক (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        4 => "কাগজ ও কাগজজাত (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        5 => "রাসায়িক ও রাসায়িনকজাত (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        6 => "মৌলিক ফার্মাসিউটিক্যাল প্রস্তুত এবং ওষুধ (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        7 => "ইলেক্ট্রিক্যাল ও ইলেক্ট্রনিক (পণ্য উৎপাদন ও প্রক্রিয়াজাতকরণ)",
+        8 => "যন্ত্রপাতি, যন্ত্রাংশ ও সরঞ্জামের মেরামত ও স্থাপন(কম্পিউটার এবং ব্যক্তিগত ও গৃহস্থালি দ্রব্যাদি)",
+        9 => "কম্পিউটার",
+        10 => "দৃষ্টি/চশমা উৎপাদন কার্যাদি",
+        11 => "হালকা প্রকৌশল (লাইট ইঞ্জিনিয়ারিং)",
+        12 => "আসবাবপত্র উৎপাদন",
+        13 => "হস্ত ও কুটির শিল্প",
+        14 => "হস্তশিল্প (অন্যান্য)",
+        15 => "ফ্যাশন ও ডিজাইন",
+        16 => "তৈরী পােশাক শিল্প (ক্ষুদ্র ও মাঝারী)",
+        17 => "কৃষি ও কৃষিজাত পন্য উৎপাদন এবং প্রক্রিয়াজাতকরণ।",
+        18 => "তথ্য ও যােগাযােগ",
+        19 => "পেশাগত, বৈজ্ঞানিক এবং কারিগরি কার্যক্রম (কনসালট্যান্সি)।",
+        20 => "জনস্বাস্থ্য এবং সামাজিক কার্যক্রম",
+        21 => "খাদ্য ও পানীয়।",
+        22 => "আবাসন ও খাদ্য সেবা কার্যক্রম",
+        23 => "কলাবিদ্যা, আপ্যায়ন এবং বিনােদন",
+        24 => "পণ্য আমদানি, রপ্তানি ও সরবরাহকারী (শুধু)",
+        26 => "পাইকারি ও খুচরা ব্যবসা (হােলসেল এবং রিটেইল)",
+        self::OTHER_SECTOR_KEY => "অন্যান্য"
     ];
 
     public const REGISTERED_AUTHORITY = [
@@ -142,6 +149,16 @@ class NascibMember extends BaseModel
         6 => 'বাংলাদেশ এনার্জি রেগুলেটরি কমিশন',
         7 => 'বিস্ফোরক পরিদপ্তর',
         self::OTHER_AUTHORITY_KEY => 'অন্যন্য'
+    ];
+
+    public const FACTORY_CATEGORIES = [
+        1 => "কুটির শিল্প (র্সবােচ্চ জনবল ১৫)",
+        2 => "মাইক্রো শিল্প-(ম্যানুফেকচারিং- ১৬-৩০ জন বা তার চেয়েকম সংখ্যক শ্রমিক)",
+        3 => "মাইক্রো শিল্প-(সেবা- সর্বোচ্চ১৫ জন)",
+        4 => "ক্ষুদ্রশিল্প-(ম্যানুফেকচারিং- ৩১-১২০জন)",
+        5 => "ক্ষুদ্র শিল্প-(সবো-  ১৬-৫০জন )",
+        6 => "মাঝারি শিল্প- (ম্যানুফেকচারিং- ১২১-৩০০ জন (তৈরী পোষাক র্সবােচ্চ ১০০০ জন))",
+        7 => "মাঝারি শিল্প- (সেবা- ৫১-১২০ জন)"
     ];
 
     public const SPECIALIZED_AREA = [
@@ -182,11 +199,13 @@ class NascibMember extends BaseModel
         1 => 'Own Land',
         2 => 'Rent'
     ];
-
+    public const BUSINESS_TYPE_MANUFACTURING = 1;
+    public const BUSINESS_TYPE_SERVICE = 2;
+    public const BUSINESS_TYPE_TRADING = 3;
     public const BUSINESS_TYPE = [
-        1 => 'ম্যানুফ্যাকচারিং',
-        2 => 'সার্ভিস',
-        3 => 'ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)',
+        self::BUSINESS_TYPE_MANUFACTURING => 'ম্যানুফ্যাকচারিং',
+        self::BUSINESS_TYPE_SERVICE => 'সার্ভিস',
+        self::BUSINESS_TYPE_TRADING => 'ট্রেডিং(দেশ পণ্য/বিদেশী বিদেশী)',
     ];
 
     public const YES_NO = [
@@ -197,8 +216,8 @@ class NascibMember extends BaseModel
     public const APPLICATION_TYPE_NEW = "NEW_APPLICATION";
     public const APPLICATION_TYPE_RENEW = "RENEW_APPLICATION";
     public const APPLICATION_TYPE = [
-        self::APPLICATION_TYPE_NEW => "New Application",
-        self::APPLICATION_TYPE_RENEW => "Renew Application"
+        self::APPLICATION_TYPE_NEW => "নতুন",
+        self::APPLICATION_TYPE_RENEW => "নবায়ন"
     ];
 
     public const PAYMENT_GATEWAY_PAGE_URL_PREFIX = "member-registration-payment-method";
@@ -211,6 +230,7 @@ class NascibMember extends BaseModel
         'export_type' => 'array',
         'import_type' => 'array',
         'bank_account_type' => 'array',
+        'business_type_services' => 'array'
     ];
 
 }

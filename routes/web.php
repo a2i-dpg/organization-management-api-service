@@ -90,9 +90,10 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->get("industry-association-dashboard-statistics", ["as" => "industry-association-dashboard-statistics", "uses" => "IndustryAssociationController@industryAssociationDashboardStatistics"]);
         //$router->get("industry-association-members/{industryId}", ["as" => "industry-association-member-details", "uses" => "IndustryAssociationController@industryAssociationMemberDetails"]);
 
+        $router->get("organization-dashboard-statistics", ["as" => "organization-dashboard-statistics", "uses" => "OrganizationController@organizationDashboardStatistics"]);
 
         /** job management routes */
-        $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($router) {
+        $router->group(["prefix" => "jobs", "as" => "jobs"], function () use ($customRouter, $router) {
             $router->get('/', ["as" => "job-list", "uses" => "JobManagementController@getJobList"]);
             $router->get('industry-association-member-jobs', ["as" => "industry-association-members-job-list", "uses" => "JobManagementController@getIndustryAssociationMembersJobList"]);
             $router->get("job-id", ["as" => "job-id", "uses" => "PrimaryJobInfoController@getJobId"]);
@@ -143,7 +144,6 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->put('/{applicationId}/hired', ["as" => "candidate-update.hired", "uses" => "JobManagementController@updateHiredCandidate"]);
             });
 
-
             /**recruitment step routes **/
             $router->get('recruitment-step/{stepId}', ["as" => "recruitment-steps.get", "uses" => "JobManagementController@getRecruitmentStep"]);
             $router->post('recruitment-step', ["as" => "recruitment-step.store", "uses" => "JobManagementController@createRecruitmentStep"]);
@@ -169,6 +169,26 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
                 $router->get('hired/{jobId}', ["as" => "hired", "uses" => "JobManagementController@getHiredCandidateList"]);
             });
         });
+
+
+        /**
+         * FourIR Project APIS
+         **/
+        $customRouter()->resourceRoute('projects', 'FourIRProjectController')->render();
+        $customRouter()->resourceRoute('guidelines', 'FourIRGuidelineController')->render();
+        $customRouter()->resourceRoute('team-members', 'FourIRProjectTeamMemberController')->render();
+        $customRouter()->resourceRoute('4ir-occupations', 'FourIROccupationController')->render();
+        $customRouter()->resourceRoute('project-cells', 'FourIRProjectCellController')->render();
+        $customRouter()->resourceRoute('project-cs', 'FourIRProjectCsController')->render();
+        $customRouter()->resourceRoute('project-curriculums', 'FourIRProjectCurriculumController')->render();
+        $customRouter()->resourceRoute('tna-formats', 'FourIRProjectTnaFormatController')->render();
+        $customRouter()->resourceRoute('cblms', 'FourIRCblmController')->render();
+        $customRouter()->resourceRoute('resource-managements', 'FourIRResourceController')->render();
+        $customRouter()->resourceRoute('tots', 'FourIRProjectTotController')->render();
+        $customRouter()->resourceRoute('course-developments', 'FourIRCourseDevelopmentController')->render();
+        $customRouter()->resourceRoute('showcasing', 'FourIRShowcasingController')->render();
+        $customRouter()->resourceRoute('assessments', 'FourIRAssessmentController')->render();
+
 
         /** Provide suggestions in drop downs */
         $router->group(["prefix" => "suggestions", "as" => "suggestions"], function () use ($router) {

@@ -42,7 +42,6 @@ class NascibMemberService
         $orgData['contact_person_designation'] = 'উদ্যোক্তা';
         $orgData['contact_person_designation_en'] = 'Entrepreneur';
         $orgData['payment_status'] = Organization::PAYMENT_PENDING;
-        $orgData['membership_id'] = $data['membership_id'];
         $orgData['membership_type_id'] = $data['membership_type_id'];
 
         /**Model Name For Nascib Organization */
@@ -66,7 +65,6 @@ class NascibMemberService
     {
 
         $organization->industryAssociations()->attach($data['industry_association_id'], [
-            'membership_id' => $data['membership_id'],
             'membership_type_id' => $data['membership_type_id'],
             'payment_status' => BaseModel::PAYMENT_PENDING,
             'additional_info_model_name' => $data['additional_info_model_name'],
@@ -303,10 +301,6 @@ class NascibMemberService
                 "integer",
                 "exists:membership_types,id"
             ],
-            'membership_id' => [
-                "required",
-                "string",
-            ],
             'trade_license_no' => 'required|string|max:191|unique:nascib_members,trade_license_no',
             /** Same as industry */
             'title' => 'required|string|max:500',
@@ -336,7 +330,7 @@ class NascibMemberService
             'entrepreneur_name' => 'required|string|max: 100',
             'entrepreneur_name_en' => 'nullable|string|max: 100',
             'entrepreneur_gender' => 'required|int|digits_between: 1,2',
-            'entrepreneur_date_of_birth' => 'required|date_format:Y-m-d',
+            'entrepreneur_date_of_birth' => 'nullable|date_format:Y-m-d',
             'entrepreneur_educational_qualification' => 'required|string|max: 191',
             'entrepreneur_nid' => 'required|string',
             'entrepreneur_nid_file_path' => [
@@ -472,19 +466,6 @@ class NascibMemberService
                 'int',
                 Rule::in(array_keys(NascibMember::BUSINESS_TYPE))
             ],
-            'main_product_name' => 'required|string|max:191',
-            'main_product_name_en' => 'nullable|string|max:191',
-            'main_material_description' => [
-                'required',
-                'string',
-                'max:5000'
-            ],
-            'main_material_description_en' => [
-                'nullable',
-                'string',
-                'max:5000'
-            ],
-
             'is_import' => [
                 "required",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
@@ -585,7 +566,7 @@ class NascibMemberService
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
             'have_internet_connection' => [
-                "required",
+                "nullable",
                 Rule::in([BaseModel::BOOLEAN_TRUE, BaseModel::BOOLEAN_FALSE])
             ],
             'have_online_business' => [
@@ -603,6 +584,29 @@ class NascibMemberService
             ],
 
         ];
+
+        if (!empty($request->get('business_type')) && $request->get('business_type') != NascibMember::BUSINESS_TYPE_SERVICE) {
+            $rules['main_product_name'] = 'required|string|max:191';
+            $rules['main_product_name_en'] = 'nullable|string|max:191';
+            $rules['main_material_description'] = [
+                'required',
+                'string',
+                'max:5000'
+            ];
+            $rules['main_material_description_en'] = [
+                'nullable',
+                'string',
+                'max:5000'
+            ];
+        } else {
+            $rules['business_type_services'] = [
+                "required",
+                "array"
+            ];
+            $rules['business_type_services.*'] = [
+                "required"
+            ];
+        }
         /** other Authority */
         if (!empty($request->get('other_authority')) && is_array($request->get('other_authority'))) {
             $rules['other_authority.' . 'authority_type'] = [
@@ -674,6 +678,8 @@ class NascibMemberService
                 'exists:loc_unions,id,deleted_at,NULL'
             ];
             $rules['chamber_or_association_code'] = 'required|string|max: 255';
+            $rules['chamber_or_association_membership_id'] = 'nullable|string|max: 255';
+            $rules['chamber_or_association_last_membership_renewal_date'] = 'required|date_format:Y-m-d';
 
             /** info_provider  information */
             $rules['info_provider_name'] = 'nullable|string|max:100';
@@ -690,6 +696,11 @@ class NascibMemberService
 
         /** If Industry has factory then the fields are required */
         if ($request->get('have_factory') == BaseModel::BOOLEAN_TRUE) {
+            $rules['factory_category_id'] = [
+                "required",
+                "integer",
+                Rule::in(array_keys(NascibMember::FACTORY_CATEGORIES))
+            ];
             $rules["factory_address"] = "required|string|max:1200";
             $rules["factory_address_en"] = "nullable|string|max:800";
             $rules['factory_loc_division_id'] = [
