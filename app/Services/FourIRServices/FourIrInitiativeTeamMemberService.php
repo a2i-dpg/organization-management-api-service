@@ -195,8 +195,9 @@ class FourIrInitiativeTeamMemberService
     private function updateInitiativeStepper(array $data)
     {
         $initiative = FourIRInitiative::findOrFail($data['four_ir_initiative_id']);
-
-        $initiative->form_step = $data['team_type'] == FourIRInitiativeTeamMember:: IMPLEMENTING_TEAM_TYPE ? FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM : FourIRInitiative::FORM_STEP_EXPERT_TEAM;
+        if($initiative->completion_step < FourIRInitiative::COMPLETION_STEP_TWO){
+            $initiative->form_step = $data['team_type'] == FourIRInitiativeTeamMember:: IMPLEMENTING_TEAM_TYPE ? FourIRInitiative::FORM_STEP_IMPLEMENTING_TEAM : FourIRInitiative::FORM_STEP_EXPERT_TEAM;
+        }
         // Tod do (If cell requirement available then remove)
         if ($data['team_type'] == FourIRInitiativeTeamMember::EXPERT_TEAM_TYPE && $initiative->completion_step < FourIRInitiative::COMPLETION_STEP_TWO) {
             $initiative->completion_step = FourIRInitiative::COMPLETION_STEP_TWO;
