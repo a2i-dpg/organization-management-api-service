@@ -1203,6 +1203,80 @@
                 ]
             }
         },
+        "/public/organization-details": {
+            "get": {
+                "tags": [
+                    "organization"
+                ],
+                "summary": "Public API to get one organization details",
+                "description": "An Public API endpoint to get  an organization details ",
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "title_en": "Test",
+                                        "title": "Test",
+                                        "date_of_establishment": null,
+                                        "name_of_the_office_head": null,
+                                        "name_of_the_office_head_en": null,
+                                        "name_of_the_office_head_designation": null,
+                                        "name_of_the_office_head_designation_en": null,
+                                        "domain": null,
+                                        "fax_no": null,
+                                        "mobile": "",
+                                        "mobile_numbers": null,
+                                        "phone_numbers": null,
+                                        "email": "",
+                                        "contact_person_name": null,
+                                        "contact_person_name_en": null,
+                                        "contact_person_mobile": null,
+                                        "contact_person_email": null,
+                                        "contact_person_designation": null,
+                                        "contact_person_designation_en": null,
+                                        "description": null,
+                                        "description_en": null,
+                                        "logo": null,
+                                        "loc_division_id": 1,
+                                        "loc_division_title_en": "Barisal",
+                                        "loc_division_title": "বরিশাল",
+                                        "loc_district_id": 1,
+                                        "loc_district_title_en": "BARGUNA",
+                                        "loc_district_title": "বরগুনা",
+                                        "loc_upazila_id": 1,
+                                        "loc_upazila_title_en": "BAGERHAT SADAR",
+                                        "loc_upazila_title": "বাগেরহাট সদর",
+                                        "location_latitude": "",
+                                        "location_longitude": null,
+                                        "google_map_src": null,
+                                        "organization_type_id": 1,
+                                        "organization_type_title_en": "Government Organization",
+                                        "organization_type_title": "Government Organization",
+                                        "address": null,
+                                        "address_en": null,
+                                        "row_status": 2,
+                                        "created_by": null,
+                                        "updated_by": null,
+                                        "created_at": null,
+                                        "updated_at": null,
+                                        "sub_trades": [],
+                                        "industry_associations": []
+                                    },
+                                    "_response_status": {
+                                        "success": true,
+                                        "code": 200,
+                                        "query_time": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/public/organizations/{organizationId}": {
             "get": {
                 "summary": "get public organization",

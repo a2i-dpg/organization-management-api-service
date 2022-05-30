@@ -91,11 +91,21 @@ class OrganizationController extends Controller
     /**
      * Display a specified resource for public
      * @param Request $request
-     * @param int $id
+     * @param int|null $id
      * @return JsonResponse
+     * @throws Throwable
      */
-    public function organizationDetails(Request $request, int $id): JsonResponse
+    public function organizationDetails(Request $request, int $id = null): JsonResponse
     {
+        if (!$id) {
+            /** this should be set from PublicApiMiddleWare */
+            $id = request()->get('organization_id');
+        }
+
+        throw_if(empty($id), ValidationException::withMessages([
+            "organization_id not found!"
+        ]));
+
         $organization = $this->organizationService->getOneOrganization($id);
         if (!empty($organization)) {
             $organization = $organization->toArray();
