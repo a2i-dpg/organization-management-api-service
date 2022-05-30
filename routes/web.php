@@ -247,6 +247,7 @@ $router->group(['prefix' => 'api/v1', 'as' => 'api.v1'], function () use ($route
         $router->group(['middleware' => 'public-domain-handle'], function () use ($router) {
             $router->get('jobs', ["as" => "public.job-list", "uses" => "JobManagementController@getPublicJobList"]);
             $router->get("industry-association-details", ["as" => "public.industry-association.details", "uses" => "IndustryAssociationController@industryAssociationDetails"]);
+            $router->get("organization-details", ["as" => "public.organization.details", "uses" => "OrganizationController@organizationDetails"]);
             $router->get("contact-info", ["as" => "public.contact-info", "uses" => "ContactInfoController@getPublicContactInfoList"]);
             $router->get("publications", ["as" => "public.publications", "uses" => "PublicationController@getPublicPublicationList"]);
             $router->get("industry-association-members", ["as" => "public.industry-association-members", "uses" => "IndustryAssociationController@getPublicIndustryAssociationMemberList"]);
