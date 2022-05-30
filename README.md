@@ -39,13 +39,6 @@ This following command has to be run in the background as a daemon service.
 php artisan queue:work --queue=organization.db.sync.q
 ```
 
-## Contributing
-
-
-## Security Vulnerabilities
-
-## License
-Softbd LTD
 
 
 
