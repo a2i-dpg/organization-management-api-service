@@ -1,34 +1,29 @@
-<?php
-
-
-namespace App\Helpers\Classes;
-
+<?php namespace App\Helpers\Classes;
 
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 class CustomExceptionHandler
 {
-    /**
+    /**      *
+     * @param $messageBody
      * @throws Exception
      */
     public static function customHttpResponseMessage($messageBody)
     {
-
-        $body = json_decode($messageBody, true);
-        $code = $body['_response_status']['code'];
-        $message = [];
-        if (!empty($body['errors'])) {
-            $message["errors"] = $body['errors'];
+        if (!empty($messageBody)) {
+            $body = json_decode($messageBody, true);
+            if (!empty($body['_response_status']) && !empty($body['_response_status']['code'])) {
+                $code = $body['_response_status']['code'];
+                $message = [];
+                if (!empty($body['errors'])) {
+                    $message["errors"] = $body['errors'];
+                }
+                if (!empty($body['_response_status']['message'])) {
+                    $message["message"] = $body['_response_status']['message'];
+                }
+                throw new Exception(json_encode($message), $code);
+            }
         }
-        if (!empty($body['_response_status']['message'])) {
-            $message["message"] = $body['_response_status']['message'];
-        }
-        throw new Exception(json_encode($message), $code);
+        throw new Exception("Something went wrong in internal service to service calling!", 500);
     }
 }
