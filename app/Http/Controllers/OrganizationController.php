@@ -752,20 +752,18 @@ class OrganizationController extends Controller
     public function updateOrganizationProfile(Request $request): JsonResponse
     {
         $organizationId = $request->input('organization_id');
-
         $organization = Organization::findOrFail($organizationId);
 
         $this->authorize('updateProfile', $organization);
 
-
         $validated = $this->organizationService->organizationProfileUpdateValidator($request, $organizationId)->validate();
-        $data = $this->organizationService->adminProfileUpdate($organization, $validated);
+        $data = $this->organizationService->organizationProfileUpdate($organization, $validated);
         $response = [
-            'data' => $data ?: [],
+            'data' => $data,
             '_response_status' => [
                 "success" => true,
                 "code" => ResponseAlias::HTTP_OK,
-                "message" => "Organization admin profile updated successfully.",
+                "message" => "Organization profile updated successfully.",
                 "query_time" => $this->startTime->diffInSeconds(Carbon::now()),
             ]
         ];

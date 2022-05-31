@@ -704,7 +704,7 @@ class OrganizationService
      * @param array $data
      * @return Organization
      */
-    public function adminProfileUpdate(Organization $organization, array $data): Organization
+    public function organizationProfileUpdate(Organization $organization, array $data): Organization
     {
         $organization->fill($data);
         $organization->save();
