@@ -1,4 +1,4 @@
-# NISE3 Industry And Industry Association API Service
+# NISE Industry And Industry Association API Service
 
 ## Following 3 branches are protected and among them develop branch is the default branch:
 ```shell
